@@ -1,0 +1,12 @@
+.idea
+__pycache__
+_test
+/*.json
+!test/*.json
+.pytest_cache
+build
+dist
+*.log
+venv
+.run
+_misc
