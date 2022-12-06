@@ -1,0 +1,40 @@
+{
+  "node": {
+    "name": "Test node",
+    "type": "link",
+    "position": {
+      "node_style": "wtw",
+      "editor_position": [
+        100,
+        200
+      ]
+    }
+  },
+  "node_node_style_invalid_type": {
+    "name": "Test node",
+    "type": "link",
+    "position": {
+      "node_style": 1
+    }
+  },
+  "node_wo_position": {
+    "name": "Test node",
+    "type": "link"
+  },
+  "node_wo_node_style": {
+    "name": "Test node",
+    "type": "link",
+    "position": {
+    }
+  },
+  "node_wrong_position": {
+    "name": "Test node",
+    "type": "link",
+    "position": {
+      "node_style": "wtw",
+      "editor_position": [
+        100
+      ]
+    }
+  }
+}

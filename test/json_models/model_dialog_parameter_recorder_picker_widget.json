@@ -1,0 +1,74 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "nodes": [
+    {
+      "name": "Reservoir1",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35
+    },
+    {
+      "name": "Reservoir2",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35
+    },
+    {
+      "name": "Reservoir3",
+      "type": "reservoir",
+      "max_volume": 35,
+      "initial_volume": 35
+    },
+    {
+      "name": "Output",
+      "type": "output"
+    }
+  ],
+  "recorders": {
+    "Recorder1": {
+      "type": "NumpyArrayRecorder"
+    },
+    "Recorder2": {
+      "type": "NumpyArrayRecorder"
+    }
+  },
+  "parameters": {
+    "valid": {
+      "type": "RecorderThresholdParameter",
+      "threshold": 23,
+      "values": [1.432, 53.033],
+      "predicate": "EQ",
+      "recorder": "Recorder1"
+    },
+    "empty_string": {
+      "type": "RecorderThresholdParameter",
+      "threshold": 23,
+      "values": [1.432, 53.033],
+      "predicate": "EQ",
+      "recorder": ""
+    },
+    "not_existing_name": {
+      "type": "RecorderThresholdParameter",
+      "threshold": 23,
+      "values": [1.432, 53.033],
+      "predicate": "EQ",
+      "recorder": "Missing recorder"
+    },
+    "not_provided": {
+      "type": "RecorderThresholdParameter",
+      "threshold": 23,
+      "values": [1.432, 53.033],
+      "predicate": "EQ"
+    }
+  },
+  "pywr_editor_schematic_size": [1900, 1450]
+}

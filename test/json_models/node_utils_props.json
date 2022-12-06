@@ -1,0 +1,52 @@
+{
+  "node_inside": {
+    "name": "Test node",
+    "type": "link",
+    "position": {
+      "editor_position": [
+        100,
+        400
+      ]
+    }
+  },
+  "node_outside_left_edge": {
+    "name": "Test node",
+    "type": "link",
+    "position": {
+      "editor_position": [
+        5,
+        400
+      ]
+    }
+  },
+  "node_outside_top_edge": {
+    "name": "Test node",
+    "type": "link",
+    "position": {
+      "editor_position": [
+        50,
+        -6
+      ]
+    }
+  },
+  "node_outside_right_edge": {
+    "name": "Test node",
+    "type": "link",
+    "position": {
+      "editor_position": [
+        1895,
+        600
+      ]
+    }
+  },
+  "node_outside_bottom_edge": {
+    "name": "Test node",
+    "type": "link",
+    "position": {
+      "editor_position": [
+        50,
+        1440
+      ]
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "includes": ["files/custom_parameter.py"],
+  "nodes": [
+    {
+      "name": "Reservoir",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35,
+      "position": {"editor_position": [200, 500]}
+    },
+    {
+      "name": "Link",
+      "type": "Link",
+      "min_flow": {
+        "type": "custom_param",
+        "data": ["Table 3", "CSV table"]
+      },
+      "max_flow": {
+        "type": "aggregated",
+        "params": [{"table": "CSV table", "index": "1"}]
+      },
+      "position": {"editor_position": [1000, 300]}
+    }
+  ],
+  "edges": [["Reservoir", "Link"]],
+  "parameters": {
+    "param1": {
+      "type": "constant",
+      "value": 4,
+      "scale": 8,
+      "offset": -1,
+      "comment": "Last updated on 12/12/2021"
+    }
+  },
+  "recorders": {
+    "node_link_rec": {
+      "type": "NodeRecorder",
+      "node": "Link"
+    },
+    "obj_min": {
+      "type": "NodeRecorder",
+      "node": "Reservoir",
+      "is_objective": "min"
+    },
+    "obj_max": {
+      "type": "NodeRecorder",
+      "node": "Reservoir",
+      "is_objective": "max"
+    },
+    "obj_minimize": {
+      "type": "NodeRecorder",
+      "node": "Reservoir",
+      "is_objective": "min"
+    },
+    "obj_maximize": {
+      "type": "NodeRecorder",
+      "node": "Reservoir",
+      "is_objective": "max"
+    },
+    "agg_func_product_str": {
+      "type": "NodeRecorder",
+      "node": "Reservoir",
+      "is_objective": "max",
+      "agg_func": "product"
+    },
+    "agg_func_product_dict": {
+      "type": "NodeRecorder",
+      "node": "Reservoir",
+      "is_objective": "max",
+      "agg_func": {"func": "product"}
+    },
+    "agg_func_percentile": {
+      "type": "NodeRecorder",
+      "node": "Reservoir",
+      "is_objective": "max",
+      "agg_func": {"func": "percentile", "args": [70, 95], "kwargs": {"method": "weibull"}}
+    },
+    "agg_func_percentileofscore": {
+      "type": "NodeRecorder",
+      "node": "Reservoir",
+      "is_objective": "maximise",
+      "agg_func": {"func": "percentileofscore", "kwargs": {"score": 0.5, "kind": "strict"}}
+    }
+  },
+  "pywr_editor_schematic_size": [1900, 1450]
+}

@@ -1,0 +1,49 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1"
+  },
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
+  "nodes": [
+    {
+      "name": "Reservoir",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35,
+      "position": {
+        "editor_position": [
+          200,
+          500
+        ]
+      }
+    },
+    {
+      "name": "Link1",
+      "type": "Link"
+    },
+    {
+      "name": "Link2",
+      "type": "Link",
+      "position": {
+      }
+    },
+    {
+      "name": "Link3",
+      "type": "Link",
+      "position": {
+        "editor_position": []
+      }
+    }
+  ],
+  "edges": [
+    [
+      "Reservoir",
+      "Link1"
+    ]
+  ]
+}

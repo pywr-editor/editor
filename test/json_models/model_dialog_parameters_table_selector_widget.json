@@ -1,0 +1,154 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
+  "nodes": [
+    {
+      "name": "Reservoir",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35,
+      "position": {
+        "editor_position": [
+          200,
+          500
+        ]
+      }
+    },
+    {
+      "name": "Link",
+      "type": "Link",
+      "min_flow": {
+        "type": "custom_param",
+        "data": [
+          "Table 3",
+          "CSV table"
+        ]
+      },
+      "max_flow": {
+        "type": "aggregated",
+        "params": [
+          {
+            "table": "CSV table",
+            "index": "1"
+          }
+        ]
+      },
+      "position": {
+        "editor_position": [
+          1000,
+          300
+        ]
+      }
+    }
+  ],
+  "edges": [
+    [
+      "Reservoir",
+      "Link"
+    ]
+  ],
+  "tables": {
+    "excel_file": {
+      "url": "files/table2.xlsx",
+      "sheet_name": 0,
+      "index_col": "Centre"
+    },
+    "csv_table": {
+      "url": "files/table.csv",
+      "index_col": [
+        0,
+        1
+      ]
+    },
+    "csv_table_no_index_col": {
+      "url": "files/table.csv"
+    },
+    "h5_table": {
+      "url": "files/table.h5",
+      "key": "/flow"
+    },
+    "another_csv_table": {
+      "url": "files/table_mixed_types.csv",
+      "index_col": 1
+    },
+    "non_parsable_table": {
+      "url": "files/table.xlsx",
+      "sheet_name": "Not found"
+    },
+    "non_existing_file": {
+      "url": "files/table_not_found.xlsx"
+    },
+    "file_ext_not_supported": {
+      "url": "files/table.docx"
+    },
+    "h5_no_keys": {
+      "url": "files/table_no_keys.h5"
+    }
+  },
+  "parameters": {
+    "param_excel_file": {
+      "type": "constant",
+      "table": "excel_file",
+      "column": 0,
+      "index": "Tywi"
+    },
+    "param_csv_file": {
+      "type": "constant",
+      "table": "csv_table",
+      "column": "Column 3",
+      "index": [1, 2]
+    },
+    "param_csv_table_no_index_col": {
+      "type": "constant",
+      "table": "csv_table_no_index_col",
+      "column": "Column 3",
+      "index": 1
+    },
+    "param_h5_file": {
+      "type": "constant",
+      "table": "h5_table",
+      "index": 1,
+      "column": 2
+    },
+    "param_non_existing_file": {
+      "type": "constant",
+      "table": "non_existing_file"
+    },
+    "param_file_ext_not_supported": {
+      "type": "constant",
+      "table": "file_ext_not_supported"
+    },
+    "param_file_invalid_table_name": {
+      "type": "constant",
+      "table": "non_existing_table"
+    },
+    "param_wrong_table_type": {
+      "type": "constant",
+      "table": 1
+    },
+    "param_file_non_parsable": {
+      "type": "constant",
+      "table": "non_parsable_table"
+    },
+    "param_with_h5_no_keys": {
+      "type": "constant",
+      "table": "h5_no_keys"
+    }
+  },
+  "pywr_editor_schematic_size": [
+    1900,
+    1450
+  ]
+}

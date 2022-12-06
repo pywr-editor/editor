@@ -1,0 +1,36 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 5},
+  "nodes": [
+    {
+      "name": "Reservoir",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35,
+      "position": {"editor_position": [200, 500]}
+    }
+  ],
+  "edges": [["Reservoir", "Link"]],
+  "parameters": {
+    "valid": {
+      "type": "DiscountFactor",
+      "discount_rate": 0.4,
+      "base_year": 2
+    },
+    "invalid_discount_rate": {
+      "type": "DiscountFactor",
+      "discount_rate": 4,
+      "base_year": 2
+    }
+
+  },
+  "pywr_editor_schematic_size": [1900, 1450]
+}

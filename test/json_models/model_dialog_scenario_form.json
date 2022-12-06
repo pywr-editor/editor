@@ -1,0 +1,66 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "scenarios": [
+    {
+      "name": "valid_complete",
+      "size": 2,
+      "ensemble_names": ["First", "Second"]
+    },
+    {"name": "valid_wo_names", "size": 2},
+    {"name": "valid_names_empty", "size": 2, "ensemble_names": []},
+    {"name": "valid_w_slice", "size": 5, "slice": [0, 3]},
+    {"name": "valid_all_slice", "size": 3, "slice": [0, 1, 2]},
+    {"name": "invalid_wrong_slice_type", "size": 5, "slice": 3},
+    {"name": "invalid_slice_not_int", "size": 5, "slice": [true, 4]},
+    {"name": "invalid_wrong_slice_max_item", "size": 5, "slice": [1, 7]},
+    {"name": "invalid_wrong_slice_size", "size": 2, "slice": [1, 4, 5]},
+    {"name": "invalid_names_type", "size": 2, "ensemble_names": "Wrong type"},
+    {
+      "name": "invalid_names_not_str",
+      "size": 2,
+      "ensemble_names": [1, "Wrong type"]
+    },
+    {
+      "name": "invalid_names_with_None",
+      "size": 2,
+      "ensemble_names": [null, "Wrong type"]
+    },
+    {
+      "name": "invalid_names_partial_length",
+      "size": 3,
+      "ensemble_names": ["Name 1", "Name 2"]
+    },
+    {
+      "name": "invalid_names_and_slice",
+      "size": 3,
+      "slice": [20],
+      "ensemble_names": ["Name 1", "Name 2"]
+    }
+  ],
+  "nodes": [
+    {
+      "name": "Reservoir",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35,
+      "position": {"editor_position": [200, 500]}
+    }
+  ],
+  "parameters": {
+    "param3": {
+      "type": "constantscenario",
+      "scenario": "scenario A",
+      "value": 5
+    }
+  },
+  "pywr_editor_schematic_size": [1900, 1450]
+}

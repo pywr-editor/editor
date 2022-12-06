@@ -1,0 +1,78 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "nodes": [
+    {
+      "name": "Reservoir",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35,
+      "position": {"editor_position": [200, 500]}
+    },
+    {
+      "name": "Link",
+      "type": "Link",
+      "min_flow": {
+        "type": "custom_param",
+        "data": ["Table 3", "CSV table"]
+      },
+      "max_flow": {
+        "type": "aggregated",
+        "params": [{"table": "CSV table", "index": "1"}]
+      }
+    }
+  ],
+  "edges": [["Reservoir", "Link"]],
+  "parameters": {
+    "valid_symbol1": {
+      "type": "StorageThresholdParameter",
+      "threshold": 23,
+      "values": [1.432, 53.033],
+      "predicate": "EQ"
+    },
+    "valid_symbol_sign": {
+      "type": "StorageThresholdParameter",
+      "threshold": 23,
+      "values": [1.432, 53.033],
+      "predicate": "<"
+    },
+    "valid_symbol2": {
+      "type": "StorageThresholdParameter",
+      "threshold": 23,
+      "values": [1.432, 53.033],
+      "predicate": ">="
+    },
+    "empty_string": {
+      "type": "StorageThresholdParameter",
+      "threshold": 23,
+      "values": [1.432, 53.033],
+      "predicate": ""
+    },
+    "wrong_type": {
+      "type": "StorageThresholdParameter",
+      "threshold": 23,
+      "values": [1.432, 53.033],
+      "predicate": 12
+    },
+    "wrong_symbol": {
+      "type": "StorageThresholdParameter",
+      "threshold": 23,
+      "values": [1.432, 53.033],
+      "predicate": "a"
+    },
+    "not_provided": {
+      "type": "StorageThresholdParameter",
+      "threshold": 23,
+      "values": [1.432, 53.033]
+    }
+  },
+  "pywr_editor_schematic_size": [1900, 1450]
+}

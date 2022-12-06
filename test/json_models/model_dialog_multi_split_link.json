@@ -1,0 +1,66 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "includes": ["files/custom_parameter.py"],
+  "nodes": [
+    {"name": "Input", "type": "Input"},
+    {"name": "Output", "type": "Output"},
+    {"name": "Output2", "type": "Output"},
+    {"name": "Output3", "type": "Output"},
+    {"name": "Output4", "type": "Output"},
+    {"name": "valid_wo_names", "type": "MultiSplitLink", "nsteps": 2},
+    {
+      "name": "valid_w_names",
+      "type": "MultiSplitLink",
+      "nsteps": 2,
+      "slot_names": ["reservoir", "wtw", "potato"],
+      "factors": [0.1, 2, null]
+    },
+    {
+      "name": "valid_partial_factors",
+      "type": "MultiSplitLink",
+      "nsteps": 2,
+      "factors": [0.1]
+    },
+    {"name": "not_connected", "type": "MultiSplitLink"},
+    {"name": "one_connection", "type": "MultiSplitLink"},
+    {
+      "name": "slot_name_wrong_len",
+      "type": "MultiSplitLink",
+      "slot_names": [0]
+    },
+    {"name": "slot_name_not_provided_in_edge", "type": "MultiSplitLink"},
+    {
+      "name": "slot_name_not_matching",
+      "type": "MultiSplitLink",
+      "slot_names": [0, "sl1", 5, "wtw"]
+    }
+  ],
+  "edges": [
+    ["Input", "not_connected"],
+    ["one_connection", "Output"],
+    ["valid_wo_names", "Output", 0],
+    ["valid_wo_names", "Output2", 1],
+    ["valid_w_names", "Output", "wtw"],
+    ["valid_w_names", "Output2", "reservoir"],
+    ["valid_w_names", "Output3", "potato"],
+    ["valid_partial_factors", "Output", 0],
+    ["valid_partial_factors", "Output2", 1],
+    ["slot_name_wrong_len", "Output", 0],
+    ["slot_name_wrong_len", "Output2", 1],
+    ["slot_name_not_provided_in_edge", "Output", 0],
+    ["slot_name_not_provided_in_edge", "Output2"],
+    ["slot_name_not_matching", "Output3", 5],
+    ["slot_name_not_matching", "Output4", -1],
+    ["slot_name_not_matching", "Output", "A"],
+    ["slot_name_not_matching", "Output2", 0]
+  ]
+}

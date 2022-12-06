@@ -1,0 +1,70 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "includes": ["files/custom_parameter.py"],
+  "nodes": [
+    {
+      "name": "Reservoir",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35,
+      "position": {"editor_position": [200, 500]}
+    },
+    {
+      "name": "Link",
+      "type": "Link",
+      "min_flow": {
+        "type": "custom_param",
+        "data": ["Table 3", "CSV table"]
+      },
+      "max_flow": {
+        "type": "aggregated",
+        "params": [{"table": "CSV table", "index": "1"}]
+      },
+      "position": {"editor_position": [1000, 300]}
+    }
+  ],
+  "edges": [["Reservoir", "Link"]],
+  "parameters": {
+    "param1": {
+      "type": "constant",
+      "value": 4,
+      "scale": 8,
+      "offset": -1,
+      "comment": "Last updated on 12/12/2021"
+    }
+  },
+  "recorders": {
+    "node_link_rec": {
+      "type": "NodeRecorder",
+      "node": "Link"
+    },
+    "node_storage_rec": {
+      "type": "StorageRecorder",
+      "node": "Reservoir"
+    },
+    "node_numpy_rec_str": {
+      "type": "NumpyArrayNodeRecorder",
+      "node": "Reservoir",
+      "temporal_agg_func": "product"
+    },
+    "node_numpy_rec_dict": {
+      "type": "NumpyArrayNodeRecorder",
+      "node": "Reservoir",
+      "temporal_agg_func": {"func": "percentile", "args": [70, 95], "kwargs": {"method": "weibull"}}
+    },
+    "node_aggregated_rec": {
+      "type": "AggregatedRecorder",
+      "recorders": ["node_numpy_rec_dict", "node_link_rec"]
+    }
+  },
+  "pywr_editor_schematic_size": [1900, 1450]
+}

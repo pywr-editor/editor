@@ -1,0 +1,61 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "includes": [
+    "files/custom_parameter.py",
+    "files/custom_node.py",
+    "files/custom_recorder.py",
+    "files/custom_parameter2.py",
+    "files/non_existing_file.py",
+    "model_2.json"
+  ],
+  "scenarios": [
+    {"name": "scenario A", "size": 10},
+    {
+      "name": "scenario B",
+      "size": 2,
+      "ensemble_names": ["First", "Second"]
+    }
+  ],
+  "nodes": [
+    {
+      "name": "Reservoir",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35,
+      "position": {"editor_position": [200, 500]}
+    },
+    {
+      "name": "Link",
+      "type": "Link",
+      "position": {"editor_position": [1000, 300]}
+    }
+  ],
+  "edges": [["Reservoir", "Link"]],
+  "parameters": {
+    "param1": {"type": "constant", "value": 4},
+    "param2": {"type": "constant", "value": 5},
+    "param3": {"type": "constantscenario", "scenario": "scenario A", "value": 5},
+    "custom_param": {"type": "MyParameter", "value": 50},
+    "custom_param2": {"type": "LicenseParameter", "value": 50}
+  },
+  "recorders": {
+    "storage_flow": {
+      "type": "NumpyArrayNodeRecorder",
+      "node": "Reservoir"
+    },
+    "storage": {
+      "type": "NumpyArrayStorageRecorder",
+      "node": "Reservoir"
+    }
+  },
+  "pywr_editor_schematic_size": [1900, 1450]
+}

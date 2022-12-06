@@ -1,0 +1,113 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
+  "nodes": [
+    {
+      "name": "Reservoir",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35,
+      "position": {
+        "editor_position": [
+          200,
+          500
+        ]
+      }
+    },
+    {
+      "name": "Link",
+      "type": "Link",
+      "min_flow": {
+        "type": "custom_param",
+        "data": ["Table 3", "CSV table"]
+      },
+      "max_flow": {
+        "type": "aggregated",
+        "params": [
+          {
+            "table": "CSV table",
+            "index": "1"
+          }
+        ]
+      },
+      "position": {
+        "editor_position": [
+          1000,
+          300
+        ]
+      }
+    }
+  ],
+  "edges": [
+    [
+      "Reservoir",
+      "Link"
+    ]
+  ],
+  "tables": {
+    "profile_table": {
+      "url": "files/monthly_profile_vba.xlsm",
+      "sheet_name": "Horizontal_table",
+      "index_col": [0, 1]
+    }
+  },
+  "parameters": {
+    "valid_monthly_profile_param": {
+      "type": "MonthlyProfile",
+      "values": [
+        10.1, 20.1, 30.1, 40.1, 50.1, 60.1, 70.1, 80.1, 90.1, 100.1, 110.1, 120.1
+      ]
+    },
+    "invalid_size_monthly_profile_param": {
+      "type": "MonthlyProfile",
+      "values": [
+        12,
+        43,
+        12,
+        12,
+        99
+      ]
+    },
+    "invalid_type_monthly_profile_param": {
+      "type": "MonthlyProfile",
+      "values": [
+        10.1, "s", 30.1, 40.1, 50.1, 60.1, 70.1, 80.1, 90.1, 100.1, 110.1, 120.1
+      ]
+    },
+    "monthly_profile_param_url": {
+      "type": "MonthlyProfile",
+      "url": "files/monthly_profile_vba.xlsm",
+      "sheet_name": "Horizontal_table",
+      "index_col": [0, 1],
+      "index": ["A", "C"]
+    },
+    "monthly_profile_param_url_h5": {
+      "type": "MonthlyProfile",
+      "url": "files/monthly_profile.h5",
+      "key": "monthly_profile",
+      "index_col": 0,
+      "index": "A"
+    },
+    "monthly_profile_param_table": {
+      "type": "MonthlyProfile",
+      "table": "profile_table",
+      "index": ["A", "C"]
+    }
+  },
+  "pywr_editor_schematic_size": [
+    1900,
+    1450
+  ]
+}

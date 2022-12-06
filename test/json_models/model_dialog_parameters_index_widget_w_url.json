@@ -1,0 +1,294 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
+  "nodes": [
+    {
+      "name": "Reservoir",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35,
+      "position": {
+        "editor_position": [
+          200,
+          500
+        ]
+      }
+    },
+    {
+      "name": "Link",
+      "type": "Link",
+      "min_flow": {
+        "type": "custom_param",
+        "data": [
+          "Table 3",
+          "CSV table"
+        ]
+      },
+      "max_flow": {
+        "type": "aggregated",
+        "params": [
+          {
+            "table": "CSV table",
+            "index": "1"
+          }
+        ]
+      },
+      "position": {
+        "editor_position": [
+          1000,
+          300
+        ]
+      }
+    }
+  ],
+  "edges": [
+    [
+      "Reservoir",
+      "Link"
+    ]
+  ],
+  "parameters": {
+    "param_with_index_int": {
+      "type": "constant",
+      "url": "files/table_mixed_types.csv",
+      "index_col": "Demand centre",
+      "index": 2,
+      "column": "Column 1"
+    },
+    "param_with_index_str": {
+      "type": "constant",
+      "url": "files/table_mixed_types.csv",
+      "index_col": "Column 1",
+      "index": "5",
+      "column": "Column 3"
+    },
+    "param_with_anonymous_index": {
+      "type": "constant",
+      "url": "files/table_mixed_types.csv",
+      "index": 1,
+      "column": 3
+    },
+    "param_with_index_list_int": {
+      "type": "constant",
+      "url": "files/table_mixed_types.csv",
+      "index_col": [
+        "Column 3",
+        "Demand centre"
+      ],
+      "index": [
+        7,
+        6
+      ],
+      "column": 0
+    },
+    "param_with_index_list_str": {
+      "type": "constant",
+      "url": "files/table_mixed_types.csv",
+      "index_col": [
+        "Column 1",
+        "Demand centre"
+      ],
+      "index": [
+        "c",
+        6
+      ],
+      "column": 1
+    },
+    "param_with_indexes_key": {
+      "type": "constant",
+      "url": "files/table_mixed_types.csv",
+      "index_col": [
+        "Column 1",
+        "Demand centre"
+      ],
+      "indexes": [
+        "c",
+        6
+      ],
+      "column": 1
+    },
+    "param_with_index_col_as_list_int": {
+      "type": "constant",
+      "url": "files/table_mixed_types.csv",
+      "index_col": [
+        2,
+        0
+      ],
+      "index": [
+        3,
+        "c"
+      ],
+      "column": 1
+    },
+    "param_h5_file": {
+      "type": "constant",
+      "url": "files/table_index.h5",
+      "key": "/flow",
+      "index": 22,
+      "column": 1
+    },
+    "param_with_h5_table_index_col": {
+      "type": "constant",
+      "url": "files/table_index.h5",
+      "key": "/flow",
+      "index_col": 2,
+      "index": 10,
+      "column": 0
+    },
+    "param_with_h5_table_ano_index": {
+      "type": "constant",
+      "url": "files/table.h5",
+      "key": "/flow",
+      "index": 2,
+      "column": 0
+    },
+    "param_with_invalid_index_one_value_only_int": {
+      "type": "constant",
+      "url": "files/table_mixed_types.csv",
+      "index_col": [
+        "Column 1",
+        "Demand centre"
+      ],
+      "index": 1,
+      "column": 3
+    },
+    "param_with_invalid_index_one_value_only_list": {
+      "type": "constant",
+      "url": "files/table_mixed_types.csv",
+      "index_col": [
+        "Column 1",
+        "Demand centre"
+      ],
+      "index": [
+        "c"
+      ],
+      "column": 3
+    },
+    "param_with_no_index_values": {
+      "type": "constant",
+      "url": "files/table_mixed_types.csv",
+      "index_col": [
+        "Column 1",
+        "Demand centre"
+      ],
+      "column": 1
+    },
+    "param_with_empty_list": {
+      "type": "constant",
+      "url": "files/table_mixed_types.csv",
+      "index_col": [
+        "Column 1",
+        "Demand centre"
+      ],
+      "index": [],
+      "column": 3
+    },
+    "param_with_wrong_anonymous_index": {
+      "type": "constant",
+      "url": "files/table_mixed_types.csv",
+      "index": 100,
+      "column": 3
+    },
+    "param_non_existing_value": {
+      "type": "constant",
+      "url": "files/table_mixed_types.csv",
+      "index_col": "Column 1",
+      "index": -9,
+      "column": 3
+    },
+    "param_non_existing_values": {
+      "type": "constant",
+      "url": "files/table_mixed_types.csv",
+      "index_col": [
+        "Demand centre",
+        "Column 1"
+      ],
+      "index": [
+        6,
+        -9
+      ],
+      "column": 3
+    },
+    "param_wrong_type": {
+      "type": "constant",
+      "url": "files/table_mixed_types.csv",
+      "index_col": [
+        "Demand centre",
+        "Column 1"
+      ],
+      "index": [
+        "6",
+        -9
+      ],
+      "column": 3
+    },
+    "param_non_existing_table": {
+      "type": "constant",
+      "url": "files/non_existing_table.csv",
+      "index_col": [
+        "Demand centre",
+        "Column 1"
+      ],
+      "index": [
+        6,
+        "c"
+      ],
+      "column": 3
+    },
+    "param_empty_table": {
+      "type": "constant",
+      "url": "files/table.xlsx",
+      "sheet_name": 1,
+      "index_col": [
+        "Demand centre",
+        "Column 1"
+      ],
+      "index": [
+        6,
+        "c"
+      ],
+      "column": 3
+    },
+    "param_empty_h5_table": {
+      "type": "constant",
+      "url": "files/table_index.h5",
+      "key": "/empty_table",
+      "index_col": [
+        "Demand centre"
+      ],
+      "index": [
+        6
+      ],
+      "column": 3
+    },
+    "param_table_no_rows": {
+      "type": "constant",
+      "url": "files/table_no_rows.csv",
+      "index_col": [
+        "Demand centre",
+        "Column 1"
+      ],
+      "index": [
+        6,
+        "c"
+      ],
+      "column": 3
+    }
+  },
+  "pywr_editor_schematic_size": [
+    1900,
+    1450
+  ]
+}

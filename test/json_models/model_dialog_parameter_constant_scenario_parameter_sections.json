@@ -1,0 +1,67 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "nodes": [
+    {
+      "name": "Reservoir",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35,
+      "position": {"editor_position": [200, 500]}
+    },
+    {
+      "name": "Link",
+      "type": "Link",
+      "min_flow": {
+        "type": "custom_param",
+        "data": ["Table 3", "CSV table"]
+      }
+    }
+  ],
+  "edges": [["Reservoir", "Link"]],
+  "scenarios": [
+    {"name": "scenario A", "size": 10},
+    {
+      "name": "scenario B",
+      "size": 2,
+      "ensemble_names": ["First", "Second"]
+    },
+    {"name": "scenario C", "size": 20}
+  ],
+  "parameters": {
+    "valid_scenario": {
+      "type": "ConstantScenario",
+      "scenario": "scenario A"
+    },
+    "valid_missing_scenario": {"type": "ConstantScenario"},
+    "valid_empty_scenario": {"type": "ConstantScenario", "scenario": ""},
+    "invalid_non_existing_scenario": {
+      "type": "ConstantScenario",
+      "scenario": "scenario X"
+    },
+    "invalid_scenario_type": {"type": "ConstantScenario", "scenario": 1},
+    "valid_values": {
+      "type": "ConstantScenario",
+      "scenario": "scenario B",
+      "values": [56, 87]
+    },
+    "valid_values_no_scenario": {
+      "type": "ConstantScenario",
+      "values": [56, 87]
+    },
+    "invalid_values_wrong_size": {
+      "type": "ConstantScenario",
+      "scenario": "scenario A",
+      "values": [56, 87, 5]
+    }
+  },
+  "pywr_editor_schematic_size": [1900, 1450]
+}

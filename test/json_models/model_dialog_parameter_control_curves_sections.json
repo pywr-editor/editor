@@ -1,0 +1,126 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "nodes": [
+    {
+      "name": "Reservoir",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35,
+      "position": {"editor_position": [200, 500]}
+    },
+    {
+      "name": "Link",
+      "type": "Link",
+      "min_flow": {
+        "type": "custom_param",
+        "data": ["Table 3", "CSV table"]
+      },
+      "max_flow": {
+        "type": "aggregated",
+        "params": [{"table": "CSV table", "index": "1"}]
+      },
+      "position": {"editor_position": [1000, 300]}
+    }
+  ],
+  "edges": [["Reservoir", "Link"]],
+  "parameters": {
+    "valid_with_constant_control_curve_and_values": {
+      "type": "ControlCurve",
+      "storage_node": "Reservoir",
+      "control_curve": 12,
+      "values": [12, 45]
+    },
+    "valid_with_parametric_control_curve_and_values": {
+      "type": "ControlCurve",
+      "storage_node": "Reservoir",
+      "values": [12, 45],
+      "control_curve": {
+        "type": "NodeThresholdParameter",
+        "node": "Link",
+        "threshold": 75.32,
+        "values": [
+          3,
+          4
+        ]
+      }
+    },
+    "valid_with_constant_control_curve_and_param": {
+      "type": "ControlCurve",
+      "storage_node": "Reservoir",
+      "control_curve": 12,
+      "parameters": [12, 67]
+    },
+    "valid_with_values_and_param": {
+      "type": "ControlCurve",
+      "storage_node": "Reservoir",
+      "control_curve": 12,
+      "values": [12, 67],
+      "parameters": [12, 67]
+    },
+    "valid_with_control_curves_to_one": {
+      "type": "ControlCurve",
+      "storage_node": "Reservoir",
+      "control_curves": [12],
+      "values": [12, 67]
+    },
+    "invalid_with_not_enough_params": {
+      "type": "ControlCurve",
+      "storage_node": "Reservoir",
+      "control_curve": 12,
+      "parameters": [12]
+    },
+    "invalid_with_empty_params": {
+      "type": "ControlCurve",
+      "storage_node": "Reservoir",
+      "control_curve": 12,
+      "parameters": []
+    },
+    "invalid_with_not_enough_values": {
+      "type": "ControlCurve",
+      "storage_node": "Reservoir",
+      "control_curve": [12, 56],
+      "values": [12, 0]
+    },
+    "bounds_no_variable_indices": {
+      "type": "ControlCurve",
+      "storage_node": "Reservoir",
+      "control_curve": [12, 56],
+      "values": [12, 0],
+      "lower_bounds": [12, 30]
+    },
+    "bounds_no_values_set": {
+      "type": "ControlCurve",
+      "storage_node": "Reservoir",
+      "control_curve": [12, 56],
+      "lower_bounds": [12, 30],
+      "variable_indices": [0, 1],
+      "parameters": [12]
+    },
+    "bounds_wrong_size": {
+      "type": "ControlCurve",
+      "storage_node": "Reservoir",
+      "control_curve": [12, 56],
+      "values": [12, 0],
+      "lower_bounds": [12],
+      "variable_indices": [0, 1]
+    },
+    "bounds_ok": {
+      "type": "ControlCurve",
+      "storage_node": "Reservoir",
+      "control_curve": [12, 56],
+      "values": [12, 0],
+      "lower_bounds": [12, 98],
+      "variable_indices": [0, 1]
+    }
+  },
+  "pywr_editor_schematic_size": [1900, 1450]
+}

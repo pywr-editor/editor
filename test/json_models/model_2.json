@@ -1,0 +1,79 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1"
+  },
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
+  "nodes": [
+    {
+      "name": "Link",
+      "type": "Link",
+      "position": {
+        "editor_position": [
+          1000,
+          300
+        ]
+      }
+    },
+    {
+      "name": "Link22",
+      "type": "Link"
+    },
+    {
+      "name": "Reservoir",
+      "type": "Reservoir"
+    },
+    {
+      "name": "Node 2",
+      "type": "Link"
+    },
+    {
+      "name": "Node 3",
+      "type": "Link"
+    },
+    {
+      "name": "Node w slot",
+      "type": "Link"
+    },
+    {
+      "name": "Node 1 w slot",
+      "type": "Link"
+    },
+    {
+      "name": "Node 2 w slot",
+      "type": "Link"
+    }
+  ],
+  "edges": [
+    [
+      "Reservoir",
+      "Link"
+    ],
+    [
+      "Reservoir",
+      "Link22"
+    ],
+    [
+      "Node w slot",
+      "Node 2",
+      0
+    ],
+    [
+      "Node 3",
+      "Node w slot",
+      null,
+      1
+    ],
+    [
+      "Node 1 w slot",
+      "Node 2 w slot",
+      0,
+      1
+    ]
+  ]
+}

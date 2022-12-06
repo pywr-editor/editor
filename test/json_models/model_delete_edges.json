@@ -1,0 +1,113 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1"
+  },
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
+  "nodes": [
+    {
+      "name": "Reservoir",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35,
+      "position": {
+        "editor_position": [
+          200,
+          500
+        ]
+      }
+    },
+    {
+      "name": "Link1",
+      "type": "Link",
+      "position": {
+        "editor_position": [
+          1000,
+          300
+        ]
+      }
+    },
+    {
+      "name": "Link2",
+      "type": "Link",
+      "position": {
+        "editor_position": [
+          100,
+          300
+        ]
+      }
+    },
+    {
+      "name": "Link3",
+      "type": "Link",
+      "position": {
+        "editor_position": [
+          50,
+          500
+        ]
+      }
+    },
+    {
+      "name": "Link4",
+      "type": "Link",
+      "position": {
+        "editor_position": [
+          70,
+          20
+        ]
+      }
+    },
+    {
+      "name": "Virtual storage",
+      "type": "virtualstorage",
+      "nodes": [],
+      "position": {
+        "editor_position": [
+          70,
+          20
+        ]
+      }
+    }
+  ],
+  "edges": [
+    [
+      "Reservoir",
+      "Link1"
+    ],
+    [
+      "Link1",
+      "Link2"
+    ],
+    [
+      "Link3",
+      "Link2"
+    ],
+    [
+      "Link3",
+      "Link4"
+    ],
+    [
+      "Reservoir",
+      "Link2"
+    ]
+  ],
+  "parameters": {
+    "param1": {
+      "type": "constant",
+      "value": 4
+    },
+    "param2": {
+      "type": "constant",
+      "value": 5
+    }
+  },
+  "pywr_editor_schematic_size": [
+    1900,
+    1450
+  ]
+}

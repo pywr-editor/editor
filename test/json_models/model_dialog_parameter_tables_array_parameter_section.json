@@ -1,0 +1,89 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "nodes": [
+    {
+      "name": "Reservoir",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35,
+      "position": {"editor_position": [200, 500]}
+    },
+    {
+      "name": "Link",
+      "type": "Link",
+      "min_flow": {
+        "type": "custom_param",
+        "data": ["Table 3", "CSV table"]
+      }
+    }
+  ],
+  "edges": [["Reservoir", "Link"]],
+  "scenarios": [
+    {"name": "scenario A", "size": 10},
+    {
+      "name": "scenario B",
+      "size": 2,
+      "ensemble_names": ["First", "Second"]
+    }
+  ],
+  "parameters": {
+    "valid": {
+      "type": "TablesArray",
+      "url": "files/pytable_ts.h5",
+      "where": "/timeseries2",
+      "node": "block0_values"
+    },
+    "valid_no_file": {"type": "TablesArray"},
+    "invalid_extension": {"type": "TablesArray", "url": "files/table.csv"},
+    "invalid_non_existing": {
+      "type": "TablesArray",
+      "url": "files/non-existing.h5"
+    },
+    "valid_no_where": {"type": "TablesArray", "url": "files/pytable_ts.h5"},
+    "valid_no_node": {
+      "type": "TablesArray",
+      "url": "files/pytable_ts.h5",
+      "where": "/timeseries2"
+    },
+    "invalid_non_existing_where": {
+      "type": "TablesArray",
+      "url": "files/pytable_ts.h5",
+      "where": "/XX"
+    },
+    "invalid_wrong_where_type": {
+      "type": "TablesArray",
+      "url": "files/pytable_ts.h5",
+      "where": ["/XX"]
+    },
+    "invalid_non_existing_node": {
+      "type": "TablesArray",
+      "url": "files/pytable_ts.h5",
+      "where": "/timeseries2",
+      "node": "XX"
+    },
+    "check_sum_calc_valid": {
+      "type": "TablesArray",
+      "url": "files/pytable_ts.h5",
+      "where": "/timeseries2"
+    },
+    "check_sum_calc_no_url": {
+      "type": "TablesArray",
+      "where": "/timeseries2"
+    },
+    "check_sum_calc_non_existing_url": {
+      "type": "TablesArray",
+      "url": "files/pyte_ts.h5",
+      "where": "/timeseries2"
+    }
+  },
+  "pywr_editor_schematic_size": [1900, 1450]
+}

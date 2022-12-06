@@ -1,0 +1,14 @@
+PySide6
+pytest
+pytest-qt
+pytest-env
+numpy
+setuptools
+pyinstaller
+pywr==1.18.0
+typer
+pandas
+requests
+pyqtgraph
+flake8
+black

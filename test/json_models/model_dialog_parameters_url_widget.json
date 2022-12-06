@@ -1,0 +1,100 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
+  "nodes": [
+    {
+      "name": "Reservoir",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35,
+      "position": {
+        "editor_position": [
+          200,
+          500
+        ]
+      }
+    },
+    {
+      "name": "Link",
+      "type": "Link",
+      "min_flow": {
+        "type": "custom_param",
+        "data": ["Table 3", "CSV table"]
+      },
+      "max_flow": {
+        "type": "aggregated",
+        "params": [
+          {
+            "table": "CSV table",
+            "index": "1"
+          }
+        ]
+      },
+      "position": {
+        "editor_position": [
+          1000,
+          300
+        ]
+      }
+    }
+  ],
+  "edges": [
+    [
+      "Reservoir",
+      "Link"
+    ]
+  ],
+  "parameters": {
+    "param_excel_file": {
+      "type": "constant",
+      "url": "files/table.xlsx",
+      "sheet_name": "Sheet 1",
+      "index_col": "Column 2",
+      "column": 1,
+      "index": 1
+    },
+    "param_csv_file": {
+      "type": "constant",
+      "url": "files/table.csv",
+      "index_col": [0, 1],
+      "column": 1,
+      "index":[1, 2]
+    },
+    "param_h5_file": {
+      "type": "constant",
+      "url": "files/table.h5",
+      "key": "/flow",
+      "column": 1,
+      "index": 1,
+      "start": 1
+    },
+    "param_non_existing_file": {
+      "type": "constant",
+      "url": "files/table_not_found.xlsx"
+    },
+    "param_file_ext_not_supported": {
+      "type": "constant",
+      "url": "files/table.docx"
+    },
+    "param_with_h5_no_keys": {
+      "type": "constant",
+      "url": "files/table_no_keys.h5"
+    }
+  },
+  "pywr_editor_schematic_size": [
+    1900,
+    1450
+  ]
+}

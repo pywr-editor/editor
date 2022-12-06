@@ -1,0 +1,13 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1"
+  },
+  "includes": [
+    "files/custom_parameter_duplicated_name.py"
+  ],
+  "timestepper": {},
+  "nodes": [],
+  "edges": []
+}

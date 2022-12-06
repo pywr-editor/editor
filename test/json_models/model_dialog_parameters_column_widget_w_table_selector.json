@@ -1,0 +1,163 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
+  "nodes": [
+    {
+      "name": "Reservoir",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35,
+      "position": {
+        "editor_position": [
+          200,
+          500
+        ]
+      }
+    },
+    {
+      "name": "Link",
+      "type": "Link",
+      "min_flow": {
+        "type": "custom_param",
+        "data": [
+          "Table 3",
+          "CSV table"
+        ]
+      },
+      "max_flow": {
+        "type": "aggregated",
+        "params": [
+          {
+            "table": "CSV table",
+            "index": "1"
+          }
+        ]
+      },
+      "position": {
+        "editor_position": [
+          1000,
+          300
+        ]
+      }
+    }
+  ],
+  "edges": [
+    [
+      "Reservoir",
+      "Link"
+    ]
+  ],
+  "tables": {
+    "csv_table": {
+      "url": "files/table.csv",
+      "index_col": [
+        0,
+        1
+      ]
+    },
+    "excel_table": {
+      "url": "files/table.xlsx",
+      "sheet_name": "Sheet 1",
+      "index_col": "Column 2"
+    },
+    "excel_table_no_index_col": {
+      "url": "files/table.xlsx",
+      "sheet_name": "Sheet 1",
+      "index_col": ""
+    },
+    "empty_table": {
+      "url": "files/table.xlsx",
+      "sheet_name": "Sheet 2",
+      "index_col": [
+        2,
+        3
+      ]
+    },
+    "missing_table_file": {
+      "url": "files/table_not_found.csv",
+      "index_col": [
+        0,
+        1
+      ]
+    },
+    "h5_table_index_col": {
+      "url": "files/table_index.h5",
+      "key": "/flow",
+      "index_col": 2
+    }
+  },
+  "parameters": {
+    "param_with_column_str": {
+      "type": "constant",
+      "table": "excel_table",
+      "column": "Column 3",
+      "index": 6
+    },
+    "param_with_column_int": {
+      "type": "constant",
+      "table": "excel_table",
+      "column": 2,
+      "index": 6
+    },
+    "param_no_index_col": {
+      "type": "constant",
+      "table": "excel_table_no_index_col"
+    },
+    "param_with_non_existing_column": {
+      "type": "constant",
+      "table": "excel_table",
+      "column": "Column 8"
+    },
+    "param_with_column_is_index": {
+      "type": "constant",
+      "table": "excel_table",
+      "column": "Column 2"
+    },
+    "param_with_no_column": {
+      "type": "constant",
+      "table": "excel_table"
+    },
+    "param_with_invalid_column_type": {
+      "type": "constant",
+      "table": "excel_table",
+      "column": []
+    },
+    "param_with_invalid_column_type2": {
+      "type": "constant",
+      "table": "excel_table",
+      "column": null
+    },
+    "param_non_existing_file": {
+      "type": "constant",
+      "table": "missing_table_file",
+      "column": 1
+    },
+    "param_empty_sheet": {
+      "type": "constant",
+      "table": "empty_table",
+      "column": 1
+    },
+    "param_with_h5_table_index_col": {
+      "type": "constant",
+      "table": "h5_table_index_col",
+      "column": "Column 3",
+      "index": 10
+    }
+  },
+  "pywr_editor_schematic_size": [
+    1900,
+    1450
+  ]
+}

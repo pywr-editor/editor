@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "title": "Reservoir",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1"
+  },
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
+  "nodes": [
+    {
+      "name": "Link",
+      "type": "Link",
+      "position": {
+        "editor_position": [
+          -10,
+          50
+        ]
+      }
+    },
+    {
+      "name": "Output",
+      "type": "Output",
+      "position": {
+        "editor_position": [
+          100,
+          450
+        ]
+      }
+    }
+  ],
+  "edges": [
+    [
+      "Link",
+      "Output"
+    ]
+  ],
+  "pywr_editor_schematic_size": [
+    300,
+    400
+  ]
+}

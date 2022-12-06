@@ -1,0 +1,31 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "includes": [
+    "files/custom_parameter.py"
+  ],
+  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "nodes": [
+    {
+      "name": "Reservoir1",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35
+    },
+    {"name": "Output", "type": "output"}
+  ],
+  "parameters": {
+    "constant_param": {"type": "constant", "value": 343.13},
+    "monthly_param": {"type": "monthlyprofile", "values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]},
+    "weekly_param": {"type": "weeklyprofile", "values": []},
+    "custom_param": {"type": "my", "values": []}
+  },
+  "pywr_editor_schematic_size": [1900, 1450]
+}
