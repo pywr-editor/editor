@@ -1,0 +1,110 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
+  "nodes": [
+    {
+      "name": "Reservoir",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35,
+      "position": {
+        "editor_position": [
+          200,
+          500
+        ]
+      }
+    },
+    {
+      "name": "Link",
+      "type": "Link",
+      "min_flow": {
+        "type": "custom_param",
+        "data": ["Table 3", "Table 1"]
+      },
+      "max_flow": {
+        "type": "aggregated",
+        "params": [
+          {
+            "table": "Table 1",
+            "index": "1"
+          }
+        ]
+      },
+      "position": {
+        "editor_position": [
+          1000,
+          300
+        ]
+      }
+    }
+  ],
+  "edges": [
+    [
+      "Reservoir",
+      "Link"
+    ]
+  ],
+  "parameters": {
+    "param1": {
+      "type": "constant",
+      "value": 4
+    },
+    "param2": {
+      "type": "constant",
+      "table": "Table 1",
+      "index": "Cardiff",
+      "column": "Demand"
+    }
+  },
+  "tables": {
+    "Table 1": {
+      "url": "file1.csv",
+      "index_col": "Demand centre"
+    },
+    "Table 2": {
+      "url": "file2.csv",
+      "index_col": "Date",
+      "parse_dates": false
+    },
+    "Table 3": {
+      "url": "files/table.csv",
+      "index_col": "Column 1",
+      "parse_dates": true
+    },
+    "Table 5": {
+      "url": "files/table.h5",
+      "key": "/flow",
+      "start": 1
+    },
+    "Table 6": {
+      "url": "files/table.h5",
+      "key": "/non-existing-key",
+      "start": 1
+    },
+    "Table 7": {
+      "url": "files/table.xlsx",
+      "sheet_name": "Sheet 1",
+      "index_col": 2
+    },
+    "Table 8": {
+      "url": "files/table.xlsx",
+      "sheet_name": "Sheet 2"
+    }
+  },
+  "pywr_editor_schematic_size": [
+    1900,
+    1450
+  ]
+}

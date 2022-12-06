@@ -1,0 +1,163 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "includes": ["files/custom_parameter.py"],
+  "nodes": [
+    {
+      "name": "Reservoir",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35,
+      "position": {"editor_position": [200, 500]}
+    },
+    {
+      "name": "Link",
+      "type": "Link",
+      "min_flow": {
+        "type": "custom_param",
+        "data": ["Table 3", "CSV table"]
+      },
+      "max_flow": {
+        "type": "aggregated",
+        "params": [{"table": "CSV table", "index": "1"}]
+      },
+      "position": {"editor_position": [1000, 300]}
+    }
+  ],
+  "edges": [["Reservoir", "Link"]],
+  "tables": {
+    "CSV table": {
+      "url": "files/table.csv",
+      "index_col": "Column 1",
+      "skipinitialspace": true
+    },
+    "CSV table (mixed types)": {
+      "url": "files/table_mixed_types.csv",
+      "index_col": "Column 1"
+    },
+    "CSV table (multi-index)": {
+      "url": "files/table.csv",
+      "index_col": ["Column 1", "Column 3"],
+      "skipinitialspace": true
+    },
+    "CSV table (no file)": {
+      "url": "files/table_missing.csv",
+      "index_col": "Demand centre"
+    },
+    "CSV table (parse error)": {
+      "url": "files/table.csv",
+      "index_col": "Column X"
+    },
+    "Excel table": {
+      "url": "files/table.xlsx",
+      "sheet_name": "Sheet 1",
+      "index_col": 2
+    },
+    "Excel table (empty)": {
+      "url": "files/table.xlsx",
+      "sheet_name": "Sheet 2"
+    },
+    "H5 table": {"url": "files/table.h5", "key": "/flow"}
+  },
+  "parameters": {
+    "param1": {
+      "type": "constant",
+      "value": 4,
+      "scale": 8,
+      "offset": -1,
+      "comment": "Last updated on 12/12/2021"
+    },
+    "const_param_with_values": {"type": "constant", "values": 7},
+    "const_param_wrong_type": {"type": "constant", "value": [3, 2]},
+    "param_with_valid_csv_table": {
+      "type": "constant",
+      "table": "CSV table",
+      "index": 1,
+      "column": "Demand centre"
+    },
+    "param_with_table_parse_error": {
+      "type": "constant",
+      "table": "CSV table (parse error)",
+      "index": 1,
+      "column": "Demand centre"
+    },
+    "param_with_empty_table": {
+      "type": "constant",
+      "table": "Excel table (empty)",
+      "index": 1,
+      "column": "Demand centre"
+    },
+    "param_with_valid_excel_table": {
+      "type": "ConstantParameter",
+      "table": "Excel table",
+      "sheet_name": "Sheet 3",
+      "index": 8,
+      "column": "Column 2"
+    },
+    "param_with_valid_anonymous_excel_table": {
+      "type": "constant",
+      "url": "files/table.xlsx",
+      "sheet_name": "Sheet 3",
+      "index_col": 2,
+      "column": "Column 2"
+    },
+    "param_with_anonymous_excel_table_wrong_sheet": {
+      "type": "constant",
+      "url": "files/table.xlsx",
+      "sheet_name": "Sheet 300",
+      "index_col": 2,
+      "column": "Column 2"
+    },
+    "param_with_invalid_table": {
+      "type": "constant",
+      "table": "XX table",
+      "index": "Cardiff",
+      "column": "Demand centre"
+    },
+    "param_with_missing_file_table": {
+      "type": "constant",
+      "table": "CSV table (no file)",
+      "index": "Cardiff",
+      "column": "Column 3"
+    },
+    "param_with_mixed_index_types": {
+      "type": "constant",
+      "table": "CSV table (mixed types)",
+      "index": "5",
+      "column": "Column 3"
+    },
+    "param_no_source": {"type": "constant"},
+    "dataframe_param": {
+      "type": "dataframe",
+      "url": "files/table.csv",
+      "column": 0
+    },
+    "hydro_param_valid": {
+      "type": "HydropowerTargetParameter",
+      "target": 45,
+      "max_flow": 54,
+      "efficiency": 0.5
+    },
+    "hydro_param_invalid_min": {
+      "type": "HydropowerTargetParameter",
+      "target": 45,
+      "max_flow": 54,
+      "efficiency": -4
+    },
+    "hydro_param_invalid_max": {
+      "type": "HydropowerTargetParameter",
+      "target": 45,
+      "max_flow": 54,
+      "efficiency": 10
+    }
+  },
+  "pywr_editor_schematic_size": [1900, 1450]
+}

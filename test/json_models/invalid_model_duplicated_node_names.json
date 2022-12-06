@@ -1,0 +1,31 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1"
+  },
+  "timestepper": {},
+  "nodes": [
+    {
+      "name": "Node 1",
+      "type": "storage"
+    },
+    {
+      "name": "Node 1",
+      "type": "storage"
+    },
+    {
+      "name": "Node 2",
+      "type": "storage"
+    },
+    {
+      "name": "Node 4",
+      "type": "storage"
+    },
+    {
+      "name": "Node 4",
+      "type": "storage"
+    }
+  ],
+  "edges": []
+}

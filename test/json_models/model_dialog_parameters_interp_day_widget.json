@@ -1,0 +1,157 @@
+{
+    "metadata": {
+        "title": "Reservoir 1",
+        "description": "A model with a reservoir.",
+        "minimum_version": "0.1",
+        "author": "Stefano Simoncelli",
+        "email": "stefano.simoncelli@domain.com",
+        "maintainer": "Stefano Simoncelli",
+        "model_version": "2.1"
+    },
+    "timestepper": {
+        "start": "2015-01-01",
+        "end": "2015-12-31",
+        "timestep": 1
+    },
+    "nodes": [
+        {
+            "name": "Reservoir",
+            "type": "Storage",
+            "max_volume": 35,
+            "initial_volume": 35,
+            "position": {
+                "editor_position": [
+                    200,
+                    500
+                ]
+            }
+        },
+        {
+            "name": "Link",
+            "type": "Link",
+            "min_flow": {
+                "type": "custom_param",
+                "data": [
+                    "Table 3",
+                    "CSV table"
+                ]
+            },
+            "max_flow": {
+                "type": "aggregated",
+                "params": [
+                    {
+                        "table": "CSV table",
+                        "index": "1"
+                    }
+                ]
+            },
+            "position": {
+                "editor_position": [
+                    1000,
+                    300
+                ]
+            }
+        }
+    ],
+    "edges": [
+        [
+            "Reservoir",
+            "Link"
+        ]
+    ],
+    "parameters": {
+        "valid_interp_day": {
+            "type": "MonthlyProfile",
+            "values": [
+                12,
+                43,
+                12,
+                12,
+                99,
+                111,
+                432,
+                123.5,
+                657,
+                10,
+                9,
+                76
+            ],
+            "interp_day": "first"
+        },
+        "valid_interp_day_case": {
+            "type": "MonthlyProfile",
+            "values": [
+                12,
+                43,
+                12,
+                12,
+                99,
+                111,
+                432,
+                123.5,
+                657,
+                10,
+                9,
+                76
+            ],
+            "interp_day": "Last"
+        },
+        "valid_interp_day_empty": {
+            "type": "MonthlyProfile",
+            "values": [
+                12,
+                43,
+                12,
+                12,
+                99,
+                111,
+                432,
+                123.5,
+                657,
+                10,
+                9,
+                76
+            ]
+        },
+        "invalid_interp_day_wrong_name": {
+            "type": "MonthlyProfile",
+            "values": [
+                12,
+                43,
+                12,
+                12,
+                99,
+                111,
+                432,
+                123.5,
+                657,
+                10,
+                9,
+                76
+            ],
+            "interp_day": "wrong_name"
+        },
+        "invalid_interp_day_wrong_type": {
+            "type": "MonthlyProfile",
+            "values": [
+                12,
+                43,
+                12,
+                12,
+                99,
+                111,
+                432,
+                123.5,
+                657,
+                10,
+                9,
+                76
+            ],
+            "interp_day": 1
+        }
+    },
+    "pywr_editor_schematic_size": [
+        1900,
+        1450
+    ]
+}

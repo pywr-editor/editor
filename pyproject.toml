@@ -1,0 +1,10 @@
+[tool.black]
+line-length = 80
+[tool.pytest_ini_options]
+testpaths = [
+    "test"
+]
+required_plugins = [
+    "pytest-qt"
+]
+qt_api = "pyside6"

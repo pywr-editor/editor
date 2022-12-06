@@ -1,0 +1,83 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "nodes": [
+    {
+      "name": "valid",
+      "type": "KeatingAquifer",
+      "stream_flow_levels": [[100, 200, 600], [1, 3, 6]],
+      "transmissivity": [19, 1, 2],
+      "coefficient": 1,
+      "levels": [0, 1],
+      "volumes": [0, 1]
+    },
+    {
+      "name": "invalid_empty_levels",
+      "type": "KeatingAquifer",
+      "transmissivity": [19, 1, 2]
+    },
+    {
+      "name": "invalid_empty_transmissivity",
+      "type": "KeatingAquifer",
+      "stream_flow_levels": [[100, 200, 600], [1, 3, 6]]
+    },
+    {
+      "name": "invalid_type_transmissivity",
+      "type": "KeatingAquifer",
+      "stream_flow_levels": [[100, 200, 600], [1, 3, 6]],
+      "transmissivity": 1
+    },
+    {
+      "name": "invalid_type_transmissivity_not_number",
+      "type": "KeatingAquifer",
+      "stream_flow_levels": [[100, 200, 600], [1, 3, 6]],
+      "transmissivity": [1, "s"]
+    },
+    {
+      "name": "invalid_type_level",
+      "type": "KeatingAquifer",
+      "stream_flow_levels": 1,
+      "transmissivity": [19, 1, 2]
+    },
+    {
+      "name": "invalid_type_level_not_list",
+      "type": "KeatingAquifer",
+      "stream_flow_levels": [1, 4],
+      "transmissivity": [19, 1, 2]
+    },
+    {
+      "name": "invalid_type_level_not_number",
+      "type": "KeatingAquifer",
+      "stream_flow_levels": [[1, "s"]],
+      "transmissivity": [19, 1, 2]
+    },
+    {
+      "name": "invalid_level_wrong_size",
+      "type": "KeatingAquifer",
+      "stream_flow_levels": [[10, 20], [10, 20, 30]],
+      "transmissivity": [19, 1, 2]
+    },
+    {
+      "name": "invalid_level_transmissivity_size",
+      "type": "KeatingAquifer",
+      "stream_flow_levels": [[10, 20], [10, 11]],
+      "transmissivity": [19, 1, 2]
+    },
+    {
+      "name": "valid_empty",
+      "type": "KeatingAquifer",
+      "stream_flow_levels": [[100, 200, 600]],
+      "transmissivity": [19, 1, 2],
+      "coefficient": 1,
+      "levels": [0, 1, 8]
+    }
+  ]
+}

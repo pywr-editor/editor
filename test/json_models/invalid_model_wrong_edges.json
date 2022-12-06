@@ -1,0 +1,13 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1"
+  },
+  "timestepper": {},
+  "nodes": [],
+  "edges": [
+    [1, "Node 1", 0],
+    ["Node A", "Node B"]
+  ]
+}

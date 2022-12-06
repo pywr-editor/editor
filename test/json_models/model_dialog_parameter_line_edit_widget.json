@@ -1,0 +1,105 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "tables": {
+    "tableA":{
+      "url": "files/table.csv"
+    }
+  },
+  "nodes": [
+    {
+      "name": "Reservoir",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35,
+      "position": {"editor_position": [200, 500]}
+    },
+    {
+      "name": "Link",
+      "type": "Link",
+      "min_flow": {
+        "type": "custom_param",
+        "data": ["Table 3", "CSV table"]
+      },
+      "max_flow": {
+        "type": "aggregated",
+        "params": [{"table": "CSV table", "index": "1"}]
+      }
+    }
+  ],
+  "edges": [["Reservoir", "Link"]],
+  "parameters": {
+    "constant_param": {
+      "type": "constant",
+      "value": 23
+    },
+    "monthly_param": {
+      "type": "monthlyprofile",
+      "values": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+    },
+    "valid_model_param_constant": {
+      "type": "StorageThreshold",
+      "threshold": "constant_param",
+      "values": [20, 10]
+    },
+    "valid_model_param_monthly": {
+      "type": "StorageThreshold",
+      "threshold": "monthly_param",
+      "values": [20, 10]
+    },
+    "valid_number": {
+      "type": "StorageThreshold",
+      "threshold": 10,
+      "values": [20, 10]
+    },
+    "valid_dict": {
+      "type": "StorageThreshold",
+      "threshold": {
+        "type": "monthlyprofile",
+        "values": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+      },
+      "values": [20, 10]
+    },
+    "valid_empty": {
+      "type": "StorageThreshold",
+      "values": [20, 10]
+    },
+    "valid_custom_parameter": {
+      "type": "StorageThreshold",
+      "values": [20, 10],
+      "threshold": {
+        "type": "customParameter",
+        "value": 2
+      }
+    },
+    "invalid_empty_dict": {
+      "type": "StorageThreshold",
+      "threshold": {},
+      "values": [20, 10]
+    },
+    "invalid_empty_str": {
+      "type": "StorageThreshold",
+      "threshold": " ",
+      "values": [20, 10]
+    },
+    "invalid_type": {
+      "type": "StorageThreshold",
+      "threshold": [1, 2],
+      "values": [20, 10]
+    },
+    "invalid_non_existing_model_param": {
+      "type": "StorageThreshold",
+      "threshold": "Not_found",
+      "values": [20, 10]
+    }
+  },
+  "pywr_editor_schematic_size": [1900, 1450]
+}

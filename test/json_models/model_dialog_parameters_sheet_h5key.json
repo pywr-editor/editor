@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
+  "nodes": [
+    {
+      "name": "Reservoir",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35,
+      "position": {
+        "editor_position": [
+          200,
+          500
+        ]
+      }
+    },
+    {
+      "name": "Link",
+      "type": "Link",
+      "min_flow": {
+        "type": "custom_param",
+        "data": [
+          "Table 3",
+          "CSV table"
+        ]
+      },
+      "max_flow": {
+        "type": "aggregated",
+        "params": [
+          {
+            "table": "CSV table",
+            "index": "1"
+          }
+        ]
+      },
+      "position": {
+        "editor_position": [
+          1000,
+          300
+        ]
+      }
+    }
+  ],
+  "edges": [
+    [
+      "Reservoir",
+      "Link"
+    ]
+  ],
+  "parameters": {
+    "param_with_valid_excel_table": {
+      "type": "constant",
+      "url": "files/table.xlsx",
+      "sheet_name": "Sheet 3",
+      "index_col": 1,
+      "index": 0,
+      "column": "V1"
+    },
+    "param_with_excel_table_wrong_sheet": {
+      "type": "constant",
+      "url": "files/table.xlsx",
+      "sheet_name": "Sheet 300",
+      "index_col": 2,
+      "index": 8,
+      "column": "Column 2"
+    },
+    "param_with_valid_h5_table_w_index": {
+      "type": "constant",
+      "url": "files/table_index.h5",
+      "key": "/flow",
+      "index": 10,
+      "column": "Column 4"
+    },
+    "param_with_valid_h5_table_anonymous_index": {
+      "type": "constant",
+      "url": "files/table.h5",
+      "key": "/flow",
+      "index": 1,
+      "column": "Column 4"
+    },
+    "param_with_h5_table_wrong_key": {
+      "type": "constant",
+      "url": "files/table_index.h5",
+      "key": "/non-existing",
+      "index": 10,
+      "column": "Column 4"
+    },
+    "param_with_h5_no_keys": {
+      "type": "constant",
+      "url": "files/table_no_keys.h5"
+    }
+  },
+  "pywr_editor_schematic_size": [
+    1900,
+    1450
+  ]
+}

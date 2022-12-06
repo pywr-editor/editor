@@ -1,0 +1,1289 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1"
+  },
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
+  "edges": [],
+  "nodes": [
+    {
+      "name": "Node #0",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -87.62829017315445,
+          95.39073509581605
+        ]
+      }
+    },
+    {
+      "name": "Node #1",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -95.36842105263158,
+          96.34698376682262
+        ]
+      }
+    },
+    {
+      "name": "Node #2",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -76.07635115008188,
+          96.88038916837321
+        ]
+      }
+    },
+    {
+      "name": "Node #3",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -90.81908300429579,
+          78.14219879547545
+        ]
+      }
+    },
+    {
+      "name": "Node #4",
+      "type": "link",
+      "position": {
+        "schematic": [
+          90.76465627925512,
+          19.246418744578065
+        ]
+      }
+    },
+    {
+      "name": "Node #5",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -88.17511055843411,
+          69.92471704310475
+        ]
+      }
+    },
+    {
+      "name": "Node #6",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -83.5,
+          54.51666666666665
+        ]
+      }
+    },
+    {
+      "name": "Node #7",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -93.4029638138259,
+          41.33534061146904
+        ]
+      }
+    },
+    {
+      "name": "Node #8",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -73.18202258004537,
+          79.01594598449408
+        ]
+      }
+    },
+    {
+      "name": "Node #9",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -62.20581175324387,
+          80.06012972279106
+        ]
+      }
+    },
+    {
+      "name": "Node #10",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -55.241666666666674,
+          73.96666666666667
+        ]
+      }
+    },
+    {
+      "name": "Node #11",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -50.08333333333337,
+          78.98333333333335
+        ]
+      }
+    },
+    {
+      "name": "Node #12",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -58.17626079004471,
+          69.77665225302322
+        ]
+      }
+    },
+    {
+      "name": "Node #13",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -76.15707254328862,
+          45.22981262263513
+        ]
+      }
+    },
+    {
+      "name": "Node #14",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -70.50470019796128,
+          53.19676756217085
+        ]
+      }
+    },
+    {
+      "name": "Node #15",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -68.0,
+          57.63333333333332
+        ]
+      }
+    },
+    {
+      "name": "Node #16",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -76.678880171372,
+          61.31048920060549
+        ]
+      }
+    },
+    {
+      "name": "Node #17",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -63.625,
+          63.26666666666668
+        ]
+      }
+    },
+    {
+      "name": "Node #18",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -47.118500561646655,
+          56.00385652119307
+        ]
+      }
+    },
+    {
+      "name": "Node #19",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -55.35252158008946,
+          52.71580184805952
+        ]
+      }
+    },
+    {
+      "name": "Node #20",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -63.154977382331296,
+          93.97470830142467
+        ]
+      }
+    },
+    {
+      "name": "Node #21",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -78.77549219697971,
+          85.33275678759524
+        ]
+      }
+    },
+    {
+      "name": "Node #22",
+      "type": "link",
+      "position": {
+        "schematic": [
+          47.71666666666667,
+          -88.0
+        ]
+      }
+    },
+    {
+      "name": "Node #23",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -43.13296749016355,
+          88.1030848913255
+        ]
+      }
+    },
+    {
+      "name": "Node #24",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -34.501899481400514,
+          77.60892632506058
+        ]
+      }
+    },
+    {
+      "name": "Node #25",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -26.392446241792555,
+          67.29185232486574
+        ]
+      }
+    },
+    {
+      "name": "Node #26",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -65.76068907577161,
+          41.13656577116253
+        ]
+      }
+    },
+    {
+      "name": "Node #27",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -70.5211457477597,
+          32.71953876340952
+        ]
+      }
+    },
+    {
+      "name": "Node #28",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -81.75,
+          30.78333333333333
+        ]
+      }
+    },
+    {
+      "name": "Node #29",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -74.375,
+          22.933333333333337
+        ]
+      }
+    },
+    {
+      "name": "Node #30",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -77.25,
+          16.73333333333332
+        ]
+      }
+    },
+    {
+      "name": "Node #31",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -61.625,
+          26.849999999999994
+        ]
+      }
+    },
+    {
+      "name": "Node #32",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -53.125,
+          11.299999999999955
+        ]
+      }
+    },
+    {
+      "name": "Node #33",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -70.75,
+          9.616666666666646
+        ]
+      }
+    },
+    {
+      "name": "Node #34",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -60.875,
+          19.733333333333334
+        ]
+      }
+    },
+    {
+      "name": "Node #35",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -63.25,
+          -1.3333333333333286
+        ]
+      }
+    },
+    {
+      "name": "Node #36",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -84.375,
+          0.06666666666666288
+        ]
+      }
+    },
+    {
+      "name": "Node #37",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -82.375,
+          -6.333333333333329
+        ]
+      }
+    },
+    {
+      "name": "Node #38",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -81.5,
+          -20.58333333333333
+        ]
+      }
+    },
+    {
+      "name": "Node #39",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -76.75,
+          -11.383333333333326
+        ]
+      }
+    },
+    {
+      "name": "Node #40",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -75.125,
+          -24.883333333333326
+        ]
+      }
+    },
+    {
+      "name": "Node #41",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -68.625,
+          -18.549999999999983
+        ]
+      }
+    },
+    {
+      "name": "Node #42",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -38.125,
+          -24.166666666666657
+        ]
+      }
+    },
+    {
+      "name": "Node #43",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -18.75,
+          -28.066666666666663
+        ]
+      }
+    },
+    {
+      "name": "Node #44",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -28.75,
+          -19.900000000000006
+        ]
+      }
+    },
+    {
+      "name": "Node #45",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -37.875,
+          -9.416666666666657
+        ]
+      }
+    },
+    {
+      "name": "Node #46",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -33.875,
+          -5.733333333333306
+        ]
+      }
+    },
+    {
+      "name": "Node #47",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -48.25,
+          -14.73333333333332
+        ]
+      }
+    },
+    {
+      "name": "Node #48",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -36.625,
+          -2.2929453886854674
+        ]
+      }
+    },
+    {
+      "name": "Node #49",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -24.25,
+          -15.543596597284335
+        ]
+      }
+    },
+    {
+      "name": "Node #50",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -31.75,
+          3.30340054728228
+        ]
+      }
+    },
+    {
+      "name": "Node #51",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -20.125,
+          -2.9835184163760005
+        ]
+      }
+    },
+    {
+      "name": "Node #52",
+      "type": "link",
+      "position": {
+        "schematic": [
+          3.0,
+          17.600000000000023
+        ]
+      }
+    },
+    {
+      "name": "Node #53",
+      "type": "link",
+      "position": {
+        "schematic": [
+          7.375,
+          24.799999999999997
+        ]
+      }
+    },
+    {
+      "name": "Node #54",
+      "type": "link",
+      "position": {
+        "schematic": [
+          14.746227394253424,
+          -15.40082291597156
+        ]
+      }
+    },
+    {
+      "name": "Node #55",
+      "type": "link",
+      "position": {
+        "schematic": [
+          17.875,
+          58.39999999999998
+        ]
+      }
+    },
+    {
+      "name": "Node #56",
+      "type": "link",
+      "position": {
+        "schematic": [
+          12.375000000000028,
+          55.19999999999999
+        ]
+      }
+    },
+    {
+      "name": "Node #57",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -43.5,
+          44.666666666666686
+        ]
+      }
+    },
+    {
+      "name": "Node #58",
+      "type": "link",
+      "position": {
+        "schematic": [
+          25.499999999999986,
+          24.13333333333331
+        ]
+      }
+    },
+    {
+      "name": "Node #59",
+      "type": "link",
+      "position": {
+        "schematic": [
+          44.596898807457336,
+          32.833538451915175
+        ]
+      }
+    },
+    {
+      "name": "Node #60",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -23.625,
+          29.466666666666697
+        ]
+      }
+    },
+    {
+      "name": "Node #61",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -11.5,
+          94.0
+        ]
+      }
+    },
+    {
+      "name": "Node #62",
+      "type": "link",
+      "position": {
+        "schematic": [
+          33.125,
+          -8.400000000000006
+        ]
+      }
+    },
+    {
+      "name": "Node #63",
+      "type": "link",
+      "position": {
+        "schematic": [
+          23.35562023850855,
+          1.1002051185818686
+        ]
+      }
+    },
+    {
+      "name": "Node #64",
+      "type": "link",
+      "position": {
+        "schematic": [
+          18.86854007950288,
+          -6.79161538702121
+        ]
+      }
+    },
+    {
+      "name": "Node #65",
+      "type": "link",
+      "position": {
+        "schematic": [
+          7.625,
+          34.66666666666666
+        ]
+      }
+    },
+    {
+      "name": "Node #66",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -1.625,
+          37.866666666666674
+        ]
+      }
+    },
+    {
+      "name": "Node #67",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -8.375,
+          41.599999999999994
+        ]
+      }
+    },
+    {
+      "name": "Node #68",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -21.25,
+          47.06666666666669
+        ]
+      }
+    },
+    {
+      "name": "Node #69",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -30.75,
+          51.599999999999994
+        ]
+      }
+    },
+    {
+      "name": "Node #70",
+      "type": "link",
+      "position": {
+        "schematic": [
+          5.125,
+          51.99999999999997
+        ]
+      }
+    },
+    {
+      "name": "Node #71",
+      "type": "link",
+      "position": {
+        "schematic": [
+          3.125,
+          73.59999999999997
+        ]
+      }
+    },
+    {
+      "name": "Node #72",
+      "type": "link",
+      "position": {
+        "schematic": [
+          14.875,
+          92.66666666666669
+        ]
+      }
+    },
+    {
+      "name": "Node #73",
+      "type": "link",
+      "position": {
+        "schematic": [
+          26.55921052631578,
+          97.51724137931035
+        ]
+      }
+    },
+    {
+      "name": "Node #74",
+      "type": "link",
+      "position": {
+        "schematic": [
+          3.0,
+          88.66666666666666
+        ]
+      }
+    },
+    {
+      "name": "Node #75",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -6.75,
+          -15.59999999999998
+        ]
+      }
+    },
+    {
+      "name": "Node #76",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -39.0,
+          16.53333333333333
+        ]
+      }
+    },
+    {
+      "name": "Node #77",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -45.39036800921747,
+          66.68354270653262
+        ]
+      }
+    },
+    {
+      "name": "Node #78",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -38.76315789473684,
+          60.809195402298855
+        ]
+      }
+    },
+    {
+      "name": "Node #79",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -34.125,
+          55.866666666666674
+        ]
+      }
+    },
+    {
+      "name": "Node #80",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -9.375,
+          26.666666666666657
+        ]
+      }
+    },
+    {
+      "name": "Node #81",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -28.625,
+          41.866666666666674
+        ]
+      }
+    },
+    {
+      "name": "Node #82",
+      "type": "link",
+      "position": {
+        "schematic": [
+          24.00000000000003,
+          40.0
+        ]
+      }
+    },
+    {
+      "name": "Node #83",
+      "type": "link",
+      "position": {
+        "schematic": [
+          36.25,
+          61.33333333333331
+        ]
+      }
+    },
+    {
+      "name": "Node #84",
+      "type": "link",
+      "position": {
+        "schematic": [
+          13.75,
+          48.0
+        ]
+      }
+    },
+    {
+      "name": "Node #85",
+      "type": "link",
+      "position": {
+        "schematic": [
+          89.42105263157893,
+          39.97333123873907
+        ]
+      }
+    },
+    {
+      "name": "Node #86",
+      "type": "link",
+      "position": {
+        "schematic": [
+          52.25484494037286,
+          19.6335384519152
+        ]
+      }
+    },
+    {
+      "name": "Node #87",
+      "type": "link",
+      "position": {
+        "schematic": [
+          52.503229960248575,
+          10.85668717852485
+        ]
+      }
+    },
+    {
+      "name": "Node #88",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -2.7368421052631646,
+          -51.86206896551724
+        ]
+      }
+    },
+    {
+      "name": "Node #89",
+      "type": "link",
+      "position": {
+        "schematic": [
+          79.0,
+          -11.866666666666674
+        ]
+      }
+    },
+    {
+      "name": "Node #90",
+      "type": "link",
+      "position": {
+        "schematic": [
+          78.75,
+          -20.666666666666657
+        ]
+      }
+    },
+    {
+      "name": "Node #91",
+      "type": "link",
+      "position": {
+        "schematic": [
+          79.0,
+          -3.3333333333333286
+        ]
+      }
+    },
+    {
+      "name": "Node #92",
+      "type": "link",
+      "position": {
+        "schematic": [
+          85.0,
+          87.46666666666667
+        ]
+      }
+    },
+    {
+      "name": "Node #93",
+      "type": "link",
+      "position": {
+        "schematic": [
+          84.5,
+          58.66666666666666
+        ]
+      }
+    },
+    {
+      "name": "Node #94",
+      "type": "link",
+      "position": {
+        "schematic": [
+          85.625,
+          73.20000000000002
+        ]
+      }
+    },
+    {
+      "name": "Node #95",
+      "type": "link",
+      "position": {
+        "schematic": [
+          78.5,
+          70.80000000000001
+        ]
+      }
+    },
+    {
+      "name": "Node #96",
+      "type": "link",
+      "position": {
+        "schematic": [
+          70.0,
+          67.19999999999999
+        ]
+      }
+    },
+    {
+      "name": "Node #97",
+      "type": "link",
+      "position": {
+        "schematic": [
+          65.75,
+          75.06666666666666
+        ]
+      }
+    },
+    {
+      "name": "Node #98",
+      "type": "link",
+      "position": {
+        "schematic": [
+          48.875,
+          68.66666666666666
+        ]
+      }
+    },
+    {
+      "name": "Node #99",
+      "type": "link",
+      "position": {
+        "schematic": [
+          49.5,
+          88.93333333333334
+        ]
+      }
+    },
+    {
+      "name": "Node #100",
+      "type": "link",
+      "position": {
+        "schematic": [
+          63.125,
+          54.0
+        ]
+      }
+    },
+    {
+      "name": "Node #101",
+      "type": "link",
+      "position": {
+        "schematic": [
+          61.5,
+          83.73333333333332
+        ]
+      }
+    },
+    {
+      "name": "Node #102",
+      "type": "link",
+      "position": {
+        "schematic": [
+          23.25,
+          81.33333333333331
+        ]
+      }
+    },
+    {
+      "name": "Node #103",
+      "type": "link",
+      "position": {
+        "schematic": [
+          68.25,
+          94.0
+        ]
+      }
+    },
+    {
+      "name": "Node #104",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -29.473684210526315,
+          -48.27586206896552
+        ]
+      }
+    },
+    {
+      "name": "Node #105",
+      "type": "link",
+      "position": {
+        "schematic": [
+          59.125,
+          -76.13333333333335
+        ]
+      }
+    },
+    {
+      "name": "Node #106",
+      "type": "link",
+      "position": {
+        "schematic": [
+          68.375,
+          -68.66666666666669
+        ]
+      }
+    },
+    {
+      "name": "Node #107",
+      "type": "link",
+      "position": {
+        "schematic": [
+          77.625,
+          -56.93333333333334
+        ]
+      }
+    },
+    {
+      "name": "Node #108",
+      "type": "link",
+      "position": {
+        "schematic": [
+          85.75,
+          -68.53333333333333
+        ]
+      }
+    },
+    {
+      "name": "Node #109",
+      "type": "link",
+      "position": {
+        "schematic": [
+          80.625,
+          -79.06666666666666
+        ]
+      }
+    },
+    {
+      "name": "Node #110",
+      "type": "link",
+      "position": {
+        "schematic": [
+          70.0,
+          -88.0
+        ]
+      }
+    },
+    {
+      "name": "Node #111",
+      "type": "link",
+      "position": {
+        "schematic": [
+          73.625,
+          -88.0
+        ]
+      }
+    },
+    {
+      "name": "Node #112",
+      "type": "link",
+      "position": {
+        "schematic": [
+          77.125,
+          -82.93333333333331
+        ]
+      }
+    },
+    {
+      "name": "Node #113",
+      "type": "link",
+      "position": {
+        "schematic": [
+          75.0,
+          -73.73333333333335
+        ]
+      }
+    },
+    {
+      "name": "Node #114",
+      "type": "link",
+      "position": {
+        "schematic": [
+          0.6250000000000142,
+          12.40000000000002
+        ]
+      }
+    },
+    {
+      "name": "Node #115",
+      "type": "link",
+      "position": {
+        "schematic": [
+          52.75,
+          4.533333333333331
+        ]
+      }
+    },
+    {
+      "name": "Node #116",
+      "type": "link",
+      "position": {
+        "schematic": [
+          53.5,
+          -26.266666666666666
+        ]
+      }
+    },
+    {
+      "name": "Node #117",
+      "type": "link",
+      "position": {
+        "schematic": [
+          47.125,
+          -59.19999999999999
+        ]
+      }
+    },
+    {
+      "name": "Node #118",
+      "type": "link",
+      "position": {
+        "schematic": [
+          47.25,
+          -78.4
+        ]
+      }
+    },
+    {
+      "name": "Node #119",
+      "type": "link",
+      "position": {
+        "schematic": [
+          47.81111111111113,
+          -88.0
+        ]
+      }
+    },
+    {
+      "name": "Node #120",
+      "type": "link",
+      "position": {
+        "schematic": [
+          36.125,
+          -20.933333333333337
+        ]
+      }
+    },
+    {
+      "name": "Node #121",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -7.26315789473685,
+          -34.48275862068965
+        ]
+      }
+    },
+    {
+      "name": "Node #122",
+      "type": "link",
+      "position": {
+        "schematic": [
+          24.500000000000014,
+          -25.33333333333333
+        ]
+      }
+    },
+    {
+      "name": "Node #123",
+      "type": "link",
+      "position": {
+        "schematic": [
+          33.875,
+          -64.26666666666668
+        ]
+      }
+    },
+    {
+      "name": "Node #124",
+      "type": "link",
+      "position": {
+        "schematic": [
+          24.625000000000014,
+          -58.66666666666666
+        ]
+      }
+    },
+    {
+      "name": "Node #125",
+      "type": "link",
+      "position": {
+        "schematic": [
+          -5.875,
+          7.466666666666669
+        ]
+      }
+    },
+    {
+      "name": "Node #126",
+      "type": "link",
+      "position": {
+        "schematic": [
+          66.13049147080258,
+          5.516974344539477
+        ]
+      }
+    }
+  ],
+  "pywr_editor_schematic_size": [
+    1000,
+    400
+  ]
+}

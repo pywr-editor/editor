@@ -1,0 +1,93 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "nodes": [
+    {
+      "name": "Reservoir1",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35
+    },
+    {
+      "name": "Reservoir2",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35
+    },
+    {
+      "name": "Reservoir3",
+      "type": "reservoir",
+      "max_volume": 35,
+      "initial_volume": 35
+    },
+    {"name": "Output", "type": "output"}
+  ],
+  "includes": ["files/custom_parameter.py"],
+  "recorders": {
+    "node": {"type": "node", "node": "Output"},
+    "node1": {"type": "node", "node": "Reservoir3"},
+    "valid_dicts": {
+      "type": "AggregatedRecorder",
+      "recorder_agg_func": "mean",
+      "recorders": [
+        {"type": "node", "node": "Output"},
+        {"type": "node", "node": "Reservoir3"}
+      ]
+    },
+    "valid_with_str": {
+      "type": "AggregatedRecorder",
+      "recorder_agg_func": "mean",
+      "recorders": [
+        "node",
+        {"type": "node", "node": "Reservoir3"}
+      ]
+    },
+    "valid_no_key": {
+      "type": "AggregatedRecorder"
+    },
+    "valid_empty_list": {
+      "type": "AggregatedRecorder",
+      "recorders": []
+    },
+    "invalid_type": {
+      "type": "AggregatedRecorder",
+      "recorders": 12
+    },
+    "invalid_type_in_list": {
+      "type": "AggregatedRecorder",
+      "recorders": ["node", false]
+    },
+    "invalid_type_in_list_number": {
+      "type": "AggregatedRecorder",
+      "recorders": ["node", 12]
+    },
+    "invalid_wrong_param_dict": {
+      "type": "AggregatedRecorder",
+      "recorders": ["node", {"node":  "Reservoir2"}]
+    },
+    "invalid_non_existing_recorder_name": {
+      "type": "AggregatedRecorder",
+      "recorders": ["non_existing_recorder", {"type": "NodeRecorder","node":  "Reservoir2"}]
+    },
+    "main_recorder": {
+      "type": "AggregatedRecorder",
+      "recorders": ["node", {"type": "NodeRecorder","node":  "Reservoir1"}]
+    },
+    "recorder_agg_func": {
+      "type": "AggregatedRecorder",
+      "recorders": [
+        "node",
+        {"type": "node", "node": "Reservoir3"}
+      ]
+    }
+  },
+  "pywr_editor_schematic_size": [1900, 1450]
+}

@@ -1,0 +1,36 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "nodes": [
+    {
+      "name": "Reservoir",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35
+    },
+    {
+      "name": "Reservoir2",
+      "type": "Storage",
+      "max_volume": 120,
+      "initial_volume": 35
+    },
+    {
+      "name": "Virtual",
+      "type": "RollingVirtualStorage"
+    },
+    {
+      "name": "Aggregated",
+      "type": "AggregatedStorage",
+      "storage_nodes": ["Virtual", "Reservoir2"]
+    }
+  ],
+  "edges": []
+}

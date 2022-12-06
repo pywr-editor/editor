@@ -1,0 +1,68 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "includes": ["files/custom_parameter.py"],
+  "nodes": [
+    {
+      "name": "Reservoir",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35,
+      "position": {"editor_position": [200, 500]}
+    }
+  ],
+  "edges": [],
+  "recorders": {
+    "valid_kde": {
+      "type": "GaussianKDEStorageRecorder",
+      "node": "Reservoir",
+      "resample_freq": "Y",
+      "resample_func": "sum",
+      "target_volume_pc": 0.5
+    },
+    "valid_kde_str_replaced": {
+      "type": "GaussianKDEStorageRecorder",
+      "node": "Reservoir",
+      "resample_freq": "A",
+      "resample_func": "sum",
+      "target_volume_pc": 0.5
+    },
+    "valid_kde_empty": {
+      "type": "GaussianKDEStorageRecorder",
+      "node": "Reservoir",
+      "target_volume_pc": 0.5
+    },
+    "invalid_kde_missing_func": {
+      "type": "GaussianKDEStorageRecorder",
+      "node": "Reservoir",
+      "resample_freq": "A",
+      "target_volume_pc": 0.5
+    },
+    "invalid_kde_missing_freq": {
+      "type": "GaussianKDEStorageRecorder",
+      "node": "Reservoir",
+      "resample_func": "mean",
+      "target_volume_pc": 0.5
+    },
+    "invalid_kde_missing_volume_pc": {
+      "type": "GaussianKDEStorageRecorder",
+      "node": "Reservoir",
+      "resample_func": "mean"
+    },
+    "invalid_kde_wrong_volume_pc": {
+      "type": "GaussianKDEStorageRecorder",
+      "node": "Reservoir",
+      "resample_func": "mean",
+      "target_volume_pc": 100
+    }
+  },
+  "pywr_editor_schematic_size": [1900, 1450]
+}

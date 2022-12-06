@@ -1,0 +1,74 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "nodes": [
+    {
+      "name": "Reservoir",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35,
+      "position": {"editor_position": [200, 500]}
+    },
+    {
+      "name": "Link",
+      "type": "Link",
+      "position": {"editor_position": [1000, 300]}
+    },
+    {
+      "name": "Node A",
+      "type": "Input"
+    },
+    {
+      "name": "Node B",
+      "type": "Output"
+    },
+    {
+      "name": "Node C",
+      "type": "Input"
+    },
+    {
+      "name": "Node D",
+      "type": "Output"
+    },
+    {
+      "name": "Node F",
+      "type": "Input"
+    },
+    {
+      "name": "Node G",
+      "type": "Output"
+    },
+    {
+      "name": "MultiSplitLink",
+      "type": "MultiSplitLink",
+      "extra_slots": 2,
+      "slot_names": ["slot1", "slot3", "slot2"]
+    },
+    {
+      "name": "MultiSplitLink - no slots",
+      "type": "MultiSplitLink",
+      "extra_slots": 1,
+      "slot_names": ["slot1", "slot3"]
+    }
+  ],
+  "edges": [
+    ["Reservoir", "Link"],
+    ["Node A", "Node B", 1],
+    ["Node C", "Node D", null, 2],
+    ["Node F", "Node G", "works", 1],
+    ["Node A", "MultiSplitLink"],
+    ["MultiSplitLink", "Node B", "slot1"],
+    ["MultiSplitLink", "Node D", "slot2"],
+    ["MultiSplitLink", "Node G", "slot3"],
+    ["MultiSplitLink - no slots", "Node D"],
+    ["MultiSplitLink - no slots", "Node G"]
+  ]
+}
