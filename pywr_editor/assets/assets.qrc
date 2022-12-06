@@ -1,0 +1,108 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="toolbar">
+        <file alias="increase-width">toolbar/greatest_width.svg</file>
+        <file alias="increase-height">toolbar/greatest_height.svg</file>
+        <file alias="decrease-height">toolbar/smallest_height.svg</file>
+        <file alias="decrease-width">toolbar/smallest_width.svg</file>
+        <file alias="open">toolbar/open.svg</file>
+        <file alias="save">toolbar/save.svg</file>
+        <file alias="lock-schematic">toolbar/protect.svg</file>
+        <file alias="zoom-in">toolbar/zoomin.svg</file>
+        <file alias="zoom-out">toolbar/zoomout.svg</file>
+        <file alias="zoom-100">toolbar/zoom100percent.svg</file>
+        <file alias="minimise-schematic-size">toolbar/fullscreen.svg</file>
+        <file alias="find-orphaned-nodes">toolbar/showerrors.svg</file>
+        <file alias="find-orphaned-parameters">toolbar/validation.svg</file>
+        <file alias="centre-schematic">toolbar/aligncenter.svg</file>
+        <file alias="export-schematic-as-image">toolbar/imagebutton.svg</file>
+        <file alias="toggle-schematic-labels">toolbar/label.svg</file>
+        <file alias="toggle-schematic-arrows">toolbar/arrowshapes.svg</file>
+        <file alias="listbox">toolbar/listbox.svg</file>
+        <file alias="quit">toolbar/quit.svg</file>
+        <file alias="new">toolbar/newdocument.svg</file>
+        <file alias="select-all">toolbar/selectall.svg</file>
+        <file alias="select-none">toolbar/selectnone.svg</file>
+        <file alias="show-json">toolbar/insertslidenumberfield.svg</file>
+        <file alias="edit-metadata">toolbar/dbformedit.svg</file>
+        <file alias="remove-edge">toolbar/connectorline_del.svg</file>
+        <file alias="arrow-down">toolbar/caret-down-fill.svg</file>
+        <file alias="scroll-down">toolbar/caret-down-fill-scroll.svg</file>
+        <file alias="scroll-up">toolbar/caret-up-fill-scroll.svg</file>
+        <file alias="arrow-down-disabled">toolbar/caret-down-fill-disabled.svg</file>
+        <file alias="edit-node">toolbar/edit_node.svg</file>
+        <file alias="delete-node">toolbar/delete_node.svg</file>
+        <file alias="add-edge">toolbar/connectorline.svg</file>
+        <file alias="edit-tables">toolbar/viewrowcolumnheader.svg</file>
+        <file alias="edit-parameters">toolbar/configuredialog.svg</file>
+        <file alias="edit-recorders">toolbar/configuredialog_recorder.svg</file>
+        <file alias="edit-scenarios">toolbar/copyobjects.svg</file>
+        <file alias="edit-imports">toolbar/sharshapes.svg</file>
+        <file alias="edit-slots">toolbar/connectorarrowend.svg</file>
+    </qresource>
+    <qresource prefix="file-browser">
+        <file alias="close">file_browser/x-circle.svg</file>
+    </qresource>
+    <qresource prefix="schematic">
+        <file alias="demand-centre">schematic/house-door.svg</file>
+        <file alias="delay">schematic/hourglass.svg</file>
+        <file alias="break-link">schematic/link.svg</file>
+        <file alias="split">schematic/diagram-3.svg</file>
+        <file alias="water">schematic/water.svg</file>
+        <file alias="input">schematic/arrow-down.svg</file>
+        <file alias="gauge">schematic/speedometer2.svg</file>
+        <file alias="output">schematic/popup.svg</file>
+        <file alias="cost">schematic/currency-pound.svg</file>
+        <file alias="pumping-station">schematic/play-fill.svg</file>
+        <file alias="valve">schematic/pipe-valve.svg</file>
+        <file alias="leak">schematic/pipe-leak.svg</file>
+        <file alias="tankering">schematic/tanker-truck.svg</file>
+        <file alias="rainfall">schematic/cloud-drizzle.svg</file>
+        <file alias="evaporation">schematic/arrow-bar-up.svg</file>
+        <file alias="custom">schematic/star.svg</file>
+    </qresource>
+    <qresource prefix="components-tree">
+        <file alias="branch-end">components_tree/stylesheet-branch-end.png</file>
+        <file alias="branch-more">components_tree/stylesheet-branch-more.png</file>
+        <file alias="branch-vline">components_tree/stylesheet-vline.png</file>
+        <file alias="branch-closed">components_tree/stylesheet-branch-closed.png</file>
+        <file alias="branch-open">components_tree/stylesheet-branch-open.png</file>
+    </qresource>
+    <qresource prefix="scrollbar">
+        <file alias="scroll-up">scroll_bar/scroll-up.svg</file>
+        <file alias="scroll-down">scroll_bar/scroll-down.svg</file>
+        <file alias="scroll-left">scroll_bar/scroll-left.svg</file>
+        <file alias="scroll-right">scroll_bar/scroll-right.svg</file>
+    </qresource>
+    <qresource prefix="misc">
+        <file alias="reload">misc/arrow-repeat.svg</file>
+        <file alias="plus">misc/plus.svg</file>
+        <file alias="minus">misc/dash.svg</file>
+        <file alias="edit">misc/pencil-fill.svg</file>
+        <file alias="help">misc/question-circle.svg</file>
+        <file alias="external">misc/box-arrow-up-right.svg</file>
+        <file alias="table-dialog">misc/tabledialog.svg</file>
+        <file alias="plot">misc/graph-up.svg</file>
+        <file alias="import">misc/box-arrow-in-down.svg</file>
+        <file alias="export">misc/box-arrow-up.svg</file>
+        <file alias="paste">misc/paste.svg</file>
+    </qresource>
+    <qresource prefix="form">
+        <file alias="caret-down">form/caret-down-fill.svg</file>
+        <file alias="caret-up">form/caret-up-fill.svg</file>
+        <file alias="caret-down-disabled">form/caret-down-fill-disabled.svg</file>
+        <file alias="caret-up-disabled">form/caret-up-fill-disabled.svg</file>
+        <file alias="toggle-switch-disabled">form/toggle_switch_disabled.png</file>
+        <file alias="toggle-switch-off">form/toggle_switch_off.png</file>
+        <file alias="toggle-switch-off-hover">form/toggle_switch_off_hover.png</file>
+        <file alias="toggle-switch-off-pressed">form/toggle_switch_off_pressed.png</file>
+        <file alias="toggle-switch-on">form/toggle_switch_on.png</file>
+        <file alias="toggle-switch-on-hover">form/toggle_switch_on_hover.png</file>
+        <file alias="toggle-switch-on-pressed">form/toggle_switch_on_pressed.png</file>
+    </qresource>
+    <qresource prefix="logos">
+        <file alias="normal">logo.svg</file>
+        <file alias="small">logo-small.svg</file>
+    </qresource>
+
+</RCC>

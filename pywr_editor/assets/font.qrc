@@ -1,0 +1,7 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="fonts">
+        <file alias="regular">static/SourceSans3-Regular.ttf</file>
+        <file alias="bold">static/SourceSans3-Bold.ttf</file>
+    </qresource>
+</RCC>
