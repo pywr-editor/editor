@@ -100,9 +100,10 @@ class RecorderConfig:
 
     def humanise_attribute_name(self, attribute_name: str) -> str:
         """
-        Renames a recoder attribute. The first letter is capitalised and some attributes are replaced with a
-        more human-readable string (for example recorder_agg_func is converted to Aggregation function).
-        Attributes of custom recorders are not renamed.
+        Renames a recoder attribute. The first letter is capitalised and some
+        attributes are replaced with a more human-readable string (for example
+        recorder_agg_func is converted to Aggregation function). Attributes of
+        custom recorders are not renamed.
         :param attribute_name: The attribute name.
         :return: The renamed attribute name.
         """

@@ -217,8 +217,8 @@ class JsonUtils:
         (for example "table").
         :param old: The string to replace.
         :param new: The new string.
-        :param tracked_dict_key: A variable used to store the key of the parent dictionary
-        for an item.
+        :param tracked_dict_key: A variable used to store the key of the parent
+        dictionary for an item.
         :return: The updated dictionary.
         """
         if isinstance(match_key, str):

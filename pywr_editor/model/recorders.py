@@ -116,7 +116,8 @@ class Recorders:
         """
         self.model.json["recorders"][recorder_name] = recorder_dict
         self.model.changes_tracker.add(
-            f"Updated recorder '{recorder_name}' with the following values: {recorder_dict}"
+            f"Updated recorder '{recorder_name}' with the following values: "
+            + f"{recorder_dict}"
         )
 
     def rename(self, recorder_name: str, new_name: str) -> None:

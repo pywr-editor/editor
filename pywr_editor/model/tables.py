@@ -16,7 +16,8 @@ class Tables:
     def get_all(self) -> dict[str, dict] | None:
         """
         Returns the list of tables.
-        :return: The table dictionary with the table name as key and its properties as value.
+        :return: The table dictionary with the table name as key and its properties
+        as value.
         """
         if "tables" not in self.model.json:
             return {}
@@ -55,7 +56,8 @@ class Tables:
         """
         Checks if the given table name is being used in the model.
         :param table_name: The name of the table.
-        :return: The number of model components using the table. If the table does not exist, this returns 0.
+        :return: The number of model components using the table. If the table does
+        not exist, this returns 0.
         """
         if self.does_table_exist(table_name) is False:
             return 0
@@ -97,7 +99,8 @@ class Tables:
 
     def update(self, table_name: str, table_dict: dict) -> None:
         """
-        Replaces the table dictionary for an existing table or create a new one if it does not exist.
+        Replaces the table dictionary for an existing table or create a new one if it
+        does not exist.
         :param table_name: The table name to add or update.
         :param table_dict: The table dictionary with the fields to add or update.
         :return: None
@@ -109,8 +112,9 @@ class Tables:
 
     def rename(self, table_name: str, new_name: str) -> None:
         """
-        Renames a table. This changes the name in the "tables" dictionary and in each model component, where the
-        table is referred using the "table": table_name syntax.
+        Renames a table. This changes the name in the "tables" dictionary and in each
+        model component, where the table is referred using the "table": table_name
+        syntax.
         :param table_name: The table to rename.
         :param new_name: The new table name.
         :return: None
