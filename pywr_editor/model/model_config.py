@@ -200,7 +200,7 @@ class ModelConfig:
                 self.json = json.load(file)
         except Exception as e:
             self.load_error = (
-                f"The JSON file contains the following syntax error and "
+                "The JSON file contains the following syntax error and "
                 + f"cannot be loaded:\n\n{type(e).__name__}: {e}\n\n"
                 + "Please fix the error by manually editing the JSON file"
             )
@@ -329,13 +329,14 @@ class ModelConfig:
         duplicated = [k for k, v in d.items() if v > 1]
         if len(duplicated) > 0:
             self.load_error = (
-                f"The following node names are duplicated: "
+                "The following node names are duplicated: "
                 + f"{', '.join(duplicated)}. Each node must have a unique name to "
                 + f"be correctly identified. {error_to_append}"
             )
             return
 
-        # check that all recorders and parameters have dictionaries and have the "type" key
+        # check that all recorders and parameters have dictionaries and have the
+        # "type" key
         for key in ["parameters", "recorders"]:
             if key in self.json.keys():
                 for name, config in self.json["parameters"].items():

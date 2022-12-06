@@ -143,7 +143,8 @@ class Parameters:
         """
         self.model.json["parameters"][parameter_name] = parameter_dict
         self.model.changes_tracker.add(
-            f"Updated parameter '{parameter_name}' with the following values: {parameter_dict}"
+            f"Updated parameter '{parameter_name}' with the following values: "
+            + f"{parameter_dict}"
         )
 
     def is_used(self, parameter_name: str) -> int:
