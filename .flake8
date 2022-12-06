@@ -1,0 +1,6 @@
+[flake8]
+select = C,E,F,W
+max-complexity = 10
+max-line-length = 88
+extend-ignore = E203, E302, W503, F401, F403, C901
+per-file-ignores = MainWindow.pyx:F401,*.pyi:E301
