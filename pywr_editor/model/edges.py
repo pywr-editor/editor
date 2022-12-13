@@ -102,7 +102,6 @@ class Edges:
         deleted_edges = [  # for change log only
             item for item in self.get_all() if item not in edges_to_keep
         ]
-        print(self.model.load_error)
         self.model.changes_tracker.add(f"Deleted edge(s) {deleted_edges}")
         self.model.json["edges"] = edges_to_keep
 
