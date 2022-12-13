@@ -1,8 +1,7 @@
 import os
-import sys
 import typer
 import PyInstaller.__main__
-from pywr_editor.model.pywr_data.utils import (
+from pywr_editor.assets import (
     get_parameters,
     get_nodes,
     get_recorders,
@@ -18,7 +17,7 @@ def publish():
     """
     Generates the assets file and create the executable.
     """
-    generate_info_file()
+    build_file()
     editor_assets()
     pywr_assets()
 
@@ -40,7 +39,8 @@ def publish():
     )
 
 
-def generate_info_file():
+@app.command()
+def build_file():
     """
     Generates the build information file.
     """
@@ -54,7 +54,6 @@ def build_info():
     return {{
         'Version': '{version}',
         'Build date': '{datetime.now().strftime('%d %b %Y')}',
-        'Runtime version': '{sys.version}'
     }}"""
 
     fid = open(Path(__file__).parent / "pywr_editor" / "build_info.py", "w")
@@ -69,10 +68,10 @@ def editor_assets():
     """
     assets_path = Path(__file__).parent / "pywr_editor" / "assets"
     qrc_file = assets_path / "assets.qrc"
-    pyx_file = assets_path.parent / "assets.py"
-    os.system(f'pyside6-rcc.exe "{qrc_file}" -o "{pyx_file}"')
+    py_file = assets_path.parent / "style" / "assets.py"
+    os.system(f'pyside6-rcc.exe "{qrc_file}" -o "{py_file}"')
 
-    typer.secho(f">> Generated {pyx_file}", fg=typer.colors.GREEN, bold=True)
+    typer.secho(f">> Generated {py_file}", fg=typer.colors.GREEN, bold=True)
 
 
 @app.command()
@@ -97,12 +96,13 @@ def pywr_assets():
     )
     get_recorders()
 
-    assets_path = Path(__file__).parent / "pywr_editor" / "model" / "pywr_data"
-    qrc_file = assets_path / "pywr_resources.qrc"
-    pyx_file = assets_path.parent / "pywr_data.py"
-    os.system(f'pyside6-rcc.exe "{qrc_file}" -o "{pyx_file}"')
+    qrc_file = (
+        Path(__file__).parent / "pywr_editor" / "assets" / "pywr_resources.qrc"
+    )
+    py_file = Path(__file__).parent / "pywr_editor" / "model" / "pywr_data.py"
+    os.system(f'pyside6-rcc.exe "{qrc_file}" -o "{py_file}"')
 
-    typer.secho(f">> Generated {pyx_file}", fg=typer.colors.GREEN, bold=True)
+    typer.secho(f">> Generated {py_file}", fg=typer.colors.GREEN, bold=True)
 
 
 if __name__ == "__main__":
