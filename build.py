@@ -1,11 +1,7 @@
 import os
 import typer
 import PyInstaller.__main__
-from pywr_editor.assets import (
-    get_parameters,
-    get_nodes,
-    get_recorders,
-)
+from pywr_editor.assets import get_parameters, get_nodes, get_recorders
 from datetime import datetime
 from pathlib import Path
 
@@ -15,11 +11,9 @@ app = typer.Typer(pretty_exceptions_enable=False)
 @app.command()
 def publish():
     """
-    Generates the assets file and create the executable.
+    Creates the executable.
     """
     build_file()
-    editor_assets()
-    pywr_assets()
 
     typer.secho(
         ">> Building executable with PyInstaller",
