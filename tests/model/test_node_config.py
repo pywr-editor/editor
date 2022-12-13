@@ -1,7 +1,7 @@
 import json
 import pytest
 from pywr_editor.model import NodeConfig
-from test.utils import resolve_model_path
+from tests.utils import resolve_model_path
 
 
 @pytest.fixture

@@ -1,6 +1,6 @@
 import pytest
 from pywr_editor.model import ModelConfig, ScenarioConfig
-from test.utils import resolve_model_path
+from tests.utils import resolve_model_path
 
 
 class TestScenarios:

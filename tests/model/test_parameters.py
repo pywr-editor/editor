@@ -1,5 +1,5 @@
 from pywr_editor.model import ModelConfig, Parameters
-from test.utils import resolve_model_path
+from tests.utils import resolve_model_path
 
 
 class TestParameters:
@@ -56,7 +56,7 @@ class TestParameters:
         parameters = self.parameters("model_with_orphans.json")
         assert parameters.find_orphans() == ["param2"]
 
-    def test_model_with_orphans(self):
+    def test_model_without_orphans(self):
         """
         Tests the find_orphans method with a model without orphaned parameters.
         """
