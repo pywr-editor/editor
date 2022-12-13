@@ -1,3 +1,5 @@
+# noinspection PyUnresolvedReferences
+from .assets import *
 from PySide6.QtGui import QFontDatabase, QFont
 from PySide6.QtWidgets import QApplication
 from .color import Color
@@ -17,7 +19,7 @@ def stylesheet_dict_to_str(stylesheet: dict, root_selector: str = "") -> str:
     for key, value in stylesheet.items():
         if hasattr(value, "items"):
             if len(root_selector) > 0:
-                stylesheet_str += "}}\n"
+                stylesheet_str += "}\n"
                 if ":" in key:
                     stylesheet_str += f"{root_selector}{key} {{\n"
                 else:
@@ -25,9 +27,14 @@ def stylesheet_dict_to_str(stylesheet: dict, root_selector: str = "") -> str:
             else:
                 stylesheet_str += f"{key} {{\n"
 
-            stylesheet_str += stylesheet_dict_to_str(value, key)
+            if ":" in key:
+                new_root = root_selector + key
+            else:
+                new_root = f"{root_selector} {key}"
+
+            stylesheet_str += stylesheet_dict_to_str(value, new_root.strip())
             if len(root_selector) == 0:
-                stylesheet_str += "}}\n"
+                stylesheet_str += "}\n"
         else:
             stylesheet_str += f"\t{key}: {value};\n"
 
