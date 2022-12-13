@@ -15,7 +15,6 @@ class TreeWidgetRecorder(AbstractTreeWidgetComponent):
         self,
         recorder_config: dict,
         model_config: ModelConfig,
-        recorder_name: str | None = None,
         parent: Union[
             "TreeWidgetRecorder", TreeWidgetRecorderName, None
         ] = None,
@@ -24,9 +23,6 @@ class TreeWidgetRecorder(AbstractTreeWidgetComponent):
         Initialises the item containing the recorder configuration.
         :param recorder_config: The recorder configuration dictionary.
         :param model_config: The ModelConfig instance.
-        :param recorder_name: The recorder name. This is available only
-        if the recorder is global and is not for anonymous recorders
-        defined within a recorder dictionary.
         :param parent: The parent widget.
         """
         super().__init__(

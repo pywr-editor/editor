@@ -1,7 +1,7 @@
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QTreeWidgetItem
 from pywr_editor.model import ModelConfig
-from pywr_editor.ui import Color
+from pywr_editor.style import Color
 
 
 class TreeWidgetTable(QTreeWidgetItem):
@@ -45,7 +45,9 @@ class TreeWidgetTable(QTreeWidgetItem):
                 and self.model_config.does_file_exist(attribute_value) is False
             ):
                 item.setBackground(1, Color("red", 100).qcolor)
-                item.setData(1, Qt.BackgroundRole, Color("red", 100).qcolor)
+                item.setData(
+                    1, Qt.ItemDataRole.BackgroundRole, Color("red", 100).qcolor
+                )
                 item.setToolTip(1, f'The file "{value}" cannot be found')
 
             items.append(item)
