@@ -99,7 +99,7 @@ def get_parameters() -> str:
                     "doc_url": get_doc_url(module_path, name),
                 }
 
-    file = Path(__file__).parent / "parameter_data.json"
+    file = Path(__file__).parent / "pywr_data" / "parameter_data.json"
     with open(file, "w") as f:
         json.dump(
             {
@@ -159,7 +159,7 @@ def get_nodes() -> str:
                 "name": new_name,
             }
 
-    file = Path(__file__).parent / "node_data.json"
+    file = Path(__file__).parent / "pywr_data" / "node_data.json"
     with open(file, "w") as f:
         json.dump(nodes_data, f)
 
@@ -229,7 +229,7 @@ def get_recorders() -> str:
                     "doc_url": get_doc_url("pywr.recorders", name),
                 }
 
-    file = Path(__file__).parent / "recorder_data.json"
+    file = Path(__file__).parent / "pywr_data" / "recorder_data.json"
     with open(file, "w") as f:
         json.dump(
             {

@@ -1,6 +1,6 @@
 # Resource object code (Python 3)
 # Created by: object code
-# Created by: The Resource Compiler for Qt version 6.4.1
+# Created by: The Resource Compiler for Qt version 6.4.0
 # WARNING! All changes made in this file will be lost!
 
 from PySide6 import QtCore
@@ -318,17 +318,10 @@ qt_resource_struct = b"\
 \x00\x00\x01\x84\xd2\xa8\xdbN\
 "
 
-
 def qInitResources():
-    QtCore.qRegisterResourceData(
-        0x03, qt_resource_struct, qt_resource_name, qt_resource_data
-    )
-
+    QtCore.qRegisterResourceData(0x03, qt_resource_struct, qt_resource_name, qt_resource_data)
 
 def qCleanupResources():
-    QtCore.qUnregisterResourceData(
-        0x03, qt_resource_struct, qt_resource_name, qt_resource_data
-    )
-
+    QtCore.qUnregisterResourceData(0x03, qt_resource_struct, qt_resource_name, qt_resource_data)
 
 qInitResources()
