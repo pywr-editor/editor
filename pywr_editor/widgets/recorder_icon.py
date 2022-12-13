@@ -1,4 +1,4 @@
-from pywr_editor.style.icon_with_initials import IconWithInitials
+from .icon_with_initials import IconWithInitials
 
 
 class RecorderIcon(IconWithInitials):

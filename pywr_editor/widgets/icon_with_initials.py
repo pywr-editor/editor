@@ -12,7 +12,7 @@ from PySide6.QtGui import (
     qRgba,
     QPixmap,
 )
-from pywr_editor.style.color import Color, ColorName
+from .color import Color, ColorName
 
 
 class IconWithInitials(QIconEngine):

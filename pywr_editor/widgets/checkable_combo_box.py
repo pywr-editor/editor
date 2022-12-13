@@ -3,7 +3,7 @@ from typing import Any, Sequence
 from PySide6.QtCore import QEvent, Qt, QModelIndex
 from PySide6.QtGui import QFontMetrics, QStandardItem
 from PySide6.QtWidgets import QStyledItemDelegate
-from pywr_editor import ComboBox
+from .combo_box import ComboBox
 
 
 class Delegate(QStyledItemDelegate):

@@ -1,7 +1,7 @@
 import PySide6
 from PySide6.QtCore import Slot, Qt
 from PySide6.QtWidgets import QCheckBox, QWidget
-from pywr_editor.utils import Color, stylesheet_dict_to_str
+from pywr_editor.ui import Color, stylesheet_dict_to_str
 
 """
  This is a QCheckBox but acts as a
