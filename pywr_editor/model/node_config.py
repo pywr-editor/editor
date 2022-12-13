@@ -83,7 +83,7 @@ class NodeConfig:
         return None
 
     @property
-    def position(self) -> list[float] | None:
+    def position(self) -> list[float | int] | None:
         """
         Returns the node position.
         :return: The node position if available, None otherwise.
@@ -188,7 +188,7 @@ class NodeConfig:
             "name": name,
             "type": node_type,
             "position": {
-                Constants.POSITION_KEY: [
+                Constants.POSITION_KEY.value: [
                     round(position[0], 4),
                     round(position[1], 4),
                 ]
