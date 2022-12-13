@@ -2,7 +2,8 @@ from typing import Type, Literal
 from PySide6.QtGui import QIcon, Qt
 from PySide6.QtWidgets import QTreeWidgetItem
 from pywr_editor.model import ParameterConfig, RecorderConfig, ModelConfig
-from pywr_editor.ui import ParameterIcon, Color, RecorderIcon
+from pywr_editor.style import Color
+from pywr_editor.widgets import ParameterIcon, RecorderIcon
 
 
 class AbstractTreeWidgetComponent:
@@ -160,7 +161,9 @@ class AbstractTreeWidgetComponent:
         # the parameter contains the url key to fetch external data
         if is_file and self.model_config.does_file_exist(value) is False:
             item.setBackground(column, Color("red", 100).qcolor)
-            item.setData(column, Qt.BackgroundRole, Color("red", 100).qcolor)
+            item.setData(
+                column, Qt.ItemDataRole.BackgroundRole, Color("red", 100).qcolor
+            )
             item.setToolTip(column, f'The file "{value}" cannot be found')
         elif isinstance(value, str):
             item.setToolTip(column, value)

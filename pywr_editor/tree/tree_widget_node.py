@@ -1,7 +1,7 @@
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QTreeWidgetItem
-from pywr_editor.ui import ParameterIcon
+from pywr_editor.widgets import ParameterIcon
 from pywr_editor.model import ModelConfig
 from .tree_widget_parameter import TreeWidgetParameter
 from .abstract_tree_widget_component import AbstractTreeWidgetComponent
@@ -68,7 +68,6 @@ class TreeWidgetNode(QTreeWidgetItem):
                 parameter_items = TreeWidgetParameter(
                     parameter_config=attribute_value,
                     model_config=self.model_config,
-                    parameter_name=None,
                     parent=item,
                 )
                 item.addChildren(parameter_items.items)

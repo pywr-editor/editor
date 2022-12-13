@@ -18,7 +18,6 @@ class TreeWidgetParameter(AbstractTreeWidgetComponent):
         self,
         parameter_config: dict,
         model_config: ModelConfig,
-        parameter_name: str | None = None,
         parent: Union[
             "TreeWidgetParameter",
             TreeWidgetParameterName,

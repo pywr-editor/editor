@@ -9,23 +9,26 @@ from PySide6.QtWidgets import (
     QTreeWidget,
     QTreeWidgetItem,
 )
+from typing import TYPE_CHECKING
 from .expanded_item_states import ExpandedItemStates
 from .tree_widget_parameter import TreeWidgetParameter, TreeWidgetParameterName
 from .tree_widget_table import TreeWidgetTable
 from .tree_widget_node import TreeWidgetNode
 from .tree_widget_recorder import TreeWidgetRecorder, TreeWidgetRecorderName
-from pywr_editor.ui import (
+from pywr_editor.dialogs import (
     TablesDialog,
     TablesWidget,
     ParametersDialog,
     ParametersWidget,
     RecordersWidget,
     RecordersDialog,
-    Color,
-    stylesheet_dict_to_str,
-    ContextualMenu,
 )
+from pywr_editor.style import Color, stylesheet_dict_to_str
+from pywr_editor.widgets import ContextualMenu
 from pywr_editor.model import Constants, ModelConfig
+
+if TYPE_CHECKING:
+    from pywr_editor import MainWindow
 
 
 class ComponentsTree(QTreeWidget):
@@ -64,7 +67,9 @@ class ComponentsTree(QTreeWidget):
         self.setColumnCount(2)
 
         self.header().resizeSection(0, 200)
-        self.header().setSectionResizeMode(1, QHeaderView.ResizeToContents)
+        self.header().setSectionResizeMode(
+            1, QHeaderView.ResizeMode.ResizeToContents
+        )
         self.header().setStretchLastSection(False)
         self.setStyleSheet(self.stylesheet)
 
@@ -174,7 +179,6 @@ class ComponentsTree(QTreeWidget):
             param_config_item = TreeWidgetParameter(
                 parameter_config=config,
                 model_config=self.model_config,
-                parameter_name=name,
                 parent=sub_item,
             )
             self.expanded_state.store_state(sub_item)
@@ -296,7 +300,6 @@ class ComponentsTree(QTreeWidget):
             recorder_config_item = TreeWidgetRecorder(
                 recorder_config=config,
                 model_config=self.model_config,
-                recorder_name=name,
                 parent=sub_item,
             )
             sub_item.addChildren(recorder_config_item.items)
@@ -388,7 +391,9 @@ class ComponentsTree(QTreeWidget):
                 # select, expand and scroll to the target node
                 t.setSelected(True)
                 t.setExpanded(True)
-                self.scrollToItem(t, QAbstractItemView.PositionAtCenter)
+                self.scrollToItem(
+                    t, QAbstractItemView.ScrollHint.PositionAtCenter
+                )
 
     @Slot(QPoint)
     def on_context_menu(self, pos: QPoint) -> None:
@@ -629,8 +634,10 @@ class StyleDelegate(QStyledItemDelegate):
             option.state & QStyle.State_Selected
             or option.state & QStyle.State_MouseOver
         ):
-            if index.data(Qt.BackgroundRole) is not None:
-                painter.fillRect(option.rect, index.data(Qt.BackgroundRole))
+            if index.data(Qt.ItemDataRole.BackgroundRole) is not None:
+                painter.fillRect(
+                    option.rect, index.data(Qt.ItemDataRole.BackgroundRole)
+                )
 
         # make fond bold when an item is selected
         if option.state & QStyle.State_Selected:
