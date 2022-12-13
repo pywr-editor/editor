@@ -1,16 +1,20 @@
 import logging
-import os
 from datetime import datetime
 from logging.config import dictConfig
 
 
 class Logging:
     def __init__(self):
+        """
+        Initialises the logger.
+        """
         self.init: bool = False
 
-    def configure(self) -> None:
+    def configure(self, file_logging: bool = False) -> None:
         """
         Configures the logging facility for the first time.
+        :param file_logging: Log everything to a file. Default to False.
+
         """
         if self.init is True:
             return
@@ -40,13 +44,12 @@ class Logging:
                 },
             },
         }
-        if os.getenv("FILE_LOGGING") == str(1):
+        if file_logging:
             config["handlers"]["file_handler"] = {
-                # "level": "DEBUG",
+                "level": "DEBUG",
                 "formatter": "standard",
                 "class": "logging.FileHandler",
-                "filename": f"pywr-editor-{datetime.now().strftime('%Y-%m-%d_%H:%M')}"
-                + ".log",
+                "filename": f"pywr-editor-{datetime.now().strftime('%Y-%m-%d')}.log",
                 "mode": "a",
             }
             config["loggers"][""]["handlers"].append("file_handler")

@@ -43,7 +43,7 @@ class JumpListItemLink:
     """ The working directory """
 
     # noinspection PyUnresolvedReferences
-    def link(self) -> "PyIShellLink":
+    def link(self) -> "PyIShellLink":  # noqa: F821
         """
         Get the link as pythocom instance.
         :return: An instance of PyIShellLink.
@@ -85,7 +85,7 @@ class JumpListItems:
 
     # noinspection PyUnresolvedReferences
     @property
-    def items(self) -> list["PyIObjectArray"] | None:
+    def items(self) -> list["PyIObjectArray"] | None:  # noqa: F821
         """
         Returns the items.
         :return: A list of items as PyIObjectArray or None if there are no items.
@@ -122,11 +122,13 @@ class JumpList:
         self.logger = Logging().logger(self.__class__.__name__)
 
         # noinspection PyUnresolvedReferences
-        self._jumplist: "PyICustomDestinationList" = pythoncom.CoCreateInstance(
-            shell.CLSID_DestinationList,
-            None,
-            pythoncom.CLSCTX_INPROC_SERVER,
-            shell.IID_ICustomDestinationList,
+        self._jumplist: "PyICustomDestinationList" = (  # noqa: F821
+            pythoncom.CoCreateInstance(
+                shell.CLSID_DestinationList,
+                None,
+                pythoncom.CLSCTX_INPROC_SERVER,
+                shell.IID_ICustomDestinationList,
+            )
         )
 
         # Windows locally stores the jump list tasks. Clear the list first

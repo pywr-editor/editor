@@ -58,7 +58,7 @@ def browse_files(file_filter: str = "JSON file (*.json)") -> None | str:
     first file is returned.
     """
     file_dialog = QFileDialog()
-    file_dialog.setFileMode(QFileDialog.ExistingFile)
+    file_dialog.setFileMode(QFileDialog.FileMode.ExistingFile)
     file_dialog.setNameFilter(file_filter)
     file_dialog.exec()
     files = file_dialog.selectedFiles()

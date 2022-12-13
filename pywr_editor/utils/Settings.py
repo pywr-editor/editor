@@ -176,7 +176,7 @@ class Settings:
         return self.instance.value(self.schematic_center_key)
 
     def save_schematic_center(
-        self, position: [QPointF] | list[QPointF]
+        self, position: list[QPointF] | list[QPointF]
     ) -> None:
         """
         Stores the schematic zoom level.

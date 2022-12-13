@@ -185,7 +185,8 @@ def find_existing_columns(
         raise TypeError("Column can only be string or integers")
     elif isinstance(columns_to_find[0], int):
         # always use table sort
-        columns_to_find = sorted(columns_to_find)
+        # noinspection PyTypeChecker
+        columns_to_find: list[int] = sorted(columns_to_find)
         wrong_columns = [
             col_id
             for col_id in columns_to_find

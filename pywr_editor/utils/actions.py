@@ -1,6 +1,9 @@
 from dataclasses import dataclass
-from typing import Callable
+from typing import Callable, Union, TYPE_CHECKING
 from PySide6.QtGui import QIcon, QKeySequence, QAction
+
+if TYPE_CHECKING:
+    from pywr_editor import MainWindow
 
 
 @dataclass
@@ -10,7 +13,7 @@ class Action:
     icon: str
     tooltip: str
     show_icon: bool = True
-    connection: Callable | None = None
+    connection: Union[Callable, None] = None
     is_disabled: bool = False
     is_checked: bool | None = None
     shortcut: QKeySequence | None = None
