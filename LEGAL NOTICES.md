@@ -78,14 +78,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 A copy of the license is available here: https://github.com/twbs/icons/blob/main/LICENSE.md
 
 ## Qt
-### Compliance with Qt LGPL
-Pywr editor uses <a href="https://www.qt.io/">Qt framework</a> and the official <a href="https://doc.qt.io/qtforpython/">Python bindings</a> for Qt under the terms of the GNU Lesser General Public License v. 3 ("LGPL"). In compliance with LGPL, this document collects the relevant information about downloading, installing, and building Qt framework from sources. The main source of the information and most of the web links provided here come from the <a href="https://www.qt.io/">Qt Company's website</a>.
-
-  Note: Qt is copyright by <a href="https://www.qt.io/">The Qt Company</a> and/or its subsidiary(-ies) and other contributors.
-
 ### LGPL License Text
-The first step in compliance with LGPL is that every recipient of this software receives also the full text of the LGPLv3 license used. We comply with this requirement by including the full text of the LGPL license below.
-
  GNU LESSER GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
@@ -253,26 +246,3 @@ Library.
 
 The full text of the LGPLv3 license can also be obtained on the 
 <a href="https://www.gnu.org/licenses/lgpl-3.0.en.html">GNU website</a>
-
-### How Pywr editor uses Qt
-Pywr editor dynamically links the unmodified PySide6 and the Qt libraries, as provided by The Qt Company in the 
-pre-compiled binary format.
-
-Also, in compliance with LGPL, the "About" dialog of this application prominently states that this program uses the 
-Qt Toolkit under the terms of LGPL.
-
-### Qt Version Information
-Additionally, the "About" dialog includes the standard "About Qt" dialog box, which informs the user about the exact 
-version of Qt and explains the Qt licensing terms.
-
-### Qt Library Source Code
-This software may use several Qt versions. Please choose the Qt version displayed in the "About Qt" dialog. 
-For Windows users the Qt source code is available at (https://download.qt.io/archive/qt/6.3/6.3.1/single/qt-everywhere-src-6.3.1.zip
-)[this link] for Qt v6.3.1
-
-In case you have any trouble downloading the Qt Source Code from the official links provided above, we make hereby a
-written offer to provide such source code to you. To make a Qt source code request, send email to the following 
-address: <a href="mailto:info@pywr-editor.com">info@pywr-editor.com</a>. Please indicate which specific Pywr editor 
-version you are using. Each Qt version will be available for three (3) years after the release date of the 
-corresponding Pywr editor version.
-
