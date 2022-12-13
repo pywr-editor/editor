@@ -1,8 +1,8 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
     <qresource prefix="model">
-        <file alias="parameter-data">parameter_data.json</file>
-        <file alias="node-data">node_data.json</file>
-        <file alias="recorder-data">recorder_data.json</file>
+        <file alias="parameter-data">pywr_data/parameter_data.json</file>
+        <file alias="node-data">pywr_data/node_data.json</file>
+        <file alias="recorder-data">pywr_data/recorder_data.json</file>
     </qresource>
 </RCC>
