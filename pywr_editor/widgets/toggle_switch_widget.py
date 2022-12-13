@@ -1,7 +1,6 @@
-import PySide6
 from PySide6.QtCore import Slot, Qt
 from PySide6.QtWidgets import QCheckBox, QWidget
-from pywr_editor.ui import Color, stylesheet_dict_to_str
+from pywr_editor.style import Color, stylesheet_dict_to_str
 
 """
  This is a QCheckBox but acts as a
@@ -19,21 +18,24 @@ class ToggleSwitchWidget(QCheckBox):
         self.setStyleSheet(self.stylesheet)
 
         # Set label at init and when state changes
-        self._set_label(self.checkState())
+        self._set_label(
+            Qt.CheckState.Checked.value
+            if self.isChecked()
+            else Qt.CheckState.Unchecked.value
+        )
         # noinspection PyUnresolvedReferences
         self.stateChanged.connect(self._set_label)
 
     @Slot(int)
-    def _set_label(self, state: PySide6.QtCore.Qt.CheckState) -> None:
+    def _set_label(self, state: int) -> None:
         """
         Change the label based on the checkbox state.
-        :param state: The state,
+        :param state: The state.
         :return: None
         """
-        if state == Qt.Checked:
-            self.setText("Yes")
-        else:
-            self.setText("No")
+        self.setText(
+            "Yes" if Qt.CheckState(state) == Qt.CheckState.Checked else "No"
+        )
 
     @property
     def stylesheet(self) -> str:

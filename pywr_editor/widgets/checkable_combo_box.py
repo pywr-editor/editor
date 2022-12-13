@@ -108,10 +108,10 @@ class CheckableComboBox(ComboBox):
                 index = self.view().indexAt(event.pos())
                 item = self.model().item(index.row())
 
-                if item.checkState() == Qt.Checked:
-                    item.setCheckState(Qt.Unchecked)
+                if item.checkState() == Qt.CheckState.Checked:
+                    item.setCheckState(Qt.CheckState.Unchecked)
                 else:
-                    item.setCheckState(Qt.Checked)
+                    item.setCheckState(Qt.CheckState.Checked)
                 return True
         return False
 
@@ -151,7 +151,7 @@ class CheckableComboBox(ComboBox):
         """
         texts = []
         for i in range(self.model().rowCount()):
-            if self.model().item(i).checkState() == Qt.Checked:
+            if self.model().item(i).checkState() == Qt.CheckState.Checked:
                 texts.append(self.model().item(i).text())
 
         # block currentTextChanged Signal
@@ -196,8 +196,10 @@ class CheckableComboBox(ComboBox):
             item.setData(text)
         else:
             item.setData(userData, Qt.UserRole)
-        item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsUserCheckable)
-        item.setData(Qt.Unchecked, Qt.CheckStateRole)
+        item.setFlags(
+            Qt.ItemFlag.ItemIsEnabled | Qt.ItemFlag.ItemIsUserCheckable
+        )
+        item.setData(Qt.CheckState.Unchecked, Qt.CheckStateRole)
         self.model().appendRow(item)
 
         self.lineEdit().blockSignals(False)
@@ -242,7 +244,7 @@ class CheckableComboBox(ComboBox):
         checked_items = []
         for index in range(self.model().rowCount()):
             item = self.model().item(index)
-            if item.checkState() == Qt.Checked:
+            if item.checkState() == Qt.CheckState.Checked:
                 checked_items.append(
                     item.text() if not use_data else item.data(Qt.UserRole)
                 )
@@ -265,7 +267,7 @@ class CheckableComboBox(ComboBox):
         # dataChanged at every loop iteration
         self.model().blockSignals(True)
         for col_index in indexes:
-            self.model().item(col_index).setCheckState(Qt.Checked)
+            self.model().item(col_index).setCheckState(Qt.CheckState.Checked)
         self.model().blockSignals(False)
 
         # emit signal only once using dummy data
@@ -286,7 +288,7 @@ class CheckableComboBox(ComboBox):
         self.model().blockSignals(True)
         for col_name in self.all_items:
             col_index = self.all_items.index(col_name)
-            self.model().item(col_index).setCheckState(Qt.Unchecked)
+            self.model().item(col_index).setCheckState(Qt.CheckState.Unchecked)
         self.model().blockSignals(False)
 
         # emit signal only once using dummy data
@@ -301,6 +303,6 @@ class CheckableComboBox(ComboBox):
         """
         data = []
         for i in range(self.model().rowCount()):
-            if self.model().item(i).checkState() == Qt.Checked:
+            if self.model().item(i).checkState() == Qt.CheckState.Checked:
                 data.append(self.model().item(i).data())
         return data

@@ -52,9 +52,9 @@ class DoubleSpinBox(QDoubleSpinBox):
         # check if user is typing e+ or e-
         if self.scientific_notation and "e" in text.lower():
             if re.search(r"^[+-]?\d*(\.\d+)?([+-][eE]\d+)?", text):
-                return QValidator.Acceptable, text, pos
+                return QValidator.State.Acceptable, text, pos
             else:
-                return QValidator.Invalid, text, pos
+                return QValidator.State.Invalid, text, pos
 
         return super().validate(text, pos)
 

@@ -12,7 +12,7 @@ from PySide6.QtGui import (
     qRgba,
     QPixmap,
 )
-from .color import Color, ColorName
+from pywr_editor.style import Color, ColorName
 
 
 class IconWithInitials(QIconEngine):
@@ -46,7 +46,9 @@ class IconWithInitials(QIconEngine):
         """
         image = QImage(size, QImage.Format_ARGB32)
         image.fill(qRgba(0, 0, 0, 0))
-        pixmap = QPixmap.fromImage(image, Qt.NoFormatConversion)
+        pixmap = QPixmap.fromImage(
+            image, Qt.ImageConversionFlag.NoFormatConversion
+        )
         painter = QPainter(pixmap)
         # set empty rectangle. This is set in the painter directly
         self.paint(painter, QRect(), mode, state)
@@ -98,7 +100,7 @@ class IconWithInitials(QIconEngine):
         font.setPixelSize(12)
         color = Color(self.color, 700).qcolor
         text_options = QTextOption()
-        text_options.setAlignment(Qt.AlignCenter)
+        text_options.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         painter.setPen(QPen(color))
         painter.setBrush(color)

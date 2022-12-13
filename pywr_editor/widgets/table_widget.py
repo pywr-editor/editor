@@ -1,6 +1,6 @@
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QTableWidget, QWidget
-from pywr_editor.ui import stylesheet_dict_to_str
+from pywr_editor.style import stylesheet_dict_to_str
 from .table_view import TableView
 
 
@@ -19,7 +19,7 @@ class TableWidget(QTableWidget):
         # style
         self.setSortingEnabled(False)
         self.horizontalHeader().setStretchLastSection(True)
-        self.horizontalHeader().setDefaultAlignment(Qt.AlignLeft)
+        self.horizontalHeader().setDefaultAlignment(Qt.AlignmentFlag.AlignLeft)
         self.horizontalHeader().setHighlightSections(False)
 
         self.verticalHeader().hide()
@@ -33,4 +33,6 @@ class TableWidget(QTableWidget):
                 style[key] = value
 
         self.setStyleSheet(stylesheet_dict_to_str(style))
-        self.verticalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
+        self.verticalScrollBar().setContextMenuPolicy(
+            Qt.ContextMenuPolicy.NoContextMenu
+        )
