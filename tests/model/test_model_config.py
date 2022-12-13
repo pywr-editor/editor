@@ -2,7 +2,7 @@ import pandas as pd
 import pytest
 from pathlib import Path
 from pywr_editor.model import ModelConfig, Constants
-from test.utils import resolve_model_path
+from tests.utils import resolve_model_path
 
 
 class TestModelConfig:

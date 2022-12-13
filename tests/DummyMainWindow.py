@@ -1,7 +1,8 @@
 from PySide6.QtCore import Signal, Slot
 from PySide6.QtWidgets import QMainWindow
-from pywr_editor import Action, Actions, Settings, Schematic
-from model import ModelConfig
+from pywr_editor.utils import Action, Actions, Settings
+from pywr_editor.schematic import Schematic
+from pywr_editor.model import ModelConfig
 
 
 class MainWindow(QMainWindow):

@@ -2,6 +2,7 @@ import numpy as np
 from pywr.parameters import Parameter, load_parameter, IndexParameter
 
 
+# noinspection PyAttributeOutsideInit,PyMethodOverriding
 class MyParameter(IndexParameter):
     def __init__(self, model, value, **kwargs):
         super().__init__(model, **kwargs)
@@ -16,9 +17,11 @@ class MyParameter(IndexParameter):
         return cls(model, value, **data)
 
 
+# noinspection PyArgumentList
 MyParameter.register()
 
 
+# noinspection PyMethodOverriding
 class EnhancedMonthlyProfileParameter(Parameter):
     def __init__(self, model, profile, **kwargs):
         super().__init__(model, **kwargs)
@@ -38,6 +41,7 @@ class MyClass:
     pass
 
 
+# noinspection PyAttributeOutsideInit,PyUnresolvedReferences,PyMethodOverriding
 class LicenseParameter(Parameter, MyClass):
     def __init__(self, model, total_volume, **kwargs):
         super().__init__(self, model, **kwargs)
@@ -73,6 +77,7 @@ class LicenseParameter(Parameter, MyClass):
         return cls(model, total_volume, **data)
 
 
+# noinspection PyArgumentList
 class SumParameter:
     def __init__(self, model, parameters, **kwargs):
         super().__init__(model, **kwargs)

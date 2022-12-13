@@ -1,18 +1,17 @@
 import pytest
 from pathlib import Path
+from pywr_editor.utils import Settings
 
-# from pywr_editor import Settings
-#
-#
-# def clean_env(model_file: str) -> None:
-#     """
-#     Removes the editor settings.
-#     :param model_file: The model file.
-#     :return: None
-#     """
-#     editor_settings = Settings(model_file)
-#     editor_settings.instance.clear()
-#     editor_settings.instance.sync()
+
+def clean_env(model_file: str) -> None:
+    """
+    Removes the editor settings.
+    :param model_file: The model file.
+    :return: None
+    """
+    editor_settings = Settings(model_file)
+    editor_settings.instance.clear()
+    editor_settings.instance.sync()
 
 
 def pytest_sessionfinish(session):

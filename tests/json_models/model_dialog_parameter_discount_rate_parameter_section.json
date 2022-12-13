@@ -16,6 +16,10 @@
       "max_volume": 35,
       "initial_volume": 35,
       "position": {"editor_position": [200, 500]}
+    },
+    {
+      "name": "Link",
+      "type": "Output"
     }
   ],
   "edges": [["Reservoir", "Link"]],
