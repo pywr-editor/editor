@@ -1,5 +1,5 @@
 import PySide6
-from typing import TypeVar
+from typing import Union
 from PySide6.QtCore import (
     QItemSelectionModel,
     Slot,
@@ -8,23 +8,17 @@ from PySide6.QtCore import (
 )
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QTableView, QPushButton, QWidget
-from pywr_editor.ui import Color, stylesheet_dict_to_str
+from pywr_editor.style import Color, stylesheet_dict_to_str
 from .list_view import ListView
-from .push_button import PushButton
-from .push_icon_button import PushIconButton
-
-button_type = TypeVar(
-    "button_type", bound=QPushButton | PushButton | PushIconButton
-)
 
 
 class TableView(QTableView):
     def __init__(
         self,
         model: QAbstractTableModel,
-        toggle_buttons_on_selection: button_type
-        | list[button_type]
-        | None = None,
+        toggle_buttons_on_selection: Union[
+            QPushButton, list[QPushButton], None
+        ] = None,
         parent: QWidget = None,
     ):
         """
@@ -49,13 +43,15 @@ class TableView(QTableView):
         # style
         self.setSortingEnabled(False)
         self.horizontalHeader().setStretchLastSection(True)
-        self.horizontalHeader().setDefaultAlignment(Qt.AlignLeft)
+        self.horizontalHeader().setDefaultAlignment(Qt.AlignmentFlag.AlignLeft)
         self.horizontalHeader().setHighlightSections(False)
 
         self.verticalHeader().hide()
         self.setAlternatingRowColors(False)
         self.setStyleSheet(self.stylesheet())
-        self.verticalScrollBar().setContextMenuPolicy(Qt.NoContextMenu)
+        self.verticalScrollBar().setContextMenuPolicy(
+            Qt.ContextMenuPolicy.NoContextMenu
+        )
 
         self.setModel(model)
 
@@ -102,11 +98,8 @@ class TableView(QTableView):
     @Slot()
     def on_value_changed(self) -> None:
         selection = self.selectionModel().selection()
-
         [
-            button.setDisabled(
-                selection.indexes().size > 0 if selection.indexes() else False
-            )
+            button.setDisabled(True if selection.indexes() else False)
             for button in self.toggle_buttons_on_selection
         ]
 
@@ -139,7 +132,7 @@ class TableView(QTableView):
         index = self.find_index_by_name(name, column)
         if index is not None:
             self.selectionModel().select(index, QItemSelectionModel.Select)
-            self.scrollTo(index, self.PositionAtCenter)
+            self.scrollTo(index, QTableView.ScrollHint.PositionAtCenter)
 
     @staticmethod
     def stylesheet(as_string: bool = True) -> str | dict:
@@ -150,16 +143,17 @@ class TableView(QTableView):
         :return: The stylesheet as string.
         """
         style = ListView.stylesheet(as_string=False)
+        new_style = {}
         for key, value in style.items():
             if "ListView" in key:
-                del style[key]
                 key = key.replace("ListView", "TableView")
-                style[key] = value
+
+            new_style[key] = value
 
         # remove border radius on cell
-        style["TableView"]["::item"]["border-radius"] = "0px"
+        new_style["TableView"]["::item"]["border-radius"] = "0px"
         # style section
-        style["QHeaderView::section"] = {
+        new_style["QHeaderView::section"] = {
             "background": Color("neutral", 100).hex,
             "height": "20px",
             "padding-top": "4px",
@@ -171,5 +165,5 @@ class TableView(QTableView):
         }
 
         if as_string:
-            return stylesheet_dict_to_str(style)
-        return style
+            return stylesheet_dict_to_str(new_style)
+        return new_style

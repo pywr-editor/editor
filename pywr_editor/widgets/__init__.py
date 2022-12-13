@@ -10,3 +10,5 @@ from .table_view import TableView
 from .table_widget import TableWidget
 from .toggle_switch_widget import ToggleSwitchWidget
 from .settings_dialog import SettingsDialog
+from .parameter_icon import ParameterIcon
+from .recorder_icon import RecorderIcon

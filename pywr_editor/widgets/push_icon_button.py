@@ -40,7 +40,7 @@ class PushIconButton(QPushButton):
         self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
 
         if position == "right":
-            self.setLayoutDirection(Qt.RightToLeft)
+            self.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
 
         if small:
             self.setStyleSheet("PushIconButton {padding: 4px 8px}")

@@ -6,7 +6,7 @@ from PySide6.QtWidgets import (
     QDialogButtonBox,
     QWidget,
 )
-from pywr_editor.ui import Color, stylesheet_dict_to_str
+from pywr_editor.style import Color, stylesheet_dict_to_str
 from .table_view import TableView
 from .push_icon_button import PushIconButton
 
@@ -37,7 +37,7 @@ class SettingsDialog(QDialog):
         :return: None
         """
         # dialog buttons
-        button_box = QDialogButtonBox(QDialogButtonBox.Close)
+        button_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
         # noinspection PyUnresolvedReferences
         button_box.rejected.connect(self.reject)
         button_box.setStyleSheet("margin-bottom:10px")
@@ -73,7 +73,8 @@ class SettingsDialog(QDialog):
         menu.verticalHeader().setDefaultSectionSize(30)
         menu.setStyleSheet(self.menu_stylesheet)
 
-    def left_widget_stylesheet(self, widget_name: str) -> str:
+    @staticmethod
+    def left_widget_stylesheet(widget_name: str) -> str:
         """
         Returns the style to apply to the widget on the left side of the layout.
         :param widget_name: The widget name.
@@ -95,11 +96,12 @@ class SettingsDialog(QDialog):
         Returns the style to apply to the TableView within the left widget.
         :return: The stylesheet.
         """
-        stylesheet = TableView.stylesheet(as_string=False)
+        stylesheet: dict = TableView.stylesheet(as_string=False)
         stylesheet["TableView"]["background"] = "transparent"
         stylesheet["TableView"]["border"] = 0
         stylesheet["TableView"]["border-top"] = "1px solid transparent"
         stylesheet["TableView"]["border-bottom"] = "1px solid transparent"
+        stylesheet["TableView"]["::item"]["border-radius"] = "5px"
 
         return stylesheet_dict_to_str(stylesheet)
 

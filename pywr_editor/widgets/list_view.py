@@ -2,7 +2,7 @@ import PySide6
 from typing import TypeVar
 from PySide6.QtCore import Slot, Qt, QAbstractTableModel
 from PySide6.QtWidgets import QListView, QWidget
-from pywr_editor.ui import Color, stylesheet_dict_to_str
+from pywr_editor.style import Color, stylesheet_dict_to_str
 from .push_button import PushButton
 from .push_icon_button import PushIconButton
 
