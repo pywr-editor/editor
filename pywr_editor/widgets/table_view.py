@@ -1,6 +1,5 @@
-from typing import TypeVar
-
 import PySide6
+from typing import TypeVar
 from PySide6.QtCore import (
     QItemSelectionModel,
     Slot,
@@ -9,7 +8,8 @@ from PySide6.QtCore import (
 )
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QTableView, QPushButton, QWidget
-from pywr_editor.utils import Color, stylesheet_dict_to_str, ListView
+from pywr_editor.ui import Color, stylesheet_dict_to_str
+from .list_view import ListView
 from .push_button import PushButton
 from .push_icon_button import PushIconButton
 

@@ -6,12 +6,9 @@ from PySide6.QtWidgets import (
     QDialogButtonBox,
     QWidget,
 )
-from pywr_editor.utils import (
-    Color,
-    stylesheet_dict_to_str,
-    TableView,
-    PushIconButton,
-)
+from pywr_editor.ui import Color, stylesheet_dict_to_str
+from .table_view import TableView
+from .push_icon_button import PushIconButton
 
 """
  Creates a dialog to edit the model settings

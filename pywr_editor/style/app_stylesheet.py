@@ -1,6 +1,6 @@
 from PySide6.QtGui import QFontDatabase, QFont
 from PySide6.QtWidgets import QApplication
-from pywr_editor.style.color import Color
+from .color import Color
 
 
 def stylesheet_dict_to_str(stylesheet: dict, root_selector: str = "") -> str:

@@ -1,6 +1,6 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QMenu, QLabel, QSizePolicy, QWidgetAction
-from pywr_editor.utils import Color, stylesheet_dict_to_str
+from pywr_editor.ui import Color, stylesheet_dict_to_str
 
 
 class ContextualMenu(QMenu):
