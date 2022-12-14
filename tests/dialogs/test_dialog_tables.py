@@ -61,7 +61,9 @@ class TestTablesDialog:
 
         table_list_widget = dialog.table_list_widget
         pages_widget = dialog.pages_widget
-        qtbot.mouseClick(table_list_widget.add_button, Qt.MouseButton.LeftButton)
+        qtbot.mouseClick(
+            table_list_widget.add_button, Qt.MouseButton.LeftButton
+        )
         # new name is random
         new_name = list(pages_widget.pages.keys())[-1]
 
@@ -223,10 +225,14 @@ class TestTablesDialog:
         # delete
         def confirm_deletion():
             widget = QApplication.activeModalWidget()
-            qtbot.mouseClick(widget.findChild(QPushButton), Qt.MouseButton.LeftButton)
+            qtbot.mouseClick(
+                widget.findChild(QPushButton), Qt.MouseButton.LeftButton
+            )
 
         QTimer.singleShot(100, confirm_deletion)
-        qtbot.mouseClick(table_list_widget.delete_button, Qt.MouseButton.LeftButton)
+        qtbot.mouseClick(
+            table_list_widget.delete_button, Qt.MouseButton.LeftButton
+        )
 
         assert isinstance(pages_widget.currentWidget(), TableEmptyPageWidget)
         assert deleted_table not in pages_widget.pages.keys()

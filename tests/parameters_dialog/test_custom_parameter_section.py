@@ -672,7 +672,9 @@ class TestDialogParameterCustomParameterSection:
             DictionaryWidget
         )
         # add key and number
-        qtbot.mouseClick(child_dictionary_widget.add_button, Qt.MouseButton.LeftButton)
+        qtbot.mouseClick(
+            child_dictionary_widget.add_button, Qt.MouseButton.LeftButton
+        )
 
         # noinspection PyTypeChecker
         child_child_dialog: DictionaryItemDialogWidget = child_dialog.findChild(

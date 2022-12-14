@@ -145,7 +145,9 @@ class TestDialogParameterLineEditWidget:
         )
 
         # 3. Test reset
-        qtbot.mouseClick(threshold_widget.clear_button, Qt.MouseButton.LeftButton)
+        qtbot.mouseClick(
+            threshold_widget.clear_button, Qt.MouseButton.LeftButton
+        )
         assert threshold_widget.line_edit.text() == "Not set"
         assert threshold_widget.component_obj is None
         assert not threshold_widget.line_edit.actions()
@@ -256,7 +258,9 @@ class TestDialogParameterLineEditWidget:
         param_line_edit_widget: ParameterLineEditWidget = (
             form.find_field_by_name("threshold").widget
         )
-        qtbot.mouseClick(param_line_edit_widget.select_button, Qt.MouseButton.LeftButton)
+        qtbot.mouseClick(
+            param_line_edit_widget.select_button, Qt.MouseButton.LeftButton
+        )
 
         # 5. Fill in the form
         # noinspection PyTypeChecker
@@ -340,7 +344,9 @@ class TestDialogParameterLineEditWidget:
         )
 
         # 3. Test that, when parameter is changed, the field is updated correctly
-        qtbot.mouseClick(param_line_edit_widget.select_button, Qt.MouseButton.LeftButton)
+        qtbot.mouseClick(
+            param_line_edit_widget.select_button, Qt.MouseButton.LeftButton
+        )
 
         # set model parameter
         source_widget: ModelComponentSourceSelectorWidget = (

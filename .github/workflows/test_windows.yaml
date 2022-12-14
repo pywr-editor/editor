@@ -1,15 +1,11 @@
 name: Windows
-
 on:
   push:
     branches:
       - main
-      - patch
   pull_request:
     branches:
       - main
-      - patch
-
 jobs:
   testWin:
     runs-on: windows-latest

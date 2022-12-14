@@ -462,7 +462,9 @@ class TestDialogParameterParametersListPickerWidget:
         # 2. Delete second parameter. Button up is still disabled
         self.select_row(thresholds_widget, 1)
         assert thresholds_widget.delete_button.isEnabled() is True
-        qtbot.mouseClick(thresholds_widget.delete_button, Qt.MouseButton.LeftButton)
+        qtbot.mouseClick(
+            thresholds_widget.delete_button, Qt.MouseButton.LeftButton
+        )
         new_value = [
             self.general_anonymous_param_value[0],
             self.general_anonymous_param_value[2],
@@ -525,9 +527,13 @@ class TestDialogParameterParametersListPickerWidget:
         if mode == "edit":
             index = 2
             self.select_row(thresholds_widget, index)
-            qtbot.mouseClick(thresholds_widget.edit_button, Qt.MouseButton.LeftButton)
+            qtbot.mouseClick(
+                thresholds_widget.edit_button, Qt.MouseButton.LeftButton
+            )
         elif mode == "add":
-            qtbot.mouseClick(thresholds_widget.add_button, Qt.MouseButton.LeftButton)
+            qtbot.mouseClick(
+                thresholds_widget.add_button, Qt.MouseButton.LeftButton
+            )
         else:
             raise ValueError("Mode not supported")
 
@@ -618,9 +624,13 @@ class TestDialogParameterParametersListPickerWidget:
         if mode == "edit":
             index = 0
             self.select_row(parameters_list_widget, index)
-            qtbot.mouseClick(parameters_list_widget.edit_button, Qt.MouseButton.LeftButton)
+            qtbot.mouseClick(
+                parameters_list_widget.edit_button, Qt.MouseButton.LeftButton
+            )
         elif mode == "add":
-            qtbot.mouseClick(parameters_list_widget.add_button, Qt.MouseButton.LeftButton)
+            qtbot.mouseClick(
+                parameters_list_widget.add_button, Qt.MouseButton.LeftButton
+            )
         else:
             raise ValueError("Mode not supported")
 
@@ -743,7 +753,9 @@ class TestDialogParameterParametersListPickerWidget:
         # 1. Open the dialog
         index = 0
         self.select_row(thresholds_widget, index)
-        qtbot.mouseClick(thresholds_widget.edit_button, Qt.MouseButton.LeftButton)
+        qtbot.mouseClick(
+            thresholds_widget.edit_button, Qt.MouseButton.LeftButton
+        )
 
         # noinspection PyTypeChecker
         child_dialog: ModelComponentPickerDialog = selected_page.findChild(
@@ -832,9 +844,13 @@ class TestDialogParameterParametersListPickerWidget:
         if mode == "edit":
             index = 0
             self.select_row(parameters_list_widget, index)
-            qtbot.mouseClick(parameters_list_widget.edit_button, Qt.MouseButton.LeftButton)
+            qtbot.mouseClick(
+                parameters_list_widget.edit_button, Qt.MouseButton.LeftButton
+            )
         elif mode == "add":
-            qtbot.mouseClick(parameters_list_widget.add_button, Qt.MouseButton.LeftButton)
+            qtbot.mouseClick(
+                parameters_list_widget.add_button, Qt.MouseButton.LeftButton
+            )
         else:
             raise ValueError("Mode not supported")
 

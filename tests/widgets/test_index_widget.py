@@ -266,8 +266,8 @@ class TestDialogParameterIndexWidget:
             )
             # check type only with supplied values
             if dict_values[index_name] is not None:
-                assert index_widget.value.index_types[ii] == type(
-                    dict_values[index_name]
+                assert isinstance(
+                    dict_values[index_name], index_widget.value.index_types[ii]
                 )
 
         # 3. Check the return value from the widget. This returns a string or number

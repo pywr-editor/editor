@@ -135,10 +135,13 @@ class TestTablesIncludes:
                 in widget.text()
             )
             if action == "delete":
-                qtbot.mouseClick(widget.findChild(QPushButton), Qt.MouseButton.LeftButton)
+                qtbot.mouseClick(
+                    widget.findChild(QPushButton), Qt.MouseButton.LeftButton
+                )
             else:
                 qtbot.mouseClick(
-                    widget.findChildren(QPushButton)[1], Qt.MouseButton.LeftButton
+                    widget.findChildren(QPushButton)[1],
+                    Qt.MouseButton.LeftButton,
                 )
 
         QTimer.singleShot(200, confirm_deletion)

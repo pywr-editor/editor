@@ -76,8 +76,8 @@ class TestParamConfig:
     )
     def test_custom_parameters(self, param_name):
         """
-        Tests that the correct value is returned for the is_a_model_parameter and is_custom
-        properties.
+        Tests that the correct value is returned for the is_a_model_parameter and
+        is_custom properties.
         """
         parameter_config = self.parameter_config(
             self.parameters_dict["custom_parameter"],
