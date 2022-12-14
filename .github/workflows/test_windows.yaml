@@ -26,6 +26,6 @@ jobs:
           pip install -r requirements-dev.txt
       - name: Run Tests
         run: |
-          python -k "not test_paste_from_excel" -m pytest --cov=./ --cov-report=xml
+          pytest -k "not test_paste_from_excel" --cov=./ --cov-report=xml
       - name: Upload to Codecov
         uses: codecov/codecov-action@v3
