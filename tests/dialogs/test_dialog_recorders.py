@@ -44,7 +44,9 @@ class TestRecordersDialog:
         """
         recorder_list_widget = dialog.recorders_list_widget
         pages_widget = dialog.pages_widget
-        qtbot.mouseClick(recorder_list_widget.add_button, Qt.MouseButton.LeftButton)
+        qtbot.mouseClick(
+            recorder_list_widget.add_button, Qt.MouseButton.LeftButton
+        )
 
         # new name is random
         new_name = list(pages_widget.pages.keys())[-1]
@@ -202,10 +204,14 @@ class TestRecordersDialog:
         # delete
         def confirm_deletion():
             widget = QApplication.activeModalWidget()
-            qtbot.mouseClick(widget.findChild(QPushButton), Qt.MouseButton.LeftButton)
+            qtbot.mouseClick(
+                widget.findChild(QPushButton), Qt.MouseButton.LeftButton
+            )
 
         QTimer.singleShot(100, confirm_deletion)
-        qtbot.mouseClick(recorder_list_widget.delete_button, Qt.MouseButton.LeftButton)
+        qtbot.mouseClick(
+            recorder_list_widget.delete_button, Qt.MouseButton.LeftButton
+        )
 
         assert isinstance(pages_widget.currentWidget(), RecorderEmptyPageWidget)
         assert deleted_recorder not in pages_widget.pages.keys()

@@ -278,9 +278,13 @@ class TestDialogParameterControlCurveParameterSection:
         if mode == "edit":
             index = 1
             self.select_row(values_widget, index)
-            qtbot.mouseClick(values_widget.edit_button, Qt.MouseButton.LeftButton)
+            qtbot.mouseClick(
+                values_widget.edit_button, Qt.MouseButton.LeftButton
+            )
         elif mode == "add":
-            qtbot.mouseClick(values_widget.add_button, Qt.MouseButton.LeftButton)
+            qtbot.mouseClick(
+                values_widget.add_button, Qt.MouseButton.LeftButton
+            )
         else:
             raise ValueError("Mode not supported")
 

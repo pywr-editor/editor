@@ -48,7 +48,7 @@ def build_info():
     return {{
         'Version': '{version}',
         'Build date': '{datetime.now().strftime('%d %b %Y')}',
-    }}"""
+    }}\n"""
 
     fid = open(Path(__file__).parent / "pywr_editor" / "build_info.py", "w")
     fid.write(code)

@@ -111,7 +111,8 @@ class TestDoubleSpinBox:
             partial_text += ch
             assert line_edit.text() == partial_text
             assert (
-                spin_box.validate(partial_text, 0)[0] == QValidator.State.Acceptable
+                spin_box.validate(partial_text, 0)[0]
+                == QValidator.State.Acceptable
             )
 
         # confirm value to show string

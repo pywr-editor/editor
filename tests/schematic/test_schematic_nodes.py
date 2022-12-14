@@ -128,7 +128,10 @@ class TestDeleteNodes:
         source_point = QPoint(100, 300)
         qtbot.mouseMove(schematic.viewport(), source_point, -1)
         qtbot.mouseClick(
-            schematic.viewport(), Qt.MouseButton.LeftButton, Qt.NoModifier, source_point
+            schematic.viewport(),
+            Qt.MouseButton.LeftButton,
+            Qt.NoModifier,
+            source_point,
         )
         found = False
         for node in schematic.items():
@@ -138,13 +141,18 @@ class TestDeleteNodes:
         assert found is True
 
         # enable connect mode
-        qtbot.mouseClick(node_op_panel.buttons["Connect"], Qt.MouseButton.LeftButton)
+        qtbot.mouseClick(
+            node_op_panel.buttons["Connect"], Qt.MouseButton.LeftButton
+        )
 
         # select the target node Reservoir
         target_point = QPoint(155, 300)
         qtbot.mouseMove(schematic.viewport(), target_point, -1)
         qtbot.mouseClick(
-            schematic.viewport(), Qt.MouseButton.LeftButton, Qt.NoModifier, target_point
+            schematic.viewport(),
+            Qt.MouseButton.LeftButton,
+            Qt.NoModifier,
+            target_point,
         )
 
         assert model_config.edges.get_targets("Link3") == [
