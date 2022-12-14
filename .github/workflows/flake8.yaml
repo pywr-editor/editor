@@ -18,8 +18,6 @@ jobs:
       - name: Checkout Source
         uses: actions/checkout@v3
       - name: Install flake8
-        run: pip install flake8
-      - name: Syntax Error Check
-        run: |
-          flake8 pywr_editor --count --show-source --statistics
-          flake8 tests --count --show-source --statistics
+        uses: py-actions/flake8@v2.2.1
+        with:
+          plugins: flake8-black
