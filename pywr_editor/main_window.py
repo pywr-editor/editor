@@ -679,7 +679,7 @@ class MainWindow(QMainWindow):
         """
         message = QMessageBox(self)
         message.setWindowTitle("Unsaved changes")
-        message.setIcon(QMessageBox.StandardButton.Information)
+        message.setIcon(QMessageBox.Icon.Information)
         message.setText("The model has been modified")
         message.setInformativeText("Do you want to save your changes?")
         message.setStandardButtons(
