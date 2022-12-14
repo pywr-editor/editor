@@ -1,6 +1,6 @@
 import pytest
 from pathlib import Path
-from ..pywr_editor.utils import Settings
+from pywr_editor.utils import Settings
 
 
 def clean_env(model_file: str) -> None:
