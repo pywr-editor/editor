@@ -1,8 +1,12 @@
 import hashlib
 import json
 import os
+from typing import TYPE_CHECKING
 from PySide6.QtCore import QSettings, QPointF
 from pywr_editor.model import ModelFileInfo
+
+if TYPE_CHECKING:
+    from pywr_editor import MainWindow
 
 
 class Settings:
