@@ -1,5 +1,6 @@
 import pytest
 from pathlib import Path
+from ..pywr_editor.utils import Settings
 
 
 def clean_env(model_file: str) -> None:
@@ -8,8 +9,6 @@ def clean_env(model_file: str) -> None:
     :param model_file: The model file.
     :return: None
     """
-    from pywr_editor.utils import Settings
-
     editor_settings = Settings(model_file)
     editor_settings.instance.clear()
     editor_settings.instance.sync()
