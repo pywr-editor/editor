@@ -71,8 +71,12 @@ class TestDialogParameterMonthlyValuesWidget:
         current_values[0] = 5.0
         # Double-clicking the table cell to set it into editor mode does not work.
         # Click->Double Click works, however
-        qtbot.mouseClick(table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y))
-        qtbot.mouseDClick(table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y))
+        qtbot.mouseClick(
+            table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
+        )
+        qtbot.mouseDClick(
+            table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
+        )
         qtbot.keyClick(table.viewport().focusWidget(), Qt.Key_5)
         qtbot.keyClick(table.viewport().focusWidget(), Qt.Key_Enter)
 

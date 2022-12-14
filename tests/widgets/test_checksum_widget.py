@@ -255,7 +255,9 @@ class TestDialogParameterCheckSumWidget:
                 assert message in text
             # warning before calculating hash
             else:
-                qtbot.mouseClick(widget.findChild(QPushButton), Qt.MouseButton.LeftButton)
+                qtbot.mouseClick(
+                    widget.findChild(QPushButton), Qt.MouseButton.LeftButton
+                )
             widget.close()
         else:
             assert False

@@ -28,7 +28,8 @@ class TestModelConfig:
 
     def test_file_not_found(self):
         """
-        Checks that the correct error message is returned when the JSON file does not exist.
+        Checks that the correct error message is returned when the JSON file does
+        not exist.
         """
         model = self.model("file.json")
         assert model.is_valid() is False
@@ -36,7 +37,8 @@ class TestModelConfig:
 
     def test_empty_model(self):
         """
-        Checks that the empty model dictionary is returned, when no JSON file is provided.
+        Checks that the empty model dictionary is returned, when no JSON file
+        is provided.
         """
         model = self.model()
         assert model.json["metadata"]["minimum_version"] == "0.1"
@@ -99,7 +101,8 @@ class TestModelConfig:
 
     def test_validation_model_wrong_type(self):
         """
-        Tests that the model fails validation (the nodes field is a dict instead of list)
+        Tests that the model fails validation (the nodes field is a dict instead of
+        list)
         """
         model = self.model("invalid_model_wrong_type.json")
         assert model.is_valid() is False

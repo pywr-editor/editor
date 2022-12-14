@@ -50,7 +50,9 @@ class TestParametersDialog:
         """
         parameter_list_widget = dialog.parameters_list_widget
         pages_widget = dialog.pages_widget
-        qtbot.mouseClick(parameter_list_widget.add_button, Qt.MouseButton.LeftButton)
+        qtbot.mouseClick(
+            parameter_list_widget.add_button, Qt.MouseButton.LeftButton
+        )
 
         # new name is random
         new_name = list(pages_widget.pages.keys())[-1]
@@ -201,10 +203,14 @@ class TestParametersDialog:
         # delete
         def confirm_deletion():
             widget = QApplication.activeModalWidget()
-            qtbot.mouseClick(widget.findChild(QPushButton), Qt.MouseButton.LeftButton)
+            qtbot.mouseClick(
+                widget.findChild(QPushButton), Qt.MouseButton.LeftButton
+            )
 
         QTimer.singleShot(100, confirm_deletion)
-        qtbot.mouseClick(parameter_list_widget.delete_button, Qt.MouseButton.LeftButton)
+        qtbot.mouseClick(
+            parameter_list_widget.delete_button, Qt.MouseButton.LeftButton
+        )
 
         assert isinstance(
             pages_widget.currentWidget(), ParameterEmptyPageWidget
@@ -280,7 +286,9 @@ class TestParametersDialog:
         """
         parameter_list_widget = dialog.parameters_list_widget
         pages_widget = dialog.pages_widget
-        qtbot.mouseClick(parameter_list_widget.add_button, Qt.MouseButton.LeftButton)
+        qtbot.mouseClick(
+            parameter_list_widget.add_button, Qt.MouseButton.LeftButton
+        )
         dialog.show()
 
         # Page widget
