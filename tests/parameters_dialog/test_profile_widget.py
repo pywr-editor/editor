@@ -7,6 +7,8 @@ from pywr_editor.form import MonthlyValuesWidget, FormField
 from tests.utils import resolve_model_path
 
 
+# delay test otherwise this may fail when run with GitHub actions
+@pytest.mark.usefixtures("delay")
 class TestDialogParameterProfileWidget:
     """
     Tests the ProfileWidget used to define a profile on a parameter.
