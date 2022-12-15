@@ -37,13 +37,16 @@ class AboutDialog(QDialog):
         self.setMinimumSize(width, height)
 
         # Text
-        from pywr_editor import build_info
+        from pywr_editor import __version__, __build_date__
 
-        info = build_info()
+        build_date = datetime.strptime(__build_date__, "%Y-%m-%d").strftime(
+            "%d %b %Y"
+        )
+
         # flake8: noqa
-        text = f"""<div style="font-weight:bold; font-size:16px">Pywr editor {info['Version']}</div>
-        <div style="margin-top:5px;">Build on {info['Build date']}</div>
-        <div style="margin-top:2px;margin-bottom:25px;">Runtime version: {sys.version}</div>
+        text = f"""<div style="font-weight:bold; font-size:16px">Pywr editor {__version__}</div>
+        <div style="margin-top:5px">Build on: {build_date}</div>
+        <div style="margin-top:2px;margin-bottom:25px">Runtime version: {sys.version}</div>
 
         <p>Copyright (C) 2021-{datetime.now().strftime('%Y')}  Stefano Simoncelli</p>
     
