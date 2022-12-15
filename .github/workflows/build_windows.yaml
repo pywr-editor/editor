@@ -22,8 +22,31 @@ jobs:
       - name: Freeze editor
         run: |
           python build.py freeze
-      - name: Upload Artifact
+      - name: Upload binary
         uses: actions/upload-artifact@v3
         with:
           name: pywr_editor
           path: dist/main
+      - name: Create installer
+        run: |
+           C:\Program Files (x86)\Inno Setup 6\ISCC.exe windows_setup.iss
+      - name: Upload installer
+        uses: actions/upload-artifact@v3
+        with:
+          name: pywr_editor
+          path: Output
+        
+
+#  deploy:
+#    name: Publish
+#    needs:
+#      - freeze_windows
+#
+#    if: github.event_name == 'push' && (startsWith(github.ref, 'refs/tags') || github.ref == 'refs/heads/master')
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Download all the dists
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: pywr_editor
+#          path: dist/main
