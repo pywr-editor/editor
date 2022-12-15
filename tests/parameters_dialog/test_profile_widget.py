@@ -7,6 +7,14 @@ from pywr_editor.form import MonthlyValuesWidget, FormField
 from tests.utils import resolve_model_path
 
 
+@pytest.fixture(scope="class")
+def delay():
+    import time
+
+    time.sleep(1)
+
+
+@pytest.mark.usefixtures("delay")
 class TestDialogParameterProfileWidget:
     """
     Tests the ProfileWidget used to define a profile on a parameter.
@@ -61,8 +69,8 @@ class TestDialogParameterProfileWidget:
         qtbot.mouseDClick(
             table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
         )
-        qtbot.keyClick(table.viewport().focusWidget(), Qt.Key_5)
-        qtbot.keyClick(table.viewport().focusWidget(), Qt.Key_Enter)
+        qtbot.keyClick(table.viewport().focusWidget(), Qt.Key.Key_5)
+        qtbot.keyClick(table.viewport().focusWidget(), Qt.Key.Key_Enter)
 
         # wait to let the model update itself
         qtbot.wait(0.1)

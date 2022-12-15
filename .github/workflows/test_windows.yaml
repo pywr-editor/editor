@@ -6,8 +6,6 @@ on:
   pull_request:
     branches:
       - main
-env:
-  GITHUB: true
 jobs:
   testWin:
     runs-on: windows-latest
@@ -25,6 +23,7 @@ jobs:
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
       - name: Run Tests
+        # exclude tests using COM objects and Excel
         run: |
           pytest -k "not test_paste_from_excel" --cov=./ --cov-report=xml
       - name: Upload to Codecov
