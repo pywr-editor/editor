@@ -7,7 +7,7 @@ from pywr_editor.toolbar.tab_panel import TabPanel
 from tests.utils import resolve_model_path
 
 
-class TestDeleteNodes:
+class TestSchematicNodes:
     model_file = resolve_model_path("model_delete_nodes.json")
 
     @pytest.fixture
@@ -125,8 +125,8 @@ class TestDeleteNodes:
         model_config = schematic.model_config
 
         # select Link3
-        source_point = QPoint(100, 300)
-        qtbot.mouseMove(schematic.viewport(), source_point, -1)
+        source_point = schematic.mapFromScene(QPoint(50, 500))
+        qtbot.mouseMove(schematic, source_point, -1)
         qtbot.mouseClick(
             schematic.viewport(),
             Qt.MouseButton.LeftButton,
@@ -146,7 +146,7 @@ class TestDeleteNodes:
         )
 
         # select the target node Reservoir
-        target_point = QPoint(155, 300)
+        target_point = schematic.mapFromScene(QPoint(200, 500))
         qtbot.mouseMove(schematic.viewport(), target_point, -1)
         qtbot.mouseClick(
             schematic.viewport(),
