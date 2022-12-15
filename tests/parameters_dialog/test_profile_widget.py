@@ -7,13 +7,7 @@ from pywr_editor.form import MonthlyValuesWidget, FormField
 from tests.utils import resolve_model_path
 
 
-@pytest.fixture(scope="class")
-def delay():
-    import time
-
-    time.sleep(1)
-
-
+# delay test otherwise this may fail when run with GitHub actions
 @pytest.mark.usefixtures("delay")
 class TestDialogParameterProfileWidget:
     """

@@ -1,3 +1,5 @@
+import time
+
 import pytest
 from pathlib import Path
 from pywr_editor.utils import Settings
@@ -32,3 +34,12 @@ def pytest_sessionfinish(session):
     dynamic_file = Path("test/models/files/table_missing.csv")
     if dynamic_file.exists():
         dynamic_file.unlink()
+
+
+@pytest.fixture(scope="class")
+def delay() -> None:
+    """
+    Fixture to delay a test.
+    :return: None
+    """
+    time.sleep(1)
