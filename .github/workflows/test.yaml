@@ -1,4 +1,4 @@
-name: Windows
+name: Unit tests
 on:
   push:
     branches:
@@ -9,7 +9,7 @@ on:
       - develop
       - main
 jobs:
-  test_editor:
+  windows:
     runs-on: windows-latest
     steps:
       - name: Python Setup
