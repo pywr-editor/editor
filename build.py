@@ -8,7 +8,7 @@ app = typer.Typer(pretty_exceptions_enable=False)
 
 
 @app.command()
-def publish():
+def freeze():
     """
     Creates the executable.
     """

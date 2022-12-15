@@ -1,15 +1,10 @@
-name: Windows
+name: Build
 on:
-  push:
-    branches:
-      - develop
-      - main
   pull_request:
     branches:
-      - develop
       - main
 jobs:
-  test_editor:
+  freeze_windows:
     runs-on: windows-latest
     steps:
       - name: Python Setup
@@ -24,6 +19,11 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
-      - name: Run Tests
+      - name: Freeze editor
         run: |
-          pytest -k "not test_paste_from_excel" --cov=./ --cov-report=xml
+          python build.py freeze
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: pywr_editor
+          path: dist/main
