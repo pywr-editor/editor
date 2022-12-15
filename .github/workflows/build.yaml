@@ -4,7 +4,7 @@ on:
     branches:
       - main
 jobs:
-  freeze_windows:
+  windows:
     runs-on: windows-latest
     steps:
       - name: Python Setup
@@ -29,7 +29,7 @@ jobs:
           path: dist/main
       - name: Create installer
         run: |
-           C:\Program Files (x86)\Inno Setup 6\ISCC.exe windows_setup.iss
+           & 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe' windows_setup.iss
       - name: Upload installer
         uses: actions/upload-artifact@v3
         with:
