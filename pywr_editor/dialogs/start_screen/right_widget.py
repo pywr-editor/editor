@@ -126,7 +126,9 @@ class CloseButton(QWidget):
         wrapper_layout.addWidget(button)
         wrapper_layout.setAlignment(Qt.AlignRight | Qt.AlignTop)
         self.setLayout(wrapper_layout)
-        self.setStyleSheet("QPushButton { background: transparent }")
+        self.setStyleSheet(
+            "QPushButton { background: transparent; border: 0px; }"
+        )
 
 
 class ButtonContainer(QPushButton):

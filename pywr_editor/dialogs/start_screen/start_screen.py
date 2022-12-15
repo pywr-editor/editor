@@ -3,7 +3,7 @@ from PySide6.QtCore import Qt, QPoint, QPointF
 from PySide6.QtWidgets import QDialog, QHBoxLayout, QWidget
 from .left_widget import StartScreenLeftWidget
 from .right_widget import StartScreenRightWidget
-from pywr_editor.style import Color, stylesheet_dict_to_str
+from pywr_editor.style import Color, stylesheet_dict_to_str, AppStylesheet
 
 
 class StartScreen(QDialog):
@@ -59,5 +59,4 @@ class StartScreen(QDialog):
                 "border": f'1px solid {Color("gray", 300).hex}',
             }
         }
-
-        return stylesheet_dict_to_str(style)
+        return AppStylesheet().get() + stylesheet_dict_to_str(style)
