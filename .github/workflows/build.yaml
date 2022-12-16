@@ -25,7 +25,7 @@ jobs:
           pip install -r requirements-dev.txt
       - name: Freeze editor
         run: |
-          python build.py freeze
+           pyinstaller main.spec --noconfirm
       - name: Upload binary
         uses: actions/upload-artifact@v3
         with:
