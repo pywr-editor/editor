@@ -83,7 +83,7 @@ class TestDialogParameterRbfSection:
             # valid
             ("days_of_year", [1, 89, 100], None),
             # first day must be one
-            # ("days_of_year", [5, 9, 10], "The first item must be 1"),
+            ("days_of_year", [5, 9, 10], "The first item must be 1"),
             # length < 3
             # ("days_of_year", [1, 65], "at least 3 items"),
             # # not increasing
