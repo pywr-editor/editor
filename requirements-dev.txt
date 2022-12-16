@@ -1,0 +1,10 @@
+pre-commit
+pytest
+pytest-qt
+pytest-cov
+numpy
+pyinstaller
+typer
+flake8
+flake8-black
+black

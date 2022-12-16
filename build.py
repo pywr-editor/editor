@@ -48,7 +48,7 @@ def build_info():
     return {{
         'Version': '{version}',
         'Build date': '{datetime.now().strftime('%d %b %Y')}',
-    }}"""
+    }}\n"""
 
     fid = open(Path(__file__).parent / "pywr_editor" / "build_info.py", "w")
     fid.write(code)
@@ -74,17 +74,17 @@ def pywr_assets():
     Generates the pywr assets.
     """
     typer.secho(
-        f">> Creating parameter names dictionary",
+        ">> Creating parameter names dictionary",
         fg=typer.colors.GREEN,
         bold=True,
     )
     get_parameters()
     typer.secho(
-        f">> Creating node names dictionary", fg=typer.colors.GREEN, bold=True
+        ">> Creating node names dictionary", fg=typer.colors.GREEN, bold=True
     )
     get_nodes()
     typer.secho(
-        f">> Creating recorder names dictionary",
+        ">> Creating recorder names dictionary",
         fg=typer.colors.GREEN,
         bold=True,
     )

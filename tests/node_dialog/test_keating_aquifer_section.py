@@ -241,7 +241,9 @@ class TestKeatingAquiferSection:
         assert widget.delete_stream_button.isEnabled() is False
         x = table.columnViewportPosition(1) + 5
         y = table.rowViewportPosition(model.rowCount() - 1) + 10
-        qtbot.mouseClick(table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y))
+        qtbot.mouseClick(
+            table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
+        )
         assert widget.delete_stream_button.isEnabled() is False
 
         # 3. Delete stream
@@ -249,7 +251,9 @@ class TestKeatingAquiferSection:
         # select row
         x = table.columnViewportPosition(1) + 5
         y = table.rowViewportPosition(row) + 10
-        qtbot.mouseClick(table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y))
+        qtbot.mouseClick(
+            table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
+        )
 
         # delete
         assert widget.delete_stream_button.isEnabled() is True
@@ -264,7 +268,9 @@ class TestKeatingAquiferSection:
         # select row
         x = table.columnViewportPosition(1) + 5
         y = table.rowViewportPosition(row) + 10
-        qtbot.mouseClick(table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y))
+        qtbot.mouseClick(
+            table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
+        )
 
         # delete
         assert widget.delete_stream_button.isEnabled() is True
@@ -299,7 +305,9 @@ class TestKeatingAquiferSection:
         # select row
         x = table.columnViewportPosition(column) + 5
         y = table.rowViewportPosition(0) + 10
-        qtbot.mouseClick(table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y))
+        qtbot.mouseClick(
+            table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
+        )
 
         # delete
         assert widget.delete_level_button.isEnabled() is True

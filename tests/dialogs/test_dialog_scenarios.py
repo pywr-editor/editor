@@ -47,7 +47,9 @@ class TestScenariosDialog:
         """
         scenario_list_widget = dialog.list
         pages_widget = dialog.pages
-        qtbot.mouseClick(scenario_list_widget.add_button, Qt.MouseButton.LeftButton)
+        qtbot.mouseClick(
+            scenario_list_widget.add_button, Qt.MouseButton.LeftButton
+        )
         # new name is random
         new_name = list(pages_widget.pages.keys())[-1]
 
@@ -188,10 +190,14 @@ class TestScenariosDialog:
         # delete
         def confirm_deletion():
             widget = QApplication.activeModalWidget()
-            qtbot.mouseClick(widget.findChild(QPushButton), Qt.MouseButton.LeftButton)
+            qtbot.mouseClick(
+                widget.findChild(QPushButton), Qt.MouseButton.LeftButton
+            )
 
         QTimer.singleShot(100, confirm_deletion)
-        qtbot.mouseClick(scenario_list_widget.delete_button, Qt.MouseButton.LeftButton)
+        qtbot.mouseClick(
+            scenario_list_widget.delete_button, Qt.MouseButton.LeftButton
+        )
 
         assert isinstance(pages_widget.currentWidget(), ScenarioEmptyPageWidget)
         assert deleted_scenario not in pages_widget.pages.keys()

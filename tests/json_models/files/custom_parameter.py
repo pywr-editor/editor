@@ -29,7 +29,7 @@ class EnhancedMonthlyProfileParameter(Parameter):
 
     def value(self, timestep, scenario_index):
         index = timestep.month - 1  # convert to zero-based index
-        value = self.profile[index]
+        return self.profile[index]
 
     @classmethod
     def load(cls, model, data):

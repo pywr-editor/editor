@@ -240,9 +240,13 @@ class TestDialogRecorderRecordersListPickerWidget:
         if mode == "edit":
             index = 1
             self.select_row(recorders_widget, index)
-            qtbot.mouseClick(recorders_widget.edit_button, Qt.MouseButton.LeftButton)
+            qtbot.mouseClick(
+                recorders_widget.edit_button, Qt.MouseButton.LeftButton
+            )
         elif mode == "add":
-            qtbot.mouseClick(recorders_widget.add_button, Qt.MouseButton.LeftButton)
+            qtbot.mouseClick(
+                recorders_widget.add_button, Qt.MouseButton.LeftButton
+            )
         else:
             raise ValueError("Mode not supported")
 
@@ -328,7 +332,9 @@ class TestDialogRecorderRecordersListPickerWidget:
         # 1. Open the dialog
         index = 0
         self.select_row(recorders_widget, index)
-        qtbot.mouseClick(recorders_widget.edit_button, Qt.MouseButton.LeftButton)
+        qtbot.mouseClick(
+            recorders_widget.edit_button, Qt.MouseButton.LeftButton
+        )
 
         # noinspection PyTypeChecker
         child_dialog: ModelComponentPickerDialog = selected_page.findChild(

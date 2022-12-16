@@ -305,7 +305,7 @@ class NodesAndFactorsTableWidget(FormCustomWidget):
         :return: A dictionary with an empty list of nodes and factors.
         """
         return {"nodes": [], "factors": []}
-        
+
     @property
     def get_default_factor(self) -> int:
         """

@@ -1,3 +1,4 @@
+import time
 import pytest
 from pathlib import Path
 from pywr_editor.utils import Settings
@@ -27,7 +28,17 @@ def pytest_sessionfinish(session):
         ):
             clean_env(cls.obj.model_file)
 
-    #   Removed the dynamic table file created by one test. If one test fails the file is not deleted.
+    # Removed the dynamic table file created by one test. If one test fails the
+    # file is not deleted.
     dynamic_file = Path("test/models/files/table_missing.csv")
     if dynamic_file.exists():
         dynamic_file.unlink()
+
+
+@pytest.fixture(scope="class")
+def delay() -> None:
+    """
+    Fixture to delay a test.
+    :return: None
+    """
+    time.sleep(1)

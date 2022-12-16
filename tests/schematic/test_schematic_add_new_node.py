@@ -32,40 +32,6 @@ class TestAddNodes:
 
         return window, schematic, node_lib_panel
 
-    # def test_start_drag_action(self, qtbot, init_window) -> None:
-    #     """
-    #     Test that the drag action properly starts when a node is dragged from
-    #     the node library.
-    #     """
-    #     window, schematic, nodes_lib_panel = init_window
-    #     # noinspection PyTypeChecker
-    #     nodes_lib_widget: NodesLibrary = nodes_lib_panel.widgets[0]
-    #     viewport = nodes_lib_widget.viewport()
-    #
-    #     # application must be visible
-    #     qtbot.wait(300)
-    #     window.show()
-    #
-    #     filter = EventFilter(window)
-    #     # start the drag action
-    #     # nodes_lib_widget.installEventFilter(filter)
-    #     viewport.installEventFilter(filter)
-    #
-    #     # qtbot.mousePress does not work on QGraphicsItem
-    #     p = QPoint(30, 30)
-    #     qtbot.mousePress(nodes_lib_widget, Qt.MouseButton.LeftButton, Qt.NoModifier, p)
-    #     mime_data = QMimeData()
-    #     mime_data.setText("Link")
-    #     event = QDragMoveEvent(
-    #         p,
-    #         Qt.CopyAction,
-    #         mime_data,
-    #         Qt.MouseButton.LeftButton,
-    #         Qt.NoModifier,
-    #     )
-    #     QApplication.postEvent(viewport, event)
-    #     qtbot.mouseRelease(viewport, Qt.MouseButton.LeftButton, Qt.NoModifier, p)
-
     def test_drag_node_to_schematic(self, qtbot, init_window) -> None:
         """
         Tests that when a node is dropped onto the schematic, the node is correctly

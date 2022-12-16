@@ -66,8 +66,8 @@ class TestRecorderConfig:
 
     def test_custom_recorders(self):
         """
-        Tests that the correct value is returned for the is_a_model_recorder and is_custom
-        properties.
+        Tests that the correct value is returned for the is_a_model_recorder and
+        is_custom properties.
         """
         recorder_config = self.recorder_config(
             self.recorders_dict["custom_recorder"],

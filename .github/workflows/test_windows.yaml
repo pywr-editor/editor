@@ -1,0 +1,27 @@
+name: Windows
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+jobs:
+  testWin:
+    runs-on: windows-latest
+    steps:
+      - name: Python Setup
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+          architecture: x64
+      - name: Checkout Source
+        uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+      - name: Run Tests
+        run: |
+          pytest -k "not test_paste_from_excel" --cov=./ --cov-report=xml
