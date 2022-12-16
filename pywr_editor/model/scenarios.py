@@ -17,8 +17,6 @@ class Scenarios:
         :return: The list of dictionaries with the scenario configurations or an empty
         list if the scenarios are not configured.
         """
-        if "scenarios" not in self.model.json:
-            return []
         return self.model.json["scenarios"]
 
     @property

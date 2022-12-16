@@ -19,8 +19,6 @@ class Tables:
         :return: The table dictionary with the table name as key and its properties
         as value.
         """
-        if "tables" not in self.model.json:
-            return {}
         return self.model.json["tables"]
 
     @property
