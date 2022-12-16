@@ -56,12 +56,19 @@ Pywr editor provides the following features:
 
 # Screenshot gallery
 
-<table cellspacing="0" cellpadding="0">
+<table cellspacing="0" cellpadding="0" border="0" align="center">
   <tr>
-    <td><img src="screenshots/main_window.png" width="50%" alt="Main window"/><br/>Main window</td>
-    <td><img src="screenshots/parameter_dialog.png" width="50%" alt="Parameter dialog" /><br/>Parameter dialog</td>
-    <td><img src="screenshots/available_parameters.png" width="70%" alt="Available parameters" /><br/>Available parameters</td>
+    <td><img src="screenshots/main_window.png" alt="Main window"/><br/>Main window</td>
+    <td><img src="screenshots/parameter_dialog.png" alt="Parameter dialog" /><br/>Parameter dialog</td>
+    <td><img src="screenshots/available_parameters.png" alt="Available parameters" /><br/>Available parameters</td>
+    <td><img src="screenshots/tables.png" alt="Tables" /><br/>Pandas parsing options with external data</td>
   </tr>
+<tr>
+    <td><img src="screenshots/schematic_nodes.png" alt="Schematic node"/><br/>Node editing</td>
+    <td><img src="screenshots/scenarios.png" alt="Scenarios"/><br/>Scenarios</td>
+    <td><img src="screenshots/metadata.png" alt="Metadata"/><br/>Model metadata</td>
+    <td><img src="screenshots/custom_imports.png" alt="Imports"/><br/>Custom component import</td>
+</tr>
 </table>
 
 # Getting started
