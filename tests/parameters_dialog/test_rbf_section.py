@@ -132,7 +132,7 @@ class TestDialogParameterRbfSection:
 
         # 2. Validate
         # ignore failed validation messages
-        qtbot.wait_until(close_message_box, 1000)
+        qtbot.wait_until(close_message_box)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
 
         if message is None:
