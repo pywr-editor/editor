@@ -132,11 +132,8 @@ class TestDialogParameterRbfSection:
 
         # 2. Validate
         # ignore failed validation messages
-        print("1")
         QTimer.singleShot(100, close_message_box)
-        print("2")
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
-        print("3")
 
         if message is None:
             assert days_field.message.text() == ""
