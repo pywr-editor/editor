@@ -1,4 +1,4 @@
-<h1 style="text-align:center">
+<h1 align="center">
   <br>
   <img src="./pywr_editor/assets/logo-color.png" alt="Pywr editor" width="200">
   <br>
@@ -9,16 +9,19 @@
 <h4 align="center">A graphical user interface to edit Pywr models</h4>
 
 
-<p  style="text-align:center">
+<p align="center">
   <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">
     <img src="https://img.shields.io/badge/license-GPL-blue"
          alt="GPL" />
   </a>
   <a href="paypal.me/ssimoncelli87">
-    <img src="https://img.shields.io/badge/%C2%A3-donate-brightgreen" alt="Donate" />
+    <img src="https://img.shields.io/badge/%C2%A3-donate-red" alt="Donate" />
   </a>
-  <a href="https://github.com/pywr-editor/editor/actions/workflows/test_windows.yaml">
-    <img src="https://github.com/pywr-editor/editor/actions/workflows/test_windows.yaml/badge.svg" alt="Windows" />
+  <a href="https://github.com/pywr-editor/editor/actions/workflows/build.yaml">
+    <img src="https://github.com/pywr-editor/editor/actions/workflows/build.yaml/badge.svg" alt="Build" />
+  </a>
+  <a href="https://github.com/pywr-editor/editor/actions/workflows/test.yaml">
+    <img src="https://github.com/pywr-editor/editor/actions/workflows/test.yaml/badge.svg" alt="Windows" />
   </a>
   <a href="https://github.com/pywr-editor/editor/actions/workflows/flake8.yaml">
     <img src="https://github.com/pywr-editor/editor/actions/workflows/flake8.yaml/badge.svg" alt="Syntax check" />
@@ -41,26 +44,47 @@ Pywr editor provides the following features:
   - change colour and shape of nodes
 - External data support
   - Automatic parsing of external files to offer suggestions of DataFrame index and column names, and values (from CSV, Excel or HDF files)
-  - Import/ export value to Excel (Windows only)
   - Data visualisation with charts
+  - Import/export value to Excel (Windows only)
+- Windows integration
+  - Open JSON files directly in the editor
+  - Browse recent files
+  - Pin most used models in the taskbar
 
 > Note: although the software can run on any system that can run Python, 
 > the editor is currently designed to work on Windows only. Upon request
 > the UI can be optimised to work on Linux and Mac platforms.
 
 # Getting Started
-You can get started with Pywr editor by installing the Windows binary or fetching the
-package from the Python Package Index (PyPI).
+You can get started with Pywr editor by installing the Windows binary or running the
+repository source code.
 
-## Install the binary
-The Windows executable is already bundles Python and all the necessary dependencies
+## Install executable
+The Windows executable already bundles Python and all the necessary dependencies. You can either 
+install the editor by downloading the [**Pywr editor installer.exe**](https://github.com/pywr-editor/editor/releases)
+file in the [Release](https://github.com/pywr-editor/editor/releases) page of this project or by 
+downloading and unpacking the [**Pywr editor.zip**](https://github.com/pywr-editor/editor/releases)
+file with the Pywr editor.exe file.
 
-## Install using pip
-Pywr editor is available on PyPI. You can install it through pip:
+## Run the Repository source code
+You can run Pywr editor using the Python virtual environment on your machine. From your command line:
 
-    pip install pywr-editor
+  ```bash
+    # clone the repository first
+    git clone https://github.com/pywr-editor/editor.git
+    
+    # create a new Python virtual environment
+    python -m venv venv
+    venv\Scripts\activate
 
+    # install the necessary dependency first:
+    pip install -r requirements.txt
+    
+    # run the editor using
+    python main.py
+  ```
 this requires Python >= 3.10
 
+
 # License
-This software is licensed under the GNU General Public License, version 3.0+. See the LICENSE file
+This software is licensed under the GNU General Public License, version 3.0+. See the [LICENSE](LICENSE.txt) file
