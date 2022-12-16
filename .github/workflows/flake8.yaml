@@ -1,4 +1,4 @@
-name: flake8
+name: Syntax check
 on:
   push:
     branches:
@@ -9,7 +9,7 @@ on:
       - develop
       - main
 jobs:
-  checkSyntax:
+  flake8:
     runs-on: ubuntu-latest
     steps:
       - name: Python Setup
