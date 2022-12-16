@@ -85,19 +85,19 @@ class TestDialogParameterRbfSection:
             # first day must be one
             ("days_of_year", [5, 9, 10], "The first item must be 1"),
             # length < 3
-            # ("days_of_year", [1, 65], "at least 3 items"),
-            # # not increasing
-            # ("days_of_year", [1, 100, 65], "monotonically increasing"),
-            # # outside bounds
-            # ("days_of_year", [1, 300, 400], "between 1 and 365"),
-            # # valid variable_days_of_year_range
-            # ("variable_days_of_year_range", 6, None),
-            # # invalid variable_days_of_year_range
-            # (
-            #     "variable_days_of_year_range",
-            #     50,
-            #     "the distance between this value",
-            # ),
+            ("days_of_year", [1, 65], "at least 3 items"),
+            # not increasing
+            ("days_of_year", [1, 100, 65], "monotonically increasing"),
+            # outside bounds
+            ("days_of_year", [1, 300, 400], "between 1 and 365"),
+            # valid variable_days_of_year_range
+            ("variable_days_of_year_range", 6, None),
+            # invalid variable_days_of_year_range
+            (
+                "variable_days_of_year_range",
+                50,
+                "the distance between this value",
+            ),
         ],
     )
     def test_check_day_of_year(
