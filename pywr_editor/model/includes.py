@@ -73,13 +73,11 @@ class Includes:
         Returns the list of non Python files.
         :return: The list of non Pyton files as they are included in the JSON file.
         """
-        if "includes" in self.model.json:
-            return [
-                file
-                for file in self.model.json["includes"]
-                if not file.endswith(".py")
-            ]
-        return []
+        return [
+            file
+            for file in self.model.json["includes"]
+            if not file.endswith(".py")
+        ]
 
     def get_all_files(self, include_non_existing: bool) -> list[Path]:
         """
