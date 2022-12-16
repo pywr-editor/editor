@@ -26,7 +26,9 @@ def close_message_box():
     Closes the message box.
     :return: None
     """
+    print("close_message_box")
     widget = QApplication.activeModalWidget()
+    print(widget)
     if widget is not None and isinstance(widget, QMessageBox):
         widget.close()
 
