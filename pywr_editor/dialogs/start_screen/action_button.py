@@ -1,6 +1,5 @@
-from typing import Callable
-
 import PySide6
+from typing import Callable
 from PySide6.QtCore import QByteArray, QFile, QTextStream
 from PySide6.QtSvgWidgets import QSvgWidget
 from PySide6.QtWidgets import (
@@ -67,8 +66,7 @@ class StartScreenActionButton(QWidget):
         style = {
             "QPushButton": {
                 "background": "transparent",
-                "border": "none",
-                "border-radius": "4px",
+                "border": "0px",
                 "color": Color("gray", 700).hex,
             },
             "QPushButton:hover, QPushButton:pressed": {
