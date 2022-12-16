@@ -7,6 +7,8 @@ from pywr_editor.form import FormField
 from tests.utils import resolve_model_path, close_message_box
 
 
+# delay test otherwise this may fail when run with GitHub actions
+@pytest.mark.usefixtures("delay")
 class TestDialogParameterRbfSection:
     """
     Tests the validation of RbfProfileParameterSection.
