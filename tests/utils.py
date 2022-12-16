@@ -21,9 +21,11 @@ def resolve_model_path(file_name: str) -> str:
     return str(model_path() / file_name)
 
 
-def close_message_box(parent: QWidget):
+def close_message_box(parent: QWidget = None):
     """
     Closes the message box.
+    :param parent: The parent widget where to look for the QMessageBox. When None, the
+    message box is assumed to be the active modal widget. Default to None.
     :return: None
     """
     if parent is None:
