@@ -11,6 +11,7 @@ on:
 jobs:
   windows:
     runs-on: windows-latest
+    timeout-minutes: 15
     steps:
       - name: Python Setup
         uses: actions/setup-python@v4
