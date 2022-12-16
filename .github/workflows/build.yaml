@@ -26,11 +26,14 @@ jobs:
       - name: Freeze editor
         run: |
            pyinstaller main.spec --noconfirm
-      - name: Upload binary
+      - name: Zip Windows bin folder
+        run: |
+          & "C:\Program Files\7-Zip\7z.exe" a "Windows binary.zip" "dist/main"
+      - name: Upload binary ZIP file
         uses: actions/upload-artifact@v3
         with:
           name: pywr_editor
-          path: dist/main
+          path: Windows binary.zip
       - name: Create installer
         run: |
           & 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe' windows_setup.iss
@@ -39,8 +42,6 @@ jobs:
         with:
           name: pywr_editor
           path: Output
-      - name: Zip Windows bin folder
-        run: zip -r Windows binary.zip "dist/main"
       - name: Release
         uses: softprops/action-gh-release@v1
 #        if: startsWith(github.ref, 'refs/tags/')
