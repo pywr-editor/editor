@@ -130,11 +130,9 @@ class TestDialogParameterRbfSection:
 
         assert save_button.isEnabled() is True
 
-        dialog.show()
-        qtbot.wait(5000)
         # 2. Validate
         # ignore failed validation messages
-        QTimer.singleShot(200, close_message_box)
+        QTimer.singleShot(1000, close_message_box)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
 
         if message is None:
