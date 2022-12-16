@@ -1,6 +1,6 @@
 from pathlib import Path
 from PySide6.QtCore import Qt, QPoint
-from PySide6.QtWidgets import QApplication, QMessageBox
+from PySide6.QtWidgets import QApplication, QMessageBox, QWidget
 from pywr_editor.widgets import TableView
 
 
@@ -21,16 +21,20 @@ def resolve_model_path(file_name: str) -> str:
     return str(model_path() / file_name)
 
 
-def close_message_box():
+def close_message_box(parent: QWidget):
     """
     Closes the message box.
     :return: None
     """
-    print("close_message_box")
-    widget = QApplication.activeModalWidget()
-    print(widget)
-    if widget is not None and isinstance(widget, QMessageBox):
-        widget.close()
+    if parent is None:
+        widget = QApplication.activeModalWidget()
+        if widget is not None and isinstance(widget, QMessageBox):
+            widget.close()
+    else:
+        # noinspection PyTypeChecker
+        widget: QMessageBox = parent.findChild(QMessageBox)
+        if widget is not None:
+            widget.close()
 
 
 def check_msg(message: str):

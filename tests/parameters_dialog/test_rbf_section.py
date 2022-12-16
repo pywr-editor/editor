@@ -1,6 +1,11 @@
+from functools import partial
+
 import pytest
 from PySide6.QtCore import Qt, QTimer
-from PySide6.QtWidgets import QPushButton
+from PySide6.QtWidgets import QPushButton, QMessageBox
+from pywr_editor.dialogs.parameters.parameter_page_widget import (
+    ParameterPageWidget,
+)
 from pywr_editor.model import ModelConfig
 from pywr_editor.dialogs import ParametersDialog
 from pywr_editor.form import FormField
@@ -110,10 +115,12 @@ class TestDialogParameterRbfSection:
         dialog = ParametersDialog(model_config, param_name)
         dialog.hide()
 
-        selected_page = dialog.pages_widget.currentWidget()
-        days_field: FormField = selected_page.findChild(FormField, field_name)
-        assert selected_page.findChild(FormField, "name").value() == param_name
+        selected_page: ParameterPageWidget = dialog.pages_widget.currentWidget()
+        form = selected_page.form
+        days_field = form.find_field_by_name(field_name)
+        assert form.find_field_by_name("name").value() == param_name
 
+        # noinspection PyTypeChecker
         save_button: QPushButton = selected_page.findChild(
             QPushButton, "save_button"
         )
@@ -132,7 +139,7 @@ class TestDialogParameterRbfSection:
 
         # 2. Validate
         # ignore failed validation messages
-        QTimer.singleShot(100, close_message_box)
+        QTimer.singleShot(100, partial(close_message_box, form))
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
 
         if message is None:
