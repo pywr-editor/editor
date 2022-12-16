@@ -8,7 +8,6 @@
 
 <h4 align="center">A graphical user interface to edit Pywr models</h4>
 
-
 <p align="center">
   <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">
     <img src="https://img.shields.io/badge/license-GPL-blue"
@@ -34,11 +33,11 @@ models written in [JSON-based document](https://pywr.github.io/pywr/json.html) f
 
 Pywr editor provides the following features:
 
-- Full and easy customisation of model parameters, nodes, recorders, metadata, tables, slots and imports directly from the UI
+- Full and easy customisation of model parameters, nodes, recorders, metadata, tables, imports and slots directly from the UI
 - Dynamic validation of model configuration  
 - Support of custom model components
 - Interactive model schematic
-  - pan, zoom, resize, screenshotting of schematic
+  - pan, zoom, resize, screenshotting
   - drag, drop or delete multiple nodes at the same time
   - connect or disconnect nodes
   - change colour and shape of nodes
@@ -55,11 +54,21 @@ Pywr editor provides the following features:
 > the editor is currently designed to work on Windows only. Upon request
 > the UI can be optimised to work on Linux and Mac platforms.
 
-# Getting Started
+# Screenshot gallery
+
+<table cellspacing="0" cellpadding="0">
+  <tr>
+    <td><img src="screenshots/main_window.png" width="50%" alt="Main window"/><br/>Main window</td>
+    <td><img src="screenshots/parameter_dialog.png" width="50%" alt="Parameter dialog" /><br/>Parameter dialog</td>
+    <td><img src="screenshots/available_parameters.png" width="70%" alt="Available parameters" /><br/>Available parameters</td>
+  </tr>
+</table>
+
+# Getting started
 You can get started with Pywr editor by installing the Windows binary or running the
 repository source code.
 
-## Install executable
+## Install the executable
 The Windows executable already bundles Python and all the necessary dependencies. You can either 
 install the editor by downloading the [**Pywr editor installer.exe**](https://github.com/pywr-editor/editor/releases)
 file in the [Release](https://github.com/pywr-editor/editor/releases) page of this project or by 
