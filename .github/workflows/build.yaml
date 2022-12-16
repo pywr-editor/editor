@@ -44,9 +44,11 @@ jobs:
           path: Output
       - name: Release
         uses: softprops/action-gh-release@v1
-#        if: startsWith(github.ref, 'refs/tags/')
+        if: startsWith(github.ref, 'refs/tags/')
 #        generate_release_notes: true
         with:
+          # approve release manually
+          draft: true
           body_path: CHANGELOG.md
           files: |
             Output\Pywr editor installer.exe
