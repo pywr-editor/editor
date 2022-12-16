@@ -170,6 +170,7 @@ class ModelConfig:
             "scenarios": [],
             "nodes": [],
             "edges": [],
+            "tables": {},
         }
 
     def load_model(self) -> None:
@@ -216,7 +217,13 @@ class ModelConfig:
                 self.json[key] = []
 
         # check for missing keys with dictionary as value
-        for key in ["parameters", "recorders", "timestepper", "metadata"]:
+        for key in [
+            "parameters",
+            "recorders",
+            "timestepper",
+            "metadata",
+            "tables",
+        ]:
             if key not in self.json:
                 self.json[key] = {}
 
