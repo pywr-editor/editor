@@ -1,5 +1,7 @@
+import platform
 from typing import Any
 from pywr_editor.model import ParameterConfig, RecorderConfig
+from PySide6.QtAxContainer import QAxObject
 
 
 def tooltip_table(comp_obj: ParameterConfig | RecorderConfig):
@@ -69,3 +71,26 @@ def tooltip_table_row(
             + "</td></tr>"
         )
     return row
+
+
+def is_windows() -> bool:
+    """
+    Returns True if the editor is run on Windows.
+    :return: True if the platform is Windows, False otherwise.
+    """
+    return platform.system() == "Windows"
+
+
+def is_excel_installed() -> bool:
+    """
+    Returns True if Microsoft Excel is installed on Windows.
+    :return: True if Excel is installed, False otherwise.
+    """
+    # noinspection PyBroadException
+    try:
+        excel = QAxObject("Excel.Application")
+        # noinspection PyTypeChecker
+        excel.dynamicCall("version")
+        return True
+    except Exception:
+        return False
