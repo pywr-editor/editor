@@ -21,9 +21,7 @@ class Nodes:
         :return: The node list. Each list item contains the node properties as
         dictionary.
         """
-        if "nodes" in self.model.json:
-            return self.model.json["nodes"]
-        return []
+        return self.model.json["nodes"]
 
     @property
     def names(self) -> list[str]:

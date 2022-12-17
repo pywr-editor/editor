@@ -8,7 +8,7 @@ from PySide6.QtWidgets import (
     QSizePolicy,
     QStyledItemDelegate,
 )
-from PySide6.QtCore import QSize, Qt
+from PySide6.QtCore import QSize, Qt, QRect
 from pywr_editor.style import Color, stylesheet_dict_to_str
 from pywr_editor.utils import browse_files, Settings, JumpList
 
@@ -34,6 +34,9 @@ class ListViewDelegate(QStyledItemDelegate):
         :param index: The item index.
         :return: The item size.
         """
+        # noinspection PyTypeHints
+        option.rect: QRect
+
         if not index.isValid():
             return QSize()
 
@@ -81,6 +84,9 @@ class ListViewDelegate(QStyledItemDelegate):
         :param index: The item index.
         :return: None
         """
+        # noinspection PyTypeHints
+        option.rect: QRect
+
         if not index.isValid():
             return
 
@@ -103,7 +109,9 @@ class ListViewDelegate(QStyledItemDelegate):
             option.rect.top() + 5,
             option.rect.width(),
             0,
-            Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap,
+            Qt.AlignmentFlag.AlignLeft
+            | Qt.AlignmentFlag.AlignTop
+            | Qt.TextFlag.TextWordWrap,
             header_text,
         )
         last_update_rect = last_update_fm.boundingRect(
@@ -111,7 +119,9 @@ class ListViewDelegate(QStyledItemDelegate):
             option.rect.top() + 5,
             option.rect.width() - 5,
             0,
-            Qt.AlignRight | Qt.AlignTop | Qt.TextWordWrap,
+            Qt.AlignmentFlag.AlignRight
+            | Qt.AlignmentFlag.AlignTop
+            | Qt.TextFlag.TextWordWrap,
             last_update_text,
         )
         sub_header_rect = sub_header_fm.boundingRect(
@@ -119,7 +129,9 @@ class ListViewDelegate(QStyledItemDelegate):
             header_rect.bottom() + 5,
             option.rect.width(),
             0,
-            Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap,
+            Qt.AlignmentFlag.AlignLeft
+            | Qt.AlignmentFlag.AlignTop
+            | Qt.TextFlag.TextWordWrap,
             sub_hearder_text,
         )
 
@@ -128,19 +140,25 @@ class ListViewDelegate(QStyledItemDelegate):
         painter.setFont(header_font)
         painter.drawText(
             header_rect,
-            Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap,
+            Qt.AlignmentFlag.AlignLeft
+            | Qt.AlignmentFlag.AlignTop
+            | Qt.TextFlag.TextWordWrap,
             header_text,
         )
         painter.setFont(sub_header_font)
         painter.drawText(
             sub_header_rect,
-            Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap,
+            Qt.AlignmentFlag.AlignLeft
+            | Qt.AlignmentFlag.AlignTop
+            | Qt.TextFlag.TextWordWrap,
             sub_hearder_text,
         )
         painter.setPen(Color("gray", 500).qcolor)
         painter.drawText(
             last_update_rect,
-            Qt.AlignLeft | Qt.AlignTop | Qt.TextWordWrap,
+            Qt.AlignmentFlag.AlignLeft
+            | Qt.AlignmentFlag.AlignTop
+            | Qt.TextFlag.TextWordWrap,
             last_update_text,
         )
 
@@ -157,8 +175,8 @@ class RecentFileListWidget(QListWidget):
         self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
         self.setStyleSheet(self.stylesheet)
         self.setItemDelegate(ListViewDelegate())
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setFocusPolicy(Qt.NoFocus)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 
         # load recent projects
         files_info = Settings().get_recent_files()
@@ -185,7 +203,7 @@ class RecentFileListWidget(QListWidget):
                 self.addItem(item)
 
                 # display the 5 most recent files
-                if fi > 6:
+                if fi >= 4:
                     break
         else:
             self.add_no_item_description()
@@ -199,7 +217,7 @@ class RecentFileListWidget(QListWidget):
         self.add_no_item_description()
         # clear settings and jump list
         Settings().clear_recent_files()
-        JumpList().clear()
+        JumpList().erase()
 
     def browse_files(self) -> None:
         """
