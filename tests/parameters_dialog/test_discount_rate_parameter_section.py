@@ -1,11 +1,11 @@
 import pytest
+from functools import partial
 from PySide6.QtCore import QTimer
 from pywr_editor.model import ModelConfig
 from pywr_editor.dialogs.parameters.parameter_page_widget import (
     ParameterPageWidget,
 )
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.form import FormField
 from tests.utils import resolve_model_path, close_message_box
 
 
@@ -48,16 +48,17 @@ class TestDialogParameterControlCurveParameterSection:
 
         # noinspection PyTypeChecker
         selected_page: ParameterPageWidget = dialog.pages_widget.currentWidget()
+        form = selected_page.form
 
         # noinspection PyUnresolvedReferences
-        assert selected_page.findChild(FormField, "name").value() == param_name
+        assert form.find_field_by_name("name").value() == param_name
 
         # send form and verify message
-        form_field = selected_page.form.find_field_by_name(field_name_to_check)
+        form_field = form.find_field_by_name(field_name_to_check)
 
         if message is not None:
-            QTimer.singleShot(100, close_message_box)
-            selected_page.form.validate()
+            QTimer.singleShot(100, partial(close_message_box, form))
+            form.validate()
             assert message in form_field.message.text()
         else:
             assert form_field.message.text() == ""
