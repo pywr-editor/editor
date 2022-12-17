@@ -17,6 +17,7 @@ from pywr_editor.form import (
     UrlWidget,
     FormField,
 )
+from pywr_editor.utils import is_excel_installed
 from tests.utils import resolve_model_path, model_path, check_msg
 
 
@@ -113,6 +114,7 @@ class TestDialogParameterMonthlyValuesWidget:
         assert message in value_field.message.text()
         assert value_field.value() == [0] * 12
 
+    @pytest.mark.skipif(not is_excel_installed(), reason="requires Excel")
     def test_paste_from_excel(self, qtbot, model_config):
         """
         Tests the paste feature from Excel.
