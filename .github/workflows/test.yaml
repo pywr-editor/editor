@@ -27,4 +27,4 @@ jobs:
           pip install -r requirements-dev.txt
       - name: Run Tests
         run: |
-          pytest -k "not test_paste_from_excel"
+          pytest tests
