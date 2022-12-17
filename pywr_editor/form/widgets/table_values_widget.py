@@ -24,7 +24,7 @@ from pywr_editor.form import (
     FormCustomWidget,
     FormValidation,
 )
-from pywr_editor.utils import get_signal_sender, Logging
+from pywr_editor.utils import get_signal_sender, Logging, is_excel_installed
 
 """
  Displays a widget with a table with the variable
@@ -148,31 +148,33 @@ class TableValuesWidget(FormCustomWidget):
         # noinspection PyUnresolvedReferences
         self.move_down.clicked.connect(self.on_move_down)
 
-        self.paste_button = PushIconButton(
-            icon=":misc/paste", label="Paste from Excel", small=True
-        )
-        self.paste_button.setToolTip(
-            "Paste data copied from a column from an Excel spreadsheet"
-        )
-        # noinspection PyUnresolvedReferences
-        self.paste_button.clicked.connect(self.paste_from_excel)
-
-        self.export_button = PushIconButton(
-            icon=":misc/export", label="Export to Excel", small=True
-        )
-        self.export_button.setToolTip(
-            "Create an Excel spreadsheet containing the data from the table above"
-        )
-        # noinspection PyUnresolvedReferences
-        self.export_button.clicked.connect(self.export_to_excel)
-
         self.button_layout.addWidget(self.add_button)
         self.button_layout.addWidget(self.delete_button)
         self.button_layout.addWidget(self.move_up)
         self.button_layout.addWidget(self.move_down)
         self.button_layout.addStretch()
-        self.button_layout.addWidget(self.paste_button)
-        self.button_layout.addWidget(self.export_button)
+
+        if is_excel_installed():
+            self.paste_button = PushIconButton(
+                icon=":misc/paste", label="Paste from Excel", small=True
+            )
+            self.paste_button.setToolTip(
+                "Paste data copied from a column from an Excel spreadsheet"
+            )
+            # noinspection PyUnresolvedReferences
+            self.paste_button.clicked.connect(self.paste_from_excel)
+
+            self.export_button = PushIconButton(
+                icon=":misc/export", label="Export to Excel", small=True
+            )
+            self.export_button.setToolTip(
+                "Create an Excel spreadsheet containing the data from the table above"
+            )
+            # noinspection PyUnresolvedReferences
+            self.export_button.clicked.connect(self.export_to_excel)
+
+            self.button_layout.addWidget(self.paste_button)
+            self.button_layout.addWidget(self.export_button)
 
         # Table
         self.table = TableView(self.model, self.delete_button)
@@ -586,6 +588,7 @@ class TableValuesWidget(FormCustomWidget):
         self.export_button.setEnabled(False)
         button_text = self.export_button.text()
         self.export_button.setText("Exporting...")
+        self.table.setFocus()
         QCoreApplication.processEvents()
 
         # add the workbook

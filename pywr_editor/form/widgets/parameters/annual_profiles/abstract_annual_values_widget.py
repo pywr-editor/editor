@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QMessageBox,
 )
-from pywr_editor.utils import Logging
+from pywr_editor.utils import Logging, is_excel_installed
 from pywr_editor.form import ProfilePlotDialog, FormCustomWidget
 from pywr_editor.widgets import TableView, DoubleSpinBox, PushIconButton
 
@@ -69,23 +69,6 @@ class AbstractAnnualValuesWidget(FormCustomWidget):
 
         # Buttons
         button_layout = QHBoxLayout()
-        self.paste_button = PushIconButton(
-            icon=":misc/paste", label="Paste from Excel", small=True
-        )
-        self.paste_button.setToolTip(
-            "Paste data copied from a column from an Excel spreadsheet"
-        )
-        # noinspection PyUnresolvedReferences
-        self.paste_button.clicked.connect(self.paste_from_excel)
-
-        self.export_button = PushIconButton(
-            icon=":misc/export", label="Export to Excel", small=True
-        )
-        self.export_button.setToolTip(
-            "Create an Excel spreadsheet containing the data from the table above"
-        )
-        # noinspection PyUnresolvedReferences
-        self.export_button.clicked.connect(self.export_to_excel)
 
         self.plot_button = PushIconButton(
             icon=":misc/plot", label="Plot profile", small=True
@@ -93,11 +76,30 @@ class AbstractAnnualValuesWidget(FormCustomWidget):
         self.plot_button.setToolTip("Display a chart with the profile")
         # noinspection PyUnresolvedReferences
         self.plot_button.clicked.connect(self.plot_data)
-
         button_layout.addWidget(self.plot_button)
         button_layout.addStretch()
-        button_layout.addWidget(self.paste_button)
-        button_layout.addWidget(self.export_button)
+
+        if is_excel_installed():
+            self.paste_button = PushIconButton(
+                icon=":misc/paste", label="Paste from Excel", small=True
+            )
+            self.paste_button.setToolTip(
+                "Paste data copied from a column from an Excel spreadsheet"
+            )
+            # noinspection PyUnresolvedReferences
+            self.paste_button.clicked.connect(self.paste_from_excel)
+
+            self.export_button = PushIconButton(
+                icon=":misc/export", label="Export to Excel", small=True
+            )
+            self.export_button.setToolTip(
+                "Create an Excel spreadsheet containing the data from the table above"
+            )
+            # noinspection PyUnresolvedReferences
+            self.export_button.clicked.connect(self.export_to_excel)
+
+            button_layout.addWidget(self.paste_button)
+            button_layout.addWidget(self.export_button)
 
         # Set layout
         layout = QVBoxLayout(self)
@@ -255,6 +257,7 @@ class AbstractAnnualValuesWidget(FormCustomWidget):
         self.export_button.setEnabled(False)
         button_text = self.export_button.text()
         self.export_button.setText("Exporting...")
+        self.table.setFocus()
         QCoreApplication.processEvents()
 
         # add the workbook
