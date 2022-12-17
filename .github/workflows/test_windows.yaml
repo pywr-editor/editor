@@ -9,6 +9,7 @@ on:
 jobs:
   testWin:
     runs-on: windows-latest
+    timeout-minutes: 15
     steps:
       - name: Python Setup
         uses: actions/setup-python@v4
@@ -24,4 +25,4 @@ jobs:
           pip install -r requirements-dev.txt
       - name: Run Tests
         run: |
-          pytest -k "not test_paste_from_excel" --cov=./ --cov-report=xml
+          pytest -k "not test_paste_from_excel"
