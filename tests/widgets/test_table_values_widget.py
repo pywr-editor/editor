@@ -6,6 +6,7 @@ from PySide6.QtCore import Qt, QItemSelection, QItemSelectionModel, QTimer
 from PySide6.QtWidgets import QPushButton, QWidget
 from pywr_editor.model import ModelConfig, ParameterConfig
 from pywr_editor.form import TableValuesWidget, FormField, ParameterForm
+from pywr_editor.utils import is_excel_installed
 from tests.utils import model_path, check_msg
 
 
@@ -434,6 +435,7 @@ class TestDialogParameterTableValuesWidget:
             )
         assert table_widget.get_value() == new_values
 
+    @pytest.mark.skipif(not is_excel_installed(), reason="requires Excel")
     def test_paste_from_excel(self, qtbot):
         """
         Tests the paste feature from Excel.
