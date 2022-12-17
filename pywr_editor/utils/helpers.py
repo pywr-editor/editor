@@ -1,7 +1,6 @@
 import platform
 from typing import Any
 from pywr_editor.model import ParameterConfig, RecorderConfig
-from PySide6.QtAxContainer import QAxObject
 
 
 def tooltip_table(comp_obj: ParameterConfig | RecorderConfig):
@@ -86,12 +85,12 @@ def is_excel_installed() -> bool:
     Returns True if Microsoft Excel is installed on Windows.
     :return: True if Excel is installed, False otherwise.
     """
+    import win32com.client
+
     # noinspection PyBroadException
     try:
-        excel = QAxObject("Excel.Application")
-        print(excel)
-        # noinspection PyTypeChecker
-        print(excel.dynamicCall("version"))
+        excel = win32com.client.Dispatch("Excel.Application")
+        _ = excel.version
         return True
     except Exception:
         return False
