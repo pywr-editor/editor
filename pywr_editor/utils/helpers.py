@@ -89,8 +89,9 @@ def is_excel_installed() -> bool:
     # noinspection PyBroadException
     try:
         excel = QAxObject("Excel.Application")
+        print(excel)
         # noinspection PyTypeChecker
-        excel.dynamicCall("version")
+        print(excel.dynamicCall("version"))
         return True
     except Exception:
         return False
