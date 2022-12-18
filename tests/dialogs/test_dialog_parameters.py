@@ -276,6 +276,21 @@ class TestParametersDialog:
 
         assert len(missing_sections) == 0, missing_sections
 
+    def test_sections(self, qtbot, model_config):
+        """
+        Tests that the sections do not throw any exception when loaded.
+        """
+        param_name = "param_with_valid_excel_table"
+        dialog = ParametersDialog(model_config, param_name)
+        selected_page = dialog.pages_widget.currentWidget()
+        form = selected_page.form
+
+        param_type_widget: ParameterTypeSelectorWidget = (
+            form.find_field_by_name("type").widget
+        )
+        for name in param_type_widget.combo_box.all_items:
+            param_type_widget.combo_box.setCurrentText(name)
+
     @pytest.mark.parametrize("imported", [False, True])
     def test_add_new_custom_parameter(
         self, qtbot, model_config, dialog, imported

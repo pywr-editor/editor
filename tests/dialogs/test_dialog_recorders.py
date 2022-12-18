@@ -7,7 +7,7 @@ from pywr_editor.dialogs import RecorderDialogForm, RecordersDialog
 from pywr_editor.dialogs.recorders.recorder_empty_page_widget import (
     RecorderEmptyPageWidget,
 )
-from pywr_editor.form import FormField
+from pywr_editor.form import FormField, RecorderTypeSelectorWidget
 from tests.utils import resolve_model_path, close_message_box
 
 
@@ -236,3 +236,19 @@ class TestRecordersDialog:
         assert (
             len(missing_sections) == 0
         ), f"The following sections are missing: {','.join(missing_sections)}"
+
+    def test_sections(self, qtbot, model_config, dialog):
+        """
+        Tests that the sections do not throw any exception when loaded.
+        """
+        param_name = "node_storage_rec"
+        dialog = RecordersDialog(model_config, param_name)
+
+        selected_page = dialog.pages_widget.currentWidget()
+        form = selected_page.form
+
+        recorder_type_widget: RecorderTypeSelectorWidget = (
+            form.find_field_by_name("type").widget
+        )
+        for name in recorder_type_widget.combo_box.all_items:
+            recorder_type_widget.combo_box.setCurrentText(name)
