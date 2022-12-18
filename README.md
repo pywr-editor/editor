@@ -1,11 +1,7 @@
 <h1 align="center">
-  <br>
-  <img src="./pywr_editor/assets/logo-color.png" alt="Pywr editor" width="200">
-  <br>
   Pywr editor
   <br>
 </h1>
-
 <h4 align="center">A graphical user interface to edit Pywr models</h4>
 
 <p align="center">
@@ -13,7 +9,7 @@
     <img src="https://img.shields.io/badge/license-GPL-blue"
          alt="GPL" />
   </a>
-  <a href="paypal.me/ssimoncelli87">
+  <a href="https://paypal.me/ssimoncelli87">
     <img src="https://img.shields.io/badge/%C2%A3-donate-red" alt="Donate" />
   </a>
   <a href="https://github.com/pywr-editor/editor/actions/workflows/build.yaml">
@@ -25,7 +21,13 @@
   <a href="https://github.com/pywr-editor/editor/actions/workflows/flake8.yaml">
     <img src="https://github.com/pywr-editor/editor/actions/workflows/flake8.yaml/badge.svg" alt="Syntax check" />
   </a>
+  
+  <br/>
+  <br/>
+  <img src="screenshots/main_window.png" style="width:700px" alt="Main window"/>
+  
 </p>
+
 
 
 Pywr editor is a user-friendly, free and open‑source graphical user interface (UI) to build and customise [pywr](https://github.com/pywr/pywr) 
@@ -55,21 +57,14 @@ Pywr editor provides the following features:
 > the UI can be optimised to work on Linux and Mac platforms.
 
 # Screenshot gallery
-
-<table cellspacing="0" cellpadding="0" border="0" align="center">
-  <tr>
-    <td><img src="screenshots/main_window.png" alt="Main window"/><br/>Main window</td>
-    <td><img src="screenshots/parameter_dialog.png" alt="Parameter dialog" /><br/>Parameter dialog</td>
-    <td><img src="screenshots/available_parameters.png" alt="Available parameters" /><br/>Available parameters</td>
-    <td><img src="screenshots/tables.png" alt="Tables" /><br/>Pandas parsing options with external data</td>
-  </tr>
-<tr>
-    <td><img src="screenshots/schematic_nodes.png" alt="Schematic node"/><br/>Node editing</td>
-    <td><img src="screenshots/scenarios.png" alt="Scenarios"/><br/>Scenarios</td>
-    <td><img src="screenshots/metadata.png" alt="Metadata"/><br/>Model metadata</td>
-    <td><img src="screenshots/custom_imports.png" alt="Imports"/><br/>Custom component import</td>
-</tr>
-</table>
+- [Main window](screenshots/main_window.png)
+- [Schematic nodes](screenshots/schematic_nodes.png)
+- [Parameter dialog](screenshots/parameter_dialog.png)
+- [Scenarios](screenshots/scenarios.png)
+- [Model metadata](screenshots/metadata.png)
+- [Pandas parsing options with external data](screenshots/tables.png)
+- [Available parameters](screenshots/available_parameters.png)
+- [Custom component import](screenshots/custom_imports.png)
 
 # Getting started
 You can get started with Pywr editor by installing the Windows binary or running the
@@ -77,10 +72,10 @@ repository source code.
 
 ## Install the executable
 The Windows executable already bundles Python and all the necessary dependencies. You can either 
-install the editor by downloading the [**Pywr editor installer.exe**](https://github.com/pywr-editor/editor/releases)
+install the editor by downloading the [**Pywr_editor_installer.exe**](https://github.com/pywr-editor/editor/releases)
 file in the [Release](https://github.com/pywr-editor/editor/releases) page of this project or by 
-downloading and unpacking the [**Pywr editor.zip**](https://github.com/pywr-editor/editor/releases)
-file with the Pywr editor.exe file.
+downloading and unpacking the [**Pywr_editor.zip**](https://github.com/pywr-editor/editor/releases)
+file with the _Pywr editor.exe_ file.
 
 ## Run the Repository source code
 You can run Pywr editor using the Python virtual environment on your machine. From your command line:
