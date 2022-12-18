@@ -82,6 +82,16 @@ class ListView(QListView):
             for button in self.toggle_buttons_on_selection
         ]
 
+    def clear_selection(self) -> None:
+        """
+        Clear the current selection and restore the focus on the widget. This method
+        can be called when the current selection changes (for example when an item is
+        deleted from the model).
+        :return: None
+        """
+        self.clearSelection()
+        self.setFocus()
+
     @staticmethod
     def stylesheet(as_string: bool = True) -> str | dict:
         """

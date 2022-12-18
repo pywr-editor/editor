@@ -26,7 +26,8 @@ class TableView(QTableView):
         :param model: The model.
         :param toggle_buttons_on_selection: The buttons to enable when at least one
         table item is selected, or to disable when no item is selected. Default to
-        None. When available, the button is disabled if no table item is selected.
+        None. When available, the button is disabled if no table item is selected
+        when the dataChanged or layoutChanged Slots are emitted.
         :param parent: The parent widget. Default to None.
         """
         super().__init__(parent)
@@ -58,11 +59,11 @@ class TableView(QTableView):
         # disable buttons when there are no items
         if self.toggle_buttons_on_selection is not None:
             # noinspection PyUnresolvedReferences
-            self.model.layoutChanged.connect(self.on_layout_changed)
+            self.model.layoutChanged.connect(self.on_empty_table)
             # noinspection PyUnresolvedReferences
-            self.model.dataChanged.connect(self.on_value_changed)
+            self.model.dataChanged.connect(self.on_selection_change)
             # noinspection PyUnresolvedReferences
-            self.model.layoutChanged.connect(self.on_value_changed)
+            self.model.layoutChanged.connect(self.on_selection_change)
 
     def selectionChanged(
         self,
@@ -84,7 +85,7 @@ class TableView(QTableView):
         super().selectionChanged(selected, deselected)
 
     @Slot()
-    def on_layout_changed(self) -> None:
+    def on_empty_table(self) -> None:
         """
         Disables the buttons when there are no items in the model.
         :return: None
@@ -96,7 +97,11 @@ class TableView(QTableView):
             ]
 
     @Slot()
-    def on_value_changed(self) -> None:
+    def on_selection_change(self) -> None:
+        """
+        Disables the buttons when the selection changes in the model.
+        :return: None
+        """
         selection = self.selectionModel().selection()
         [
             button.setDisabled(True if selection.indexes() else False)
@@ -134,6 +139,16 @@ class TableView(QTableView):
             self.selectionModel().select(index, QItemSelectionModel.Select)
             self.scrollTo(index, QTableView.ScrollHint.PositionAtCenter)
 
+    def clear_selection(self) -> None:
+        """
+        Clear the current selection and restore the focus on the widget. This method
+        can be called when the current selection changes (for example when an item is
+        deleted from the model).
+        :return: None
+        """
+        self.clearSelection()
+        self.setFocus()
+
     @staticmethod
     def stylesheet(as_string: bool = True) -> str | dict:
         """
@@ -143,7 +158,7 @@ class TableView(QTableView):
         :return: The stylesheet as string.
         """
         style = ListView.stylesheet(as_string=False)
-        new_style = {}
+        new_style: dict = {}
         for key, value in style.items():
             if "ListView" in key:
                 key = key.replace("ListView", "TableView")
@@ -160,8 +175,6 @@ class TableView(QTableView):
             "padding-left": "6px",
             "font-size": "110%",
             "border": f"1px solid {Color('neutral', 300).hex}",
-            # "border-top": "1px solid transparent",
-            # "border-left": "1px solid transparent",
         }
 
         if as_string:
