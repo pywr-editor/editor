@@ -39,7 +39,7 @@ class TestMainWindow:
         window = MainWindow(resolve_model_path("model_1.json"))
         save_button = window.actions.get("save-model")
         # button gets disabled after a few ms
-        qtbot.wait(300)
+        qtbot.wait(600)
         assert save_button.isEnabled() is False
 
         # make a change - button is enabled after 500 ms in the main loop
@@ -49,7 +49,7 @@ class TestMainWindow:
 
         # with changes the prompt is shown
         QTimer.singleShot(
-            500,
+            600,
             partial(check_msg, "The model has been modified"),
         )
         window.close()
