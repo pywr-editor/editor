@@ -9,7 +9,7 @@ on:
       - develop
       - main
 jobs:
-  windows:
+  windows_tests:
     runs-on: windows-latest
     timeout-minutes: 15
     steps:

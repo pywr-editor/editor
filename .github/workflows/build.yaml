@@ -4,7 +4,7 @@ on:
     tags:
     - '*'
 jobs:
-  windows:
+  windows_release:
     runs-on: windows-latest
     steps:
       - name: Python Setup
