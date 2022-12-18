@@ -31,10 +31,7 @@ class PushIconButton(QPushButton):
         self.setText(label)
         self.setIcon(icon)
         if icon_size is None:
-            if small:
-                icon_size = QSize(14, 14)
-            else:
-                icon_size = QSize(16, 16)
+            icon_size = QSize(16, 16)
         self.setIconSize(icon_size)
 
         self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
