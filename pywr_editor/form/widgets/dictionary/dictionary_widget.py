@@ -167,6 +167,7 @@ class DictionaryWidget(FormCustomWidget):
         self.model.dictionary = self.get_default_value()
         # noinspection PyUnresolvedReferences
         self.model.layoutChanged.emit()
+        self.table.clear_selection()
 
     @Slot()
     def on_add_new_item(self) -> None:
@@ -239,6 +240,7 @@ class DictionaryWidget(FormCustomWidget):
         self.logger.debug(f"Updated model dictionary to {new_dict}")
         # noinspection PyUnresolvedReferences
         self.model.layoutChanged.emit()
+        self.table.clear_selection()
 
     def on_form_save(
         self, form_data: dict[str, Any], data: dict[str, Any]

@@ -154,6 +154,7 @@ class KeatingStreamsWidget(FormCustomWidget):
         del self.model.levels[row_index]
         # noinspection PyUnresolvedReferences
         self.model.layoutChanged.emit()
+        self.table.clear_selection()
 
         # remove all data when all streams are deleted
         if self.model.rowCount() == 0:
@@ -202,6 +203,7 @@ class KeatingStreamsWidget(FormCustomWidget):
 
         # noinspection PyUnresolvedReferences
         self.model.layoutChanged.emit()
+        self.table.clear_selection()
 
     @Slot()
     def toggle_buttons(self) -> None:

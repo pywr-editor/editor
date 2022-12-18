@@ -90,7 +90,7 @@ class ScenariosWidget(QWidget):
             self.model.scenario_names.remove(scenario_name)
             # noinspection PyUnresolvedReferences
             self.model.layoutChanged.emit()
-            self.list.clearSelection()
+            self.list.clear_selection()
 
             # remove the page widget
             page_widget = self.dialog.pages.pages[scenario_name]

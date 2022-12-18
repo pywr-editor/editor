@@ -572,6 +572,7 @@ class AbstractModelComponentsListPickerWidget(FormCustomWidget):
         self.model.values = self.get_default_value()
         # noinspection PyUnresolvedReferences
         self.model.layoutChanged.emit()
+        self.list.clear_selection()
 
     @property
     def is_parameter(self) -> bool:

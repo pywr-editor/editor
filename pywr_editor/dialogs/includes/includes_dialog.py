@@ -170,7 +170,7 @@ class IncludesDialog(QDialog):
         self.model.files_dict = new_files
         # noinspection PyUnresolvedReferences
         self.model.layoutChanged.emit()
-        self.table.clearSelection()
+        self.table.clear_selection()
 
     @Slot()
     def on_add_new_file(self) -> None:

@@ -90,7 +90,7 @@ class RecordersWidget(QWidget):
             self.model.recorder_names.remove(recorder_name)
             # noinspection PyUnresolvedReferences
             self.model.layoutChanged.emit()
-            self.list.clearSelection()
+            self.list.clear_selection()
 
             # remove the page widget
             page_widget = self.dialog.pages_widget.pages[recorder_name]

@@ -117,7 +117,7 @@ class MetadataCustomFieldsWidget(FormCustomWidget):
 
         # noinspection PyUnresolvedReferences
         self.model.layoutChanged.emit()
-        self.table.clearSelection()
+        self.table.clear_selection()
 
     @Slot()
     def on_value_change(self) -> None:
