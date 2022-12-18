@@ -205,13 +205,12 @@ class ScenarioValuesWidget(FormCustomWidget):
                     f"Deleted index {index} with values {sub_values}"
                 )
 
-        self.list.clearSelection()
         # noinspection PyUnresolvedReferences
         self.model.layoutAboutToBeChanged.emit()
         self.model.values = new_values
         # noinspection PyUnresolvedReferences
         self.model.layoutChanged.emit()
-        self.list.setFocus()
+        self.list.clear_selection()
 
     @Slot()
     def on_edit_ensemble(self) -> None:
@@ -432,3 +431,4 @@ class ScenarioValuesWidget(FormCustomWidget):
         self.model.values = self.get_default_value()
         # noinspection PyUnresolvedReferences
         self.model.layoutChanged.emit()
+        self.list.clear_selection()

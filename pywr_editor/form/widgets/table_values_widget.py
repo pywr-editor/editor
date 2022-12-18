@@ -375,6 +375,7 @@ class TableValuesWidget(FormCustomWidget):
         self.model.values = self.get_default_value()
         # noinspection PyUnresolvedReferences
         self.model.layoutChanged.emit()
+        self.table.clear_selection()
 
     @Slot()
     def on_add_new_row(self) -> None:
@@ -437,6 +438,7 @@ class TableValuesWidget(FormCustomWidget):
         self.model.values = new_values
         # noinspection PyUnresolvedReferences
         self.model.layoutChanged.emit()
+        self.table.clear_selection()
 
     @Slot()
     def on_selection_changed(self) -> None:

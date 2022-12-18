@@ -135,14 +135,13 @@ class NodesAndFactorsTableWidget(FormCustomWidget):
                     f"Deleted index {index} with values {sub_values}"
                 )
 
-        self.table.clearSelection()
         # noinspection PyUnresolvedReferences
         self.model.layoutAboutToBeChanged.emit()
         self.model.nodes = new_node_values
         self.model.factors = new_factor_values
         # noinspection PyUnresolvedReferences
         self.model.layoutChanged.emit()
-        self.table.setFocus()
+        self.table.clear_selection()
 
     @Slot()
     def on_edit_row(self) -> None:
@@ -336,6 +335,7 @@ class NodesAndFactorsTableWidget(FormCustomWidget):
         self.model.factors = self.get_default_value()["factors"]
         # noinspection PyUnresolvedReferences
         self.model.layoutChanged.emit()
+        self.table.clear_selection()
 
     def validate(
         self, name: str, label: str, value: value_type

@@ -32,7 +32,9 @@ def build_picker_form_fields(
         elif component_type == "recorder":
             key = "include_recorder_key"
         else:
-            raise ValueError("component_type can only be 'parameter; or 'recorder'")
+            raise ValueError(
+                "component_type can only be 'parameter; or 'recorder'"
+            )
 
         field_args = {key: include_comp_key}
 
