@@ -25,7 +25,7 @@ DisableProgramGroupPage=yes
 LicenseFile=LICENSE.txt
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
-OutputBaseFilename=Pywr editor installer
+OutputBaseFilename=Pywr_editor_installer
 SetupIconFile=pywr_editor\assets\ico\Pywr Editor.ico
 Compression=lzma
 SolidCompression=yes

@@ -24,12 +24,12 @@ jobs:
            pyinstaller main.spec --noconfirm
       - name: Zip Windows bin folder
         run: |
-          & "C:\Program Files\7-Zip\7z.exe" a "Windows binary.zip" "dist/main"
+          & "C:\Program Files\7-Zip\7z.exe" a "Windows_binary.zip" "dist/main"
       - name: Upload binary ZIP file
         uses: actions/upload-artifact@v3
         with:
           name: pywr_editor
-          path: Windows binary.zip
+          path: Windows_binary.zip
       - name: Create installer
         run: |
           & 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe' windows_setup.iss
@@ -46,5 +46,5 @@ jobs:
           draft: true
           body_path: CHANGELOG.md
           files: |
-            Pywr editor installer.exe
-            Windows binary.zip
+            Pywr_editor_installer.exe
+            Windows_binary.zip
