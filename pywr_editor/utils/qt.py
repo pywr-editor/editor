@@ -1,5 +1,9 @@
+from typing import Union, Literal, TYPE_CHECKING, Callable
 from PySide6.QtCore import QObject
 from PySide6.QtWidgets import QFileDialog, QWidget, QLayout
+
+if TYPE_CHECKING:
+    from pywr_editor.widgets import TableView, ListView
 
 
 def clear_layout(layout: QLayout) -> None:
@@ -66,3 +70,38 @@ def browse_files(file_filter: str = "JSON file (*.json)") -> None | str:
         return files[0]
     else:
         return None
+
+
+def move_row(
+    widget: Union["ListView", "TableView"],
+    direction: Literal["up", "down"],
+    callback: Callable[[int, int], None],
+) -> None:
+    """
+    Moves a component to a new position in the list.
+    :param widget: The instance of the ListView or TableView widget.
+    :param direction: The direction to move the component to (up or down).
+    :param callback: A callback function to execute after the layoutAboutToBeChanged
+    Signal is emitted but before the layoutChanged Signal is triggered. This function
+    should update the widget's internal model and receive the current model index.row()
+    being updated and the new one.
+    :return: None
+    """
+    current_index = widget.selectionModel().selection().indexes()[0].row()
+    if direction == "down":
+        new_index = current_index + 1
+    elif direction == "up":
+        new_index = current_index - 1
+    else:
+        raise ValueError("The direction can only be 'up' or 'down'")
+
+    # noinspection PyUnresolvedReferences
+    widget.model.layoutAboutToBeChanged.emit()
+
+    callback(current_index, new_index)
+
+    # noinspection PyUnresolvedReferences
+    widget.model.layoutChanged.emit()
+
+    # select moved row
+    widget.setCurrentIndex(widget.model.index(new_index, 0))
