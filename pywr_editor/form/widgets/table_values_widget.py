@@ -1,7 +1,6 @@
 import traceback
 import PySide6
 from itertools import groupby
-from typing import Literal
 from PySide6.QtAxContainer import QAxObject
 from PySide6.QtCore import Slot, Qt, QCoreApplication
 from PySide6.QtGui import QGuiApplication
@@ -19,12 +18,13 @@ from pywr_editor.widgets import (
     DoubleSpinBox,
     PushIconButton,
 )
-from pywr_editor.form import (
-    TableValuesModel,
-    FormCustomWidget,
-    FormValidation,
+from pywr_editor.form import TableValuesModel, FormCustomWidget, FormValidation
+from pywr_editor.utils import (
+    get_signal_sender,
+    Logging,
+    is_excel_installed,
+    move_row,
 )
-from pywr_editor.utils import get_signal_sender, Logging, is_excel_installed
 
 """
  Displays a widget with a table with the variable
@@ -470,7 +470,9 @@ class TableValuesWidget(FormCustomWidget):
         self.logger.debug(
             f"Running on_move_up Slot from {get_signal_sender(self)}"
         )
-        self._move_row("up")
+        move_row(
+            widget=self.table, direction="up", callback=self.move_row_in_model
+        )
 
     @Slot()
     def on_move_down(self) -> None:
@@ -481,26 +483,17 @@ class TableValuesWidget(FormCustomWidget):
         self.logger.debug(
             f"Running on_move_down Slot from {get_signal_sender(self)}"
         )
-        self._move_row("down")
+        move_row(
+            widget=self.table, direction="down", callback=self.move_row_in_model
+        )
 
-    def _move_row(self, direction: Literal["down", "up"]) -> None:
+    def move_row_in_model(self, current_index: int, new_index: int) -> None:
         """
-        Moves a row to a new position in the table.
-        :param direction: The direction to move the row to (up or down).
+        Moves a model's item.
+        :param current_index: The row index being moved.
+        :param new_index: The row index the item is being moved to.
         :return: None
         """
-        current_index = (
-            self.table.selectionModel().selection().indexes()[0].row()
-        )
-        if direction == "down":
-            new_index = current_index + 1
-        elif direction == "up":
-            new_index = current_index - 1
-        else:
-            raise ValueError("The direction can only be up or down")
-
-        # noinspection PyUnresolvedReferences
-        self.model.layoutAboutToBeChanged.emit()
         new_values = []
         for variable_values in self.model.values:
             new_values.append(
@@ -509,11 +502,6 @@ class TableValuesWidget(FormCustomWidget):
                 )
             )
         self.logger.debug(f"Moved index {current_index} to {new_index}")
-
-        # noinspection PyUnresolvedReferences
-        self.model.layoutChanged.emit()
-        # select moved row
-        self.table.setCurrentIndex(self.model.index(new_index, 0))
 
     @Slot()
     def paste_from_excel(self) -> None:

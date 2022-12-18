@@ -1,14 +1,7 @@
 from PySide6.QtCore import Slot, QSize
-from PySide6.QtWidgets import (
-    QVBoxLayout,
-    QHBoxLayout,
-    QAbstractItemView,
-)
+from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QAbstractItemView
 from typing import Literal, Any, List, Union, TYPE_CHECKING
-from pywr_editor.model import (
-    RecorderConfig,
-    ParameterConfig,
-)
+from pywr_editor.model import RecorderConfig, ParameterConfig
 from pywr_editor.form import (
     ModelComponentPickerDialog,
     AbstractModelComponentListPickerModel,
@@ -16,20 +9,11 @@ from pywr_editor.form import (
     FormValidation,
     FormField,
 )
-
-from pywr_editor.widgets import (
-    PushButton,
-    PushIconButton,
-    TableView,
-    ListView,
-)
-from pywr_editor.utils import get_signal_sender, Logging
+from pywr_editor.widgets import PushButton, PushIconButton, TableView, ListView
+from pywr_editor.utils import get_signal_sender, Logging, move_row
 
 if TYPE_CHECKING:
-    from pywr_editor.dialogs import (
-        ParameterDialogForm,
-        RecorderDialogForm,
-    )
+    from pywr_editor.dialogs import ParameterDialogForm, RecorderDialogForm
 
 """
  This widget provides a list of model components (parameters or recorders)
@@ -192,20 +176,22 @@ class AbstractModelComponentsListPickerWidget(FormCustomWidget):
         buttons_layout.addWidget(self.delete_button)
 
         # List
+        widget_args = {
+            "model": self.model,
+            "toggle_buttons_on_selection": [
+                self.delete_button,
+                self.move_up,
+                self.move_down,
+            ],
+        }
         if show_row_numbers:
-            self.list = TableView(
-                model=self.model,
-                toggle_buttons_on_selection=self.delete_button,
-            )
+            self.list = TableView(**widget_args)
             # always select row
             self.list.setSelectionBehavior(
                 QAbstractItemView.SelectionBehavior.SelectRows
             )
         else:
-            self.list = ListView(
-                model=self.model,
-                toggle_buttons_on_selection=self.delete_button,
-            )
+            self.list = ListView(**widget_args)
         self.list.setMaximumHeight(100)
         # noinspection PyUnresolvedReferences
         self.list.selectionModel().selectionChanged.connect(
@@ -260,7 +246,9 @@ class AbstractModelComponentsListPickerWidget(FormCustomWidget):
         self.logger.debug(
             f"Running on_move_up Slot from {get_signal_sender(self)}"
         )
-        self._move_component("up")
+        move_row(
+            widget=self.list, direction="up", callback=self.move_row_in_model
+        )
 
     @Slot()
     def on_move_down(self) -> None:
@@ -271,34 +259,21 @@ class AbstractModelComponentsListPickerWidget(FormCustomWidget):
         self.logger.debug(
             f"Running on_move_down Slot from {get_signal_sender(self)}"
         )
-        self._move_component("down")
+        move_row(
+            widget=self.list, direction="down", callback=self.move_row_in_model
+        )
 
-    def _move_component(self, direction: Literal["up", "down"]) -> None:
+    def move_row_in_model(self, current_index: int, new_index: int) -> None:
         """
-        Moves a component to a new position in the list.
-        :param direction: The direction to move the component t0 (up or down).
+        Moves a model's item.
+        :param current_index: The row index being moved.
+        :param new_index: The row index the item is being moved to.
         :return: None
         """
-        current_index = (
-            self.list.selectionModel().selection().indexes()[0].row()
+        self.model.values.insert(
+            new_index, self.model.values.pop(current_index)
         )
-        if direction == "down":
-            new_index = current_index + 1
-        elif direction == "up":
-            new_index = current_index - 1
-        else:
-            raise ValueError("The direction can only be up or down")
-
-        model_values = self.model.values
-
-        # noinspection PyUnresolvedReferences
-        self.model.layoutAboutToBeChanged.emit()
-
-        model_values.insert(new_index, model_values.pop(current_index))
-        self.logger.debug(f"Moved index {current_index} to {new_index}")
-
-        # noinspection PyUnresolvedReferences
-        self.model.layoutChanged.emit()
+        self.logger.debug(f"Moved row index {current_index} to {new_index}")
 
     @Slot()
     def on_delete(self) -> None:
@@ -318,16 +293,14 @@ class AbstractModelComponentsListPickerWidget(FormCustomWidget):
             if field_value not in row_values:
                 row_values.append(field_value)
 
-        # self.list.clearSelection()
         # noinspection PyUnresolvedReferences
         self.model.layoutAboutToBeChanged.emit()
         for value in row_values:
             self.logger.debug(f"Deleted {value} from custom fields")
             self.model.values.remove(value)
-
         # noinspection PyUnresolvedReferences
         self.model.layoutChanged.emit()
-        # self.list.setFocus()
+        self.list.clear_selection()
 
     @Slot()
     def on_edit_component(self) -> None:

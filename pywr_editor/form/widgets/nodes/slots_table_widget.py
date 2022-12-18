@@ -1,12 +1,8 @@
-from functools import partial
-from typing import Literal, Any, TYPE_CHECKING
+from typing import Any, TYPE_CHECKING
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QVBoxLayout, QLabel, QHBoxLayout
 from pywr_editor.model import NodeConfig
-from pywr_editor.utils import (
-    Logging,
-    get_signal_sender,
-)
+from pywr_editor.utils import Logging, get_signal_sender, move_row
 from pywr_editor.widgets import TableView, PushButton
 from pywr_editor.style import Color
 from pywr_editor.form import (
@@ -195,13 +191,13 @@ class SlotsTableWidget(FormCustomWidget):
         self.move_up.setDisabled(True)
         self.move_up.setToolTip("Move the selected slot up in the table")
         # noinspection PyUnresolvedReferences
-        self.move_up.clicked.connect(partial(self.on_move_row, "up"))
+        self.move_up.clicked.connect(self.on_move_up)
 
         self.move_down = PushButton(label="Move down", small=True)
         self.move_down.setDisabled(True)
         self.move_down.setToolTip("Move the selected slot down in the table")
         # noinspection PyUnresolvedReferences
-        self.move_down.clicked.connect(partial(self.on_move_row, "down"))
+        self.move_down.clicked.connect(self.on_move_down)
 
         button_layout.addStretch()
         button_layout.addWidget(self.move_up)
@@ -254,25 +250,42 @@ class SlotsTableWidget(FormCustomWidget):
         self.form.save_button.setEnabled(True)
 
     @Slot()
-    def on_move_row(self, direction: Literal["up", "down"]) -> None:
+    def on_move_up(self) -> None:
         """
-        Moves a row to a new position in the table.
-        :param direction: The direction to move the row to (up or down).
+        Moves a parameter up in the table.
         :return: None
         """
-        current_index = (
-            self.slot_table.selectionModel().selection().indexes()[0].row()
+        self.logger.debug(
+            f"Running on_move_up Slot from {get_signal_sender(self)}"
         )
-        if direction == "down":
-            new_index = current_index + 1
-        elif direction == "up":
-            new_index = current_index - 1
-        else:
-            raise ValueError("The direction can only be up or down")
+        move_row(
+            widget=self.slot_table,
+            direction="up",
+            callback=self.move_row_in_model,
+        )
 
-        # noinspection PyUnresolvedReferences
-        self.model.layoutAboutToBeChanged.emit()
+    @Slot()
+    def on_move_down(self) -> None:
+        """
+        Moves a parameter down in the table.
+        :return: None
+        """
+        self.logger.debug(
+            f"Running on_move_down Slot from {get_signal_sender(self)}"
+        )
+        move_row(
+            widget=self.slot_table,
+            direction="down",
+            callback=self.move_row_in_model,
+        )
 
+    def move_row_in_model(self, current_index: int, new_index: int) -> None:
+        """
+        Moves a model's item.
+        :param current_index: The row index being moved.
+        :param new_index: The row index the item is being moved to.
+        :return: None
+        """
         self.model.nodes.insert(new_index, self.model.nodes.pop(current_index))
         self.model.slot_names.insert(
             new_index, self.model.slot_names.pop(current_index)
@@ -280,12 +293,6 @@ class SlotsTableWidget(FormCustomWidget):
         self.model.factors.insert(
             new_index, self.model.factors.pop(current_index)
         )
-        self.logger.debug(f"Moved index {current_index} to {new_index}")
-
-        # noinspection PyUnresolvedReferences
-        self.model.layoutChanged.emit()
-        # select moved row
-        self.slot_table.setCurrentIndex(self.model.index(new_index, 0))
 
     def sanitise(
         self,
