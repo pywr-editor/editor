@@ -65,7 +65,7 @@ class MainWindow(QMainWindow):
             QMessageBox().critical(
                 self,
                 "File not found",
-                f"Cannot open the file {model_file} because it does not exist.",
+                f"Cannot open the file '{model_file}' because it does not exist.",
             )
             sys.exit(1)
         self.empty_model: bool = False
@@ -845,11 +845,9 @@ class MainWindow(QMainWindow):
         Slot called by the global timer. This listens for model changes.
         :return: None
         """
-        # re-enable the button if there are changes
+        # enable the "Save" button if there are changes
         save_button = self.actions.get("save-model")
-
-        if self.model_config.has_changes and not save_button.isEnabled():
-            save_button.setDisabled(False)
+        save_button.setEnabled(self.model_config.has_changes)
 
     def on_save(self) -> None:
         """
