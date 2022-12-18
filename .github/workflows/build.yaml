@@ -46,5 +46,5 @@ jobs:
           draft: true
           body_path: CHANGELOG.md
           files: |
-            Output\Pywr editor installer.exe
+            Pywr editor installer.exe
             Windows binary.zip
