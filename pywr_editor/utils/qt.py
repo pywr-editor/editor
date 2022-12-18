@@ -2,6 +2,8 @@ from typing import Union, Literal, TYPE_CHECKING, Callable
 from PySide6.QtCore import QObject
 from PySide6.QtWidgets import QFileDialog, QWidget, QLayout
 
+from pywr_editor.utils import Logging
+
 if TYPE_CHECKING:
     from pywr_editor.widgets import TableView, ListView
 
@@ -87,21 +89,30 @@ def move_row(
     being updated and the new one.
     :return: None
     """
-    current_index = widget.selectionModel().selection().indexes()[0].row()
+    logger = Logging().logger("move_row")
+    current_index = widget.selectionModel().selection().indexes()[0]
+    current_row_index = current_index.row()
+    current_column_index = current_index.column()
     if direction == "down":
-        new_index = current_index + 1
+        new_row_index = current_row_index + 1
     elif direction == "up":
-        new_index = current_index - 1
+        new_row_index = current_row_index - 1
     else:
         raise ValueError("The direction can only be 'up' or 'down'")
 
     # noinspection PyUnresolvedReferences
     widget.model.layoutAboutToBeChanged.emit()
 
-    callback(current_index, new_index)
+    callback(current_row_index, new_row_index)
 
     # noinspection PyUnresolvedReferences
     widget.model.layoutChanged.emit()
 
     # select moved row
-    widget.setCurrentIndex(widget.model.index(new_index, 0))
+    logger.debug(
+        f"Moved row index {current_row_index} to {new_row_index} "
+        + f"(selected column index {current_column_index})"
+    )
+    widget.setCurrentIndex(
+        widget.model.index(new_row_index, current_column_index)
+    )
