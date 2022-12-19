@@ -15,7 +15,6 @@ from PySide6.QtWidgets import (
 from .library_node import LibraryNode
 from pywr_editor.style import Color, stylesheet_dict_to_str
 from pywr_editor.widgets import PushIconButton
-from pywr_editor.model import ModelConfig
 
 if TYPE_CHECKING:
     from pywr_editor import MainWindow
@@ -131,22 +130,16 @@ class NodesLibraryPanel(QGraphicsView):
         super().__init__()
         self.container = parent
         self.window = parent.window
+        self.init = False
+        self.node_dict = {}
 
         # built-in nodes
-        self.node_dict = {
+        self.built_in_node_dict = {
             item["class"]: item["name"]
             for node_type, item in self.window.model_config.pywr_node_data.nodes_data.items()  # noqa: E501
         }
-        # add custom imported nodes and the generic custom node to let user add
-        # not-imported custom nodes to the schematic
-        self.node_dict = {
-            **self.node_dict,
-            **{
-                item["name"]: item["name"]
-                for item in self.window.model_config.includes.get_custom_nodes().values()  # noqa: E501
-            },
-            LibraryNode.not_import_custom_node_name: LibraryNode.not_import_custom_node_name,  # noqa: E501
-        }
+        # store available nodes for the first time
+        self.update_available_nodes()
 
         # behaviour
         self.setFixedHeight(90)
@@ -172,32 +165,25 @@ class NodesLibraryPanel(QGraphicsView):
         self.scene = QGraphicsScene(parent=self)
         self.setScene(self.scene)
         self.add_nodes()
+        self.init = True
 
-    @staticmethod
-    def get_available_nodes(model_config: ModelConfig) -> dict[str, str]:
+    def update_available_nodes(self) -> None:
         """
-        Returns a dictionary containing the available nodes in the library.
-        :param model_config: The ModelConfig instance.
-        :return: A dictionary with the node class name as key and the node's name
-        as value.
+        Adds or updates the list of custom nodes available in the panel.
+        :return: None
         """
-        # built-in nodes
-        node_dict = {
-            item["class"]: item["name"]
-            for node_type, item in model_config.pywr_node_data.nodes_data.items()
-        }
+        self.node_dict = self.built_in_node_dict.copy()
+
         # add custom imported nodes and the generic custom node to let user add
         # not-imported custom nodes to the schematic
-        node_dict = {
-            **node_dict,
+        self.node_dict = {
+            **self.node_dict,
             **{
                 item["name"]: item["name"]
-                for item in model_config.includes.get_custom_nodes().values()
+                for item in self.window.model_config.includes.get_custom_nodes().values()  # noqa: E501
             },
             "CustomNode": LibraryNode.not_import_custom_node_name,
         }
-
-        return node_dict
 
     def add_nodes(self) -> None:
         """
@@ -208,9 +194,7 @@ class NodesLibraryPanel(QGraphicsView):
         x0 = 10
         y = 0
         x = x0
-        for ni, (node_type, node_name) in enumerate(
-            self.get_available_nodes(self.window.model_config).items()
-        ):
+        for ni, (node_type, node_name) in enumerate(self.node_dict.items()):
             node_obj = LibraryNode(
                 view=self, node_class_type=node_type, node_name=node_name
             )
@@ -223,8 +207,18 @@ class NodesLibraryPanel(QGraphicsView):
                 y += 35
             node_obj.setPos(QPointF(x, y))
 
-        self.scale(self.view_scale, self.view_scale)
         self.setSceneRect(-20, -20, self.width(), y + 35)
+        if not self.init:
+            self.scale(self.view_scale, self.view_scale)
+
+    def reload(self) -> None:
+        """
+        Updates the node library.
+        :return: None
+        """
+        self.scene.clear()
+        self.update_available_nodes()
+        self.add_nodes()
 
     def wheelEvent(self, event: PySide6.QtGui.QWheelEvent) -> None:
         """

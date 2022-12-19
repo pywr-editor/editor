@@ -915,11 +915,13 @@ class Schematic(QGraphicsView):
         :return: None
         """
         super().dragEnterEvent(event)
+        # noinspection PyTypeChecker
+        panel: NodesLibraryPanel = self.app.findChild(NodesLibraryPanel)
+
         if (
             event.mimeData().hasText()
             and isinstance(event.mimeData().text(), str)
-            and event.mimeData().text()
-            in NodesLibraryPanel.get_available_nodes(self.model_config)
+            and event.mimeData().text() in panel.node_dict
         ):
             event.accept()
             self.update()
