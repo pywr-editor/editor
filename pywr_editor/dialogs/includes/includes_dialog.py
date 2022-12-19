@@ -20,6 +20,7 @@ from pywr_editor.widgets import TableView, PushIconButton
 from pywr_editor.form import FormTitle
 from pywr_editor.utils import get_signal_sender, Logging
 from .files_model import FilesModel
+from pywr_editor.toolbar.node_library.nodes_library import NodesLibraryPanel
 
 
 class IncludesDialog(QDialog):
@@ -282,9 +283,15 @@ class IncludesDialog(QDialog):
         values = self.model_config.includes.get_all_non_pyfiles()
         # convert to relative path
         for file in self.model.files_dict.keys():
-            values.append(self.model_config.path_to_relative(file, False))
+            values.append(self.model_config.path_to_relative(file, True))
         self.logger.debug(f"Saving {values}")
         self.model_config.includes.save_imports(values)
+
+        # update the node panel
+        # noinspection PyTypeChecker
+        panel: NodesLibraryPanel = self.app.findChild(NodesLibraryPanel)
+        panel.reload()
+        self.save_button.setEnabled(False)
 
     @Slot()
     def on_value_change(self) -> None:
