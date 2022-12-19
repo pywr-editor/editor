@@ -856,7 +856,7 @@ class Schematic(QGraphicsView):
             self.toggle_schematic_size_buttons()
 
             # disable drag of canvas regardless of item
-            self.setDragMode(QGraphicsView.NoDrag)
+            self.setDragMode(QGraphicsView.DragMode.NoDrag)
             self.canvas_drag = False
 
             # connect nodes when mode is enabled
@@ -918,7 +918,8 @@ class Schematic(QGraphicsView):
         if (
             event.mimeData().hasText()
             and isinstance(event.mimeData().text(), str)
-            and event.mimeData().text() in NodesLibraryPanel.pywr_node_classes()
+            and event.mimeData().text()
+            in NodesLibraryPanel.get_available_nodes(self.model_config)
         ):
             event.accept()
             self.update()
