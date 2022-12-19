@@ -1,8 +1,7 @@
 import logging
-import sys
 from datetime import datetime
 from logging.config import dictConfig
-from pathlib import Path
+from .helpers import get_app_path
 
 
 class Logging:
@@ -47,15 +46,11 @@ class Logging:
             },
         }
         if file_logging:
-            if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
-                file_path = Path(sys._MEIPASS)
-            else:
-                file_path = Path(__file__).parent.parent.parent
             config["handlers"]["file_handler"] = {
                 "level": "DEBUG",
                 "formatter": "standard",
                 "class": "logging.FileHandler",
-                "filename": file_path
+                "filename": get_app_path()
                 / f"pywr-editor-{datetime.now().strftime('%Y-%m-%d')}.log",
                 "mode": "a",
             }
