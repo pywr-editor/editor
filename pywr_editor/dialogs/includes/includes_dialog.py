@@ -288,9 +288,11 @@ class IncludesDialog(QDialog):
         self.model_config.includes.save_imports(values)
 
         # update the node panel
-        # noinspection PyTypeChecker
-        panel: NodesLibraryPanel = self.app.findChild(NodesLibraryPanel)
-        panel.reload()
+        if self.app:
+            # noinspection PyTypeChecker
+            panel: NodesLibraryPanel = self.app.findChild(NodesLibraryPanel)
+            panel.reload()
+
         self.save_button.setEnabled(False)
 
     @Slot()
