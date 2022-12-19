@@ -22,7 +22,7 @@ from pywr_editor.form import TableValuesModel, FormCustomWidget, FormValidation
 from pywr_editor.utils import (
     get_signal_sender,
     Logging,
-    is_excel_installed,
+    is_windows,
     move_row,
 )
 
@@ -154,7 +154,7 @@ class TableValuesWidget(FormCustomWidget):
         self.button_layout.addWidget(self.move_down)
         self.button_layout.addStretch()
 
-        if is_excel_installed():
+        if is_windows():
             self.paste_button = PushIconButton(
                 icon=":misc/paste", label="Paste from Excel", small=True
             )

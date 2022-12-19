@@ -85,6 +85,7 @@ def is_windows() -> bool:
 def is_excel_installed() -> bool:
     """
     Returns True if Microsoft Excel is installed on Windows.
+    This method is slow as it relies on the WIN32 API.
     :return: True if Excel is installed, False otherwise.
     """
     import win32com.client
