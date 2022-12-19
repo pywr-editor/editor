@@ -547,8 +547,7 @@ class MainWindow(QMainWindow):
         op_panel.add_button(self.actions.get("delete-node"))
 
         nodes_panel = nodes.add_panel("Nodes Library", show_name=False)
-        # nodes_panel.add_widget(QLabel("test"))
-        nodes_panel.add_widget(NodesLibrary())
+        nodes_panel.add_widget(NodesLibrary(self))
 
         # Schematic tab
         schematic = self.toolbar.add_tab("Schematic")
@@ -870,8 +869,10 @@ class MainWindow(QMainWindow):
         if parameter_names is None:
             message = "The model does not have any orphaned parameters"
         else:
-            message = f"The model has {len(parameter_names)} orphaned"
-            message += f"parameter(s): {', '.join(parameter_names)}"
+            message = (
+                f"The model has {len(parameter_names)} orphaned "
+                + f"parameter(s): {', '.join(parameter_names)}"
+            )
 
         # noinspection PyUnresolvedReferences
         self.warning_info_message.emit("Orphaned parameters", message, "warn")
