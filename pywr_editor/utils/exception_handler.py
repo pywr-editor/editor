@@ -2,9 +2,9 @@ import sys
 import traceback
 import logging
 from datetime import datetime
-from pathlib import Path
 from PySide6.QtCore import QObject, Signal
 from PySide6.QtWidgets import QApplication, QMessageBox, QMainWindow
+from .helpers import get_app_path
 
 
 class ExceptionHandler(QObject):
@@ -41,14 +41,14 @@ class ExceptionHandler(QObject):
             )
             log = logging.getLogger(__name__)
             log_file = (
-                Path(__file__).parent
-                / f"error_{datetime.now().strftime('%Y%m%d_%H%M')}.log"
+                get_app_path()
+                / f"error_{datetime.now().strftime('%Y%m%d')}.log"
             )
-            handler = logging.FileHandler(log_file)
-            log.addHandler(handler)
-            log.critical(f"Uncaught exception:\n {0}", exc_info=exc_info)
+            log.addHandler(logging.FileHandler(log_file))
+            # force logs to be on in case the app is started without logging
+            logging.disable(logging.INFO)
 
-            # noinspection PyUnresolvedReferences
+            log.critical(f"Uncaught exception:\n {0}", exc_info=exc_info)
             self.exception_signal.emit(log_msg, str(log_file))
 
     @staticmethod
