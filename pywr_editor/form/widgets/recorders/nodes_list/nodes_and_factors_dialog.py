@@ -126,6 +126,7 @@ class NodesAndFactorsDialog(QDialog):
         self.setLayout(layout)
         self.setWindowTitle(title.text())
         self.setMinimumSize(400, 200)
+        self.setWindowModality(Qt.WindowModality.WindowModal)
 
     def filter_nodes(self) -> None:
         """

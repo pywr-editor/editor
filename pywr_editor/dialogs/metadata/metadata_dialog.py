@@ -50,3 +50,4 @@ class MetadataDialog(QDialog):
         self.setWindowTitle("Model metadata")
         self.setMinimumSize(600, 600)
         self.setMaximumSize(600, 600)
+        self.setWindowModality(Qt.WindowModality.WindowModal)

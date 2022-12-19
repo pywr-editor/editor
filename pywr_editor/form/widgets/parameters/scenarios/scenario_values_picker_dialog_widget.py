@@ -128,6 +128,7 @@ class ScenarioValuesPickerDialogWidget(QDialog):
 
         self.setLayout(layout)
         self.setWindowTitle(title.text())
+        self.setWindowModality(Qt.WindowModality.WindowModal)
         self.setMinimumSize(600, 600)
 
     @Slot()

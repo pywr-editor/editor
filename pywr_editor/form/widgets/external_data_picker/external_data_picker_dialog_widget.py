@@ -100,3 +100,4 @@ class ExternalDataPickerDialogWidget(QDialog):
         self.setLayout(layout)
         self.setWindowTitle(title.text())
         self.setMinimumSize(600, 600)
+        self.setWindowModality(Qt.WindowModality.WindowModal)

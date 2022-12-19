@@ -75,6 +75,7 @@ class NodeDialog(QDialog):
         self.setLayout(layout)
         self.setWindowTitle(f"Edit node - {node_name}")
         self.setMinimumSize(750, 650)
+        self.setWindowModality(Qt.WindowModality.WindowModal)
 
 
 class NodeDialogTitle(QWidget):
