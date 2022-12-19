@@ -80,12 +80,12 @@ def change_table_view_cell(
     x = table.columnViewportPosition(column) + 5
     y = table.rowViewportPosition(row) + 10
     old_model_name = table.model.data(
-        table.model.index(row, column), Qt.DisplayRole
+        table.model.index(row, column), Qt.ItemDataRole.DisplayRole
     )
 
     assert (
         old_model_name == old_name
-    ), f"Expected {old_name}, got {old_model_name}"
+    ), f"Expected '{old_name}', got '{old_model_name}'"
 
     qtbot.mouseClick(
         table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)

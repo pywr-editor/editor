@@ -53,7 +53,7 @@ class ScenarioOptionsModel(QAbstractTableModel):
             else:
                 return Qt.CheckState.Unchecked
         # other columns
-        elif role == Qt.ItemDataRole.DisplayRole:
+        elif role in [Qt.ItemDataRole.DisplayRole, Qt.ItemDataRole.EditRole]:
             if index.column() == 0:
                 return index.row() + 1
             # names list may be empty

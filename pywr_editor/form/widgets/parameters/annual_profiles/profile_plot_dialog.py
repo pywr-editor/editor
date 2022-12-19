@@ -1,6 +1,6 @@
 import pyqtgraph as pg
 from typing import Any
-from PySide6.QtGui import QFont
+from PySide6.QtGui import QFont, Qt
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QWidget
 from pyqtgraph import mkPen, mkBrush
 from pywr_editor.style import Color
@@ -160,6 +160,7 @@ class ProfilePlotDialog(QDialog):
 
         # Dialog
         self.setWindowTitle(self.title)
+        self.setWindowModality(Qt.WindowModality.WindowModal)
         layout = QVBoxLayout(self)
         layout.addWidget(self.widget)
 

@@ -28,6 +28,7 @@ class SettingsDialog(QDialog):
         :param parent: The parent widget. Default to None.
         """
         super().__init__(parent)
+        self.setWindowModality(Qt.WindowModality.WindowModal)
 
     def setup(self, left_widget: QWidget, right_widget: QWidget) -> None:
         """

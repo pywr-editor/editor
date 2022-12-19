@@ -8,7 +8,7 @@ from pywr_editor.dialogs.scenarios.scenario_options_widget import (
 )
 from pywr_editor.form import FormField
 from pywr_editor.widgets import SpinBox
-from tests.utils import resolve_model_path
+from tests.utils import resolve_model_path, change_table_view_cell
 
 
 class TestScenariosDialog:
@@ -324,15 +324,17 @@ class TestScenariosDialog:
             assert model.slice == new_values
 
     @pytest.mark.parametrize(
-        "scenario_name",
+        "scenario_name, ensemble_names",
         [
-            "valid_complete",
+            ("valid_complete", ["First", "Second"]),
             # check model with empty name list (model must receive name list of same
             # size of scenario)
-            "valid_wo_names",
+            ("valid_wo_names", ["", ""]),
         ],
     )
-    def test_names_in_table_model(self, qtbot, model_config, scenario_name):
+    def test_names_in_table_model(
+        self, qtbot, model_config, scenario_name, ensemble_names
+    ):
         """
         Checks that the names list in the model is correctly updated.
         """
@@ -351,27 +353,25 @@ class TestScenariosDialog:
         x = table.columnViewportPosition(1) + 5
 
         # Empty name 1
-        y = table.rowViewportPosition(0) + 10
-        qtbot.mouseClick(
-            table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
+        change_table_view_cell(
+            qtbot=qtbot,
+            table=table,
+            row=0,
+            column=1,
+            old_name=ensemble_names[0],
+            new_name="",
         )
-        qtbot.mouseDClick(
-            table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
-        )
-        qtbot.keyClick(table.viewport().focusWidget(), Qt.Key_Enter)
-        qtbot.wait(100)
         assert model.names == ["", model.names[1]]
 
         # Empty all
-        y = table.rowViewportPosition(1) + 10
-        qtbot.mouseClick(
-            table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
+        change_table_view_cell(
+            qtbot=qtbot,
+            table=table,
+            row=1,
+            column=1,
+            old_name=ensemble_names[1],
+            new_name="",
         )
-        qtbot.mouseDClick(
-            table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
-        )
-        qtbot.keyClick(table.viewport().focusWidget(), Qt.Key_Enter)
-        qtbot.wait(100)
         assert model.names == ["", ""]
 
         # Fill one name at the time
