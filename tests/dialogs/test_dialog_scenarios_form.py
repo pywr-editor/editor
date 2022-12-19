@@ -324,15 +324,17 @@ class TestScenariosDialog:
             assert model.slice == new_values
 
     @pytest.mark.parametrize(
-        "scenario_name",
+        "scenario_name, ensemble_names",
         [
-            "valid_complete",
+            ("valid_complete", ["First", "Second"]),
             # check model with empty name list (model must receive name list of same
             # size of scenario)
-            "valid_wo_names",
+            ("valid_wo_names", ["", ""]),
         ],
     )
-    def test_names_in_table_model(self, qtbot, model_config, scenario_name):
+    def test_names_in_table_model(
+        self, qtbot, model_config, scenario_name, ensemble_names
+    ):
         """
         Checks that the names list in the model is correctly updated.
         """
@@ -356,7 +358,7 @@ class TestScenariosDialog:
             table=table,
             row=0,
             column=1,
-            old_name="First",
+            old_name=ensemble_names[0],
             new_name="",
         )
         assert model.names == ["", model.names[1]]
@@ -367,7 +369,7 @@ class TestScenariosDialog:
             table=table,
             row=1,
             column=1,
-            old_name="Second",
+            old_name=ensemble_names[1],
             new_name="",
         )
         assert model.names == ["", ""]
