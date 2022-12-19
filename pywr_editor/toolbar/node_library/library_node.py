@@ -17,16 +17,21 @@ if TYPE_CHECKING:
 
 class LibraryNode(QGraphicsItemGroup):
     max_label_size = 25
+    not_import_custom_node_name = "Custom node"
 
-    def __init__(self, view: "NodesLibraryPanel", node_class_name: str):
+    def __init__(
+        self, view: "NodesLibraryPanel", node_class_type: str, node_name: str
+    ):
         """
         Initialises the class.
         :param view: The view where to draw the item.
-        :param node_class_name: The name of the node class (inheriting from PywrNode).
+        :param node_class_type: The name of the node class.
+        :param node_name: The name of the node to show under the node's shape.
         :return None
         """
         super().__init__()
-        self.node_class_name = node_class_name
+        self.node_class_type = node_class_type
+        self.node_name = node_name
         self.view = view
         self.x: float = 0
         self.y: float = 0
@@ -39,14 +44,15 @@ class LibraryNode(QGraphicsItemGroup):
         # enable hover event
         self.setAcceptHoverEvents(True)
 
-        # node
-        node_class = getattr(pywr_editor.node_shapes, node_class_name)
-        if node_class is None:
-            return
+        # node icon
+        try:
+            node_class = getattr(pywr_editor.node_shapes, node_class_type)
+        except AttributeError:
+            # node name is not a built-in component
+            node_class = getattr(pywr_editor.node_shapes, "CustomNodeShape")
         self.node: "SchematicItem" = node_class(parent=self)
 
         # label
-        # noinspection PyTypeChecker
         self.label = LibraryNodeLabel(
             parent=self,
             name=self.name,
@@ -70,10 +76,10 @@ class LibraryNode(QGraphicsItemGroup):
     @property
     def name(self) -> str:
         """
-        Gets the node name. For example "AggregatedNode" returns "Aggregated".
+        Gets the trimmed node name.
         :return: The formatted name.
         """
-        label = self.node.name
+        label = self.node_name
 
         if len(label) > self.max_label_size:
             label = f"{label[0:self.max_label_size]}..."

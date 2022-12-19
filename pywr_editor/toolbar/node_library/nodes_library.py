@@ -1,7 +1,5 @@
 import PySide6
-import shiboken6
-import pywr_editor
-from typing import Literal
+from typing import Literal, TYPE_CHECKING
 from functools import partial
 from PySide6.QtCore import QPointF, QMimeData, Slot, QSize
 from PySide6.QtGui import QPainter, Qt, QDrag
@@ -15,16 +13,24 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 from .library_node import LibraryNode
-from pywr_editor.node_shapes import PywrNode
 from pywr_editor.style import Color, stylesheet_dict_to_str
 from pywr_editor.widgets import PushIconButton
+from pywr_editor.model import ModelConfig
+
+if TYPE_CHECKING:
+    from pywr_editor import MainWindow
 
 
 class NodesLibrary(QWidget):
-    def __init__(self):
+    def __init__(self, parent: "MainWindow"):
+        """
+        Initialises the node's library.
+        :param parent: The parent widget.
+        """
         super().__init__()
 
-        self.panel = NodesLibraryPanel()
+        self.window = parent
+        self.panel = NodesLibraryPanel(self)
 
         # Scroll buttons
         self.scroll_up = PushIconButton(
@@ -118,11 +124,29 @@ class NodesLibrary(QWidget):
 class NodesLibraryPanel(QGraphicsView):
     view_scale = 0.75
 
-    def __init__(self):
+    def __init__(self, parent: NodesLibrary):
         """
         :return: None
         """
         super().__init__()
+        self.container = parent
+        self.window = parent.window
+
+        # built-in nodes
+        self.node_dict = {
+            item["class"]: item["name"]
+            for node_type, item in self.window.model_config.pywr_node_data.nodes_data.items()  # noqa: E501
+        }
+        # add custom imported nodes and the generic custom node to let user add
+        # not-imported custom nodes to the schematic
+        self.node_dict = {
+            **self.node_dict,
+            **{
+                item["name"]: item["name"]
+                for item in self.window.model_config.includes.get_custom_nodes().values()  # noqa: E501
+            },
+            LibraryNode.not_import_custom_node_name: LibraryNode.not_import_custom_node_name,  # noqa: E501
+        }
 
         # behaviour
         self.setFixedHeight(90)
@@ -150,30 +174,46 @@ class NodesLibraryPanel(QGraphicsView):
         self.add_nodes()
 
     @staticmethod
-    def pywr_node_classes() -> list[str]:
-        return [
-            module
-            for module in dir(pywr_editor.node_shapes)
-            if module != "PywrNode"
-            and isinstance(
-                getattr(pywr_editor.node_shapes, module),
-                shiboken6.Object.__class__,
-            )
-            and issubclass(getattr(pywr_editor.node_shapes, module), PywrNode)
-        ]
+    def get_available_nodes(model_config: ModelConfig) -> dict[str, str]:
+        """
+        Returns a dictionary containing the available nodes in the library.
+        :param model_config: The ModelConfig instance.
+        :return: A dictionary with the node class name as key and the node's name
+        as value.
+        """
+        # built-in nodes
+        node_dict = {
+            item["class"]: item["name"]
+            for node_type, item in model_config.pywr_node_data.nodes_data.items()
+        }
+        # add custom imported nodes and the generic custom node to let user add
+        # not-imported custom nodes to the schematic
+        node_dict = {
+            **node_dict,
+            **{
+                item["name"]: item["name"]
+                for item in model_config.includes.get_custom_nodes().values()
+            },
+            "CustomNode": LibraryNode.not_import_custom_node_name,
+        }
+
+        return node_dict
 
     def add_nodes(self) -> None:
         """
         Adds the node to the scene widget.
         :return: None
         """
-        # TODO: check that all nodes are represented (otherwise add dummy
-        #  classes inheriting from GrayCircle)
+        # position nodes on the dummy schematic
         x0 = 10
         y = 0
         x = x0
-        for ni, node_class in enumerate(self.pywr_node_classes()):
-            node_obj = LibraryNode(view=self, node_class_name=node_class)
+        for ni, (node_type, node_name) in enumerate(
+            self.get_available_nodes(self.window.model_config).items()
+        ):
+            node_obj = LibraryNode(
+                view=self, node_class_type=node_type, node_name=node_name
+            )
             self.scene.addItem(node_obj)
 
             if ni != 0:
@@ -216,7 +256,7 @@ class NodesLibraryPanel(QGraphicsView):
             return
         node = nodes[0]
         mime_data = QMimeData()
-        mime_data.setText(node.node_class_name)
+        mime_data.setText(node.node_class_type)
 
         drag = QDrag(self)
         drag.setMimeData(mime_data)
