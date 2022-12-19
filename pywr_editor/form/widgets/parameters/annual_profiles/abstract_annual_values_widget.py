@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QMessageBox,
 )
-from pywr_editor.utils import Logging, is_excel_installed
+from pywr_editor.utils import Logging, is_windows
 from pywr_editor.form import ProfilePlotDialog, FormCustomWidget
 from pywr_editor.widgets import TableView, DoubleSpinBox, PushIconButton
 
@@ -79,7 +79,7 @@ class AbstractAnnualValuesWidget(FormCustomWidget):
         button_layout.addWidget(self.plot_button)
         button_layout.addStretch()
 
-        if is_excel_installed():
+        if is_windows():
             self.paste_button = PushIconButton(
                 icon=":misc/paste", label="Paste from Excel", small=True
             )

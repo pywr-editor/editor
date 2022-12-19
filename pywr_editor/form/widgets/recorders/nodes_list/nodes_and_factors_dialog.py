@@ -130,7 +130,7 @@ class NodesAndFactorsDialog(QDialog):
 
     def filter_nodes(self) -> None:
         """
-        Prevent adding an already exising node to the list. This event
+        Prevent adding an already existing node to the list. This event
         manipulates the ComboBox in the "node" field.
         :return: None
         """
