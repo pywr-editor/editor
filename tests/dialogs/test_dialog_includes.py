@@ -7,22 +7,15 @@ from PySide6.QtWidgets import (
     QPushButton,
     QApplication,
 )
+from pywr_editor import MainWindow
 from pywr_editor.dialogs import IncludesDialog
 from pywr_editor.model import ModelConfig
+from pywr_editor.toolbar.node_library.library_node_label import LibraryNodeLabel
+from pywr_editor.toolbar.node_library.nodes_library import NodesLibraryPanel
 from tests.utils import resolve_model_path, model_path, check_msg
 
 
 class TestTablesIncludes:
-    model_file = resolve_model_path("model_1.json")
-
-    @pytest.fixture()
-    def model_config(self) -> ModelConfig:
-        """
-        Initialises the model configuration.
-        :return: The ModelConfig instance.
-        """
-        return ModelConfig(self.model_file)
-
     @pytest.mark.parametrize(
         "file, added_to_model, error_message",
         [
@@ -54,15 +47,22 @@ class TestTablesIncludes:
             ),
             # valid file
             ("json_models/files/custom_parameter3.py", True, None),
+            # valid file - node panel gets updated
+            ("json_models/files/custom_node2.py", True, None),
         ],
     )
-    def test_add_files(
-        self, qtbot, model_config, file, added_to_model, error_message
-    ):
+    def test_add_files(self, qtbot, file, added_to_model, error_message):
         """
         Tests the add_files method.
         """
-        dialog = IncludesDialog(model_config)
+        window = MainWindow(resolve_model_path("model_1.json"))
+        model_config = window.model_config
+        panel: NodesLibraryPanel = window.toolbar.findChild(NodesLibraryPanel)
+        window.hide()
+
+        window.open_imports_dialog()
+        # noinspection PyTypeChecker
+        dialog: IncludesDialog = window.findChild(IncludesDialog)
         dialog.hide()
         all_files = list(map(str, dialog.model.files_dict.keys()))
 
@@ -79,11 +79,10 @@ class TestTablesIncludes:
 
         # check for errors
         # file has no valid classes, but it is added nonetheless
-        if "test_dialog_metadata.py" in str(file):
+        if "test_dialog_metadata.py" in file.as_posix():
             assert file in dialog.model.files_dict
 
         # check if file was added to the model
-        # all_files = list(map(str, dialog.model.files_dict))
         if not added_to_model:
             assert file not in dialog.model.files_dict
         else:
@@ -103,16 +102,24 @@ class TestTablesIncludes:
             all_files.insert(0, "model_2.json")
 
             assert model_config.has_changes is True
+            assert dialog.save_button.isEnabled() is False
             assert model_config.json["includes"] == all_files
 
-        # add delay for activeModalWidget to avoid conflicts between messages and tests
-        qtbot.wait(100)
+            # check that the node library is updated
+            if "custom_node2.py" in file.as_posix():
+                found_imported = False
+                for item in panel.items():
+                    if isinstance(item, LibraryNodeLabel):
+                        if item.text() == "MyNewNode":
+                            found_imported = True
+                assert found_imported is True
 
     @pytest.mark.parametrize("action", ["delete", "discard"])
-    def test_delete_file(self, qtbot, model_config, action):
+    def test_delete_file(self, qtbot, action):
         """
         Tests that a file is deleted correctly.
         """
+        model_config = ModelConfig(resolve_model_path("model_1.json"))
         dialog = IncludesDialog(model_config)
         table = dialog.table
 
