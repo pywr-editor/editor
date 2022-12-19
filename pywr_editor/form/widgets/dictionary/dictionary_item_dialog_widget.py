@@ -86,3 +86,4 @@ class DictionaryItemDialogWidget(QDialog):
         self.setLayout(layout)
         self.setWindowTitle(title.text())
         self.setMinimumSize(650, 500)
+        self.setWindowModality(Qt.WindowModality.WindowModal)

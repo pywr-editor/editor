@@ -1,3 +1,4 @@
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QDialog,
     QDialogButtonBox,
@@ -24,3 +25,4 @@ class JsonCodeViewer(QDialog):
         layout.addWidget(JsonEditor(file_content))
         layout.addWidget(button_box)
         self.setLayout(layout)
+        self.setWindowModality(Qt.WindowModality.WindowModal)

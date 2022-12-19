@@ -111,6 +111,7 @@ class IncludesDialog(QDialog):
 
         self.setLayout(layout)
         self.setMinimumSize(630, 300)
+        self.setWindowModality(Qt.WindowModality.WindowModal)
 
     @Slot()
     def on_delete_file(self) -> None:

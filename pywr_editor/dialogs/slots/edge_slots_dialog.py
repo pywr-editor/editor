@@ -82,3 +82,4 @@ class EdgeSlotsDialog(QDialog):
         self.setLayout(layout)
         self.setWindowTitle("Edit edge slots")
         self.setMinimumSize(750, 650)
+        self.setWindowModality(Qt.WindowModality.WindowModal)
