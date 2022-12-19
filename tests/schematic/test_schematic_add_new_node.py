@@ -1,7 +1,7 @@
 import pytest
 from typing import Tuple
 from PySide6 import QtCore, QtGui
-from PySide6.QtCore import QPoint, QMimeData, QEvent, QObject
+from PySide6.QtCore import QPoint, QMimeData, QEvent, QObject, QTimer
 from PySide6.QtGui import Qt, QDragEnterEvent
 from PySide6.QtWidgets import QWidget
 from pywr_editor import MainWindow
@@ -32,10 +32,10 @@ class TestAddNodes:
 
         return window, schematic, node_lib_panel
 
-    def test_drag_node_to_schematic(self, qtbot, init_window) -> None:
+    def test_drag_drop_node_to_schematic(self, qtbot, init_window) -> None:
         """
         Tests that when a node is dropped onto the schematic, the node is correctly
-        added to the model and the schematic. This tests the dragEnterEvent and
+        added to the model and the schematic. This only tests the dragEnterEvent and
         dropEvent methods in the Schematic class.
         """
         window, schematic, _ = init_window
@@ -48,7 +48,6 @@ class TestAddNodes:
 
         # start the drop event
         scene_pos = QPoint(100, 50)
-        # noinspection PyTypeChecker
         event = QDragEnterEvent(
             scene_pos,
             Qt.DropAction.CopyAction,
@@ -59,7 +58,6 @@ class TestAddNodes:
         QtCore.QCoreApplication.sendEvent(schematic.viewport(), event)
 
         # drop the node
-        # noinspection PyTypeChecker
         event = QtGui.QDropEvent(
             scene_pos,
             Qt.DropAction.MoveAction,

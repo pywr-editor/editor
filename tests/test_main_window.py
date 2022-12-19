@@ -2,6 +2,9 @@ import pytest
 from functools import partial
 from PySide6.QtCore import QTimer
 from pywr_editor import MainWindow
+from pywr_editor.toolbar.node_library.library_node import LibraryNode
+from pywr_editor.toolbar.node_library.library_node_label import LibraryNodeLabel
+from pywr_editor.toolbar.node_library.nodes_library import NodesLibraryPanel
 from tests.utils import check_msg, resolve_model_path
 
 
@@ -53,3 +56,24 @@ class TestMainWindow:
             partial(check_msg, "The model has been modified"),
         )
         window.close()
+
+    def test_node_library(self, qtbot):
+        """
+        Check that the shape for the custom nodes are included in the
+        node library.
+        """
+        window = MainWindow(resolve_model_path("model_1.json"))
+        window.hide()
+
+        # check that the imported node is in the panel
+        panel: NodesLibraryPanel = window.toolbar.findChild(NodesLibraryPanel)
+        found_imported = False
+        found_generic_custom = False
+        for item in panel.items():
+            if isinstance(item, LibraryNodeLabel):
+                if item.text() == "LeakyPipe":
+                    found_imported = True
+                elif item.text() == LibraryNode.not_import_custom_node_name:
+                    found_generic_custom = True
+        assert found_imported is True
+        assert found_generic_custom is True
