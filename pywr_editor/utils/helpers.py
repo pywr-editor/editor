@@ -1,4 +1,6 @@
 import platform
+import sys
+from pathlib import Path
 from typing import Any
 from pywr_editor.model import ParameterConfig, RecorderConfig
 
@@ -94,3 +96,22 @@ def is_excel_installed() -> bool:
         return True
     except Exception:
         return False
+
+
+def is_app_frozen() -> bool:
+    """
+    Returns True if the app was frozen with PyInstaller.
+    :return: Whether the app is frozen.
+    """
+    return getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS")
+
+
+def get_app_path() -> Path:
+    """
+    Returns the path where the application is executed.
+    :return: The Path instance of the application.
+    """
+    if is_app_frozen():
+        return Path(sys._MEIPASS)
+    else:
+        return Path(__file__).parent.parent.parent
