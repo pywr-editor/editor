@@ -1,5 +1,4 @@
 import shiboken6
-import pywr_editor
 import pywr_editor.node_shapes as all_nodes
 from PySide6.QtCore import QSize
 from typing import Type
