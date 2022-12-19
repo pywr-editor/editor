@@ -13,7 +13,7 @@ class ToolbarWidget(QToolBar):
 
         # load the toolbar style
         self.setStyleSheet(self.stylesheet)
-        self.tabs = {}
+        self.tabs: dict[str, Tab] = {}
 
         self.setObjectName("toolbar")
         self.toolbar = QTabWidget(self)
