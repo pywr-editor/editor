@@ -17,6 +17,7 @@ from PySide6.QtWidgets import (
 from pywr_editor.model import Edges, ModelConfig, NodeConfig
 from pywr_editor.node_shapes import get_node_icon_classes
 from pywr_editor.schematic import (
+    DeleteNodeCommand,
     SchematicBBoxUtils,
     SchematicItem,
     scaling_factor,
@@ -64,7 +65,7 @@ class Schematic(QGraphicsView):
         self.scaling_factor = self.editor_settings.zoom_level
         self.nodes_wo_position = 0
         self.connecting_node_props = ConnectingNodeProps()
-        self.schematic_items = {}
+        self.schematic_items: dict[str, SchematicItem] = {}
 
         # noinspection PyUnresolvedReferences
         self.schematic_move_event.connect(self.on_schematic_move)
@@ -643,65 +644,8 @@ class Schematic(QGraphicsView):
         Deletes the nodes and their edges from the schematic and model configuration.
         :return: None
         """
-        status_message = None
-        deleted_edges = 0
-        for node in nodes:
-            # delete node and edges from the model config
-            self.model_config.nodes.delete(node.name)
-            del self.schematic_items[node.name]
-
-            # Collect edges to delete
-            # delete edges on the schematic when node is source node
-            edges_to_delete = []
-            for c_node in node.connected_nodes["target_nodes"]:
-                for ei, edge_item in enumerate(c_node.edges):
-                    if edge_item.source.name == node.name:
-                        # delete schematic edge item
-                        edges_to_delete.append(edge_item)
-                        # delete item from edges list for target node
-                        # the edges list for node when the object is deleted below
-                        del c_node.edges[ei]
-                        break
-
-            # delete edges on the schematic when node is target node
-            for c_node in node.connected_nodes["source_nodes"]:
-                for ei, edge_item in enumerate(c_node.edges):
-                    if edge_item.target.name == node.name:
-                        # schematic
-                        edges_to_delete.append(edge_item)
-                        del c_node.edges[ei]
-                        break
-
-            # remove graphic item (edges) from the schematic
-            for edge_to_delete in edges_to_delete:
-                self.scene.removeItem(edge_to_delete)
-                del edge_to_delete
-
-            # remove graphic node, and node and edges in model config
-            self.model_config.nodes.delete(node.name)
-            self.scene.removeItem(node)
-            del node
-
-            # status message
-            edges_count = len(edges_to_delete)
-            if len(nodes) == 1:
-                status_message = f'Deleted node "{nodes[0].name}"'
-                if edges_count == 1:
-                    status_message += " and its edge"
-                if edges_count > 1:
-                    status_message += f" and its {len(edges_to_delete)} edges"
-            else:
-                deleted_edges += edges_count
-
-        # update status bar and tree
-        if status_message is None:
-            status_message = (
-                f"Deleted {len(nodes)} nodes and {deleted_edges} edges"
-            )
-
-        # noinspection PyUnresolvedReferences
-        self.app.status_message.emit(status_message)
-        self.app.components_tree.reload()
+        command = DeleteNodeCommand(schematic=self, selected_nodes=nodes)
+        self.app.undo_stack.push(command)
 
     @Slot(SchematicItem)
     def on_connect_node_start(self, node: "SchematicItem") -> None:

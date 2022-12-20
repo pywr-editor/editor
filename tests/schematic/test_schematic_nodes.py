@@ -4,7 +4,13 @@ import pytest
 from PySide6.QtCore import QPoint, Qt
 
 from pywr_editor import MainWindow
-from pywr_editor.schematic import Edge, Schematic, SchematicItem
+from pywr_editor.model import ModelConfig
+from pywr_editor.schematic import (
+    DeleteNodeCommand,
+    Edge,
+    Schematic,
+    SchematicItem,
+)
 from pywr_editor.toolbar.tab_panel import TabPanel
 from tests.utils import resolve_model_path
 
@@ -25,26 +31,27 @@ class TestSchematicNodes:
 
         return window, schematic, node_op_panel
 
-    def test_delete_node(self, qtbot, init_window) -> None:
+    @staticmethod
+    def is_node_deleted(
+        model_config: ModelConfig,
+        node_name: str,
+        schematic: Schematic,
+        removed_edges: list[Edge],
+    ) -> None:
         """
-        Tests that the nodes are properly deleted from the schematic and the model
-        configuration.
+        Checks that a node and its edges are deleted.
+        :param model_config: The ModelConfig instance.
+        :param node_name: The node that was removed.
+        :param schematic: The Schematic instance.
+        :param removed_edges: The list of Edge instance that were removed.
+        :return: None
         """
-        window, schematic, node_op_panel = init_window
-        model_config = schematic.model_config
-
-        node = schematic.schematic_items["Link2"]
-        removed_edges = node.edges
-        # noinspection PyArgumentList
-        node.on_delete_node()
-
-        assert model_config.has_changes is True
-
+        # 1. Check node and edges
         # the node is removed from the model configuration
-        assert model_config.nodes.find_node_index_by_name("Link2") is None
+        assert model_config.nodes.find_node_index_by_name(node_name) is None
 
         # node is removed from the items list
-        assert "Link2" not in schematic.schematic_items.keys()
+        assert node_name not in schematic.schematic_items.keys()
 
         # node is removed from the schematic as graphical item
         node_names = [
@@ -52,10 +59,12 @@ class TestSchematicNodes:
             for node in schematic.items()
             if isinstance(node, SchematicItem)
         ]
-        assert "Link2" not in node_names
+        assert node_name not in node_names
 
+        # 2. Check edges
         # the node edges are removed from the model configuration
-        assert model_config.edges.get_targets("Link2") is None
+        for edge in model_config.edges.get_all():
+            assert node_name not in edge
 
         # the edges are removed from the schematic as graphical items
         all_edges = [
@@ -68,7 +77,108 @@ class TestSchematicNodes:
         all_connected_node_names = [edge.source.name for edge in all_edges] + [
             edge.target.name for edge in all_edges
         ]
-        assert "Link2" not in all_connected_node_names
+        assert node_name not in all_connected_node_names
+
+    def test_delete_node(self, qtbot, init_window) -> None:
+        """
+        Tests that the nodes are properly deleted from the schematic and the model
+        configuration.
+        """
+        node_name = "Link2"
+        window, schematic, node_op_panel = init_window
+        model_config = schematic.model_config
+        original_node_config = model_config.nodes.get_node_config_from_name(
+            node_name
+        )
+        original_edges = [
+            edge for edge in model_config.edges.get_all() if node_name in edge
+        ]
+
+        node = schematic.schematic_items[node_name]
+        removed_edges = node.edges
+        node.on_delete_node()
+
+        assert model_config.has_changes is True
+
+        # 1. Check node and edges
+        self.is_node_deleted(
+            model_config=model_config,
+            node_name=node_name,
+            schematic=schematic,
+            removed_edges=removed_edges,
+        )
+
+        # 2. Test undo operation
+        assert window.undo_stack.canUndo() is True
+        undo_command: DeleteNodeCommand = window.undo_stack.command(0)
+
+        # check internal status
+        assert undo_command.deleted_node_configs == {
+            node_name: original_node_config
+        }
+        assert sorted(undo_command.deleted_edges) == sorted(original_edges)
+
+        # undo
+        undo_command.undo()
+
+        # node is restored
+        assert model_config.nodes.find_node_index_by_name(node_name) is not None
+        assert node_name in schematic.schematic_items.keys()
+        node_names = [
+            node.name
+            for node in schematic.items()
+            if isinstance(node, SchematicItem)
+        ]
+        assert node_name in node_names
+
+        # edges are restored
+        assert sorted(original_edges) == sorted(
+            [
+                [name, node_name]
+                for name in model_config.edges.get_sources(node_name)
+            ]
+            + [
+                [node_name, name]
+                for name in model_config.edges.get_targets(node_name)
+            ]
+        )
+
+        # check edges in schematic
+        all_schematic_edges = [
+            [edge.source.name, edge.target.name]
+            for edge in schematic.items()
+            if isinstance(edge, Edge)
+        ]
+
+        for edge in original_edges:
+            assert edge in all_schematic_edges
+
+        # check node internal connections
+        assert model_config.edges.get_sources(node_name) == [
+            item.name
+            for item in schematic.schematic_items[node_name].connected_nodes[
+                "source_nodes"
+            ]
+        ]
+        assert model_config.edges.get_targets(node_name) == [
+            item.name
+            for item in schematic.schematic_items[node_name].connected_nodes[
+                "target_nodes"
+            ]
+        ]
+
+        # 3. Test redo operation
+        # get new schematic item instance
+        node = schematic.schematic_items[node_name]
+        removed_edges = node.edges
+
+        undo_command.redo()
+        self.is_node_deleted(
+            model_config=model_config,
+            node_name=node_name,
+            schematic=schematic,
+            removed_edges=removed_edges,
+        )
 
     def test_delete_nodes(self, qtbot, init_window) -> None:
         """
@@ -77,15 +187,23 @@ class TestSchematicNodes:
         window, schematic, node_op_panel = init_window
         model_config = schematic.model_config
         nodes_to_delete = ["Reservoir", "Link3"]
-        deleted_schematic_edges = set()
+        deleted_schematic_edge_dict = {}
+        original_node_config_dict = {
+            node_name: model_config.nodes.get_node_config_from_name(node_name)
+            for node_name in nodes_to_delete
+        }
+        original_edges = [
+            edge
+            for edge in model_config.edges.get_all()
+            for node_name in nodes_to_delete
+            if node_name in edge
+        ]
 
-        # select 3 nodes
+        # 1. Select 3 nodes
         for node in nodes_to_delete:
             schematic_item = schematic.schematic_items[node]
             schematic_item.setSelected(True)
-            deleted_schematic_edges = set.union(
-                deleted_schematic_edges, schematic_item.edges
-            )
+            deleted_schematic_edge_dict[node] = schematic_item.edges
 
         # delete them
         panel = window.toolbar.tabs["Nodes"].panels["Operations"]
@@ -93,31 +211,91 @@ class TestSchematicNodes:
 
         assert model_config.has_changes is True
 
-        # deleted nodes are not in the model config anymore
-        left_nodes = [
-            node_dict["name"] for node_dict in model_config.nodes.get_all()
-        ]
-        assert set(left_nodes) - set(nodes_to_delete) == set(left_nodes)
-
-        # their edges have been deleted as well
-        for edge in model_config.edges.get_all():
-            assert edge[0] not in nodes_to_delete
-            assert edge[1] not in nodes_to_delete
-
-        # nodes have been deleted from the schematic
-        assert set(schematic.schematic_items.keys()) - set(left_nodes) == set()
-
-        # edges deleted from schematic
-        all_left_schematic_edges = set()
-        for node in schematic.schematic_items.values():
-            all_left_schematic_edges = set.union(
-                all_left_schematic_edges, node.edges
+        for node_name in nodes_to_delete:
+            self.is_node_deleted(
+                model_config=model_config,
+                node_name=node_name,
+                schematic=schematic,
+                removed_edges=deleted_schematic_edge_dict[node_name],
             )
-        for schematic_edge in deleted_schematic_edges:
-            assert schematic_edge not in all_left_schematic_edges
 
         # edges to already existing nodes have been deleted
-        assert model_config.edges.get_all() == [["Link1", "Link2"]]
+        assert model_config.edges.get_all() == [
+            ["Link1", "Link2"],
+            ["Link2", "Link4"],
+        ]
+
+        # 3. Undo operation
+        assert window.undo_stack.canUndo() is True
+        undo_command: DeleteNodeCommand = window.undo_stack.command(0)
+        assert undo_command.deleted_node_configs == original_node_config_dict
+        assert sorted(undo_command.deleted_edges) == sorted(original_edges)
+
+        # undo
+        undo_command.undo()
+
+        # nodes are restored
+        all_restored_edges = []
+        node_names = [
+            node.name
+            for node in schematic.items()
+            if isinstance(node, SchematicItem)
+        ]
+        all_schematic_edges = [
+            [edge.source.name, edge.target.name]
+            for edge in schematic.items()
+            if isinstance(edge, Edge)
+        ]
+        for node_name in nodes_to_delete:
+            assert (
+                model_config.nodes.find_node_index_by_name(node_name)
+                is not None
+            )
+            assert node_name in schematic.schematic_items.keys()
+            assert node_name in node_names
+
+            # check edges in schematic
+            for edge in original_edges:
+                assert edge in all_schematic_edges
+
+            # check node internal connections
+            sources = model_config.edges.get_sources(node_name)
+            sources = [] if sources is None else sources
+            all_restored_edges += [[name, node_name] for name in sources]
+
+            targets = model_config.edges.get_targets(node_name)
+            targets = [] if targets is None else targets
+            all_restored_edges += [[node_name, name] for name in targets]
+            assert sources == [
+                item.name
+                for item in schematic.schematic_items[
+                    node_name
+                ].connected_nodes["source_nodes"]
+            ]
+            assert targets == [
+                item.name
+                for item in schematic.schematic_items[
+                    node_name
+                ].connected_nodes["target_nodes"]
+            ]
+
+        # all edges are restored
+        assert sorted(original_edges) == sorted(all_restored_edges)
+
+        # 4. Test redo operation
+        # get new schematic item instance
+        for node_name in nodes_to_delete:
+            schematic_item = schematic.schematic_items[node_name]
+            deleted_schematic_edge_dict[node_name] = schematic_item.edges
+
+        undo_command.redo()
+        for node_name in nodes_to_delete:
+            self.is_node_deleted(
+                model_config=model_config,
+                node_name=node_name,
+                schematic=schematic,
+                removed_edges=deleted_schematic_edge_dict[node_name],
+            )
 
     def test_connect_node(self, qtbot, init_window):
         """
@@ -159,6 +337,5 @@ class TestSchematicNodes:
 
         assert model_config.edges.get_targets("Link3") == [
             "Link2",
-            "Link4",
             "Reservoir",
         ]
