@@ -6,7 +6,7 @@ from typing import Literal
 
 import PySide6
 from PySide6.QtCore import QTimer, Signal, Slot
-from PySide6.QtGui import QAction, QKeySequence, Qt
+from PySide6.QtGui import QAction, QKeySequence, Qt, QUndoStack
 from PySide6.QtWidgets import QFileDialog, QMainWindow, QMessageBox, QSplitter
 
 from pywr_editor.dialogs import (
@@ -105,6 +105,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.splitter)
 
         # Actions
+        self.undo_stack = QUndoStack(self)
         self.actions = Actions(window=self)
         self.register_model_actions()
         self.register_nodes_actions()
@@ -134,10 +135,6 @@ class MainWindow(QMainWindow):
         if not self.model_config.is_valid():
             # noinspection PyUnresolvedReferences
             self.error_message.emit(self.model_config.load_error, True)
-
-        # Show errors and warnings if Pywr fails to load the model.
-        # Skip this if the model is new.
-        # TODO: missing custom params, etc
 
         # Draw the widgets
         self.components_tree.draw()
@@ -315,7 +312,8 @@ class MainWindow(QMainWindow):
                 connection=self.schematic.de_select_all_items,
             )
         )
-
+        self.actions.add_undo(icon=":/toolbar/undo")
+        self.actions.add_redo(icon=":/toolbar/redo")
         self.actions.add(
             Action(
                 key="remove-edges",
@@ -533,6 +531,10 @@ class MainWindow(QMainWindow):
 
         # Nodes tab
         nodes = self.toolbar.add_tab("Nodes")
+        nodes_panel = nodes.add_panel("Undo", layout="vertical")
+        nodes_panel.add_button(self.actions.get("undo"), is_large=False)
+        nodes_panel.add_button(self.actions.get("redo"), is_large=False)
+
         nodes_panel = nodes.add_panel("Selection", layout="vertical")
         nodes_panel.add_button(self.actions.get("select-all"), is_large=False)
         nodes_panel.add_button(self.actions.get("select-none"), is_large=False)
