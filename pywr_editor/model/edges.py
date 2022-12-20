@@ -123,7 +123,7 @@ class Edges:
         self, source_node_name: str, target_node_name: str
     ) -> tuple[list, int] | tuple[None, None]:
         """
-        Finds rhe edge index from the source and target node names.
+        Finds the edge list and its index from the source and target node names.
         :param source_node_name: The name of the source node.
         :param target_node_name:  The name of the target node.
         :return: The edge and its index or None if the edge is not found.
