@@ -1,6 +1,8 @@
 import pytest
 from typing import Tuple
 from PySide6.QtCore import Qt, QPoint
+from PySide6.QtGui import QKeySequence
+
 from pywr_editor import MainWindow
 from pywr_editor.model import ModelConfig
 from pywr_editor.schematic import (
@@ -99,11 +101,16 @@ class TestSchematicNodes:
         original_edges = [
             edge for edge in model_config.edges.get_all() if node_name in edge
         ]
+        panel = schematic.app.toolbar.tabs["Nodes"].panels["Undo"]
+        undo_button = panel.buttons["Undo"]
+        redo_button = panel.buttons["Redo"]
 
         node = schematic.schematic_items[node_name]
         removed_edges = node.edges
         node.on_delete_node()
 
+        assert undo_button.isEnabled() is True
+        assert redo_button.isEnabled() is False
         assert model_config.has_changes is True
 
         # 1. Check node and edges
@@ -125,7 +132,9 @@ class TestSchematicNodes:
         assert sorted(undo_command.deleted_edges) == sorted(original_edges)
 
         # undo
-        undo_command.undo()
+        qtbot.mouseClick(undo_button, Qt.MouseButton.LeftButton)
+        assert undo_button.isEnabled() is False
+        assert redo_button.isEnabled() is True
 
         # node is restored
         assert model_config.nodes.find_node_index_by_name(node_name) is not None
@@ -178,7 +187,10 @@ class TestSchematicNodes:
         node = schematic.schematic_items[node_name]
         removed_edges = node.edges
 
-        undo_command.redo()
+        qtbot.mouseClick(redo_button, Qt.MouseButton.LeftButton)
+        assert undo_button.isEnabled() is True
+        assert redo_button.isEnabled() is False
+
         self.is_node_deleted(
             model_config=model_config,
             node_name=node_name,
