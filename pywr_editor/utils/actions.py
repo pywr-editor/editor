@@ -88,6 +88,7 @@ class Actions:
         action_obj = self.window.undo_stack.createUndoAction(
             self.window, "Undo"
         )
+        action_obj.setData("UndoStack")
         action_obj.setShortcut(QKeySequence.StandardKey.Undo)
         action_obj.setIcon(QIcon(icon))
         action_obj.setToolTip(
@@ -107,6 +108,7 @@ class Actions:
         action_obj = self.window.undo_stack.createRedoAction(
             self.window, "Redo"
         )
+        action_obj.setData("UndoStack")
         action_obj.setShortcut(QKeySequence.StandardKey.Redo)
         action_obj.setIcon(QIcon(icon))
         action_obj.setToolTip(

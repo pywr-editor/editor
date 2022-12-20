@@ -39,8 +39,9 @@ class ToolbarBaseButton(QToolButton):
         self._update_status()
         # noinspection PyUnresolvedReferences
         self.clicked.connect(self.action.trigger)
-        # noinspection PyUnresolvedReferences
-        self.action.changed.connect(self._update_status)
+        if self.action.data() != "UndoStack":
+            # noinspection PyUnresolvedReferences
+            self.action.changed.connect(self._update_status)
 
     def _update_status(self) -> None:
         """
