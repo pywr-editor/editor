@@ -27,6 +27,25 @@ class Edges:
         """
         return len(self.get_all())
 
+    def get_sources(self, node_name: str) -> list[str] | None:
+        """
+        Returns the source nodes for the target node.
+        :param node_name: The name of the source node.
+        :return: The list of source node names.
+        """
+        edges = []
+        node_names = self.model.nodes.names
+        for edge in self.get_all():
+            node_source = edge[0]
+            target_node = edge[1]
+            if target_node == node_name and node_source in node_names:
+                edges.append(edge[0])
+
+        if len(edges) == 0:
+            return None
+
+        return edges
+
     def get_targets(self, node_name: str) -> list[str] | None:
         """
         Returns the target nodes for the source node.

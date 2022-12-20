@@ -34,6 +34,14 @@ class TestEdges:
         # source node does not exist
         assert edges.get_targets("Link35") is None
 
+    def test_find_source_nodes(self):
+        """
+        Extracts source nodes.
+        """
+        edges = self.edges("model_delete_nodes.json")
+        assert edges.get_sources("Link2") == ["Link1", "Link3"]
+        assert edges.get_sources("Link1") == ["Reservoir"]
+
     def test_delete_edge1(self):
         """
         Tests that the edges are properly deleted.
