@@ -77,6 +77,14 @@ class TestSchematicNodes:
         ]
         assert node_name not in all_connected_node_names
 
+        # node is deleted from the component tree
+        tree_nodes = schematic.app.components_tree.items["nodes"]
+        for group in range(tree_nodes.childCount()):
+            for child_id in range(tree_nodes.child(group).childCount()):
+                assert node_name not in tree_nodes.child(group).child(
+                    child_id
+                ).text(0)
+
     def test_delete_node(self, qtbot, init_window) -> None:
         """
         Tests that the nodes are properly deleted from the schematic and the model
