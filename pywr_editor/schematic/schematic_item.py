@@ -275,7 +275,7 @@ class SchematicItem(QGraphicsItemGroup):
             return not self.model_node.is_virtual
 
     @property
-    def connected_nodes(self) -> dict:
+    def connected_nodes(self) -> dict[str, list[Edge] | int]:
         """
         Returns the connected nodes.
         :return: A dictionary with the following keys:
@@ -302,21 +302,20 @@ class SchematicItem(QGraphicsItemGroup):
         are not added.
         :return: True if the actions are added, False otherwise.
         """
-        connected_nodes = self.connected_nodes
         # always clear the menu first
         menu.clear()
 
-        if connected_nodes["count"] == 0:
+        if self.connected_nodes["count"] == 0:
             return False
 
-        for target_node in connected_nodes["target_nodes"]:
+        for target_node in self.connected_nodes["target_nodes"]:
             node_type = target_node.model_node.humanise_node_type
             action = menu.addAction(f"{target_node.name} ({node_type})")
             action.setData({"source_node": self, "target_node": target_node})
 
         menu.addSeparator()
 
-        for source_node in connected_nodes["source_nodes"]:
+        for source_node in self.connected_nodes["source_nodes"]:
             node_type = source_node.model_node.humanise_node_type
             action = menu.addAction(f"{source_node.name} ({node_type})")
             action.setData({"source_node": source_node, "target_node": self})
