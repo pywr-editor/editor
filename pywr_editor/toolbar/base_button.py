@@ -1,3 +1,4 @@
+from PySide6.QtCore import Slot
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import QToolButton, QWidget
 
@@ -39,10 +40,10 @@ class ToolbarBaseButton(QToolButton):
         self._update_status()
         # noinspection PyUnresolvedReferences
         self.clicked.connect(self.action.trigger)
-        if self.action.data() != "UndoStack":
-            # noinspection PyUnresolvedReferences
-            self.action.changed.connect(self._update_status)
+        # noinspection PyUnresolvedReferences
+        self.action.changed.connect(self._update_status)
 
+    @Slot()
     def _update_status(self) -> None:
         """
         Updates the button status when the action changes.
