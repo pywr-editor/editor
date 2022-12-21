@@ -69,18 +69,25 @@ class Edges:
         self,
         source_node_name: str,
         target_node_name: str,
+        slot_source: int | str | None = None,
+        slot_target: int | str | None = None,
     ) -> None:
         """
         Adds a new edge.
         :param source_node_name: The name of the source node.
         :param target_node_name: The name of the source node.
+        :param slot_source: The name of the source node slot. Optional.
+        :param slot_target: The name of the target node slot. Optional.
         :return: None
         """
-        self.model.json["edges"].append([source_node_name, target_node_name])
-        self.model.changes_tracker.add(
-            f"Added new edge from '{source_node_name}' "
-            + f"to '{target_node_name}'"
-        )
+        edge = [source_node_name, target_node_name]
+        if slot_source and not slot_target:
+            edge.append(slot_source)
+        elif (not slot_source and slot_target) or (slot_source and slot_target):
+            edge += [slot_source, slot_target]
+
+        self.model.json["edges"].append(edge)
+        self.model.changes_tracker.add(f"Added new edge: {edge}")
 
     def delete(
         self,

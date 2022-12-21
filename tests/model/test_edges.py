@@ -42,6 +42,24 @@ class TestEdges:
         assert edges.get_sources("Link2") == ["Link1", "Link3"]
         assert edges.get_sources("Link1") == ["Reservoir"]
 
+    @pytest.mark.parametrize(
+        "slot_source, slot_target, expected_slots",
+        [
+            ("slot1", None, ["slot1"]),
+            ("slot1", "slot2", ["slot1", "slot2"]),
+            (None, "slot2", [None, "slot2"]),
+            (None, None, []),
+        ],
+    )
+    def test_add_edge(self, slot_source, slot_target, expected_slots):
+        """
+        Tests the add edge method.
+        """
+        edges = self.edges("model_4.json")
+        edges.add("Node 1", "Node 2", slot_source, slot_target)
+        edge, _ = edges.find_edge_by_index("Node 1", "Node 2")
+        assert edge == ["Node 1", "Node 2"] + expected_slots
+
     def test_delete_edge1(self):
         """
         Tests that the edges are properly deleted.
