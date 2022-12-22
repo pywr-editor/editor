@@ -943,7 +943,7 @@ class Schematic(QGraphicsView):
             )
 
             # register the action in the undo stack
-            command = AddNodeCommand(schematic=self, node_config=node_props)
+            command = AddNodeCommand(schematic=self, added_node_dict=node_props)
             self.app.undo_stack.push(command)
         self.update()
 
