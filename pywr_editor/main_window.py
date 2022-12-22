@@ -36,7 +36,6 @@ from pywr_editor.utils import (
 
 
 class MainWindow(QMainWindow):
-    # noinspection PyTypeChecker
     warning_info_message = Signal(str, str, str)
     error_message = Signal(str, bool)
     status_message = Signal(str)

@@ -18,6 +18,7 @@ from pywr_editor.model import Edges, ModelConfig, NodeConfig
 from pywr_editor.node_shapes import get_node_icon_classes
 from pywr_editor.schematic import (
     DeleteNodeCommand,
+    AddNodeCommand,
     SchematicBBoxUtils,
     SchematicItem,
     scaling_factor,
@@ -53,6 +54,7 @@ class Schematic(QGraphicsView):
         :return: None
         """
         super().__init__(app)
+        self.init = True
         self.model_config = model_config
         self.app = app
         self.editor_settings = self.app.editor_settings
@@ -162,7 +164,7 @@ class Schematic(QGraphicsView):
                 )
 
             # draw the node
-            self.add_schematic_item(node_props=node_props)
+            self.add_node(node_props=node_props)
 
         # draw the edges
         model_edges = Edges(self.model_config)
@@ -187,6 +189,9 @@ class Schematic(QGraphicsView):
         # move nodes outside canvas
         self.adjust_nodes_initial_pos()
 
+        if self.init is True:
+            self.init = False
+
     def reload(self) -> None:
         """
         Reloads the scene and schematic.
@@ -196,9 +201,9 @@ class Schematic(QGraphicsView):
         self.add_scene_decorations()
         self.draw()
 
-    def add_schematic_item(self, node_props: dict) -> SchematicItem:
+    def add_node(self, node_props: dict) -> SchematicItem:
         """
-        Adds and register a new graphical node to the schematic.
+        Adds and registers a new graphical node to the schematic.
         :param node_props: The dictionary with the node properties.
         :return: The graphical node instance.
         """
@@ -207,6 +212,54 @@ class Schematic(QGraphicsView):
         self.schematic_items[node_obj.name] = node_obj
 
         return node_obj
+
+    def delete_node(self, node_name: str) -> list[list[str | int]]:
+        """
+        Deletes the provided node and its edges from the schematic and model
+        configuration.
+        :param node_name: The node name.
+        :return: The list of model edges that were deleted.
+        """
+        # find the node shape on the schematic
+        node_item = self.schematic_items[node_name]
+        deleted_edges: list[list[str]] = []
+
+        # delete edges on the schematic when node is source node
+        for c_node in node_item.connected_nodes["target_nodes"]:
+            for ei, edge_item in enumerate(c_node.edges):
+                if edge_item.source.name == node_item.name:
+                    deleted_edges.append(self.delete_edge(edge_item))
+                    del c_node.edges[ei]
+                    break
+
+        # delete edges on the schematic when node is target node
+        for c_node in node_item.connected_nodes["source_nodes"]:
+            for ei, edge_item in enumerate(c_node.edges):
+                if edge_item.target.name == node_item.name:
+                    deleted_edges.append(self.delete_edge(edge_item))
+                    del c_node.edges[ei]
+                    break
+
+        # remove the graphic item in schematic and model config
+        self.model_config.nodes.delete(node_name)
+        del self.schematic_items[node_name]
+        self.scene.removeItem(node_item)
+
+        return deleted_edges
+
+    def delete_edge(self, edge_item: Edge) -> list[str | int]:
+        """
+        Deletes the edge from the schematic and model configuration.
+        :param edge_item: The schematic Edge instance.
+        :return: The deleted model edge (nodes and slot names).
+        """
+        self.scene.removeItem(edge_item)
+        # delete edge from model config and returned deleted model edge
+        edge, _ = self.model_config.edges.find_edge_by_index(
+            edge_item.source.name, edge_item.target.name
+        )
+        self.model_config.edges.delete(edge)
+        return edge
 
     def add_abort_node_connection_button(self) -> None:
         """
@@ -283,7 +336,8 @@ class Schematic(QGraphicsView):
                 node.save_position_if_moved()
                 moved_nodes_count += 1
 
-        if moved_nodes_count > 0:
+        # print message only when the schematic is first drawn
+        if moved_nodes_count > 0 and self.init:
             if moved_nodes_count == 1:
                 message = f"{moved_nodes_count} node was outside the schematic canvas "
                 message += "and it has been\nmoved to lie within the canvas."
@@ -889,23 +943,10 @@ class Schematic(QGraphicsView):
                 node_type=node_type,
                 position=self.mapToScene(event.pos()).toTuple(),
             )
-            self.model_config.nodes.add(node_props)
-            # add the node to the schematic
-            node_obj = self.add_schematic_item(node_props=node_props)
 
-            # check that the node is fully inside the canvas
-            node_obj.adjust_node_position()
-
-            # add message in status bar
-            node_type_label = self.model_config.pywr_node_data.name(node_type)
-            if node_type_label is None:
-                node_type_label = node_type
-            # noinspection PyUnresolvedReferences
-            self.app.status_message.emit(
-                f'Added new node of type "{node_type_label}"'
-            )
-            # reload tree
-            self.app.components_tree.reload()
+            # register the action in the undo stack
+            command = AddNodeCommand(schematic=self, node_config=node_props)
+            self.app.undo_stack.push(command)
         self.update()
 
     def on_scene_change(self) -> None:
