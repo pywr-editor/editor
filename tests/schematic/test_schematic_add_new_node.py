@@ -134,7 +134,7 @@ class TestAddNodes:
             model_config.nodes.find_node_index_by_name(new_new_node_name)
             is None
         )
-        edge, _ = model_config.edges.find_edge_by_index(*new_edge[0:2])
+        edge, _ = model_config.edges.find_edge(*new_edge[0:2])
         assert edge is None
         assert undo_command.deleted_edges[0] == new_edge
 
@@ -165,7 +165,7 @@ class TestAddNodes:
             model_config.nodes.get_node_config_from_name(new_new_node_name)
             == node_dict
         )
-        edge, _ = model_config.edges.find_edge_by_index(*new_edge[0:2])
+        edge, _ = model_config.edges.find_edge(*new_edge[0:2])
         assert edge == new_edge
         assert undo_command.deleted_edges[0] == new_edge
 
