@@ -81,11 +81,12 @@ class Edges:
         :return: None
         """
         edge = [source_node_name, target_node_name]
-        if slot_source and not slot_target:
+        if slot_source is not None and slot_target is None:
             edge.append(slot_source)
-        elif (not slot_source and slot_target) or (slot_source and slot_target):
+        elif (slot_source is None and slot_target is not None) or (
+            slot_source is not None and slot_target is not None
+        ):
             edge += [slot_source, slot_target]
-
         self.model.json["edges"].append(edge)
         self.model.changes_tracker.add(f"Added new edge: {edge}")
 
