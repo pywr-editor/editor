@@ -186,6 +186,7 @@ class TestSchematicNodes:
         original_edges = [
             edge for edge in model_config.edges.get_all() if node_name in edge
         ]
+
         panel = schematic.app.toolbar.tabs["Nodes"].panels["Undo"]
         undo_button = panel.buttons["Undo"]
         redo_button = panel.buttons["Redo"]
@@ -226,6 +227,12 @@ class TestSchematicNodes:
         # mock node renaming in NodeDialogForm
         model_config.nodes.rename(node_name, new_name)
         schematic.reload()
+        for oi, or_edge in enumerate(original_edges):
+            try:
+                i = or_edge.index(node_name)
+                original_edges[oi][i] = or_edge[i].replace(node_name, new_name)
+            except IndexError:
+                continue
 
         # 4. Test redo operation
         # get new schematic item instance
