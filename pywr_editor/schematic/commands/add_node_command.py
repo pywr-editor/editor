@@ -28,6 +28,7 @@ class AddNodeCommand(QUndoCommand):
         self.node_config: NodeConfig | None = None
         self.model_config = self.schematic.model_config
         self.deleted_edges: list[list[str | int]] = []
+        self.setText("add new node")
 
     def redo(self) -> None:
         """
