@@ -1,8 +1,7 @@
 import pytest
 from typing import Tuple
 from PySide6.QtCore import Qt, QPoint
-from PySide6.QtGui import QKeySequence
-
+from PySide6.QtWidgets import QPushButton
 from pywr_editor import MainWindow
 from pywr_editor.model import ModelConfig
 from pywr_editor.schematic import (
@@ -87,48 +86,34 @@ class TestSchematicNodes:
                     child_id
                 ).text(0)
 
-    def test_delete_node(self, qtbot, init_window) -> None:
+    @staticmethod
+    def undo_and_check(
+        qtbot,
+        undo_command: DeleteNodeCommand,
+        original_node_config: dict,
+        original_edges: list[str | int],
+        undo_button: QPushButton,
+        redo_button: QPushButton,
+        model_config: ModelConfig,
+        schematic: Schematic,
+    ) -> None:
         """
-        Tests that the nodes are properly deleted from the schematic and the model
-        configuration.
+        Undo the node deletion action and check that the node and its edges are
+        properly restored.
+        :param qtbot: The qtbot instance.
+        :param undo_command: The undo command instance.
+        :param original_node_config: The config dictionary of the deleted node.
+        :param original_edges: The list of edges of the deleted node.
+        :param undo_button: The undo button instance.
+        :param redo_button: The redo button instance.
+        :param model_config: The ModelConfig instance.
+        :param schematic: The schematic instance.
+        :return: None
         """
-        node_name = "Link2"
-        window, schematic, node_op_panel = init_window
-        model_config = schematic.model_config
-        original_node_config = model_config.nodes.get_node_config_from_name(
-            node_name
+        node_name = original_node_config["name"]
+        assert (
+            undo_command.deleted_node_configs[0].props == original_node_config
         )
-        original_edges = [
-            edge for edge in model_config.edges.get_all() if node_name in edge
-        ]
-        panel = schematic.app.toolbar.tabs["Nodes"].panels["Undo"]
-        undo_button = panel.buttons["Undo"]
-        redo_button = panel.buttons["Redo"]
-
-        node = schematic.schematic_items[node_name]
-        removed_edges = node.edges
-        node.on_delete_node()
-
-        assert undo_button.isEnabled() is True
-        assert redo_button.isEnabled() is False
-        assert model_config.has_changes is True
-
-        # 1. Check node and edges
-        self.is_node_deleted(
-            model_config=model_config,
-            node_name=node_name,
-            schematic=schematic,
-            removed_edges=removed_edges,
-        )
-
-        # 2. Test undo operation
-        assert window.undo_stack.canUndo() is True
-        undo_command: DeleteNodeCommand = window.undo_stack.command(0)
-
-        # check internal status
-        assert undo_command.deleted_node_configs == {
-            node_name: original_node_config
-        }
         assert sorted(undo_command.deleted_edges) == sorted(original_edges)
 
         # undo
@@ -137,7 +122,10 @@ class TestSchematicNodes:
         assert redo_button.isEnabled() is True
 
         # node is restored
-        assert model_config.nodes.find_node_index_by_name(node_name) is not None
+        assert (
+            model_config.nodes.get_node_config_from_name(node_name)
+            == original_node_config
+        )
         assert node_name in schematic.schematic_items.keys()
         node_names = [
             node.name
@@ -182,9 +170,64 @@ class TestSchematicNodes:
             ]
         ]
 
-        # 3. Test redo operation
-        # get new schematic item instance
+    def test_delete_node(self, qtbot, init_window) -> None:
+        """
+        Tests that the nodes are properly deleted from the schematic and the model
+        configuration.
+        """
+        node_name = "Link2"
+        window, schematic, node_op_panel = init_window
+        model_config = schematic.model_config
+        original_node_config: dict = (
+            model_config.nodes.get_node_config_from_name(node_name)
+        )
+        original_edges = [
+            edge for edge in model_config.edges.get_all() if node_name in edge
+        ]
+        panel = schematic.app.toolbar.tabs["Nodes"].panels["Undo"]
+        undo_button = panel.buttons["Undo"]
+        redo_button = panel.buttons["Redo"]
+
         node = schematic.schematic_items[node_name]
+        removed_edges = node.edges
+        node.on_delete_node()
+
+        assert undo_button.isEnabled() is True
+        assert redo_button.isEnabled() is False
+        assert model_config.has_changes is True
+
+        # 1. Check node and edges
+        self.is_node_deleted(
+            model_config=model_config,
+            node_name=node_name,
+            schematic=schematic,
+            removed_edges=removed_edges,
+        )
+
+        # 2. Test undo operation
+        assert window.undo_stack.canUndo() is True
+        undo_command: DeleteNodeCommand = window.undo_stack.command(0)
+        self.undo_and_check(
+            qtbot=qtbot,
+            undo_command=undo_command,
+            original_node_config=original_node_config,
+            original_edges=original_edges,
+            undo_button=undo_button,
+            redo_button=redo_button,
+            model_config=model_config,
+            schematic=schematic,
+        )
+
+        # 3. Rename node to test the new node configuration is used when the node
+        # is restored
+        new_name = "New node name"
+        # mock node renaming in NodeDialogForm
+        model_config.nodes.rename(node_name, new_name)
+        schematic.reload()
+
+        # 4. Test redo operation
+        # get new schematic item instance
+        node = schematic.schematic_items[new_name]
         removed_edges = node.edges
 
         qtbot.mouseClick(redo_button, Qt.MouseButton.LeftButton)
@@ -193,9 +236,22 @@ class TestSchematicNodes:
 
         self.is_node_deleted(
             model_config=model_config,
-            node_name=node_name,
+            node_name=new_name,
             schematic=schematic,
             removed_edges=removed_edges,
+        )
+
+        # 5. Restore node with new configuration
+        assert original_node_config["name"] == new_name
+        self.undo_and_check(
+            qtbot=qtbot,
+            undo_command=undo_command,
+            original_node_config=original_node_config,
+            original_edges=original_edges,
+            undo_button=undo_button,
+            redo_button=redo_button,
+            model_config=model_config,
+            schematic=schematic,
         )
 
     def test_delete_nodes(self, qtbot, init_window) -> None:
@@ -208,7 +264,7 @@ class TestSchematicNodes:
         deleted_schematic_edge_dict = {}
         original_node_config_dict = {
             node_name: model_config.nodes.get_node_config_from_name(node_name)
-            for node_name in nodes_to_delete
+            for node_name in sorted(nodes_to_delete)
         }
         original_edges = [
             edge
@@ -246,7 +302,10 @@ class TestSchematicNodes:
         # 3. Undo operation
         assert window.undo_stack.canUndo() is True
         undo_command: DeleteNodeCommand = window.undo_stack.command(0)
-        assert undo_command.deleted_node_configs == original_node_config_dict
+        for ni, node_config in enumerate(undo_command.deleted_node_configs):
+            assert (
+                node_config.props == original_node_config_dict[node_config.name]
+            )
         assert sorted(undo_command.deleted_edges) == sorted(original_edges)
 
         # undo
