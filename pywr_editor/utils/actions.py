@@ -84,9 +84,8 @@ class Actions:
         :param icon: The icon path to set for the action.
         :return: The QAction instance.
         """
-        action_obj = self.window.undo_stack.createUndoAction(
-            self.window, "Undo"
-        )
+        action_obj = self.window.undo_stack.createUndoAction(self.window)
+        action_obj.setText("Undo")
         action_obj.setData("UndoStack")
         action_obj.setShortcut(QKeySequence.StandardKey.Undo)
         action_obj.setIcon(QIcon(icon))
@@ -104,9 +103,7 @@ class Actions:
         :param icon: The icon path to set for the action.
         :return: The QAction instance.
         """
-        action_obj = self.window.undo_stack.createRedoAction(
-            self.window, "Redo"
-        )
+        action_obj = self.window.undo_stack.createRedoAction(self.window)
         action_obj.setData("UndoStack")
         action_obj.setShortcut(QKeySequence.StandardKey.Redo)
         action_obj.setIcon(QIcon(icon))
