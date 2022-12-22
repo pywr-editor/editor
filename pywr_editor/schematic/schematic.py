@@ -979,6 +979,7 @@ class Schematic(QGraphicsView):
         add_edge_action = self.app.actions.get("add-edge")
         edit_node_action = self.app.actions.get("edit-node")
         delete_node_action = self.app.actions.get("delete-node")
+        select_node_action = self.app.actions.get("select-none")
 
         # always disconnect the signals
         try:
@@ -1006,24 +1007,24 @@ class Schematic(QGraphicsView):
                 else:
                     delete_edge_action.setDisabled(True)
 
-                # noinspection PyUnresolvedReferences
                 add_edge_action.triggered.connect(
                     lambda *args, node=item: self.on_connect_node_start(node)
                 )
                 add_edge_action.setDisabled(False)
 
             # edit node
-            # noinspection PyUnresolvedReferences
             edit_node_action.triggered.connect(item.on_edit_node)
             edit_node_action.setDisabled(False)
 
             # delete node
-            # noinspection PyUnresolvedReferences
             delete_node_action.triggered.connect(item.on_delete_node)
             delete_node_action.setDisabled(False)
+
+            # select none
+            select_node_action.setDisabled(False)
         elif items_count > 1:
             # delete multiple selected nodes
-            # noinspection PyUnresolvedReferences
+            # noinspection PyDefaultArgument
             delete_node_action.triggered.connect(
                 lambda *args, nodes=selected_items: self.on_delete_nodes(nodes)
             )
@@ -1032,6 +1033,7 @@ class Schematic(QGraphicsView):
         if items_count == 0:
             edit_node_action.setDisabled(True)
             delete_node_action.setDisabled(True)
+            select_node_action.setDisabled(True)
 
         if items_count != 1:
             add_edge_action.setDisabled(True)

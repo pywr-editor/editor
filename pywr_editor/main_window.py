@@ -309,6 +309,7 @@ class MainWindow(QMainWindow):
                 tooltip="De-select all nodes on the schematic",
                 shortcut=QKeySequence.Deselect,
                 connection=self.schematic.de_select_all_items,
+                is_disabled=True,
             )
         )
         self.actions.add_undo(icon=":/toolbar/undo")
