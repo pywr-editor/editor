@@ -36,6 +36,10 @@ class DeleteNodeCommand(QUndoCommand):
         # is renamed, the lists are updated because ref is used
         self.deleted_edges: list[list[str | int]] = []
 
+        total_nodes = len(self.deleted_node_configs)
+        prefix = "node" if total_nodes == 1 else "nodes"
+        self.setText(f"delete {total_nodes} {prefix}")
+
     def redo(self) -> None:
         """
         Deletes the nodes and their edges from the schematic and model configuration.
@@ -79,13 +83,13 @@ class DeleteNodeCommand(QUndoCommand):
         """
         # add nodes
         for node_config in self.deleted_node_configs:
-            self.logger.debug(f"Restoring node config: {node_config.props}")
             self.model_config.nodes.add(node_config.props)
+            self.logger.debug(f"Restored node config: {node_config.props}")
 
         # add edges
         for edge in self.deleted_edges:
-            self.logger.debug(f"Restoring edge: [{edge[0]}, {edge[1]}]")
-            self.model_config.edges.add(edge[0], edge[1])
+            self.model_config.edges.add(*edge)
+            self.logger.debug(f"Restored edge: {edge}")
 
         # emit the status message
         status_message = (
