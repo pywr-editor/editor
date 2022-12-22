@@ -147,7 +147,7 @@ class Edges:
             return NodeConfig(node_config).edge_color
         return None
 
-    def find_edge_by_index(
+    def find_edge(
         self, source_node_name: str, target_node_name: str
     ) -> tuple[list, int] | tuple[None, None]:
         """
@@ -178,7 +178,7 @@ class Edges:
         """
         if slot_pos not in [1, 2]:
             raise ValueError("slot_pos can only be 1 or 2")
-        edge, _ = self.find_edge_by_index(source_node_name, target_node_name)
+        edge, _ = self.find_edge(source_node_name, target_node_name)
 
         try:
             return edge[slot_pos + 1]
@@ -215,7 +215,7 @@ class Edges:
         if slot_name == "":
             slot_name = None
 
-        edge, ei = self.find_edge_by_index(source_node_name, target_node_name)
+        edge, ei = self.find_edge(source_node_name, target_node_name)
         if edge:
             # no slots are set
             if len(edge) == 2:

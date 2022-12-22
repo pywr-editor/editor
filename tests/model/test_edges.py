@@ -57,7 +57,7 @@ class TestEdges:
         """
         edges = self.edges("model_4.json")
         edges.add("Node 1", "Node 2", slot_source, slot_target)
-        edge, _ = edges.find_edge_by_index("Node 1", "Node 2")
+        edge, _ = edges.find_edge("Node 1", "Node 2")
         assert edge == ["Node 1", "Node 2"] + expected_slots
 
     def test_delete_edge1(self):
@@ -126,14 +126,14 @@ class TestEdges:
         Test the find_edge_by_index method.
         """
         edges = self.edges("model_2.json")
-        assert edges.find_edge_by_index("Reservoir", "Link22") == (
+        assert edges.find_edge("Reservoir", "Link22") == (
             [
                 "Reservoir",
                 "Link22",
             ],
             1,
         )
-        assert edges.find_edge_by_index("Reservoir", "Missing") == (None, None)
+        assert edges.find_edge("Reservoir", "Missing") == (None, None)
 
     @pytest.mark.parametrize(
         "source, target, slot_pos, expected_slot_name",
@@ -215,5 +215,5 @@ class TestEdges:
             slot_pos=slot_pos,
             slot_name=slot_name,
         )
-        edge, _ = edges.find_edge_by_index(source, target)
+        edge, _ = edges.find_edge(source, target)
         assert edge == [source, target] + expected_slots

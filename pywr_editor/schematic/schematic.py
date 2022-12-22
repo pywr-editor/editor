@@ -256,7 +256,7 @@ class Schematic(QGraphicsView):
         """
         self.scene.removeItem(edge_item)
         # delete edge from model config and returned deleted model edge
-        edge, _ = self.model_config.edges.find_edge_by_index(
+        edge, _ = self.model_config.edges.find_edge(
             edge_item.source.name, edge_item.target.name
         )
         self.model_config.edges.delete(edge)
