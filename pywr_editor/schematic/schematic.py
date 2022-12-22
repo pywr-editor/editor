@@ -199,6 +199,7 @@ class Schematic(QGraphicsView):
         """
         self.scene.clear()
         self.add_scene_decorations()
+        self.schematic_items = {}
         self.draw()
 
     def add_node(self, node_props: dict) -> SchematicItem:
