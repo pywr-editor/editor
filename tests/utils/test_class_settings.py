@@ -28,7 +28,7 @@ class TestSettings:
         assert config.json_file is not None
 
         # set new geometry, save it and restore it
-        new_geometry = (30, 30, 1080, 806)
+        new_geometry = (30, 30, 1200, 806)
         window.setGeometry(*new_geometry)
         config.save_window_attributes(window)
         config.restore_window_attributes(window)
