@@ -1,7 +1,7 @@
 from typing import Tuple
 
 import pytest
-from PySide6.QtCore import QPoint, Qt
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QPushButton
 
 from pywr_editor import MainWindow
@@ -382,46 +382,3 @@ class TestSchematicNodes:
                 schematic=schematic,
                 removed_edges=deleted_schematic_edge_dict[node_name],
             )
-
-    def test_connect_node(self, qtbot, init_window):
-        """
-        Tests when a node is connected to another one.
-        """
-        window, schematic, node_op_panel = init_window
-        model_config = schematic.model_config
-
-        # select Link3
-        source_point = schematic.mapFromScene(QPoint(50, 500))
-        qtbot.mouseMove(schematic, source_point, -1)
-        qtbot.mouseClick(
-            schematic.viewport(),
-            Qt.MouseButton.LeftButton,
-            Qt.NoModifier,
-            source_point,
-        )
-        found = False
-        for node in schematic.items():
-            if isinstance(node, SchematicItem) and node.name == "Link3":
-                found = True
-                assert node.isSelected() is True
-        assert found is True
-
-        # enable connect mode
-        qtbot.mouseClick(
-            node_op_panel.buttons["Connect"], Qt.MouseButton.LeftButton
-        )
-
-        # select the target node Reservoir
-        target_point = schematic.mapFromScene(QPoint(200, 500))
-        qtbot.mouseMove(schematic.viewport(), target_point, -1)
-        qtbot.mouseClick(
-            schematic.viewport(),
-            Qt.MouseButton.LeftButton,
-            Qt.NoModifier,
-            target_point,
-        )
-
-        assert model_config.edges.get_targets("Link3") == [
-            "Link2",
-            "Reservoir",
-        ]
