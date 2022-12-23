@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Optional, Union
+from typing import TYPE_CHECKING, Any, Literal, Optional, Union
 
 import PySide6
 from PySide6.QtCore import Slot
@@ -277,8 +277,25 @@ class SchematicItem(QGraphicsItemGroup):
         else:
             return not self.model_node.is_virtual
 
+    def delete_edge(
+        self, node_name: str, edge_type: Literal["source", "target"]
+    ) -> Edge | None:
+        """
+        Deletes an Edge instance from the list of stores edges for the node.
+        :param node_name: The node name to delete.
+        :param edge_type: The edge to delete ("source" or "target").
+        :return: None
+        """
+        if edge_type not in ["source", "target"]:
+            raise ValueError("edge_type can only be 'source' or 'target'")
+
+        for ei, edge_item in enumerate(self.edges):
+            if getattr(edge_item, edge_type).name == node_name:
+                del self.edges[ei]
+                return edge_item
+
     @property
-    def connected_nodes(self) -> dict[str, list[Edge] | int]:
+    def connected_nodes(self) -> dict[str, list["SchematicItem"] | int]:
         """
         Returns the connected nodes.
         :return: A dictionary with the following keys:
