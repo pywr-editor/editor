@@ -1,15 +1,9 @@
 [tool.black]
 line-length = 80
-
 [tool.pytest_ini_options]
-testpaths = [
-    "test"
-]
-required_plugins = [
-    "pytest-qt"
-]
+testpaths = ["test"]
+required_plugins = ["pytest-qt"]
 qt_api = "pyside6"
-
 [tool.bumpver]
 current_version = "1.1.0"
 version_pattern = "MAJOR.MINOR.PATCH"
@@ -17,7 +11,6 @@ commit_message = "bump version {old_version} -> {new_version}"
 commit = true
 tag = true
 push = false
-
 [tool.bumpver.file_patterns]
 "pyproject.toml" = [
     'current_version = "{version}"',
@@ -26,4 +19,7 @@ push = false
     '^__version__ = "{version}"$',
     '^__build_date__ = "YYYY-MM-DD"$',
 ]
-
+[tool.isort]
+profile = "black"
+# some imports have different priorities (see form module)
+skip = ["__init__.py"]
