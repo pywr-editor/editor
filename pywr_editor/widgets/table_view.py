@@ -1,14 +1,17 @@
-import PySide6
 from typing import Union
+
+import PySide6
 from PySide6.QtCore import (
-    QItemSelectionModel,
-    Slot,
     QAbstractTableModel,
+    QItemSelectionModel,
     QModelIndex,
+    Slot,
 )
 from PySide6.QtGui import Qt
-from PySide6.QtWidgets import QTableView, QPushButton, QWidget
+from PySide6.QtWidgets import QPushButton, QTableView, QWidget
+
 from pywr_editor.style import Color, stylesheet_dict_to_str
+
 from .list_view import ListView
 
 

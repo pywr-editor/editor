@@ -1,9 +1,10 @@
 import pytest
-from PySide6.QtCore import Qt, QPoint, QItemSelectionModel
+from PySide6.QtCore import QItemSelectionModel, QPoint, Qt
 from PySide6.QtWidgets import QLabel
-from pywr_editor.model import ModelConfig
+
 from pywr_editor.dialogs import NodeDialog
 from pywr_editor.form import SlotsTableWidget
+from pywr_editor.model import ModelConfig
 from tests.utils import resolve_model_path
 
 

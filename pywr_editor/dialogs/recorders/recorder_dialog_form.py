@@ -1,14 +1,17 @@
-from PySide6.QtCore import Slot
 from typing import TYPE_CHECKING
+
+from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QPushButton
-from .recorders_list_model import RecordersListModel
-from pywr_editor.model import ModelConfig
+
 from pywr_editor.form import (
     FormValidation,
-    RecorderTypeSelectorWidget,
     RecorderForm,
+    RecorderTypeSelectorWidget,
 )
+from pywr_editor.model import ModelConfig
 from pywr_editor.utils import Logging
+
+from .recorders_list_model import RecordersListModel
 
 if TYPE_CHECKING:
     from .recorder_page_widget import RecorderPageWidget

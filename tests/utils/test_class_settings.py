@@ -1,6 +1,7 @@
 from PySide6.QtCore import QPointF
+
 from pywr_editor import MainWindow
-from tests.utils import resolve_model_path, model_path
+from tests.utils import model_path, resolve_model_path
 
 
 class TestSettings:

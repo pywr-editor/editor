@@ -1,4 +1,4 @@
-from pywr_editor.form import FormValidation, FloatWidget, FormField
+from pywr_editor.form import FloatWidget, FormField, FormValidation
 
 """
  This widget handles the "score" argument when the recorder "agg_func" or

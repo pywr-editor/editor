@@ -1,23 +1,22 @@
-from PySide6.QtCore import Slot
-from PySide6.QtWidgets import (
-    QHBoxLayout,
-)
 from pandas import DataFrame
-from pywr_editor.widgets import ComboBox
+from PySide6.QtCore import Slot
+from PySide6.QtWidgets import QHBoxLayout
+
 from pywr_editor.form import (
+    FormCustomWidget,
+    FormField,
+    FormValidation,
+    SourceSelectorWidget,
     TableSelectorWidget,
     UrlWidget,
-    SourceSelectorWidget,
-    FormCustomWidget,
-    FormValidation,
-    FormField,
 )
 from pywr_editor.utils import (
-    get_signal_sender,
     Logging,
-    get_columns,
     are_columns_valid,
+    get_columns,
+    get_signal_sender,
 )
+from pywr_editor.widgets import ComboBox
 
 
 class ColumnWidget(FormCustomWidget):

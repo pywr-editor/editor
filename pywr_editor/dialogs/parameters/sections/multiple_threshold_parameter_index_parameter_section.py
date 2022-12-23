@@ -1,9 +1,10 @@
+from pywr_editor.form import ModelParameterPickerWidget
+
 from ..parameter_dialog_form import ParameterDialogForm
 from .abstract_threshold_parameter_section import ValueDict
 from .abstract_thresholds_parameter_section import (
     AbstractThresholdsParameterSection,
 )
-from pywr_editor.form import ModelParameterPickerWidget
 
 
 class MultipleThresholdParameterIndexParameterSection(

@@ -1,20 +1,21 @@
 import pytest
-import pywr_editor
-from PySide6.QtCore import Qt, QTimer, QItemSelectionModel
+from PySide6.QtCore import QItemSelectionModel, Qt, QTimer
 from PySide6.QtTest import QSignalSpy
-from PySide6.QtWidgets import QLabel, QPushButton, QApplication, QLineEdit
-from pywr_editor.model import ModelConfig, PywrParametersData
+from PySide6.QtWidgets import QApplication, QLabel, QLineEdit, QPushButton
+
+import pywr_editor
 from pywr_editor.dialogs import (
-    ParameterDialogForm,
-    ParametersDialog,
     ConstantParameterSection,
     MonthlyProfileParameterSection,
+    ParameterDialogForm,
+    ParametersDialog,
 )
 from pywr_editor.dialogs.parameters.parameter_empty_page_widget import (
     ParameterEmptyPageWidget,
 )
-from pywr_editor.form import ParameterTypeSelectorWidget, FormField
-from tests.utils import resolve_model_path, close_message_box
+from pywr_editor.form import FormField, ParameterTypeSelectorWidget
+from pywr_editor.model import ModelConfig, PywrParametersData
+from tests.utils import close_message_box, resolve_model_path
 
 
 class TestParametersDialog:

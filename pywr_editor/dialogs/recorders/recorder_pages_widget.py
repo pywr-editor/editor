@@ -1,8 +1,11 @@
-from PySide6.QtWidgets import QStackedWidget
 from typing import TYPE_CHECKING
+
+from PySide6.QtWidgets import QStackedWidget
+
+from pywr_editor.model import ModelConfig
+
 from .recorder_empty_page_widget import RecorderEmptyPageWidget
 from .recorder_page_widget import RecorderPageWidget
-from pywr_editor.model import ModelConfig
 
 if TYPE_CHECKING:
     from .recorders_dialog import RecordersDialog

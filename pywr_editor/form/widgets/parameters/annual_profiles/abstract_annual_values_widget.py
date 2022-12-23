@@ -1,18 +1,20 @@
 import traceback
-import PySide6
 from typing import TYPE_CHECKING
+
+import PySide6
 from PySide6.QtAxContainer import QAxObject
-from PySide6.QtCore import Slot, Qt, QCoreApplication
+from PySide6.QtCore import QCoreApplication, Qt, Slot
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtWidgets import (
-    QVBoxLayout,
-    QStyledItemDelegate,
     QHBoxLayout,
     QMessageBox,
+    QStyledItemDelegate,
+    QVBoxLayout,
 )
+
+from pywr_editor.form import FormCustomWidget, ProfilePlotDialog
 from pywr_editor.utils import Logging, is_windows
-from pywr_editor.form import ProfilePlotDialog, FormCustomWidget
-from pywr_editor.widgets import TableView, DoubleSpinBox, PushIconButton
+from pywr_editor.widgets import DoubleSpinBox, PushIconButton, TableView
 
 if TYPE_CHECKING:
     from pywr_editor.dialogs import ParameterDialogForm

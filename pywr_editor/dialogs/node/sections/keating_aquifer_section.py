@@ -1,13 +1,15 @@
 from typing import Any
-from ..node_dialog_form import NodeDialogForm
+
 from pywr_editor.form import (
-    FormSection,
-    KeatingStreamsWidget,
     FloatWidget,
-    TableValuesWidget,
+    FormSection,
     FormValidation,
+    KeatingStreamsWidget,
+    TableValuesWidget,
 )
 from pywr_editor.utils import Logging
+
+from ..node_dialog_form import NodeDialogForm
 
 
 class KeatingAquiferSection(FormSection):

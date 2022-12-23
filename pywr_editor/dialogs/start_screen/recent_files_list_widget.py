@@ -1,6 +1,8 @@
-import PySide6
 from pathlib import Path
 from typing import TYPE_CHECKING
+
+import PySide6
+from PySide6.QtCore import QRect, QSize, Qt
 from PySide6.QtGui import QFont, QFontMetrics
 from PySide6.QtWidgets import (
     QListWidget,
@@ -8,9 +10,9 @@ from PySide6.QtWidgets import (
     QSizePolicy,
     QStyledItemDelegate,
 )
-from PySide6.QtCore import QSize, Qt, QRect
+
 from pywr_editor.style import Color, stylesheet_dict_to_str
-from pywr_editor.utils import browse_files, Settings, JumpList
+from pywr_editor.utils import JumpList, Settings, browse_files
 
 if TYPE_CHECKING:
     from .left_widget import StartScreenLeftWidget

@@ -1,19 +1,22 @@
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
+
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QMessageBox, QPushButton
-from .tables_list_model import TablesListModel
-from .table_url_widget import TableUrlWidget
-from pywr_editor.model import JsonUtils, ModelConfig
-from pywr_editor.utils import get_columns
+
 from pywr_editor.form import (
-    ParseDatesWidget,
-    IndexColWidget,
-    SheetNameWidget,
-    H5KeyWidget,
+    FieldConfig,
     Form,
     FormValidation,
-    FieldConfig,
+    H5KeyWidget,
+    IndexColWidget,
+    ParseDatesWidget,
+    SheetNameWidget,
 )
+from pywr_editor.model import JsonUtils, ModelConfig
+from pywr_editor.utils import get_columns
+
+from .table_url_widget import TableUrlWidget
+from .tables_list_model import TablesListModel
 
 if TYPE_CHECKING:
     from .table_page_widget import TablePageWidget

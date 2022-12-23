@@ -1,8 +1,9 @@
 import pytest
 from PySide6.QtTest import QSignalSpy
-from pywr_editor.model import ModelConfig
+
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.form import ParseDatesWidget, FormField
+from pywr_editor.form import FormField, ParseDatesWidget
+from pywr_editor.model import ModelConfig
 from tests.utils import resolve_model_path
 
 

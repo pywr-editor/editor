@@ -1,8 +1,11 @@
-from PySide6.QtWidgets import QStackedWidget
 from typing import TYPE_CHECKING
-from .scenario_page_widget import ScenarioPageWidget
-from .scenario_empty_page_widget import ScenarioEmptyPageWidget
+
+from PySide6.QtWidgets import QStackedWidget
+
 from pywr_editor.model import ModelConfig
+
+from .scenario_empty_page_widget import ScenarioEmptyPageWidget
+from .scenario_page_widget import ScenarioPageWidget
 
 if TYPE_CHECKING:
     from .scenarios_dialog import ScenariosDialog

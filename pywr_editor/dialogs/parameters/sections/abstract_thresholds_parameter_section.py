@@ -1,8 +1,8 @@
-from ..parameter_dialog_form import ParameterDialogForm
-from .abstract_threshold_parameter_section import ValueDict
-from pywr_editor.form import ParametersListPickerWidget, FormSection
+from pywr_editor.form import FormSection, ParametersListPickerWidget
 from pywr_editor.utils import Logging
 
+from ..parameter_dialog_form import ParameterDialogForm
+from .abstract_threshold_parameter_section import ValueDict
 
 """
   Abstract section class to use for threshold

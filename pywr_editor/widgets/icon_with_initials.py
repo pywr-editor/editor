@@ -1,17 +1,19 @@
-import PySide6
 from typing import Literal
+
+import PySide6
 from PySide6.QtCore import QRect
 from PySide6.QtGui import (
     QFont,
     QIconEngine,
+    QImage,
     QPainter,
     QPen,
-    QTextOption,
-    Qt,
-    QImage,
-    qRgba,
     QPixmap,
+    Qt,
+    QTextOption,
+    qRgba,
 )
+
 from pywr_editor.style import Color, ColorName
 
 

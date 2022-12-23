@@ -1,7 +1,9 @@
+from typing import TYPE_CHECKING
+
+from pywr_editor.style import Color
+
 from ..base_reservoir import BaseReservoir
 from .pywr_node import PywrNode
-from pywr_editor.style import Color
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from pywr_editor.schematic import SchematicItem

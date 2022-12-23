@@ -1,9 +1,10 @@
 import pytest
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QPushButton
+
+from pywr_editor.dialogs import ParameterDialogForm, ParametersDialog
+from pywr_editor.form import FloatWidget, FormField, ValueWidget
 from pywr_editor.model import ModelConfig
-from pywr_editor.dialogs import ParametersDialog, ParameterDialogForm
-from pywr_editor.form import ValueWidget, FloatWidget, FormField
 from tests.utils import resolve_model_path
 
 

@@ -1,14 +1,12 @@
 import pytest
-from PySide6.QtWidgets import (
-    QPushButton,
-    QWidget,
-)
-from pywr_editor.model import ModelConfig, ParameterConfig
+from PySide6.QtWidgets import QPushButton, QWidget
+
 from pywr_editor.form import (
-    ParameterForm,
     AbstractStringComboBoxWidget,
     FormField,
+    ParameterForm,
 )
+from pywr_editor.model import ModelConfig, ParameterConfig
 
 default_labels_map = {"apple": "Apple", "cider": "Cider", "pear": "Pear"}
 

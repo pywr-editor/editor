@@ -1,4 +1,4 @@
-from pywr_editor.form import FormField, AbstractFloatListWidget
+from pywr_editor.form import AbstractFloatListWidget, FormField
 
 
 class OptDailyBoundsWidget(AbstractFloatListWidget):

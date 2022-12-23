@@ -1,4 +1,4 @@
-from pywr.nodes import Node, Link, Output
+from pywr.nodes import Link, Node, Output
 
 
 class LeakyPipe(Node):

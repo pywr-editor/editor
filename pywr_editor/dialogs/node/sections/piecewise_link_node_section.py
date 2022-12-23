@@ -1,7 +1,7 @@
+from ..node_dialog_form import NodeDialogForm
 from .abstract_piecewise_link_node_section import (
     AbstractPiecewiseLinkNodeSection,
 )
-from ..node_dialog_form import NodeDialogForm
 
 
 class PiecewiseLinkSection(AbstractPiecewiseLinkNodeSection):

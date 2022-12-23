@@ -2,7 +2,9 @@ import hashlib
 import json
 import os
 from typing import TYPE_CHECKING
-from PySide6.QtCore import QSettings, QPointF
+
+from PySide6.QtCore import QPointF, QSettings
+
 from pywr_editor.model import ModelFileInfo
 
 if TYPE_CHECKING:

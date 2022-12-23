@@ -1,15 +1,16 @@
-import pywr_editor
 from PySide6.QtCore import QSize, Slot
 from PySide6.QtWidgets import QHBoxLayout
+
+import pywr_editor
+from pywr_editor.form import FormCustomWidget, FormField
 from pywr_editor.model import NodeConfig
-from pywr_editor.utils import Logging
-from pywr_editor.widgets import ComboBox
 from pywr_editor.node_shapes import (
-    get_node_icon_classes,
     get_node_icon,
+    get_node_icon_classes,
     get_pixmap_from_type,
 )
-from pywr_editor.form import FormCustomWidget, FormField
+from pywr_editor.utils import Logging
+from pywr_editor.widgets import ComboBox
 
 
 class NodeStylePickerWidget(FormCustomWidget):

@@ -1,18 +1,17 @@
-import pytest
 from functools import partial
 from pathlib import Path
-from PySide6.QtCore import QTimer, QItemSelectionModel
+
+import pytest
+from PySide6.QtCore import QItemSelectionModel, QTimer
 from PySide6.QtGui import Qt
-from PySide6.QtWidgets import (
-    QPushButton,
-    QApplication,
-)
+from PySide6.QtWidgets import QApplication, QPushButton
+
 from pywr_editor import MainWindow
 from pywr_editor.dialogs import IncludesDialog
 from pywr_editor.model import ModelConfig
 from pywr_editor.toolbar.node_library.library_node_label import LibraryNodeLabel
 from pywr_editor.toolbar.node_library.nodes_library import NodesLibraryPanel
-from tests.utils import resolve_model_path, model_path, check_msg
+from tests.utils import check_msg, model_path, resolve_model_path
 
 
 class TestTablesIncludes:

@@ -1,10 +1,12 @@
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QTreeWidgetItem
-from pywr_editor.widgets import ParameterIcon
+
 from pywr_editor.model import ModelConfig
-from .tree_widget_parameter import TreeWidgetParameter
+from pywr_editor.widgets import ParameterIcon
+
 from .abstract_tree_widget_component import AbstractTreeWidgetComponent
+from .tree_widget_parameter import TreeWidgetParameter
 
 
 class TreeWidgetNodeAttribute(QTreeWidgetItem):

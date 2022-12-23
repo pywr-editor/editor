@@ -1,7 +1,9 @@
-from typing import Type, Literal
+from typing import Literal, Type
+
 from PySide6.QtGui import QIcon, Qt
 from PySide6.QtWidgets import QTreeWidgetItem
-from pywr_editor.model import ParameterConfig, RecorderConfig, ModelConfig
+
+from pywr_editor.model import ModelConfig, ParameterConfig, RecorderConfig
 from pywr_editor.style import Color
 from pywr_editor.widgets import ParameterIcon, RecorderIcon
 

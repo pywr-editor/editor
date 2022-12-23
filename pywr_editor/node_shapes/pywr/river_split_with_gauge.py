@@ -1,5 +1,6 @@
-from .river_gauge import RiverGauge
 from typing import TYPE_CHECKING
+
+from .river_gauge import RiverGauge
 
 if TYPE_CHECKING:
     from pywr_editor.schematic import SchematicItem

@@ -1,8 +1,10 @@
 import os
-import typer
-import PyInstaller.__main__
-from pywr_editor.assets import get_parameters, get_nodes, get_recorders
 from pathlib import Path
+
+import PyInstaller.__main__
+import typer
+
+from pywr_editor.assets import get_nodes, get_parameters, get_recorders
 
 app = typer.Typer(pretty_exceptions_enable=False)
 

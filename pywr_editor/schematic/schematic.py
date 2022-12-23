@@ -1,6 +1,9 @@
+from typing import TYPE_CHECKING, Sequence, Union
+
 import PySide6
-from typing import Sequence, Union
 from PySide6 import QtGui
+from PySide6.QtCore import QPointF, QRectF, Qt, QUuid, Signal, Slot
+from PySide6.QtGui import QPainter
 from PySide6.QtWidgets import (
     QFileDialog,
     QFrame,
@@ -10,40 +13,43 @@ from PySide6.QtWidgets import (
     QPushButton,
     QVBoxLayout,
 )
-from PySide6.QtCore import QPointF, QRectF, Qt, Signal, Slot, QUuid
-from PySide6.QtGui import QPainter
-from typing import TYPE_CHECKING
-from .edge import Edge, TempEdge
-from .schematic_canvas import SchematicCanvas
-from .connecting_node_props import ConnectingNodeProps
+
+from pywr_editor.model import Edges, ModelConfig, NodeConfig
 from pywr_editor.node_shapes import get_node_icon_classes
 from pywr_editor.schematic import (
-    SchematicItem,
-    DeleteNodeCommand,
     AddNodeCommand,
+    DeleteNodeCommand,
     SchematicBBoxUtils,
+    SchematicItem,
     scaling_factor,
     units_to_factor,
 )
-from pywr_editor.toolbar import NodesLibraryPanel
 from pywr_editor.style import Color, stylesheet_dict_to_str
-from pywr_editor.model import Edges, NodeConfig, ModelConfig
+from pywr_editor.toolbar import NodesLibraryPanel
+
+from .connecting_node_props import ConnectingNodeProps
+from .edge import Edge, TempEdge
+from .schematic_canvas import SchematicCanvas
 
 if TYPE_CHECKING:
     from pywr_editor import MainWindow
 
 
 class Schematic(QGraphicsView):
-    # schematic
     padding: int = 50
+    """ canvas padding """
     pywr_bounds: tuple[int] = (-100, 100)
+    """ bounds used in the pixels conversion """
     max_view_size_delta: int = 50
+    """ max step increment to use when resizing the schematic """
     schematic_move_event = Signal(QPointF)
+    """ event emitted when schematic is moved """
     connect_node_event = Signal(SchematicItem)
-
-    # zoom factors
+    """ event emitted when a node is being connected to another """
     min_zoom = scaling_factor("zoom-out", 3)
+    """ min zoom factor"""
     max_zoom = scaling_factor("zoom-in", 3)
+    """ max zoom factor"""
 
     def __init__(self, model_config: ModelConfig, app: "MainWindow"):
         """

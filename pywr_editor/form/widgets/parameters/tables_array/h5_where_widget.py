@@ -1,11 +1,12 @@
-from PySide6.QtCore import Slot, Signal, SignalInstance
-from pywr_editor.utils import get_signal_sender
+from PySide6.QtCore import Signal, SignalInstance, Slot
+
 from pywr_editor.form import (
-    FormField,
     AbstractStringComboBoxWidget,
-    H5FileWidget,
+    FormField,
     FormValidation,
+    H5FileWidget,
 )
+from pywr_editor.utils import get_signal_sender
 
 """
  Widget used to select the where attribute of

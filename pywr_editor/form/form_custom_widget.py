@@ -1,10 +1,12 @@
+from typing import TYPE_CHECKING, Any, Callable
+
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QWidget
+
 from .form_validation import FormValidation
-from typing import Any, TYPE_CHECKING, Callable
 
 if TYPE_CHECKING:
-    from .form import FormField, Form
+    from .form import Form, FormField
 
 
 class FormCustomWidget(QWidget):

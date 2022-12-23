@@ -1,6 +1,7 @@
 from PySide6.QtCore import Slot
+
 from pywr_editor.form import AbstractStringComboBoxWidget, FormField
-from pywr_editor.utils import get_signal_sender, Logging
+from pywr_editor.utils import Logging, get_signal_sender
 
 """
  Change the visibility of the fields to provide

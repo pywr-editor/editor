@@ -1,20 +1,22 @@
-import pytest
 from functools import partial
+
+import pytest
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import QPushButton
-from pywr_editor.model import ModelConfig, ParameterConfig
+
+from pywr_editor.dialogs import ParametersDialog
 from pywr_editor.dialogs.parameters.parameter_page_widget import (
     ParameterPageWidget,
 )
-from pywr_editor.dialogs import ParametersDialog
 from pywr_editor.form import (
+    FormField,
     NodePickerWidget,
     ParameterLineEditWidget,
     StoragePickerWidget,
-    FormField,
 )
+from pywr_editor.model import ModelConfig, ParameterConfig
 from pywr_editor.widgets import ToggleSwitchWidget
-from tests.utils import resolve_model_path, check_msg
+from tests.utils import check_msg, resolve_model_path
 
 
 class TestDialogParameterPolynomial1DParameterSection:

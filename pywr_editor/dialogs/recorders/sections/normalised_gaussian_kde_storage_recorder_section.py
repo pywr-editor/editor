@@ -1,11 +1,12 @@
-from ..recorder_dialog_form import RecorderDialogForm
-from .abstract_recorder_section import AbstractRecorderSection
 from pywr_editor.form import (
-    StoragePickerWidget,
     FormValidation,
     ResampleAggFrequencyWidget,
     ResampleAggFunctionWidget,
+    StoragePickerWidget,
 )
+
+from ..recorder_dialog_form import RecorderDialogForm
+from .abstract_recorder_section import AbstractRecorderSection
 
 
 class NormalisedGaussianKDEStorageRecorderSection(AbstractRecorderSection):

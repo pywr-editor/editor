@@ -1,6 +1,7 @@
+from pywr_editor.form import FloatWidget, ParameterLineEditWidget
+
 from ..recorder_dialog_form import RecorderDialogForm
 from .abstract_recorder_section import AbstractRecorderSection
-from pywr_editor.form import ParameterLineEditWidget, FloatWidget
 
 
 class TotalParameterRecorderSection(AbstractRecorderSection):

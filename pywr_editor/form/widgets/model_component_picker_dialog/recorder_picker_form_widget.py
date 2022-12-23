@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING
-from PySide6.QtWidgets import QPushButton
-from pywr_editor.form import build_picker_form_fields, RecorderForm
-from pywr_editor.model import RecorderConfig, ModelConfig
 
+from PySide6.QtWidgets import QPushButton
+
+from pywr_editor.form import RecorderForm, build_picker_form_fields
+from pywr_editor.model import ModelConfig, RecorderConfig
 
 if TYPE_CHECKING:
     from pywr_editor.form import ModelComponentPickerDialog

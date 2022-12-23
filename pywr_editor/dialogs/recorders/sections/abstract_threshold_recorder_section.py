@@ -1,16 +1,16 @@
 from typing import Type
 
-from ..recorder_dialog_form import RecorderDialogForm
 from pywr_editor.form import (
-    ThresholdRelationSymbolWidget,
-    ThresholdValuesWidget,
-    FormSection,
     FloatWidget,
+    FormSection,
     NodePickerWidget,
     StoragePickerWidget,
+    ThresholdRelationSymbolWidget,
+    ThresholdValuesWidget,
 )
 from pywr_editor.utils import Logging
 
+from ..recorder_dialog_form import RecorderDialogForm
 
 """
   Abstract section class to use for node threshold

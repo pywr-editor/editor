@@ -1,21 +1,22 @@
 import pytest
-from PySide6.QtCore import Qt, QItemSelectionModel
+from PySide6.QtCore import QItemSelectionModel, Qt
 from PySide6.QtWidgets import QPushButton
-from pywr_editor.model import ModelConfig
+
 from pywr_editor.dialogs import ParametersDialog
 from pywr_editor.dialogs.parameters.parameter_page_widget import (
     ParameterPageWidget,
 )
 from pywr_editor.form import (
-    ScenarioPickerWidget,
-    ScenarioValuesWidget,
+    FormField,
     MonthlyValuesWidget,
+    ScenarioPickerWidget,
     ScenarioValuesPickerDialogWidget,
+    ScenarioValuesWidget,
     SourceSelectorWidget,
     TableSelectorWidget,
-    FormField,
     UrlWidget,
 )
+from pywr_editor.model import ModelConfig
 from tests.utils import resolve_model_path
 
 

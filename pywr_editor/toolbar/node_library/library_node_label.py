@@ -1,9 +1,8 @@
 from typing import TYPE_CHECKING
+
 from PySide6.QtGui import QFont
-from PySide6.QtWidgets import (
-    QGraphicsItem,
-    QGraphicsSimpleTextItem,
-)
+from PySide6.QtWidgets import QGraphicsItem, QGraphicsSimpleTextItem
+
 from pywr_editor.style import Color
 
 if TYPE_CHECKING:

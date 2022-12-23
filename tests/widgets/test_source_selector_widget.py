@@ -1,19 +1,21 @@
+from typing import List
+
 import pytest
 from PySide6.QtTest import QSignalSpy
 from PySide6.QtWidgets import QGroupBox
-from typing import List
-from pywr_editor.model import ModelConfig
+
 from pywr_editor.dialogs import ParametersDialog
 from pywr_editor.form import (
     ColumnWidget,
+    FormField,
     IndexWidget,
     SourceSelectorWidget,
     TableSelectorWidget,
     UrlWidget,
-    FormField,
 )
-from pywr_editor.widgets import ComboBox
+from pywr_editor.model import ModelConfig
 from pywr_editor.utils import default_index_name
+from pywr_editor.widgets import ComboBox
 from tests.utils import resolve_model_path
 
 field_visibility = {

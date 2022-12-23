@@ -1,14 +1,16 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QDialog,
-    QVBoxLayout,
-    QHBoxLayout,
     QDialogButtonBox,
+    QHBoxLayout,
+    QVBoxLayout,
     QWidget,
 )
+
 from pywr_editor.style import Color, stylesheet_dict_to_str
-from .table_view import TableView
+
 from .push_icon_button import PushIconButton
+from .table_view import TableView
 
 """
  Creates a dialog to edit the model settings

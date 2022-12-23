@@ -1,5 +1,6 @@
-from PySide6.QtCore import Slot, Qt
+from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QCheckBox, QWidget
+
 from pywr_editor.style import Color, stylesheet_dict_to_str
 
 """

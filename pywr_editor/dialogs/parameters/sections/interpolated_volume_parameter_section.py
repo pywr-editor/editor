@@ -1,7 +1,8 @@
-from ..parameter_dialog_form import ParameterDialogForm
-from .abstract_interpolation_section import AbstractInterpolationSection
 from pywr_editor.form import StoragePickerWidget, ValuesAndExternalDataWidget
 from pywr_editor.utils import Logging
+
+from ..parameter_dialog_form import ParameterDialogForm
+from .abstract_interpolation_section import AbstractInterpolationSection
 
 
 class InterpolatedVolumeParameterSection(AbstractInterpolationSection):

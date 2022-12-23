@@ -1,13 +1,11 @@
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
+
 from PySide6.QtCore import Slot
-from PySide6.QtWidgets import (
-    QVBoxLayout,
-    QGroupBox,
-)
+from PySide6.QtWidgets import QGroupBox, QVBoxLayout
+
+from pywr_editor.form import FormCustomWidget, FormField
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import ToggleSwitchWidget
-from pywr_editor.form import FormCustomWidget, FormField
-
 
 if TYPE_CHECKING:
     from pywr_editor.form import ModelComponentForm

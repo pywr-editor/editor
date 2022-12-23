@@ -1,15 +1,12 @@
-import PySide6
-from typing import Literal, Any
-from PySide6.QtCore import QAbstractTableModel
-from PySide6.QtGui import Qt, QIcon
-from pywr_editor.model import (
-    ParameterConfig,
-    RecorderConfig,
-    ModelConfig,
-)
-from pywr_editor.widgets import RecorderIcon, ParameterIcon
-from pywr_editor.utils import tooltip_table
+from typing import Any, Literal
 
+import PySide6
+from PySide6.QtCore import QAbstractTableModel
+from PySide6.QtGui import QIcon, Qt
+
+from pywr_editor.model import ModelConfig, ParameterConfig, RecorderConfig
+from pywr_editor.utils import tooltip_table
+from pywr_editor.widgets import ParameterIcon, RecorderIcon
 
 """
  Model used to store model components (parameters or recorders)

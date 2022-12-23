@@ -7,5 +7,7 @@ numpy
 pyinstaller
 typer
 flake8
+isort
 flake8-black
+flake8-isort
 black

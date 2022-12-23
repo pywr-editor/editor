@@ -1,21 +1,20 @@
-from PySide6.QtCore import Slot, QModelIndex
-from PySide6.QtWidgets import QHBoxLayout
-from pandas import DataFrame
 from typing import TYPE_CHECKING
-from pywr_editor.form import (
-    FormCustomWidget,
-    FormValidation,
-)
-from pywr_editor.widgets import CheckableComboBox
+
+from pandas import DataFrame
+from PySide6.QtCore import QModelIndex, Slot
+from PySide6.QtWidgets import QHBoxLayout
+
+from pywr_editor.form import FormCustomWidget, FormValidation
 from pywr_editor.utils import (
-    get_signal_sender,
     Logging,
-    get_columns,
-    set_table_index,
     default_index_name,
     find_existing_columns,
+    get_columns,
     get_index_names,
+    get_signal_sender,
+    set_table_index,
 )
+from pywr_editor.widgets import CheckableComboBox
 
 if TYPE_CHECKING:
     from pywr_editor.form import FormField, UrlWidget

@@ -1,10 +1,8 @@
 import pytest
-from PySide6.QtWidgets import (
-    QPushButton,
-    QWidget,
-)
+from PySide6.QtWidgets import QPushButton, QWidget
+
+from pywr_editor.form import FormField, InterpFillValueWidget, ParameterForm
 from pywr_editor.model import ModelConfig, ParameterConfig
-from pywr_editor.form import ParameterForm, InterpFillValueWidget, FormField
 from tests.DummyMainWindow import MainWindow
 
 

@@ -1,6 +1,8 @@
-import pytest
-from pywr_editor.form import AbstractFloatListWidget, FormField, Form
 from typing import Any
+
+import pytest
+
+from pywr_editor.form import AbstractFloatListWidget, Form, FormField
 
 
 class OnlyListFloatIntWidget(AbstractFloatListWidget):

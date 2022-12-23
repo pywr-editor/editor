@@ -1,15 +1,12 @@
 import pytest
 from PySide6.QtCore import Qt
-from pywr_editor.model import ModelConfig
+
+from pywr_editor.dialogs import ParametersDialog
 from pywr_editor.dialogs.parameters.parameter_page_widget import (
     ParameterPageWidget,
 )
-from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.form import (
-    ScenarioPickerWidget,
-    TableValuesWidget,
-    FormField,
-)
+from pywr_editor.form import FormField, ScenarioPickerWidget, TableValuesWidget
+from pywr_editor.model import ModelConfig
 from tests.utils import resolve_model_path
 
 

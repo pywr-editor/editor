@@ -1,7 +1,8 @@
 import pytest
 from PySide6.QtWidgets import QPushButton, QWidget
+
+from pywr_editor.form import ControlCurvesWidget, FormField, ParameterForm
 from pywr_editor.model import ModelConfig, ParameterConfig
-from pywr_editor.form import ParameterForm, ControlCurvesWidget, FormField
 
 
 class TestDialogParameterControlCurvesWidget:

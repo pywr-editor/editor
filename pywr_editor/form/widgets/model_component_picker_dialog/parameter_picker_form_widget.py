@@ -1,7 +1,9 @@
-from PySide6.QtWidgets import QPushButton
 from typing import TYPE_CHECKING
+
+from PySide6.QtWidgets import QPushButton
+
 from pywr_editor.form import ParameterForm, build_picker_form_fields
-from pywr_editor.model import ParameterConfig, ModelConfig
+from pywr_editor.model import ModelConfig, ParameterConfig
 
 if TYPE_CHECKING:
     from pywr_editor.form import ModelComponentPickerDialog

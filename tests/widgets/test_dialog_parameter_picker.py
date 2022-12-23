@@ -1,24 +1,26 @@
 import os.path
-import pytest
 from typing import Any
+
+import pytest
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QPushButton
-from pywr_editor.model import ModelConfig, ParameterConfig
-from pywr_editor.form import (
-    ParameterPickerWidget,
-    ModelComponentPickerDialog,
-    ModelComponentSourceSelectorWidget,
-    SourceSelectorWidget,
-    FormField,
-    FormSection,
-    FormCustomWidget,
-)
+
 from pywr_editor.dialogs.parameters.sections.constant_parameter_section import (
     ConstantParameterSection,
 )
 from pywr_editor.dialogs.parameters.sections.monthly_profile_parameter_section import (
     MonthlyProfileParameterSection,
 )
+from pywr_editor.form import (
+    FormCustomWidget,
+    FormField,
+    FormSection,
+    ModelComponentPickerDialog,
+    ModelComponentSourceSelectorWidget,
+    ParameterPickerWidget,
+    SourceSelectorWidget,
+)
+from pywr_editor.model import ModelConfig, ParameterConfig
 from tests.utils import resolve_model_path
 
 

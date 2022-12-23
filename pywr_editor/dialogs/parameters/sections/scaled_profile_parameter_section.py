@@ -1,6 +1,7 @@
-from ..parameter_dialog_form import ParameterDialogForm
-from pywr_editor.form import FloatWidget, ParameterLineEditWidget, FormSection
+from pywr_editor.form import FloatWidget, FormSection, ParameterLineEditWidget
 from pywr_editor.utils import Logging
+
+from ..parameter_dialog_form import ParameterDialogForm
 
 
 class ScaledProfileParameterSection(FormSection):

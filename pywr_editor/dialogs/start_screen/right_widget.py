@@ -1,5 +1,7 @@
+from typing import TYPE_CHECKING, Callable
+
 import PySide6
-from PySide6.QtCore import QByteArray, QFile, QTextStream, Qt
+from PySide6.QtCore import QByteArray, QFile, Qt, QTextStream
 from PySide6.QtSvgWidgets import QSvgWidget
 from PySide6.QtWidgets import (
     QFrame,
@@ -12,10 +14,11 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-from typing import TYPE_CHECKING, Callable
+
+from pywr_editor.style import Color, stylesheet_dict_to_str
+
 from .action_button import StartScreenActionButton
 from .recent_files_list_widget import RecentFileListWidget
-from pywr_editor.style import Color, stylesheet_dict_to_str
 
 if TYPE_CHECKING:
     from .start_screen import StartScreen

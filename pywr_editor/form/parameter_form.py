@@ -1,8 +1,10 @@
 from typing import Any
+
 from PySide6.QtWidgets import QMessageBox, QPushButton, QWidget
+
 from pywr_editor.form import ModelComponentForm
-from pywr_editor.utils import Logging
 from pywr_editor.model import ModelConfig, ParameterConfig
+from pywr_editor.utils import Logging
 
 """
  This widgets define a base class of a form that change a parameter

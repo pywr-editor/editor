@@ -1,6 +1,7 @@
-from .virtual_storage import VirtualStorage
-from .pywr_node import PywrNode
 from typing import TYPE_CHECKING
+
+from .pywr_node import PywrNode
+from .virtual_storage import VirtualStorage
 
 if TYPE_CHECKING:
     from pywr_editor.schematic import SchematicItem

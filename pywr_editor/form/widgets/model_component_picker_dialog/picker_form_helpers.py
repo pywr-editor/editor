@@ -1,9 +1,10 @@
 from typing import Literal
+
 from pywr_editor.form import (
-    ParameterPickerWidget,
-    RecorderPickerWidget,
     ModelComponentSourceSelectorWidget,
+    ParameterPickerWidget,
     ParameterTypeSelectorWidget,
+    RecorderPickerWidget,
     RecorderTypeSelectorWidget,
 )
 from pywr_editor.model import ParameterConfig, RecorderConfig

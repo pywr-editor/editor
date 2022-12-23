@@ -1,11 +1,9 @@
-from typing import Any, Callable, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Callable
+
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QMessageBox, QPushButton
-from pywr_editor.form import (
-    ModelComponentForm,
-    SourceSelectorWidget,
-    UrlWidget,
-)
+
+from pywr_editor.form import ModelComponentForm, SourceSelectorWidget, UrlWidget
 from pywr_editor.model import ModelConfig
 
 if TYPE_CHECKING:

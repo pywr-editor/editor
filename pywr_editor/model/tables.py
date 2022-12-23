@@ -1,8 +1,8 @@
 from copy import deepcopy
 from dataclasses import dataclass
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
 from pywr_editor.model import JsonUtils
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from pywr_editor.model import ModelConfig

@@ -1,15 +1,18 @@
-import PySide6
 from typing import TYPE_CHECKING
+
+import PySide6
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
     QDialogButtonBox,
     QPushButton,
+    QVBoxLayout,
+    QWidget,
 )
-from .recorder_dialog_form import RecorderDialogForm
+
 from pywr_editor.form import FormTitle
 from pywr_editor.model import ModelConfig
+
+from .recorder_dialog_form import RecorderDialogForm
 
 if TYPE_CHECKING:
     from .recorder_pages_widget import RecorderPagesWidget

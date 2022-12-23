@@ -1,24 +1,26 @@
+from functools import partial
+
 import numpy as np
 import pandas as pd
 import pytest
 import win32com.client
-from functools import partial
-from PySide6.QtCore import Qt, QPoint, QTimer
-from PySide6.QtWidgets import QPushButton, QLineEdit
-from pywr_editor.model import ModelConfig
+from PySide6.QtCore import QPoint, Qt, QTimer
+from PySide6.QtWidgets import QLineEdit, QPushButton
+
 from pywr_editor.dialogs import ParametersDialog
 from pywr_editor.form import (
-    MonthlyValuesWidget,
-    IndexWidget,
+    FormField,
     H5KeyWidget,
     IndexColWidget,
+    IndexWidget,
+    MonthlyValuesWidget,
     SheetNameWidget,
     TableSelectorWidget,
     UrlWidget,
-    FormField,
 )
+from pywr_editor.model import ModelConfig
 from pywr_editor.utils import is_excel_installed
-from tests.utils import resolve_model_path, model_path, check_msg
+from tests.utils import check_msg, model_path, resolve_model_path
 
 
 class TestDialogParameterMonthlyValuesWidget:

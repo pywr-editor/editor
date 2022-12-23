@@ -1,14 +1,13 @@
-from typing import TypeVar, Any
+from typing import Any, TypeVar
+
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout
-from .keating_streams_model import KeatingStreamsModel
-from pywr_editor.form import (
-    FormCustomWidget,
-    FormValidation,
-    FormField,
-)
+
+from pywr_editor.form import FormCustomWidget, FormField, FormValidation
 from pywr_editor.utils import Logging, get_signal_sender
-from pywr_editor.widgets import TableView, PushIconButton
+from pywr_editor.widgets import PushIconButton, TableView
+
+from .keating_streams_model import KeatingStreamsModel
 
 """
  This widget handles the levels in each Keating stream

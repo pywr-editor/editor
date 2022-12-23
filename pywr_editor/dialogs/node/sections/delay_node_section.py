@@ -1,6 +1,8 @@
 from typing import Any
+
 from pywr_editor.form import FormSection, FormValidation
 from pywr_editor.utils import Logging
+
 from ..node_dialog_form import NodeDialogForm
 
 

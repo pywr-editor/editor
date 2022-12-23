@@ -1,19 +1,17 @@
-from typing import TypeVar, Any, Union, TYPE_CHECKING
-from PySide6.QtCore import Slot, QSize
-from PySide6.QtWidgets import (
-    QVBoxLayout,
-    QHBoxLayout,
-)
+from typing import TYPE_CHECKING, Any, TypeVar, Union
 
-from pywr_editor.widgets import PushIconButton, TableView
+from PySide6.QtCore import QSize, Slot
+from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout
+
 from pywr_editor.form import (
-    NodesAndFactorsModel,
     FormCustomWidget,
+    FormField,
     FormValidation,
     NodesAndFactorsDialog,
-    FormField,
+    NodesAndFactorsModel,
 )
-from pywr_editor.utils import get_signal_sender, Logging
+from pywr_editor.utils import Logging, get_signal_sender
+from pywr_editor.widgets import PushIconButton, TableView
 
 if TYPE_CHECKING:
     from pywr_editor.dialogs.node.node_dialog_form import NodeDialogForm

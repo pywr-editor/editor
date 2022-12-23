@@ -1,7 +1,8 @@
 import PySide6
-from PySide6.QtCore import Qt, QEvent
+from PySide6.QtCore import QEvent, Qt
 from PySide6.QtGui import QFocusEvent
 from PySide6.QtWidgets import QComboBox, QWidget
+
 from pywr_editor.style import Color, stylesheet_dict_to_str
 
 

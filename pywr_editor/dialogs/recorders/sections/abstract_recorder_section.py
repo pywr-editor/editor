@@ -1,6 +1,7 @@
-from ..recorder_dialog_form import RecorderDialogForm
 from pywr_editor.form import FormSection
 from pywr_editor.utils import Logging
+
+from ..recorder_dialog_form import RecorderDialogForm
 
 """
  Defines a generic section for a recorder. This holds and handles

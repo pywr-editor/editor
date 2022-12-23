@@ -1,22 +1,25 @@
+from typing import TYPE_CHECKING, Any, Optional, Union
+
 import PySide6
-from typing import Optional, Any, TYPE_CHECKING, Union
+from PySide6.QtCore import Slot
+from PySide6.QtGui import QAction, QFont, QPainterPath, QPen
 from PySide6.QtWidgets import (
     QGraphicsItem,
     QGraphicsItemGroup,
-    QMenu,
     QGraphicsTextItem,
+    QMenu,
 )
-from PySide6.QtCore import Slot
-from PySide6.QtGui import QAction, QPainterPath, QPen, QFont
-from .schematic_node_utils import SchematicNodeUtils
-from .edge import Edge
-from pywr_editor.node_shapes import get_node_icon, GrayCircle
+
+from pywr_editor.node_shapes import GrayCircle, get_node_icon
 from pywr_editor.style import Color
 from pywr_editor.widgets import ContextualMenu
 
+from .edge import Edge
+from .schematic_node_utils import SchematicNodeUtils
+
 if TYPE_CHECKING:
-    from pywr_editor.schematic import Schematic
     from pywr_editor.node_shapes import BaseNode
+    from pywr_editor.schematic import Schematic
 
 
 class SchematicItem(QGraphicsItemGroup):

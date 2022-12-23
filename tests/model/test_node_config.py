@@ -1,5 +1,7 @@
 import json
+
 import pytest
+
 from pywr_editor.model import NodeConfig
 from tests.utils import resolve_model_path
 

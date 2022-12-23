@@ -1,15 +1,16 @@
 from typing import Any
 
 from PySide6.QtCore import Slot
-from PySide6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QLineEdit
-from pywr_editor.widgets import ComboBox, PushButton, PushIconButton
+from PySide6.QtWidgets import QHBoxLayout, QLineEdit, QVBoxLayout, QWidget
+
 from pywr_editor.form import (
-    TableValuesWidget,
     ExternalDataPickerDialogWidget,
-    FormValidation,
     FormField,
+    FormValidation,
+    TableValuesWidget,
 )
 from pywr_editor.utils import get_signal_sender
+from pywr_editor.widgets import ComboBox, PushButton, PushIconButton
 
 """
  Defines a widget that allows providing values for one variable:

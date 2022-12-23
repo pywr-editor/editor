@@ -1,20 +1,23 @@
-from typing import Callable, Any
+from typing import Any, Callable
+
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QPushButton, QWidget
-from .dictionary_widget import DictionaryWidget
+
 from pywr_editor.form import (
+    DataTypeDictionaryItemWidget,
     FloatWidget,
-    NodePickerWidget,
+    Form,
     ModelParameterPickerWidget,
     ModelRecorderPickerWidget,
-    TableSelectorWidget,
+    NodePickerWidget,
     ScenarioPickerWidget,
+    TableSelectorWidget,
     TableValuesWidget,
-    DataTypeDictionaryItemWidget,
-    Form,
 )
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import Logging
+
+from .dictionary_widget import DictionaryWidget
 
 
 class DictionaryItemFormWidget(Form):

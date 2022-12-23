@@ -1,8 +1,11 @@
-from PySide6.QtWidgets import QStackedWidget
 from typing import TYPE_CHECKING
+
+from PySide6.QtWidgets import QStackedWidget
+
+from pywr_editor.model import ModelConfig
+
 from .parameter_empty_page_widget import ParameterEmptyPageWidget
 from .parameter_page_widget import ParameterPageWidget
-from pywr_editor.model import ModelConfig
 
 if TYPE_CHECKING:
     from .parameters_dialog import ParametersDialog

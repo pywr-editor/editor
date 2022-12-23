@@ -1,7 +1,8 @@
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QVBoxLayout
-from pywr_editor.widgets import SpinBox
-from pywr_editor.form import FormCustomWidget, FormValidation, FormField
+
+from pywr_editor.form import FormCustomWidget, FormField, FormValidation
 from pywr_editor.utils import Logging
+from pywr_editor.widgets import SpinBox
 
 """
  Displays a widget with a day and month fields.

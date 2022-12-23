@@ -1,5 +1,6 @@
 from PySide6.QtWidgets import QGroupBox
-from pywr_editor.form import UrlWidget, FormField
+
+from pywr_editor.form import FormField, UrlWidget
 
 """
  This widget loads and handles slots and signals

@@ -1,6 +1,7 @@
 from PySide6.QtCore import Slot
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import QToolButton, QWidget
+
 from pywr_editor.style import Color
 from pywr_editor.widgets import ContextualMenu
 

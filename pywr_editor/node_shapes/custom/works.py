@@ -1,9 +1,12 @@
+from typing import TYPE_CHECKING
+
 import PySide6
 from PySide6.QtCore import QPointF, QRectF
 from PySide6.QtGui import QPen, Qt
-from ..circle import Circle
+
 from pywr_editor.style import Color
-from typing import TYPE_CHECKING
+
+from ..circle import Circle
 
 if TYPE_CHECKING:
     from pywr_editor.schematic import SchematicItem

@@ -1,13 +1,14 @@
-from ..parameter_dialog_form import ParameterDialogForm
 from pywr_editor.form import (
-    H5FileWidget,
-    H5WhereWidget,
-    H5NodeWidget,
-    ScenarioPickerWidget,
     CheckSumWidget,
     FormSection,
+    H5FileWidget,
+    H5NodeWidget,
+    H5WhereWidget,
+    ScenarioPickerWidget,
 )
 from pywr_editor.utils import Logging
+
+from ..parameter_dialog_form import ParameterDialogForm
 
 
 class TablesArrayParameterSection(FormSection):

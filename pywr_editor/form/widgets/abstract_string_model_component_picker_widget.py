@@ -1,10 +1,11 @@
-from typing import Literal, TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
+
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QHBoxLayout
-from pywr_editor.utils import Logging
-from pywr_editor.widgets import ParameterIcon, RecorderIcon, ComboBox
-from pywr_editor.form import FormCustomWidget, FormValidation, FormField
 
+from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.utils import Logging
+from pywr_editor.widgets import ComboBox, ParameterIcon, RecorderIcon
 
 if TYPE_CHECKING:
     from pywr_editor.form import ModelComponentForm

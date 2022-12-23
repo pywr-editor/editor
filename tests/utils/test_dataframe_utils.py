@@ -1,17 +1,18 @@
 import pandas as pd
 import pytest
-from tests.utils import model_path
+
 from pywr_editor.utils import (
-    get_columns,
-    get_index_values,
     are_columns_valid,
-    set_table_index,
-    get_index_names,
     default_index_name,
-    is_table_not_empty,
     find_existing_columns,
+    get_columns,
+    get_index_names,
+    get_index_values,
+    is_table_not_empty,
     reset_pandas_index_names,
+    set_table_index,
 )
+from tests.utils import model_path
 
 
 class TestDataFrameUtils:

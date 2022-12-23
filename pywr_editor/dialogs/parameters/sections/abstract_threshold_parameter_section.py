@@ -1,13 +1,15 @@
 from typing import Type
-from ..parameter_dialog_form import ParameterDialogForm
+
 from pywr_editor.form import (
+    FormCustomWidget,
+    FormSection,
+    ParameterLineEditWidget,
     ThresholdRelationSymbolWidget,
     ThresholdValuesWidget,
-    ParameterLineEditWidget,
-    FormSection,
-    FormCustomWidget,
 )
 from pywr_editor.utils import Logging
+
+from ..parameter_dialog_form import ParameterDialogForm
 
 """
   Abstract section class to use for threshold

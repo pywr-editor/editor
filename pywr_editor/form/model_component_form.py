@@ -1,19 +1,21 @@
 from typing import Any
+
 from PySide6.QtWidgets import QPushButton, QWidget
+
 from pywr_editor.form import (
     ColumnWidget,
-    IndexWidget,
+    Form,
     H5KeyWidget,
     IndexColWidget,
+    IndexWidget,
     ParseDatesWidget,
     SheetNameWidget,
+    SourceSelectorWidget,
     TableSelectorWidget,
     UrlWidget,
-    SourceSelectorWidget,
-    Form,
 )
-from pywr_editor.utils import Logging
 from pywr_editor.model import ModelConfig
+from pywr_editor.utils import Logging
 
 """
  This widgets define an abstract class of a

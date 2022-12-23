@@ -1,6 +1,7 @@
 from dataclasses import dataclass
-from typing import Callable, Union, TYPE_CHECKING
-from PySide6.QtGui import QIcon, QKeySequence, QAction
+from typing import TYPE_CHECKING, Callable, Union
+
+from PySide6.QtGui import QAction, QIcon, QKeySequence
 
 if TYPE_CHECKING:
     from pywr_editor import MainWindow

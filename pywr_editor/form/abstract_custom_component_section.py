@@ -1,11 +1,13 @@
 import ast
-from typing import Literal, TYPE_CHECKING, Union
-from .widgets.dictionary.dictionary_widget import DictionaryWidget
+from typing import TYPE_CHECKING, Literal, Union
+
+from pywr_editor.form import FormSection, FormValidation
+from pywr_editor.utils import Logging
+
 from .widgets.custom_component_external_data_toggle import (
     CustomComponentExternalDataToggle,
 )
-from pywr_editor.form import FormValidation, FormSection
-from pywr_editor.utils import Logging
+from .widgets.dictionary.dictionary_widget import DictionaryWidget
 
 if TYPE_CHECKING:
     from pywr_editor.dialogs import ParameterDialogForm, RecorderDialogForm

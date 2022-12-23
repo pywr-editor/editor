@@ -1,12 +1,13 @@
 import pytest
 from PySide6.QtCore import QItemSelectionModel, QTimer
-from PySide6.QtWidgets import QPushButton, QDialogButtonBox
 from PySide6.QtGui import Qt
-from pywr_editor.form import FormField
+from PySide6.QtWidgets import QDialogButtonBox, QPushButton
+
+from pywr_editor.dialogs import MetadataDialog
 from pywr_editor.dialogs.metadata.metadata_custom_fields_widget import (
     MetadataCustomFieldsWidget,
 )
-from pywr_editor.dialogs import MetadataDialog
+from pywr_editor.form import FormField
 from pywr_editor.model import ModelConfig
 from tests.utils import close_message_box, resolve_model_path
 

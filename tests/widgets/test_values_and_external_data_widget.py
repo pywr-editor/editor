@@ -1,25 +1,27 @@
-import pytest
 from functools import partial
 from pathlib import Path
+
+import pytest
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import QPushButton, QWidget
-from pywr_editor.model import ModelConfig, ParameterConfig
+
 from pywr_editor.form import (
-    ParameterForm,
-    ValuesAndExternalDataWidget,
+    ColumnWidget,
     ExternalDataPickerDialogWidget,
-    SourceSelectorWidget,
-    UrlWidget,
+    FormCustomWidget,
+    FormField,
     IndexColWidget,
     IndexWidget,
-    ColumnWidget,
+    ParameterForm,
+    SourceSelectorWidget,
     TableSelectorWidget,
-    FormField,
-    FormCustomWidget,
+    UrlWidget,
+    ValuesAndExternalDataWidget,
 )
-from pywr_editor.widgets import PushButton, ComboBox
+from pywr_editor.model import ModelConfig, ParameterConfig
+from pywr_editor.widgets import ComboBox, PushButton
 from tests.DummyMainWindow import MainWindow
-from tests.utils import resolve_model_path, check_msg
+from tests.utils import check_msg, resolve_model_path
 
 
 class TestDialogParameterValuesAndExternalDataWidget:

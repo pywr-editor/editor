@@ -1,13 +1,14 @@
-from ..parameter_dialog_form import ParameterDialogForm
 from pywr_editor.form import (
-    SourceSelectorWidget,
-    UrlWidget,
-    FormSection,
-    FormValidation,
     AbstractAnnualValuesModel,
     AbstractFloatListWidget,
+    FormSection,
+    FormValidation,
+    SourceSelectorWidget,
+    UrlWidget,
 )
 from pywr_editor.utils import Logging
+
+from ..parameter_dialog_form import ParameterDialogForm
 
 """
   Abstract section class to use for annual profile

@@ -1,15 +1,16 @@
 import pytest
-import pywr_editor
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import QLineEdit
-from pywr_editor.model import ModelConfig, Constants, PywrNodesData
+
+import pywr_editor
 from pywr_editor.dialogs import NodeDialog
 from pywr_editor.form import (
-    ParameterLineEditWidget,
     EdgeColorPickerWidget,
     NodeStylePickerWidget,
+    ParameterLineEditWidget,
 )
-from tests.utils import resolve_model_path, close_message_box
+from pywr_editor.model import Constants, ModelConfig, PywrNodesData
+from tests.utils import close_message_box, resolve_model_path
 
 
 class TestNodeDialog:

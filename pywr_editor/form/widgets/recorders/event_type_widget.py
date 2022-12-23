@@ -1,11 +1,10 @@
-from PySide6.QtCore import Slot
-from pywr_editor.model import (
-    ParameterConfig,
-    RecorderConfig,
-)
-from pywr_editor.form import AbstractStringComboBoxWidget, FormField
-from pywr_editor.utils import get_signal_sender
 from typing import TYPE_CHECKING
+
+from PySide6.QtCore import Slot
+
+from pywr_editor.form import AbstractStringComboBoxWidget, FormField
+from pywr_editor.model import ParameterConfig, RecorderConfig
+from pywr_editor.utils import get_signal_sender
 
 if TYPE_CHECKING:
     from pywr_editor.form import RecorderForm

@@ -1,11 +1,13 @@
-import pytest
 from typing import Tuple
+
+import pytest
 from PySide6 import QtCore, QtGui
-from PySide6.QtCore import QPoint, QMimeData, QEvent, QObject
-from PySide6.QtGui import Qt, QDragEnterEvent
+from PySide6.QtCore import QEvent, QMimeData, QObject, QPoint
+from PySide6.QtGui import QDragEnterEvent, Qt
 from PySide6.QtWidgets import QWidget
+
 from pywr_editor import MainWindow
-from pywr_editor.schematic import Schematic, Edge, SchematicItem
+from pywr_editor.schematic import Edge, Schematic, SchematicItem
 from pywr_editor.schematic.commands.add_node_command import AddNodeCommand
 from pywr_editor.toolbar.tab_panel import TabPanel
 from tests.utils import resolve_model_path

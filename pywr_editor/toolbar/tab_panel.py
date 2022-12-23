@@ -1,17 +1,20 @@
-from typing import Literal, TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
+
 from PySide6.QtCore import QPointF, Qt
-from PySide6.QtGui import QPainter, QPen, QAction, QPaintEvent
+from PySide6.QtGui import QAction, QPainter, QPaintEvent, QPen
 from PySide6.QtWidgets import (
+    QHBoxLayout,
+    QLabel,
     QSizePolicy,
     QSpacerItem,
-    QWidget,
-    QHBoxLayout,
     QVBoxLayout,
-    QLabel,
+    QWidget,
 )
+
+from pywr_editor.style import Color, stylesheet_dict_to_str
+
 from .large_button import ToolbarLargeButton
 from .small_button import ToolbarSmallButton
-from pywr_editor.style import Color, stylesheet_dict_to_str
 
 if TYPE_CHECKING:
     from .tab import Tab

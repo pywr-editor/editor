@@ -1,5 +1,6 @@
-import PySide6
 from typing import Callable
+
+import PySide6
 from PySide6.QtCore import QByteArray, QFile, QTextStream
 from PySide6.QtSvgWidgets import QSvgWidget
 from PySide6.QtWidgets import (
@@ -11,6 +12,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+
 from pywr_editor.style import Color, stylesheet_dict_to_str
 
 
