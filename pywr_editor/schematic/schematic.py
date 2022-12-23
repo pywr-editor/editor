@@ -18,6 +18,7 @@ from pywr_editor.model import Edges, ModelConfig, NodeConfig
 from pywr_editor.node_shapes import get_node_icon_classes
 from pywr_editor.schematic import (
     AddNodeCommand,
+    ConnectNodeCommand,
     DeleteNodeCommand,
     SchematicBBoxUtils,
     SchematicItem,
@@ -231,19 +232,19 @@ class Schematic(QGraphicsView):
 
         # delete edges on the schematic when node is source node
         for c_node in node_item.connected_nodes["target_nodes"]:
-            for ei, edge_item in enumerate(c_node.edges):
-                if edge_item.source.name == node_item.name:
-                    deleted_edges.append(self.delete_edge(edge_item))
-                    del c_node.edges[ei]
-                    break
+            edge_item = c_node.delete_edge(
+                node_name=node_item.name, edge_type="source"
+            )
+            if edge_item:
+                deleted_edges.append(self.delete_edge(edge_item))
 
         # delete edges on the schematic when node is target node
         for c_node in node_item.connected_nodes["source_nodes"]:
-            for ei, edge_item in enumerate(c_node.edges):
-                if edge_item.target.name == node_item.name:
-                    deleted_edges.append(self.delete_edge(edge_item))
-                    del c_node.edges[ei]
-                    break
+            edge_item = c_node.delete_edge(
+                node_name=node_item.name, edge_type="target"
+            )
+            if edge_item:
+                deleted_edges.append(self.delete_edge(edge_item))
 
         # remove the graphic item in schematic and model config
         self.model_config.nodes.delete(node_name)
@@ -764,26 +765,15 @@ class Schematic(QGraphicsView):
         # remove the temporary dge
         self.scene.removeItem(self.connecting_node_props.temp_edge)
 
-        # create the new edge if the target mode is available (this can be False or
-        # None)
+        # create the new edge if the target mode is available (this may be False or
+        # None when the connection is aborted)
         if target_node:
-            self.scene.addItem(
-                Edge(
-                    source=source_node,
-                    target=target_node,
-                    hide_arrow=self.editor_settings.are_edge_arrows_hidden,
-                )
-            )
-            self.model_config.edges.add(
+            command = ConnectNodeCommand(
+                schematic=self,
                 source_node_name=source_node.name,
                 target_node_name=target_node.name,
             )
-
-            # noinspection PyUnresolvedReferences
-            self.app.status_message.emit(
-                f"Connected {source_node.name} to {target_node.name}"
-            )
-        self.app.components_tree.reload()
+            self.app.undo_stack.push(command)
 
         # reset
         self.connecting_node_props.reset()
