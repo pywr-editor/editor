@@ -1,8 +1,10 @@
+from typing import Any, Callable
+
 import PySide6
-from typing import Callable, Any
 from PySide6.QtCore import QAbstractTableModel
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QMessageBox
+
 from pywr_editor.model import Edges
 
 

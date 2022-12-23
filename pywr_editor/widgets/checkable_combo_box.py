@@ -1,8 +1,10 @@
-import PySide6
 from typing import Any, Sequence
-from PySide6.QtCore import QEvent, Qt, QModelIndex
+
+import PySide6
+from PySide6.QtCore import QEvent, QModelIndex, Qt
 from PySide6.QtGui import QFontMetrics, QStandardItem
 from PySide6.QtWidgets import QStyledItemDelegate
+
 from .combo_box import ComboBox
 
 

@@ -1,9 +1,12 @@
+from typing import TYPE_CHECKING
+
 import PySide6
 from PySide6.QtCore import QPointF
 from PySide6.QtGui import QPen
-from ..base_node import BaseNode
+
 from pywr_editor.style import Color
-from typing import TYPE_CHECKING
+
+from ..base_node import BaseNode
 
 if TYPE_CHECKING:
     from pywr_editor.schematic import SchematicItem

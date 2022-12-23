@@ -1,9 +1,12 @@
 from typing import TYPE_CHECKING, Union
+
 from PySide6.QtGui import QWindow
+
 from pywr_editor.model import ModelConfig
+from pywr_editor.widgets import SettingsDialog
+
 from .scenario_pages_widget import ScenarioPagesWidget
 from .scenarios_widget import ScenariosWidget
-from pywr_editor.widgets import SettingsDialog
 
 if TYPE_CHECKING:
     from pywr_editor import MainWindow

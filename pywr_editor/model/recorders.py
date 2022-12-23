@@ -1,6 +1,7 @@
 from dataclasses import dataclass
-from pywr_editor.model import RecorderConfig, JsonUtils
 from typing import TYPE_CHECKING
+
+from pywr_editor.model import JsonUtils, RecorderConfig
 
 if TYPE_CHECKING:
     from pywr_editor.model import ModelConfig

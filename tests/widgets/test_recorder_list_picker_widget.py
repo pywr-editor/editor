@@ -1,16 +1,17 @@
 import pytest
-from PySide6.QtCore import Qt, QItemSelectionModel
+from PySide6.QtCore import QItemSelectionModel, Qt
 from PySide6.QtWidgets import QPushButton
-from pywr_editor.model import ModelConfig, RecorderConfig
+
 from pywr_editor.dialogs import RecordersDialog
 from pywr_editor.form import (
-    ModelComponentPickerDialog,
     FormField,
-    RecordersListPickerWidget,
-    RecorderTypeSelectorWidget,
+    ModelComponentPickerDialog,
     NodePickerWidget,
     RecorderPickerWidget,
+    RecordersListPickerWidget,
+    RecorderTypeSelectorWidget,
 )
+from pywr_editor.model import ModelConfig, RecorderConfig
 from tests.utils import resolve_model_path
 
 

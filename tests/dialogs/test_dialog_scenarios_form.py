@@ -1,14 +1,15 @@
 import pytest
-from PySide6.QtCore import Qt, QPoint
-from PySide6.QtWidgets import QPushButton, QLineEdit
-from pywr_editor.model import ModelConfig
+from PySide6.QtCore import QPoint, Qt
+from PySide6.QtWidgets import QLineEdit, QPushButton
+
 from pywr_editor.dialogs import ScenariosDialog
 from pywr_editor.dialogs.scenarios.scenario_options_widget import (
     ScenarioOptionsWidget,
 )
 from pywr_editor.form import FormField
+from pywr_editor.model import ModelConfig
 from pywr_editor.widgets import SpinBox
-from tests.utils import resolve_model_path, change_table_view_cell
+from tests.utils import change_table_view_cell, resolve_model_path
 
 
 class TestScenariosDialog:

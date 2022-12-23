@@ -2,6 +2,7 @@ import PySide6
 from PySide6.QtCore import QRectF
 from PySide6.QtGui import QPen, Qt
 from PySide6.QtWidgets import QGraphicsDropShadowEffect, QGraphicsItem
+
 from pywr_editor.style import Color
 
 

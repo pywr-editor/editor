@@ -1,8 +1,10 @@
-import pyqtgraph as pg
 from typing import Any
+
+import pyqtgraph as pg
+from pyqtgraph import mkBrush, mkPen
 from PySide6.QtGui import QFont, Qt
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QWidget
-from pyqtgraph import mkPen, mkBrush
+
 from pywr_editor.style import Color
 
 

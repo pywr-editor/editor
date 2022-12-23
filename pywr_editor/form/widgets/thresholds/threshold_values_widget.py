@@ -1,8 +1,10 @@
 from typing import Any
+
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QVBoxLayout
-from pywr_editor.widgets import DoubleSpinBox
+
 from pywr_editor.form import FormCustomWidget, FormField
 from pywr_editor.utils import Logging
+from pywr_editor.widgets import DoubleSpinBox
 
 """
  Defines a widget to set and provide values when the

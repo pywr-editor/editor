@@ -1,6 +1,7 @@
-from .abstract_node_section import AbstractNodeSection
-from ..node_dialog_form import NodeDialogForm
 from pywr_editor.form import FloatWidget
+
+from ..node_dialog_form import NodeDialogForm
+from .abstract_node_section import AbstractNodeSection
 
 
 class LossLinkSection(AbstractNodeSection):

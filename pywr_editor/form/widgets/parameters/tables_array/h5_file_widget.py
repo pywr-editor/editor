@@ -1,17 +1,14 @@
 import os
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 from pandas import HDFStore
-from pathlib import Path
 from PySide6.QtCore import Slot
-from PySide6.QtWidgets import QHBoxLayout, QLineEdit, QFileDialog
+from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QLineEdit
+
+from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.utils import Logging, get_signal_sender
 from pywr_editor.widgets import PushButton
-from pywr_editor.utils import get_signal_sender, Logging
-from pywr_editor.form import (
-    FormField,
-    FormCustomWidget,
-    FormValidation,
-)
 
 if TYPE_CHECKING:
     from pywr_editor.dialogs import ParameterDialogForm

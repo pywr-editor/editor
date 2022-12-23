@@ -1,25 +1,22 @@
 import os
 import traceback
-import pandas as pd
 from typing import TYPE_CHECKING
-from PySide6.QtCore import Slot, Signal
-from PySide6.QtWidgets import (
-    QHBoxLayout,
-    QMessageBox,
-    QSizePolicy,
-)
-from pandas import read_hdf, read_excel, read_csv
-from pywr_editor.model import ModelConfig
-from pywr_editor.widgets import ComboBox, PushButton
-from pywr_editor.form import FormField, FormCustomWidget, FormValidation
-from pywr_editor.utils import (
-    get_signal_sender,
-    Logging,
-    set_table_index,
-    get_index_names,
-    reset_pandas_index_names,
-)
 
+import pandas as pd
+from pandas import read_csv, read_excel, read_hdf
+from PySide6.QtCore import Signal, Slot
+from PySide6.QtWidgets import QHBoxLayout, QMessageBox, QSizePolicy
+
+from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.model import ModelConfig
+from pywr_editor.utils import (
+    Logging,
+    get_index_names,
+    get_signal_sender,
+    reset_pandas_index_names,
+    set_table_index,
+)
+from pywr_editor.widgets import ComboBox, PushButton
 
 if TYPE_CHECKING:
     from pywr_editor.form import ModelComponentForm

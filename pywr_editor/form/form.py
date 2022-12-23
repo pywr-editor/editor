@@ -1,30 +1,33 @@
-from typing import Literal, Any, Callable, Type, Union
+from typing import Any, Callable, Literal, Type, Union
+
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import (
-    QVBoxLayout,
-    QScrollArea,
-    QGroupBox,
-    QWidget,
-    QMessageBox,
-    QLabel,
-    QGridLayout,
-    QLineEdit,
-    QSpinBox,
-    QDoubleSpinBox,
     QCheckBox,
+    QDoubleSpinBox,
+    QGridLayout,
+    QGroupBox,
+    QLabel,
+    QLineEdit,
+    QMessageBox,
     QPushButton,
+    QScrollArea,
+    QSpinBox,
+    QVBoxLayout,
+    QWidget,
 )
-from pywr_editor.utils import get_signal_sender, humanise_label, Logging
+
+from pywr_editor.utils import Logging, get_signal_sender, humanise_label
 from pywr_editor.widgets import (
-    ComboBox,
     CheckableComboBox,
+    ComboBox,
     SpinBox,
     ToggleSwitchWidget,
 )
-from .form_field import FormField
-from .form_validation import FormValidation
+
 from .field_config import FieldConfig
+from .form_field import FormField
 from .form_section import FormSection
+from .form_validation import FormValidation
 
 
 class Form(QScrollArea):

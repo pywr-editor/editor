@@ -1,18 +1,21 @@
-from PySide6.QtCore import Slot, QUuid
-from PySide6.QtWidgets import (
-    QVBoxLayout,
-    QHBoxLayout,
-    QWidget,
-    QSpacerItem,
-    QSizePolicy,
-    QMessageBox,
-)
 from typing import TYPE_CHECKING
+
+from PySide6.QtCore import QUuid, Slot
+from PySide6.QtWidgets import (
+    QHBoxLayout,
+    QMessageBox,
+    QSizePolicy,
+    QSpacerItem,
+    QVBoxLayout,
+    QWidget,
+)
+
+from pywr_editor.model import ModelConfig
+from pywr_editor.widgets import PushIconButton
+
+from .scenario_pages_widget import ScenarioPagesWidget
 from .scenarios_list_model import ScenariosListModel
 from .scenarios_list_widget import ScenariosListWidget
-from .scenario_pages_widget import ScenarioPagesWidget
-from pywr_editor.widgets import PushIconButton
-from pywr_editor.model import ModelConfig
 
 if TYPE_CHECKING:
     from .scenarios_dialog import ScenariosDialog

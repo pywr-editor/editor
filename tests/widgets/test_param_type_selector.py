@@ -1,7 +1,8 @@
 import pytest
 from PySide6.QtWidgets import QPushButton, QWidget
+
+from pywr_editor.form import ParameterForm, ParameterTypeSelectorWidget
 from pywr_editor.model import ModelConfig, ParameterConfig
-from pywr_editor.form import ParameterTypeSelectorWidget, ParameterForm
 from tests.utils import resolve_model_path
 
 """

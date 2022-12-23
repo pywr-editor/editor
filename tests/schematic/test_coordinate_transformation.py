@@ -1,8 +1,10 @@
-import pytest
+from typing import List
+
 import numpy as np
+import pytest
+
 from tests.DummyMainWindow import MainWindow
 from tests.utils import resolve_model_path
-from typing import List
 
 
 class TestSchematicCoordinatesTransformation:

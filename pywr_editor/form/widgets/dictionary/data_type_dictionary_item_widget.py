@@ -1,5 +1,7 @@
-from PySide6.QtCore import Slot
 from typing import TYPE_CHECKING
+
+from PySide6.QtCore import Slot
+
 from pywr_editor.form import AbstractStringComboBoxWidget, FormField
 from pywr_editor.model import ModelConfig
 

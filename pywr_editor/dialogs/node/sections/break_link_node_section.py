@@ -1,5 +1,5 @@
-from .abstract_node_section import AbstractNodeSection
 from ..node_dialog_form import NodeDialogForm
+from .abstract_node_section import AbstractNodeSection
 
 
 class BreakLinkSection(AbstractNodeSection):

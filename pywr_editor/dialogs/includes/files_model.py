@@ -1,8 +1,10 @@
-import PySide6
 from pathlib import Path
 from typing import Any
+
+import PySide6
 from PySide6.QtCore import QAbstractTableModel
 from PySide6.QtGui import Qt
+
 from pywr_editor.model import ImportProps, ModelConfig
 from pywr_editor.style import Color
 

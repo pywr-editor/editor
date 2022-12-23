@@ -1,6 +1,7 @@
 from dataclasses import dataclass
-from pywr_editor.model import NodeConfig, JsonUtils, DictMatches, Constants
 from typing import TYPE_CHECKING
+
+from pywr_editor.model import Constants, DictMatches, JsonUtils, NodeConfig
 
 if TYPE_CHECKING:
     from pywr_editor.model import ModelConfig

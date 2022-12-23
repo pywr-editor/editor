@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING, Union
+
 from pywr_editor.form import (
-    ModelParameterPickerWidget,
     FormField,
     FormValidation,
+    ModelParameterPickerWidget,
 )
 
 if TYPE_CHECKING:

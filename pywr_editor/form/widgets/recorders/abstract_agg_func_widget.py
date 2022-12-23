@@ -1,4 +1,5 @@
 from PySide6.QtCore import Slot
+
 from pywr_editor.form import AbstractStringComboBoxWidget, FormField
 
 """

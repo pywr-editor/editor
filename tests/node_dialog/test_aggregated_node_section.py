@@ -1,9 +1,10 @@
 import pytest
 from PySide6.QtCore import Qt, QTimer
-from pywr_editor.model import ModelConfig
+
 from pywr_editor.dialogs import NodeDialog
 from pywr_editor.form import TableValuesWidget
-from tests.utils import resolve_model_path, close_message_box
+from pywr_editor.model import ModelConfig
+from tests.utils import close_message_box, resolve_model_path
 
 
 class TestAggregatedNodeSection:

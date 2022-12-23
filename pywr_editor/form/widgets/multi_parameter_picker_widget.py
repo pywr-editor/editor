@@ -1,8 +1,9 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QHBoxLayout
+
+from pywr_editor.form import FormCustomWidget, FormField
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import CheckableComboBox
-from pywr_editor.form import FormCustomWidget, FormField
 
 """
  This widgets displays a list of available model parameters

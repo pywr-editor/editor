@@ -1,5 +1,6 @@
-from typing import Any, TYPE_CHECKING
-from pywr_editor.form import FormSection, DictionaryWidget
+from typing import TYPE_CHECKING, Any
+
+from pywr_editor.form import DictionaryWidget, FormSection
 from pywr_editor.utils import Logging
 
 if TYPE_CHECKING:

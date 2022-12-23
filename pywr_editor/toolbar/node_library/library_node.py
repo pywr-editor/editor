@@ -1,18 +1,22 @@
-import PySide6
-import pywr_editor
-import pywr_editor.node_shapes
 from typing import TYPE_CHECKING
-from PySide6.QtGui import QPixmap, Qt, QPainter
+
+import PySide6
+from PySide6.QtGui import QPainter, QPixmap, Qt
 from PySide6.QtWidgets import (
     QGraphicsItem,
-    QStyleOptionGraphicsItem,
     QGraphicsItemGroup,
+    QStyleOptionGraphicsItem,
 )
+
+import pywr_editor
+import pywr_editor.node_shapes
+
 from .library_node_label import LibraryNodeLabel
 
 if TYPE_CHECKING:
-    from .nodes_library import NodesLibraryPanel
     from pywr_editor.schematic import SchematicItem
+
+    from .nodes_library import NodesLibraryPanel
 
 
 class LibraryNode(QGraphicsItemGroup):

@@ -1,18 +1,20 @@
-import pytest
 from pathlib import Path
+
+import pytest
 from PySide6.QtCore import Qt
 from PySide6.QtTest import QSignalSpy
-from pywr_editor.model import ModelConfig
+
+from pywr_editor.dialogs import ParametersDialog
 from pywr_editor.dialogs.parameters.parameter_page_widget import (
     ParameterPageWidget,
 )
-from pywr_editor.dialogs import ParametersDialog
 from pywr_editor.form import (
-    H5FileWidget,
-    H5WhereWidget,
-    H5NodeWidget,
     FormField,
+    H5FileWidget,
+    H5NodeWidget,
+    H5WhereWidget,
 )
+from pywr_editor.model import ModelConfig
 from tests.utils import resolve_model_path
 
 

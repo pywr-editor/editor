@@ -1,9 +1,11 @@
 from PySide6.QtWidgets import QMainWindow
+
+from pywr_editor.model import ModelConfig
+from pywr_editor.widgets import SettingsDialog
+
+from .table_page_widget import TablePageWidget
 from .table_pages_widget import TablePagesWidget
 from .tables_widget import TablesWidget
-from .table_page_widget import TablePageWidget
-from pywr_editor.widgets import SettingsDialog
-from pywr_editor.model import ModelConfig
 
 
 class TablesDialog(SettingsDialog):

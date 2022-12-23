@@ -1,12 +1,13 @@
 import pytest
 from PySide6.QtCore import QTimer
-from pywr_editor.model import ModelConfig
-from pywr_editor.form import FormField
+
 from pywr_editor.dialogs import RecordersDialog
 from pywr_editor.dialogs.recorders.recorder_page_widget import (
     RecorderPageWidget,
 )
-from tests.utils import resolve_model_path, close_message_box
+from pywr_editor.form import FormField
+from pywr_editor.model import ModelConfig
+from tests.utils import close_message_box, resolve_model_path
 
 
 class TestDialogRecorderStorageDurationCurveRecorderSection:

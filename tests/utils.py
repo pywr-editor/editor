@@ -1,6 +1,8 @@
 from pathlib import Path
-from PySide6.QtCore import Qt, QPoint
+
+from PySide6.QtCore import QPoint, Qt
 from PySide6.QtWidgets import QApplication, QMessageBox, QWidget
+
 from pywr_editor.widgets import TableView
 
 

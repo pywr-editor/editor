@@ -1,10 +1,11 @@
-from ..parameter_dialog_form import ParameterDialogForm
 from pywr_editor.form import (
-    ParametersListPickerWidget,
-    ParameterLineEditWidget,
     FormSection,
+    ParameterLineEditWidget,
+    ParametersListPickerWidget,
 )
 from pywr_editor.utils import Logging
+
+from ..parameter_dialog_form import ParameterDialogForm
 
 
 class IndexedArrayParameterSection(FormSection):

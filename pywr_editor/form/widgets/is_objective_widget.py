@@ -1,4 +1,4 @@
-from pywr_editor.form import FormField, AbstractStringComboBoxWidget
+from pywr_editor.form import AbstractStringComboBoxWidget, FormField
 
 """
  Defines a widget to set the objective on a recorder.

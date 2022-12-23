@@ -1,26 +1,23 @@
-import pandas as pd
-import pytest
 from functools import partial
 from typing import List
-from PySide6.QtCore import QTimer, QItemSelectionModel
+
+import pandas as pd
+import pytest
+from PySide6.QtCore import QItemSelectionModel, QTimer
 from PySide6.QtGui import Qt
 from PySide6.QtTest import QSignalSpy
-from PySide6.QtWidgets import (
-    QPushButton,
-    QLabel,
-    QApplication,
-    QGroupBox,
-)
-from pywr_editor.model import ModelConfig
+from PySide6.QtWidgets import QApplication, QGroupBox, QLabel, QPushButton
+
 from pywr_editor.dialogs import TablesDialog
-from pywr_editor.form import IndexColWidget, FormField
-from pywr_editor.utils import get_index_names
 from pywr_editor.dialogs.tables.table_empty_page_widget import (
     TableEmptyPageWidget,
 )
 from pywr_editor.dialogs.tables.table_url_widget import TableUrlWidget
+from pywr_editor.form import FormField, IndexColWidget
+from pywr_editor.model import ModelConfig
+from pywr_editor.utils import get_index_names
+from tests.utils import check_msg, close_message_box, resolve_model_path
 from tests.widgets.test_url_widget import df_from_h5
-from tests.utils import resolve_model_path, close_message_box, check_msg
 
 
 # noinspection PyTypeChecker

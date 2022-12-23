@@ -1,10 +1,13 @@
-import PySide6
 from typing import TYPE_CHECKING
-from PySide6.QtCore import QPointF, QPoint
+
+import PySide6
+from PySide6.QtCore import QPoint, QPointF
 from PySide6.QtGui import QPainterPath, QPen
-from .base_node import BaseNode
-from .svg_icon import SvgIcon, IconProps
+
 from pywr_editor.style import Color
+
+from .base_node import BaseNode
+from .svg_icon import IconProps, SvgIcon
 
 if TYPE_CHECKING:
     from pywr_editor.schematic import SchematicItem

@@ -1,9 +1,10 @@
 import pytest
-from pywr_editor.model import ModelConfig, ParameterConfig, RecorderConfig
+
 from pywr_editor.dialogs import RecordersDialog
 from pywr_editor.dialogs.recorders.recorder_page_widget import (
     RecorderPageWidget,
 )
+from pywr_editor.model import ModelConfig, ParameterConfig, RecorderConfig
 from tests.utils import resolve_model_path
 
 

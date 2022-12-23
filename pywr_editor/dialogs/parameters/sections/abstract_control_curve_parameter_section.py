@@ -1,17 +1,18 @@
 from functools import partial
 from typing import Any
-from ..parameter_dialog_form import ParameterDialogForm
+
 from pywr_editor.form import (
-    ControlCurvesWidget,
-    StoragePickerWidget,
     ControlCurvesValuesSourceWidget,
-    ValuesAndExternalDataWidget,
-    ParametersListPickerWidget,
+    ControlCurvesWidget,
     FormSection,
     FormValidation,
+    ParametersListPickerWidget,
+    StoragePickerWidget,
+    ValuesAndExternalDataWidget,
 )
 from pywr_editor.utils import Logging
 
+from ..parameter_dialog_form import ParameterDialogForm
 
 """
  Abstract class used for ControlCurveParameter

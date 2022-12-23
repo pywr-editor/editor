@@ -1,22 +1,23 @@
 import pytest
-from PySide6.QtCore import Qt, QItemSelectionModel
+from PySide6.QtCore import QItemSelectionModel, Qt
 from PySide6.QtWidgets import QPushButton, QWidget
-from pywr_editor.model import ModelConfig, ParameterConfig
+
 from pywr_editor.dialogs import ParametersDialog
 from pywr_editor.form import (
-    ValueWidget,
-    ModelComponentPickerDialog,
-    ParametersListPickerWidget,
-    IndexParametersListPickerWidget,
-    ParameterPickerWidget,
-    ParameterTypeSelectorWidget,
-    ParameterLineEditWidget,
-    StoragePickerWidget,
-    ModelParameterPickerWidget,
-    ModelComponentSourceSelectorWidget,
-    ParameterForm,
     FormField,
+    IndexParametersListPickerWidget,
+    ModelComponentPickerDialog,
+    ModelComponentSourceSelectorWidget,
+    ModelParameterPickerWidget,
+    ParameterForm,
+    ParameterLineEditWidget,
+    ParameterPickerWidget,
+    ParametersListPickerWidget,
+    ParameterTypeSelectorWidget,
+    StoragePickerWidget,
+    ValueWidget,
 )
+from pywr_editor.model import ModelConfig, ParameterConfig
 from tests.utils import resolve_model_path
 
 

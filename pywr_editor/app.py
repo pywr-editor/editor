@@ -1,11 +1,14 @@
 import logging
 import sys
 from argparse import ArgumentParser, BooleanOptionalAction
+
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication
-from .main_window import MainWindow
+
 from pywr_editor.dialogs import StartScreen
-from pywr_editor.utils import Logging, browse_files, ExceptionHandler
+from pywr_editor.utils import ExceptionHandler, Logging, browse_files
+
+from .main_window import MainWindow
 
 
 # noinspection PyTypeChecker

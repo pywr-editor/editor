@@ -1,9 +1,10 @@
 import calendar
+
 from pywr_editor.form import (
     AbstractAnnualValuesWidget,
-    MonthlyValuesModel,
     ChartOptions,
     FormField,
+    MonthlyValuesModel,
 )
 
 

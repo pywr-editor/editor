@@ -1,9 +1,11 @@
-import pytest
 from functools import partial
+
+import pytest
 from PySide6.QtCore import Qt, QTimer
-from pywr_editor.model import ModelConfig, ParameterConfig
+
 from pywr_editor.dialogs import NodeDialog
-from tests.utils import resolve_model_path, check_msg
+from pywr_editor.model import ModelConfig, ParameterConfig
+from tests.utils import check_msg, resolve_model_path
 
 
 class TestStorageSection:

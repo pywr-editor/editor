@@ -1,7 +1,8 @@
-from .abstract_storage_section import AbstractStorageSection
-from ..node_dialog_form import NodeDialogForm
 from pywr_editor.form import NodesAndFactorsTableWidget, ParameterLineEditWidget
 from pywr_editor.utils import Logging
+
+from ..node_dialog_form import NodeDialogForm
+from .abstract_storage_section import AbstractStorageSection
 
 """
  Defines a section for a virtual storage. Note that

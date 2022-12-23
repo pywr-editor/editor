@@ -1,5 +1,5 @@
 import numpy as np
-from pywr.parameters import Parameter, load_parameter, IndexParameter
+from pywr.parameters import IndexParameter, Parameter, load_parameter
 
 
 # noinspection PyAttributeOutsideInit,PyMethodOverriding

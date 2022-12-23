@@ -1,41 +1,38 @@
-import traceback
-import sys
 import os.path
-import PySide6
+import sys
+import traceback
 from pathlib import Path
 from typing import Literal
+
+import PySide6
 from PySide6.QtCore import QTimer, Signal, Slot
-from PySide6.QtGui import QKeySequence, Qt, QAction
-from PySide6.QtWidgets import (
-    QFileDialog,
-    QMessageBox,
-    QMainWindow,
-    QSplitter,
-)
-from pywr_editor.utils import (
-    Actions,
-    Action,
-    Settings,
-    JumpList,
-    browse_files,
-    Logging,
-)
+from PySide6.QtGui import QAction, QKeySequence, Qt
+from PySide6.QtWidgets import QFileDialog, QMainWindow, QMessageBox, QSplitter
+
 from pywr_editor.dialogs import (
-    ParametersDialog,
-    ScenariosDialog,
-    IncludesDialog,
-    EdgeSlotsDialog,
-    RecordersDialog,
-    JsonCodeViewer,
     AboutButton,
+    EdgeSlotsDialog,
+    IncludesDialog,
+    JsonCodeViewer,
     MetadataDialog,
+    ParametersDialog,
+    RecordersDialog,
+    ScenariosDialog,
     TablesDialog,
 )
-from pywr_editor.tree import ComponentsTree
-from pywr_editor.toolbar import ToolbarWidget, NodesLibrary
+from pywr_editor.model import ModelConfig
 from pywr_editor.schematic import Schematic, scaling_factor
 from pywr_editor.style import AppStylesheet
-from pywr_editor.model import ModelConfig
+from pywr_editor.toolbar import NodesLibrary, ToolbarWidget
+from pywr_editor.tree import ComponentsTree
+from pywr_editor.utils import (
+    Action,
+    Actions,
+    JumpList,
+    Logging,
+    Settings,
+    browse_files,
+)
 
 
 class MainWindow(QMainWindow):

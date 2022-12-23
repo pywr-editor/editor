@@ -1,8 +1,11 @@
+from typing import TYPE_CHECKING
+
 import PySide6
 from PySide6.QtWidgets import QAbstractItemView, QPushButton
-from typing import TYPE_CHECKING
-from .recorders_list_model import RecordersListModel
+
 from pywr_editor.widgets import TableView
+
+from .recorders_list_model import RecordersListModel
 
 if TYPE_CHECKING:
     from .recorders_widget import RecordersWidget

@@ -1,5 +1,6 @@
-import PySide6
 from typing import Any
+
+import PySide6
 from PySide6.QtCore import QAbstractTableModel
 from PySide6.QtGui import Qt
 

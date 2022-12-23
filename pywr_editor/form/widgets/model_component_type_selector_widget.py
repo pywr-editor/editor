@@ -1,14 +1,16 @@
 import os
-import pywr_editor.model
-import pywr_editor.dialogs
-from typing import Literal, TYPE_CHECKING, Union
-from PySide6.QtCore import Slot, QSize, Signal
+from typing import TYPE_CHECKING, Literal, Union
+
+from PySide6.QtCore import QSize, Signal, Slot
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QHBoxLayout, QSizePolicy
+
+import pywr_editor.dialogs
+import pywr_editor.model
+from pywr_editor.form import FormCustomWidget, FormField, FormSection
 from pywr_editor.model import ParameterConfig, RecorderConfig
-from pywr_editor.widgets import ComboBox, PushIconButton
-from pywr_editor.form import FormCustomWidget, FormSection, FormField
 from pywr_editor.utils import Logging
+from pywr_editor.widgets import ComboBox, PushIconButton
 
 if TYPE_CHECKING:
     from pywr_editor.form import ParameterForm, RecorderForm

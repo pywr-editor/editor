@@ -1,10 +1,13 @@
 import math
-import PySide6
 from typing import TYPE_CHECKING
-from PySide6.QtCore import QRectF, QPointF, QRect
+
+import PySide6
+from PySide6.QtCore import QPointF, QRect, QRectF
 from PySide6.QtGui import QPen, Qt
-from .base_node import BaseNode
+
 from pywr_editor.style import Color
+
+from .base_node import BaseNode
 
 if TYPE_CHECKING:
     from pywr_editor.schematic import SchematicItem

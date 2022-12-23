@@ -1,6 +1,8 @@
-import pytest
 from typing import Tuple
-from PySide6.QtCore import QTimer, Qt
+
+import pytest
+from PySide6.QtCore import Qt, QTimer
+
 from pywr_editor import MainWindow
 from pywr_editor.tree import ComponentsTree
 from tests.utils import close_message_box, resolve_model_path

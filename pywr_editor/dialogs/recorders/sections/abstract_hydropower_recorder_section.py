@@ -1,10 +1,11 @@
-from ..recorder_dialog_form import RecorderDialogForm
-from .abstract_recorder_section import AbstractRecorderSection
 from pywr_editor.form import (
+    FloatWidget,
     NodePickerWidget,
     ParameterLineEditWidget,
-    FloatWidget,
 )
+
+from ..recorder_dialog_form import RecorderDialogForm
+from .abstract_recorder_section import AbstractRecorderSection
 
 
 class AbstractHydropowerRecorderSection(AbstractRecorderSection):

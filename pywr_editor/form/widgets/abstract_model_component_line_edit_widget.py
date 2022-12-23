@@ -1,16 +1,17 @@
-from typing import Literal, Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Literal
+
 from PySide6.QtCore import Slot
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QLineEdit, QHBoxLayout
-from pywr_editor.model import ParameterConfig, RecorderConfig
+from PySide6.QtWidgets import QHBoxLayout, QLineEdit
+
 from pywr_editor.form import (
-    ModelComponentPickerDialog,
     FormCustomWidget,
     FormValidation,
+    ModelComponentPickerDialog,
 )
-from pywr_editor.widgets import PushButton, RecorderIcon, ParameterIcon
-from pywr_editor.utils import tooltip_table, get_signal_sender, Logging
-
+from pywr_editor.model import ParameterConfig, RecorderConfig
+from pywr_editor.utils import Logging, get_signal_sender, tooltip_table
+from pywr_editor.widgets import ParameterIcon, PushButton, RecorderIcon
 
 if TYPE_CHECKING:
     from pywr_editor.form import FormField, ModelComponentForm

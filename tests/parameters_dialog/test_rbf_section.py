@@ -2,14 +2,15 @@ from functools import partial
 
 import pytest
 from PySide6.QtCore import Qt, QTimer
-from PySide6.QtWidgets import QPushButton, QMessageBox
+from PySide6.QtWidgets import QMessageBox, QPushButton
+
+from pywr_editor.dialogs import ParametersDialog
 from pywr_editor.dialogs.parameters.parameter_page_widget import (
     ParameterPageWidget,
 )
-from pywr_editor.model import ModelConfig
-from pywr_editor.dialogs import ParametersDialog
 from pywr_editor.form import FormField
-from tests.utils import resolve_model_path, close_message_box
+from pywr_editor.model import ModelConfig
+from tests.utils import close_message_box, resolve_model_path
 
 
 class TestDialogParameterRbfSection:

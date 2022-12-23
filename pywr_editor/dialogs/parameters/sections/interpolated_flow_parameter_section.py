@@ -1,7 +1,8 @@
+from pywr_editor.form import NodePickerWidget, TableValuesWidget
+from pywr_editor.utils import Logging
+
 from ..parameter_dialog_form import ParameterDialogForm
 from .abstract_interpolation_section import AbstractInterpolationSection
-from pywr_editor.form import TableValuesWidget, NodePickerWidget
-from pywr_editor.utils import Logging
 
 
 class InterpolatedFlowParameterSection(AbstractInterpolationSection):

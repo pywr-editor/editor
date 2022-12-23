@@ -1,10 +1,8 @@
+from pywr_editor.form import FormValidation, ValuesAndExternalDataWidget
+
 from ..recorder_dialog_form import RecorderDialogForm
 from .abstract_flow_duration_curve_recorder_section import (
     AbstractFlowDurationCurveRecorderSection,
-)
-from pywr_editor.form import (
-    ValuesAndExternalDataWidget,
-    FormValidation,
 )
 
 """

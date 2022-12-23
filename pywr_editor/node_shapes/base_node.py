@@ -1,9 +1,10 @@
 import re
+from typing import TYPE_CHECKING, Union
+
 import PySide6
-from typing import Union
 from PySide6.QtCore import QRectF
 from PySide6.QtWidgets import QGraphicsItemGroup
-from typing import TYPE_CHECKING
+
 from pywr_editor.style import Color
 
 if TYPE_CHECKING:

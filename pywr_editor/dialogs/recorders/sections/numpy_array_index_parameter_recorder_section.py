@@ -1,9 +1,10 @@
+from pywr_editor.form import ParameterLineEditWidget
+
 from ..recorder_dialog_form import RecorderDialogForm
 from .abstract_numpy_recorder_section import (
     AbstractNumpyRecorderSection,
     TemporalWidgetField,
 )
-from pywr_editor.form import ParameterLineEditWidget
 
 
 class NumpyArrayIndexParameterRecorderSection(AbstractNumpyRecorderSection):

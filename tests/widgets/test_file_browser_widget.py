@@ -1,7 +1,8 @@
 import pytest
 from PySide6.QtWidgets import QPushButton, QWidget
-from pywr_editor.model import ModelConfig, RecorderConfig
+
 from pywr_editor.form import FileBrowserWidget, RecorderForm
+from pywr_editor.model import ModelConfig, RecorderConfig
 from tests.utils import resolve_model_path
 
 

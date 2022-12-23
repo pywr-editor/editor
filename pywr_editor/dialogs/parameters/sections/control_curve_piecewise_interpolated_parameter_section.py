@@ -1,13 +1,14 @@
-from ..parameter_dialog_form import ParameterDialogForm
 from pywr_editor.form import (
     ControlCurvesWidget,
-    StoragePickerWidget,
-    ValuesAndExternalDataWidget,
     FloatWidget,
     FormSection,
     FormValidation,
+    StoragePickerWidget,
+    ValuesAndExternalDataWidget,
 )
 from pywr_editor.utils import Logging
+
+from ..parameter_dialog_form import ParameterDialogForm
 
 
 class ControlCurvePiecewiseInterpolatedParameterSection(FormSection):

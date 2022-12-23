@@ -1,11 +1,14 @@
-from PySide6.QtCore import Slot
-from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout
 from typing import TYPE_CHECKING
-from .scenario_options_model import ScenarioOptionsModel
+
+from PySide6.QtCore import Slot
+from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout
+
+from pywr_editor.form import FormCustomWidget, FormField, FormValidation
 from pywr_editor.model import ScenarioConfig
-from pywr_editor.widgets import TableView, SpinBox, PushButton
 from pywr_editor.utils import Logging
-from pywr_editor.form import FormField, FormCustomWidget, FormValidation
+from pywr_editor.widgets import PushButton, SpinBox, TableView
+
+from .scenario_options_model import ScenarioOptionsModel
 
 if TYPE_CHECKING:
     from .scenario_form_widget import ScenarioFormWidget

@@ -1,5 +1,7 @@
-from typing import Any, Union, Literal, Type, Callable, TypedDict
+from typing import Any, Callable, Literal, Type, TypedDict, Union
+
 from PySide6.QtWidgets import QWidget
+
 from .form_custom_widget import FormCustomWidget
 from .form_validation import FormValidation
 

@@ -1,9 +1,10 @@
+from pywr_editor.form import ModelRecorderPickerWidget
+
 from ..parameter_dialog_form import ParameterDialogForm
 from .abstract_threshold_parameter_section import (
     AbstractThresholdParameterSection,
     ValueDict,
 )
-from pywr_editor.form import ModelRecorderPickerWidget
 
 
 class RecorderThresholdParameterSection(AbstractThresholdParameterSection):

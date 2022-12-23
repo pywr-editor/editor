@@ -1,16 +1,18 @@
-from PySide6.QtCore import Slot, QSize
-from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QAbstractItemView
-from typing import Literal, Any, List, Union, TYPE_CHECKING
-from pywr_editor.model import RecorderConfig, ParameterConfig
+from typing import TYPE_CHECKING, Any, List, Literal, Union
+
+from PySide6.QtCore import QSize, Slot
+from PySide6.QtWidgets import QAbstractItemView, QHBoxLayout, QVBoxLayout
+
 from pywr_editor.form import (
-    ModelComponentPickerDialog,
     AbstractModelComponentListPickerModel,
     FormCustomWidget,
-    FormValidation,
     FormField,
+    FormValidation,
+    ModelComponentPickerDialog,
 )
-from pywr_editor.widgets import PushButton, PushIconButton, TableView, ListView
-from pywr_editor.utils import get_signal_sender, Logging, move_row
+from pywr_editor.model import ParameterConfig, RecorderConfig
+from pywr_editor.utils import Logging, get_signal_sender, move_row
+from pywr_editor.widgets import ListView, PushButton, PushIconButton, TableView
 
 if TYPE_CHECKING:
     from pywr_editor.dialogs import ParameterDialogForm, RecorderDialogForm

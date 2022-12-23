@@ -1,16 +1,17 @@
 import os
 import sys
 from dataclasses import dataclass
-import pythoncom
 from pathlib import Path
-from pywr_editor.utils import Logging
 
-# noinspection PyUnresolvedReferences
-from win32com.shell import shell
+import pythoncom
 
 # noinspection PyUnresolvedReferences
 from win32com.propsys import propsys, pscon
 
+# noinspection PyUnresolvedReferences
+from win32com.shell import shell
+
+from pywr_editor.utils import Logging
 
 """
  Add items to the Windows jump list. Items can be:

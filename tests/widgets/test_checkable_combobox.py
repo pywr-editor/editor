@@ -1,5 +1,6 @@
 import pytest
 from PySide6.QtTest import QSignalSpy
+
 from pywr_editor.widgets import CheckableComboBox
 
 

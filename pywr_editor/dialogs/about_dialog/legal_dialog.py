@@ -1,12 +1,13 @@
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import (
     QDialog,
-    QVBoxLayout,
-    QLabel,
     QDialogButtonBox,
+    QLabel,
     QTextEdit,
+    QVBoxLayout,
     QWidget,
 )
+
 from .about_dialog_style_sheet import about_dialog_stylesheet
 
 

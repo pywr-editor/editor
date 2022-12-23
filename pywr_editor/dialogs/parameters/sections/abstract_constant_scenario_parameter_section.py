@@ -1,15 +1,18 @@
-from typing import Type, Any
+from typing import Any, Type
+
 from PySide6.QtCore import Slot
-from ..parameter_dialog_form import ParameterDialogForm
+
 from pywr_editor.form import (
-    SourceSelectorWidget,
-    UrlWidget,
-    ScenarioPickerWidget,
     FormSection,
-    TableValuesWidget,
     FormValidation,
+    ScenarioPickerWidget,
+    SourceSelectorWidget,
+    TableValuesWidget,
+    UrlWidget,
 )
-from pywr_editor.utils import get_signal_sender, Logging
+from pywr_editor.utils import Logging, get_signal_sender
+
+from ..parameter_dialog_form import ParameterDialogForm
 
 """
   Abstract section class to use for ConstantScenarioParameter

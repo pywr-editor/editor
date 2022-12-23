@@ -1,5 +1,6 @@
-from typing import TYPE_CHECKING
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
+
 from pywr_editor.model import NodeConfig
 
 if TYPE_CHECKING:

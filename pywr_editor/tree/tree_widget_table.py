@@ -1,5 +1,6 @@
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QTreeWidgetItem
+
 from pywr_editor.model import ModelConfig
 from pywr_editor.style import Color
 

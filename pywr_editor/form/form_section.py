@@ -1,7 +1,9 @@
 from typing import TYPE_CHECKING
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QGroupBox
-from .form_validation import FormValidation
+
+from PySide6.QtWidgets import QGroupBox, QVBoxLayout, QWidget
+
 from .field_config import FieldConfig
+from .form_validation import FormValidation
 
 if TYPE_CHECKING:
     from pywr_editor.form import Form

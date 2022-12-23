@@ -1,14 +1,15 @@
-from ..parameter_dialog_form import ParameterDialogForm
 from pywr_editor.form import (
-    NodePickerWidget,
-    TableValuesWidget,
-    StoragePickerWidget,
-    ParameterLineEditWidget,
     FloatWidget,
     FormSection,
     FormValidation,
+    NodePickerWidget,
+    ParameterLineEditWidget,
+    StoragePickerWidget,
+    TableValuesWidget,
 )
 from pywr_editor.utils import Logging
+
+from ..parameter_dialog_form import ParameterDialogForm
 
 
 class Polynomial1DParameterSection(FormSection):

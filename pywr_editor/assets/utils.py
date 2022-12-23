@@ -1,13 +1,14 @@
 import inspect
-import warnings
+import json
 import re
-import pywr.recorders
+import warnings
+from pathlib import Path
+
+import pywr.domains.groundwater
+import pywr.nodes
 import pywr.parameters
 import pywr.parameters.control_curves
-import pywr.nodes
-import pywr.domains.groundwater
-import json
-from pathlib import Path
+import pywr.recorders
 import requests as requests
 
 session = requests.Session()

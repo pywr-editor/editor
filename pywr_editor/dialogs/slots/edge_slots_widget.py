@@ -1,12 +1,15 @@
 import traceback
 from typing import TYPE_CHECKING
+
 from PySide6.QtCore import QSortFilterProxyModel, Qt
-from PySide6.QtWidgets import QVBoxLayout, QLineEdit
-from .edge_slots_model import EdgeSlotsModel
+from PySide6.QtWidgets import QLineEdit, QVBoxLayout
+
+from pywr_editor.form import FormCustomWidget, FormField
+from pywr_editor.model.edges import Edges
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import TableView
-from pywr_editor.form import FormField, FormCustomWidget
-from pywr_editor.model.edges import Edges
+
+from .edge_slots_model import EdgeSlotsModel
 
 if TYPE_CHECKING:
     from pywr_editor.dialogs import EdgeSlotsDialog

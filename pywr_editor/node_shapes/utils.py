@@ -1,13 +1,16 @@
-import shiboken6
-import pywr_editor.node_shapes as all_nodes
-from PySide6.QtCore import QSize
 from typing import Type
-from PySide6.QtGui import QPainter, Qt, QPixmap
+
+import shiboken6
+from PySide6.QtCore import QSize
+from PySide6.QtGui import QPainter, QPixmap, Qt
 from PySide6.QtWidgets import QGraphicsItemGroup, QStyleOptionGraphicsItem
+
+import pywr_editor.node_shapes as all_nodes
 from pywr_editor.model import NodeConfig
+
 from .base_node import BaseNode
-from .pywr.pywr_node import PywrNode
 from .custom_node_shape import CustomNodeShape
+from .pywr.pywr_node import PywrNode
 
 
 def get_node_icon_classes(include_pywr_nodes: bool = True) -> list[str]:

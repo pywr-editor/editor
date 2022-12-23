@@ -1,18 +1,20 @@
-import pytest
 from functools import partial
-from PySide6.QtCore import Qt, QPoint, QTimer
-from pywr_editor.model import ModelConfig
+
+import pytest
+from PySide6.QtCore import QPoint, Qt, QTimer
+
 from pywr_editor.dialogs import NodeDialog
 from pywr_editor.form import (
+    FloatWidget,
     KeatingStreamsWidget,
     TableValuesWidget,
-    FloatWidget,
 )
+from pywr_editor.model import ModelConfig
 from tests.utils import (
-    resolve_model_path,
     change_table_view_cell,
-    close_message_box,
     check_msg,
+    close_message_box,
+    resolve_model_path,
 )
 
 

@@ -1,17 +1,18 @@
 import traceback
 from typing import TYPE_CHECKING
+
+from pandas import ExcelFile
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QHBoxLayout
-from pandas import ExcelFile
-from pywr_editor.utils import Logging, get_signal_sender
-from pywr_editor.widgets import ComboBox
+
 from pywr_editor.form import (
+    FormCustomWidget,
     FormField,
     FormValidation,
-    FormCustomWidget,
     UrlWidget,
 )
-
+from pywr_editor.utils import Logging, get_signal_sender
+from pywr_editor.widgets import ComboBox
 
 if TYPE_CHECKING:
     from pywr_editor.form import ModelComponentForm

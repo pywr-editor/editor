@@ -1,7 +1,8 @@
+from typing import TYPE_CHECKING
+
 import PySide6
 from PySide6.QtCore import QSize
 from PySide6.QtWidgets import QWidget
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .json_editor import JsonEditor

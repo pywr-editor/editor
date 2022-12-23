@@ -1,9 +1,12 @@
-from PySide6.QtGui import QWindow
 from typing import TYPE_CHECKING, Union
+
+from PySide6.QtGui import QWindow
+
 from pywr_editor.model import ModelConfig
+from pywr_editor.widgets import SettingsDialog
+
 from .recorder_pages_widget import RecorderPagesWidget
 from .recorders_widget import RecordersWidget
-from pywr_editor.widgets import SettingsDialog
 
 if TYPE_CHECKING:
     from pywr_editor import MainWindow

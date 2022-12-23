@@ -1,9 +1,10 @@
 from PySide6.QtCore import Slot
+
 from pywr_editor.form import (
     AbstractStringComboBoxWidget,
-    H5WhereWidget,
-    FormValidation,
     FormField,
+    FormValidation,
+    H5WhereWidget,
 )
 from pywr_editor.utils import get_signal_sender
 

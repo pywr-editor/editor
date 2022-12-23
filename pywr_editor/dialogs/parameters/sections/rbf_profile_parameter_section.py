@@ -1,14 +1,15 @@
-from ..parameter_dialog_form import ParameterDialogForm
 from pywr_editor.form import (
+    FloatWidget,
+    FormSection,
+    FormValidation,
     RbfDayOfYearWidget,
     RbfFunction,
     RbfOptBoundWidget,
     RbfValues,
-    FloatWidget,
-    FormSection,
-    FormValidation,
 )
 from pywr_editor.utils import Logging
+
+from ..parameter_dialog_form import ParameterDialogForm
 
 
 class RbfProfileParameterSection(FormSection):

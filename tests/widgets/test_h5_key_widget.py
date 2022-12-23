@@ -1,18 +1,19 @@
 import pandas as pd
 import pytest
 from PySide6.QtCore import QTimer
-from pywr_editor.model import ModelConfig
+
 from pywr_editor.dialogs import ParametersDialog
 from pywr_editor.form import (
+    FormField,
     H5KeyWidget,
     IndexColWidget,
-    UrlWidget,
     ParseDatesWidget,
-    FormField,
+    UrlWidget,
 )
+from pywr_editor.model import ModelConfig
 from pywr_editor.utils import get_index_names
+from tests.utils import close_message_box, resolve_model_path
 from tests.widgets.test_url_widget import df_from_h5
-from tests.utils import resolve_model_path, close_message_box
 
 
 class TestDialogParameterH5KeyWidget:

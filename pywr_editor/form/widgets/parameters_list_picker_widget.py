@@ -1,4 +1,4 @@
-from pywr_editor.form import FormField, AbstractParametersListPickerWidget
+from pywr_editor.form import AbstractParametersListPickerWidget, FormField
 
 """
  Widget that provides a list of parameters.

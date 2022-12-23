@@ -1,15 +1,17 @@
+from typing import TYPE_CHECKING, Union
+
 from PySide6.QtSvgWidgets import QSvgWidget
 from PySide6.QtWidgets import (
-    QWidget,
-    QSizePolicy,
-    QLabel,
-    QVBoxLayout,
-    QSpacerItem,
     QHBoxLayout,
+    QLabel,
+    QSizePolicy,
+    QSpacerItem,
+    QVBoxLayout,
+    QWidget,
 )
-from typing import Union, TYPE_CHECKING
-from pywr_editor.style import Color
+
 from pywr_editor.form import FormTitle
+from pywr_editor.style import Color
 
 if TYPE_CHECKING:
     from .scenario_pages_widget import ScenarioPagesWidget

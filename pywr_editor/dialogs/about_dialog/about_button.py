@@ -1,8 +1,6 @@
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import (
-    QPushButton,
-    QSizePolicy,
-)
+from PySide6.QtWidgets import QPushButton, QSizePolicy
+
 from .about_dialog import AboutDialog
 
 

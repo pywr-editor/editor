@@ -1,20 +1,17 @@
-import pywr_editor
-from typing import TypeVar, Callable, Any, Literal
+from typing import Any, Callable, Literal, TypeVar
+
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import (
     QDialog,
-    QVBoxLayout,
-    QLabel,
     QDialogButtonBox,
+    QLabel,
     QPushButton,
+    QVBoxLayout,
     QWidget,
 )
-from pywr_editor.form import (
-    Form,
-    FormTitle,
-    FormField,
-    FormCustomWidget,
-)
+
+import pywr_editor
+from pywr_editor.form import Form, FormCustomWidget, FormField, FormTitle
 from pywr_editor.model import ModelConfig, ParameterConfig, RecorderConfig
 from pywr_editor.utils import Logging
 

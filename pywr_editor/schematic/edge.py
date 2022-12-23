@@ -1,22 +1,23 @@
-import PySide6
+from math import atan2, cos, pi, sin
 from typing import TYPE_CHECKING, Union
-from math import pi, sin, cos, atan2
+
+import PySide6
 from PySide6.QtCore import (
-    Qt,
     QLineF,
+    QPoint,
     QPointF,
     QRectF,
     QSizeF,
+    Qt,
     qFuzzyCompare,
-    QPoint,
 )
-from PySide6.QtGui import QPen, QPolygonF, QPainter, QColor
+from PySide6.QtGui import QColor, QPainter, QPen, QPolygonF
 from PySide6.QtWidgets import QGraphicsItem
+
 from pywr_editor.style import Color, ColorName
 
-
 if TYPE_CHECKING:
-    from pywr_editor.schematic import SchematicItem, Schematic
+    from pywr_editor.schematic import Schematic, SchematicItem
 
 
 class Edge(QGraphicsItem):

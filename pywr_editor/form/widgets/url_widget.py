@@ -1,23 +1,25 @@
 import os
 import traceback
-from PySide6.QtCore import Signal, Slot, SignalInstance
+
+from pandas import read_csv, read_excel, read_hdf
+from PySide6.QtCore import Signal, SignalInstance, Slot
 from PySide6.QtWidgets import (
+    QComboBox,
+    QFileDialog,
     QHBoxLayout,
     QLineEdit,
-    QFileDialog,
     QMessageBox,
-    QComboBox,
     QSpinBox,
 )
-from pandas import read_csv, read_excel, read_hdf
+
+from pywr_editor.form import FormCustomWidget, FormField, FormValidation
 from pywr_editor.utils import (
-    get_signal_sender,
     Logging,
+    get_signal_sender,
     reset_pandas_index_names,
     set_table_index,
 )
 from pywr_editor.widgets import PushButton
-from pywr_editor.form import FormCustomWidget, FormValidation, FormField
 
 """
  This widget loads and handles slots and signals for an external

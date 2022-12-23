@@ -1,7 +1,9 @@
 from typing import Any
-from .abstract_virtual_storage_section import AbstractVirtualStorageSection
-from ..node_dialog_form import NodeDialogForm
+
 from pywr_editor.form import FormValidation
+
+from ..node_dialog_form import NodeDialogForm
+from .abstract_virtual_storage_section import AbstractVirtualStorageSection
 
 
 class RollingVirtualStorageSection(AbstractVirtualStorageSection):

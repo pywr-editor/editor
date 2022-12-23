@@ -1,6 +1,8 @@
-from PySide6.QtWidgets import QToolBar, QTabWidget, QMainWindow
-from .tab import Tab
+from PySide6.QtWidgets import QMainWindow, QTabWidget, QToolBar
+
 from pywr_editor.style import Color, stylesheet_dict_to_str
+
+from .tab import Tab
 
 
 class ToolbarWidget(QToolBar):

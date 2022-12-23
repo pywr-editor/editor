@@ -1,13 +1,14 @@
-from ..parameter_dialog_form import ParameterDialogForm
 from pywr_editor.form import (
-    SourceSelectorWidget,
-    UrlWidget,
-    ScenarioPickerWidget,
     CheckSumWidget,
     FormSection,
     FormValidation,
+    ScenarioPickerWidget,
+    SourceSelectorWidget,
+    UrlWidget,
 )
 from pywr_editor.utils import Logging
+
+from ..parameter_dialog_form import ParameterDialogForm
 
 
 class DataFrameParameterSection(FormSection):

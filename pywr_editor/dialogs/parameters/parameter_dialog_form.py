@@ -1,17 +1,19 @@
+from typing import TYPE_CHECKING
+
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QPushButton
-from typing import TYPE_CHECKING
+
 from pywr_editor.form import (
+    FormValidation,
     ParameterForm,
     ParameterTypeSelectorWidget,
-    FormValidation,
 )
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import Logging
 
 if TYPE_CHECKING:
-    from .parameters_list_model import ParametersListModel
     from .parameter_page_widget import ParameterPageWidget
+    from .parameters_list_model import ParametersListModel
 
 """
  This forms allow editing a parameter

@@ -1,6 +1,8 @@
 import time
-import pytest
 from pathlib import Path
+
+import pytest
+
 from pywr_editor.utils import Settings
 
 

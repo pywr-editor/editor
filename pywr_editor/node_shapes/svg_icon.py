@@ -1,8 +1,10 @@
 import PySide6
-from PySide6.QtCore import QByteArray, QFile, QRectF, QTextStream, Qt
+from PySide6.QtCore import QByteArray, QFile, QRectF, Qt, QTextStream
 from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtWidgets import QGraphicsItem
+
 from pywr_editor.style import Color
+
 from .base_node import BaseNode
 
 

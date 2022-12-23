@@ -1,15 +1,14 @@
 from copy import deepcopy
-from typing import Any, TYPE_CHECKING
-from PySide6.QtCore import Slot, QSize
-from PySide6.QtWidgets import (
-    QVBoxLayout,
-    QHBoxLayout,
-    QAbstractItemView,
-)
+from typing import TYPE_CHECKING, Any
+
+from PySide6.QtCore import QSize, Slot
+from PySide6.QtWidgets import QAbstractItemView, QHBoxLayout, QVBoxLayout
+
+from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.utils import Logging, get_signal_sender
+from pywr_editor.widgets import PushIconButton, TableView
+
 from .dictionary_model import DictionaryModel
-from pywr_editor.widgets import TableView, PushIconButton
-from pywr_editor.utils import get_signal_sender, Logging
-from pywr_editor.form import FormField, FormCustomWidget, FormValidation
 
 if TYPE_CHECKING:
     from pywr_editor.form import ModelComponentForm

@@ -1,22 +1,25 @@
 import ast
-import pywr_editor.dialogs
 from typing import TYPE_CHECKING, Any, Literal
+
 from PySide6.QtWidgets import QGroupBox, QLineEdit, QPushButton
-from pywr_editor.model import NodeConfig, Constants, ModelConfig
+
+import pywr_editor.dialogs
 from pywr_editor.form import (
+    EdgeColorPickerWidget,
+    FloatWidget,
     Form,
     FormValidation,
-    EdgeColorPickerWidget,
     NodeStylePickerWidget,
     ParameterLineEditWidget,
-    FloatWidget,
 )
-from .sections.custom_node_section import CustomNodeSection
+from pywr_editor.model import Constants, ModelConfig, NodeConfig
 from pywr_editor.utils import Logging
 
+from .sections.custom_node_section import CustomNodeSection
+
 if TYPE_CHECKING:
-    from pywr_editor.form import FieldConfig
     from pywr_editor.dialogs import NodeDialog
+    from pywr_editor.form import FieldConfig
 
 """
  This forms allow editing a node configuration.

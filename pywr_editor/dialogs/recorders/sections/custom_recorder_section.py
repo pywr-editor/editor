@@ -1,5 +1,6 @@
-from ..recorder_dialog_form import RecorderDialogForm
 from pywr_editor.form import AbstractCustomComponentSection
+
+from ..recorder_dialog_form import RecorderDialogForm
 
 """
  This section allows setting up a custom recorder dictionary

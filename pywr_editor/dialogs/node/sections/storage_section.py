@@ -1,7 +1,8 @@
-from .abstract_storage_section import AbstractStorageSection
-from ..node_dialog_form import NodeDialogForm
 from pywr_editor.form import ParameterLineEditWidget
 from pywr_editor.utils import Logging
+
+from ..node_dialog_form import NodeDialogForm
+from .abstract_storage_section import AbstractStorageSection
 
 """
  Section for a Storage node. NOTE: the num_inputs
