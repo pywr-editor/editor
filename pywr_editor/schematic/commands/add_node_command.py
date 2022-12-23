@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
+
 from PySide6.QtGui import QUndoCommand
+
 from pywr_editor.model import NodeConfig
 from pywr_editor.utils import Logging
 
