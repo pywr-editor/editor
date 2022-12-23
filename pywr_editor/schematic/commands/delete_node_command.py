@@ -1,10 +1,12 @@
-from PySide6.QtGui import QUndoCommand
 from typing import TYPE_CHECKING
+
+from PySide6.QtGui import QUndoCommand
+
 from pywr_editor.model import NodeConfig
 from pywr_editor.utils import Logging
 
 if TYPE_CHECKING:
-    from pywr_editor.schematic import SchematicItem, Schematic
+    from pywr_editor.schematic import Schematic, SchematicItem
 
 
 class DeleteNodeCommand(QUndoCommand):
