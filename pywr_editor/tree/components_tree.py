@@ -1,5 +1,7 @@
+from typing import TYPE_CHECKING
+
 import PySide6
-from PySide6.QtCore import Qt, Slot, QPoint
+from PySide6.QtCore import QPoint, Qt, Slot
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (
     QAbstractItemView,
@@ -9,23 +11,24 @@ from PySide6.QtWidgets import (
     QTreeWidget,
     QTreeWidgetItem,
 )
-from typing import TYPE_CHECKING
-from .expanded_item_states import ExpandedItemStates
-from .tree_widget_parameter import TreeWidgetParameter, TreeWidgetParameterName
-from .tree_widget_table import TreeWidgetTable
-from .tree_widget_node import TreeWidgetNode
-from .tree_widget_recorder import TreeWidgetRecorder, TreeWidgetRecorderName
+
 from pywr_editor.dialogs import (
-    TablesDialog,
-    TablesWidget,
     ParametersDialog,
     ParametersWidget,
-    RecordersWidget,
     RecordersDialog,
+    RecordersWidget,
+    TablesDialog,
+    TablesWidget,
 )
+from pywr_editor.model import Constants, ModelConfig
 from pywr_editor.style import Color, stylesheet_dict_to_str
 from pywr_editor.widgets import ContextualMenu
-from pywr_editor.model import Constants, ModelConfig
+
+from .expanded_item_states import ExpandedItemStates
+from .tree_widget_node import TreeWidgetNode
+from .tree_widget_parameter import TreeWidgetParameter, TreeWidgetParameterName
+from .tree_widget_recorder import TreeWidgetRecorder, TreeWidgetRecorderName
+from .tree_widget_table import TreeWidgetTable
 
 if TYPE_CHECKING:
     from pywr_editor import MainWindow

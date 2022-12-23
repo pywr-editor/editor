@@ -1,16 +1,19 @@
+from typing import TYPE_CHECKING, Union
+
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QWindow
 from PySide6.QtWidgets import (
     QDialog,
     QDialogButtonBox,
-    QVBoxLayout,
     QGroupBox,
     QLabel,
+    QVBoxLayout,
 )
-from typing import TYPE_CHECKING, Union
-from .edge_slots_widget import EdgeSlotsWidget
-from pywr_editor.form import FormTitle, Form, FieldConfig
+
+from pywr_editor.form import FieldConfig, Form, FormTitle
 from pywr_editor.model import ModelConfig
+
+from .edge_slots_widget import EdgeSlotsWidget
 
 if TYPE_CHECKING:
     from pywr_editor import MainWindow

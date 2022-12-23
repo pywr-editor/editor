@@ -1,11 +1,12 @@
-from typing import Union, Literal, TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING, Callable, Literal, Union
+
 from PySide6.QtCore import QObject
-from PySide6.QtWidgets import QFileDialog, QWidget, QLayout
+from PySide6.QtWidgets import QFileDialog, QLayout, QWidget
 
 from pywr_editor.utils import Logging
 
 if TYPE_CHECKING:
-    from pywr_editor.widgets import TableView, ListView
+    from pywr_editor.widgets import ListView, TableView
 
 
 def clear_layout(layout: QLayout) -> None:

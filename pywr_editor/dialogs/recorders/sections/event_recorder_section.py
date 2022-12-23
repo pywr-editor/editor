@@ -1,11 +1,12 @@
-from ..recorder_dialog_form import RecorderDialogForm
-from .abstract_recorder_section import AbstractRecorderSection
 from pywr_editor.form import (
+    EventTrackedParameterAggFuncWidget,
+    EventTypeWidget,
     ParameterLineEditWidget,
     RecorderLineEditWidget,
-    EventTypeWidget,
-    EventTrackedParameterAggFuncWidget,
 )
+
+from ..recorder_dialog_form import RecorderDialogForm
+from .abstract_recorder_section import AbstractRecorderSection
 
 
 class EventRecorderSection(AbstractRecorderSection):

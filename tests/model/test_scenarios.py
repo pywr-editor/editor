@@ -1,4 +1,5 @@
 import pytest
+
 from pywr_editor.model import ModelConfig, ScenarioConfig
 from tests.utils import resolve_model_path
 

@@ -1,7 +1,7 @@
 import pytest
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QPushButton, QWidget
-from pywr_editor.model import ModelConfig, ParameterConfig, PywrParametersData
+
 from pywr_editor.dialogs import ParametersDialog
 from pywr_editor.dialogs.parameters.parameter_page_widget import (
     ParameterPageWidget,
@@ -10,23 +10,24 @@ from pywr_editor.dialogs.parameters.sections.storage_threshold_parameter_section
     StorageThresholdParameterSection,
 )
 from pywr_editor.form import (
-    MonthlyValuesWidget,
     ColumnWidget,
+    FormField,
+    IndexColWidget,
     IndexWidget,
-    ValueWidget,
-    ParameterPickerWidget,
     ModelComponentPickerDialog,
     ModelComponentSourceSelectorWidget,
-    IndexColWidget,
+    MonthlyValuesWidget,
+    ParameterForm,
     ParameterLineEditWidget,
+    ParameterPickerWidget,
     ParameterTypeSelectorWidget,
     SourceSelectorWidget,
     StoragePickerWidget,
     TableSelectorWidget,
     UrlWidget,
-    ParameterForm,
-    FormField,
+    ValueWidget,
 )
+from pywr_editor.model import ModelConfig, ParameterConfig, PywrParametersData
 from pywr_editor.widgets import ComboBox
 from tests.utils import resolve_model_path
 

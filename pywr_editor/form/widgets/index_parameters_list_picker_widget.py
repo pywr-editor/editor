@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Union
-from pywr_editor.form import FormField, AbstractParametersListPickerWidget
+
+from pywr_editor.form import AbstractParametersListPickerWidget, FormField
 
 if TYPE_CHECKING:
     from pywr_editor.dialogs import ParameterDialogForm, RecorderDialogForm

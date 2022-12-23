@@ -1,6 +1,7 @@
+from pywr_editor.form import FloatWidget
+
 from ..parameter_dialog_form import ParameterDialogForm
 from .abstract_storage_license_section import AbstractStorageLicenseSection
-from pywr_editor.form import FloatWidget
 
 
 class AnnualExponentialLicenseSection(AbstractStorageLicenseSection):

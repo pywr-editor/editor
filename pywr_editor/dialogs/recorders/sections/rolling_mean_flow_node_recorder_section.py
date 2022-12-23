@@ -1,9 +1,7 @@
+from pywr_editor.form import FormValidation, NodePickerWidget
+
 from ..recorder_dialog_form import RecorderDialogForm
 from .abstract_recorder_section import AbstractRecorderSection
-from pywr_editor.form import (
-    NodePickerWidget,
-    FormValidation,
-)
 
 
 class RollingMeanFlowNodeRecorderSection(AbstractRecorderSection):

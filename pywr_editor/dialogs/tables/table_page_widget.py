@@ -1,16 +1,19 @@
+from typing import TYPE_CHECKING
+
 import PySide6
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
     QDialogButtonBox,
     QPushButton,
+    QVBoxLayout,
+    QWidget,
 )
-from typing import TYPE_CHECKING
-from .table_form_widget import TableFormWidget
+
 from pywr_editor.form import FormTitle
-from pywr_editor.utils import Logging
 from pywr_editor.model import ModelConfig
+from pywr_editor.utils import Logging
+
+from .table_form_widget import TableFormWidget
 
 if TYPE_CHECKING:
     from .table_pages_widget import TablePagesWidget

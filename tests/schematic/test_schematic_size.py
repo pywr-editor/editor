@@ -1,11 +1,13 @@
+from typing import Literal, Tuple
+
 import pytest
-from typing import Tuple, Literal
-from PySide6.QtCore import QTimer, Qt
+from PySide6.QtCore import Qt, QTimer
+
 from pywr_editor import MainWindow
 from pywr_editor.schematic import Schematic
 from pywr_editor.toolbar.base_button import ToolbarBaseButton
 from pywr_editor.toolbar.tab_panel import TabPanel
-from tests.utils import resolve_model_path, close_message_box
+from tests.utils import close_message_box, resolve_model_path
 
 
 class TestSchematicResize:

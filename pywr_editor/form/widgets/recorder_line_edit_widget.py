@@ -1,4 +1,4 @@
-from pywr_editor.form import FormField, AbstractModelComponentLineEditWidget
+from pywr_editor.form import AbstractModelComponentLineEditWidget, FormField
 
 """
  This widget displays a non-editable QLineEdit and

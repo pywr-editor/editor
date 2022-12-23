@@ -1,13 +1,15 @@
 from typing import Any, Literal
-from ..parameter_dialog_form import ParameterDialogForm
+
 from pywr_editor.form import (
+    FormSection,
     ScenarioPickerWidget,
+    ScenarioValuesWidget,
     SourceSelectorWidget,
     UrlWidget,
-    ScenarioValuesWidget,
-    FormSection,
 )
 from pywr_editor.utils import Logging
+
+from ..parameter_dialog_form import ParameterDialogForm
 
 
 class AbstractScenarioProfileParameterSection(FormSection):

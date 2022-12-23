@@ -1,6 +1,8 @@
 import json
-import pytest
 from typing import Tuple
+
+import pytest
+
 from pywr_editor.schematic import SchematicItem, SchematicNodeUtils
 from tests.DummyMainWindow import MainWindow
 from tests.utils import resolve_model_path

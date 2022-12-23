@@ -3,18 +3,19 @@ from typing import Any, Callable
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QDialog,
-    QVBoxLayout,
-    QLabel,
     QDialogButtonBox,
+    QLabel,
     QPushButton,
+    QVBoxLayout,
     QWidget,
 )
+
 from pywr_editor.form import (
     ExternalDataPickerFormWidget,
     Form,
-    FormTitle,
-    FormField,
     FormCustomWidget,
+    FormField,
+    FormTitle,
 )
 from pywr_editor.model import ModelConfig
 

@@ -1,7 +1,9 @@
 from typing import Any
-from ..node_dialog_form import NodeDialogForm
-from pywr_editor.form import FormSection, SlotsTableWidget, FormValidation
+
+from pywr_editor.form import FormSection, FormValidation, SlotsTableWidget
 from pywr_editor.utils import Logging
+
+from ..node_dialog_form import NodeDialogForm
 
 """
  The node sets defaults value for the "nsteps", "max_flows"

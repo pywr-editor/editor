@@ -1,6 +1,8 @@
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QTableWidget, QWidget
+
 from pywr_editor.style import stylesheet_dict_to_str
+
 from .table_view import TableView
 
 

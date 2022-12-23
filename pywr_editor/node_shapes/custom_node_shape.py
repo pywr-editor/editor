@@ -1,7 +1,9 @@
 from typing import TYPE_CHECKING
+
+from pywr_editor.style import Color
+
 from .circle import Circle
 from .svg_icon import IconProps
-from pywr_editor.style import Color
 
 if TYPE_CHECKING:
     from pywr_editor.schematic import SchematicItem

@@ -1,6 +1,8 @@
-from PySide6.QtWidgets import QLabel, QSizePolicy, QVBoxLayout, QWidget, QDialog
-from .recent_files_list_widget import RecentFileListWidget
+from PySide6.QtWidgets import QDialog, QLabel, QSizePolicy, QVBoxLayout, QWidget
+
 from pywr_editor.style import Color, stylesheet_dict_to_str
+
+from .recent_files_list_widget import RecentFileListWidget
 
 
 class StartScreenLeftWidget(QWidget):

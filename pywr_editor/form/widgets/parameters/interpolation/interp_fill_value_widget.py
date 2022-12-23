@@ -1,12 +1,9 @@
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QHBoxLayout
-from pywr_editor.widgets import ComboBox
-from pywr_editor.form import (
-    AbstractFloatListWidget,
-    FormValidation,
-    FormField,
-)
+
+from pywr_editor.form import AbstractFloatListWidget, FormField, FormValidation
 from pywr_editor.utils import get_signal_sender
+from pywr_editor.widgets import ComboBox
 
 """
  Defines a widget to select the extrapolation options:

@@ -1,6 +1,7 @@
+from pywr_editor.form import EventDurationAggFuncWidget, RecorderLineEditWidget
+
 from ..recorder_dialog_form import RecorderDialogForm
 from .abstract_recorder_section import AbstractRecorderSection
-from pywr_editor.form import RecorderLineEditWidget, EventDurationAggFuncWidget
 
 
 class EventDurationRecorderSection(AbstractRecorderSection):

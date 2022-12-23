@@ -1,5 +1,5 @@
-from .storage_section import StorageSection
 from ..node_dialog_form import NodeDialogForm
+from .storage_section import StorageSection
 
 """
  Section to configure a Reservoir node. This is a Storage

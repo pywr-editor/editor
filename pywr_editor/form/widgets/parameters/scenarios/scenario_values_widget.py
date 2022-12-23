@@ -1,17 +1,19 @@
 import operator
-from typing import Literal, Any, TYPE_CHECKING
-from PySide6.QtCore import Slot, QSize
-from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout
+from typing import TYPE_CHECKING, Any, Literal
+
+from PySide6.QtCore import QSize, Slot
+from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout
+
 from pywr_editor.form import (
-    ScenarioValuesModel,
-    ScenarioPickerWidget,
-    ScenarioValuesPickerDialogWidget,
-    FormValidation,
     FormCustomWidget,
     FormField,
+    FormValidation,
+    ScenarioPickerWidget,
+    ScenarioValuesModel,
+    ScenarioValuesPickerDialogWidget,
 )
-from pywr_editor.widgets import PushIconButton, ListView
-from pywr_editor.utils import get_signal_sender, Logging
+from pywr_editor.utils import Logging, get_signal_sender
+from pywr_editor.widgets import ListView, PushIconButton
 
 if TYPE_CHECKING:
     from pywr_editor.dialogs import ParameterDialogForm, ParametersDialog

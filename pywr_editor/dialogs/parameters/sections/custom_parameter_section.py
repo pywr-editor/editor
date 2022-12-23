@@ -1,5 +1,6 @@
-from ..parameter_dialog_form import ParameterDialogForm
 from pywr_editor.form import AbstractCustomComponentSection
+
+from ..parameter_dialog_form import ParameterDialogForm
 
 """
  This section allows setting up a custom parameter dictionary

@@ -1,23 +1,25 @@
-from typing import Callable, Any
+from typing import Any, Callable
+
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import (
     QDialog,
-    QVBoxLayout,
-    QLabel,
     QDialogButtonBox,
+    QLabel,
     QPushButton,
+    QVBoxLayout,
     QWidget,
 )
+
 from pywr_editor.form import (
     DailyValuesWidget,
-    WeeklyValuesWidget,
-    MonthlyValuesWidget,
-    ModelComponentForm,
-    TableValuesWidget,
     Form,
-    FormTitle,
-    FormField,
     FormCustomWidget,
+    FormField,
+    FormTitle,
+    ModelComponentForm,
+    MonthlyValuesWidget,
+    TableValuesWidget,
+    WeeklyValuesWidget,
 )
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import Logging

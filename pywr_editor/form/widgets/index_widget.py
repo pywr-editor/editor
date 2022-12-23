@@ -1,29 +1,31 @@
 import traceback
 from dataclasses import dataclass
 from typing import Any
-from PySide6.QtCore import Slot
-from PySide6.QtWidgets import QVBoxLayout, QLabel
+
 from pandas import DataFrame
-from pywr_editor.widgets import ComboBox
+from PySide6.QtCore import Slot
+from PySide6.QtWidgets import QLabel, QVBoxLayout
+
 from pywr_editor.form import (
+    FormCustomWidget,
+    FormField,
+    FormValidation,
     IndexColWidget,
+    SourceSelectorWidget,
     TableSelectorWidget,
     UrlWidget,
-    SourceSelectorWidget,
-    FormCustomWidget,
-    FormValidation,
-    FormField,
 )
 from pywr_editor.utils import (
-    get_signal_sender,
-    clear_layout,
     Logging,
-    get_columns,
-    get_index_values,
-    get_index_names,
-    is_table_not_empty,
+    clear_layout,
     default_index_name,
+    get_columns,
+    get_index_names,
+    get_index_values,
+    get_signal_sender,
+    is_table_not_empty,
 )
+from pywr_editor.widgets import ComboBox
 
 
 @dataclass

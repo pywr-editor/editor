@@ -1,8 +1,10 @@
 from typing import Any
-from .river_split_node_section import RiverSplitSection
-from ..node_dialog_form import NodeDialogForm
-from pywr_editor.form import FormSection, SlotsTableWidget, FloatWidget
+
+from pywr_editor.form import FloatWidget, FormSection, SlotsTableWidget
 from pywr_editor.utils import Logging
+
+from ..node_dialog_form import NodeDialogForm
+from .river_split_node_section import RiverSplitSection
 
 
 class RiverSplitWithGaugeSection(FormSection):

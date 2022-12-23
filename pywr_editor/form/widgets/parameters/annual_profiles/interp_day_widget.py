@@ -1,7 +1,8 @@
 from PySide6.QtWidgets import QHBoxLayout
+
+from pywr_editor.form import FormCustomWidget, FormField
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import ComboBox
-from pywr_editor.form import FormField, FormCustomWidget
 
 """
  This widget is only used by the MonthlyProfileParameter

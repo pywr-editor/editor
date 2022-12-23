@@ -1,10 +1,12 @@
 from typing import Literal
+
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QHBoxLayout
-from pywr_editor.utils import get_signal_sender, Logging
-from pywr_editor.widgets import ComboBox
-from pywr_editor.form import FormField, FormSection, FormCustomWidget
+
+from pywr_editor.form import FormCustomWidget, FormField, FormSection
 from pywr_editor.model import ParameterConfig, RecorderConfig
+from pywr_editor.utils import Logging, get_signal_sender
+from pywr_editor.widgets import ComboBox
 
 """
  This widget allows the user to choose how to define the component value

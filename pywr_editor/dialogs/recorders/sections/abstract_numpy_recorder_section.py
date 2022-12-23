@@ -1,16 +1,17 @@
 from dataclasses import dataclass
-from ..recorder_dialog_form import RecorderDialogForm
-from .abstract_recorder_section import AbstractRecorderSection
+
 from pywr_editor.form import (
-    AggFuncPercentileMethodWidget,
-    AggFuncPercentileOfScoreScoreWidget,
-    AggFuncPercentileOfScoreKindWidget,
+    AbstractAggFuncWidget,
     AggFuncPercentileListWidget,
+    AggFuncPercentileMethodWidget,
+    AggFuncPercentileOfScoreKindWidget,
+    AggFuncPercentileOfScoreScoreWidget,
     TemporalAggFuncWidget,
     validate_percentile_field_section,
-    AbstractAggFuncWidget,
 )
 
+from ..recorder_dialog_form import RecorderDialogForm
+from .abstract_recorder_section import AbstractRecorderSection
 
 """
  Handles the label and description of the "temporal_agg_func"

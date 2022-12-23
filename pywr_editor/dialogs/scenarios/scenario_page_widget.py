@@ -1,15 +1,18 @@
+from typing import TYPE_CHECKING
+
 import PySide6
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
     QDialogButtonBox,
     QPushButton,
+    QVBoxLayout,
+    QWidget,
 )
-from typing import TYPE_CHECKING
-from .scenario_form_widget import ScenarioFormWidget
+
 from pywr_editor.form import FormTitle
 from pywr_editor.model import ModelConfig
+
+from .scenario_form_widget import ScenarioFormWidget
 
 if TYPE_CHECKING:
     from .scenario_pages_widget import ScenarioPagesWidget

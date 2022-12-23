@@ -1,7 +1,9 @@
-from typing import TypeVar, Type
+from typing import Type, TypeVar
+
 from PySide6.QtWidgets import QHBoxLayout, QLineEdit
+
+from pywr_editor.form import FormCustomWidget, FormField, FormValidation
 from pywr_editor.utils import Logging
-from pywr_editor.form import FormField, FormCustomWidget, FormValidation
 
 """
  This widget handles form fields whose value can be a number and/or

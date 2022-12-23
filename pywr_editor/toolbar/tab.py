@@ -1,7 +1,9 @@
+from typing import TYPE_CHECKING, Literal
+
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QHBoxLayout, QWidget
+
 from .tab_panel import TabPanel
-from typing import TYPE_CHECKING, Literal
 
 if TYPE_CHECKING:
     from .toolbar import ToolbarWidget

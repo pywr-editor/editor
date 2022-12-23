@@ -1,22 +1,24 @@
+from pathlib import Path
+from typing import List, Tuple
+
 import pandas as pd
 import pytest
-from pathlib import Path
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtTest import QSignalSpy
-from PySide6.QtWidgets import QLineEdit, QSpinBox, QPushButton
-from pywr_editor.model import ModelConfig
+from PySide6.QtWidgets import QLineEdit, QPushButton, QSpinBox
+
 from pywr_editor.dialogs import ParametersDialog
 from pywr_editor.form import (
     ColumnWidget,
-    IndexWidget,
-    IndexColWidget,
-    UrlWidget,
     FormField,
+    IndexColWidget,
+    IndexWidget,
+    UrlWidget,
 )
-from pywr_editor.widgets import ComboBox
+from pywr_editor.model import ModelConfig
 from pywr_editor.utils import default_index_name, get_index_names
-from tests.utils import resolve_model_path, close_message_box, model_path
-from typing import Tuple, List
+from pywr_editor.widgets import ComboBox
+from tests.utils import close_message_box, model_path, resolve_model_path
 
 
 def df_from_h5(

@@ -1,26 +1,29 @@
-import PySide6
 from pathlib import Path
+
+import PySide6
 from PySide6.QtCore import Slot
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import (
+    QAbstractItemView,
     QDialog,
     QDialogButtonBox,
-    QVBoxLayout,
-    QLabel,
-    QAbstractItemView,
-    QPushButton,
-    QHBoxLayout,
-    QStyledItemDelegate,
-    QMessageBox,
     QFileDialog,
+    QHBoxLayout,
+    QLabel,
+    QMessageBox,
+    QPushButton,
+    QStyledItemDelegate,
+    QVBoxLayout,
     QWidget,
 )
-from pywr_editor.model import JsonUtils, ModelConfig
-from pywr_editor.widgets import TableView, PushIconButton
+
 from pywr_editor.form import FormTitle
-from pywr_editor.utils import get_signal_sender, Logging
-from .files_model import FilesModel
+from pywr_editor.model import JsonUtils, ModelConfig
 from pywr_editor.toolbar.node_library.nodes_library import NodesLibraryPanel
+from pywr_editor.utils import Logging, get_signal_sender
+from pywr_editor.widgets import PushIconButton, TableView
+
+from .files_model import FilesModel
 
 
 class IncludesDialog(QDialog):

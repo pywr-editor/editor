@@ -1,9 +1,11 @@
 import PySide6
-from PySide6.QtCore import Qt, QPoint, QPointF
+from PySide6.QtCore import QPoint, QPointF, Qt
 from PySide6.QtWidgets import QDialog, QHBoxLayout, QWidget
+
+from pywr_editor.style import AppStylesheet, Color, stylesheet_dict_to_str
+
 from .left_widget import StartScreenLeftWidget
 from .right_widget import StartScreenRightWidget
-from pywr_editor.style import Color, stylesheet_dict_to_str, AppStylesheet
 
 
 class StartScreen(QDialog):

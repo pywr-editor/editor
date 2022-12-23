@@ -1,6 +1,7 @@
-from ..node_dialog_form import NodeDialogForm
 from pywr_editor.form import FormSection, MultiNodePickerWidget
 from pywr_editor.utils import Logging
+
+from ..node_dialog_form import NodeDialogForm
 
 
 class AggregatedStorageSection(FormSection):

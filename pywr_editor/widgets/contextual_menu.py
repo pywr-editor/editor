@@ -1,5 +1,6 @@
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QMenu, QLabel, QSizePolicy, QWidgetAction
+from PySide6.QtWidgets import QLabel, QMenu, QSizePolicy, QWidgetAction
+
 from pywr_editor.style import Color, stylesheet_dict_to_str
 
 

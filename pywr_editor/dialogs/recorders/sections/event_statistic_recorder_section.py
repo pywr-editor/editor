@@ -1,9 +1,7 @@
+from pywr_editor.form import EventStatisticAggFuncWidget, RecorderLineEditWidget
+
 from ..recorder_dialog_form import RecorderDialogForm
 from .abstract_recorder_section import AbstractRecorderSection
-from pywr_editor.form import (
-    RecorderLineEditWidget,
-    EventStatisticAggFuncWidget,
-)
 
 
 class EventStatisticRecorderSection(AbstractRecorderSection):

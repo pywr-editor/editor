@@ -1,11 +1,14 @@
 import re
+from typing import TYPE_CHECKING, Any
+
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QDialogButtonBox
-from typing import TYPE_CHECKING, Any
-from .metadata_custom_fields_widget import MetadataCustomFieldsWidget
-from pywr_editor.form import Form, FormValidation, FieldConfig
-from pywr_editor.utils import Logging
+
+from pywr_editor.form import FieldConfig, Form, FormValidation
 from pywr_editor.model import ModelConfig
+from pywr_editor.utils import Logging
+
+from .metadata_custom_fields_widget import MetadataCustomFieldsWidget
 
 if TYPE_CHECKING:
     from .metadata_dialog import MetadataDialog

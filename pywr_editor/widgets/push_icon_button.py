@@ -1,4 +1,5 @@
 from typing import Literal
+
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon, Qt
 from PySide6.QtWidgets import QPushButton, QSizePolicy

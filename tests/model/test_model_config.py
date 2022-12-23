@@ -1,7 +1,9 @@
+from pathlib import Path
+
 import pandas as pd
 import pytest
-from pathlib import Path
-from pywr_editor.model import ModelConfig, Constants
+
+from pywr_editor.model import Constants, ModelConfig
 from tests.utils import resolve_model_path
 
 

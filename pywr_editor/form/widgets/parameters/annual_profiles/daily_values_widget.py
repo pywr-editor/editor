@@ -1,7 +1,7 @@
 from pywr_editor.form import (
     AbstractAnnualValuesWidget,
-    DailyValuesModel,
     ChartOptions,
+    DailyValuesModel,
     FormField,
 )
 

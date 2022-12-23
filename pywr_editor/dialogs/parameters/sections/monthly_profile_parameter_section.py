@@ -1,11 +1,12 @@
-from ..parameter_dialog_form import ParameterDialogForm
-from .abstract_annual_profile_parameter_section import (
-    AbstractAnnualProfileParameterSection,
-)
 from pywr_editor.form import (
     InterpDayWidget,
     MonthlyValuesWidget,
     OptMonthlyBoundsWidget,
+)
+
+from ..parameter_dialog_form import ParameterDialogForm
+from .abstract_annual_profile_parameter_section import (
+    AbstractAnnualProfileParameterSection,
 )
 
 

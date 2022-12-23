@@ -1,6 +1,7 @@
 from dataclasses import dataclass
-from .schematic_item import SchematicItem
+
 from .edge import TempEdge
+from .schematic_item import SchematicItem
 
 
 @dataclass

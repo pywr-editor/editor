@@ -1,9 +1,11 @@
+import logging
 import sys
 import traceback
-import logging
 from datetime import datetime
+
 from PySide6.QtCore import QObject, Signal
-from PySide6.QtWidgets import QApplication, QMessageBox, QMainWindow
+from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox
+
 from .helpers import get_app_path
 
 

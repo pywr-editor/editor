@@ -1,12 +1,11 @@
 from typing import TYPE_CHECKING, Union
+
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import (
-    QDialog,
-    QVBoxLayout,
-    QDialogButtonBox,
-)
-from .metadata_form_widget import MetadataFormWidget
+from PySide6.QtWidgets import QDialog, QDialogButtonBox, QVBoxLayout
+
 from pywr_editor.model import ModelConfig
+
+from .metadata_form_widget import MetadataFormWidget
 
 if TYPE_CHECKING:
     from pywr_editor import MainWindow

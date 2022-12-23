@@ -1,11 +1,14 @@
+from typing import TYPE_CHECKING
+
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QPushButton
-from typing import TYPE_CHECKING
-from .scenarios_list_model import ScenariosListModel
-from .scenario_options_widget import ScenarioOptionsWidget
-from pywr_editor.form import ModelComponentForm, FormValidation
-from pywr_editor.utils import Logging
+
+from pywr_editor.form import FormValidation, ModelComponentForm
 from pywr_editor.model import ModelConfig
+from pywr_editor.utils import Logging
+
+from .scenario_options_widget import ScenarioOptionsWidget
+from .scenarios_list_model import ScenariosListModel
 
 if TYPE_CHECKING:
     from .scenario_page_widget import ScenarioPageWidget

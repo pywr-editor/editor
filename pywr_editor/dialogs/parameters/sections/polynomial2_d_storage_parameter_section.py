@@ -1,12 +1,13 @@
-from ..parameter_dialog_form import ParameterDialogForm
 from pywr_editor.form import (
-    StoragePickerWidget,
-    ParameterLineEditWidget,
-    Polynomial2DCoefficientsWidget,
     FloatWidget,
     FormSection,
+    ParameterLineEditWidget,
+    Polynomial2DCoefficientsWidget,
+    StoragePickerWidget,
 )
 from pywr_editor.utils import Logging
+
+from ..parameter_dialog_form import ParameterDialogForm
 
 
 class Polynomial2DStorageParameterSection(FormSection):

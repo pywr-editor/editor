@@ -1,4 +1,4 @@
-from pywr_editor.form import FormField, AbstractColumnsSelectorWidget
+from pywr_editor.form import AbstractColumnsSelectorWidget, FormField
 
 
 class ParseDatesWidget(AbstractColumnsSelectorWidget):

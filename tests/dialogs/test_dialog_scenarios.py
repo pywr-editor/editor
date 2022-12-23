@@ -1,17 +1,17 @@
 import pytest
-from PySide6.QtCore import Qt, QTimer, QItemSelectionModel
-from PySide6.QtWidgets import QLabel, QPushButton, QApplication
-from pywr_editor.model import ModelConfig
+from PySide6.QtCore import QItemSelectionModel, Qt, QTimer
+from PySide6.QtWidgets import QApplication, QLabel, QPushButton
+
 from pywr_editor.dialogs import ScenariosDialog
-from pywr_editor.dialogs.scenarios.scenario_form_widget import (
-    ScenarioFormWidget,
-)
 from pywr_editor.dialogs.scenarios.scenario_empty_page_widget import (
     ScenarioEmptyPageWidget,
 )
-
+from pywr_editor.dialogs.scenarios.scenario_form_widget import (
+    ScenarioFormWidget,
+)
 from pywr_editor.form import FormField
-from tests.utils import resolve_model_path, close_message_box
+from pywr_editor.model import ModelConfig
+from tests.utils import close_message_box, resolve_model_path
 
 
 class TestScenariosDialog:

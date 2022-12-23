@@ -1,3 +1,5 @@
+from pywr_editor.form import StoragePickerWidget, TableValuesWidget
+
 from ..recorder_dialog_form import RecorderDialogForm
 from .abstract_flow_duration_curve_recorder_section import (
     AbstractFlowDurationCurveRecorderSection,
@@ -6,7 +8,6 @@ from .abstract_numpy_recorder_section import (
     AbstractNumpyRecorderSection,
     TemporalWidgetField,
 )
-from pywr_editor.form import StoragePickerWidget, TableValuesWidget
 
 
 class StorageDurationCurveRecorderSection(AbstractNumpyRecorderSection):

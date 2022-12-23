@@ -1,8 +1,9 @@
 import pytest
 from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QApplication
-from pywr_editor.schematic import SchematicNodeUtils
+
 from pywr_editor import MainWindow
+from pywr_editor.schematic import SchematicNodeUtils
 from tests.utils import resolve_model_path
 
 

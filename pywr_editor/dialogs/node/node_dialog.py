@@ -1,23 +1,26 @@
-from typing import Type, TYPE_CHECKING, Union
-from PySide6.QtCore import Qt, QSize
+from typing import TYPE_CHECKING, Type, Union
+
+from PySide6.QtCore import QSize, Qt
 from PySide6.QtGui import QWindow
 from PySide6.QtWidgets import (
     QDialog,
-    QPushButton,
     QDialogButtonBox,
-    QVBoxLayout,
-    QLabel,
-    QWidget,
     QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
 )
-from .node_dialog_form import NodeDialogForm
+
+from pywr_editor.form import FormTitle
 from pywr_editor.model import ModelConfig
 from pywr_editor.node_shapes import (
+    BaseNode,
     get_node_icon,
     get_pixmap_from_type,
-    BaseNode,
 )
-from pywr_editor.form import FormTitle
+
+from .node_dialog_form import NodeDialogForm
 
 if TYPE_CHECKING:
     from pywr_editor import MainWindow

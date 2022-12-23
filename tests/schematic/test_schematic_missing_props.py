@@ -1,8 +1,9 @@
 import pytest
 from PySide6.QtCore import QTimer
+
 from pywr_editor import MainWindow
 from pywr_editor.model import Constants
-from tests.utils import resolve_model_path, close_message_box
+from tests.utils import close_message_box, resolve_model_path
 
 
 class TestMissingSchematicProps:

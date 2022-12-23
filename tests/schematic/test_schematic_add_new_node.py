@@ -1,9 +1,11 @@
-import pytest
 from typing import Tuple
+
+import pytest
 from PySide6 import QtCore, QtGui
-from PySide6.QtCore import QPoint, QMimeData, QEvent, QObject, QTimer
-from PySide6.QtGui import Qt, QDragEnterEvent
+from PySide6.QtCore import QEvent, QMimeData, QObject, QPoint, QTimer
+from PySide6.QtGui import QDragEnterEvent, Qt
 from PySide6.QtWidgets import QWidget
+
 from pywr_editor import MainWindow
 from pywr_editor.schematic import Schematic
 from pywr_editor.toolbar.tab_panel import TabPanel

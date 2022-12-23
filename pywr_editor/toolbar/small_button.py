@@ -1,8 +1,10 @@
 from PySide6.QtCore import QSize, Qt
 from PySide6.QtGui import QAction
 from PySide6.QtWidgets import QWidget
-from .base_button import ToolbarBaseButton
+
 from pywr_editor.style import stylesheet_dict_to_str
+
+from .base_button import ToolbarBaseButton
 
 
 class ToolbarSmallButton(ToolbarBaseButton):

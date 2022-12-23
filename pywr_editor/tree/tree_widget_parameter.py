@@ -1,6 +1,9 @@
-from PySide6.QtWidgets import QTreeWidgetItem
 from typing import TYPE_CHECKING, Union
+
+from PySide6.QtWidgets import QTreeWidgetItem
+
 from pywr_editor.model import ModelConfig
+
 from .abstract_tree_widget_component import AbstractTreeWidgetComponent
 
 if TYPE_CHECKING:

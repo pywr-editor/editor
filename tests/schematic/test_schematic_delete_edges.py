@@ -1,10 +1,12 @@
-import pytest
 from typing import Tuple
+
+import pytest
 from PySide6.QtGui import QAction
+
 from pywr_editor import MainWindow
+from pywr_editor.model import Edges
 from pywr_editor.schematic import Edge, Schematic
 from pywr_editor.toolbar.tab_panel import TabPanel
-from pywr_editor.model import Edges
 from tests.utils import resolve_model_path
 
 

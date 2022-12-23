@@ -1,23 +1,16 @@
-import pytest
 from functools import partial
+
+import pytest
 from PySide6.QtCore import Qt, QTimer
-from PySide6.QtWidgets import (
-    QPushButton,
-    QWidget,
-    QApplication,
-    QMessageBox,
-)
-from pywr_editor.model import ModelConfig, ParameterConfig
-from pywr_editor.form import (
-    ParameterForm,
-    CheckSumWidget,
-    FormField,
-)
-from pywr_editor.widgets import PushButton
+from PySide6.QtWidgets import QApplication, QMessageBox, QPushButton, QWidget
+
 from pywr_editor.dialogs import ParametersDialog
 from pywr_editor.dialogs.parameters.parameter_page_widget import (
     ParameterPageWidget,
 )
+from pywr_editor.form import CheckSumWidget, FormField, ParameterForm
+from pywr_editor.model import ModelConfig, ParameterConfig
+from pywr_editor.widgets import PushButton
 from tests.utils import resolve_model_path
 
 

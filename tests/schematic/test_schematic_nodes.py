@@ -1,8 +1,10 @@
-import pytest
 from typing import Tuple
-from PySide6.QtCore import Qt, QPoint
+
+import pytest
+from PySide6.QtCore import QPoint, Qt
+
 from pywr_editor import MainWindow
-from pywr_editor.schematic import Schematic, SchematicItem, Edge
+from pywr_editor.schematic import Edge, Schematic, SchematicItem
 from pywr_editor.toolbar.tab_panel import TabPanel
 from tests.utils import resolve_model_path
 

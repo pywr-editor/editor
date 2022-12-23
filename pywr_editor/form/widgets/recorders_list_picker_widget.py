@@ -1,4 +1,4 @@
-from pywr_editor.form import FormField, AbstractRecordersListPickerWidget
+from pywr_editor.form import AbstractRecordersListPickerWidget, FormField
 
 """
  Widgets that provides a list of recorders.

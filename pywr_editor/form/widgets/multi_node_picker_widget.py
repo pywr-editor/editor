@@ -1,13 +1,11 @@
-from typing import Union, TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
+
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QHBoxLayout
+
+from pywr_editor.form import FormCustomWidget, FormField, FormValidation
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import CheckableComboBox
-from pywr_editor.form import (
-    FormField,
-    FormCustomWidget,
-    FormValidation,
-)
 
 if TYPE_CHECKING:
     from pywr_editor.dialogs import (

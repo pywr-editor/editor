@@ -1,10 +1,11 @@
-from ..parameter_dialog_form import ParameterDialogForm
 from pywr_editor.form import (
-    InterpKindWidget,
-    InterpFillValueWidget,
-    FormSection,
     FieldConfig,
+    FormSection,
+    InterpFillValueWidget,
+    InterpKindWidget,
 )
+
+from ..parameter_dialog_form import ParameterDialogForm
 
 
 class AbstractInterpolationSection(FormSection):

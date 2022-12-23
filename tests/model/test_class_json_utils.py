@@ -1,4 +1,5 @@
 import pytest
+
 from pywr_editor.model import JsonUtils
 
 

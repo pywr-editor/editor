@@ -1,9 +1,11 @@
-import PySide6
 from typing import Any
+
+import PySide6
 from PySide6.QtCore import QAbstractTableModel
-from PySide6.QtGui import Qt, QIcon
-from pywr_editor.widgets import RecorderIcon
+from PySide6.QtGui import QIcon, Qt
+
 from pywr_editor.model import ModelConfig
+from pywr_editor.widgets import RecorderIcon
 
 
 class RecordersListModel(QAbstractTableModel):

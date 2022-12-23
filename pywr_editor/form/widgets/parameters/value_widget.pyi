@@ -1,6 +1,8 @@
 import logging
+
 from model import ModelConfig
-from pywr_editor import FloatWidget, ParameterDialogForm, FormField
+
+from pywr_editor import FloatWidget, FormField, ParameterDialogForm
 
 class ValueWidget(FloatWidget):
     logger: logging.Logger

@@ -1,17 +1,20 @@
 from collections import Counter
 from typing import Any
+
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import (
-    QVBoxLayout,
-    QLabel,
     QHBoxLayout,
-    QSpacerItem,
+    QLabel,
     QSizePolicy,
+    QSpacerItem,
+    QVBoxLayout,
 )
+
+from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.utils import Logging, get_signal_sender
+from pywr_editor.widgets import PushIconButton, TableView
+
 from .metadata_custom_fields_model import MetadataCustomFieldsModel
-from pywr_editor.widgets import TableView, PushIconButton
-from pywr_editor.form import FormCustomWidget, FormValidation, FormField
-from pywr_editor.utils import get_signal_sender, Logging
 
 
 class MetadataCustomFieldsWidget(FormCustomWidget):

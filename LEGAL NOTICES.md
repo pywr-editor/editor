@@ -49,8 +49,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 A copy of the license is available here: https://github.com/pyqtgraph/pyqtgraph/blob/master/LICENSE.txt
 
 ## Colibre Icon Theme
-The Colibre Icon Theme in icons/
-
  Copyright (C) 2018 Andreas Kainz <kainz.a@gmail.com>
  Copyright (c) 2020-2022 Rizal Muttaqin <riz_17_oke@yahoo.co.id>
 

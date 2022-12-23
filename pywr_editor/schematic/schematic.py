@@ -1,6 +1,9 @@
+from typing import TYPE_CHECKING, Sequence, Union
+
 import PySide6
-from typing import Sequence, Union
 from PySide6 import QtGui
+from PySide6.QtCore import QPointF, QRectF, Qt, QUuid, Signal, Slot
+from PySide6.QtGui import QPainter
 from PySide6.QtWidgets import (
     QFileDialog,
     QFrame,
@@ -10,22 +13,21 @@ from PySide6.QtWidgets import (
     QPushButton,
     QVBoxLayout,
 )
-from PySide6.QtCore import QPointF, QRectF, Qt, Signal, Slot, QUuid
-from PySide6.QtGui import QPainter
-from typing import TYPE_CHECKING
-from .edge import Edge, TempEdge
-from .schematic_canvas import SchematicCanvas
-from .connecting_node_props import ConnectingNodeProps
+
+from pywr_editor.model import Edges, ModelConfig, NodeConfig
 from pywr_editor.node_shapes import get_node_icon_classes
 from pywr_editor.schematic import (
-    SchematicItem,
     SchematicBBoxUtils,
+    SchematicItem,
     scaling_factor,
     units_to_factor,
 )
-from pywr_editor.toolbar import NodesLibraryPanel
 from pywr_editor.style import Color, stylesheet_dict_to_str
-from pywr_editor.model import Edges, NodeConfig, ModelConfig
+from pywr_editor.toolbar import NodesLibraryPanel
+
+from .connecting_node_props import ConnectingNodeProps
+from .edge import Edge, TempEdge
+from .schematic_canvas import SchematicCanvas
 
 if TYPE_CHECKING:
     from pywr_editor import MainWindow

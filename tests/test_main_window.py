@@ -1,6 +1,8 @@
-import pytest
 from functools import partial
+
+import pytest
 from PySide6.QtCore import QTimer
+
 from pywr_editor import MainWindow
 from pywr_editor.toolbar.node_library.library_node import LibraryNode
 from pywr_editor.toolbar.node_library.library_node_label import LibraryNodeLabel

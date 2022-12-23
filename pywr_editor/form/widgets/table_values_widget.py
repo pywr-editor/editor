@@ -1,29 +1,26 @@
 import traceback
-import PySide6
 from itertools import groupby
+
+import PySide6
 from PySide6.QtAxContainer import QAxObject
-from PySide6.QtCore import Slot, Qt, QCoreApplication
+from PySide6.QtCore import QCoreApplication, Qt, Slot
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtWidgets import (
-    QVBoxLayout,
-    QStyledItemDelegate,
     QHBoxLayout,
-    QMessageBox,
     QHeaderView,
+    QMessageBox,
+    QStyledItemDelegate,
+    QVBoxLayout,
     QWidget,
 )
+
+from pywr_editor.form import FormCustomWidget, FormValidation, TableValuesModel
+from pywr_editor.utils import Logging, get_signal_sender, is_windows, move_row
 from pywr_editor.widgets import (
-    TableView,
-    PushButton,
     DoubleSpinBox,
+    PushButton,
     PushIconButton,
-)
-from pywr_editor.form import TableValuesModel, FormCustomWidget, FormValidation
-from pywr_editor.utils import (
-    get_signal_sender,
-    Logging,
-    is_windows,
-    move_row,
+    TableView,
 )
 
 """

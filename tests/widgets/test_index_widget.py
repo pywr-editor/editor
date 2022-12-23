@@ -1,23 +1,25 @@
 from typing import List
+
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtTest import QSignalSpy
 from PySide6.QtWidgets import QLabel, QPushButton
-from pywr_editor.model import ModelConfig
+
 from pywr_editor.dialogs import ParametersDialog
 from pywr_editor.form import (
-    IndexWidget,
+    FormField,
     IndexColWidget,
+    IndexWidget,
     TableSelectorWidget,
     UrlWidget,
-    FormField,
 )
-from pywr_editor.widgets import ComboBox
+from pywr_editor.model import ModelConfig
 from pywr_editor.utils import (
-    get_index_names,
     default_index_name,
+    get_index_names,
     get_index_values,
 )
-from tests.utils import resolve_model_path, close_message_box
+from pywr_editor.widgets import ComboBox
+from tests.utils import close_message_box, resolve_model_path
 
 """
  Tests for IndexWidget. The class tests the widget behaviour

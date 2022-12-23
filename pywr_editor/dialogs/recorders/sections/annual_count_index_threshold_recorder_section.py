@@ -1,14 +1,15 @@
+from pywr_editor.form import (
+    AbstractFloatListWidget,
+    DayMonthWidget,
+    FloatWidget,
+    FormValidation,
+    ParametersListPickerWidget,
+)
+
 from ..recorder_dialog_form import RecorderDialogForm
 from .abstract_numpy_recorder_section import (
     AbstractNumpyRecorderSection,
     TemporalWidgetField,
-)
-from pywr_editor.form import (
-    FloatWidget,
-    ParametersListPickerWidget,
-    AbstractFloatListWidget,
-    FormValidation,
-    DayMonthWidget,
 )
 
 

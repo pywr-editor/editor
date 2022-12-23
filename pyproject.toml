@@ -21,5 +21,6 @@ push = false
 ]
 [tool.isort]
 profile = "black"
+line_length = 80
 # some imports have different priorities (see form module)
-skip = ["__init__.py"]
+skip = ["__init__.py", "venv", "venv310"]

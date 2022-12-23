@@ -1,10 +1,12 @@
-import pytest
 from typing import Tuple
-from PySide6.QtCore import QTimer, Qt
+
+import pytest
+from PySide6.QtCore import Qt, QTimer
+
 from pywr_editor import MainWindow
-from pywr_editor.utils import Settings
-from pywr_editor.schematic import SchematicLabel, Schematic, Edge
+from pywr_editor.schematic import Edge, Schematic, SchematicLabel
 from pywr_editor.toolbar.tab_panel import TabPanel
+from pywr_editor.utils import Settings
 from tests.utils import close_message_box, resolve_model_path
 
 

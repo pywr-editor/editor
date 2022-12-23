@@ -1,7 +1,8 @@
 import pytest
 from PySide6.QtWidgets import QPushButton, QWidget
+
+from pywr_editor.form import Form, MultiNodePickerWidget
 from pywr_editor.model import ModelConfig
-from pywr_editor.form import MultiNodePickerWidget, Form
 from tests.utils import resolve_model_path
 
 

@@ -1,19 +1,21 @@
-from PySide6.QtCore import Slot, QUuid
-from PySide6.QtWidgets import (
-    QVBoxLayout,
-    QHBoxLayout,
-    QWidget,
-    QSpacerItem,
-    QSizePolicy,
-    QMessageBox,
-)
 from typing import TYPE_CHECKING
-from .parameter_pages_widget import ParameterPagesWidget
-from .parameters_list_widget import ParametersListWidget
-from .parameters_list_model import ParametersListModel
-from pywr_editor.widgets import PushIconButton
+
+from PySide6.QtCore import QUuid, Slot
+from PySide6.QtWidgets import (
+    QHBoxLayout,
+    QMessageBox,
+    QSizePolicy,
+    QSpacerItem,
+    QVBoxLayout,
+    QWidget,
+)
 
 from pywr_editor.model import ModelConfig
+from pywr_editor.widgets import PushIconButton
+
+from .parameter_pages_widget import ParameterPagesWidget
+from .parameters_list_model import ParametersListModel
+from .parameters_list_widget import ParametersListWidget
 
 if TYPE_CHECKING:
     from .parameters_dialog import ParametersDialog

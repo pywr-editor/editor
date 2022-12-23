@@ -2,6 +2,7 @@ import platform
 import sys
 from pathlib import Path
 from typing import Any
+
 from pywr_editor.model import ParameterConfig, RecorderConfig
 
 

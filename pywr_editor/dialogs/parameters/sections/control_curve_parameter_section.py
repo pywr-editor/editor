@@ -1,10 +1,11 @@
-from ..parameter_dialog_form import ParameterDialogForm
-from .abstract_control_curve_parameter_section import (
-    AbstractControlCurveParameterSection,
-)
 from pywr_editor.form import (
     ControlCurveOptBoundsWidget,
     ControlCurveVariableIndicesWidget,
+)
+
+from ..parameter_dialog_form import ParameterDialogForm
+from .abstract_control_curve_parameter_section import (
+    AbstractControlCurveParameterSection,
 )
 
 

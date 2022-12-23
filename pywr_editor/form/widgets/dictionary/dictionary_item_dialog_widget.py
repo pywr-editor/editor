@@ -1,21 +1,19 @@
-from typing import Callable, Any
+from typing import Any, Callable
+
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QDialog,
-    QVBoxLayout,
-    QLabel,
     QDialogButtonBox,
+    QLabel,
     QPushButton,
+    QVBoxLayout,
     QWidget,
 )
-from .dictionary_item_form_widget import DictionaryItemFormWidget
-from pywr_editor.form import (
-    Form,
-    FormTitle,
-    FormField,
-    FormCustomWidget,
-)
+
+from pywr_editor.form import Form, FormCustomWidget, FormField, FormTitle
 from pywr_editor.model import ModelConfig
+
+from .dictionary_item_form_widget import DictionaryItemFormWidget
 
 
 class DictionaryItemDialogWidget(QDialog):

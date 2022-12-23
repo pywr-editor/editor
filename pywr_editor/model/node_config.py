@@ -1,5 +1,6 @@
 from copy import deepcopy as dp
-from pywr_editor.model import PywrNodesData, Constants
+
+from pywr_editor.model import Constants, PywrNodesData
 
 """
  Handles the model node configuration.

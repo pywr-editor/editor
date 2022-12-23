@@ -1,11 +1,14 @@
 import json
+
 import PySide6
 from PySide6.QtCore import QRect, Slot
 from PySide6.QtGui import QFont, QPainter, Qt
 from PySide6.QtWidgets import QPlainTextEdit
+
+from pywr_editor.style import Color
+
 from .json_highlighter import JsonHighlighter
 from .line_number_area import LineNumberArea
-from pywr_editor.style import Color
 
 
 class JsonEditor(QPlainTextEdit):

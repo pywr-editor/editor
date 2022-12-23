@@ -1,16 +1,19 @@
-from typing import Literal, Any, TYPE_CHECKING, Type
+from typing import TYPE_CHECKING, Any, Literal, Type
+
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QWidget,
-    QLineEdit,
-    QVBoxLayout,
     QLabel,
+    QLineEdit,
     QSizePolicy,
+    QVBoxLayout,
+    QWidget,
 )
-from .form_custom_widget import FormCustomWidget
-from pywr_editor.widgets import ToggleSwitchWidget, SpinBox
+
 from pywr_editor.style import Color
 from pywr_editor.utils import Logging
+from pywr_editor.widgets import SpinBox, ToggleSwitchWidget
+
+from .form_custom_widget import FormCustomWidget
 
 if TYPE_CHECKING:
     from pywr_editor.form import Form

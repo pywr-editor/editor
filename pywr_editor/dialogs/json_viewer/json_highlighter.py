@@ -1,7 +1,9 @@
-from typing import Literal, Any
+from typing import Any, Literal
+
 from PySide6 import QtGui
 from PySide6.QtCore import QRegularExpression
 from PySide6.QtGui import QFont, QTextCharFormat
+
 from pywr_editor.style import Color
 
 

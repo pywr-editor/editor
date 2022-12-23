@@ -1,4 +1,4 @@
-from pywr_editor.form import FormField, AbstractStringComboBoxWidget
+from pywr_editor.form import AbstractStringComboBoxWidget, FormField
 
 """
  This widget handles the mode strings to open a file.

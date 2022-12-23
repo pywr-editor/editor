@@ -1,17 +1,18 @@
 import traceback
-from PySide6.QtCore import Slot, Signal
-from PySide6.QtWidgets import QHBoxLayout
 from typing import TYPE_CHECKING
-from pandas import HDFStore
-from pywr_editor.widgets import ComboBox
-from pywr_editor.form import (
-    UrlWidget,
-    FormCustomWidget,
-    FormValidation,
-    FormField,
-)
-from pywr_editor.utils import get_signal_sender, Logging
 
+from pandas import HDFStore
+from PySide6.QtCore import Signal, Slot
+from PySide6.QtWidgets import QHBoxLayout
+
+from pywr_editor.form import (
+    FormCustomWidget,
+    FormField,
+    FormValidation,
+    UrlWidget,
+)
+from pywr_editor.utils import Logging, get_signal_sender
+from pywr_editor.widgets import ComboBox
 
 if TYPE_CHECKING:
     from pywr_editor.form import ModelComponentForm

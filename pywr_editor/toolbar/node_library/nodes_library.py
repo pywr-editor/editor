@@ -1,20 +1,23 @@
-import PySide6
-from typing import Literal, TYPE_CHECKING
 from functools import partial
-from PySide6.QtCore import QPointF, QMimeData, Slot, QSize
-from PySide6.QtGui import QPainter, Qt, QDrag
+from typing import TYPE_CHECKING, Literal
+
+import PySide6
+from PySide6.QtCore import QMimeData, QPointF, QSize, Slot
+from PySide6.QtGui import QDrag, QPainter, Qt
 from PySide6.QtWidgets import (
-    QGraphicsView,
-    QGraphicsScene,
     QFrame,
-    QSizePolicy,
-    QWidget,
+    QGraphicsScene,
+    QGraphicsView,
     QHBoxLayout,
+    QSizePolicy,
     QVBoxLayout,
+    QWidget,
 )
-from .library_node import LibraryNode
+
 from pywr_editor.style import Color, stylesheet_dict_to_str
 from pywr_editor.widgets import PushIconButton
+
+from .library_node import LibraryNode
 
 if TYPE_CHECKING:
     from pywr_editor import MainWindow

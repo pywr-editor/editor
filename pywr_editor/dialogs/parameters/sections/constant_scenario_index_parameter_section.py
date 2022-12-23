@@ -1,8 +1,9 @@
+from pywr_editor.form import TableValuesWidget
+
 from ..parameter_dialog_form import ParameterDialogForm
 from .abstract_constant_scenario_parameter_section import (
     AbstractConstantScenarioParameterSection,
 )
-from pywr_editor.form import TableValuesWidget
 
 
 class ConstantScenarioIndexParameterSection(

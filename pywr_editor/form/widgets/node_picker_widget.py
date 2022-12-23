@@ -1,4 +1,4 @@
-from pywr_editor.form import FormField, AbstractModelNodePickerWidget
+from pywr_editor.form import AbstractModelNodePickerWidget, FormField
 
 """
  This widgets displays a list of available model nodes

@@ -1,15 +1,16 @@
 import pytest
-from PySide6.QtCore import QTimer, Qt
+from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QWindow
-from PySide6.QtWidgets import QApplication, QVBoxLayout, QTextEdit
-from tests.utils import close_message_box
+from PySide6.QtWidgets import QApplication, QTextEdit, QVBoxLayout
+
 from pywr_editor.form import (
-    FormField,
-    Form,
-    FormValidation,
-    FormCustomWidget,
     FieldConfig,
+    Form,
+    FormCustomWidget,
+    FormField,
+    FormValidation,
 )
+from tests.utils import close_message_box
 
 
 @pytest.fixture

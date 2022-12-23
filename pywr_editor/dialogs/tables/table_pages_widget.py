@@ -1,6 +1,9 @@
-from PySide6.QtWidgets import QStackedWidget
 from typing import TYPE_CHECKING
+
+from PySide6.QtWidgets import QStackedWidget
+
 from pywr_editor.model import ModelConfig
+
 from .table_empty_page_widget import TableEmptyPageWidget
 from .table_page_widget import TablePageWidget
 

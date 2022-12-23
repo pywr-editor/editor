@@ -2,18 +2,19 @@ import pytest
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtTest import QSignalSpy
 from PySide6.QtWidgets import QPushButton
-from pywr_editor.model import ModelConfig
+
 from pywr_editor.dialogs import ParametersDialog
 from pywr_editor.form import (
-    TableSelectorWidget,
     ColumnWidget,
-    UrlWidget,
+    FormField,
     IndexColWidget,
     SheetNameWidget,
-    FormField,
+    TableSelectorWidget,
+    UrlWidget,
 )
+from pywr_editor.model import ModelConfig
 from pywr_editor.utils import get_columns, get_index_names
-from tests.utils import resolve_model_path, close_message_box
+from tests.utils import close_message_box, resolve_model_path
 
 """
  Tests for ColumnWidget. The class tests the widget behaviour

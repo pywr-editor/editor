@@ -1,11 +1,12 @@
 from pywr_editor.form import (
     FormSection,
+    FormValidation,
     MultiNodePickerWidget,
     TableValuesWidget,
-    FormValidation,
 )
-from ..node_dialog_form import NodeDialogForm
 from pywr_editor.utils import Logging
+
+from ..node_dialog_form import NodeDialogForm
 
 
 class AggregatedNodeSection(FormSection):

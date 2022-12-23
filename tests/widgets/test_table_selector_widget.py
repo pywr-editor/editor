@@ -3,13 +3,14 @@ import pytest
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtTest import QSignalSpy
 from PySide6.QtWidgets import QPushButton, QWidget
-from pywr_editor.model import ModelConfig, ParameterConfig
+
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.form import TableSelectorWidget, ParameterForm, FormField
+from pywr_editor.form import FormField, ParameterForm, TableSelectorWidget
+from pywr_editor.model import ModelConfig, ParameterConfig
+from pywr_editor.utils import default_index_name, get_index_names
 from pywr_editor.widgets import ComboBox
-from pywr_editor.utils import get_index_names, default_index_name
+from tests.utils import close_message_box, model_path, resolve_model_path
 from tests.widgets.test_url_widget import df_from_h5
-from tests.utils import resolve_model_path, close_message_box, model_path
 
 
 class TestDialogParameterTableSelectorWidget:

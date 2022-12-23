@@ -3,22 +3,23 @@ import io
 import os
 import traceback
 from pathlib import Path
-from typing import Any, TYPE_CHECKING
-from PySide6.QtCore import Slot, Qt
+from typing import TYPE_CHECKING, Any
+
+from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import (
-    QLineEdit,
     QHBoxLayout,
-    QVBoxLayout,
     QLabel,
+    QLineEdit,
     QMessageBox,
-)
-from pywr_editor.widgets import PushButton
-from pywr_editor.form import (
-    AbstractStringComboBoxWidget,
-    FormValidation,
-    FormField,
+    QVBoxLayout,
 )
 
+from pywr_editor.form import (
+    AbstractStringComboBoxWidget,
+    FormField,
+    FormValidation,
+)
+from pywr_editor.widgets import PushButton
 
 if TYPE_CHECKING:
     from pywr_editor.form import ModelComponentForm

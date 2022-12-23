@@ -1,12 +1,14 @@
 from typing import Any
-from ..parameter_dialog_form import ParameterDialogForm
+
 from pywr_editor.form import (
-    NodePickerWidget,
     FloatWidget,
     FormSection,
     FormValidation,
+    NodePickerWidget,
 )
 from pywr_editor.utils import Logging
+
+from ..parameter_dialog_form import ParameterDialogForm
 
 
 class FlowDelayParameterSection(FormSection):

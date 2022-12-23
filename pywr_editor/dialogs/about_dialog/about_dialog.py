@@ -1,20 +1,23 @@
 import sys
 from datetime import datetime
+from typing import TYPE_CHECKING, Union
+
 from PySide6.QtCore import QSize
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import (
-    QPushButton,
     QDialog,
-    QVBoxLayout,
-    QLabel,
     QDialogButtonBox,
     QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QVBoxLayout,
 )
-from typing import TYPE_CHECKING, Union
+
+from pywr_editor.style import Color
+from pywr_editor.widgets import PushIconButton
+
 from .about_dialog_style_sheet import about_dialog_stylesheet
 from .legal_dialog import LegalDialog
-from pywr_editor.widgets import PushIconButton
-from pywr_editor.style import Color
 
 if TYPE_CHECKING:
     from .about_button import AboutButton
@@ -37,7 +40,7 @@ class AboutDialog(QDialog):
         self.setMinimumSize(width, height)
 
         # Text
-        from pywr_editor import __version__, __build_date__
+        from pywr_editor import __build_date__, __version__
 
         build_date = datetime.strptime(__build_date__, "%Y-%m-%d").strftime(
             "%d %b %Y"

@@ -1,14 +1,15 @@
-from ..recorder_dialog_form import RecorderDialogForm
 from pywr_editor.form import (
-    FormSection,
+    DictionaryWidget,
     FileBrowserWidget,
     FileModeWidget,
-    MultiNodePickerWidget,
+    FormSection,
     H5CompressionLibWidget,
-    DictionaryWidget,
+    MultiNodePickerWidget,
     MultiParameterPickerWidget,
 )
 from pywr_editor.utils import Logging
+
+from ..recorder_dialog_form import RecorderDialogForm
 
 
 class TablesRecorderSection(FormSection):

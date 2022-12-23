@@ -1,4 +1,4 @@
-from pywr_editor.form import FormField, AbstractStringModelComponentPickerWidget
+from pywr_editor.form import AbstractStringModelComponentPickerWidget, FormField
 
 """
  This widgets displays a list of available model parameters

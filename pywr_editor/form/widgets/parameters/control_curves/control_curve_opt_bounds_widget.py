@@ -1,4 +1,4 @@
-from pywr_editor.form import AbstractFloatListWidget, FormValidation, FormField
+from pywr_editor.form import AbstractFloatListWidget, FormField, FormValidation
 
 
 class ControlCurveOptBoundsWidget(AbstractFloatListWidget):

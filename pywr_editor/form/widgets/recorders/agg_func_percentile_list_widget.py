@@ -1,8 +1,4 @@
-from pywr_editor.form import (
-    FormField,
-    AbstractFloatListWidget,
-    FormValidation,
-)
+from pywr_editor.form import AbstractFloatListWidget, FormField, FormValidation
 
 """
  This widgets handles the percentile or list of percentiles to use

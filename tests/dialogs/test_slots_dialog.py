@@ -1,10 +1,12 @@
-import pytest
 from functools import partial
+
+import pytest
 from PySide6.QtCore import Qt, QTimer
-from pywr_editor.model import ModelConfig
+
 from pywr_editor.dialogs import EdgeSlotsDialog
 from pywr_editor.dialogs.slots.edge_slots_widget import EdgeSlotsWidget
-from tests.utils import resolve_model_path, check_msg, change_table_view_cell
+from pywr_editor.model import ModelConfig
+from tests.utils import change_table_view_cell, check_msg, resolve_model_path
 
 
 class TestSlotsDialog:
