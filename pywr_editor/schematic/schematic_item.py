@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Literal, Optional, Union
+from typing import TYPE_CHECKING, Any, Literal, Optional, TypedDict, Union
 
 import PySide6
 from PySide6.QtCore import Slot
@@ -14,12 +14,22 @@ from pywr_editor.node_shapes import GrayCircle, get_node_icon
 from pywr_editor.style import Color
 from pywr_editor.widgets import ContextualMenu
 
+from .commands.disconnect_node_command import DisconnectNodeCommand
 from .edge import Edge
 from .schematic_node_utils import SchematicNodeUtils
 
 if TYPE_CHECKING:
     from pywr_editor.node_shapes import BaseNode
     from pywr_editor.schematic import Schematic
+
+
+class ConnectedNodeProps(TypedDict):
+    source_nodes: list["SchematicItem"]
+    """ the list of SchematicItem instances connected to the node """
+    target_nodes: list["SchematicItem"]
+    """ the list of SchematicItem instances connected from the node """
+    count: int
+    """ the total number of connected nodes """
 
 
 class SchematicItem(QGraphicsItemGroup):
@@ -295,7 +305,7 @@ class SchematicItem(QGraphicsItemGroup):
                 return edge_item
 
     @property
-    def connected_nodes(self) -> dict[str, list["SchematicItem"] | int]:
+    def connected_nodes(self) -> ConnectedNodeProps:
         """
         Returns the connected nodes.
         :return: A dictionary with the following keys:
@@ -309,11 +319,12 @@ class SchematicItem(QGraphicsItemGroup):
         source_nodes = [
             edge.source for edge in self.edges if edge.target.name == self.name
         ]
-        return {
-            "target_nodes": target_nodes,
-            "source_nodes": source_nodes,
-            "count": len(target_nodes) + len(source_nodes),
-        }
+
+        return ConnectedNodeProps(
+            target_nodes=target_nodes,
+            source_nodes=source_nodes,
+            count=len(target_nodes) + len(source_nodes),
+        )
 
     def add_delete_edge_actions(self, menu: QMenu) -> bool:
         """
@@ -420,41 +431,18 @@ class SchematicItem(QGraphicsItemGroup):
         source_node = action_data["source_node"]
         target_node = action_data["target_node"]
 
-        # remove from model config
-        self.view.model_config.edges.delete(
-            source_node_name=source_node.name, target_node_name=target_node.name
+        command = DisconnectNodeCommand(
+            schematic=self.view,
+            source_node_name=source_node.name,
+            target_node_name=target_node.name,
         )
-
-        # remove edge from the edges list for the source node
-        edge_items = self.view.schematic_items[source_node.name].edges
-        edge_to_delete: Edge | None = None
-        for ei, edge_item in enumerate(edge_items):
-            if edge_item.target.name == target_node.name:
-                edge_to_delete = edge_item
-                del edge_items[ei]
-                break
-
-        # remove edge from the edges list for the target node
-        edge_items = self.view.schematic_items[target_node.name].edges
-        for ei, edge_item in enumerate(edge_items):
-            if edge_item.source.name == source_node.name:
-                del edge_items[ei]
-                break
-
-        # remove graphic item from the schematic
-        if edge_to_delete is not None:
-            self.scene().removeItem(edge_to_delete)
-        # object is still instantiated
-        del edge_to_delete
-
+        self.view.app.undo_stack.push(command)
         self.setSelected(False)
 
-        # update status bar and tree
-        # noinspection PyUnresolvedReferences
+        # update status bar
         self.view.app.status_message.emit(
             f'Deleted edge from "{source_node.name}" to "{target_node.name}"'
         )
-        self.view.app.components_tree.reload()
 
     @Slot()
     def on_delete_node(self) -> None:
