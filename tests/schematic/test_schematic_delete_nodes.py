@@ -263,6 +263,42 @@ class TestSchematicNodes:
             schematic=schematic,
         )
 
+    def test_undo_node_rename(self, qtbot, init_window) -> None:
+        """
+        Tests that, when a node is deleted and a node that what previously connected
+        to it is renamed, the deleted edge is not restored. The deleted edge is not
+        valid anymore because the node changed name.
+        """
+        node_name = "Link2"
+        window, schematic, node_op_panel = init_window
+        model_config = schematic.model_config
+        node_item = schematic.schematic_items[node_name]
+        assert len(node_item.edges) == 3
+
+        panel = schematic.app.toolbar.tabs["Nodes"].panels["Undo"]
+        undo_button = panel.buttons["Undo"]
+
+        node_item.on_delete_node()
+
+        # rename Link1 and undo
+        model_config.nodes.rename("Link1", "New Link1")
+        qtbot.mouseClick(undo_button, Qt.MouseButton.LeftButton)
+
+        # edge is not in model config
+        assert model_config.edges.find_edge("Link1", node_name)[0] is None
+        assert model_config.edges.find_edge("New Link1", node_name)[0] is None
+
+        # edge item on schematic is not restored
+        node_item = schematic.schematic_items[node_name]
+        assert len(node_item.edges) == 2
+
+        assert [n.name for n in node_item.connected_nodes["source_nodes"]] == [
+            "Link3",
+        ]
+        assert [n.name for n in node_item.connected_nodes["target_nodes"]] == [
+            "Link4",
+        ]
+
     def test_delete_nodes(self, qtbot, init_window) -> None:
         """
         Tests that multiple selected nodes are properly deleted.
