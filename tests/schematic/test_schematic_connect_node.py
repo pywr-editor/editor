@@ -137,3 +137,22 @@ class TestSchematicConnectNodes:
         ]
 
         assert ["Link3", "Reservoir"] in all_schematic_edges
+
+        # 6. Undo, rename connected node and redo
+        qtbot.mouseClick(undo_button, Qt.MouseButton.LeftButton)
+        model_config.nodes.rename("Reservoir", "Lake")
+
+        qtbot.mouseClick(redo_button, Qt.MouseButton.LeftButton)
+
+        # command becomes obsolete and edge is not restored
+        assert model_config.edges.find_edge("Link3", "Lake")[0] is None
+        assert model_config.edges.find_edge("Link3", "Reservoir")[0] is None
+
+        # buttons are disabled
+        qtbot.wait(400)  # setObsolete is delayed by the command
+        assert redo_button.isEnabled() is False
+        assert undo_button.isEnabled() is False
+
+        # command object is deleted and not accessible anymore
+        with pytest.raises(RuntimeError):
+            assert undo_command.isObsolete() is True

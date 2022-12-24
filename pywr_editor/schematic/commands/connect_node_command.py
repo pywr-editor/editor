@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from PySide6.QtCore import QTimer
 from PySide6.QtGui import QUndoCommand
 
 from pywr_editor.model import NodeConfig
@@ -19,7 +20,7 @@ class ConnectNodeCommand(QUndoCommand):
         target_node_name: str,
     ):
         """
-        Initialises the delete node command.
+        Initialises the connect node command.
         :param schematic: The Schematic instance.
         :param source_node_name: The name of the source node.
         :param target_node_name: The name of the target node.
@@ -42,16 +43,44 @@ class ConnectNodeCommand(QUndoCommand):
                 target_node_name, as_dict=False
             )
         )
-        # To properly restore the edge, store the edge configuration, if the edge is
-        # changed (for ex. a Slot is added) when undo is called
+        # To properly restore, if the edge is changed (for ex. a Slot is added),
+        # store the edge configuration for the undo command
         self.edge_config: list[str | int] | None = None
         self.setText("connect node")
+        self.make_obsolete = False
 
     def redo(self) -> None:
         """
         Connect the node.
         :return: None
         """
+        # edge is added for the first time
+        if self.edge_config is None:
+            if self.model_config.edges.add(
+                source_node_name=self.source_node.name,
+                target_node_name=self.target_node.name,
+            ):
+                self.logger.debug(
+                    f"Added edge: [{self.source_node.name},"
+                    + f"{self.target_node.name}]"
+                )
+        # restore edge delete with undo command
+        else:
+            if self.model_config.edges.add(*self.edge_config):
+                self.logger.debug(f"Restored edge: {self.edge_config}")
+            else:
+                # When a node is renamed after the edge is deleted, its edge cannot
+                # be restored. This also ensures consistency with all commands
+                self.logger.debug(
+                    f"Operation for '{self.source_node.name}' and "
+                    + f"'{self.target_node.name}' is now obsolete"
+                )
+                # command cannot be make obsolete and removed from stack in redo().
+                # Call undo() with delay as workaround
+                self.make_obsolete = True
+                QTimer.singleShot(200, self.app.undo_stack.undo)
+                return
+
         self.schematic.scene.addItem(
             Edge(
                 source=self.schematic.schematic_items[self.source_node.name],
@@ -59,21 +88,6 @@ class ConnectNodeCommand(QUndoCommand):
                 hide_arrow=self.app.editor_settings.are_edge_arrows_hidden,
             )
         )
-        # edge is added for the first time
-        if self.edge_config is None:
-            self.model_config.edges.add(
-                source_node_name=self.source_node.name,
-                target_node_name=self.target_node.name,
-            )
-            self.logger.debug(
-                f"Added edge: [{self.source_node.name},"
-                + f"{self.target_node.name}]"
-            )
-        else:
-            self.model_config.edges.add(*self.edge_config)
-            self.logger.debug(f"Restored edge: {self.edge_config}")
-
-        # noinspection PyUnresolvedReferences
         self.app.status_message.emit(
             f"Connected {self.source_node.name} to {self.target_node.name}"
         )
@@ -84,6 +98,10 @@ class ConnectNodeCommand(QUndoCommand):
         Disconnect the nodes that were previously connected with the redo command.
         :return: None
         """
+        if self.make_obsolete:
+            self.setObsolete(True)
+            return
+
         # store the edge so that it can be restored later
         self.edge_config, _ = self.model_config.edges.find_edge(
             source_node_name=self.source_node.name,
