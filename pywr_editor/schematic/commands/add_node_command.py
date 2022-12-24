@@ -58,21 +58,21 @@ class AddNodeCommand(QUndoCommand):
         # restore deleted node
         else:
             # add node
-            self.logger.debug(
-                f"Restoring node config: {self.node_config.props}"
-            )
             self.model_config.nodes.add(self.node_config.props)
+            self.logger.debug(f"Restored node config: {self.node_config.props}")
 
             # add edges
+            restored_edges = 0
             for edge in self.deleted_edges:
-                self.logger.debug(f"Restoring edge: {edge}")
-                self.model_config.edges.add(*edge)
+                if self.model_config.edges.add(*edge):
+                    self.logger.debug(f"Restored edge: {edge}")
+                    restored_edges += 1
 
             # emit the status message
-            status_message = (
-                f"Restored '{self.node_config.name}' and its "
-                + f"{len(self.deleted_edges)} edge(s)"
-            )
+            status_message = f"Restored '{self.node_config.name}'"
+            if restored_edges > 0:
+                suffix_edges = "edge" if restored_edges == 1 else "edges"
+                status_message += f" and its {restored_edges} {suffix_edges}"
 
         self.schematic.app.status_message.emit(status_message)
 
