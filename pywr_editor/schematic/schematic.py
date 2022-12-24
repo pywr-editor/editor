@@ -20,6 +20,7 @@ from pywr_editor.schematic import (
     AddNodeCommand,
     ConnectNodeCommand,
     DeleteNodeCommand,
+    MoveNodeCommand,
     SchematicBBoxUtils,
     SchematicItem,
     scaling_factor,
@@ -826,13 +827,18 @@ class Schematic(QGraphicsView):
         if event.button() == Qt.LeftButton:
             # perform action on selected nodes
             if self.canvas_drag is False:
-                for item in self.scene.selectedItems():
-                    item: "SchematicItem"
-                    # prevent the nodes from being moved outside the schematic edges.
-                    item.adjust_node_position()
-                    # store the new positions of any selected nodes as long as the
-                    # nodes were moved
-                    item.save_position_if_moved()
+                # save position only if the nodes were moved
+                if any(
+                    [
+                        n.has_position_changed()
+                        for n in self.scene.selectedItems()
+                    ]
+                ):
+                    command = MoveNodeCommand(
+                        schematic=self,
+                        selected_nodes=self.scene.selectedItems(),
+                    )
+                    self.app.undo_stack.push(command)
             else:
                 # export the new scene center
                 items = self.items(event.pos())

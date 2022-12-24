@@ -237,27 +237,31 @@ class SchematicItem(QGraphicsItemGroup):
 
         return was_node_moved
 
-    def save_position_if_moved(
-        self, x: float | None = None, y: float | None = None
-    ) -> None:
+    @property
+    def position(self) -> [float, float]:
+        """
+        Returns the current node's position.
+        :return: The position as tuple of floats.
+        """
+        return round(self.scenePos().x(), 5), round(self.scenePos().y(), 5)
+
+    def has_position_changed(self) -> bool:
+        """
+        Checks if the node has been moved.
+        :return: True if the node was moved, False otherwise.
+        """
+        return self.position != self.prev_position
+
+    def save_position_if_moved(self) -> None:
         """
         Saves the new node position in the configuration file.
-        :param x: The x coordinate. If omitted, the current position will be saved.
-        :param y: The y coordinate. If omitted, the current position will be saved.
         :return: None
         """
-        # store the new position
-        if x is None:
-            x = round(self.scenePos().x(), 5)
-        if y is None:
-            y = round(self.scenePos().y(), 5)
-
-        new_position = [x, y]
-        if self.prev_position != new_position:
-            self.prev_position = new_position
+        if self.has_position_changed():
             self.view.app.model_config.nodes.set_position(
-                node_name=self.name, position=new_position
+                node_name=self.name, position=self.position
             )
+            self.prev_position = self.position
 
     def draw_edge(self, edge: Edge) -> None:
         """
