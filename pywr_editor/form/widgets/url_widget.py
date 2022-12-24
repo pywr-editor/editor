@@ -249,7 +249,7 @@ class UrlWidget(FormCustomWidget):
                 )
                 continue
 
-            form_widget = form_field.widget
+            form_widget: FormCustomWidget = form_field.widget
             if not hasattr(form_widget, "update_field"):
                 raise NotImplementedError(
                     f"The widget {form_widget} must have the update_field() method"
@@ -345,7 +345,7 @@ class UrlWidget(FormCustomWidget):
         """
         self.logger.debug("Opening file dialog")
         file_dialog = QFileDialog()
-        file_dialog.setFileMode(QFileDialog.ExistingFile)
+        file_dialog.setFileMode(QFileDialog.FileMode.ExistingFile)
 
         files_filter = (
             "CSV (*.csv);; Text (*.txt);; Excel (*.xls *.xlsx *.xlsm);; "

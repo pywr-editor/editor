@@ -194,7 +194,6 @@ class AbstractConstantScenarioParameterSection(FormSection):
         ).widget
         labels = source_widget.labels
 
-        keys_to_delete = []
         url_fields = (
             UrlWidget.csv_fields
             + UrlWidget.excel_fields

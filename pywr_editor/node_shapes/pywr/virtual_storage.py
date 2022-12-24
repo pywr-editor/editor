@@ -50,5 +50,5 @@ class VirtualStorage(BaseReservoir, PywrNode):
 
         # text
         text_options = QTextOption()
-        text_options.setAlignment(Qt.AlignCenter)
+        text_options.setAlignment(Qt.AlignmentFlag.AlignCenter)
         painter.drawText(font_box, self.inside_label, text_options)

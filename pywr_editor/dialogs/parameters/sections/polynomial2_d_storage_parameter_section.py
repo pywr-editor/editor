@@ -56,7 +56,7 @@ class Polynomial2DStorageParameterSection(FormSection):
                     "value": self.form.get_param_dict_value(
                         "use_proportional_volume"
                     ),
-                    "help_text": "If Yes the independent variable is the proportial "
+                    "help_text": "If Yes the independent variable is the proportional "
                     "volume (between 0 and 1) of the Storage node",
                 },
                 {

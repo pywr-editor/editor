@@ -335,12 +335,10 @@ class SlotsTableWidget(FormCustomWidget):
             factor_map = {}
             for si, slot_name in enumerate(self.node_config_slot_names):
                 self.logger.debug(f"Processing slot '{slot_name}'")
-                node_name = None
                 # get name in edge to fetch the target node
                 try:
                     ei = self.edge_slot_names.index(slot_name)
                 except ValueError:
-                    ei = None
                     self.logger.debug("No slot found")
                     # let user update slot_names
                     self.form.save_button.setEnabled(True)

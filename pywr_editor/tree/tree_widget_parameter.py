@@ -32,9 +32,6 @@ class TreeWidgetParameter(AbstractTreeWidgetComponent):
         Initialises the item containing the parameter configuration.
         :param parameter_config: The parameter configuration dictionary.
         :param model_config: The ModelConfig instance.
-        :param parameter_name: The parameter name. This is available only
-        if the parameter is global and is not for anonymous parameters
-        defined within a node, parameter or recorder dictionary.
         :param parent: The parent widget.
         """
         super().__init__(

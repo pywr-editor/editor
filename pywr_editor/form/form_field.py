@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Literal, Type
+from typing import TYPE_CHECKING, Any, Literal, Type, Union
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
@@ -83,7 +83,9 @@ class FormField(QWidget):
         self.message.hide()
 
         # field
-        self.widget = None
+        self.widget: Union[
+            FormCustomWidget, QLineEdit, SpinBox, ToggleSwitchWidget, None
+        ] = None
         warning_message = None
         # custom widget
         if self.is_custom_widget:

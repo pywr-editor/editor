@@ -47,7 +47,7 @@ class ScenarioWrapperParameterSection(FormSection):
                     "value": self.form.get_param_dict_value("parameters"),
                     "help_text": "The parameter to use for each scenario ensemble. "
                     "You can provide parameters not explicitly supporting scenarios "
-                    "(for example for control curbves or interpolation parameters)",
+                    "(for example for control curves or interpolation parameters)",
                 },
             ],
             "Miscellaneous": [

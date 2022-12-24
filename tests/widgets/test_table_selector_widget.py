@@ -408,7 +408,7 @@ class TestDialogParameterTableSelectorWidget:
             ("non_existing_table", False, None, None),
             ("param_file_ext_not_supported", False, None, None),
             ("param_file_non_parsable", False, None, None),
-            # no model tabels
+            # no model tables
             (None, True, "no tables defined", None),
             # valid table
             (

@@ -98,7 +98,6 @@ class ArrayIndexedScenarioMonthlyFactorsParameterSection(FormSection):
         labels = source_widget.labels
 
         # remove unnecessary keys depending on source for factors
-        keys_to_delete = []
         url_fields = (
             UrlWidget.csv_fields
             + UrlWidget.excel_fields
