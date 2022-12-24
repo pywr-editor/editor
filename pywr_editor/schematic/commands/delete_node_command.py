@@ -34,8 +34,9 @@ class DeleteNodeCommand(QUndoCommand):
             )
             for node in selected_nodes
         ]
-        # lists of deleted edges (nodes and slots) from the redo command. If the node
-        # is renamed, the lists are updated because ref is used
+        # lists of deleted edges (nodes and slots) from the redo command. If a node
+        # in an edge is renamed, and the operation is undone, the edge is not
+        # restored because the node was changed
         self.deleted_edges: list[list[str | int]] = []
 
         total_nodes = len(self.deleted_node_configs)
@@ -71,7 +72,6 @@ class DeleteNodeCommand(QUndoCommand):
                 f"Deleted {len(self.deleted_node_configs)} nodes and "
                 + f"{edges_count} edges"
             )
-        # noinspection PyUnresolvedReferences
         self.schematic.app.status_message.emit(status_message)
 
         # update widgets
@@ -89,15 +89,22 @@ class DeleteNodeCommand(QUndoCommand):
             self.logger.debug(f"Restored node config: {node_config.props}")
 
         # add edges
+        restored_edges = 0
         for edge in self.deleted_edges:
-            self.model_config.edges.add(*edge)
-            self.logger.debug(f"Restored edge: {edge}")
+            # check that the edge is still valid
+            if self.model_config.edges.add(*edge):
+                self.logger.debug(f"Restored edge: {edge}")
+                restored_edges += 1
 
         # emit the status message
+        suffix_node = "node" if len(self.deleted_node_configs) == 1 else "nodes"
         status_message = (
-            f"Restored {len(self.deleted_node_configs)} node(s) and "
-            + f"{len(self.deleted_edges)} edge(s)"
+            f"Restored {len(self.deleted_node_configs)} {suffix_node}"
         )
+        if restored_edges > 0:
+            suffix_edges = "edge" if restored_edges == 1 else "edges"
+            status_message += f" and {restored_edges} {suffix_edges}"
+
         self.schematic.app.status_message.emit(status_message)
         self.logger.debug(status_message)
 
