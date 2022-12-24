@@ -703,11 +703,10 @@ class MainWindow(QMainWindow):
         if self.model_file is not None:
             status = self.model_config.save()
             if status is not True:
-                # noinspection PyUnresolvedReferences
                 self.error_message.emit(status, False)
             else:
-                # noinspection PyUnresolvedReferences
                 self.save.emit()
+                self.undo_stack.setClean()
         else:
             file_dialog = QFileDialog()
             file_dialog.setNameFilter("JSON file (*.json)")
@@ -719,6 +718,7 @@ class MainWindow(QMainWindow):
                 self.model_file = model_file
                 self.model_config.json_file = model_file
                 self.save_model()
+                self.undo_stack.setClean()
             else:
                 return False
 
