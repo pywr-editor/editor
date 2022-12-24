@@ -1,4 +1,3 @@
-import pandas as pd
 import pytest
 from PySide6.QtCore import QTimer
 
