@@ -38,16 +38,20 @@ if TYPE_CHECKING:
 
 
 class Schematic(QGraphicsView):
-    # schematic
     padding: int = 50
+    """ canvas padding """
     pywr_bounds: tuple[int] = (-100, 100)
+    """ bounds used in the pixels conversion """
     max_view_size_delta: int = 50
+    """ max step increment to use when resizing the schematic """
     schematic_move_event = Signal(QPointF)
+    """ event emitted when schematic is moved """
     connect_node_event = Signal(SchematicItem)
-
-    # zoom factors
+    """ event emitted when a node is being connected to another """
     min_zoom = scaling_factor("zoom-out", 3)
+    """ min zoom factor"""
     max_zoom = scaling_factor("zoom-in", 3)
+    """ max zoom factor"""
 
     def __init__(self, model_config: ModelConfig, app: "MainWindow"):
         """
