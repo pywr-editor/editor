@@ -351,7 +351,7 @@ class Color:
         :param alpha: The alpha level. Default to 1.
         :return: A tuple containing the RGB data.
         """
-        return self.rgb + (0.4,)
+        return self.rgb + (alpha,)
 
     @property
     def qcolor(self) -> QColor:
