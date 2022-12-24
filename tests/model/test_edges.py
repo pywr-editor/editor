@@ -55,10 +55,11 @@ class TestEdges:
         """
         Tests the add edge method.
         """
+        nodes = ["LinkXXX", "Link35"]
         edges = self.edges("model_4.json")
-        edges.add("Node 1", "Node 2", slot_source, slot_target)
-        edge, _ = edges.find_edge("Node 1", "Node 2")
-        assert edge == ["Node 1", "Node 2"] + expected_slots
+        edges.add(nodes[0], nodes[1], slot_source, slot_target)
+        edge, _ = edges.find_edge(*nodes)
+        assert edge == nodes + expected_slots
 
     def test_delete_edge1(self):
         """
