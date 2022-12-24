@@ -1,8 +1,6 @@
 [flake8]
-select = C,E,F,W,I
-max-complexity = 10
 max-line-length = 88
-extend-ignore = E203, E302, W503, F401, F403, C901, F401
-per-file-ignores = pywr_data.py,assets.py:E501,E305,custom_parameter_syntax_error.py:E999
+extend-ignore = E203, C901
+per-file-ignores = app_stylesheet.py:F403,F401
 require-plugins = flake8-black,flake8-isort
-exclude: venv*,dist,build
+exclude: venv*,dist,build,pywr_data.py,assets.py,custom_parameter_syntax_error.py,__init__.py

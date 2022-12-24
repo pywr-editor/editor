@@ -68,9 +68,6 @@ class FormCustomWidget(QWidget):
         "default_value" property.
         :return: The default value.
         """
-        # TODO convert to NotImplemented. In the future, each widget
-        #  must provide its default value.
-        # noinspection PyTypeChecker
         return self.property("default_value")
 
     @Slot()
