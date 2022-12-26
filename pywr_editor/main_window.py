@@ -55,6 +55,7 @@ class MainWindow(QMainWindow):
         """
         super().__init__()
         self.logger = Logging().logger(self.__class__.__name__)
+        self.setStyleSheet(AppStylesheet().get())
 
         # Check the model file
         if model_file is not None and not os.path.exists(model_file):
@@ -100,7 +101,6 @@ class MainWindow(QMainWindow):
         self.setAutoFillBackground(True)
         self.setPalette(Qt.GlobalColor.white)
         self.setDockNestingEnabled(False)
-        self.setStyleSheet(AppStylesheet().get())
         self.setCentralWidget(self.splitter)
 
         # Actions
