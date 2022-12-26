@@ -101,8 +101,8 @@ class TestSchematicConnectNodes:
         )
 
         # check internal Edges in schematic nodes
-        assert len(schematic.schematic_items["Link3"].edges) == 1
-        assert len(schematic.schematic_items["Reservoir"].edges) == 1
+        assert len(schematic.node_items["Link3"].edges) == 1
+        assert len(schematic.node_items["Reservoir"].edges) == 1
 
         # check edge item in schematic
         all_schematic_edges = [
@@ -126,8 +126,8 @@ class TestSchematicConnectNodes:
         ]
 
         # check internal Edges in schematic nodes
-        assert len(schematic.schematic_items["Link3"].edges) == 2
-        assert len(schematic.schematic_items["Reservoir"].edges) == 2
+        assert len(schematic.node_items["Link3"].edges) == 2
+        assert len(schematic.node_items["Reservoir"].edges) == 2
 
         # check edge item in schematic
         all_schematic_edges = [

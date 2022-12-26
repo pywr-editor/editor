@@ -38,7 +38,7 @@ class TestSchematicMoveNodes:
         node_name = "Link3"
 
         # 1. Move Link3
-        node_item = schematic.schematic_items[node_name]
+        node_item = schematic.node_items[node_name]
         initial_pos = node_item.position
         assert node_item.prev_position == initial_pos
         new_pos = QPoint(150, 100)
@@ -74,7 +74,7 @@ class TestSchematicMoveNodes:
         assert undo_button.isEnabled() is False
         assert redo_button.isEnabled() is True
 
-        node_item = schematic.schematic_items[node_name]
+        node_item = schematic.node_items[node_name]
         assert node_item.scenePos().toTuple() == initial_pos
         assert node_item.position == initial_pos
         assert (
@@ -89,7 +89,7 @@ class TestSchematicMoveNodes:
         assert undo_button.isEnabled() is True
         assert redo_button.isEnabled() is False
 
-        node_item = schematic.schematic_items[node_name]
+        node_item = schematic.node_items[node_name]
         assert node_item.scenePos() == new_pos
         assert node_item.position == new_pos.toTuple()
         assert (

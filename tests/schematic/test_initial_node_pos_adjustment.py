@@ -40,7 +40,7 @@ class TestInitialWrongPosition:
         """
         schematic = window.schematic
 
-        item = schematic.schematic_items["Link"]
+        item = schematic.node_items["Link"]
         item_utils = SchematicNodeUtils(
             node=item,
             schematic_size=[
@@ -51,7 +51,7 @@ class TestInitialWrongPosition:
         assert item_utils.is_outside_left_edge is False
         assert item.sceneBoundingRect().left() == 0.0
 
-        item = schematic.schematic_items["Output"]
+        item = schematic.node_items["Output"]
         item_utils = SchematicNodeUtils(
             node=item,
             schematic_size=[

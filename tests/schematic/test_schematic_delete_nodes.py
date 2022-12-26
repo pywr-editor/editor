@@ -52,7 +52,7 @@ class TestSchematicNodes:
         assert model_config.nodes.find_node_index_by_name(node_name) is None
 
         # node is removed from the items list
-        assert node_name not in schematic.schematic_items.keys()
+        assert node_name not in schematic.node_items.keys()
 
         # node is removed from the schematic as graphical item
         node_names = [
@@ -128,7 +128,7 @@ class TestSchematicNodes:
             model_config.nodes.get_node_config_from_name(node_name)
             == original_node_config
         )
-        assert node_name in schematic.schematic_items.keys()
+        assert node_name in schematic.node_items.keys()
         node_names = [
             node.name
             for node in schematic.items()
@@ -161,13 +161,13 @@ class TestSchematicNodes:
         # check node internal connections
         assert model_config.edges.get_sources(node_name) == [
             item.name
-            for item in schematic.schematic_items[node_name].connected_nodes[
+            for item in schematic.node_items[node_name].connected_nodes[
                 "source_nodes"
             ]
         ]
         assert model_config.edges.get_targets(node_name) == [
             item.name
-            for item in schematic.schematic_items[node_name].connected_nodes[
+            for item in schematic.node_items[node_name].connected_nodes[
                 "target_nodes"
             ]
         ]
@@ -191,7 +191,7 @@ class TestSchematicNodes:
         undo_button = panel.buttons["Undo"]
         redo_button = panel.buttons["Redo"]
 
-        node = schematic.schematic_items[node_name]
+        node = schematic.node_items[node_name]
         removed_edges = node.edges
         node.on_delete_node()
 
@@ -236,7 +236,7 @@ class TestSchematicNodes:
 
         # 4. Test redo operation
         # get new schematic item instance
-        node = schematic.schematic_items[new_name]
+        node = schematic.node_items[new_name]
         removed_edges = node.edges
 
         qtbot.mouseClick(redo_button, Qt.MouseButton.LeftButton)
@@ -272,7 +272,7 @@ class TestSchematicNodes:
         node_name = "Link2"
         window, schematic, node_op_panel = init_window
         model_config = schematic.model_config
-        node_item = schematic.schematic_items[node_name]
+        node_item = schematic.node_items[node_name]
         assert len(node_item.edges) == 3
 
         panel = schematic.app.toolbar.tabs["Nodes"].panels["Undo"]
@@ -289,7 +289,7 @@ class TestSchematicNodes:
         assert model_config.edges.find_edge("New Link1", node_name)[0] is None
 
         # edge item on schematic is not restored
-        node_item = schematic.schematic_items[node_name]
+        node_item = schematic.node_items[node_name]
         assert len(node_item.edges) == 2
 
         assert [n.name for n in node_item.connected_nodes["source_nodes"]] == [
@@ -320,7 +320,7 @@ class TestSchematicNodes:
 
         # 1. Select 3 nodes
         for node in nodes_to_delete:
-            schematic_item = schematic.schematic_items[node]
+            schematic_item = schematic.node_items[node]
             schematic_item.setSelected(True)
             deleted_schematic_edge_dict[node] = schematic_item.edges
 
@@ -373,7 +373,7 @@ class TestSchematicNodes:
                 model_config.nodes.find_node_index_by_name(node_name)
                 is not None
             )
-            assert node_name in schematic.schematic_items.keys()
+            assert node_name in schematic.node_items.keys()
             assert node_name in node_names
 
             # check edges in schematic
@@ -390,15 +390,15 @@ class TestSchematicNodes:
             all_restored_edges += [[node_name, name] for name in targets]
             assert sources == [
                 item.name
-                for item in schematic.schematic_items[
-                    node_name
-                ].connected_nodes["source_nodes"]
+                for item in schematic.node_items[node_name].connected_nodes[
+                    "source_nodes"
+                ]
             ]
             assert targets == [
                 item.name
-                for item in schematic.schematic_items[
-                    node_name
-                ].connected_nodes["target_nodes"]
+                for item in schematic.node_items[node_name].connected_nodes[
+                    "target_nodes"
+                ]
             ]
 
         # all edges are restored
@@ -407,7 +407,7 @@ class TestSchematicNodes:
         # 4. Test redo operation
         # get new schematic item instance
         for node_name in nodes_to_delete:
-            schematic_item = schematic.schematic_items[node_name]
+            schematic_item = schematic.node_items[node_name]
             deleted_schematic_edge_dict[node_name] = schematic_item.edges
 
         undo_command.redo()

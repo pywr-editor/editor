@@ -78,6 +78,5 @@ class TestComponentTree:
         tree_widget.on_item_click(tree_item)
         # node must be selected
         assert (
-            window.schematic.schematic_items[tree_item.text(0)].isSelected()
-            is True
+            window.schematic.node_items[tree_item.text(0)].isSelected() is True
         )

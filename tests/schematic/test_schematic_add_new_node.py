@@ -43,7 +43,7 @@ class TestAddNodes:
         """
         window, schematic, _ = init_window
         model_config = schematic.model_config
-        item_count = len(schematic.schematic_items)
+        item_count = len(schematic.node_items)
         panel = schematic.app.toolbar.tabs["Nodes"].panels["Undo"]
         undo_button = panel.buttons["Undo"]
         redo_button = panel.buttons["Redo"]
@@ -78,10 +78,10 @@ class TestAddNodes:
         QtCore.QCoreApplication.sendEvent(schematic.viewport(), event)
 
         # 2. Check that the new node is in the schematic
-        new_item_count = len(schematic.schematic_items)
-        new_node_name = list(schematic.schematic_items.keys())[-1]
+        new_item_count = len(schematic.node_items)
+        new_node_name = list(schematic.node_items.keys())[-1]
         assert new_item_count == item_count + 1
-        assert "Node " in list(schematic.schematic_items.keys())[-1]
+        assert "Node " in list(schematic.node_items.keys())[-1]
 
         assert model_config.has_changes is True
         # the node is in the model configuration
@@ -114,8 +114,8 @@ class TestAddNodes:
         model_config.edges.add(*new_edge)
         schematic.scene.addItem(
             Edge(
-                source=schematic.schematic_items["Reservoir"],
-                target=schematic.schematic_items[new_node_name],
+                source=schematic.node_items["Reservoir"],
+                target=schematic.node_items[new_node_name],
             )
         )
         new_new_node_name = "New link"
@@ -141,8 +141,8 @@ class TestAddNodes:
         assert undo_command.deleted_edges[0] == new_edge
 
         # node and edges are removed from schematic
-        assert new_node_name not in schematic.schematic_items.keys()
-        assert new_new_node_name not in schematic.schematic_items.keys()
+        assert new_node_name not in schematic.node_items.keys()
+        assert new_new_node_name not in schematic.node_items.keys()
         node_names = [
             node.name
             for node in schematic.items()
@@ -172,7 +172,7 @@ class TestAddNodes:
         assert undo_command.deleted_edges[0] == new_edge
 
         # node and edges are restored from schematic
-        assert new_new_node_name in schematic.schematic_items.keys()
+        assert new_new_node_name in schematic.node_items.keys()
         node_names = [
             node.name
             for node in schematic.items()

@@ -14,15 +14,17 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
-from pywr_editor.model import Edges, ModelConfig, NodeConfig
+from pywr_editor.model import Edges, ModelConfig, NodeConfig, TextShape
 from pywr_editor.node_shapes import get_node_icon_classes
 from pywr_editor.schematic import (
     AddNodeCommand,
+    BaseShape,
     ConnectNodeCommand,
     DeleteNodeCommand,
     MoveNodeCommand,
     SchematicBBoxUtils,
-    SchematicItem,
+    SchematicNode,
+    SchematicText,
     scaling_factor,
     units_to_factor,
 )
@@ -46,7 +48,7 @@ class Schematic(QGraphicsView):
     """ max step increment to use when resizing the schematic """
     schematic_move_event = Signal(QPointF)
     """ event emitted when schematic is moved """
-    connect_node_event = Signal(SchematicItem)
+    connect_node_event = Signal(SchematicNode)
     """ event emitted when a node is being connected to another """
     min_zoom = scaling_factor("zoom-out", 3)
     """ min zoom factor"""
@@ -73,7 +75,8 @@ class Schematic(QGraphicsView):
         self.scaling_factor = self.editor_settings.zoom_level
         self.nodes_wo_position = 0
         self.connecting_node_props = ConnectingNodeProps()
-        self.schematic_items: dict[str, SchematicItem] = {}
+        self.node_items: dict[str, SchematicNode] = {}
+        self.shape_items: dict[str, BaseShape] = {}
 
         # noinspection PyUnresolvedReferences
         self.schematic_move_event.connect(self.on_schematic_move)
@@ -148,10 +151,8 @@ class Schematic(QGraphicsView):
             self.model_config.nodes.get_all()
         ):
             node_config = self.model_config.nodes.node(node_props)
-            # if node_dict.is_visible is False:
-            #     continue
-
             node_position = node_config.position
+
             # position is not available
             if node_position is None:
                 # use pywr position if available
@@ -174,14 +175,14 @@ class Schematic(QGraphicsView):
 
         # draw the edges
         model_edges = Edges(self.model_config)
-        for source_node_name, source_node_obj in self.schematic_items.items():
+        for source_node_name, source_node_obj in self.node_items.items():
             target_nodes = self.model_config.edges.get_targets(source_node_name)
             if target_nodes is not None:
                 for target_node_name in target_nodes:
                     self.scene.addItem(
                         Edge(
                             source=source_node_obj,
-                            target=self.schematic_items[target_node_name],
+                            target=self.node_items[target_node_name],
                             edge_color_name=model_edges.get_edge_color(
                                 source_node_name
                             ),
@@ -195,6 +196,16 @@ class Schematic(QGraphicsView):
         # move nodes outside canvas
         self.adjust_nodes_initial_pos()
 
+        # draw the shapes
+        for shape_obj in self.model_config.shapes.get_all():
+            shape = None
+            if isinstance(shape_obj, TextShape):
+                shape = SchematicText(shape=shape_obj, view=self)
+
+            if shape:
+                self.shape_items[shape_obj.id] = shape
+                self.scene.addItem(shape)
+
         if self.init is True:
             self.init = False
 
@@ -205,18 +216,18 @@ class Schematic(QGraphicsView):
         """
         self.scene.clear()
         self.add_scene_decorations()
-        self.schematic_items = {}
+        self.node_items = {}
         self.draw()
 
-    def add_node(self, node_props: dict) -> SchematicItem:
+    def add_node(self, node_props: dict) -> SchematicNode:
         """
         Adds and registers a new graphical node to the schematic.
         :param node_props: The dictionary with the node properties.
         :return: The graphical node instance.
         """
-        node_obj = SchematicItem(node_props=node_props, view=self)
+        node_obj = SchematicNode(node_props=node_props, view=self)
         self.scene.addItem(node_obj)
-        self.schematic_items[node_obj.name] = node_obj
+        self.node_items[node_obj.name] = node_obj
 
         return node_obj
 
@@ -228,7 +239,7 @@ class Schematic(QGraphicsView):
         :return: The list of model edges that were deleted.
         """
         # find the node shape on the schematic
-        node_item = self.schematic_items[node_name]
+        node_item = self.node_items[node_name]
         deleted_edges: list[list[str]] = []
 
         # delete edges on the schematic when node is source node
@@ -249,7 +260,7 @@ class Schematic(QGraphicsView):
 
         # remove the graphic item in schematic and model config
         self.model_config.nodes.delete(node_name)
-        del self.schematic_items[node_name]
+        del self.node_items[node_name]
         self.scene.removeItem(node_item)
 
         return deleted_edges
@@ -335,7 +346,7 @@ class Schematic(QGraphicsView):
         moved_nodes_count = False
         for node in self.items():
             # ignore children and work on node groups only
-            if not isinstance(node, SchematicItem):
+            if not isinstance(node, SchematicNode):
                 continue
             was_node_moved = node.adjust_node_position()
 
@@ -497,7 +508,7 @@ class Schematic(QGraphicsView):
         :return: None
         """
         for item in self.items():
-            if isinstance(item, SchematicItem):
+            if isinstance(item, SchematicNode):
                 item.setFlag(
                     QGraphicsItem.ItemIsMovable,
                     # this is False when schematic is going to be locked
@@ -612,7 +623,7 @@ class Schematic(QGraphicsView):
         :return: None
         """
         for node in self.items():
-            if isinstance(node, SchematicItem) and node.name == node_name:
+            if isinstance(node, SchematicNode) and node.name == node_name:
                 node.setSelected(True)
                 break
 
@@ -622,7 +633,7 @@ class Schematic(QGraphicsView):
         :return: None
         """
         for node in self.items():
-            if isinstance(node, SchematicItem):
+            if isinstance(node, SchematicNode):
                 node.label.toggle_label()
 
         self.editor_settings.save_hide_labels(
@@ -700,7 +711,7 @@ class Schematic(QGraphicsView):
         self.scene.clearSelection()
 
     @Slot()
-    def on_delete_nodes(self, nodes: list["SchematicItem"]) -> None:
+    def on_delete_nodes(self, nodes: list["SchematicNode"]) -> None:
         """
         Deletes the nodes and their edges from the schematic and model configuration.
         :return: None
@@ -708,8 +719,8 @@ class Schematic(QGraphicsView):
         command = DeleteNodeCommand(schematic=self, selected_nodes=nodes)
         self.app.undo_stack.push(command)
 
-    @Slot(SchematicItem)
-    def on_connect_node_start(self, node: "SchematicItem") -> None:
+    @Slot(SchematicNode)
+    def on_connect_node_start(self, node: "SchematicNode") -> None:
         """
         Connects the node to another one on the schematic.
         :param node: The node where the new edge needs to start.
@@ -733,8 +744,8 @@ class Schematic(QGraphicsView):
 
         # enable connecting mode for nodes. Exclude virtual and already connected nodes
         for item in self.items():
-            item: SchematicItem
-            if isinstance(item, SchematicItem) and item != node:
+            item: SchematicNode
+            if isinstance(item, SchematicNode) and item != node:
                 if item.is_connectable(node):
                     item.connecting_mode_on = True
                     item.setFlag(QGraphicsItem.ItemIsMovable, False)
@@ -748,9 +759,9 @@ class Schematic(QGraphicsView):
         self.connecting_node_props.temp_edge = new_temp_edge
         self.scene.addItem(new_temp_edge)
 
-    @Slot(SchematicItem)
+    @Slot(SchematicNode)
     def on_connect_node_end(
-        self, target_node: Union["SchematicItem", None] = None
+        self, target_node: Union["SchematicNode", None] = None
     ) -> None:
         """
         Actions to perform after a node has been connected.
@@ -781,7 +792,7 @@ class Schematic(QGraphicsView):
         self.abort_node_connection_button.hide()
         self.viewport().setCursor(Qt.ArrowCursor)
         for item in self.items():
-            if isinstance(item, SchematicItem):
+            if isinstance(item, SchematicNode):
                 # restore style and behaviour
                 item.setFlag(
                     QGraphicsItem.ItemIsMovable,
@@ -808,9 +819,14 @@ class Schematic(QGraphicsView):
                 self.setDragMode(QGraphicsView.DragMode.RubberBandDrag)
             else:
                 items = self.items(event.pos())
-                item_types = map(type, items)
+                # check that no selectable item was selected and canvas can be dragged
+                is_selectable = map(
+                    lambda item: isinstance(item, SchematicNode)
+                    or isinstance(item, BaseShape),
+                    items,
+                )
                 # enable canvas dragging
-                if len(items) > 0 and SchematicItem not in item_types:
+                if len(items) > 0 and not any(is_selectable):
                     self.de_select_all_items()
                     self.canvas_drag = True
                     self.setDragMode(QGraphicsView.DragMode.ScrollHandDrag)
@@ -828,28 +844,27 @@ class Schematic(QGraphicsView):
             # perform action on selected nodes
             if self.canvas_drag is False:
                 # save position only if the nodes were moved
-                if any(
-                    [
-                        n.has_position_changed()
-                        for n in self.scene.selectedItems()
-                    ]
-                ):
+                if any([n.has_position_changed() for n in self.selected_nodes]):
                     command = MoveNodeCommand(
                         schematic=self,
-                        selected_nodes=self.scene.selectedItems(),
+                        selected_nodes=self.selected_nodes,
                     )
                     self.app.undo_stack.push(command)
             else:
                 # export the new scene center
                 items = self.items(event.pos())
-                item_types = map(type, items)
-                if len(items) > 0 and SchematicItem not in item_types:
+                # check that no selectable item was selected
+                is_selectable = map(
+                    lambda item: isinstance(item, SchematicNode)
+                    or isinstance(item, BaseShape),
+                    items,
+                )
+                if len(items) > 0 and not any(is_selectable):
                     center = (
                         self.mapToScene(self.viewport().geometry())
                         .boundingRect()
                         .center()
                     )
-                    # noinspection PyUnresolvedReferences
                     self.schematic_move_event.emit(center)
 
             # toggle the status of the 'reduce schematic size' buttons after a node
@@ -867,7 +882,7 @@ class Schematic(QGraphicsView):
                 self.viewport().setCursor(Qt.CrossCursor)
 
                 valid_items = [
-                    item for item in items if isinstance(item, SchematicItem)
+                    item for item in items if isinstance(item, SchematicNode)
                 ]
                 if len(valid_items) > 0:
                     selected_item = valid_items[0]
@@ -964,11 +979,24 @@ class Schematic(QGraphicsView):
         if self.app.actions.get("minimise").isEnabled() != enabled:
             self.app.actions.get("minimise").setEnabled(enabled)
 
+    @property
+    def selected_nodes(self) -> list["SchematicNode"]:
+        """
+        Returns a list of selected nodes.
+        :return: The list of selected SchematicItem instances.
+        """
+        return [
+            item
+            for item in self.scene.selectedItems()
+            if isinstance(item, SchematicNode)
+        ]
+
     @Slot()
     def on_selection_changed(self) -> None:
         """
         Slot called when the selection on the scene changes. This is used to
-        enable/disable the toolbar buttons.
+        enable/disable the toolbar buttons for nodes only. Annotation shapes
+        are ignored.
         :return: None
         """
         if self.connecting_node_props.enabled is True:
@@ -994,7 +1022,8 @@ class Schematic(QGraphicsView):
         except RuntimeError:
             pass
 
-        selected_items: list["SchematicItem"] = self.scene.selectedItems()
+        selected_items = self.selected_nodes
+
         items_count = len(selected_items)
         if items_count == 1:
             item = selected_items[0]

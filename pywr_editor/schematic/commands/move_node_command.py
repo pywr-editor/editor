@@ -42,7 +42,7 @@ class MoveNodeCommand(QUndoCommand):
         # nodes are moved for the first time
         if not self.updated_positions:
             for config in self.node_configs:
-                item = self.schematic.schematic_items[config.name]
+                item = self.schematic.node_items[config.name]
                 self.prev_positions.append(item.prev_position)
 
                 # prevent the nodes from being moved outside the schematic edges.

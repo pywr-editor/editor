@@ -7,6 +7,8 @@ from .commands.add_node_command import AddNodeCommand
 from .commands.connect_node_command import ConnectNodeCommand
 from .commands.disconnect_node_command import DisconnectNodeCommand
 from .commands.move_node_command import MoveNodeCommand
-from .schematic_item import SchematicItem, SchematicLabel
+from .node import SchematicNode, SchematicLabel
+from .shapes.base_shape import BaseShape
+from .shapes.text_shape import SchematicText
 from .schematic import Schematic
 from .edge import *

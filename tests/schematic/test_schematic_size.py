@@ -114,11 +114,11 @@ class TestSchematicResize:
         _, measured, button = resize
 
         if "width" in request.node.callspec.id:
-            node = schematic.schematic_items["Link"]
+            node = schematic.node_items["Link"]
             rect = node.mapRectToScene(node.boundingRect())
             expected = rect.x() + rect.width()
         else:
-            node = schematic.schematic_items["Reservoir"]
+            node = schematic.node_items["Reservoir"]
             rect = node.mapRectToScene(node.boundingRect())
             expected = rect.y() + rect.height()
 
@@ -143,11 +143,11 @@ class TestSchematicResize:
         window, schematic, tab_panel = init_window
         _ = minimise
 
-        node = schematic.schematic_items["Link"]
+        node = schematic.node_items["Link"]
         rect = node.mapRectToScene(node.boundingRect())
         expected_width = rect.x() + rect.width()
 
-        node = schematic.schematic_items["Reservoir"]
+        node = schematic.node_items["Reservoir"]
         rect = node.mapRectToScene(node.boundingRect())
         expected_height = rect.y() + rect.height()
 

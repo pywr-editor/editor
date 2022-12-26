@@ -21,7 +21,7 @@ class TestBboxUtils:
         """
         Tests that the max and min coordinates of the nodes' bounding boxes are correct.
         """
-        schematic_items = window.schematic.schematic_items
+        schematic_items = window.schematic.node_items
         max_min_bbox = SchematicBBoxUtils(
             window.schematic.items()
         ).min_max_bounding_box_coordinates
@@ -55,7 +55,7 @@ class TestBboxUtils:
         Tests the method that checks when a node is on the schematic right or bottom
         edge.
         """
-        schematic_items = window.schematic.schematic_items
+        schematic_items = window.schematic.node_items
 
         # test node initial position
         node_utils_obj = SchematicNodeUtils(
