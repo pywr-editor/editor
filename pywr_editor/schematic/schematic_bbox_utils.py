@@ -2,12 +2,12 @@ from dataclasses import dataclass
 
 import PySide6
 
-from .schematic_item import SchematicItem
+from .node import SchematicNode
 
 
 @dataclass
 class NodeInfo:
-    node: SchematicItem
+    node: SchematicNode
     """ The node instance """
     value: float
     """ The node information value """
@@ -27,7 +27,7 @@ class BoxBoundaries:
 
 @dataclass
 class SchematicBBoxUtils:
-    items: list[PySide6.QtWidgets.QGraphicsItem] | list[SchematicItem]
+    items: list[PySide6.QtWidgets.QGraphicsItem] | list[SchematicNode]
 
     @property
     def min_max_bounding_box_coordinates(self) -> BoxBoundaries:
@@ -44,7 +44,7 @@ class SchematicBBoxUtils:
         item_min_y = item_max_y = None
         for item in self.items:
             # ignore children and work on groups only
-            if isinstance(item, SchematicItem) is False:
+            if isinstance(item, SchematicNode) is False:
                 continue
 
             bounding_rect = item.sceneBoundingRect()
@@ -84,7 +84,7 @@ class SchematicBBoxUtils:
         is_on_right_edge = False
         for node in self.items:
             # ignore children and work on groups only
-            if isinstance(node, SchematicItem) is False:
+            if isinstance(node, SchematicNode) is False:
                 continue
             node_rect = node.sceneBoundingRect()
             if node_rect.right() == rectangle_width:

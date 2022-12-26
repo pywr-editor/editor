@@ -10,7 +10,7 @@ from pywr_editor.schematic import (
     DeleteNodeCommand,
     Edge,
     Schematic,
-    SchematicItem,
+    SchematicNode,
 )
 from pywr_editor.toolbar.tab_panel import TabPanel
 from tests.utils import resolve_model_path
@@ -58,7 +58,7 @@ class TestSchematicNodes:
         node_names = [
             node.name
             for node in schematic.items()
-            if isinstance(node, SchematicItem)
+            if isinstance(node, SchematicNode)
         ]
         assert node_name not in node_names
 
@@ -132,7 +132,7 @@ class TestSchematicNodes:
         node_names = [
             node.name
             for node in schematic.items()
-            if isinstance(node, SchematicItem)
+            if isinstance(node, SchematicNode)
         ]
         assert node_name in node_names
 
@@ -361,7 +361,7 @@ class TestSchematicNodes:
         node_names = [
             node.name
             for node in schematic.items()
-            if isinstance(node, SchematicItem)
+            if isinstance(node, SchematicNode)
         ]
         all_schematic_edges = [
             [edge.source.name, edge.target.name]

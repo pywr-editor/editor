@@ -10,11 +10,11 @@ from ..base_node import BaseNode
 from .pywr_node import PywrNode
 
 if TYPE_CHECKING:
-    from pywr_editor.schematic import SchematicItem
+    from pywr_editor.schematic import SchematicNode
 
 
 class KeatingAquifer(BaseNode, PywrNode):
-    def __init__(self, parent: "SchematicItem"):
+    def __init__(self, parent: "SchematicNode"):
         """
         Initialises a KeatingAquifer node.
         :param parent: The schematic item group.

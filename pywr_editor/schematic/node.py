@@ -24,20 +24,29 @@ if TYPE_CHECKING:
 
 
 class ConnectedNodeProps(TypedDict):
-    source_nodes: list["SchematicItem"]
+    source_nodes: list["SchematicNode"]
     """ the list of SchematicItem instances connected to the node """
-    target_nodes: list["SchematicItem"]
+    target_nodes: list["SchematicNode"]
     """ the list of SchematicItem instances connected from the node """
     count: int
     """ the total number of connected nodes """
 
 
-class SchematicItem(QGraphicsItemGroup):
+class SchematicNode(QGraphicsItemGroup):
+    padding_y: int = 5
+    """ The bounding rectangle x padding """
+    padding_x: int = 5
+    """ The bounding rectangle y padding """
+    outline_width: int = 2
+    """ The outline width of the bounding rectangle """
+    disabled_node_opacity: float = 0.3
+    """ The opacity of the nodes when they are disabled """
+
     def __init__(self, node_props: dict, view: "Schematic"):
         """
         Initialises the class.
         :param node_props: The node properties from the model dictionary.
-        :param view: THe view where to draw the item.
+        :param view: The view where to draw the item.
         :return None
         """
         super().__init__()
@@ -46,11 +55,6 @@ class SchematicItem(QGraphicsItemGroup):
         self.x, self.y = self.model_node.position
         self.edges: list[Edge] = []
         self.view = view
-
-        self.padding_y: int = 5
-        self.padding_x = 5
-        self.outline_width = 2
-        self.disabled_node_opacity = 0.3
 
         # allow interaction
         self.setFlag(
@@ -273,7 +277,7 @@ class SchematicItem(QGraphicsItemGroup):
         edge.adjust()
 
     def is_connectable(
-        self, connected_node: Union["SchematicItem", None] = None
+        self, connected_node: Union["SchematicNode", None] = None
     ) -> bool:
         """
         Checks that the node can be connected to another one.
@@ -473,12 +477,12 @@ class SchematicItem(QGraphicsItemGroup):
 
 
 class SchematicLabel(QGraphicsTextItem):
-    # Boundary box vertical padding
     padding_y: str = 2
+    """ Boundary box vertical padding """
 
     def __init__(
         self,
-        parent: "SchematicItem",
+        parent: "SchematicNode",
         name: str,
         color: Color,
         hide_label: bool = False,

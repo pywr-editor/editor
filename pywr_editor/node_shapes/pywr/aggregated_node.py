@@ -10,11 +10,11 @@ from ..base_node import BaseNode
 from .pywr_node import PywrNode
 
 if TYPE_CHECKING:
-    from pywr_editor.schematic import SchematicItem
+    from pywr_editor.schematic import SchematicNode
 
 
 class AggregatedNode(BaseNode, PywrNode):
-    def __init__(self, parent: "SchematicItem"):
+    def __init__(self, parent: "SchematicNode"):
         """
         Initialises the class for an aggregated node.
         :param parent: The parent node.

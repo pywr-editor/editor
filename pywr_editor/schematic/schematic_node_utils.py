@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from pywr_editor.schematic import SchematicItem
+    from pywr_editor.schematic import SchematicNode
 
 
 class SchematicNodeUtils:
-    def __init__(self, schematic_size: list[float], node: "SchematicItem"):
+    def __init__(self, schematic_size: list[float], node: "SchematicNode"):
         """
         Initialises the class.
         :param schematic_size: The schematic width and height.

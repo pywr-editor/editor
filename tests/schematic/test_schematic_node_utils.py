@@ -3,7 +3,7 @@ from typing import Tuple
 
 import pytest
 
-from pywr_editor.schematic import SchematicItem, SchematicNodeUtils
+from pywr_editor.schematic import SchematicNode, SchematicNodeUtils
 from tests.DummyMainWindow import MainWindow
 from tests.utils import resolve_model_path
 
@@ -32,7 +32,7 @@ class BaseTestClass:
     @pytest.fixture
     def add_node(
         self, window: MainWindow, node_props: dict
-    ) -> Tuple[SchematicItem, SchematicNodeUtils]:
+    ) -> Tuple[SchematicNode, SchematicNodeUtils]:
         """
         Adds a node to the schematic.
         :param window: The window instance.
@@ -40,7 +40,7 @@ class BaseTestClass:
         :return: A tuple with the schematic item and the schematic utility instances.
         """
         schematic = window.schematic
-        node_obj = SchematicItem(view=schematic, node_props=node_props)
+        node_obj = SchematicNode(view=schematic, node_props=node_props)
         schematic.scene.addItem(node_obj)
 
         return node_obj, SchematicNodeUtils(

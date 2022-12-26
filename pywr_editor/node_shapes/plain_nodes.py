@@ -5,11 +5,11 @@ from pywr_editor.style import Color
 from .circle import Circle
 
 if TYPE_CHECKING:
-    from pywr_editor.schematic import SchematicItem
+    from pywr_editor.schematic import SchematicNode
 
 
 class BlueCircle(Circle):
-    def __init__(self, parent: "SchematicItem"):
+    def __init__(self, parent: "SchematicNode"):
         """
         Initialises the shape for a blue circle.
         """
@@ -22,7 +22,7 @@ class BlueCircle(Circle):
 
 
 class GrayCircle(Circle):
-    def __init__(self, parent: "SchematicItem"):
+    def __init__(self, parent: "SchematicNode"):
         """
         Initialises the shape for a gray circle.
         """
@@ -35,7 +35,7 @@ class GrayCircle(Circle):
 
 
 class GreenCircle(Circle):
-    def __init__(self, parent: "SchematicItem"):
+    def __init__(self, parent: "SchematicNode"):
         """
         Initialises the shape for a blue circle.
         """
@@ -48,7 +48,7 @@ class GreenCircle(Circle):
 
 
 class OrangeCircle(Circle):
-    def __init__(self, parent: "SchematicItem"):
+    def __init__(self, parent: "SchematicNode"):
         """
         Initialises the shape for an orange circle.
         """

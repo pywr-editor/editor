@@ -4,11 +4,11 @@ from .pywr_node import PywrNode
 from .virtual_storage import VirtualStorage
 
 if TYPE_CHECKING:
-    from pywr_editor.schematic import SchematicItem
+    from pywr_editor.schematic import SchematicNode
 
 
 class MonthlyVirtualStorage(VirtualStorage, PywrNode):
-    def __init__(self, parent: "SchematicItem"):
+    def __init__(self, parent: "SchematicNode"):
         """
         Initialises the class for a monthly virtual storage node.
         :param parent: The schematic item.

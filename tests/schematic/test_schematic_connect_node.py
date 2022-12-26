@@ -4,7 +4,7 @@ import pytest
 from PySide6.QtCore import QPoint, Qt
 
 from pywr_editor import MainWindow
-from pywr_editor.schematic import Edge, Schematic, SchematicItem
+from pywr_editor.schematic import Edge, Schematic, SchematicNode
 from pywr_editor.schematic.commands.connect_node_command import (
     ConnectNodeCommand,
 )
@@ -50,7 +50,7 @@ class TestSchematicConnectNodes:
         )
         found = False
         for node in schematic.items():
-            if isinstance(node, SchematicItem) and node.name == "Link3":
+            if isinstance(node, SchematicNode) and node.name == "Link3":
                 found = True
                 assert node.isSelected() is True
         assert found is True

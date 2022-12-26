@@ -17,14 +17,14 @@ from PySide6.QtWidgets import QGraphicsItem
 from pywr_editor.style import Color, ColorName
 
 if TYPE_CHECKING:
-    from pywr_editor.schematic import Schematic, SchematicItem
+    from pywr_editor.schematic import Schematic, SchematicNode
 
 
 class Edge(QGraphicsItem):
     def __init__(
         self,
-        source: Union["SchematicItem", None],
-        target: Union["SchematicItem", None],
+        source: Union["SchematicNode", None],
+        target: Union["SchematicNode", None],
         edge_color_name: ColorName | None = None,
         hide_arrow: bool = False,
     ):
@@ -201,7 +201,7 @@ class Edge(QGraphicsItem):
 
 
 class TempEdge(QGraphicsItem):
-    def __init__(self, source: "SchematicItem", view: "Schematic"):
+    def __init__(self, source: "SchematicNode", view: "Schematic"):
         """
         Initialises the edge.
         :param source: The source node.

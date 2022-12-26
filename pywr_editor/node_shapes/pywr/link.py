@@ -6,11 +6,11 @@ from ..circle import Circle
 from .pywr_node import PywrNode
 
 if TYPE_CHECKING:
-    from pywr_editor.schematic import SchematicItem
+    from pywr_editor.schematic import SchematicNode
 
 
 class Link(Circle, PywrNode):
-    def __init__(self, parent: "SchematicItem"):
+    def __init__(self, parent: "SchematicNode"):
         """
         Initialises a link node.
         :param parent: The schematic item group.

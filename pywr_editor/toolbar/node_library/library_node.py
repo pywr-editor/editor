@@ -14,7 +14,7 @@ import pywr_editor.node_shapes
 from .library_node_label import LibraryNodeLabel
 
 if TYPE_CHECKING:
-    from pywr_editor.schematic import SchematicItem
+    from pywr_editor.schematic import SchematicNode
 
     from .nodes_library import NodesLibraryPanel
 
@@ -54,7 +54,7 @@ class LibraryNode(QGraphicsItemGroup):
         except AttributeError:
             # node name is not a built-in component
             node_class = getattr(pywr_editor.node_shapes, "CustomNodeShape")
-        self.node: "SchematicItem" = node_class(parent=self)
+        self.node: "SchematicNode" = node_class(parent=self)
 
         # label
         self.label = LibraryNodeLabel(

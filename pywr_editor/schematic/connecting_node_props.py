@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from .edge import TempEdge
-from .schematic_item import SchematicItem
+from .node import SchematicNode
 
 
 @dataclass
@@ -10,7 +10,7 @@ class ConnectingNodeProps:
     """ Whether the connection is taking place """
     temp_edge: TempEdge | None = None
     """ The instance of the temporary edge """
-    source_node: SchematicItem | None = None
+    source_node: SchematicNode | None = None
     """ The instance of the schematic source node """
 
     def reset(self):

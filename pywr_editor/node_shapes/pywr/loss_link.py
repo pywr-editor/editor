@@ -7,11 +7,11 @@ from ..svg_icon import IconProps
 from .pywr_node import PywrNode
 
 if TYPE_CHECKING:
-    from pywr_editor.schematic import SchematicItem
+    from pywr_editor.schematic import SchematicNode
 
 
 class LossLink(Circle, PywrNode):
-    def __init__(self, parent: "SchematicItem"):
+    def __init__(self, parent: "SchematicNode"):
         """
         Initialises the class for a leak node.
         :param parent: The parent node

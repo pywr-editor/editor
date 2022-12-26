@@ -6,12 +6,12 @@ from pywr_editor.model import NodeConfig
 from pywr_editor.utils import Logging
 
 if TYPE_CHECKING:
-    from pywr_editor.schematic import Schematic, SchematicItem
+    from pywr_editor.schematic import Schematic, SchematicNode
 
 
 class DeleteNodeCommand(QUndoCommand):
     def __init__(
-        self, schematic: "Schematic", selected_nodes: list["SchematicItem"]
+        self, schematic: "Schematic", selected_nodes: list["SchematicNode"]
     ):
         """
         Initialises the delete node command.

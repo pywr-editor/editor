@@ -7,7 +7,7 @@ from PySide6.QtGui import QDragEnterEvent, Qt
 from PySide6.QtWidgets import QWidget
 
 from pywr_editor import MainWindow
-from pywr_editor.schematic import Edge, Schematic, SchematicItem
+from pywr_editor.schematic import Edge, Schematic, SchematicNode
 from pywr_editor.schematic.commands.add_node_command import AddNodeCommand
 from pywr_editor.toolbar.tab_panel import TabPanel
 from tests.utils import resolve_model_path
@@ -146,7 +146,7 @@ class TestAddNodes:
         node_names = [
             node.name
             for node in schematic.items()
-            if isinstance(node, SchematicItem)
+            if isinstance(node, SchematicNode)
         ]
         assert new_node_name not in node_names
         assert new_new_node_name not in node_names
@@ -176,7 +176,7 @@ class TestAddNodes:
         node_names = [
             node.name
             for node in schematic.items()
-            if isinstance(node, SchematicItem)
+            if isinstance(node, SchematicNode)
         ]
         assert new_new_node_name in node_names
         all_schematic_edges = [
