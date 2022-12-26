@@ -334,7 +334,7 @@ class Color:
         return self.color
 
     @property
-    def rgb(self) -> tuple:
+    def rgb(self) -> tuple[int]:
         """
         Returns the color in RGB format.
         :return: A tuple containing the RGB data.
