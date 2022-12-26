@@ -404,7 +404,6 @@ class SchematicNode(QGraphicsItemGroup):
 
         # delete node action
         delete_node_action = context_menu.addAction("Delete node")
-        # delete_node_action.setShortcut(QKeySequence.Delete)
         # noinspection PyUnresolvedReferences
         delete_node_action.triggered.connect(self.on_delete_node)
         self.view.addAction(delete_node_action)

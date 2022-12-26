@@ -147,7 +147,7 @@ class SchematicText(BaseShape, QGraphicsTextItem):
                     "max_value": self.shape_obj.max_font_size,
                 },
                 {
-                    "name": "colour",
+                    "name": "color",
                     "field_type": ColorPickerWidget,
                     "default_value": self.shape_obj.default_font_color,
                     "value": self.shape_obj.color.toTuple()[0:3],
@@ -158,7 +158,7 @@ class SchematicText(BaseShape, QGraphicsTextItem):
         )
         # enable save button when a new colour is selected
         color_widget: ColorPickerWidget = dialog.form.find_field_by_name(
-            "colour"
+            "color"
         ).widget
         color_widget.changed_color.connect(
             lambda: dialog.save_button.setEnabled(True)

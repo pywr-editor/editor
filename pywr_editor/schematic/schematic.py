@@ -76,7 +76,7 @@ class Schematic(QGraphicsView):
         self.nodes_wo_position = 0
         self.connecting_node_props = ConnectingNodeProps()
         self.node_items: dict[str, SchematicNode] = {}
-        self.shape_items: dict[str, BaseShape] = {}
+        self.shape_items: dict[str, SchematicText] = {}
 
         # noinspection PyUnresolvedReferences
         self.schematic_move_event.connect(self.on_schematic_move)

@@ -102,6 +102,19 @@
     "schematic_size": [
       1900,
       1450
-    ]
+    ],
+    "shapes": {
+      "c60bfe": {
+        "text": "This is a label",
+        "color": [
+          255,
+          170,
+          0
+        ],
+        "type": "text",
+        "x": 410.1829,
+        "y": 124.644
+      }
+    }
   }
 }
