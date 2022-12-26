@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Literal, Sequence
 
 from PySide6.QtGui import QColor
 
+from pywr_editor.model import Constants
 from pywr_editor.style import Color
 
 if TYPE_CHECKING:
@@ -53,7 +54,7 @@ class BaseShape:
         """
         default_qcolor = QColor.fromRgb(*default_rb)
 
-        if rgb is not None and isinstance(rgb, list) and len(rgb) == 3:
+        if rgb is not None and isinstance(rgb, (list, tuple)) and len(rgb) == 3:
             qcolor = QColor.fromRgb(*rgb)
             # if RGB color is not valid use default
             if not qcolor.isValid():
@@ -125,13 +126,18 @@ class Shapes:
         :return: The shape dictionary with the shape IDs as keys and the shape
         configurations as values.
         """
-        if "shapes" not in self.model.editor_config or not isinstance(
-            self.model.editor_config["shapes"], dict
+        if (
+            Constants.SHAPES_KEY.value not in self.model.editor_config
+            or not isinstance(
+                self.model.editor_config[Constants.SHAPES_KEY.value], dict
+            )
         ):
             return []
 
         shapes = []
-        for shape_id, shape_dict in self.model.editor_config["shapes"].items():
+        for shape_id, shape_dict in self.model.editor_config[
+            Constants.SHAPES_KEY.value
+        ].items():
             if isinstance(shape_dict, dict) and "type" in shape_dict:
                 try:
                     shape_class_type = self.shape_type_map[
@@ -150,6 +156,16 @@ class Shapes:
 
         return shapes
 
+    def find_shape(self, shape_id: str) -> dict | None:
+        """
+        Find the shape by ID and get its dictionary
+        :param shape_id: The shape ID.
+        :return: The shape dictionary if the ID is found, None otherwise.
+        """
+        if shape_id not in self.model.editor_config[Constants.SHAPES_KEY.value]:
+            return None
+        return self.model.editor_config[Constants.SHAPES_KEY.value][shape_id]
+
     def update(self, shape_id: str, shape_dict: dict) -> None:
         """
         Saves the shape.
@@ -157,8 +173,10 @@ class Shapes:
         :param shape_dict: The shape dictionary.
         :return: None
         """
-        if shape_id in self.model.editor_config["shapes"]:
-            self.model.editor_config["shapes"][shape_id] = shape_dict
+        if shape_id in self.model.editor_config[Constants.SHAPES_KEY.value]:
+            self.model.editor_config[Constants.SHAPES_KEY.value][
+                shape_id
+            ] = shape_dict
             self.model.changes_tracker.add(
                 f"Updated shape {shape_id} with the following values: {shape_dict}"
             )

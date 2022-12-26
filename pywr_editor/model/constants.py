@@ -3,7 +3,9 @@ from enum import Enum
 
 class Constants(Enum):
     EDITOR_CONFIG_KEY = "pywr_editor"
-    """ key in JSOn containing the editor's settings """
+    """ key in JSON containing the editor's settings """
+    SHAPES_KEY = "shapes"
+    """ key in editor's setting dictionary where to locate the shapes  """
     POSITION_KEY = "editor_position"
     """ key defying where to store the node's position """
     NODE_STYLE_KEY = "node_style"
