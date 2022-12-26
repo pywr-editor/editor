@@ -20,4 +20,5 @@ from .parameters import Parameters
 from .recorders import Recorders
 from .scenarios import Scenarios
 from .tables import Tables
+from .shapes import Shapes, TextShape
 from .model_config import ModelConfig
