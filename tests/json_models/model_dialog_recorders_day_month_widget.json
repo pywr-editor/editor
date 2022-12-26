@@ -8,7 +8,11 @@
     "maintainer": "Stefano Simoncelli",
     "model_version": "2.1"
   },
-  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
   "nodes": [
     {
       "name": "Reservoir",
@@ -22,55 +26,112 @@
       "max_volume": 120,
       "initial_volume": 35
     },
-    {"name": "Link", "type": "Link", "min_flow": 1, "max_flow": 6},
-    {"name": "LinkX", "type": "Link", "min_flow": 10, "max_flow": 60},
-    {"name": "LinkXX", "type": "Link", "min_flow": 10, "max_flow": 60},
-    {"name": "Output", "type": "Output", "max_flow": 2}
+    {
+      "name": "Link",
+      "type": "Link",
+      "min_flow": 1,
+      "max_flow": 6
+    },
+    {
+      "name": "LinkX",
+      "type": "Link",
+      "min_flow": 10,
+      "max_flow": 60
+    },
+    {
+      "name": "LinkXX",
+      "type": "Link",
+      "min_flow": 10,
+      "max_flow": 60
+    },
+    {
+      "name": "Output",
+      "type": "Output",
+      "max_flow": 2
+    }
   ],
-  "edges": [["Reservoir", "Link"], ["Link", "Output"]],
+  "edges": [
+    [
+      "Reservoir",
+      "Link"
+    ],
+    [
+      "Link",
+      "Output"
+    ]
+  ],
   "parameters": {
-    "param1": {"type": "constant", "value": 4},
-    "param2": {"type": "constant", "value": 5}
+    "param1": {
+      "type": "constant",
+      "value": 4
+    },
+    "param2": {
+      "type": "constant",
+      "value": 5
+    }
   },
   "recorders": {
     "valid": {
       "type": "AnnualCountIndexThresholdRecorder",
-      "parameters": ["param1", "param2"],
+      "parameters": [
+        "param1",
+        "param2"
+      ],
       "threshold": 1,
       "include_from_month": 5,
       "include_from_day": 21
     },
     "not_set": {
       "type": "AnnualCountIndexThresholdRecorder",
-      "parameters": ["param1", "param2"],
+      "parameters": [
+        "param1",
+        "param2"
+      ],
       "threshold": 1
     },
     "invalid_missing_day": {
       "type": "AnnualCountIndexThresholdRecorder",
-      "parameters": ["param1", "param2"],
+      "parameters": [
+        "param1",
+        "param2"
+      ],
       "threshold": 1,
       "include_from_month": 3
     },
     "invalid_missing_month": {
       "type": "AnnualCountIndexThresholdRecorder",
-      "parameters": ["param1", "param2"],
+      "parameters": [
+        "param1",
+        "param2"
+      ],
       "threshold": 1,
       "include_from_day": 21
     },
     "invalid_day_too_large": {
       "type": "AnnualCountIndexThresholdRecorder",
-      "parameters": ["param1", "param2"],
+      "parameters": [
+        "param1",
+        "param2"
+      ],
       "threshold": 1,
       "include_from_day": 54,
       "include_from_month": 3
     },
     "invalid_month_too_large": {
       "type": "AnnualCountIndexThresholdRecorder",
-      "parameters": ["param1", "param2"],
+      "parameters": [
+        "param1",
+        "param2"
+      ],
       "threshold": 1,
       "include_from_day": 21,
       "include_from_month": 13
     }
   },
-  "pywr_editor_schematic_size": [1900, 1450]
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ]
+  }
 }

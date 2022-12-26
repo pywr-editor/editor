@@ -156,8 +156,10 @@
       "index": 10
     }
   },
-  "pywr_editor_schematic_size": [
-    1900,
-    1450
-  ]
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ]
+  }
 }

@@ -8,34 +8,64 @@
     "maintainer": "Stefano Simoncelli",
     "model_version": "2.1"
   },
-  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
-  "includes": ["files/custom_parameter.py"],
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
+  "includes": [
+    "files/custom_parameter.py"
+  ],
   "nodes": [
     {
       "name": "Reservoir",
       "type": "Storage",
       "max_volume": 35,
       "initial_volume": 35,
-      "position": {"editor_position": [200, 500]}
+      "position": {
+        "editor_position": [
+          200,
+          500
+        ]
+      }
     }
   ],
-  "parameters": {"constant": {"type": "constant", "value": 5}},
+  "parameters": {
+    "constant": {
+      "type": "constant",
+      "value": 5
+    }
+  },
   "edges": [],
   "recorders": {
-    "node_recorder": {"type": "node", "node": "Reservoir"},
-    "valid_empty": {"type": "EventRecorder"},
+    "node_recorder": {
+      "type": "node",
+      "node": "Reservoir"
+    },
+    "valid_empty": {
+      "type": "EventRecorder"
+    },
     "valid_parameter_str": {
       "type": "EventRecorder",
       "threshold": "constant"
     },
-    "valid_parameter_number": {"type": "EventRecorder", "threshold": 12},
+    "valid_parameter_number": {
+      "type": "EventRecorder",
+      "threshold": 12
+    },
     "valid_parameter_dict": {
       "type": "EventRecorder",
-      "threshold": {"type": "constant", "value": 500}
+      "threshold": {
+        "type": "constant",
+        "value": 500
+      }
     },
     "valid_parameter_custom_param": {
       "type": "EventRecorder",
-      "threshold": {"type": "my", "value": 500}
+      "threshold": {
+        "type": "my",
+        "value": 500
+      }
     },
     "valid_recorder_str": {
       "type": "EventRecorder",
@@ -43,7 +73,10 @@
     },
     "valid_recorder_dict": {
       "type": "EventRecorder",
-      "threshold": {"type": "node", "node": "Reservoir"}
+      "threshold": {
+        "type": "node",
+        "node": "Reservoir"
+      }
     },
     "invalid_comp_str": {
       "type": "EventRecorder",
@@ -51,28 +84,47 @@
     },
     "invalid_comp_dict": {
       "type": "EventRecorder",
-      "threshold": {"type": "non_existing"}
+      "threshold": {
+        "type": "non_existing"
+      }
     },
     "recorder_agg_func_provided": {
       "type": "EventRecorder",
-      "threshold": {"type": "constant", "value": 500},
+      "threshold": {
+        "type": "constant",
+        "value": 500
+      },
       "event_agg_func": "min"
     },
     "recorder_agg_func_disabled": {
       "type": "EventRecorder",
-      "threshold": {"type": "constant", "value": 500}
+      "threshold": {
+        "type": "constant",
+        "value": 500
+      }
     },
     "agg_func_provided": {
       "type": "EventRecorder",
-      "threshold": {"type": "constant", "value": 500},
+      "threshold": {
+        "type": "constant",
+        "value": 500
+      },
       "agg_func": "max"
     },
     "both_agg_funcs_provided": {
       "type": "EventRecorder",
-      "threshold": {"type": "constant", "value": 500},
+      "threshold": {
+        "type": "constant",
+        "value": 500
+      },
       "event_agg_func": "min",
       "agg_func": "max"
     }
   },
-  "pywr_editor_schematic_size": [1900, 1450]
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ]
+  }
 }

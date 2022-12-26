@@ -8,46 +8,77 @@
     "maintainer": "Stefano Simoncelli",
     "model_version": "2.1"
   },
-  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
-  "includes": ["files/custom_parameter.py"],
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
+  "includes": [
+    "files/custom_parameter.py"
+  ],
   "nodes": [
     {
       "name": "Reservoir",
       "type": "Storage",
       "max_volume": 35,
       "initial_volume": 35,
-      "position": {"editor_position": [200, 500]}
+      "position": {
+        "editor_position": [
+          200,
+          500
+        ]
+      }
     }
   ],
   "edges": [],
   "recorders": {
     "valid_months": {
       "type": "AnnualCountIndexThresholdRecorder",
-      "parameters": [{
-        "type": "constant",
-        "value": 5
-      }],
+      "parameters": [
+        {
+          "type": "constant",
+          "value": 5
+        }
+      ],
       "threshold": 5,
-      "exclude_months": [1, 2]
+      "exclude_months": [
+        1,
+        2
+      ]
     },
     "invalid_months_1": {
       "type": "AnnualCountIndexThresholdRecorder",
-      "parameters": [{
-        "type": "constant",
-        "value": 5
-      }],
+      "parameters": [
+        {
+          "type": "constant",
+          "value": 5
+        }
+      ],
       "threshold": 5,
-      "exclude_months": [0, 5]
+      "exclude_months": [
+        0,
+        5
+      ]
     },
     "invalid_months_2": {
       "type": "AnnualCountIndexThresholdRecorder",
-      "parameters": [{
-        "type": "constant",
-        "value": 5
-      }],
+      "parameters": [
+        {
+          "type": "constant",
+          "value": 5
+        }
+      ],
       "threshold": 5,
-      "exclude_months": [1, 20]
+      "exclude_months": [
+        1,
+        20
+      ]
     }
   },
-  "pywr_editor_schematic_size": [1900, 1450]
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ]
+  }
 }

@@ -8,21 +8,35 @@
     "maintainer": "Stefano Simoncelli",
     "model_version": "2.1"
   },
-  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 5},
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 5
+  },
   "nodes": [
     {
       "name": "Reservoir",
       "type": "Storage",
       "max_volume": 35,
       "initial_volume": 35,
-      "position": {"editor_position": [200, 500]}
+      "position": {
+        "editor_position": [
+          200,
+          500
+        ]
+      }
     },
     {
       "name": "Link",
       "type": "Output"
     }
   ],
-  "edges": [["Reservoir", "Link"]],
+  "edges": [
+    [
+      "Reservoir",
+      "Link"
+    ]
+  ],
   "parameters": {
     "invalid_timesteps": {
       "node": "Reservoir",
@@ -50,5 +64,10 @@
       "type": "FlowDelay"
     }
   },
-  "pywr_editor_schematic_size": [1900, 1450]
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ]
+  }
 }

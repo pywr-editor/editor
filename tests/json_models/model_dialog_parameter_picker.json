@@ -8,29 +8,51 @@
     "maintainer": "Stefano Simoncelli",
     "model_version": "2.1"
   },
-  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
   "nodes": [
     {
       "name": "Reservoir",
       "type": "Storage",
       "max_volume": 35,
       "initial_volume": 35,
-      "position": {"editor_position": [200, 500]}
+      "position": {
+        "editor_position": [
+          200,
+          500
+        ]
+      }
     },
     {
       "name": "Link",
       "type": "Link",
       "min_flow": {
         "type": "custom_param",
-        "data": ["Table 3", "CSV table"]
+        "data": [
+          "Table 3",
+          "CSV table"
+        ]
       },
       "max_flow": {
         "type": "aggregated",
-        "params": [{"table": "CSV table", "index": "1"}]
+        "params": [
+          {
+            "table": "CSV table",
+            "index": "1"
+          }
+        ]
       }
     }
   ],
-  "edges": [["Reservoir", "Link"]],
+  "edges": [
+    [
+      "Reservoir",
+      "Link"
+    ]
+  ],
   "tables": {
     "csv_table": {
       "url": "files/table.csv",
@@ -47,8 +69,26 @@
     },
     "monthly_param": {
       "type": "monthlyprofile",
-      "values": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+      "values": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ]
     }
   },
-  "pywr_editor_schematic_size": [1900, 1450]
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ]
+  }
 }

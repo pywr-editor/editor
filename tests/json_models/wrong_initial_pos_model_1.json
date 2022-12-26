@@ -37,8 +37,10 @@
       "Output"
     ]
   ],
-  "pywr_editor_schematic_size": [
-    300,
-    400
-  ]
+  "pywr_editor": {
+    "schematic_size": [
+      300,
+      400
+    ]
+  }
 }

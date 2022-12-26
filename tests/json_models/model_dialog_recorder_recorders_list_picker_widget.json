@@ -8,7 +8,11 @@
     "maintainer": "Stefano Simoncelli",
     "model_version": "2.1"
   },
-  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
   "nodes": [
     {
       "name": "Reservoir1",
@@ -28,18 +32,35 @@
       "max_volume": 35,
       "initial_volume": 35
     },
-    {"name": "Output", "type": "output"}
+    {
+      "name": "Output",
+      "type": "output"
+    }
   ],
-  "includes": ["files/custom_parameter.py"],
+  "includes": [
+    "files/custom_parameter.py"
+  ],
   "recorders": {
-    "node": {"type": "node", "node": "Output"},
-    "node1": {"type": "node", "node": "Reservoir3"},
+    "node": {
+      "type": "node",
+      "node": "Output"
+    },
+    "node1": {
+      "type": "node",
+      "node": "Reservoir3"
+    },
     "valid_dicts": {
       "type": "AggregatedRecorder",
       "recorder_agg_func": "mean",
       "recorders": [
-        {"type": "node", "node": "Output"},
-        {"type": "node", "node": "Reservoir3"}
+        {
+          "type": "node",
+          "node": "Output"
+        },
+        {
+          "type": "node",
+          "node": "Reservoir3"
+        }
       ]
     },
     "valid_with_str": {
@@ -47,7 +68,10 @@
       "recorder_agg_func": "mean",
       "recorders": [
         "node",
-        {"type": "node", "node": "Reservoir3"}
+        {
+          "type": "node",
+          "node": "Reservoir3"
+        }
       ]
     },
     "valid_no_key": {
@@ -63,31 +87,62 @@
     },
     "invalid_type_in_list": {
       "type": "AggregatedRecorder",
-      "recorders": ["node", false]
+      "recorders": [
+        "node",
+        false
+      ]
     },
     "invalid_type_in_list_number": {
       "type": "AggregatedRecorder",
-      "recorders": ["node", 12]
+      "recorders": [
+        "node",
+        12
+      ]
     },
     "invalid_wrong_param_dict": {
       "type": "AggregatedRecorder",
-      "recorders": ["node", {"node":  "Reservoir2"}]
+      "recorders": [
+        "node",
+        {
+          "node": "Reservoir2"
+        }
+      ]
     },
     "invalid_non_existing_recorder_name": {
       "type": "AggregatedRecorder",
-      "recorders": ["non_existing_recorder", {"type": "NodeRecorder","node":  "Reservoir2"}]
+      "recorders": [
+        "non_existing_recorder",
+        {
+          "type": "NodeRecorder",
+          "node": "Reservoir2"
+        }
+      ]
     },
     "main_recorder": {
       "type": "AggregatedRecorder",
-      "recorders": ["node", {"type": "NodeRecorder","node":  "Reservoir1"}]
+      "recorders": [
+        "node",
+        {
+          "type": "NodeRecorder",
+          "node": "Reservoir1"
+        }
+      ]
     },
     "recorder_agg_func": {
       "type": "AggregatedRecorder",
       "recorders": [
         "node",
-        {"type": "node", "node": "Reservoir3"}
+        {
+          "type": "node",
+          "node": "Reservoir3"
+        }
       ]
     }
   },
-  "pywr_editor_schematic_size": [1900, 1450]
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ]
+  }
 }

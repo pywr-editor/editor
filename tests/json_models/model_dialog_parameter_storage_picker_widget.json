@@ -8,7 +8,11 @@
     "maintainer": "Stefano Simoncelli",
     "model_version": "2.1"
   },
-  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
   "nodes": [
     {
       "name": "Reservoir1",
@@ -37,44 +41,67 @@
     "valid_storage": {
       "type": "StorageThresholdParameter",
       "threshold": 23,
-      "values": [1.432, 53.033],
+      "values": [
+        1.432,
+        53.033
+      ],
       "predicate": "EQ",
       "storage_node": "Reservoir1"
     },
     "valid_reservoir": {
       "type": "StorageThresholdParameter",
       "threshold": 23,
-      "values": [1.432, 53.033],
+      "values": [
+        1.432,
+        53.033
+      ],
       "predicate": "EQ",
       "storage_node": "Reservoir3"
     },
     "empty_string": {
       "type": "StorageThresholdParameter",
       "threshold": 23,
-      "values": [1.432, 53.033],
+      "values": [
+        1.432,
+        53.033
+      ],
       "predicate": "EQ",
       "storage_node": ""
     },
     "not_existing_name": {
       "type": "StorageThresholdParameter",
       "threshold": 23,
-      "values": [1.432, 53.033],
+      "values": [
+        1.432,
+        53.033
+      ],
       "predicate": "EQ",
       "storage_node": "Missing Reservoir"
     },
     "not_provided": {
       "type": "StorageThresholdParameter",
       "threshold": 23,
-      "values": [1.432, 53.033],
+      "values": [
+        1.432,
+        53.033
+      ],
       "predicate": "EQ"
     },
     "invalid_type": {
       "type": "StorageThresholdParameter",
       "threshold": 23,
-      "values": [1.432, 53.033],
+      "values": [
+        1.432,
+        53.033
+      ],
       "predicate": "EQ",
       "storage_node": "Output"
     }
   },
-  "pywr_editor_schematic_size": [1900, 1450]
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ]
+  }
 }
