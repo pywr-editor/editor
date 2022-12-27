@@ -2,7 +2,7 @@ import pytest
 from PySide6.QtCore import QTimer
 
 from pywr_editor import MainWindow
-from pywr_editor.schematic import SchematicBBoxUtils, SchematicNodeUtils
+from pywr_editor.schematic import SchematicBBoxUtils, SchematicItemUtils
 from tests.utils import close_message_box, resolve_model_path
 
 
@@ -60,8 +60,8 @@ class TestBboxUtils:
         schematic_items = window.schematic.node_items
 
         # test node initial position
-        node_utils_obj = SchematicNodeUtils(
-            node=schematic_items["Link1"],
+        node_utils_obj = SchematicItemUtils(
+            item=schematic_items["Link1"],
             schematic_size=[
                 window.schematic.schematic_width,
                 window.schematic.schematic_height,

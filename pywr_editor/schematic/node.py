@@ -16,7 +16,7 @@ from pywr_editor.widgets import ContextualMenu
 
 from .commands.disconnect_node_command import DisconnectNodeCommand
 from .edge import Edge
-from .schematic_node_utils import SchematicNodeUtils
+from .schematic_item_utils import SchematicItemUtils
 
 if TYPE_CHECKING:
     from pywr_editor.node_shapes import BaseNode
@@ -217,8 +217,8 @@ class SchematicNode(QGraphicsItemGroup):
         :return: True if the node position is adjusted, False otherwise.
         """
         # prevent the nodes from being moved outside the schematic edges.
-        item_utils = SchematicNodeUtils(
-            node=self,
+        item_utils = SchematicItemUtils(
+            item=self,
             schematic_size=[
                 self.view.schematic_width,
                 self.view.schematic_height,

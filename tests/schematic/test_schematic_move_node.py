@@ -5,7 +5,7 @@ from PySide6.QtCore import QPoint, Qt
 
 from pywr_editor import MainWindow
 from pywr_editor.schematic import Schematic
-from pywr_editor.schematic.commands.move_node_command import MoveNodeCommand
+from pywr_editor.schematic.commands.move_item_command import MoveItemCommand
 from pywr_editor.toolbar.tab_panel import TabPanel
 from tests.utils import resolve_model_path
 
@@ -46,9 +46,9 @@ class TestSchematicMoveNodes:
         # mock drag and drop
         node_item.setPos(new_pos)
         node_item.setSelected(True)
-        command = MoveNodeCommand(
+        command = MoveItemCommand(
             schematic=schematic,
-            selected_nodes=schematic.scene.selectedItems(),
+            selected_items=schematic.scene.selectedItems(),
         )
         window.undo_stack.push(command)
 
@@ -63,7 +63,7 @@ class TestSchematicMoveNodes:
         )
 
         # 2. Check init of undo command
-        undo_command: MoveNodeCommand = window.undo_stack.command(0)
+        undo_command: MoveItemCommand = window.undo_stack.command(0)
         assert undo_button.isEnabled() is True
         assert redo_button.isEnabled() is False
         assert undo_command.prev_positions == [initial_pos]

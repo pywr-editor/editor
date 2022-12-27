@@ -3,7 +3,7 @@ from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QApplication
 
 from pywr_editor import MainWindow
-from pywr_editor.schematic import SchematicNodeUtils
+from pywr_editor.schematic import SchematicItemUtils
 from tests.utils import resolve_model_path
 
 
@@ -40,8 +40,8 @@ class TestInitialWrongPosition:
         schematic = window.schematic
 
         item = schematic.node_items["Link"]
-        item_utils = SchematicNodeUtils(
-            node=item,
+        item_utils = SchematicItemUtils(
+            item=item,
             schematic_size=[
                 schematic.schematic_width,
                 schematic.schematic_height,
@@ -51,8 +51,8 @@ class TestInitialWrongPosition:
         assert item.sceneBoundingRect().left() == 0.0
 
         item = schematic.node_items["Output"]
-        item_utils = SchematicNodeUtils(
-            node=item,
+        item_utils = SchematicItemUtils(
+            item=item,
             schematic_size=[
                 schematic.schematic_width,
                 schematic.schematic_height,
