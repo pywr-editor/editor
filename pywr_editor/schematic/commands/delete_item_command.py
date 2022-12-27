@@ -76,6 +76,7 @@ class DeleteItemCommand(QUndoCommand):
         # delete shapes
         for shape_dict in self.deleted_shape_dicts:
             self.model_config.shapes.delete(shape_dict["id"])
+            del self.schematic.shape_items[shape_dict["id"]]
             self.logger.debug(f"Deleted shape with config: {shape_dict}")
 
         # status message

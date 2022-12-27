@@ -16,7 +16,7 @@ from pywr_editor.toolbar.tab_panel import TabPanel
 from tests.utils import resolve_model_path
 
 
-class TestSchematicNodes:
+class TestDeleteSchematicNodes:
     model_file = resolve_model_path("model_delete_nodes.json")
 
     @pytest.fixture

@@ -1,18 +1,22 @@
 from typing import Tuple
 
 import pytest
-from PySide6.QtCore import QTimer
+from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import QLineEdit
 
 from pywr_editor import MainWindow
 from pywr_editor.form.widgets.color_picker_widget import ColorPickerWidget
+from pywr_editor.model import ModelConfig
 from pywr_editor.schematic import Schematic
+from pywr_editor.schematic.commands.delete_item_command import DeleteItemCommand
 from pywr_editor.schematic.shapes.shape_dialogs import ShapeDialogForm
+from pywr_editor.schematic.shapes.text_shape import SchematicText
 from tests.utils import close_message_box, resolve_model_path
 
 
 class TestSchematicTextShape:
     model_file = resolve_model_path("model_1.json")
+    shape_id = "c60bfe"
 
     @pytest.fixture
     def init_window(self) -> Tuple[MainWindow, Schematic]:
@@ -33,22 +37,17 @@ class TestSchematicTextShape:
         """
         window, schematic = init_window
         model_config = window.model_config
-        shape_id = "c60bfe"
-        shape_dict = {
-            "text": "This is a label",
-            "color": (255, 170, 0),
-            "type": "text",
-            "x": 410.1829,
-            "y": 124.644,
-        }
+        shape_dict = model_config.shapes.find_shape(self.shape_id).copy()
 
-        assert shape_id in schematic.shape_items
+        assert self.shape_id in schematic.shape_items
 
         # 1. Check text properties
-        item = schematic.shape_items[shape_id]
+        item = schematic.shape_items[self.shape_id]
         assert item.toPlainText() == shape_dict["text"]
         assert item.pos().toTuple() == (shape_dict["x"], shape_dict["y"])
-        assert item.defaultTextColor().toTuple()[0:3] == shape_dict["color"]
+        assert item.defaultTextColor().toTuple()[0:3] == tuple(
+            shape_dict["color"]
+        )
 
         # 2. Change text colour and label
         item.on_edit_shape()
@@ -66,15 +65,99 @@ class TestSchematicTextShape:
         # 3. Send form and check the model config and schematic item
         form.save()
         assert model_config.has_changes is True
-        assert model_config.shapes.find_shape(shape_id) == {
+        assert model_config.shapes.find_shape(self.shape_id) == {
             **shape_dict,
             **{
-                "id": shape_id,
                 "text": new_text,
                 "color": color_widget.value,
             },
         }
 
-        item = schematic.shape_items[shape_id]
+        item = schematic.shape_items[self.shape_id]
         assert item.toPlainText() == new_text
         assert item.defaultTextColor().toTuple()[0:3] == color_widget.value
+
+    def is_shape_deleted(
+        self, model_config: ModelConfig, schematic: Schematic
+    ) -> None:
+        """
+        Checks that the shape is deleted in the model configuration and schematic.
+        :param model_config: The ModelConfig instance.
+        :param schematic: The Schematic instance.
+        :return: None
+        """
+        # the shape is removed from the model configuration
+        assert model_config.shapes.find_shape(self.shape_id) is None
+
+        # the shape is removed from the items list
+        assert self.shape_id not in schematic.shape_items.keys()
+
+        # the shape is removed from the schematic as graphical item
+        shape_ids = [
+            shape.id
+            for shape in schematic.items()
+            if isinstance(shape, SchematicText)
+        ]
+        assert self.shape_id not in shape_ids
+
+    def is_shape_restored(
+        self, model_config: ModelConfig, schematic: Schematic, shape_dict: dict
+    ) -> None:
+        """
+        Checks that the shape exists in the model configuration and schematic.
+        :param model_config: The ModelConfig instance.
+        :param schematic: The Schematic instance.
+        :return: None
+        """
+        assert model_config.shapes.find_shape(self.shape_id) == shape_dict
+        assert self.shape_id in schematic.shape_items.keys()
+        shape_ids = [
+            shape.id
+            for shape in schematic.items()
+            if isinstance(shape, SchematicText)
+        ]
+        assert self.shape_id in shape_ids
+
+    def test_delete_text_shape(self, qtbot, init_window) -> None:
+        """
+        Test that the text shape is properly deleted from the schematic and the model
+        configuration.
+        """
+        window, schematic = init_window
+        model_config = window.model_config
+        shape_dict = model_config.shapes.find_shape(self.shape_id)
+
+        panel = schematic.app.toolbar.tabs["Nodes"].panels["Undo"]
+        undo_button = panel.buttons["Undo"]
+        redo_button = panel.buttons["Redo"]
+
+        # 1. Delete the shape
+        shape = schematic.shape_items[self.shape_id]
+        shape.on_delete_shape()
+
+        assert undo_button.isEnabled() is True
+        assert redo_button.isEnabled() is False
+        assert model_config.has_changes is True
+        self.is_shape_deleted(model_config, schematic)
+
+        # 2. Test undo operation
+        assert window.undo_stack.canUndo() is True
+        undo_command: DeleteItemCommand = window.undo_stack.command(0)
+        assert undo_command.deleted_shape_dicts == [shape_dict]
+
+        # undo
+        qtbot.mouseClick(undo_button, Qt.MouseButton.LeftButton)
+        assert undo_button.isEnabled() is False
+        assert redo_button.isEnabled() is True
+        self.is_shape_restored(model_config, schematic, shape_dict)
+
+        # 3. Test redo and undo operation again
+        qtbot.mouseClick(redo_button, Qt.MouseButton.LeftButton)
+        assert undo_button.isEnabled() is True
+        assert redo_button.isEnabled() is False
+        self.is_shape_deleted(model_config, schematic)
+
+        qtbot.mouseClick(undo_button, Qt.MouseButton.LeftButton)
+        assert undo_button.isEnabled() is False
+        assert redo_button.isEnabled() is True
+        self.is_shape_restored(model_config, schematic, shape_dict)
