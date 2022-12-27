@@ -18,7 +18,6 @@ class TestInitialWrongPosition:
         :return: The window instance.
         """
         QTimer.singleShot(100, self.get_warning_message)
-        # QTimer.singleShot(100, close_message_box)
         window = MainWindow(self.model_file)
         window.hide()
 

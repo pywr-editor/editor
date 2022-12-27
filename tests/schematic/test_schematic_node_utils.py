@@ -3,8 +3,8 @@ from typing import Tuple
 
 import pytest
 
+from pywr_editor import MainWindow
 from pywr_editor.schematic import SchematicNode, SchematicNodeUtils
-from tests.DummyMainWindow import MainWindow
 from tests.utils import resolve_model_path
 
 

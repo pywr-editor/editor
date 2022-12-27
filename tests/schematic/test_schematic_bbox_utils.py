@@ -1,8 +1,9 @@
 import pytest
+from PySide6.QtCore import QTimer
 
+from pywr_editor import MainWindow
 from pywr_editor.schematic import SchematicBBoxUtils, SchematicNodeUtils
-from tests.DummyMainWindow import MainWindow
-from tests.utils import resolve_model_path
+from tests.utils import close_message_box, resolve_model_path
 
 
 class TestBboxUtils:
@@ -15,6 +16,7 @@ class TestBboxUtils:
         :param qtbot: The QT bot fixture.
         :return The window instance.
         """
+        QTimer.singleShot(200, close_message_box)
         return MainWindow(self.model_file)
 
     def test_min_max_bounding_box_coordinates(self, qtbot, window):
