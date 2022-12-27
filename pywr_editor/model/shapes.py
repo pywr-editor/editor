@@ -196,3 +196,28 @@ class Shapes:
         self.model.changes_tracker.add(
             f"Updated shape {shape_id} with the following values: {shape_dict}"
         )
+
+    def set_position(
+        self,
+        position: list[float],
+        shape_id: str,
+    ) -> None:
+        """
+        Sets or updates the position of a shape.
+        :param position: The position to set as list.
+        :param shape_id: The shape ID.
+        :return None
+        """
+        if shape_id not in self.model.editor_config[Constants.SHAPES_KEY.value]:
+            return None
+
+        self.model.editor_config[Constants.SHAPES_KEY.value][shape_id][
+            "x"
+        ] = position[0]
+        self.model.editor_config[Constants.SHAPES_KEY.value][shape_id][
+            "y"
+        ] = position[1]
+
+        self.model.changes_tracker.add(
+            f'Changed position for shape "{shape_id}" to {position}'
+        )
