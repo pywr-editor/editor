@@ -6,17 +6,22 @@ from pywr_editor.model import NodeConfig
 from pywr_editor.utils import Logging
 
 from ..node import SchematicNode
-from ..shapes.text_shape import SchematicText
+from ..shapes.abstract_schematic_shape import AbstractSchematicShape
 
 if TYPE_CHECKING:
-    from pywr_editor.schematic import Schematic
+    from pywr_editor.schematic import AbstractSchematicItem, Schematic
 
 
 class DeleteItemCommand(QUndoCommand):
+    """
+    Undo command used to undo/redo schematic items (nodes, edges and shapes)
+    deletion.
+    """
+
     def __init__(
         self,
         schematic: "Schematic",
-        selected_items: list["SchematicNode", "SchematicText"],
+        selected_items: list["AbstractSchematicItem"],
     ):
         """
         Initialise the command to delete nodes, edges and shapes.
@@ -50,7 +55,7 @@ class DeleteItemCommand(QUndoCommand):
         self.deleted_shape_dicts: list[dict] = [
             self.model_config.shapes.find_shape(shape.id)
             for shape in selected_items
-            if isinstance(shape, SchematicText)
+            if isinstance(shape, AbstractSchematicShape)
         ]
 
         total_items = len(self.deleted_node_configs) + len(
@@ -121,9 +126,8 @@ class DeleteItemCommand(QUndoCommand):
 
         # add shapes
         for shape_dict in self.deleted_shape_dicts:
-            new_dict = shape_dict.copy()
             self.model_config.shapes.update(
-                shape_id=new_dict.pop("id"), shape_dict=new_dict
+                shape_id=shape_dict["id"], shape_dict=shape_dict
             )
             self.logger.debug(f"Added shape with config: {shape_dict}")
 
