@@ -457,7 +457,7 @@ class SchematicNode(QGraphicsItemGroup):
         Deletes a node and its edges from the schematic and model configuration.
         :return: None
         """
-        self.view.on_delete_nodes([self])
+        self.view.on_delete_item([self])
 
     @Slot()
     def on_edit_node(self) -> None:

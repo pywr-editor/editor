@@ -7,7 +7,7 @@ from PySide6.QtWidgets import QPushButton
 from pywr_editor import MainWindow
 from pywr_editor.model import ModelConfig
 from pywr_editor.schematic import (
-    DeleteNodeCommand,
+    DeleteItemCommand,
     Edge,
     Schematic,
     SchematicNode,
@@ -91,7 +91,7 @@ class TestSchematicNodes:
     @staticmethod
     def undo_and_check(
         qtbot,
-        undo_command: DeleteNodeCommand,
+        undo_command: DeleteItemCommand,
         original_node_config: dict,
         original_edges: list[str | int],
         undo_button: QPushButton,
@@ -209,7 +209,7 @@ class TestSchematicNodes:
 
         # 2. Test undo operation
         assert window.undo_stack.canUndo() is True
-        undo_command: DeleteNodeCommand = window.undo_stack.command(0)
+        undo_command: DeleteItemCommand = window.undo_stack.command(0)
         self.undo_and_check(
             qtbot=qtbot,
             undo_command=undo_command,
@@ -346,7 +346,7 @@ class TestSchematicNodes:
 
         # 3. Undo operation
         assert window.undo_stack.canUndo() is True
-        undo_command: DeleteNodeCommand = window.undo_stack.command(0)
+        undo_command: DeleteItemCommand = window.undo_stack.command(0)
         for ni, node_config in enumerate(undo_command.deleted_node_configs):
             assert (
                 node_config.props == original_node_config_dict[node_config.name]

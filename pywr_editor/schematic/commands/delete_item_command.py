@@ -5,18 +5,23 @@ from PySide6.QtGui import QUndoCommand
 from pywr_editor.model import NodeConfig
 from pywr_editor.utils import Logging
 
+from ..node import SchematicNode
+from ..shapes.text_shape import SchematicText
+
 if TYPE_CHECKING:
-    from pywr_editor.schematic import Schematic, SchematicNode
+    from pywr_editor.schematic import Schematic
 
 
-class DeleteNodeCommand(QUndoCommand):
+class DeleteItemCommand(QUndoCommand):
     def __init__(
-        self, schematic: "Schematic", selected_nodes: list["SchematicNode"]
+        self,
+        schematic: "Schematic",
+        selected_items: list["SchematicNode", "SchematicText"],
     ):
         """
-        Initialises the delete node command.
+        Initialise the command to delete nodes, edges and shapes.
         :param schematic: The Schematic instance.
-        :param selected_nodes: The list of selected schematic node instances to delete.
+        :param selected_items: The list of selected schematic item instances to delete.
         :return: None
         """
         super().__init__()
@@ -25,27 +30,38 @@ class DeleteNodeCommand(QUndoCommand):
         self.schematic = schematic
         self.model_config = self.schematic.model_config
 
-        # collect the node to delete. Internal dict gets updated by ref if the node
+        # collect the nodes to delete. Internal dict gets updated by ref if the node
         # configuration is changed so that the restored node always contains the latest
         # changes
         self.deleted_node_configs: list[NodeConfig] = [
             self.model_config.nodes.get_node_config_from_name(
                 node.name, as_dict=False
             )
-            for node in selected_nodes
+            for node in selected_items
+            if isinstance(node, SchematicNode)
         ]
+
         # lists of deleted edges (nodes and slots) from the redo command. If a node
         # in an edge is renamed, and the operation is undone, the edge is not
         # restored because the node was changed
         self.deleted_edges: list[list[str | int]] = []
 
-        total_nodes = len(self.deleted_node_configs)
-        prefix = "node" if total_nodes == 1 else "nodes"
-        self.setText(f"delete {total_nodes} {prefix}")
+        # list of annotation shapes
+        self.deleted_shape_dicts: list[dict] = [
+            self.model_config.shapes.find_shape(shape.id)
+            for shape in selected_items
+            if isinstance(shape, SchematicText)
+        ]
+
+        total_items = len(self.deleted_node_configs) + len(
+            self.deleted_shape_dicts
+        )
+        prefix = "item" if total_items == 1 else "items"
+        self.setText(f"delete {total_items} {prefix}")
 
     def redo(self) -> None:
         """
-        Deletes the nodes and their edges from the schematic and model configuration.
+        Delete the schematic items from the schematic and model configuration.
         :return: None
         """
         # delete node and store deleted edges
@@ -57,21 +73,27 @@ class DeleteNodeCommand(QUndoCommand):
             self.logger.debug(f"Deleted node with config: {node_config.props}")
         self.logger.debug(f"Deleted edges: {self.deleted_edges}")
 
+        # delete shapes
+        for shape_dict in self.deleted_shape_dicts:
+            self.model_config.shapes.delete(shape_dict["id"])
+            self.logger.debug(f"Deleted shape with config: {shape_dict}")
+
         # status message
         edges_count = len(self.deleted_edges)
-        if len(self.deleted_node_configs) == 1:
-            status_message = (
-                f"Deleted node '{self.deleted_node_configs[0].name}'"
-            )
-            if edges_count == 1:
-                status_message += " and its edge"
-            elif edges_count > 1:
-                status_message += f" and its {edges_count} edges"
-        else:
-            status_message = (
-                f"Deleted {len(self.deleted_node_configs)} nodes and "
-                + f"{edges_count} edges"
-            )
+        item_count = len(self.deleted_node_configs) + len(
+            self.deleted_shape_dicts
+        )
+        status_message = "Deleted "
+        if item_count == 1:
+            status_message += "1 schematic item"
+        elif item_count > 1:
+            status_message += f"{item_count} schematic items"
+
+        if edges_count == 1:
+            status_message += " and one edge"
+        elif edges_count > 1:
+            status_message += f" and {edges_count} edges"
+
         self.schematic.app.status_message.emit(status_message)
 
         # update widgets
@@ -96,11 +118,20 @@ class DeleteNodeCommand(QUndoCommand):
                 self.logger.debug(f"Restored edge: {edge}")
                 restored_edges += 1
 
+        # add shapes
+        for shape_dict in self.deleted_shape_dicts:
+            new_dict = shape_dict.copy()
+            self.model_config.shapes.update(
+                shape_id=new_dict.pop("id"), shape_dict=new_dict
+            )
+            self.logger.debug(f"Added shape with config: {shape_dict}")
+
         # emit the status message
-        suffix_node = "node" if len(self.deleted_node_configs) == 1 else "nodes"
-        status_message = (
-            f"Restored {len(self.deleted_node_configs)} {suffix_node}"
+        item_count = len(self.deleted_node_configs) + len(
+            self.deleted_shape_dicts
         )
+        suffix_node = "item" if item_count == 1 else "items"
+        status_message = f"Restored {item_count} schematic {suffix_node}"
         if restored_edges > 0:
             suffix_edges = "edge" if restored_edges == 1 else "edges"
             status_message += f" and {restored_edges} {suffix_edges}"

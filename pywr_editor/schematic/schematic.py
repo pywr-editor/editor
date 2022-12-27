@@ -20,7 +20,7 @@ from pywr_editor.schematic import (
     AddNodeCommand,
     BaseShape,
     ConnectNodeCommand,
-    DeleteNodeCommand,
+    DeleteItemCommand,
     MoveNodeCommand,
     SchematicBBoxUtils,
     SchematicNode,
@@ -78,9 +78,7 @@ class Schematic(QGraphicsView):
         self.node_items: dict[str, SchematicNode] = {}
         self.shape_items: dict[str, SchematicText] = {}
 
-        # noinspection PyUnresolvedReferences
         self.schematic_move_event.connect(self.on_schematic_move)
-        # noinspection PyUnresolvedReferences
         self.connect_node_event.connect(self.on_connect_node_end)
         self.node_classes = get_node_icon_classes()
 
@@ -143,7 +141,7 @@ class Schematic(QGraphicsView):
 
     def draw(self) -> None:
         """
-        Draws the schematic.
+        Draw the schematic.
         :return: None
         """
         # draw the nodes
@@ -200,7 +198,9 @@ class Schematic(QGraphicsView):
         for shape_obj in self.model_config.shapes.get_all():
             shape = None
             if isinstance(shape_obj, TextShape):
-                shape = SchematicText(shape=shape_obj, view=self)
+                shape = SchematicText(
+                    shape_id=shape_obj.id, shape=shape_obj, view=self
+                )
 
             if shape:
                 self.shape_items[shape_obj.id] = shape
@@ -407,7 +407,7 @@ class Schematic(QGraphicsView):
         self.update_size()
 
         # re-enable button if it was disabled
-        if self.app.actions.get("decrease-height").isEnabled() is False:
+        if self.app.app_actions.get("decrease-height").isEnabled() is False:
             self.enable_decrease_height_button(True)
 
     def decrease_height(self) -> None:
@@ -440,7 +440,7 @@ class Schematic(QGraphicsView):
         self.update_size()
 
         # re-enable button if it was disabled
-        if self.app.actions.get("decrease-width").isEnabled() is False:
+        if self.app.app_actions.get("decrease-width").isEnabled() is False:
             self.enable_decrease_width_button(True)
 
     def decrease_width(self) -> None:
@@ -561,27 +561,27 @@ class Schematic(QGraphicsView):
         if self.scaling_factor is not None:
             # zoom out button
             if self.scaling_factor <= self.min_zoom:
-                self.app.actions.get("zoom-out").setDisabled(True)
+                self.app.app_actions.get("zoom-out").setDisabled(True)
             else:
-                self.app.actions.get("zoom-out").setDisabled(False)
+                self.app.app_actions.get("zoom-out").setDisabled(False)
             # block scaling
             if self.scaling_factor < self.min_zoom:
                 return
 
             if self.scaling_factor >= self.max_zoom:
                 # zoom in button
-                self.app.actions.get("zoom-in").setDisabled(True)
+                self.app.app_actions.get("zoom-in").setDisabled(True)
             else:
-                self.app.actions.get("zoom-in").setDisabled(False)
+                self.app.app_actions.get("zoom-in").setDisabled(False)
             # block scaling
             if self.scaling_factor > self.max_zoom:
                 return
 
             # zoom 100% button
             if self.scaling_factor == 1:
-                self.app.actions.get("zoom-100").setDisabled(True)
+                self.app.app_actions.get("zoom-100").setDisabled(True)
             else:
-                self.app.actions.get("zoom-100").setDisabled(False)
+                self.app.app_actions.get("zoom-100").setDisabled(False)
 
         self.app.editor_settings.save_zoom_level(self.scaling_factor)
         self.scale(f, f)
@@ -685,7 +685,7 @@ class Schematic(QGraphicsView):
         :param enable: Whether to enable the button. If False the button is disabled.
         :return: None
         """
-        self.app.actions.get("decrease-width").setEnabled(enable)
+        self.app.app_actions.get("decrease-width").setEnabled(enable)
 
     def enable_decrease_height_button(self, enable: bool = False) -> None:
         """
@@ -693,7 +693,7 @@ class Schematic(QGraphicsView):
         :param enable: Whether to enable the button. If False the button is disabled.
         :return: None
         """
-        self.app.actions.get("decrease-height").setEnabled(enable)
+        self.app.app_actions.get("decrease-height").setEnabled(enable)
 
     def select_all_items(self) -> None:
         """
@@ -710,13 +710,16 @@ class Schematic(QGraphicsView):
         """
         self.scene.clearSelection()
 
-    @Slot()
-    def on_delete_nodes(self, nodes: list["SchematicNode"]) -> None:
+    @Slot(list)
+    def on_delete_item(
+        self, items: list[Union["SchematicNode", "SchematicText"]]
+    ) -> None:
         """
-        Deletes the nodes and their edges from the schematic and model configuration.
+        Delete the provided list of nodes (and their edges), and annotation shapes from
+        the schematic and model configuration.
         :return: None
         """
-        command = DeleteNodeCommand(schematic=self, selected_nodes=nodes)
+        command = DeleteItemCommand(schematic=self, selected_items=items)
         self.app.undo_stack.push(command)
 
     @Slot(SchematicNode)
@@ -730,7 +733,7 @@ class Schematic(QGraphicsView):
         self.connecting_node_props.source_node = node
         self.viewport().setCursor(Qt.CrossCursor)
         self.abort_node_connection_button.show()
-        self.app.actions.get("add-edge").setEnabled(False)
+        self.app.app_actions.get("add-edge").setEnabled(False)
 
         # disable actions
         for action_key in [
@@ -740,7 +743,7 @@ class Schematic(QGraphicsView):
             "select-all",
             "select-none",
         ]:
-            self.app.actions.get(action_key).setEnabled(False)
+            self.app.app_actions.get(action_key).setEnabled(False)
 
         # enable connecting mode for nodes. Exclude virtual and already connected nodes
         for item in self.items():
@@ -805,7 +808,7 @@ class Schematic(QGraphicsView):
 
         self.de_select_all_items()
         for action_key in ["select-all", "select-none"]:
-            self.app.actions.get(action_key).setEnabled(True)
+            self.app.app_actions.get(action_key).setEnabled(True)
 
     def mousePressEvent(self, event: PySide6.QtGui.QMouseEvent) -> None:
         """
@@ -976,8 +979,8 @@ class Schematic(QGraphicsView):
             enabled = False
         else:
             enabled = True
-        if self.app.actions.get("minimise").isEnabled() != enabled:
-            self.app.actions.get("minimise").setEnabled(enabled)
+        if self.app.app_actions.get("minimise").isEnabled() != enabled:
+            self.app.app_actions.get("minimise").setEnabled(enabled)
 
     @property
     def selected_nodes(self) -> list["SchematicNode"]:
@@ -1004,11 +1007,11 @@ class Schematic(QGraphicsView):
 
         panel = self.app.toolbar.tabs["Nodes"].panels["Operations"]
         delete_edge_button = panel.buttons["Disconnect"]
-        delete_edge_action = self.app.actions.get("remove-edges")
-        add_edge_action = self.app.actions.get("add-edge")
-        edit_node_action = self.app.actions.get("edit-node")
-        delete_node_action = self.app.actions.get("delete-node")
-        select_node_action = self.app.actions.get("select-none")
+        delete_edge_action = self.app.app_actions.get("remove-edges")
+        add_edge_action = self.app.app_actions.get("add-edge")
+        edit_node_action = self.app.app_actions.get("edit-node")
+        delete_node_action = self.app.app_actions.get("delete-node")
+        select_node_action = self.app.app_actions.get("select-none")
 
         # always disconnect the signals
         try:
@@ -1056,7 +1059,7 @@ class Schematic(QGraphicsView):
             # delete multiple selected nodes
             # noinspection PyDefaultArgument
             delete_node_action.triggered.connect(
-                lambda *args, nodes=selected_items: self.on_delete_nodes(nodes)
+                lambda *args, nodes=selected_items: self.on_delete_item(nodes)
             )
 
         # restore state
