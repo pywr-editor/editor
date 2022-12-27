@@ -158,25 +158,41 @@ class Shapes:
 
     def find_shape(self, shape_id: str) -> dict | None:
         """
-        Find the shape by ID and get its dictionary
+        Find the shape by ID and get its dictionary.
         :param shape_id: The shape ID.
         :return: The shape dictionary if the ID is found, None otherwise.
         """
         if shape_id not in self.model.editor_config[Constants.SHAPES_KEY.value]:
             return None
-        return self.model.editor_config[Constants.SHAPES_KEY.value][shape_id]
+
+        shape_dict = self.model.editor_config[Constants.SHAPES_KEY.value][
+            shape_id
+        ]
+        shape_dict["id"] = shape_id
+        return shape_dict
+
+    def delete(self, shape_id: str) -> None:
+        """
+        Delete the shape by ID.
+        :param shape_id: The shape ID.
+        :return: None.
+        """
+        if shape_id not in self.model.editor_config[Constants.SHAPES_KEY.value]:
+            return None
+
+        del self.model.editor_config[Constants.SHAPES_KEY.value][shape_id]
+        self.model.changes_tracker.add(f"Deleted shape {shape_id}")
 
     def update(self, shape_id: str, shape_dict: dict) -> None:
         """
-        Saves the shape.
-        :param shape_id: The shape ID to update.
+        Add or save an existing shape shape.
+        :param shape_id: The shape ID to update or add.
         :param shape_dict: The shape dictionary.
         :return: None
         """
-        if shape_id in self.model.editor_config[Constants.SHAPES_KEY.value]:
-            self.model.editor_config[Constants.SHAPES_KEY.value][
-                shape_id
-            ] = shape_dict
-            self.model.changes_tracker.add(
-                f"Updated shape {shape_id} with the following values: {shape_dict}"
-            )
+        self.model.editor_config[Constants.SHAPES_KEY.value][
+            shape_id
+        ] = shape_dict
+        self.model.changes_tracker.add(
+            f"Updated shape {shape_id} with the following values: {shape_dict}"
+        )

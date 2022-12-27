@@ -69,6 +69,7 @@ class TestSchematicTextShape:
         assert model_config.shapes.find_shape(shape_id) == {
             **shape_dict,
             **{
+                "id": shape_id,
                 "text": new_text,
                 "color": color_widget.value,
             },
