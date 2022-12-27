@@ -22,13 +22,15 @@ class SchematicText(BaseShape, QGraphicsTextItem):
     This widgets renders a text onto the schematic.
     """
 
-    def __init__(self, shape: TextShape, view: "Schematic"):
+    def __init__(self, shape_id: str, shape: TextShape, view: "Schematic"):
         """
         Initialise the text shape.
         :param shape: The TextShape instance.
         :param view: The view where to draw the item.
         """
-        super().__init__()
+        BaseShape.__init__(self, shape_id, shape, view)
+        QGraphicsTextItem.__init__(self)
+
         self.view = view
         self.shape_obj = shape
         self.setPlainText(shape.text)
@@ -119,8 +121,7 @@ class SchematicText(BaseShape, QGraphicsTextItem):
         Delete the selected shape.
         :return: None
         """
-        # TODO
-        pass
+        self.view.on_delete_item([self])
 
     @Slot()
     def on_edit_shape(self) -> None:
