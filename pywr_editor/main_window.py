@@ -23,7 +23,7 @@ from pywr_editor.dialogs import (
 from pywr_editor.model import ModelConfig
 from pywr_editor.schematic import Schematic, scaling_factor
 from pywr_editor.style import AppStylesheet
-from pywr_editor.toolbar import NodesLibrary, ToolbarWidget
+from pywr_editor.toolbar import SchematicItemsLibrary, ToolbarWidget
 from pywr_editor.tree import ComponentsTree
 from pywr_editor.utils import (
     Action,
@@ -561,7 +561,7 @@ class MainWindow(QMainWindow):
         op_panel.add_button(self.app_actions.get("delete-node"))
 
         nodes_panel = nodes.add_panel("Nodes Library", show_name=False)
-        nodes_panel.add_widget(NodesLibrary(self))
+        nodes_panel.add_widget(SchematicItemsLibrary(self))
 
         # Schematic tab
         schematic = self.toolbar.add_tab("Schematic")

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Literal, Sequence
+from typing import TYPE_CHECKING, Sequence
 
 from PySide6.QtGui import QColor
 
@@ -14,8 +14,6 @@ if TYPE_CHECKING:
 class BaseShape:
     id: str
     """ The ID of the shape """
-    type: Literal["text"]
-    """ The shape type. Valid types are: 'text' """
     shape_dict: dict
     """ The shape dictionary with the x and y key for the shape coordinates """
 
@@ -73,6 +71,8 @@ class TextShape(BaseShape):
      - color: A list for the RGB font color. Optional
     """
 
+    shape_type: str = "text"
+    """ The type of the shape """
     default_font_size: int = 14
     """ The font size to use when it is not provided """
     default_font_color: tuple[int] = Color(name="gray", shade=800).rgb
@@ -111,6 +111,25 @@ class TextShape(BaseShape):
             and len(self.text) >= self.min_text_size
         )
 
+    @staticmethod
+    def create(shape_id: str, position: Sequence[float]) -> "TextShape":
+        """
+        Creates a new dictionary with the shape properties.
+        :param shape_id: The shape iD.
+        :param position: The node position.
+        :return: The TextShape instance.
+        """
+        return TextShape(
+            id=shape_id,
+            shape_dict={
+                "id": shape_id,
+                "text": "Label",
+                "type": TextShape.shape_type,
+                "x": position[0],
+                "y": position[1],
+            },
+        )
+
 
 @dataclass
 class Shapes:
@@ -118,7 +137,7 @@ class Shapes:
     """ The ModelConfig instance """
 
     def __post_init__(self):
-        self.shape_type_map = {"text": TextShape}
+        self.shape_type_map = {TextShape.shape_type: TextShape}
 
     def get_all(self) -> list[TextShape]:
         """
@@ -144,9 +163,7 @@ class Shapes:
                         shape_dict.get("type")
                     ]
                     shape: TextShape = shape_class_type(
-                        id=shape_id,
-                        shape_dict=shape_dict,
-                        type=shape_dict.get("type"),
+                        id=shape_id, shape_dict=shape_dict
                     )
                     if shape.is_valid():
                         shapes.append(shape)

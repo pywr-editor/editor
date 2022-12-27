@@ -30,7 +30,7 @@ from pywr_editor.schematic import (
     units_to_factor,
 )
 from pywr_editor.style import Color, stylesheet_dict_to_str
-from pywr_editor.toolbar import NodesLibraryPanel
+from pywr_editor.toolbar import LibraryPanel
 
 from .canvas import SchematicCanvas
 from .connecting_node_props import ConnectingNodeProps
@@ -936,12 +936,16 @@ class Schematic(QGraphicsView):
         """
         super().dragEnterEvent(event)
         # noinspection PyTypeChecker
-        panel: NodesLibraryPanel = self.app.findChild(NodesLibraryPanel)
+        panel: LibraryPanel = self.app.findChild(LibraryPanel)
 
         if (
             event.mimeData().hasText()
             and isinstance(event.mimeData().text(), str)
-            and event.mimeData().text() in panel.node_dict
+            # item is a node or a shape
+            and (
+                event.mimeData().text() in panel.node_dict
+                or "Shape." in event.mimeData().text()
+            )
         ):
             event.accept()
             self.update()
@@ -956,17 +960,36 @@ class Schematic(QGraphicsView):
         """
         super().dropEvent(event)
         if event.mimeData().hasText():
-            node_type = event.mimeData().text()
-            # add the new node to the model
-            node_props = NodeConfig.create(
-                name=f"Node {QUuid().createUuid().toString()[1:7]}",
-                node_type=node_type,
-                position=self.mapToScene(event.pos()).toTuple(),
-            )
+            mime_type = event.mimeData().text()
+            position = self.mapToScene(event.pos()).toTuple()
+            if "Shape." in mime_type:
+                if "TextShape" in mime_type:
+                    shape_obj = TextShape.create(
+                        shape_id=QUuid().createUuid().toString()[1:7],
+                        position=position,
+                    )
+                    shape = SchematicText(
+                        shape_id=shape_obj.id, shape=shape_obj, view=self
+                    )
+                    # TODO move to command
+                    self.model_config.shapes.update(
+                        shape_id=shape_obj.id, shape_dict=shape_obj.shape_dict
+                    )
+                    self.shape_items[shape_obj.id] = shape
+                    self.scene.addItem(shape)
+            else:
+                # add the new node to the model
+                node_props = NodeConfig.create(
+                    name=f"Node {QUuid().createUuid().toString()[1:7]}",
+                    node_type=mime_type,
+                    position=position,
+                )
 
-            # register the action in the undo stack
-            command = AddNodeCommand(schematic=self, added_node_dict=node_props)
-            self.app.undo_stack.push(command)
+                # register the action in the undo stack
+                command = AddNodeCommand(
+                    schematic=self, added_node_dict=node_props
+                )
+                self.app.undo_stack.push(command)
         self.update()
 
     def on_scene_change(self) -> None:

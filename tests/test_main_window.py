@@ -4,9 +4,11 @@ import pytest
 from PySide6.QtCore import QTimer
 
 from pywr_editor import MainWindow
-from pywr_editor.toolbar.node_library.library_node import LibraryNode
-from pywr_editor.toolbar.node_library.library_node_label import LibraryNodeLabel
-from pywr_editor.toolbar.node_library.nodes_library import NodesLibraryPanel
+from pywr_editor.toolbar.node_library.library_item import LibraryItem
+from pywr_editor.toolbar.node_library.library_item_label import LibraryItemLabel
+from pywr_editor.toolbar.node_library.schematic_items_library import (
+    LibraryPanel,
+)
 from tests.utils import check_msg, resolve_model_path
 
 
@@ -68,14 +70,14 @@ class TestMainWindow:
         window.hide()
 
         # check that the imported node is in the panel
-        panel: NodesLibraryPanel = window.toolbar.findChild(NodesLibraryPanel)
+        panel: LibraryPanel = window.toolbar.findChild(LibraryPanel)
         found_imported = False
         found_generic_custom = False
         for item in panel.items():
-            if isinstance(item, LibraryNodeLabel):
+            if isinstance(item, LibraryItemLabel):
                 if item.text() == "LeakyPipe":
                     found_imported = True
-                elif item.text() == LibraryNode.not_import_custom_node_name:
+                elif item.text() == LibraryItem.not_import_custom_node_name:
                     found_generic_custom = True
         assert found_imported is True
         assert found_generic_custom is True

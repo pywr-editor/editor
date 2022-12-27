@@ -1,4 +1,7 @@
-from .node_library.nodes_library import NodesLibrary, NodesLibraryPanel
-from .node_library.library_node import LibraryNode
-from .node_library.library_node_label import LibraryNodeLabel
+from .node_library.schematic_items_library import (
+    SchematicItemsLibrary,
+    LibraryPanel,
+)
+from .node_library.library_item import LibraryItem
+from .node_library.library_item_label import LibraryItemLabel
 from .toolbar import ToolbarWidget

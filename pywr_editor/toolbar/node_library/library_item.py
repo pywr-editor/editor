@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Type
 
 import PySide6
 from PySide6.QtGui import QPainter, QPixmap, Qt
@@ -8,34 +8,40 @@ from PySide6.QtWidgets import (
     QStyleOptionGraphicsItem,
 )
 
-import pywr_editor
-import pywr_editor.node_shapes
+from pywr_editor.style import Color
 
-from .library_node_label import LibraryNodeLabel
+from .library_item_label import LibraryItemLabel
 
 if TYPE_CHECKING:
-    from pywr_editor.schematic import SchematicNode
-
-    from .nodes_library import NodesLibraryPanel
+    from .schematic_items_library import LibraryPanel
 
 
-class LibraryNode(QGraphicsItemGroup):
+class LibraryItem(QGraphicsItemGroup):
+    """
+    Class that draws the library item.
+    """
+
     max_label_size = 25
+    """ The maximum size of the label to display beneath the item. """
     not_import_custom_node_name = "Custom node"
+    """ The label for nodes that were not imported. """
 
     def __init__(
-        self, view: "NodesLibraryPanel", node_class_type: str, node_name: str
+        self,
+        view: "LibraryPanel",
+        item_class_type: Type[QGraphicsItem],
+        name: str,
     ):
         """
-        Initialises the class.
+        Initialise the class.
         :param view: The view where to draw the item.
-        :param node_class_type: The name of the node class.
-        :param node_name: The name of the node to show under the node's shape.
+        :param item_class_type: The name of the node class.
+        :param name: The name of the node to show under the node's shape.
         :return None
         """
         super().__init__()
-        self.node_class_type = node_class_type
-        self.node_name = node_name
+        self.item_class_type = item_class_type
+        self.name = name
         self.view = view
         self.x: float = 0
         self.y: float = 0
@@ -48,29 +54,29 @@ class LibraryNode(QGraphicsItemGroup):
         # enable hover event
         self.setAcceptHoverEvents(True)
 
-        # node icon
+        self.item = item_class_type(parent=self)
         try:
-            node_class = getattr(pywr_editor.node_shapes, node_class_type)
+            # label from node's colour
+            label_color = self.item.label
         except AttributeError:
-            # node name is not a built-in component
-            node_class = getattr(pywr_editor.node_shapes, "CustomNodeShape")
-        self.node: "SchematicNode" = node_class(parent=self)
+            # for shapes
+            label_color = Color("gray", 800)
 
         # label
-        self.label = LibraryNodeLabel(
+        self.label = LibraryItemLabel(
             parent=self,
-            name=self.name,
-            color=self.node.label,
+            name=self.trimmed_name,
+            color=label_color,
         )
 
         # add elements to the group
-        self.addToGroup(self.node)
+        self.addToGroup(self.item)
         self.addToGroup(self.label)
 
     def setPos(self, pos: PySide6.QtCore.QPointF) -> None:
         """
-        Sets the position of the node.
-        :param pos: The node Position as QPointF instance.
+        Set the position of the item.
+        :param pos: The item position as QPointF instance.
         :return: None
         """
         self.x = pos.x()
@@ -78,12 +84,12 @@ class LibraryNode(QGraphicsItemGroup):
         super().setPos(pos)
 
     @property
-    def name(self) -> str:
+    def trimmed_name(self) -> str:
         """
-        Gets the trimmed node name.
+        Gets the trimmed item's name.
         :return: The formatted name.
         """
-        label = self.node_name
+        label = self.name
 
         if len(label) > self.max_label_size:
             label = f"{label[0:self.max_label_size]}..."
@@ -92,25 +98,25 @@ class LibraryNode(QGraphicsItemGroup):
 
     def pixmap_from_item(self) -> QPixmap:
         """
-        Converts the node to a pixmap instance.
+        Converts the item to a pixmap instance.
         :return: The QPixmap instance.
         """
-        item = self.node
-
-        pixmap = QPixmap(item.boundingRect().size().toSize())
+        pixmap = QPixmap(self.item.boundingRect().size().toSize())
         pixmap.fill(Qt.GlobalColor.transparent)
 
         painter = QPainter(pixmap)
         painter.scale(0.8, 0.8)
-        painter.translate(-item.boundingRect().x(), -item.boundingRect().y())
+        painter.translate(
+            -self.item.boundingRect().x(), -self.item.boundingRect().y()
+        )
         painter.setRenderHints(
             QPainter.Antialiasing | QPainter.SmoothPixmapTransform
         )
 
         options = QStyleOptionGraphicsItem()
-        item.paint(painter, options)
+        self.item.paint(painter, options, None)
         # render children
-        children = item.childItems()
+        children = self.item.childItems()
         if len(children) > 0:
             for child in children:
                 child.paint(painter, options)
@@ -125,8 +131,8 @@ class LibraryNode(QGraphicsItemGroup):
         :param event: The event being triggered.
         :return: None
         """
-        self.node.hover = True
-        self.node.update()
+        self.item.hover = True
+        self.item.update()
         super().hoverEnterEvent(event)
 
     def hoverLeaveEvent(
@@ -137,6 +143,6 @@ class LibraryNode(QGraphicsItemGroup):
         :param event: The event being triggered.
         :return: None
         """
-        self.node.hover = False
-        self.node.update()
+        self.item.hover = False
+        self.item.update()
         super().hoverLeaveEvent(event)

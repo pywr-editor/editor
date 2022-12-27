@@ -19,7 +19,9 @@ from PySide6.QtWidgets import (
 
 from pywr_editor.form import FormTitle
 from pywr_editor.model import JsonUtils, ModelConfig
-from pywr_editor.toolbar.node_library.nodes_library import NodesLibraryPanel
+from pywr_editor.toolbar.node_library.schematic_items_library import (
+    LibraryPanel,
+)
 from pywr_editor.utils import Logging, get_signal_sender
 from pywr_editor.widgets import PushIconButton, TableView
 
@@ -294,7 +296,7 @@ class IncludesDialog(QDialog):
         # update the node panel
         if self.app:
             # noinspection PyTypeChecker
-            panel: NodesLibraryPanel = self.app.findChild(NodesLibraryPanel)
+            panel: LibraryPanel = self.app.findChild(LibraryPanel)
             panel.reload()
 
         self.save_button.setEnabled(False)
