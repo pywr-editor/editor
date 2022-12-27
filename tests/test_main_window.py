@@ -42,7 +42,7 @@ class TestMainWindow:
         unsaved changes.
         """
         window = MainWindow(resolve_model_path("model_1.json"))
-        save_button = window.actions.get("save-model")
+        save_button = window.app_actions.get("save-model")
         # button gets disabled after a few ms
         qtbot.wait(600)
         assert save_button.isEnabled() is False
