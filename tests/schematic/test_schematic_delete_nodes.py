@@ -193,7 +193,7 @@ class TestDeleteSchematicNodes:
 
         node = schematic.node_items[node_name]
         removed_edges = node.edges
-        node.on_delete_node()
+        node.on_delete_item()
 
         assert undo_button.isEnabled() is True
         assert redo_button.isEnabled() is False
@@ -278,7 +278,7 @@ class TestDeleteSchematicNodes:
         panel = schematic.app.toolbar.tabs["Nodes"].panels["Undo"]
         undo_button = panel.buttons["Undo"]
 
-        node_item.on_delete_node()
+        node_item.on_delete_item()
 
         # rename Link1 and undo
         model_config.nodes.rename("Link1", "New Link1")

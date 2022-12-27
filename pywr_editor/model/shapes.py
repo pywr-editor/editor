@@ -168,7 +168,6 @@ class Shapes:
         shape_dict = self.model.editor_config[Constants.SHAPES_KEY.value][
             shape_id
         ]
-        shape_dict["id"] = shape_id
         return shape_dict
 
     def delete(self, shape_id: str) -> None:
@@ -193,6 +192,7 @@ class Shapes:
         self.model.editor_config[Constants.SHAPES_KEY.value][
             shape_id
         ] = shape_dict
+
         self.model.changes_tracker.add(
             f"Updated shape {shape_id} with the following values: {shape_dict}"
         )
@@ -211,12 +211,11 @@ class Shapes:
         if shape_id not in self.model.editor_config[Constants.SHAPES_KEY.value]:
             return None
 
-        self.model.editor_config[Constants.SHAPES_KEY.value][shape_id][
-            "x"
-        ] = position[0]
-        self.model.editor_config[Constants.SHAPES_KEY.value][shape_id][
-            "y"
-        ] = position[1]
+        shape_dict = self.model.editor_config[Constants.SHAPES_KEY.value][
+            shape_id
+        ]
+        shape_dict["x"] = position[0]
+        shape_dict["y"] = position[1]
 
         self.model.changes_tracker.add(
             f'Changed position for shape "{shape_id}" to {position}'

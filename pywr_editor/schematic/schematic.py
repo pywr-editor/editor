@@ -17,11 +17,12 @@ from PySide6.QtWidgets import (
 from pywr_editor.model import Edges, ModelConfig, NodeConfig, TextShape
 from pywr_editor.node_shapes import get_node_icon_classes
 from pywr_editor.schematic import (
+    AbstractSchematicItem,
+    AbstractSchematicShape,
     AddNodeCommand,
-    BaseShape,
     ConnectNodeCommand,
     DeleteItemCommand,
-    MoveNodeCommand,
+    MoveItemCommand,
     SchematicBBoxUtils,
     SchematicNode,
     SchematicText,
@@ -31,9 +32,9 @@ from pywr_editor.schematic import (
 from pywr_editor.style import Color, stylesheet_dict_to_str
 from pywr_editor.toolbar import NodesLibraryPanel
 
+from .canvas import SchematicCanvas
 from .connecting_node_props import ConnectingNodeProps
 from .edge import Edge, TempEdge
-from .schematic_canvas import SchematicCanvas
 
 if TYPE_CHECKING:
     from pywr_editor import MainWindow
@@ -191,9 +192,6 @@ class Schematic(QGraphicsView):
         # warn if some nodes do not have a position
         self.trigger_missing_pos_warning()
 
-        # move nodes outside canvas
-        self.adjust_nodes_initial_pos()
-
         # draw the shapes
         for shape_obj in self.model_config.shapes.get_all():
             shape = None
@@ -205,6 +203,9 @@ class Schematic(QGraphicsView):
             if shape:
                 self.shape_items[shape_obj.id] = shape
                 self.scene.addItem(shape)
+
+        # move items outside canvas
+        self.adjust_items_initial_pos()
 
         if self.init is True:
             self.init = False
@@ -338,40 +339,39 @@ class Schematic(QGraphicsView):
                 "Missing positions", text, "warn"
             )
 
-    def adjust_nodes_initial_pos(self) -> None:
+    def adjust_items_initial_pos(self) -> None:
         """
-         Moves nodes that are outside schematic onto the canvas.
+        Move items that are outside the schematic onto the canvas.
         :return: None
         """
-        moved_nodes_count = False
-        for node in self.items():
-            # ignore children and work on node groups only
-            if not isinstance(node, SchematicNode):
+        moved_items_count = False
+        for item in self.items():
+            # ignore children and work on node groups and shapes only
+            if not isinstance(item, (SchematicNode, AbstractSchematicShape)):
                 continue
-            was_node_moved = node.adjust_node_position()
 
-            if was_node_moved:
-                node.save_position_if_moved()
-                moved_nodes_count += 1
+            was_item_moved = item.adjust_position()
+            if was_item_moved:
+                item.save_position_if_moved()
+                moved_items_count += 1
 
         # print message only when the schematic is first drawn
-        if moved_nodes_count > 0 and self.init:
-            if moved_nodes_count == 1:
-                message = f"{moved_nodes_count} node was outside the schematic canvas "
-                message += "and it has been\nmoved to lie within the canvas."
+        if moved_items_count > 0 and self.init:
+            if moved_items_count == 1:
+                message = (
+                    f"{moved_items_count} item was outside the schematic canvas "
+                    + "and this was\nmoved to lie within the canvas limits."
+                )
             else:
                 message = (
-                    f"{moved_nodes_count} nodes were outside the schematic "
+                    f"{moved_items_count} items were outside the schematic "
+                    + "canvas and these were\nmoved to lie within the canvas limits."
                 )
-                message += (
-                    "canvas and they have been\nmoved to lie within the canvas."
-                )
-            # noinspection PyUnresolvedReferences
             self.app.warning_info_message.emit(
-                "Wrong node position", message, "info"
+                "Wrong item position", message, "info"
             )
 
-        # disable decrease size buttons if at least one node is already on the edge
+        # disable decrease size buttons if at least one item is already on the edge
         # or has been moved
         self.toggle_schematic_size_buttons()
 
@@ -508,7 +508,7 @@ class Schematic(QGraphicsView):
         :return: None
         """
         for item in self.items():
-            if isinstance(item, SchematicNode):
+            if isinstance(item, (SchematicNode, AbstractSchematicShape)):
                 item.setFlag(
                     QGraphicsItem.ItemIsMovable,
                     # this is False when schematic is going to be locked
@@ -528,7 +528,7 @@ class Schematic(QGraphicsView):
         """
         is_on_right_edge, is_on_bottom_edge = SchematicBBoxUtils(
             self.items()
-        ).are_nodes_on_edges(self.schematic_width, self.schematic_height)
+        ).are_items_on_edges(self.schematic_width, self.schematic_height)
         self.enable_decrease_width_button(not is_on_right_edge)
         self.enable_decrease_height_button(not is_on_bottom_edge)
 
@@ -711,9 +711,7 @@ class Schematic(QGraphicsView):
         self.scene.clearSelection()
 
     @Slot(list)
-    def on_delete_item(
-        self, items: list[Union["SchematicNode", "SchematicText"]]
-    ) -> None:
+    def on_delete_item(self, items: list["AbstractSchematicItem"]) -> None:
         """
         Delete the provided list of nodes (and their edges), and annotation shapes from
         the schematic and model configuration.
@@ -824,8 +822,9 @@ class Schematic(QGraphicsView):
                 items = self.items(event.pos())
                 # check that no selectable item was selected and canvas can be dragged
                 is_selectable = map(
-                    lambda item: isinstance(item, SchematicNode)
-                    or isinstance(item, BaseShape),
+                    lambda item: isinstance(
+                        item, (SchematicNode, AbstractSchematicShape)
+                    ),
                     items,
                 )
                 # enable canvas dragging
@@ -846,11 +845,13 @@ class Schematic(QGraphicsView):
         if event.button() == Qt.LeftButton:
             # perform action on selected nodes
             if self.canvas_drag is False:
+                items: list[
+                    "AbstractSchematicItem"
+                ] = self.scene.selectedItems()
                 # save position only if the nodes were moved
-                if any([n.has_position_changed() for n in self.selected_nodes]):
-                    command = MoveNodeCommand(
-                        schematic=self,
-                        selected_nodes=self.selected_nodes,
+                if any([n.has_position_changed() for n in items]):
+                    command = MoveItemCommand(
+                        schematic=self, selected_items=items
                     )
                     self.app.undo_stack.push(command)
             else:
@@ -859,7 +860,7 @@ class Schematic(QGraphicsView):
                 # check that no selectable item was selected
                 is_selectable = map(
                     lambda item: isinstance(item, SchematicNode)
-                    or isinstance(item, BaseShape),
+                    or isinstance(item, AbstractSchematicShape),
                     items,
                 )
                 if len(items) > 0 and not any(is_selectable):
@@ -1050,7 +1051,7 @@ class Schematic(QGraphicsView):
             edit_node_action.setDisabled(False)
 
             # delete node
-            delete_node_action.triggered.connect(item.on_delete_node)
+            delete_node_action.triggered.connect(item.on_delete_item)
             delete_node_action.setDisabled(False)
 
             # select none

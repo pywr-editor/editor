@@ -2,22 +2,21 @@ from typing import TYPE_CHECKING
 
 import PySide6
 from PySide6.QtCore import Slot
-from PySide6.QtGui import QFont, QPen
-from PySide6.QtWidgets import QGraphicsItem, QGraphicsTextItem, QStyle
+from PySide6.QtGui import QFont
+from PySide6.QtWidgets import QGraphicsItem, QGraphicsTextItem
 
 from pywr_editor.form import ColorPickerWidget, FormValidation
 from pywr_editor.model import TextShape
-from pywr_editor.style import Color
 from pywr_editor.widgets import ContextualMenu
 
-from .base_shape import BaseShape
+from .abstract_schematic_shape import AbstractSchematicShape
 from .shape_dialogs import ShapeDialog
 
 if TYPE_CHECKING:
     from pywr_editor.schematic import Schematic
 
 
-class SchematicText(BaseShape, QGraphicsTextItem):
+class SchematicText(AbstractSchematicShape, QGraphicsTextItem):
     """
     This widgets renders a text onto the schematic.
     """
@@ -28,7 +27,7 @@ class SchematicText(BaseShape, QGraphicsTextItem):
         :param shape: The TextShape instance.
         :param view: The view where to draw the item.
         """
-        BaseShape.__init__(self, shape_id, shape, view)
+        AbstractSchematicShape.__init__(self, shape_id, shape, view)
         QGraphicsTextItem.__init__(self)
 
         self.view = view
@@ -57,6 +56,9 @@ class SchematicText(BaseShape, QGraphicsTextItem):
         self.setPos(shape.x, shape.y)
         self.setZValue(0)
 
+        # store the position after drawing the item
+        self.prev_position = self.scenePos().toTuple()
+
     def paint(
         self,
         painter: PySide6.QtGui.QPainter,
@@ -71,19 +73,7 @@ class SchematicText(BaseShape, QGraphicsTextItem):
         :return: None
         """
         if self.isSelected():
-            pen = QPen()
-            pen.setColor(Color("red", 500).qcolor)
-            painter.setPen(pen)
-
-            line_width = 1
-            rect = self.boundingRect()
-            rect.setX(rect.x() + line_width)
-            rect.setY(rect.y() + line_width)
-            rect.setWidth(rect.width() - line_width)
-            rect.setHeight(rect.height() - line_width)
-            painter.drawRoundedRect(rect, 4, 4)
-            # remove default outline
-            option.state = QStyle.StateFlag.State_None
+            self.draw_outline(painter, option)
 
         super().paint(painter, option, widget)
 
@@ -110,18 +100,10 @@ class SchematicText(BaseShape, QGraphicsTextItem):
         # delete action
         delete_action = context_menu.addAction("Delete text")
         # noinspection PyUnresolvedReferences
-        delete_action.triggered.connect(self.on_delete_shape)
+        delete_action.triggered.connect(self.on_delete_item)
         self.view.addAction(delete_action)
 
         context_menu.exec(event.screenPos())
-
-    @Slot()
-    def on_delete_shape(self) -> None:
-        """
-        Delete the selected shape.
-        :return: None
-        """
-        self.view.on_delete_item([self])
 
     @Slot()
     def on_edit_shape(self) -> None:

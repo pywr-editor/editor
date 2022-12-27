@@ -28,25 +28,25 @@ class TestBboxUtils:
             window.schematic.items()
         ).min_max_bounding_box_coordinates
 
-        assert max_min_bbox.max_x.node == schematic_items["Link1"]
+        assert max_min_bbox.max_x.item == schematic_items["Link1"]
         assert (
             max_min_bbox.max_x.value
             == schematic_items["Link1"].sceneBoundingRect().right()
         )
 
-        assert max_min_bbox.min_x.node == schematic_items["Link2"]
+        assert max_min_bbox.min_x.item == schematic_items["Link2"]
         assert (
             max_min_bbox.min_x.value
             == schematic_items["Link2"].sceneBoundingRect().left()
         )
 
-        assert max_min_bbox.max_y.node == schematic_items["Link3"]
+        assert max_min_bbox.max_y.item == schematic_items["Link3"]
         assert (
             max_min_bbox.max_y.value
             == schematic_items["Link3"].sceneBoundingRect().bottom()
         )
 
-        assert max_min_bbox.min_y.node == schematic_items["Link4"]
+        assert max_min_bbox.min_y.item == schematic_items["Link4"]
         assert (
             max_min_bbox.min_y.value
             == schematic_items["Link4"].sceneBoundingRect().top()
@@ -69,7 +69,7 @@ class TestBboxUtils:
         )
         max_min_bbox = SchematicBBoxUtils(
             window.schematic.items()
-        ).are_nodes_on_edges(
+        ).are_items_on_edges(
             window.schematic.schematic_width, window.schematic.schematic_height
         )
         assert max_min_bbox[0] is False
@@ -79,7 +79,7 @@ class TestBboxUtils:
         node_utils_obj.move_to_bottom_edge()
         max_min_bbox = SchematicBBoxUtils(
             window.schematic.items()
-        ).are_nodes_on_edges(
+        ).are_items_on_edges(
             window.schematic.schematic_width, window.schematic.schematic_height
         )
         assert max_min_bbox[1] is True
@@ -88,7 +88,7 @@ class TestBboxUtils:
         node_utils_obj.move_to_right_edge()
         max_min_bbox = SchematicBBoxUtils(
             window.schematic.items()
-        ).are_nodes_on_edges(
+        ).are_items_on_edges(
             window.schematic.schematic_width, window.schematic.schematic_height
         )
         assert max_min_bbox[0] is True

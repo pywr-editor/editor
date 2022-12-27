@@ -1,7 +1,10 @@
 from dataclasses import dataclass
+from typing import TYPE_CHECKING, Union
 
 from .edge import TempEdge
-from .node import SchematicNode
+
+if TYPE_CHECKING:
+    from pywr_editor.schematic import SchematicNode
 
 
 @dataclass
@@ -10,7 +13,7 @@ class ConnectingNodeProps:
     """ Whether the connection is taking place """
     temp_edge: TempEdge | None = None
     """ The instance of the temporary edge """
-    source_node: SchematicNode | None = None
+    source_node: Union["SchematicNode", None] = None
     """ The instance of the schematic source node """
 
     def reset(self):

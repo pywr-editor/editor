@@ -61,4 +61,4 @@ class TestInitialWrongPosition:
 
         assert item_utils.is_outside_left_edge is False
         assert item.sceneBoundingRect().bottom() == schematic.schematic_height
-        assert "2 nodes were outside" in self.dialog_text
+        assert "2 items were outside" in self.dialog_text

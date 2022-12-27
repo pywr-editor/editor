@@ -107,6 +107,7 @@ class TestSchematicTextShape:
         Checks that the shape exists in the model configuration and schematic.
         :param model_config: The ModelConfig instance.
         :param schematic: The Schematic instance.
+        :param shape_dict: The shape dictionary.
         :return: None
         """
         assert model_config.shapes.find_shape(self.shape_id) == shape_dict
@@ -133,7 +134,7 @@ class TestSchematicTextShape:
 
         # 1. Delete the shape
         shape = schematic.shape_items[self.shape_id]
-        shape.on_delete_shape()
+        shape.on_delete_item()
 
         assert undo_button.isEnabled() is True
         assert redo_button.isEnabled() is False

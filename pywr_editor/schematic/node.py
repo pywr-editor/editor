@@ -1,8 +1,8 @@
-from typing import TYPE_CHECKING, Any, Literal, Optional, TypedDict, Union
+from typing import TYPE_CHECKING, Any, Literal, TypedDict, Union
 
 import PySide6
 from PySide6.QtCore import Slot
-from PySide6.QtGui import QAction, QFont, QPainterPath, QPen
+from PySide6.QtGui import QAction, QFont, QPainterPath
 from PySide6.QtWidgets import (
     QGraphicsItem,
     QGraphicsItemGroup,
@@ -14,9 +14,9 @@ from pywr_editor.node_shapes import GrayCircle, get_node_icon
 from pywr_editor.style import Color
 from pywr_editor.widgets import ContextualMenu
 
+from .abstract_schematic_item import AbstractSchematicItem
 from .commands.disconnect_node_command import DisconnectNodeCommand
 from .edge import Edge
-from .schematic_item_utils import SchematicItemUtils
 
 if TYPE_CHECKING:
     from pywr_editor.node_shapes import BaseNode
@@ -32,7 +32,7 @@ class ConnectedNodeProps(TypedDict):
     """ the total number of connected nodes """
 
 
-class SchematicNode(QGraphicsItemGroup):
+class SchematicNode(AbstractSchematicItem, QGraphicsItemGroup):
     padding_y: int = 5
     """ The bounding rectangle x padding """
     padding_x: int = 5
@@ -44,17 +44,18 @@ class SchematicNode(QGraphicsItemGroup):
 
     def __init__(self, node_props: dict, view: "Schematic"):
         """
-        Initialises the class.
+        Initialise the class.
         :param node_props: The node properties from the model dictionary.
         :param view: The view where to draw the item.
         :return None
         """
-        super().__init__()
+        AbstractSchematicItem.__init__(self, view)
+        QGraphicsItemGroup.__init__(self)
+
         self.model_node = view.model_config.nodes.node(node_props)
         self.name = self.model_node.name
         self.x, self.y = self.model_node.position
         self.edges: list[Edge] = []
-        self.view = view
 
         # allow interaction
         self.setFlag(
@@ -137,7 +138,7 @@ class SchematicNode(QGraphicsItemGroup):
         self,
         painter: PySide6.QtGui.QPainter,
         option: PySide6.QtWidgets.QStyleOptionGraphicsItem,
-        widget: Optional[PySide6.QtWidgets.QWidget] = ...,
+        widget: PySide6.QtWidgets.QWidget | None = ...,
     ) -> None:
         """
         Paints the node. Prevents the bounding box from being display when the group
@@ -150,24 +151,8 @@ class SchematicNode(QGraphicsItemGroup):
         if self.isSelected() or (
             self.view.connecting_node_props.enabled and self.node.hover
         ):
-            pen = QPen()
-            pen.setColor(Color("red", 500).qcolor)
-            painter.setPen(pen)
-            # painter.setRenderHints(
-            #     QPainter.Antialiasing
-            #     | QPainter.SmoothPixmapTransform
-            #     | QPainter.TextAntialiasing
-            # )
-
-            # avoid flickering by increasing the bbox size by the rectangle outline
-            # width
-            line_width = 1
-            rect = self.boundingRect()
-            rect.setX(rect.x() + line_width)
-            rect.setY(rect.y() + line_width)
-            rect.setWidth(rect.width() - line_width)
-            rect.setHeight(rect.height() - line_width)
-            painter.drawRoundedRect(rect, 4, 4)
+            self.draw_outline(painter, option)
+        super().paint(painter, option, widget)
 
     def hoverEnterEvent(
         self, event: PySide6.QtWidgets.QGraphicsSceneHoverEvent
@@ -209,52 +194,6 @@ class SchematicNode(QGraphicsItemGroup):
                 edge.adjust()
 
         return super().itemChange(change, value)
-
-    def adjust_node_position(self) -> bool:
-        """
-        Checks that the node bounding box is always within the canvas edges. If it is
-        not, the item is re-positioned on the schematic edge.
-        :return: True if the node position is adjusted, False otherwise.
-        """
-        # prevent the nodes from being moved outside the schematic edges.
-        item_utils = SchematicItemUtils(
-            item=self,
-            schematic_size=[
-                self.view.schematic_width,
-                self.view.schematic_height,
-            ],
-        )
-
-        was_node_moved = False
-        if item_utils.is_outside_left_edge:
-            item_utils.move_to_left_edge()
-            was_node_moved = True
-        elif item_utils.is_outside_right_edge:
-            item_utils.move_to_right_edge()
-            was_node_moved = True
-        if item_utils.is_outside_top_edge:
-            item_utils.move_to_top_edge()
-            was_node_moved = True
-        elif item_utils.is_outside_bottom_edge:
-            item_utils.move_to_bottom_edge()
-            was_node_moved = True
-
-        return was_node_moved
-
-    @property
-    def position(self) -> [float, float]:
-        """
-        Returns the current node's position.
-        :return: The position as tuple of floats.
-        """
-        return round(self.scenePos().x(), 5), round(self.scenePos().y(), 5)
-
-    def has_position_changed(self) -> bool:
-        """
-        Checks if the node has been moved.
-        :return: True if the node was moved, False otherwise.
-        """
-        return self.position != self.prev_position
 
     def save_position_if_moved(self) -> None:
         """
@@ -405,7 +344,7 @@ class SchematicNode(QGraphicsItemGroup):
         # delete node action
         delete_node_action = context_menu.addAction("Delete node")
         # noinspection PyUnresolvedReferences
-        delete_node_action.triggered.connect(self.on_delete_node)
+        delete_node_action.triggered.connect(self.on_delete_item)
         self.view.addAction(delete_node_action)
 
         # connect/disconnect edges - skip virtual nodes
@@ -451,13 +390,13 @@ class SchematicNode(QGraphicsItemGroup):
             f'Deleted edge from "{source_node.name}" to "{target_node.name}"'
         )
 
-    @Slot()
-    def on_delete_node(self) -> None:
-        """
-        Deletes a node and its edges from the schematic and model configuration.
-        :return: None
-        """
-        self.view.on_delete_item([self])
+    # @Slot()
+    # def on_delete_node(self) -> None:
+    #     """
+    #     Deletes a node and its edges from the schematic and model configuration.
+    #     :return: None
+    #     """
+    #     self.view.on_delete_item([self])
 
     @Slot()
     def on_edit_node(self) -> None:
