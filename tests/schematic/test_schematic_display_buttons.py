@@ -23,7 +23,7 @@ class TestSchematicDisplayButtons:
         window = MainWindow(resolve_model_path(self.model_file))
         window.hide()
         schematic = window.schematic
-        size_panel = window.toolbar.tabs["Schematic"].panels["Display"]
+        size_panel = window.toolbar.tabs["View"].panels["Display"]
 
         return window, schematic, size_panel
 

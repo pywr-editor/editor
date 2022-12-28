@@ -22,7 +22,7 @@ class TestSchematicMoveNodes:
         window = MainWindow(self.model_file)
         window.hide()
         schematic = window.schematic
-        node_op_panel = window.toolbar.tabs["Nodes"].panels["Operations"]
+        node_op_panel = window.toolbar.tabs["Schematic"].panels["Operations"]
 
         return window, schematic, node_op_panel
 
@@ -32,7 +32,7 @@ class TestSchematicMoveNodes:
         """
         window, schematic, node_op_panel = init_window
         model_config = schematic.model_config
-        panel = schematic.app.toolbar.tabs["Nodes"].panels["Undo"]
+        panel = schematic.app.toolbar.tabs["Schematic"].panels["Undo"]
         undo_button = panel.buttons["Undo"]
         redo_button = panel.buttons["Redo"]
         node_name = "Link3"

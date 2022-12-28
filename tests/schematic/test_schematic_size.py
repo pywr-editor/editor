@@ -23,7 +23,7 @@ class TestSchematicResize:
         window = MainWindow(self.model_file)
         window.hide()
         schematic = window.schematic
-        size_panel = window.toolbar.tabs["Schematic"].panels["Size"]
+        size_panel = window.toolbar.tabs["View"].panels["Size"]
 
         return window, schematic, size_panel
 

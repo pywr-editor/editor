@@ -137,7 +137,7 @@ class TestSchematicTextShape:
         model_config = window.model_config
         shape_config = model_config.shapes.find_shape(self.shape_id)
 
-        panel = schematic.app.toolbar.tabs["Nodes"].panels["Undo"]
+        panel = schematic.app.toolbar.tabs["Schematic"].panels["Undo"]
         undo_button = panel.buttons["Undo"]
         redo_button = panel.buttons["Redo"]
 
@@ -198,7 +198,7 @@ class TestSchematicTextShape:
         window, schematic = init_window
         model_config = window.model_config
         item_count = len(schematic.shape_items)
-        panel = schematic.app.toolbar.tabs["Nodes"].panels["Undo"]
+        panel = schematic.app.toolbar.tabs["Schematic"].panels["Undo"]
         undo_button = panel.buttons["Undo"]
         redo_button = panel.buttons["Redo"]
 
@@ -262,6 +262,7 @@ class TestSchematicTextShape:
         undo_command: AddShapeCommand = window.undo_stack.command(0)
         assert undo_command.added_shape_config == shape_config
         assert undo_command.tracker_shape_config is None
+        print(shape_config)
 
         # undo
         qtbot.mouseClick(undo_button, Qt.MouseButton.LeftButton)
@@ -276,6 +277,7 @@ class TestSchematicTextShape:
 
         shape_config.shape_dict["text"] = "I changed the label"
         shape_config.shape_dict["font_size"] = 40
+
         self.is_shape_restored(model_config, schematic, shape_config)
 
         # 6. Delete again
