@@ -175,7 +175,7 @@ class ModelConfig:
             "nodes": [],
             "edges": [],
             "tables": {},
-            Constants.EDITOR_CONFIG_KEY.value: {},
+            Constants.EDITOR_CONFIG_KEY.value: [],
         }
 
     def load_model(self) -> None:
@@ -217,7 +217,13 @@ class ModelConfig:
         :return: None
         """
         # check for missing keys with array as value
-        for key in ["nodes", "edges", "includes", "scenarios"]:
+        for key in [
+            "nodes",
+            "edges",
+            "includes",
+            "scenarios",
+            Constants.EDITOR_CONFIG_KEY.value,
+        ]:
             if key not in self.json:
                 self.json[key] = []
 
@@ -228,7 +234,6 @@ class ModelConfig:
             "timestepper",
             "metadata",
             "tables",
-            Constants.EDITOR_CONFIG_KEY.value,
         ]:
             if key not in self.json:
                 self.json[key] = {}

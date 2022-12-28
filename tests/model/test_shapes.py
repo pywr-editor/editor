@@ -25,6 +25,7 @@ class TestShapes:
             # missing x
             (
                 {
+                    "id": "aaa",
                     "y": 1.2,
                 },
                 False,
@@ -32,6 +33,7 @@ class TestShapes:
             # missing y
             (
                 {
+                    "id": "aaa",
                     "x": 1.2,
                 },
                 False,
@@ -39,13 +41,16 @@ class TestShapes:
             # wrong x
             (
                 {
+                    "id": "aaa",
                     "x": "a",
+                    "y": 100,
                 },
                 False,
             ),
             # valid
             (
                 {
+                    "id": "aaa",
                     "x": 100,
                     "y": 200,
                 },
@@ -57,10 +62,7 @@ class TestShapes:
         """
         Tests the BaseShape validation
         """
-        assert (
-            BaseShape(id="shape", shape_dict=shape_dict, type="text").is_valid()
-            == is_valid
-        )
+        assert BaseShape(shape_dict=shape_dict).is_valid() == is_valid
 
     @pytest.mark.parametrize(
         "rgb, default_rgb, expected",
@@ -89,17 +91,18 @@ class TestShapes:
         [
             # wrong font size type
             (
-                {"x": 100, "y": 200, "font_size": [120]},
+                {"id": "aaa", "x": 100, "y": 200, "font_size": [120]},
                 False,
             ),
             # font size outside bounds
             (
-                {"x": 100, "y": 200, "font_size": 120},
+                {"id": "aaa", "x": 100, "y": 200, "font_size": 120},
                 False,
             ),
             # missing text
             (
                 {
+                    "id": "aaa",
                     "x": 100,
                     "y": 200,
                 },
@@ -107,12 +110,13 @@ class TestShapes:
             ),
             # text too short
             (
-                {"x": 100, "y": 200, "text": "A"},
+                {"id": "aaa", "x": 100, "y": 200, "text": "A"},
                 False,
             ),
             # valid
             (
                 {
+                    "id": "aaa",
                     "x": 100,
                     "y": 200,
                     "text": "Example",
@@ -126,7 +130,4 @@ class TestShapes:
         """
         Tests the TextShape validation
         """
-        assert (
-            TextShape(id="shape", shape_dict=shape_dict, type="text").is_valid()
-            == is_valid
-        )
+        assert TextShape(shape_dict=shape_dict).is_valid() == is_valid
