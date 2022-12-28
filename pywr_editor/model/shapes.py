@@ -144,6 +144,14 @@ class Shapes:
         Returns the list of shapes.
         :return: A list of shape instances.
         """
+        if (
+            Constants.SHAPES_KEY.value not in self.model.editor_config
+            or not isinstance(
+                self.model.editor_config[Constants.SHAPES_KEY.value], list
+            )
+        ):
+            return []
+
         shapes = []
         for shape_dict in self.model.editor_config[Constants.SHAPES_KEY.value]:
             try:

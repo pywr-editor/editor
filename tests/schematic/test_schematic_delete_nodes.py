@@ -5,7 +5,9 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QPushButton
 
 from pywr_editor import MainWindow
-from pywr_editor.model import ModelConfig
+from pywr_editor.dialogs.node.node_dialog import NodeDialog
+from pywr_editor.form import ParameterLineEditWidget
+from pywr_editor.model import ModelConfig, ParameterConfig
 from pywr_editor.schematic import (
     DeleteItemCommand,
     Edge,
@@ -221,18 +223,22 @@ class TestDeleteSchematicNodes:
             schematic=schematic,
         )
 
-        # 3. Rename node to test the new node configuration is used when the node
-        # is restored
+        # 3. Change the node configuration and test that the new settings are restored
+        node.on_edit_node()
+        # noinspection PyTypeChecker
+        dialog: NodeDialog = window.findChild(NodeDialog)
+        dialog_form = dialog.form
+
         new_name = "New node name"
-        # mock node renaming in NodeDialogForm
-        model_config.nodes.rename(node_name, new_name)
-        schematic.reload()
-        for oi, or_edge in enumerate(original_edges):
-            try:
-                i = or_edge.index(node_name)
-                original_edges[oi][i] = or_edge[i].replace(node_name, new_name)
-            except IndexError:
-                continue
+        dialog_form.find_field_by_name("name").widget.setText(new_name)
+        cost_widget: ParameterLineEditWidget = dialog_form.find_field_by_name(
+            "cost"
+        ).widget
+        cost_widget.component_obj = ParameterConfig(
+            {"type": "constant", "value": 9000}
+        )
+        qtbot.mouseClick(dialog_form.save_button, Qt.MouseButton.LeftButton)
+        dialog.close()
 
         # 4. Test redo operation
         # get new schematic item instance
@@ -251,7 +257,16 @@ class TestDeleteSchematicNodes:
         )
 
         # 5. Restore node with new configuration
-        assert original_node_config["name"] == new_name
+        original_node_config["name"] = new_name
+        original_node_config["cost"] = 9000
+
+        for oi, or_edge in enumerate(original_edges):
+            try:
+                i = or_edge.index(node_name)
+                original_edges[oi][i] = or_edge[i].replace(node_name, new_name)
+            except IndexError:
+                continue
+
         self.undo_and_check(
             qtbot=qtbot,
             undo_command=undo_command,

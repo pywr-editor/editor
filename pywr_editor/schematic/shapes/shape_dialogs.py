@@ -123,6 +123,7 @@ class ShapeDialogForm(Form):
             return
 
         # add missing fields
+        form_data["id"] = self.dialog.shape_id
         form_data["type"] = "text"
         form_data["x"] = self.dialog.shape_dict["x"]
         form_data["y"] = self.dialog.shape_dict["y"]
