@@ -55,7 +55,7 @@ class AddNodeCommand(QUndoCommand):
                 "Added new node of type "
                 + f"'{self.node_config.humanise_node_type}'"
             )
-        # restore deleted node
+        # restore deleted node and edges
         else:
             # add node
             self.model_config.nodes.add(self.node_config.props)

@@ -14,12 +14,19 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
-from pywr_editor.model import Edges, ModelConfig, NodeConfig, TextShape
+from pywr_editor.model import (
+    BaseShape,
+    Edges,
+    ModelConfig,
+    NodeConfig,
+    TextShape,
+)
 from pywr_editor.node_shapes import get_node_icon_classes
 from pywr_editor.schematic import (
     AbstractSchematicItem,
     AbstractSchematicShape,
     AddNodeCommand,
+    AddShapeCommand,
     ConnectNodeCommand,
     DeleteItemCommand,
     MoveItemCommand,
@@ -55,6 +62,8 @@ class Schematic(QGraphicsView):
     """ min zoom factor"""
     max_zoom = scaling_factor("zoom-in", 3)
     """ max zoom factor"""
+    shape_class_map = {"TextShape": SchematicText}
+    """ map of model class to schematic class for shapes """
 
     def __init__(self, model_config: ModelConfig, app: "MainWindow"):
         """
@@ -194,17 +203,9 @@ class Schematic(QGraphicsView):
 
         # draw the shapes
         for shape_obj in self.model_config.shapes.get_all():
-            shape = None
-            if isinstance(shape_obj, TextShape):
-                shape = SchematicText(
-                    shape_id=shape_obj.id, shape=shape_obj, view=self
-                )
+            self.add_shape(shape_obj)
 
-            if shape:
-                self.shape_items[shape_obj.id] = shape
-                self.scene.addItem(shape)
-
-        # move items outside canvas
+        # move items that are outside the canvas edges
         self.adjust_items_initial_pos()
 
         if self.init is True:
@@ -222,7 +223,7 @@ class Schematic(QGraphicsView):
 
     def add_node(self, node_props: dict) -> SchematicNode:
         """
-        Adds and registers a new graphical node to the schematic.
+        Add a new graphical node to the schematic.
         :param node_props: The dictionary with the node properties.
         :return: The graphical node instance.
         """
@@ -265,6 +266,33 @@ class Schematic(QGraphicsView):
         self.scene.removeItem(node_item)
 
         return deleted_edges
+
+    def add_shape(self, shape_obj: BaseShape) -> None:
+        """
+        Add a shape to the schematic.
+        :param shape_obj: The instance of the shape object.
+        :return: None
+        """
+        shape = self.shape_class_map[shape_obj.__class__.__name__](
+            shape_id=shape_obj.id, shape=shape_obj, view=self
+        )
+        self.shape_items[shape_obj.id] = shape
+        self.scene.addItem(shape)
+
+    def delete_shape(self, shape_id: str) -> None:
+        """
+        Delete the shape matching the provided ID.
+        :param shape_id: The shape ID.
+        :return: None.
+        """
+        if shape_id not in self.shape_items:
+            return
+
+        shape_item = self.shape_items[shape_id]
+        # remove the graphic item in schematic and model config
+        self.model_config.shapes.delete(shape_item.id)
+        del self.shape_items[shape_id]
+        self.scene.removeItem(shape_item)
 
     def delete_edge(self, edge_item: Edge) -> list[str | int]:
         """
@@ -962,26 +990,22 @@ class Schematic(QGraphicsView):
         if event.mimeData().hasText():
             mime_type = event.mimeData().text()
             position = self.mapToScene(event.pos()).toTuple()
+            position = tuple(map(lambda x: round(x, 5), position))
             if "Shape." in mime_type:
                 if "TextShape" in mime_type:
                     shape_obj = TextShape.create(
                         shape_id=QUuid().createUuid().toString()[1:7],
                         position=position,
                     )
-                    shape = SchematicText(
-                        shape_id=shape_obj.id, shape=shape_obj, view=self
+                    command = AddShapeCommand(
+                        schematic=self, added_shape_obj=shape_obj
                     )
-                    # TODO move to command
-                    self.model_config.shapes.update(
-                        shape_id=shape_obj.id, shape_dict=shape_obj.shape_dict
-                    )
-                    self.shape_items[shape_obj.id] = shape
-                    self.scene.addItem(shape)
+                    self.app.undo_stack.push(command)
             else:
                 # add the new node to the model
                 node_props = NodeConfig.create(
                     name=f"Node {QUuid().createUuid().toString()[1:7]}",
-                    node_type=mime_type,
+                    node_type=mime_type.lower(),
                     position=position,
                 )
 

@@ -4,6 +4,7 @@ from .bbox_utils import SchematicBBoxUtils
 from .item_utils import *
 from .commands.delete_item_command import DeleteItemCommand
 from .commands.add_node_command import AddNodeCommand
+from .commands.add_shape_command import AddShapeCommand
 from .commands.connect_node_command import ConnectNodeCommand
 from .commands.disconnect_node_command import DisconnectNodeCommand
 from .commands.move_item_command import MoveItemCommand

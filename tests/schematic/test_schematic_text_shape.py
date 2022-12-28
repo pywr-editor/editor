@@ -1,16 +1,21 @@
 from typing import Tuple
 
 import pytest
-from PySide6.QtCore import Qt, QTimer
+from PySide6 import QtGui
+from PySide6.QtCore import QEvent, QMimeData, QPoint, Qt, QTimer
+from PySide6.QtGui import QDragEnterEvent
 from PySide6.QtWidgets import QLineEdit
 
 from pywr_editor import MainWindow
 from pywr_editor.form.widgets.color_picker_widget import ColorPickerWidget
 from pywr_editor.model import BaseShape, ModelConfig, TextShape
-from pywr_editor.schematic import Schematic
-from pywr_editor.schematic.commands.delete_item_command import DeleteItemCommand
+from pywr_editor.schematic import (
+    AddShapeCommand,
+    DeleteItemCommand,
+    Schematic,
+    SchematicText,
+)
 from pywr_editor.schematic.shapes.shape_dialogs import ShapeDialogForm
-from pywr_editor.schematic.shapes.text_shape import SchematicText
 from pywr_editor.widgets import SpinBox
 from tests.utils import close_message_box, resolve_model_path
 
@@ -76,20 +81,22 @@ class TestSchematicTextShape:
         assert item.toPlainText() == new_text
         assert item.defaultTextColor().toTuple()[0:3] == color_widget.value
 
+    @staticmethod
     def is_shape_deleted(
-        self, model_config: ModelConfig, schematic: Schematic
+        model_config: ModelConfig, schematic: Schematic, shape_id: str
     ) -> None:
         """
         Checks that the shape is deleted in the model configuration and schematic.
         :param model_config: The ModelConfig instance.
         :param schematic: The Schematic instance.
+        :param shape_id: The shape ID to check.
         :return: None
         """
         # the shape is removed from the model configuration
-        assert model_config.shapes.find_shape(self.shape_id) is None
+        assert model_config.shapes.find_shape(shape_id) is None
 
         # the shape is removed from the items list
-        assert self.shape_id not in schematic.shape_items.keys()
+        assert shape_id not in schematic.shape_items.keys()
 
         # the shape is removed from the schematic as graphical item
         shape_ids = [
@@ -97,10 +104,10 @@ class TestSchematicTextShape:
             for shape in schematic.items()
             if isinstance(shape, SchematicText)
         ]
-        assert self.shape_id not in shape_ids
+        assert shape_id not in shape_ids
 
+    @staticmethod
     def is_shape_restored(
-        self,
         model_config: ModelConfig,
         schematic: Schematic,
         shape_config: BaseShape,
@@ -112,14 +119,14 @@ class TestSchematicTextShape:
         :param shape_config: The shape configuration instance.
         :return: None
         """
-        assert model_config.shapes.find_shape(self.shape_id) == shape_config
-        assert self.shape_id in schematic.shape_items.keys()
+        assert model_config.shapes.find_shape(shape_config.id) == shape_config
+        assert shape_config.id in schematic.shape_items.keys()
         shape_ids = [
             shape.id
             for shape in schematic.items()
             if isinstance(shape, SchematicText)
         ]
-        assert self.shape_id in shape_ids
+        assert shape_config.id in shape_ids
 
     def test_delete_text_shape(self, qtbot, init_window) -> None:
         """
@@ -141,7 +148,7 @@ class TestSchematicTextShape:
         assert undo_button.isEnabled() is True
         assert redo_button.isEnabled() is False
         assert model_config.has_changes is True
-        self.is_shape_deleted(model_config, schematic)
+        self.is_shape_deleted(model_config, schematic, self.shape_id)
 
         # 2. Test undo operation
         assert window.undo_stack.canUndo() is True
@@ -171,7 +178,7 @@ class TestSchematicTextShape:
         qtbot.mouseClick(redo_button, Qt.MouseButton.LeftButton)
         assert undo_button.isEnabled() is True
         assert redo_button.isEnabled() is False
-        self.is_shape_deleted(model_config, schematic)
+        self.is_shape_deleted(model_config, schematic, self.shape_id)
 
         qtbot.mouseClick(undo_button, Qt.MouseButton.LeftButton)
         assert undo_button.isEnabled() is False
@@ -183,3 +190,96 @@ class TestSchematicTextShape:
             shape_config.shape_dict["color"]
         )
         self.is_shape_restored(model_config, schematic, shape_config)
+
+    def test_add_new_shape(self, qtbot, init_window):
+        """
+        Test when a new shape is added to the schematic.
+        """
+        window, schematic = init_window
+        model_config = window.model_config
+        item_count = len(schematic.shape_items)
+        panel = schematic.app.toolbar.tabs["Nodes"].panels["Undo"]
+        undo_button = panel.buttons["Undo"]
+        redo_button = panel.buttons["Redo"]
+
+        assert undo_button.isEnabled() is False
+        assert redo_button.isEnabled() is False
+
+        # 1. Drop a text
+        mime_data = QMimeData()
+        mime_data.setText("Shape.TextShape")
+
+        # start the drop event
+        scene_pos = QPoint(100, 50)
+        event = QDragEnterEvent(
+            scene_pos,
+            Qt.DropAction.CopyAction,
+            mime_data,
+            Qt.MouseButton.LeftButton,
+            Qt.KeyboardModifier.NoModifier,
+        )
+        from PySide6 import QtCore
+
+        QtCore.QCoreApplication.sendEvent(schematic.viewport(), event)
+
+        # drop the shape
+        event = QtGui.QDropEvent(
+            scene_pos,
+            Qt.DropAction.MoveAction,
+            mime_data,
+            Qt.MouseButton.LeftButton,
+            Qt.KeyboardModifier.NoModifier,
+            QEvent.Drop,
+        )
+        QtCore.QCoreApplication.sendEvent(schematic.viewport(), event)
+
+        # 2. Check that the new shape is in the schematic
+        new_item_count = len(schematic.shape_items)
+        new_shape_id = list(schematic.shape_items.keys())[-1]
+        assert new_item_count == item_count + 1
+
+        assert model_config.has_changes is True
+        # the shape is in the model configuration
+        assert (
+            model_config.shapes.find_shape_index_by_id(new_shape_id) is not None
+        )
+        shape_config = model_config.shapes.find_shape(new_shape_id)
+
+        # 3. Change shape config
+        schematic.shape_items[new_shape_id].on_edit_shape()
+        # noinspection PyTypeChecker
+        dialog_form: ShapeDialogForm = window.findChild(ShapeDialogForm)
+        dialog_form.find_field_by_name("text").widget.setText(
+            "I changed the label"
+        )
+        font_size_widget: SpinBox = dialog_form.find_field_by_name(
+            "font_size"
+        ).widget
+        font_size_widget.setValue(40)
+        qtbot.mouseClick(dialog_form.save_button, Qt.MouseButton.LeftButton)
+
+        # 4. Test undo
+        undo_command: AddShapeCommand = window.undo_stack.command(0)
+        assert undo_command.added_shape_config == shape_config
+        assert undo_command.tracker_shape_config is None
+
+        # undo
+        qtbot.mouseClick(undo_button, Qt.MouseButton.LeftButton)
+        assert undo_button.isEnabled() is False
+        assert redo_button.isEnabled() is True
+        self.is_shape_deleted(model_config, schematic, new_shape_id)
+
+        # 5. Test redo operation - the new configuration is restored
+        qtbot.mouseClick(redo_button, Qt.MouseButton.LeftButton)
+        assert undo_button.isEnabled() is True
+        assert redo_button.isEnabled() is False
+
+        shape_config.shape_dict["text"] = "I changed the label"
+        shape_config.shape_dict["font_size"] = 40
+        self.is_shape_restored(model_config, schematic, shape_config)
+
+        # 6. Delete again
+        qtbot.mouseClick(undo_button, Qt.MouseButton.LeftButton)
+        assert undo_button.isEnabled() is False
+        assert redo_button.isEnabled() is True
+        self.is_shape_deleted(model_config, schematic, new_shape_id)
