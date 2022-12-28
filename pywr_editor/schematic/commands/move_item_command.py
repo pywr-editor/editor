@@ -67,7 +67,7 @@ class MoveItemCommand(QUndoCommand):
                 if isinstance(config, NodeConfig):
                     item = self.schematic.node_items[config.name]
                 else:
-                    item = self.schematic.shape_items[config["id"]]
+                    item = self.schematic.shape_items[config.id]
 
                 self.prev_positions.append(item.prev_position)
 
@@ -108,7 +108,6 @@ class MoveItemCommand(QUndoCommand):
             self.moved_item_configs, self.prev_positions
         ):
             if isinstance(item_config, NodeConfig):
-
                 self.model_config.nodes.set_position(
                     node_name=item_config.name, position=prev_position
                 )
@@ -117,10 +116,10 @@ class MoveItemCommand(QUndoCommand):
                 )
             else:
                 self.model_config.shapes.set_position(
-                    shape_id=item_config["id"], position=prev_position
+                    shape_id=item_config.id, position=prev_position
                 )
                 self.logger.debug(
-                    f"Restored position '{item_config['id']}' to {prev_position}"
+                    f"Restored position '{item_config.id}' to {prev_position}"
                 )
 
         self.schematic.reload()

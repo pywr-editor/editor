@@ -7,6 +7,11 @@ from PySide6.QtGui import QDragEnterEvent, Qt
 from PySide6.QtWidgets import QWidget
 
 from pywr_editor import MainWindow
+from pywr_editor.dialogs import NodeDialog
+from pywr_editor.form.widgets.parameter_line_edit_widget import (
+    ParameterLineEditWidget,
+)
+from pywr_editor.model import ParameterConfig
 from pywr_editor.schematic import Edge, Schematic, SchematicNode
 from pywr_editor.schematic.commands.add_node_command import AddNodeCommand
 from pywr_editor.toolbar.tab_panel import TabPanel
@@ -94,7 +99,7 @@ class TestAddNodes:
         node_pos = schematic.mapToScene(scene_pos).toTuple()
 
         assert node_dict["name"] == new_node_name
-        assert node_dict["type"] == "Link"
+        assert node_dict["type"] == "link"
         assert node_dict["position"]["editor_position"][0] == round(
             node_pos[0], 4
         )
@@ -102,25 +107,41 @@ class TestAddNodes:
             node_pos[1], 4
         )
 
-        # 3. Check undo action
+        # 3. Change node config
+        schematic.node_items[new_node_name].on_edit_node()
+        # noinspection PyTypeChecker
+        dialog: NodeDialog = window.findChild(NodeDialog)
+        dialog_form = dialog.form
+
+        new_new_node_name = "New node name"
+        dialog_form.find_field_by_name("name").widget.setText(new_new_node_name)
+        cost_widget: ParameterLineEditWidget = dialog_form.find_field_by_name(
+            "cost"
+        ).widget
+        cost_widget.component_obj = ParameterConfig(
+            {"type": "constant", "value": 9000}
+        )
+        qtbot.mouseClick(dialog_form.save_button, Qt.MouseButton.LeftButton)
+        dialog.close()
+
+        # 4. Check undo action
         undo_command: AddNodeCommand = window.undo_stack.command(0)
+        node_dict["name"] = new_new_node_name
+        node_dict["cost"] = 9000
 
         assert undo_button.isEnabled() is True
         assert redo_button.isEnabled() is False
         assert undo_command.node_config.props == node_dict
 
-        # connect new edge and rename
-        new_edge = ["Reservoir", new_node_name, 0]
+        # connect new edge
+        new_edge = ["Reservoir", new_new_node_name, 0]
         model_config.edges.add(*new_edge)
         schematic.scene.addItem(
             Edge(
                 source=schematic.node_items["Reservoir"],
-                target=schematic.node_items[new_node_name],
+                target=schematic.node_items[new_new_node_name],
             )
         )
-        new_new_node_name = "New link"
-        model_config.nodes.rename(new_node_name, new_new_node_name)
-
         schematic.reload()
         assert node_dict["name"] == new_new_node_name
         new_edge[1] = new_new_node_name
@@ -157,7 +178,7 @@ class TestAddNodes:
         ]
         assert new_edge[0:2] not in all_schematic_edges
 
-        # 4. Check redo action
+        # 5. Check redo action
         qtbot.mouseClick(redo_button, Qt.MouseButton.LeftButton)
         assert undo_button.isEnabled() is True
         assert redo_button.isEnabled() is False

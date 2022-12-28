@@ -98,8 +98,7 @@ class DisconnectNodeCommand(QUndoCommand):
             if self.model_config.edges.add(*self.edge_config):
                 self.logger.debug(f"Restored edge: {self.edge_config}")
             else:
-                # When a node is renamed, its edge cannot be restored. This also
-                # ensures consistency with all commands
+                # When a node is renamed, its edge cannot be restored.
                 self.logger.debug(
                     f"Operation for '{self.source_node.name}' and "
                     + f"'{self.target_node.name}' is now obsolete"

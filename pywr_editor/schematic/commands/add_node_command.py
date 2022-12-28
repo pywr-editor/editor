@@ -16,7 +16,7 @@ class AddNodeCommand(QUndoCommand):
         added_node_dict: dict,
     ):
         """
-        Initialises the delete node command.
+         Initialises the add node command.
         :param schematic: The Schematic instance.
         :param added_node_dict: The dictionary with the configuration of the node to
         add.
@@ -86,6 +86,11 @@ class AddNodeCommand(QUndoCommand):
         :return: None
         """
         node_name = self.node_config.name
+        # store the latest configuration to be restored
+        self.node_config = self.model_config.nodes.get_node_config_from_name(
+            node_name, as_dict=False
+        )
+
         # delete node and edges and store them for the redo command
         self.deleted_edges = self.schematic.delete_node(node_name)
         self.logger.debug(f"Deleted node with config: {node_name}")
