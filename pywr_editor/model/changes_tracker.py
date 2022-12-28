@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from datetime import datetime
 
+from pywr_editor.utils import Logging
+
 
 @dataclass
 class Change:
@@ -17,6 +19,7 @@ class ChangesTracker:
         """
         self.changed = False
         self.change_log = []
+        self.logger = Logging().logger(self.__class__.__name__)
 
     def add(self, message: str) -> None:
         """
@@ -28,6 +31,7 @@ class ChangesTracker:
         self.change_log.append(
             Change(timestamp=datetime.now().timestamp(), message=message)
         )
+        self.logger.debug(message)
         self.changed = True
 
     def reset_change_flag(self) -> None:

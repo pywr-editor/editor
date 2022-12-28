@@ -1,12 +1,13 @@
 import platform
 import sys
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any, Union
 
-from pywr_editor.model import ParameterConfig, RecorderConfig
+if TYPE_CHECKING:
+    from pywr_editor.model import ParameterConfig, RecorderConfig
 
 
-def tooltip_table(comp_obj: ParameterConfig | RecorderConfig):
+def tooltip_table(comp_obj: Union["ParameterConfig", "RecorderConfig"]):
     """
     Returns the table describing the parameter or recorder configuration in a widget
     tooltip.
@@ -22,7 +23,9 @@ def tooltip_table(comp_obj: ParameterConfig | RecorderConfig):
 
 
 def tooltip_table_row(
-    key: str, value: Any, param_obj: ParameterConfig | RecorderConfig | None
+    key: str,
+    value: Any,
+    param_obj: Union["ParameterConfig", "RecorderConfig", None],
 ) -> str:
     """
     Returns the HTML table row for a widget tooltip.
@@ -31,6 +34,8 @@ def tooltip_table_row(
     :param param_obj: The instance of the parameter.
     :return: The HTML code representing the table row.
     """
+    from pywr_editor.model import ParameterConfig, RecorderConfig
+
     row = ""
     if param_obj is not None:
         humanised_key = f"<i>{param_obj.humanise_attribute_name(key)}</i>"
@@ -114,6 +119,7 @@ def get_app_path() -> Path:
     :return: The Path instance of the application.
     """
     if is_app_frozen():
+        # noinspection PyProtectedMember
         return Path(sys._MEIPASS)
     else:
         return Path(__file__).parent.parent.parent
