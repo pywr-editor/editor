@@ -3,10 +3,11 @@ from typing import TYPE_CHECKING, Literal
 
 import PySide6
 from PySide6.QtCore import QMimeData, QPointF, QSize, Slot
-from PySide6.QtGui import QDrag, QPainter, Qt
+from PySide6.QtGui import QDrag, QFont, QPainter, Qt
 from PySide6.QtWidgets import (
     QFrame,
     QGraphicsScene,
+    QGraphicsTextItem,
     QGraphicsView,
     QHBoxLayout,
     QSizePolicy,
@@ -70,7 +71,7 @@ class SchematicItemsLibrary(QWidget):
         :param direction: The direction of scroll ("up" or "down").
         :return: None
         """
-        delta = 30 if direction == "down" else -30
+        delta = 26 if direction == "down" else -26
         self.panel.verticalScrollBar().setValue(
             self.panel.verticalScrollBar().value() + delta
         )
@@ -152,7 +153,7 @@ class LibraryPanel(QGraphicsView):
 
         # behaviour
         self.setFixedHeight(90)
-        self.setMinimumWidth(700)
+        self.setMinimumWidth(500)
         self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -194,14 +195,32 @@ class LibraryPanel(QGraphicsView):
             "CustomNode": LibraryItem.not_import_custom_node_name,
         }
 
+    def draw_section_title(self, text: str, position: list[float]) -> None:
+        """
+        Draw a section title.
+        :param text: The text.
+        :param position: The title position.
+        :return: None
+        """
+        title = QGraphicsTextItem(text)
+        font = QFont()
+        font.setPixelSize(16)
+        font.setBold(True)
+        title.setFont(font)
+        title.setPos(QPointF(*position))
+        title.setDefaultTextColor(Color("gray", 700).qcolor)
+        self.scene.addItem(title)
+
     def add_items(self) -> None:
         """
         Adds the nodes and the shapes to the scene widget.
         :return: None
         """
+        self.draw_section_title("Nodes", [-5, -15])
+
         # position nodes on the dummy schematic
         x0 = 10
-        y = 0
+        y = 35
         x = x0
         for ni, (node_type, node_name) in enumerate(self.node_dict.items()):
             # node icon
@@ -225,6 +244,8 @@ class LibraryPanel(QGraphicsView):
                 y += 35
             node_obj.setPos(QPointF(x, y))
 
+        self.draw_section_title("Shapes", [-5, y + 25])
+        y += 35
         # position shapes
         for name, shape_type in self.shapes.items():
             shape_obj = LibraryItem(
@@ -312,9 +333,11 @@ class LibraryPanel(QGraphicsView):
         return stylesheet_dict_to_str(
             {
                 "LibraryPanel": {
+                    # explicitly set background to properly set border radius
+                    "background-color": "palette(base)",
                     "border": f"1px solid {Color('gray', 300).hex}",
                     "border-radius": "4px",
-                    "margin-top": "6px",
+                    "margin-top": "5px",
                 },
             },
         )
