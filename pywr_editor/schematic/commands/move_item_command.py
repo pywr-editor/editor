@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING
 
 from PySide6.QtGui import QUndoCommand
 
@@ -21,12 +21,12 @@ class MoveItemCommand(QUndoCommand):
     def __init__(
         self,
         schematic: "Schematic",
-        selected_items: list[Union["AbstractSchematicItem"]],
+        selected_items: list["AbstractSchematicItem"],
     ):
         """
         Initialise the command.
         :param schematic: The Schematic instance.
-        :param selected_items: The list of selected schematic item instances to delete.
+        :param selected_items: The list of selected schematic item instances to move.
         :return: None
         """
         super().__init__()
@@ -92,10 +92,10 @@ class MoveItemCommand(QUndoCommand):
                     )
                 else:
                     self.model_config.shapes.set_position(
-                        shape_id=item_config["id"], position=position
+                        shape_id=item_config.id, position=position
                     )
                     self.logger.debug(
-                        f"Moved shape '{item_config['id']}' back to {position}"
+                        f"Moved shape '{item_config.id}' back to {position}"
                     )
             self.schematic.reload()
 
