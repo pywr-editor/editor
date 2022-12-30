@@ -32,6 +32,7 @@ from pywr_editor.schematic import (
     MoveItemCommand,
     SchematicBBoxUtils,
     SchematicNode,
+    SchematicRectangle,
     SchematicText,
     scaling_factor,
     units_to_factor,
@@ -62,7 +63,10 @@ class Schematic(QGraphicsView):
     """ min zoom factor"""
     max_zoom = scaling_factor("zoom-in", 3)
     """ max zoom factor"""
-    shape_class_map = {"TextShape": SchematicText}
+    shape_class_map = {
+        "TextShape": SchematicText,
+        "RectangleShape": SchematicRectangle,
+    }
     """ map of model class to schematic class for shapes """
 
     def __init__(self, model_config: ModelConfig, app: "MainWindow"):
@@ -86,7 +90,7 @@ class Schematic(QGraphicsView):
         self.nodes_wo_position = 0
         self.connecting_node_props = ConnectingNodeProps()
         self.node_items: dict[str, SchematicNode] = {}
-        self.shape_items: dict[str, SchematicText] = {}
+        self.shape_items: dict[str, SchematicText | SchematicRectangle] = {}
 
         self.schematic_move_event.connect(self.on_schematic_move)
         self.connect_node_event.connect(self.on_connect_node_end)

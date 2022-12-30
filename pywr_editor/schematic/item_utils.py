@@ -71,12 +71,7 @@ class SchematicItemUtils:
         Moves the item so that it is aligned to the schematic right edge.
         :return: None.
         """
-        from .node import SchematicNode
-
-        if isinstance(self.item, SchematicNode):
-            self.item.setX(self.schematic_size[0] - self.item_bbox.width() / 2)
-        else:
-            self.item.setX(self.schematic_size[0] - self.item_bbox.width())
+        self.item.moveBy(-(self.item_bbox.right() - self.schematic_size[0]), 0)
 
     def move_to_top_edge(self) -> None:
         """
@@ -87,7 +82,7 @@ class SchematicItemUtils:
 
     def move_to_bottom_edge(self) -> None:
         """
-        Moves the item so that it is aligned to the schematic top edge.
+        Moves the item so that it is aligned to the schematic bottom edge.
         :return: None.
         """
         self.item.moveBy(0, -(self.item_bbox.bottom() - self.schematic_size[1]))

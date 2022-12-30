@@ -7,13 +7,18 @@ from PySide6.QtGui import QDragEnterEvent
 from PySide6.QtWidgets import QLineEdit
 
 from pywr_editor import MainWindow
-from pywr_editor.form.widgets.color_picker_widget import ColorPickerWidget
+from pywr_editor.form import ColorPickerWidget
 from pywr_editor.model import BaseShape, ModelConfig, TextShape
 from pywr_editor.schematic import (
     AddShapeCommand,
     DeleteItemCommand,
+    ResizeShapeCommand,
     Schematic,
     SchematicText,
+)
+from pywr_editor.schematic.shapes.rectangle_shape import (
+    Handles,
+    SchematicRectangle,
 )
 from pywr_editor.schematic.shapes.shape_dialogs import ShapeDialogForm
 from pywr_editor.widgets import SpinBox
@@ -191,7 +196,7 @@ class TestSchematicTextShape:
         )
         self.is_shape_restored(model_config, schematic, shape_config)
 
-    def test_add_new_shape(self, qtbot, init_window):
+    def test_add_new_text_shape(self, qtbot, init_window):
         """
         Test when a new shape is added to the schematic.
         """
@@ -285,3 +290,469 @@ class TestSchematicTextShape:
         assert undo_button.isEnabled() is False
         assert redo_button.isEnabled() is True
         self.is_shape_deleted(model_config, schematic, new_shape_id)
+
+    @pytest.mark.parametrize(
+        "handle, handle_point, target_point, delta_width, delta_height, rect_check_point",  # noqa: E501
+        [
+            # corner points
+            (
+                Handles.TOP_LEFT.value,
+                QPoint(800, 800),
+                QPoint(700, 600),
+                100,
+                200,
+                "topLeft",
+            ),
+            (
+                Handles.TOP_RIGHT.value,
+                QPoint(1100, 800),
+                QPoint(1500, 750),
+                400,
+                50,
+                "topRight",
+            ),
+            (
+                Handles.BOTTOM_LEFT.value,
+                QPoint(800, 1100),
+                QPoint(300, 1300),
+                500,
+                200,
+                "bottomLeft",
+            ),
+            (
+                Handles.BOTTOM_RIGHT.value,
+                QPoint(1100, 1100),
+                QPoint(1200, 1200),
+                100,
+                100,
+                "bottomRight",
+            ),
+            # middle points
+            (
+                Handles.TOP_MIDDLE.value,
+                QPoint(950, 800),
+                QPoint(950, 700),
+                0,
+                100,
+                ["center", "topLeft"],
+            ),
+            (
+                Handles.MIDDLE_RIGHT.value,
+                QPoint(1100, 950),
+                QPoint(1300, 950),
+                200,
+                0,
+                ["topRight", "center"],
+            ),
+            (
+                Handles.BOTTOM_MIDDLE.value,
+                QPoint(950, 1100),
+                QPoint(950, 1000),
+                0,
+                -100,
+                ["center", "bottomRight"],
+            ),
+            (
+                Handles.MIDDLE_LEFT.value,
+                QPoint(800, 950),
+                QPoint(850, 950),
+                -50,
+                0,
+                ["topLeft", "center"],
+            ),
+        ],
+    )
+    def test_resize_rectangle_shape(
+        self,
+        qtbot,
+        init_window,
+        handle,
+        handle_point,
+        target_point,
+        delta_width,
+        delta_height,
+        rect_check_point,
+    ):
+        """
+        Tests that, when a rectangle is resized, the shape is correctly resized using
+        its handles and the new size is updated. This also tests the undo/redo command.
+        """
+        window, schematic = init_window
+        model_config = window.model_config
+
+        panel = schematic.app.toolbar.tabs["Schematic"].panels["Undo"]
+        undo_button = panel.buttons["Undo"]
+        redo_button = panel.buttons["Redo"]
+
+        shape_id = "466eaX"
+        shape_item: SchematicRectangle = schematic.shape_items[shape_id]
+        shape_item.setSelected(True)
+        or_width = shape_item.rect().width()
+        or_height = shape_item.rect().height()
+        handle_pos = schematic.mapFromScene(handle_point)
+
+        # 1. Move the handle to the target position to resize the rectangle
+        qtbot.mouseMove(schematic.viewport(), handle_pos)
+        qtbot.mousePress(
+            schematic.viewport(),
+            Qt.MouseButton.LeftButton,
+            Qt.KeyboardModifier.NoModifier,
+            handle_pos,
+        )
+        assert shape_item.selected_handle is handle
+        assert shape_item.pressed_mouse_pos == handle_point
+        qtbot.mouseMove(
+            schematic.viewport(),
+            schematic.mapFromScene(target_point),
+        )
+        qtbot.mouseRelease(
+            schematic.viewport(),
+            Qt.MouseButton.LeftButton,
+            Qt.KeyboardModifier.NoModifier,
+        )
+
+        # 2. Check that the shape was resized on the schematic
+        if isinstance(rect_check_point, list):  # handle middle points
+            assert (
+                getattr(shape_item.rect(), rect_check_point[0])().x()
+                == target_point.x()
+            )
+            assert (
+                getattr(shape_item.rect(), rect_check_point[1])().y()
+                == target_point.y()
+            )
+        else:
+            assert (
+                getattr(shape_item.rect(), rect_check_point)() == target_point
+            )
+        assert shape_item.rect().width() == or_width + delta_width
+        assert shape_item.rect().height() == or_height + delta_height
+
+        # 3. Check the model configuration
+        assert model_config.has_changes is True
+        shape_dict = model_config.shapes.find_shape(
+            shape_id=shape_id, as_dict=True
+        )
+        assert shape_dict["width"] == round(shape_item.rect().width(), 5)
+        assert shape_dict["height"] == round(shape_item.rect().height(), 5)
+
+        # 4. Check undo command
+        undo_command: ResizeShapeCommand = window.undo_stack.command(0)
+
+        assert undo_command.prev_size == (300, 300)
+        assert undo_command.updated_size == (
+            shape_dict["width"],
+            shape_dict["height"],
+        )
+        assert undo_button.isEnabled() is True
+        assert redo_button.isEnabled() is False
+
+        # 5. Test redo command
+        qtbot.mouseClick(undo_button, Qt.MouseButton.LeftButton)
+        assert undo_button.isEnabled() is False
+        assert redo_button.isEnabled() is True
+
+        shape_dict = model_config.shapes.find_shape(
+            shape_id=shape_id, as_dict=True
+        )
+        assert shape_dict["width"] == 300
+        assert shape_dict["height"] == 300
+
+        shape_item = schematic.shape_items[shape_id]
+        assert shape_item.rect().width() == 300
+        assert shape_item.rect().height() == 300
+
+        # 6. Test Redo command
+        qtbot.mouseClick(redo_button, Qt.MouseButton.LeftButton)
+        assert undo_button.isEnabled() is True
+        assert redo_button.isEnabled() is False
+
+        shape_dict = model_config.shapes.find_shape(
+            shape_id=shape_id, as_dict=True
+        )
+        assert shape_dict["width"] == or_width + delta_width
+        assert shape_dict["height"] == or_height + delta_height
+
+        shape_item = schematic.shape_items[shape_id]
+        assert shape_item.rect().width() == or_width + delta_width
+        assert shape_item.rect().height() == or_height + delta_height
+
+    @pytest.mark.parametrize(
+        "handle, handle_point, target_point, delta_width, delta_height",
+        [
+            # corner points
+            (
+                Handles.TOP_LEFT.value,
+                QPoint(800, 800),
+                QPoint(-100, -10),
+                800,
+                800,
+            ),
+            (
+                Handles.TOP_RIGHT.value,
+                QPoint(1100, 800),
+                QPoint(3000, -10),
+                800,
+                800,
+            ),
+            (
+                Handles.BOTTOM_LEFT.value,
+                QPoint(800, 1100),
+                QPoint(-100, 3000),
+                800,
+                350,
+            ),
+            (
+                Handles.BOTTOM_RIGHT.value,
+                QPoint(1100, 1100),
+                QPoint(5000, 2000),
+                800,
+                350,
+            ),
+            # middle points
+            (
+                Handles.TOP_MIDDLE.value,
+                QPoint(950, 800),
+                QPoint(950, -10),
+                0,
+                800,
+            ),
+            (
+                Handles.MIDDLE_RIGHT.value,
+                QPoint(1100, 950),
+                QPoint(3000, 950),
+                800,
+                0,
+            ),
+            (
+                Handles.BOTTOM_MIDDLE.value,
+                QPoint(950, 1100),
+                QPoint(950, 3000),
+                0,
+                350,
+            ),
+            (
+                Handles.MIDDLE_LEFT.value,
+                QPoint(800, 950),
+                QPoint(-100, 950),
+                800,
+                0,
+            ),
+        ],
+    )
+    def test_resize_constraints_rectangle_shape(
+        self,
+        qtbot,
+        init_window,
+        handle,
+        handle_point,
+        target_point,
+        delta_width,
+        delta_height,
+    ):
+        """
+        Tests that, when the shape is resized outside the canvas limits, the rectangle
+        is reshaped to fit into the schematic.
+        """
+        window, schematic = init_window
+
+        shape_id = "466eaX"
+        shape_item: SchematicRectangle = schematic.shape_items[shape_id]
+        shape_item.setSelected(True)
+        or_width = shape_item.rect().width()
+        or_height = shape_item.rect().height()
+        handle_pos = schematic.mapFromScene(handle_point)
+
+        qtbot.mouseMove(schematic.viewport(), handle_pos)
+        qtbot.mousePress(
+            schematic.viewport(),
+            Qt.MouseButton.LeftButton,
+            Qt.KeyboardModifier.NoModifier,
+            handle_pos,
+        )
+        assert shape_item.selected_handle is handle
+        assert shape_item.pressed_mouse_pos == handle_point
+        qtbot.mouseMove(
+            schematic.viewport(),
+            schematic.mapFromScene(target_point),
+        )
+        qtbot.mouseRelease(
+            schematic.viewport(),
+            Qt.MouseButton.LeftButton,
+            Qt.KeyboardModifier.NoModifier,
+        )
+
+        if delta_width:
+            assert (
+                shape_item.rect().width()
+                == or_width + delta_width + shape_item.handle_space
+            )
+        if delta_height:
+            assert (
+                shape_item.rect().height()
+                == or_height + delta_height + shape_item.handle_space
+            )
+
+        match handle:
+            case Handles.TOP_LEFT.value:
+                assert shape_item.rect().topLeft().toTuple() == tuple(
+                    [-shape_item.handle_space] * 2
+                )
+            case Handles.TOP_RIGHT.value:
+                assert shape_item.rect().topRight().toTuple() == tuple(
+                    [
+                        schematic.schematic_width + shape_item.handle_space,
+                        -shape_item.handle_space,
+                    ]
+                )
+            case Handles.BOTTOM_LEFT.value:
+                assert shape_item.rect().bottomLeft().toTuple() == tuple(
+                    [
+                        -shape_item.handle_space,
+                        schematic.schematic_height + shape_item.handle_space,
+                    ]
+                )
+            case Handles.BOTTOM_RIGHT.value:
+                assert shape_item.rect().bottomRight().toTuple() == tuple(
+                    [
+                        schematic.schematic_width + shape_item.handle_space,
+                        schematic.schematic_height + shape_item.handle_space,
+                    ]
+                )
+            case Handles.TOP_MIDDLE.value:
+                assert shape_item.rect().top() == -shape_item.handle_space
+            case Handles.MIDDLE_RIGHT.value:
+                assert (
+                    shape_item.rect().right()
+                    == schematic.schematic_width + shape_item.handle_space
+                )
+            case Handles.BOTTOM_MIDDLE.value:
+                assert (
+                    shape_item.rect().bottom()
+                    == schematic.schematic_height + shape_item.handle_space
+                )
+            case Handles.MIDDLE_LEFT.value:
+                assert shape_item.rect().left() == -shape_item.handle_space
+            case _:
+                assert False
+
+    @pytest.mark.parametrize(
+        "handle, handle_point, target_point, min_width, min_height",
+        [
+            # corner points
+            (
+                Handles.TOP_LEFT.value,
+                QPoint(800, 800),
+                QPoint(1200, 1200),
+                True,
+                True,
+            ),
+            (
+                Handles.TOP_RIGHT.value,
+                QPoint(1100, 800),
+                QPoint(0, 2000),
+                True,
+                True,
+            ),
+            (
+                Handles.BOTTOM_LEFT.value,
+                QPoint(800, 1100),
+                QPoint(2000, 0),
+                True,
+                True,
+            ),
+            (
+                Handles.BOTTOM_RIGHT.value,
+                QPoint(1100, 1100),
+                QPoint(0, 0),
+                True,
+                True,
+            ),
+            # middle points
+            (
+                Handles.TOP_MIDDLE.value,
+                QPoint(950, 800),
+                QPoint(950, 2000),
+                False,
+                True,
+            ),
+            (
+                Handles.MIDDLE_RIGHT.value,
+                QPoint(1100, 950),
+                QPoint(0, 950),
+                True,
+                False,
+            ),
+            (
+                Handles.BOTTOM_MIDDLE.value,
+                QPoint(950, 1100),
+                QPoint(950, 0),
+                False,
+                True,
+            ),
+            (
+                Handles.MIDDLE_LEFT.value,
+                QPoint(800, 950),
+                QPoint(2000, 950),
+                True,
+                False,
+            ),
+        ],
+    )
+    def test_not_negative_constraints_rectangle_shape(
+        self,
+        qtbot,
+        init_window,
+        handle,
+        handle_point,
+        target_point,
+        min_width,
+        min_height,
+    ):
+        """
+        Tests that, when one rectangle edge is moved the opposite edge, the rectangle
+        keeps a minimum size.
+        """
+        window, schematic = init_window
+
+        shape_id = "466eaX"
+        shape_item: SchematicRectangle = schematic.shape_items[shape_id]
+        shape_item.setSelected(True)
+        or_width = shape_item.rect().width()
+        or_height = shape_item.rect().height()
+        handle_pos = schematic.mapFromScene(handle_point)
+
+        qtbot.mouseMove(schematic.viewport(), handle_pos)
+        qtbot.mousePress(
+            schematic.viewport(),
+            Qt.MouseButton.LeftButton,
+            Qt.KeyboardModifier.NoModifier,
+            handle_pos,
+        )
+        assert shape_item.selected_handle is handle
+        assert shape_item.pressed_mouse_pos == handle_point
+        qtbot.mouseMove(
+            schematic.viewport(),
+            schematic.mapFromScene(target_point),
+        )
+        qtbot.mouseRelease(
+            schematic.viewport(),
+            Qt.MouseButton.LeftButton,
+            Qt.KeyboardModifier.NoModifier,
+        )
+
+        if min_width:  # rectangle width was resized
+            assert (
+                shape_item.rect().width()
+                == shape_item.min_rect_width + shape_item.handle_space
+            )
+        else:  # the width was not changed
+            assert shape_item.rect().width() == or_width
+
+        if min_height:  # rectangle height was resized
+            assert (
+                shape_item.rect().height()
+                == shape_item.min_rect_height + shape_item.handle_space
+            )
+        else:  # the width was not changed
+            assert shape_item.rect().height() == or_height

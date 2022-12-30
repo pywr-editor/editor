@@ -115,6 +115,20 @@
         "type": "text",
         "x": 410.1829,
         "y": 124.644
+      },
+      {
+        "id": "466eaX",
+        "width": 300,
+        "height": 300,
+        "type": "rectangle",
+        "border_color": [
+          255,
+          170,
+          127
+        ],
+        "border_size": 4,
+        "x": 800,
+        "y": 800
       }
     ]
   }
