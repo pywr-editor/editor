@@ -67,9 +67,9 @@ class BaseShape:
 class TextShape(BaseShape):
     """
     Define a text shape. Available keys for shape_dict are:
-     - text: The text to write in the shape.
-     - font_size: The font size in px. Optional.
-     - color: A list for the RGB font color. Optional
+     - text: the text to write in the shape.
+     - font_size: the font size in px. Optional.
+     - color: A list of RGB values for the font colour. Optional
     """
 
     shape_type: str = "text"
@@ -117,7 +117,7 @@ class TextShape(BaseShape):
         """
         Creates a new dictionary with the shape properties.
         :param shape_id: The shape iD.
-        :param position: The node position.
+        :param position: The shape position.
         :return: The TextShape instance.
         """
         return TextShape(
@@ -132,12 +132,85 @@ class TextShape(BaseShape):
 
 
 @dataclass
+class RectangleShape(BaseShape):
+    """
+    Define a rectangle. Available keys for shape_dict are:
+     - width: the rectangle width.
+     - height: the rectangle height.
+     - border_size: the border size.
+     - border_color: A list of RGB values for the border color. Optional
+    """
+
+    shape_type: str = "rectangle"
+    """ The type of the shape """
+    default_border_size: int = 1
+    """ The border size to use when it is not provided """
+    default_border_color: tuple[int] = Color(name="gray", shade=800).rgb
+    """ The default border colour to use when it is not provided """
+    max_border_size: int = 5
+    """ The maximum allowed border size """
+
+    def __post_init__(self):
+        """
+        Initialises the shape.
+        """
+        super().__post_init__()
+
+        self.border_color = self.parse_color(
+            self.shape_dict.get("border_color", None), self.default_border_color
+        )
+        self.border_size = self.shape_dict.get(
+            "border_size", self.default_border_size
+        )
+        self.width = self.shape_dict.get("width")
+        self.height = self.shape_dict.get("height")
+
+    def is_valid(self) -> bool:
+        """
+        Validates the shape configuration dictionary.
+        :return: Whether the configuration is valid.
+        """
+        return super().is_valid() and (
+            isinstance(self.width, (int, float))
+            and isinstance(self.height, (int, float))
+            and isinstance(self.border_size, int)
+            and 1 <= self.border_size <= self.max_border_size
+        )
+
+    @staticmethod
+    def create(
+        shape_id: str, position: Sequence[float], size: Sequence[float]
+    ) -> "RectangleShape":
+        """
+        Creates a new dictionary with the shape properties.
+        :param shape_id: The shape iD.
+        :param position: The rectangle position.
+        :param size: The rectangle size.
+        :return: The RectangleShape instance.
+        """
+        return RectangleShape(
+            shape_dict={
+                "id": shape_id,
+                "text": "Label",
+                "type": RectangleShape.shape_type,
+                "width": size[0],
+                "height": size[1],
+                "x": position[0],
+                "y": position[1],
+            },
+        )
+
+
+@dataclass
 class Shapes:
     model: "ModelConfig"
     """ The ModelConfig instance """
 
     def __post_init__(self):
-        self.shape_type_map = {TextShape.shape_type: TextShape}
+        self.shape_type_map = {
+            TextShape.shape_type: TextShape,
+            RectangleShape.shape_type: RectangleShape,
+        }
 
     def get_all(self) -> list[BaseShape]:
         """
@@ -250,7 +323,7 @@ class Shapes:
 
     def set_position(
         self,
-        position: list[float],
+        position: list[float, int],
         shape_id: str,
     ) -> None:
         """
@@ -269,4 +342,29 @@ class Shapes:
 
         self.model.changes_tracker.add(
             f'Changed position for shape "{shape_id}" to {position}'
+        )
+
+    def set_size(
+        self,
+        size: list[float, int],
+        shape_id: str,
+    ) -> None:
+        """
+        Sets or updates the size of a shape. Note that some shapes do not have a size.
+        :param size: The shape width and height.
+        :param shape_id: The shape ID.
+        :return None
+        """
+        idx = self.find_shape_index_by_id(shape_id)
+        if idx is None:
+            return
+
+        shape_dict = self.model.editor_config[Constants.SHAPES_KEY.value][idx]
+        if "width" not in shape_dict or "height" not in shape_dict:
+            return
+        shape_dict["width"] = size[0]
+        shape_dict["height"] = size[1]
+
+        self.model.changes_tracker.add(
+            f'Changed size for shape "{shape_id}" to {size}'
         )

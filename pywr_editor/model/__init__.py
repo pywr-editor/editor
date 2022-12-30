@@ -20,5 +20,5 @@ from .parameters import Parameters
 from .recorders import Recorders
 from .scenarios import Scenarios
 from .tables import Tables
-from .shapes import Shapes, TextShape, BaseShape
+from .shapes import Shapes, TextShape, BaseShape, RectangleShape
 from .model_config import ModelConfig

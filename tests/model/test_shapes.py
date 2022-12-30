@@ -1,8 +1,13 @@
 import pytest
 from PySide6.QtGui import QColor
 
-from pywr_editor.model import ModelConfig, Shapes
-from pywr_editor.model.shapes import BaseShape, TextShape
+from pywr_editor.model import (
+    BaseShape,
+    ModelConfig,
+    RectangleShape,
+    Shapes,
+    TextShape,
+)
 from tests.utils import resolve_model_path
 
 
@@ -128,6 +133,74 @@ class TestShapes:
     )
     def test_text_shape(self, shape_dict, is_valid):
         """
-        Tests the TextShape validation
+        Test the TextShape validation
         """
         assert TextShape(shape_dict=shape_dict).is_valid() == is_valid
+
+    @pytest.mark.parametrize(
+        "shape_dict, is_valid",
+        [
+            # missing width
+            (
+                {"id": "aaa", "x": 100, "y": 200, "height": 120},
+                False,
+            ),
+            # missing height
+            (
+                {"id": "aaa", "x": 100, "y": 200, "width": 120},
+                False,
+            ),
+            # wrong size type
+            (
+                {
+                    "id": "aaa",
+                    "x": 100,
+                    "y": 200,
+                    "width": 120,
+                    "height": "100",
+                },
+                False,
+            ),
+            # wrong border size type
+            (
+                {
+                    "id": "aaa",
+                    "x": 100,
+                    "y": 200,
+                    "width": 120,
+                    "height": "100",
+                    "border_size": 1.6,
+                },
+                False,
+            ),
+            # border size too large
+            (
+                {
+                    "id": "aaa",
+                    "x": 100,
+                    "y": 200,
+                    "width": 120,
+                    "height": 100,
+                    "border_size": 100,
+                },
+                False,
+            ),
+            # valid
+            (
+                {
+                    "id": "aaa",
+                    "x": 100,
+                    "y": 200,
+                    "width": 120,
+                    "height": 100,
+                    "border_size": 2,
+                },
+                True,
+            ),
+        ],
+    )
+    def test_rectangle_shape(self, shape_dict, is_valid):
+        """
+        Test the RectangleShape validation.
+        """
+        assert RectangleShape(shape_dict=shape_dict).is_valid() == is_valid
