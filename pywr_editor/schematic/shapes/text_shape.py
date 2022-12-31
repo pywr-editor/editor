@@ -136,7 +136,7 @@ class SchematicText(AbstractSchematicShape, QGraphicsTextItem):
                     "value": self.shape_obj.color.toTuple()[0:3],
                 },
             ],
-            shape_dict=self.shape_obj.shape_dict,
+            shape_config=self.shape_obj,
             parent=self.view.app,
         )
         # enable save button when a new colour is selected

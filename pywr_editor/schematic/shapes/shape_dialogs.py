@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Any, Union
 
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QWindow
@@ -11,7 +11,7 @@ from PySide6.QtWidgets import (
 )
 
 from pywr_editor.form import FieldConfig, Form, FormTitle
-from pywr_editor.model import ModelConfig
+from pywr_editor.model import BaseShape, ModelConfig
 from pywr_editor.utils import Logging
 
 if TYPE_CHECKING:
@@ -22,20 +22,27 @@ class ShapeDialog(QDialog):
     def __init__(
         self,
         shape_id: str,
-        shape_dict: dict,
+        shape_config: BaseShape,
         form_fields: list[FieldConfig],
         parent: Union[QWindow, "MainWindow"],
+        append_form_items: dict[str, Any] | None = None,
     ):
         """
         Initialises the modal dialog.
         :param shape_id: The shape ID.
+        :param shape_config: The shape configuration instance.
         :param form_fields: The list of FormFields to use to customise the shape.
         :param parent: The parent widget.
+        :param append_form_items: Additional items to appends to the form dictionary
+        after the form is submitted. Default to None.
         """
         super().__init__(parent)
         self.app = parent
         self.shape_id = shape_id
-        self.shape_dict = shape_dict
+        self.shape_config = shape_config
+        self.append_form_items = append_form_items
+        if self.append_form_items is None:
+            self.append_form_items = {}
 
         layout = QVBoxLayout(self)
         layout.setAlignment(Qt.AlignTop)
@@ -122,11 +129,12 @@ class ShapeDialogForm(Form):
             self.logger.debug("Validation failed")
             return
 
-        # add missing fields
+        # add missing required fields
         form_data["id"] = self.dialog.shape_id
-        form_data["type"] = "text"
-        form_data["x"] = self.dialog.shape_dict["x"]
-        form_data["y"] = self.dialog.shape_dict["y"]
+        form_data["type"] = self.dialog.shape_config.type
+        form_data["x"] = self.dialog.shape_config.x
+        form_data["y"] = self.dialog.shape_config.y
+        form_data = {**form_data, **self.dialog.append_form_items}
 
         self.model_config.shapes.update(
             shape_id=self.dialog.shape_id, shape_dict=form_data

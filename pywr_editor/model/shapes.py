@@ -22,8 +22,30 @@ class BaseShape:
         """
         if isinstance(self.shape_dict, dict):
             self.id = self.shape_dict.get("id", None)
-            self.x = self.shape_dict.get("x", None)
-            self.y = self.shape_dict.get("y", None)
+
+    @property
+    def type(self) -> str:
+        """
+        Returns a string identifying the shape type.
+        :return: The shape type.
+        """
+        return self.shape_dict["type"]
+
+    @property
+    def x(self) -> float:
+        """
+        Returns the shape's x coordinate.
+        :return: The x coordinate.
+        """
+        return self.shape_dict["x"]
+
+    @property
+    def y(self) -> float:
+        """
+        Returns the shape's y coordinate.
+        :return: The y coordinate.
+        """
+        return self.shape_dict["y"]
 
     def is_valid(self) -> bool:
         """
@@ -33,9 +55,11 @@ class BaseShape:
         return (
             isinstance(self.shape_dict, dict)
             and "id" in self.shape_dict
+            and "type" in self.shape_dict
             and "x" in self.shape_dict
             and "y" in self.shape_dict
             and isinstance(self.shape_dict["id"], str)
+            and isinstance(self.shape_dict["type"], str)
             and isinstance(self.shape_dict["x"], (float, int))
             and isinstance(self.shape_dict["y"], (float, int))
         )
@@ -76,7 +100,7 @@ class TextShape(BaseShape):
     """ The type of the shape """
     default_font_size: int = 14
     """ The font size to use when it is not provided """
-    default_font_color: tuple[int] = Color(name="gray", shade=800).rgb
+    default_font_color: tuple[int, int, int] = Color(name="gray", shade=800).rgb
     """ The default font colour to use when it is not provided """
     min_font_size: int = 10
     """ The minimum allowed font size """
@@ -85,20 +109,31 @@ class TextShape(BaseShape):
     min_text_size: int = 3
     """ The text must have at least 3 characters """
 
-    def __post_init__(self):
+    @property
+    def text(self) -> str:
         """
-        Initialises the shape.
+        Returns the text.
+        :return: The text.
         """
-        super().__post_init__()
+        return self.shape_dict["text"]
 
-        self.color = self.parse_color(
+    @property
+    def font_size(self) -> int:
+        """
+        Returns the font size.
+        :return: The font size.
+        """
+        return self.shape_dict.get("font_size", self.default_font_size)
+
+    @property
+    def color(self) -> QColor:
+        """
+        Returns the text's colour.
+        :return: The color instance.
+        """
+        return self.parse_color(
             self.shape_dict.get("color", None), self.default_font_color
         )
-        self.text = self.shape_dict.get("text")
-        self.font_size = self.shape_dict.get(
-            "font_size", self.default_font_size
-        )
-        self.text = self.shape_dict.get("text")
 
     def is_valid(self) -> bool:
         """
@@ -145,25 +180,46 @@ class RectangleShape(BaseShape):
     """ The type of the shape """
     default_border_size: int = 1
     """ The border size to use when it is not provided """
-    default_border_color: tuple[int] = Color(name="gray", shade=800).rgb
+    default_border_color: tuple[int, int, int] = Color(
+        name="gray", shade=800
+    ).rgb
     """ The default border colour to use when it is not provided """
     max_border_size: int = 5
     """ The maximum allowed border size """
 
-    def __post_init__(self):
+    @property
+    def width(self) -> float:
         """
-        Initialises the shape.
+        Returns the rectangle's width.
+        :return: The width.
         """
-        super().__post_init__()
+        return self.shape_dict.get("width")
 
-        self.border_color = self.parse_color(
+    @property
+    def height(self) -> float:
+        """
+        Returns the rectangle's height.
+        :return: The height.
+        """
+        return self.shape_dict.get("height")
+
+    @property
+    def border_color(self) -> QColor:
+        """
+        Returns the border colour.
+        :return: The colour instance.
+        """
+        return self.parse_color(
             self.shape_dict.get("border_color", None), self.default_border_color
         )
-        self.border_size = self.shape_dict.get(
-            "border_size", self.default_border_size
-        )
-        self.width = self.shape_dict.get("width")
-        self.height = self.shape_dict.get("height")
+
+    @property
+    def border_size(self) -> int:
+        """
+        Returns the border size.
+        :return: The colour as RGB values.
+        """
+        return self.shape_dict.get("border_size", self.default_border_size)
 
     def is_valid(self) -> bool:
         """
@@ -191,7 +247,6 @@ class RectangleShape(BaseShape):
         return RectangleShape(
             shape_dict={
                 "id": shape_id,
-                "text": "Label",
                 "type": RectangleShape.shape_type,
                 "width": size[0],
                 "height": size[1],
