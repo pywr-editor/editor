@@ -19,6 +19,7 @@ from pywr_editor.model import (
     Edges,
     ModelConfig,
     NodeConfig,
+    RectangleShape,
     TextShape,
 )
 from pywr_editor.node_shapes import get_node_icon_classes
@@ -1000,6 +1001,16 @@ class Schematic(QGraphicsView):
                     shape_obj = TextShape.create(
                         shape_id=QUuid().createUuid().toString()[1:7],
                         position=position,
+                    )
+                    command = AddShapeCommand(
+                        schematic=self, added_shape_obj=shape_obj
+                    )
+                    self.app.undo_stack.push(command)
+                if "RectangleShape" in mime_type:
+                    shape_obj = RectangleShape.create(
+                        shape_id=QUuid().createUuid().toString()[1:7],
+                        position=position,
+                        size=[200, 100],
                     )
                     command = AddShapeCommand(
                         schematic=self, added_shape_obj=shape_obj

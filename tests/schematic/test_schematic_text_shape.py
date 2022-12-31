@@ -8,7 +8,7 @@ from PySide6.QtWidgets import QLineEdit
 
 from pywr_editor import MainWindow
 from pywr_editor.form import ColorPickerWidget
-from pywr_editor.model import BaseShape, ModelConfig, TextShape
+from pywr_editor.model import ModelConfig, TextShape
 from pywr_editor.schematic import (
     AddShapeCommand,
     DeleteItemCommand,
@@ -111,7 +111,7 @@ class TestSchematicTextShape:
     def is_shape_restored(
         model_config: ModelConfig,
         schematic: Schematic,
-        shape_config: BaseShape,
+        shape_config: TextShape,
     ) -> None:
         """
         Checks that the shape exists in the model configuration and schematic.
