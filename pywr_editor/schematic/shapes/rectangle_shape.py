@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 import PySide6
 from PySide6.QtCore import QPointF, QRectF, Slot
-from PySide6.QtGui import QPainter, QPainterPath, QPen, Qt
+from PySide6.QtGui import QBrush, QPainter, QPainterPath, QPen, Qt
 from PySide6.QtWidgets import QGraphicsItem, QGraphicsRectItem
 
 from pywr_editor.form import ColorPickerWidget
@@ -74,6 +74,7 @@ class SchematicRectangle(AbstractSchematicShape, QGraphicsRectItem):
         # border for the paint method
         self.pen = QPen(shape.border_color)
         self.pen.setWidth(shape.border_size)
+        self.brush = QBrush(shape.background_color)
 
         # allow interaction
         self.setFlag(
@@ -429,6 +430,7 @@ class SchematicRectangle(AbstractSchematicShape, QGraphicsRectItem):
         :return: None
         """
         painter.setPen(self.pen)
+        painter.setBrush(self.brush)
         painter.drawRoundedRect(self.rect(), 6, 6)
 
         # handles
@@ -498,6 +500,13 @@ class SchematicRectangle(AbstractSchematicShape, QGraphicsRectItem):
                     "default_value": self.shape_obj.default_border_color,
                     "value": self.shape_obj.border_color.toTuple()[0:3],
                 },
+                {
+                    "name": "background_color",
+                    "field_type": ColorPickerWidget,
+                    "field_args": {"enable_alpha": True},
+                    "default_value": self.shape_obj.default_background_color,
+                    "value": self.shape_obj.background_color.toTuple(),
+                },
             ],
             append_form_items={
                 "width": self.shape_obj.width,
@@ -507,10 +516,11 @@ class SchematicRectangle(AbstractSchematicShape, QGraphicsRectItem):
             parent=self.view.app,
         )
         # enable save button when a new colour is selected
-        color_widget: ColorPickerWidget = dialog.form.find_field_by_name(
-            "border_color"
-        ).widget
-        color_widget.changed_color.connect(
-            lambda: dialog.save_button.setEnabled(True)
-        )
+        for name in ["border_color", "background_color"]:
+            color_widget: ColorPickerWidget = dialog.form.find_field_by_name(
+                name
+            ).widget
+            color_widget.changed_color.connect(
+                lambda: dialog.save_button.setEnabled(True)
+            )
         dialog.show()

@@ -42,7 +42,20 @@ class Works(Circle):
         :param widget: The widget.
         :return: None
         """
-        # background
+        # outer border and background
+        pen = QPen()
+        pen.setColor(self.outline.qcolor)
+        if self.isSelected():
+            pen.setWidth(self.outline_width * 1.5)
+        else:
+            pen.setWidth(self.outline_width)
+
+        painter.setBrush(Qt.GlobalColor.transparent)
+        painter.setPen(pen)
+        painter.setBrush(Qt.GlobalColor.white)
+        painter.drawEllipse(QPointF(0, 0), self.radius, self.radius)
+
+        # slices
         fill = self.fill
         if self.hover or self.isSelected():
             fill = self.focus_color
@@ -60,15 +73,3 @@ class Works(Circle):
         )
         painter.drawPie(rect, 0, -90 * 16)
         painter.drawPie(rect, -180 * 16, -90 * 16)
-
-        pen = QPen()
-        pen.setColor(self.outline.qcolor)
-        if self.isSelected():
-            pen.setWidth(self.outline_width * 1.5)
-        else:
-            pen.setWidth(self.outline_width)
-
-        # outer border
-        painter.setBrush(Qt.GlobalColor.transparent)
-        painter.setPen(pen)
-        painter.drawEllipse(QPointF(0, 0), self.radius, self.radius)

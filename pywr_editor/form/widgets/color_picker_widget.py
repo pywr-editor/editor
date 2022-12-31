@@ -23,6 +23,7 @@ class ColorPickerWidget(FormCustomWidget):
         value: Sequence[int],
         parent: FormField,
         default_color: Sequence[int] = (0, 0, 0),
+        enable_alpha: bool = False,
     ):
         """
         Initialise the widget.
@@ -31,14 +32,17 @@ class ColorPickerWidget(FormCustomWidget):
         :param parent: The parent widget.
         :param default_color: The default colour to use if the selected colour is not
         valid.
+        :param enable_alpha: Whether to enable the alpha channel for the colour.
+        Default to False.
         """
         super().__init__(name, value, parent)
 
         # set default color
         self.default_color = default_color
+        self.enable_alpha = enable_alpha
         if (
             not isinstance(self.default_color, (list, tuple))
-            or len(self.default_color) != 3
+            or len(self.default_color) <= 2
             or not QColor(*self.default_color).isValid()
         ):
             raise ValueError(
@@ -70,7 +74,7 @@ class ColorPickerWidget(FormCustomWidget):
         """
         if (
             not isinstance(self.value, (list, tuple))
-            or len(self.value) != 3
+            or len(self.value) <= 2
             or not QColor(*self.value).isValid()
         ):
             self.value = self.default_color
@@ -81,9 +85,13 @@ class ColorPickerWidget(FormCustomWidget):
         :param color: The colour as RGB values.
         :return: None
         """
+
+        if self.enable_alpha and len(color) == 4:
+            rgb = f"rgba({color[0]}, {color[1]}, {color[2]}, {color[3]})"
+        else:
+            rgb = f"rgb({color[0]}, {color[1]}, {color[2]})"
         self.preview_color_box.setStyleSheet(
-            f"background: rgb({color[0]}, {color[1]}, {color[2]});"
-            + "border: 1px solid #CCC; border-radius: 5px;"
+            f"background: {rgb}; border: 1px solid #CCC; border-radius: 5px;"
         )
 
     @Slot()
@@ -93,12 +101,19 @@ class ColorPickerWidget(FormCustomWidget):
         :return: None
         """
         dialog = QColorDialog()
-        color = dialog.getColor(
-            initial=QColor.fromRgb(*self.value), parent=self
-        )
+        options = {
+            "initial": QColor.fromRgb(*self.value),
+            "parent": self,
+        }
+        if self.enable_alpha:
+            options["options"] = QColorDialog.ColorDialogOption.ShowAlphaChannel
+        color = dialog.getColor(**options)
+
         # convert to RGB
         if color.isValid():
-            self.value = color.toTuple()[0:3]
+            self.value = (
+                color.toTuple() if self.enable_alpha else color.toTuple()[0:3]
+            )
             self.set_preview_color(self.value)
             self.changed_color.emit()
 

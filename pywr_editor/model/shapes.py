@@ -67,17 +67,21 @@ class BaseShape:
     @staticmethod
     def parse_color(
         rgb: Sequence[int] | None,
-        default_rb: Sequence[int] | None = tuple([0, 0, 0]),
+        default_rgb: Sequence[int] | None = tuple([0, 0, 0]),
     ) -> QColor:
         """
         Parses the RGB colour.
         :param rgb: The RGB colour.
-        :param default_rb: The RGB colour to use if the provided colour is not valid.
+        :param default_rgb: The RGB colour to use if the provided colour is not valid.
         :return: The QColor instance.
         """
-        default_qcolor = QColor.fromRgb(*default_rb)
+        default_qcolor = QColor.fromRgb(*default_rgb)
 
-        if rgb is not None and isinstance(rgb, (list, tuple)) and len(rgb) == 3:
+        if (
+            rgb is not None
+            and isinstance(rgb, (list, tuple))
+            and 3 <= len(rgb) <= 4
+        ):
             qcolor = QColor.fromRgb(*rgb)
             # if RGB color is not valid use default
             if not qcolor.isValid():
@@ -186,6 +190,8 @@ class RectangleShape(BaseShape):
     """ The default border colour to use when it is not provided """
     max_border_size: int = 5
     """ The maximum allowed border size """
+    default_background_color = tuple([255, 255, 255, 255])
+    """ The default background colour """
 
     @property
     def width(self) -> float:
@@ -220,6 +226,17 @@ class RectangleShape(BaseShape):
         :return: The colour as RGB values.
         """
         return self.shape_dict.get("border_size", self.default_border_size)
+
+    @property
+    def background_color(self) -> QColor:
+        """
+        Returns the background colour.
+        :return: The colour instance.
+        """
+        return self.parse_color(
+            self.shape_dict.get("background_color", None),
+            self.default_background_color,
+        )
 
     def is_valid(self) -> bool:
         """
