@@ -2,15 +2,18 @@ from enum import Enum
 from typing import TYPE_CHECKING
 
 import PySide6
-from PySide6.QtCore import QPointF, QRectF
+from PySide6.QtCore import QPointF, QRectF, Slot
 from PySide6.QtGui import QPainter, QPainterPath, QPen, Qt
 from PySide6.QtWidgets import QGraphicsItem, QGraphicsRectItem
 
+from pywr_editor.form import ColorPickerWidget
 from pywr_editor.model import RectangleShape
 from pywr_editor.style import Color
+from pywr_editor.widgets import ContextualMenu
 
 from ..commands.resize_shape_command import ResizeShapeCommand
 from .abstract_schematic_shape import AbstractSchematicShape
+from .shape_dialogs import ShapeDialog
 
 if TYPE_CHECKING:
     from pywr_editor.schematic import Schematic
@@ -87,7 +90,8 @@ class SchematicRectangle(AbstractSchematicShape, QGraphicsRectItem):
         self.setCacheMode(QGraphicsItem.DeviceCoordinateCache)
 
         # set position
-        self.setRect(shape.x, shape.y, shape.width, shape.height)
+        self.setPos(shape.x, shape.y)
+        self.setRect(0, 0, shape.width, shape.height)
         self.setZValue(-1)  # place it behind all items
 
         # store the position after drawing the item
@@ -171,6 +175,7 @@ class SchematicRectangle(AbstractSchematicShape, QGraphicsRectItem):
         self.pressed_mouse_rect = None
         self.update()
 
+        # NOTE: command becomes obsolete if the shape is not resized
         command = ResizeShapeCommand(schematic=self.view, selected_shape=self)
         self.view.app.undo_stack.push(command)
 
@@ -334,7 +339,7 @@ class SchematicRectangle(AbstractSchematicShape, QGraphicsRectItem):
         """
         # rectangle top cannot go outside the top edge of the canvas
         if self.mapToScene(pos.toPoint()).y() + self.handle_space / 2 < 0:
-            to_y = 0
+            to_y = self.mapFromScene(0, 0).y()
 
         # rectangle top cannot be below its bottom
         if to_y + self.min_rect_height >= self.rect().bottom():
@@ -353,7 +358,7 @@ class SchematicRectangle(AbstractSchematicShape, QGraphicsRectItem):
             self.mapToScene(pos.toPoint()).y() + self.handle_space / 2
             > self.view.schematic_height
         ):
-            to_y = self.mapFromScene(QPointF(0, self.view.schematic_height)).y()
+            to_y = self.mapFromScene(0, self.view.schematic_height).y()
 
         # rectangle bottom cannot be above its top
         if to_y - self.rect().top() <= self.min_rect_height:
@@ -370,7 +375,7 @@ class SchematicRectangle(AbstractSchematicShape, QGraphicsRectItem):
         """
         # rectangle left cannot go outside the left edge of the canvas
         if self.mapToScene(pos.toPoint()).x() + self.handle_space / 2 < 0:
-            to_x = 0
+            to_x = self.mapFromScene(0, 0).x()
 
         # rectangle left cannot be larger than its right
         if to_x + self.min_rect_width >= self.rect().right():
@@ -390,7 +395,7 @@ class SchematicRectangle(AbstractSchematicShape, QGraphicsRectItem):
             self.mapToScene(pos.toPoint()).x() + self.handle_space / 2
             > self.view.schematic_width
         ):
-            to_x = self.mapFromScene(QPointF(self.view.schematic_width, 0)).x()
+            to_x = self.mapFromScene(self.view.schematic_width, 0).x()
 
         # rectangle right cannot be smaller than its left
         if to_x - self.rect().left() <= self.min_rect_width:
@@ -442,92 +447,70 @@ class SchematicRectangle(AbstractSchematicShape, QGraphicsRectItem):
         if self.isSelected():
             [painter.drawRect(handle) for handle in self.handles.values()]
 
-    # def contextMenuEvent(
-    #     self, event: PySide6.QtWidgets.QGraphicsSceneContextMenuEvent
-    # ) -> None:
-    #     """
-    #     Create the context menu.
-    #     :param event: The event being triggered.
-    #     :return: None
-    #     """
-    #     self.view.de_select_all_items()
-    #     self.setSelected(True)
-    #
-    #     context_menu = ContextualMenu()
-    #     context_menu.set_title("Text")
-    #
-    #     # edit action
-    #     edit_action = context_menu.addAction("Edit text")
-    #     # noinspection PyUnresolvedReferences
-    #     edit_action.triggered.connect(self.on_edit_shape)
-    #     self.view.addAction(edit_action)
-    #
-    #     # delete action
-    #     delete_action = context_menu.addAction("Delete text")
-    #     # noinspection PyUnresolvedReferences
-    #     delete_action.triggered.connect(self.on_delete_item)
-    #     self.view.addAction(delete_action)
-    #
-    #     context_menu.exec(event.screenPos())
-    #
-    # @Slot()
-    # def on_edit_shape(self) -> None:
-    #     """
-    #     Edit a node configuration.
-    #     :return: None
-    #     """
-    #     dialog = ShapeDialog(
-    #         shape_id=self.shape_obj.id,
-    #         form_fields=[
-    #             {
-    #                 "name": "text",
-    #                 "value": self.shape_obj.text,
-    #                 "help_text": "The text to show on the schematic",
-    #                 "validate_fun": self.check_form_text,
-    #             },
-    #             {
-    #                 "name": "font_size",
-    #                 "label": "Text size",
-    #                 "default_value": self.shape_obj.default_font_size,
-    #                 "value": self.shape_obj.font_size,
-    #                 "field_type": "integer",
-    #                 "min_value": self.shape_obj.min_font_size,
-    #                 "max_value": self.shape_obj.max_font_size,
-    #             },
-    #             {
-    #                 "name": "color",
-    #                 "field_type": ColorPickerWidget,
-    #                 "default_value": self.shape_obj.default_font_color,
-    #                 "value": self.shape_obj.color.toTuple()[0:3],
-    #             },
-    #         ],
-    #         shape_dict=self.shape_obj.shape_dict,
-    #         parent=self.view.app,
-    #     )
-    #     # enable save button when a new colour is selected
-    #     color_widget: ColorPickerWidget = dialog.form.find_field_by_name(
-    #         "color"
-    #     ).widget
-    #     color_widget.changed_color.connect(
-    #         lambda: dialog.save_button.setEnabled(True)
-    #     )
-    #     dialog.show()
-    #
-    # def check_form_text(
-    #     self, name: str, label: str, value: str
-    # ) -> FormValidation:
-    #     """
-    #     Check the text length in the form.
-    #     :param name: The field name.
-    #     :param label: The field label.
-    #     :param value: The field value.
-    #     :return: The FormValidation instance.
-    #     """
-    #     if len(value) < self.shape_obj.min_text_size:
-    #         return FormValidation(
-    #             validation=False,
-    #             error_message="The text must be at least "
-    #             + f"{self.shape_obj.min_text_size} characters long",
-    #         )
-    #
-    #     return FormValidation(validation=True)
+    def contextMenuEvent(
+        self, event: PySide6.QtWidgets.QGraphicsSceneContextMenuEvent
+    ) -> None:
+        """
+        Create the context menu.
+        :param event: The event being triggered.
+        :return: None
+        """
+        self.view.de_select_all_items()
+        self.setSelected(True)
+
+        context_menu = ContextualMenu()
+        context_menu.set_title("Rectangle")
+
+        # edit action
+        edit_action = context_menu.addAction("Edit style")
+        # noinspection PyUnresolvedReferences
+        edit_action.triggered.connect(self.on_edit_shape)
+        self.view.addAction(edit_action)
+
+        # delete action
+        delete_action = context_menu.addAction("Delete shape")
+        # noinspection PyUnresolvedReferences
+        delete_action.triggered.connect(self.on_delete_item)
+        self.view.addAction(delete_action)
+
+        context_menu.exec(event.screenPos())
+
+    @Slot()
+    def on_edit_shape(self) -> None:
+        """
+        Edit a node configuration.
+        :return: None
+        """
+        dialog = ShapeDialog(
+            shape_id=self.shape_obj.id,
+            form_fields=[
+                {
+                    "name": "border_size",
+                    "default_value": self.shape_obj.default_border_size,
+                    "value": self.shape_obj.border_size,
+                    "field_type": "integer",
+                    "min_value": 1,
+                    "max_value": self.shape_obj.max_border_size,
+                },
+                {
+                    "name": "border_color",
+                    "field_type": ColorPickerWidget,
+                    "default_value": self.shape_obj.default_border_color,
+                    "value": self.shape_obj.border_color.toTuple()[0:3],
+                },
+            ],
+            append_form_items={
+                "width": self.shape_obj.width,
+                "height": self.shape_obj.height,
+            },
+            shape_config=self.shape_obj,
+            parent=self.view.app,
+        )
+        # enable save button when a new colour is selected
+        color_widget: ColorPickerWidget = dialog.form.find_field_by_name(
+            "border_color"
+        ).widget
+        color_widget.changed_color.connect(
+            lambda: dialog.save_button.setEnabled(True)
+        )
+        dialog.show()
