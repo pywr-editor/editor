@@ -166,9 +166,9 @@ class SlotsTableWidget(FormCustomWidget):
         # Table
         self.model = SlotsTableModel(slot_map=slot_map, factor_map=factor_map)
         # noinspection PyUnresolvedReferences
-        self.model.dataChanged.connect(self.on_value_change)
+        self.model.dataChanged.connect(self.form.on_field_changed)
         # noinspection PyUnresolvedReferences
-        self.model.layoutChanged.connect(self.on_value_change)
+        self.model.layoutChanged.connect(self.form.on_field_changed)
 
         self.slot_table = TableView(model=self.model)
         self.slot_table.horizontalHeader().show()
@@ -239,17 +239,6 @@ class SlotsTableWidget(FormCustomWidget):
         else:
             self.move_up.setEnabled(False)
             self.move_down.setEnabled(False)
-
-    @Slot()
-    def on_value_change(self) -> None:
-        """
-        Enables the form button when the widget is updated.
-        :return: None
-        """
-        self.logger.debug(
-            f"Running on_value_change Slot from {get_signal_sender(self)}"
-        )
-        self.form.save_button.setEnabled(True)
 
     @Slot()
     def on_move_up(self) -> None:

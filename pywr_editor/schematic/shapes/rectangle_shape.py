@@ -520,7 +520,5 @@ class SchematicRectangle(AbstractSchematicShape, QGraphicsRectItem):
             color_widget: ColorPickerWidget = dialog.form.find_field_by_name(
                 name
             ).widget
-            color_widget.changed_color.connect(
-                lambda: dialog.save_button.setEnabled(True)
-            )
+            color_widget.changed_color.connect(dialog.form.on_field_changed)
         dialog.show()
