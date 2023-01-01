@@ -443,7 +443,9 @@ class ModelConfig:
             return self.json[schematic_size_key]
         else:
             # store the schematic size if it is not set or wrong
-            self.update_schematic_size(default_schematic_size)
+            self.json[
+                Constants.SCHEMATIC_SIZE_KEY.value
+            ] = default_schematic_size
             return default_schematic_size
 
     def update_schematic_size(self, size: list[float]) -> None:

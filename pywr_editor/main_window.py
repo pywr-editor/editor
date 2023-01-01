@@ -32,6 +32,7 @@ from pywr_editor.utils import (
     Logging,
     Settings,
     browse_files,
+    get_signal_sender,
 )
 
 
@@ -113,11 +114,8 @@ class MainWindow(QMainWindow):
         self.register_model_actions()
         self.register_nodes_actions()
         self.register_schematic_actions()
-        # noinspection PyUnresolvedReferences
         self.warning_info_message.connect(self.on_alert_info_message)
-        # noinspection PyUnresolvedReferences
         self.error_message.connect(self.on_error_message)
-        # noinspection PyUnresolvedReferences
         self.save.connect(self.on_save)
 
         # Toolbar
@@ -848,15 +846,22 @@ class MainWindow(QMainWindow):
         Slot called by the global timer. This listens for model changes.
         :return: None
         """
+        self.logger.debug(
+            f"Running on_model_change Slot from {get_signal_sender(self)}"
+        )
         # enable the "Save" button if there are changes
         save_button = self.actions.get("save-model")
         save_button.setEnabled(self.model_config.has_changes)
 
+    @Slot()
     def on_save(self) -> None:
         """
         Performs actions on model save.
         :return: None
         """
+        self.logger.debug(
+            f"Running on_save Slot from {get_signal_sender(self)}"
+        )
         self.statusBar().showMessage(
             f"Model last saved on {self.model_config.file.last_modified_on}"
         )
