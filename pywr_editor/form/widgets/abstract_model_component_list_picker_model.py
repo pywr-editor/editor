@@ -5,7 +5,7 @@ from PySide6.QtCore import QAbstractTableModel
 from PySide6.QtGui import QIcon, Qt
 
 from pywr_editor.model import ModelConfig, ParameterConfig, RecorderConfig
-from pywr_editor.utils import tooltip_table
+from pywr_editor.utils import ModelComponentTooltip
 from pywr_editor.widgets import ParameterIcon, RecorderIcon
 
 """
@@ -121,7 +121,10 @@ class AbstractModelComponentListPickerModel(QAbstractTableModel):
                 return QIcon(icon_class(comp_obj.key))
             elif role == Qt.ItemDataRole.ToolTipRole:
                 if exists:
-                    return tooltip_table(comp_obj)
+                    tooltip = ModelComponentTooltip(
+                        model_config=self.model_config, comp_obj=comp_obj
+                    )
+                    return tooltip.render()
                 else:
                     return f"The model {self.component_type} does not exist"
 

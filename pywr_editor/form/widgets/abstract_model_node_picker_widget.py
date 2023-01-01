@@ -111,9 +111,7 @@ class AbstractModelNodePickerWidget(FormCustomWidget):
                 continue
 
             valid_model_nodes.append(name)
-            self.combo_box.addItem(
-                f"{name} ({node_obj.humanise_node_type})", name
-            )
+            self.combo_box.addItem(f"{name} ({node_obj.humanised_type})", name)
 
         # set selected
         if value is None or value == "":

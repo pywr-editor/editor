@@ -53,7 +53,7 @@ class AddNodeCommand(QUndoCommand):
             )
             status_message = (
                 "Added new node of type "
-                + f"'{self.node_config.humanise_node_type}'"
+                + f"'{self.node_config.humanised_type}'"
             )
         # restore deleted node
         else:
