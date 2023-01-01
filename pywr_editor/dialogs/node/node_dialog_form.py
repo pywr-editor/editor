@@ -60,7 +60,7 @@ class NodeDialogForm(Form):
 
         # main fields
         if model_config.pywr_node_data.does_type_exist(self.node_type):
-            node_type_field = self.node_obj.humanise_node_type
+            node_type_field = self.node_obj.humanised_type
         else:
             node_type_field = self.node_type
 
