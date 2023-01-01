@@ -193,6 +193,6 @@ class AbstractTreeWidgetComponent:
                 node_obj = self.model_config.nodes.get_node_config_from_name(
                     value, as_dict=False
                 )
-                node_type = node_obj.humanise_node_type
+                node_type = node_obj.humanised_type
                 item.setText(1, node_type)
                 item.setToolTip(1, f"Node of type {node_type}")

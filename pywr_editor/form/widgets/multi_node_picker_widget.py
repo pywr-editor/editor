@@ -94,9 +94,7 @@ class MultiNodePickerWidget(FormCustomWidget):
             ):
                 continue
 
-            self.combo_box.addItem(
-                f"{name} ({node_obj.humanise_node_type})", name
-            )
+            self.combo_box.addItem(f"{name} ({node_obj.humanised_type})", name)
 
         # set selected
         if not value:

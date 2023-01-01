@@ -1,7 +1,7 @@
-# noinspection PyUnresolvedReferences
 from PySide6.QtGui import QFont, QFontDatabase
 from PySide6.QtWidgets import QApplication
 
+# noinspection PyUnresolvedReferences
 from .assets import *
 from .color import Color
 
