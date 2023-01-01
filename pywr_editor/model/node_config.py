@@ -141,7 +141,7 @@ class NodeConfig:
                     del self.props[attr]
 
     @property
-    def humanise_node_type(self) -> str:
+    def humanised_type(self) -> str:
         """
         Returns a user-friendly string identifying the type of node.
         :return The node type.

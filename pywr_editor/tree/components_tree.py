@@ -134,7 +134,7 @@ class ComponentsTree(QTreeWidget):
         # group nodes by type
         model_nodes = self.model_config.nodes
         for node_dict in model_nodes.get_all():
-            group = model_nodes.node(node_dict).humanise_node_type
+            group = model_nodes.node(node_dict).humanised_type
             item = TreeWidgetNode(
                 node_dict=node_dict,
                 model_config=self.model_config,

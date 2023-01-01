@@ -12,6 +12,7 @@ from PySide6.QtWidgets import (
 
 from pywr_editor.node_shapes import GrayCircle, get_node_icon
 from pywr_editor.style import Color
+from pywr_editor.utils import ModelComponentTooltip
 from pywr_editor.widgets import ContextualMenu
 
 from .commands.disconnect_node_command import DisconnectNodeCommand
@@ -46,6 +47,10 @@ class SchematicItem(QGraphicsItemGroup):
         self.x, self.y = self.model_node.position
         self.edges: list[Edge] = []
         self.view = view
+        tooltip = ModelComponentTooltip(
+            model_config=view.model_config, comp_obj=self.model_node
+        )
+        self.setToolTip(tooltip.render())
 
         self.padding_y: int = 5
         self.padding_x = 5
@@ -344,14 +349,14 @@ class SchematicItem(QGraphicsItemGroup):
             return False
 
         for target_node in self.connected_nodes["target_nodes"]:
-            node_type = target_node.model_node.humanise_node_type
+            node_type = target_node.model_node.humanised_type
             action = menu.addAction(f"{target_node.name} ({node_type})")
             action.setData({"source_node": self, "target_node": target_node})
 
         menu.addSeparator()
 
         for source_node in self.connected_nodes["source_nodes"]:
-            node_type = source_node.model_node.humanise_node_type
+            node_type = source_node.model_node.humanised_type
             action = menu.addAction(f"{source_node.name} ({node_type})")
             action.setData({"source_node": source_node, "target_node": self})
 

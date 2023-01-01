@@ -44,7 +44,7 @@ class NodeStylePickerWidget(FormCustomWidget):
         )
         self.combo_box.addItem(
             icon,
-            f"{value.humanise_node_type} (default)",
+            f"{value.humanised_type} (default)",
             self.default_str_style,
         )
 

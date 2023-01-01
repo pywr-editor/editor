@@ -10,7 +10,7 @@ from pywr_editor.form import (
     ModelComponentPickerDialog,
 )
 from pywr_editor.model import ParameterConfig, RecorderConfig
-from pywr_editor.utils import Logging, get_signal_sender, tooltip_table
+from pywr_editor.utils import Logging, ModelComponentTooltip, get_signal_sender
 from pywr_editor.widgets import ParameterIcon, PushButton, RecorderIcon
 
 if TYPE_CHECKING:
@@ -185,7 +185,10 @@ class AbstractModelComponentLineEditWidget(FormCustomWidget):
                     QIcon(self._icon_class(self.component_obj.key)),
                     QLineEdit.ActionPosition.LeadingPosition,
                 )
-                self.line_edit.setToolTip(tooltip_table(self.component_obj))
+                tooltip = ModelComponentTooltip(
+                    model_config=self.model_config, comp_obj=self.component_obj
+                )
+                self.line_edit.setToolTip(tooltip.render())
         else:
             self.line_edit.setText("Not set")
             self.line_edit.setToolTip("")
