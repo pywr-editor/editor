@@ -3,6 +3,7 @@ from PySide6.QtGui import QColor
 
 from pywr_editor.model import (
     BaseShape,
+    LineArrowShape,
     ModelConfig,
     RectangleShape,
     Shapes,
@@ -31,6 +32,7 @@ class TestShapes:
             (
                 {
                     "id": "aaa",
+                    "type": "shape",
                     "y": 1.2,
                 },
                 False,
@@ -39,6 +41,7 @@ class TestShapes:
             (
                 {
                     "id": "aaa",
+                    "type": "shape",
                     "x": 1.2,
                 },
                 False,
@@ -47,6 +50,7 @@ class TestShapes:
             (
                 {
                     "id": "aaa",
+                    "type": "shape",
                     "x": "a",
                     "y": 100,
                 },
@@ -56,6 +60,7 @@ class TestShapes:
             (
                 {
                     "id": "aaa",
+                    "type": "shape",
                     "x": 100,
                     "y": 200,
                 },
@@ -101,13 +106,20 @@ class TestShapes:
             ),
             # font size outside bounds
             (
-                {"id": "aaa", "x": 100, "y": 200, "font_size": 120},
+                {
+                    "id": "aaa",
+                    "type": "text",
+                    "x": 100,
+                    "y": 200,
+                    "font_size": 120,
+                },
                 False,
             ),
             # missing text
             (
                 {
                     "id": "aaa",
+                    "type": "text",
                     "x": 100,
                     "y": 200,
                 },
@@ -115,13 +127,14 @@ class TestShapes:
             ),
             # text too short
             (
-                {"id": "aaa", "x": 100, "y": 200, "text": "A"},
+                {"id": "aaa", "type": "text", "x": 100, "y": 200, "text": "A"},
                 False,
             ),
             # valid
             (
                 {
                     "id": "aaa",
+                    "type": "text",
                     "x": 100,
                     "y": 200,
                     "text": "Example",
@@ -142,18 +155,31 @@ class TestShapes:
         [
             # missing width
             (
-                {"id": "aaa", "x": 100, "y": 200, "height": 120},
+                {
+                    "id": "aaa",
+                    "type": "rectangle",
+                    "x": 100,
+                    "y": 200,
+                    "height": 120,
+                },
                 False,
             ),
             # missing height
             (
-                {"id": "aaa", "x": 100, "y": 200, "width": 120},
+                {
+                    "id": "aaa",
+                    "type": "rectangle",
+                    "x": 100,
+                    "y": 200,
+                    "width": 120,
+                },
                 False,
             ),
             # wrong size type
             (
                 {
                     "id": "aaa",
+                    "type": "rectangle",
                     "x": 100,
                     "y": 200,
                     "width": 120,
@@ -165,6 +191,7 @@ class TestShapes:
             (
                 {
                     "id": "aaa",
+                    "type": "rectangle",
                     "x": 100,
                     "y": 200,
                     "width": 120,
@@ -177,6 +204,7 @@ class TestShapes:
             (
                 {
                     "id": "aaa",
+                    "type": "rectangle",
                     "x": 100,
                     "y": 200,
                     "width": 120,
@@ -189,6 +217,7 @@ class TestShapes:
             (
                 {
                     "id": "aaa",
+                    "type": "rectangle",
                     "x": 100,
                     "y": 200,
                     "width": 120,
@@ -204,3 +233,75 @@ class TestShapes:
         Test the RectangleShape validation.
         """
         assert RectangleShape(shape_dict=shape_dict).is_valid() == is_valid
+
+    @pytest.mark.parametrize(
+        "shape_dict, is_valid",
+        [
+            # missing x2
+            (
+                {"id": "aaa", "type": "arrow", "x": 100, "y": 200, "y2": 120},
+                False,
+            ),
+            # missing y2
+            (
+                {"id": "aaa", "type": "arrow", "x": 100, "y": 200, "x2": 120},
+                False,
+            ),
+            # wrong target point
+            (
+                {
+                    "id": "aaa",
+                    "type": "arrow",
+                    "x": 100,
+                    "y": 200,
+                    "x2": 120,
+                    "y2": "100",
+                },
+                False,
+            ),
+            # wrong border size type
+            (
+                {
+                    "id": "aaa",
+                    "type": "arrow",
+                    "x": 100,
+                    "y": 200,
+                    "width": 120,
+                    "height": "100",
+                    "border_size": 1.6,
+                },
+                False,
+            ),
+            # border size too large
+            (
+                {
+                    "id": "aaa",
+                    "type": "arrow",
+                    "x": 100,
+                    "y": 200,
+                    "width": 120,
+                    "height": 100,
+                    "border_size": 100,
+                },
+                False,
+            ),
+            # valid
+            (
+                {
+                    "id": "aaa",
+                    "type": "arrow",
+                    "x": 100,
+                    "y": 200,
+                    "x2": 120,
+                    "y2": 100,
+                    "border_size": 2,
+                },
+                True,
+            ),
+        ],
+    )
+    def test_arrow_shape(self, shape_dict, is_valid):
+        """
+        Test the LineArrowShape validation.
+        """
+        assert LineArrowShape(shape_dict=shape_dict).is_valid() == is_valid

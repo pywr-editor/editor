@@ -145,9 +145,10 @@ class TextShape(BaseShape):
         :return: Whether the configuration is valid.
         """
         return super().is_valid() and (
-            isinstance(self.font_size, int)
-            and (self.min_font_size <= self.font_size <= self.max_font_size)
+            "text" in self.shape_dict
             and isinstance(self.text, str)
+            and isinstance(self.font_size, int)
+            and (self.min_font_size <= self.font_size <= self.max_font_size)
             and len(self.text) >= self.min_text_size
         )
 
@@ -244,7 +245,9 @@ class RectangleShape(BaseShape):
         :return: Whether the configuration is valid.
         """
         return super().is_valid() and (
-            isinstance(self.width, (int, float))
+            "width" in self.shape_dict
+            and "height" in self.shape_dict
+            and isinstance(self.width, (int, float))
             and isinstance(self.height, (int, float))
             and isinstance(self.border_size, int)
             and 1 <= self.border_size <= self.max_border_size
@@ -269,6 +272,98 @@ class RectangleShape(BaseShape):
                 "height": size[1],
                 "x": position[0],
                 "y": position[1],
+            },
+        )
+
+
+@dataclass
+class LineArrowShape(BaseShape):
+    """
+    Define a line arrow. Available keys for shape_dict are:
+     - border_size: the border size.
+     - border_color: A list of RGB values for the border color. Optional
+    """
+
+    shape_type: str = "arrow"
+    """ The type of the shape """
+    default_border_size: int = 1
+    """ The border size to use when it is not provided """
+    default_border_color: tuple[int, int, int] = Color(
+        name="gray", shade=800
+    ).rgb
+    """ The default border colour to use when it is not provided """
+    max_border_size: int = 5
+    """ The maximum allowed border size """
+
+    @property
+    def x2(self) -> float:
+        """
+        Returns the target point's x coordinate.
+        :return: The x coordinate.
+        """
+        return self.shape_dict.get("x2")
+
+    @property
+    def y2(self) -> float:
+        """
+        Returns the target point's y coordinate.
+        :return: The y coordinate.
+        """
+        return self.shape_dict.get("y2")
+
+    @property
+    def border_color(self) -> QColor:
+        """
+        Returns the border colour.
+        :return: The colour instance.
+        """
+        return self.parse_color(
+            self.shape_dict.get("border_color", None), self.default_border_color
+        )
+
+    @property
+    def border_size(self) -> int:
+        """
+        Returns the border size.
+        :return: The colour as RGB values.
+        """
+        return self.shape_dict.get("border_size", self.default_border_size)
+
+    def is_valid(self) -> bool:
+        """
+        Validates the shape configuration dictionary.
+        :return: Whether the configuration is valid.
+        """
+        return super().is_valid() and (
+            "x2" in self.shape_dict
+            and "y2" in self.shape_dict
+            and isinstance(self.x2, (int, float))
+            and isinstance(self.y2, (int, float))
+            and isinstance(self.border_size, int)
+            and 1 <= self.border_size <= self.max_border_size
+        )
+
+    @staticmethod
+    def create(
+        shape_id: str,
+        position: Sequence[float],
+        target_position: Sequence[float],
+    ) -> "LineArrowShape":
+        """
+        Creates a new dictionary with the shape properties.
+        :param shape_id: The shape iD.
+        :param position: The position of the source point.
+        :param target_position: The position of the target point.
+        :return: The RectangleShape instance.
+        """
+        return LineArrowShape(
+            shape_dict={
+                "id": shape_id,
+                "type": LineArrowShape.shape_type,
+                "y": position[1],
+                "x2": target_position[0],
+                "y2": target_position[1],
+                "x": position[0],
             },
         )
 
