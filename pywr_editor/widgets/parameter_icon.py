@@ -78,6 +78,7 @@ class ParameterIcon(IconWithInitials):
             "tablesarray": "lime",
             "uniformdrawdownprofile": "blue",
             "weeklyprofile": "sky",
+            "weightedaverageprofile": "purple",
         }
 
         if self.parameter_key in colors:
