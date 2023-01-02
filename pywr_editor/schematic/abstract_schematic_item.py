@@ -109,7 +109,7 @@ class AbstractSchematicItem:
 
         # avoid flickering by increasing the bbox size by the rectangle outline
         # width
-        line_width = 1
+        line_width = pen.width()
 
         self: QGraphicsItem
         rect = self.boundingRect()
