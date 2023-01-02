@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 All issue numbers are relative to https://github.com/pywr-editor/editor
 
+## v1.2.0 - 2023-01-02
+
+### Added
+- Added support for WeightedAverageProfileParameter (added in pywr-1.19.0) ([#3](https://github.com/pywr-editor/editor/issues/3)).
+- The schematic now supports undo/redo operations of the following actions: add node, connect node, delete nodes, disconnect 
+  node and move nodes ([#41](https://github.com/pywr-editor/editor/issues/41)). The undo/redo actions can be triggered by 
+  clicking on the new toolbar buttons or using the keyword shortcuts for undo operations in your OS (CTRL+Z or CTRL+Y in Windows)
+- The nodes on the schematic show a tooltip summarising all the node's properties ([#45](https://github.com/pywr-editor/editor/issues/45))
+
+### Fixed
+- Fixed item manipulation in TableView and ListView widgets. Selection in clear after an item is deleted or moved to
+  prevent unexpected behaviours ([#30](https://github.com/pywr-editor/editor/issues/30))
+
+### Changed
+- When a modal dialog is open, inputs to the MainWindow are now blocked ([#36](https://github.com/pywr-editor/editor/issues/36))
+- The save button in the toolbar is now enabled using a Slot instead of a QTimer object ([#47](https://github.com/pywr-editor/editor/issues/47))
+
 ## v1.1.0 - 2022-12-17
 
 ### Fixed

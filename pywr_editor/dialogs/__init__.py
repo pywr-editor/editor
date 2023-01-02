@@ -258,6 +258,9 @@ from .parameters.sections.uniform_drawdown_profile_parameter_section import (
 from .parameters.sections.weekly_profile_parameter_section import (
     WeeklyProfileParameterSection,
 )
+from .parameters.sections.weighted_average_profile_parameter_section import (
+    WeightedAverageProfileParameterSection,
+)
 from .parameters.sections.custom_parameter_section import CustomParameterSection
 
 # Form sections for recorder dialog - in order of import priority

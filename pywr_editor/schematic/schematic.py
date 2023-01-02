@@ -431,6 +431,7 @@ class Schematic(QGraphicsView):
             )
         return point_px
 
+    @Slot()
     def increase_height(self) -> None:
         """
         Increases the schematic height.
@@ -443,6 +444,7 @@ class Schematic(QGraphicsView):
         if self.app.app_actions.get("decrease-height").isEnabled() is False:
             self.enable_decrease_height_button(True)
 
+    @Slot()
     def decrease_height(self) -> None:
         """
         Decreases the schematic height.
@@ -464,6 +466,7 @@ class Schematic(QGraphicsView):
         self.schematic_height = self.schematic_height - view_size_delta
         self.update_size()
 
+    @Slot()
     def increase_width(self) -> None:
         """
         Increases the schematic width.
@@ -476,6 +479,7 @@ class Schematic(QGraphicsView):
         if self.app.app_actions.get("decrease-width").isEnabled() is False:
             self.enable_decrease_width_button(True)
 
+    @Slot()
     def decrease_width(self) -> None:
         """
         Decreases the schematic width.
@@ -629,6 +633,7 @@ class Schematic(QGraphicsView):
         """
         self.app.editor_settings.save_schematic_center(position)
 
+    @Slot()
     def center_view_on(self, position: QPointF | None = None) -> None:
         """
         Centers the view on the provided position. If this is None, the schematic is
@@ -642,6 +647,7 @@ class Schematic(QGraphicsView):
         # noinspection PyUnresolvedReferences
         self.schematic_move_event.emit(position)
 
+    @Slot()
     def fit_view(self) -> None:
         """
         Centers the view to the scene center.
@@ -660,6 +666,7 @@ class Schematic(QGraphicsView):
                 node.setSelected(True)
                 break
 
+    @Slot()
     def toggle_labels(self) -> None:
         """
         Shows or hides the node labels on the schematic.
@@ -673,6 +680,7 @@ class Schematic(QGraphicsView):
             not self.editor_settings.are_labels_hidden
         )
 
+    @Slot()
     def toggle_arrows(self) -> None:
         """
         Shows or hides the edge arrows on the schematic.
@@ -686,6 +694,7 @@ class Schematic(QGraphicsView):
             not self.editor_settings.are_edge_arrows_hidden
         )
 
+    @Slot()
     def export_current_view(self) -> None:
         # # image = QImage(self.scene.sceneRect().size().toSize(), QImage.Format_RGBA64)
         # image = QPixmap(self.scene.sceneRect().size().toSize())
@@ -700,7 +709,6 @@ class Schematic(QGraphicsView):
             self, "Save current view as image", "", "PNG (*.png)"
         )
         file_name = file[0]
-        # TODO: to clipboard?
 
         if len(file_name) > 0:
             self.scene.clearSelection()
@@ -728,6 +736,7 @@ class Schematic(QGraphicsView):
         """
         self.app.app_actions.get("decrease-height").setEnabled(enable)
 
+    @Slot()
     def select_all_items(self) -> None:
         """
         Select all items on the schematic.
@@ -736,6 +745,7 @@ class Schematic(QGraphicsView):
         for item in self.items():
             item.setSelected(True)
 
+    @Slot()
     def de_select_all_items(self) -> None:
         """
         De-select all items on the schematic.

@@ -2,6 +2,7 @@ from functools import partial
 
 import pytest
 from PySide6.QtCore import QTimer
+from PySide6.QtTest import QSignalSpy
 
 from pywr_editor import MainWindow
 from pywr_editor.toolbar.node_library.library_item import LibraryItem
@@ -44,14 +45,13 @@ class TestMainWindow:
         unsaved changes.
         """
         window = MainWindow(resolve_model_path("model_1.json"))
+        spy = QSignalSpy(window.model_config.changes_tracker.change_applied)
         save_button = window.app_actions.get("save-model")
-        # button gets disabled after a few ms
-        qtbot.wait(600)
         assert save_button.isEnabled() is False
 
-        # make a change - button is enabled after 500 ms in the main loop
+        # make a change, the save button is not enabled
         window.model_config.changes_tracker.add("New change")
-        qtbot.wait(600)
+        assert spy.count() == 1
         assert save_button.isEnabled() is True
 
         # with changes the prompt is shown
