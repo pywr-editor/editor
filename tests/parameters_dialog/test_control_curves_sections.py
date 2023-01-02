@@ -210,7 +210,9 @@ class TestDialogParameterControlCurveParameterSection:
             ("bounds_ok", None),
         ],
     )
-    def test_opt_bounds_validation(self, model_config, param_name, message):
+    def test_opt_bounds_validation(
+        self, qtbot, model_config, param_name, message
+    ):
         """
         Tests the validation of ControlCurveOptBoundsWidget
         """
