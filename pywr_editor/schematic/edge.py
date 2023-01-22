@@ -52,7 +52,7 @@ class Edge(QGraphicsItem):
                 pass
 
         # ensure that the node is always stacked on top of its edges
-        self.setZValue(-1)
+        self.setZValue(0)
 
         # do not consider edges for mouse inputs
         self.setAcceptedMouseButtons(Qt.NoButton)
