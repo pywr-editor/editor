@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Sequence
 
+from PySide6.QtCore import QUuid
 from PySide6.QtGui import QColor
 
 from pywr_editor.model import Constants
@@ -22,6 +23,14 @@ class BaseShape:
         """
         if isinstance(self.shape_dict, dict):
             self.id = self.shape_dict.get("id", None)
+
+    @staticmethod
+    def generate_id() -> str:
+        """
+        Creates a new shape ID.
+        :return: A unique shape ID.
+        """
+        return QUuid().createUuid().toString()[1:7]
 
     @property
     def type(self) -> str:
@@ -153,16 +162,15 @@ class TextShape(BaseShape):
         )
 
     @staticmethod
-    def create(shape_id: str, position: Sequence[float]) -> "TextShape":
+    def create(position: Sequence[float]) -> "TextShape":
         """
         Creates a new dictionary with the shape properties.
-        :param shape_id: The shape iD.
         :param position: The shape position.
         :return: The TextShape instance.
         """
         return TextShape(
             shape_dict={
-                "id": shape_id,
+                "id": TextShape.generate_id(),
                 "text": "Label",
                 "type": TextShape.shape_type,
                 "x": position[0],
@@ -255,18 +263,17 @@ class RectangleShape(BaseShape):
 
     @staticmethod
     def create(
-        shape_id: str, position: Sequence[float], size: Sequence[float]
+        position: Sequence[float], size: Sequence[float]
     ) -> "RectangleShape":
         """
         Creates a new dictionary with the shape properties.
-        :param shape_id: The shape iD.
         :param position: The rectangle position.
         :param size: The rectangle size.
         :return: The RectangleShape instance.
         """
         return RectangleShape(
             shape_dict={
-                "id": shape_id,
+                "id": RectangleShape.generate_id(),
                 "type": RectangleShape.shape_type,
                 "width": size[0],
                 "height": size[1],
@@ -296,20 +303,22 @@ class LineArrowShape(BaseShape):
     """ The maximum allowed border size """
 
     @property
-    def x2(self) -> float:
+    def length(self) -> float:
         """
-        Returns the target point's x coordinate.
-        :return: The x coordinate.
+        Returns the line's length.
+        :return: The length.
         """
-        return self.shape_dict.get("x2")
+        return self.shape_dict.get("length")
 
     @property
-    def y2(self) -> float:
+    def angle(self) -> float:
         """
-        Returns the target point's y coordinate.
-        :return: The y coordinate.
+        Returns the line's angle.
+        :return: The angle, A positive value means counter-clockwise, while
+        a negative value means the clockwise direction. Zero degrees is at the 3
+        o'clock position.
         """
-        return self.shape_dict.get("y2")
+        return self.shape_dict.get("angle")
 
     @property
     def border_color(self) -> QColor:
@@ -335,34 +344,37 @@ class LineArrowShape(BaseShape):
         :return: Whether the configuration is valid.
         """
         return super().is_valid() and (
-            "x2" in self.shape_dict
-            and "y2" in self.shape_dict
-            and isinstance(self.x2, (int, float))
-            and isinstance(self.y2, (int, float))
+            "length" in self.shape_dict
+            and "angle" in self.shape_dict
+            and isinstance(self.length, (int, float))
+            and isinstance(self.angle, (int, float))
+            and self.length > 0
             and isinstance(self.border_size, int)
             and 1 <= self.border_size <= self.max_border_size
         )
 
     @staticmethod
     def create(
-        shape_id: str,
         position: Sequence[float],
-        target_position: Sequence[float],
+        length: float,
+        angle: float,
     ) -> "LineArrowShape":
         """
         Creates a new dictionary with the shape properties.
-        :param shape_id: The shape iD.
         :param position: The position of the source point.
-        :param target_position: The position of the target point.
+        :param length: The position of the target point.
+        :param angle: The line angle. A positive value means counter-clockwise, while
+        a negative value means the clockwise direction. Zero degrees is at the 3
+        o'clock position.
         :return: The RectangleShape instance.
         """
         return LineArrowShape(
             shape_dict={
-                "id": shape_id,
+                "id": LineArrowShape.generate_id(),
                 "type": LineArrowShape.shape_type,
                 "y": position[1],
-                "x2": target_position[0],
-                "y2": target_position[1],
+                "length": length,
+                "angle": angle,
                 "x": position[0],
             },
         )
@@ -377,6 +389,7 @@ class Shapes:
         self.shape_type_map = {
             TextShape.shape_type: TextShape,
             RectangleShape.shape_type: RectangleShape,
+            LineArrowShape.shape_type: LineArrowShape,
         }
 
     def get_all(self) -> list[BaseShape]:
@@ -535,3 +548,36 @@ class Shapes:
         self.model.changes_tracker.add(
             f'Changed size for shape "{shape_id}" to {size}'
         )
+
+    def set_line_data(
+        self,
+        shape_id: str,
+        length: float = None,
+        angle: float = None,
+    ) -> None:
+        """
+        Sets or updates the line length and angle.
+        :param shape_id: The shape ID.
+        :param length: The line length. Optional.
+        :param angle: The line angle. A positive value means counter-clockwise, while
+        a negative value means the clockwise direction. Zero degrees is at the 3
+        o'clock position. Optional,
+        :return None
+        """
+        idx = self.find_shape_index_by_id(shape_id)
+        if idx is None:
+            return
+
+        shape_dict = self.model.editor_config[Constants.SHAPES_KEY.value][idx]
+        if "length" not in shape_dict or "angle" not in shape_dict:
+            return
+        if length:
+            shape_dict["length"] = round(length, 3)
+            self.model.changes_tracker.add(
+                f'Changed line length of "{shape_id}" to {length}'
+            )
+        if angle:
+            shape_dict["angle"] = round(angle, 3)
+            self.model.changes_tracker.add(
+                f'Changed line angle of "{shape_id}" to {angle}'
+            )

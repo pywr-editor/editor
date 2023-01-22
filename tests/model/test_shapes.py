@@ -237,25 +237,48 @@ class TestShapes:
     @pytest.mark.parametrize(
         "shape_dict, is_valid",
         [
-            # missing x2
-            (
-                {"id": "aaa", "type": "arrow", "x": 100, "y": 200, "y2": 120},
-                False,
-            ),
-            # missing y2
-            (
-                {"id": "aaa", "type": "arrow", "x": 100, "y": 200, "x2": 120},
-                False,
-            ),
-            # wrong target point
+            # missing length
             (
                 {
                     "id": "aaa",
                     "type": "arrow",
                     "x": 100,
                     "y": 200,
-                    "x2": 120,
-                    "y2": "100",
+                    "angle": 120,
+                },
+                False,
+            ),
+            # missing angle
+            (
+                {
+                    "id": "aaa",
+                    "type": "arrow",
+                    "x": 100,
+                    "y": 200,
+                    "length": 120,
+                },
+                False,
+            ),
+            # wrong lengths
+            (
+                {
+                    "id": "aaa",
+                    "type": "arrow",
+                    "x": 100,
+                    "y": 200,
+                    "angle": 120,
+                    "length": "100",
+                },
+                False,
+            ),
+            (
+                {
+                    "id": "aaa",
+                    "type": "arrow",
+                    "x": 100,
+                    "y": 200,
+                    "angle": 120,
+                    "length": -100,
                 },
                 False,
             ),
@@ -266,8 +289,8 @@ class TestShapes:
                     "type": "arrow",
                     "x": 100,
                     "y": 200,
-                    "width": 120,
-                    "height": "100",
+                    "angle": 120,
+                    "length": 100,
                     "border_size": 1.6,
                 },
                 False,
@@ -279,8 +302,8 @@ class TestShapes:
                     "type": "arrow",
                     "x": 100,
                     "y": 200,
-                    "width": 120,
-                    "height": 100,
+                    "angle": 120,
+                    "length": 100,
                     "border_size": 100,
                 },
                 False,
@@ -292,8 +315,8 @@ class TestShapes:
                     "type": "arrow",
                     "x": 100,
                     "y": 200,
-                    "x2": 120,
-                    "y2": 100,
+                    "angle": 120,
+                    "length": 100,
                     "border_size": 2,
                 },
                 True,
