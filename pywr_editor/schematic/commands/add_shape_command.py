@@ -56,6 +56,9 @@ class AddShapeCommand(QUndoCommand):
         )
         self.schematic.app.status_message.emit(status_message)
 
+        # make sure shapes are inside the canvas
+        self.schematic.adjust_items_initial_pos()
+
     def undo(self) -> None:
         """
         Removes the previously-added shape.

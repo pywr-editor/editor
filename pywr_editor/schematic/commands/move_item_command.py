@@ -48,7 +48,6 @@ class MoveItemCommand(QUndoCommand):
                 self.moved_item_configs.append(
                     self.model_config.shapes.find_shape(item.id)
                 )
-
         self.prev_positions: list[tuple[float, float]] = []
         self.updated_positions: list[tuple[float, float]] = []
 
@@ -61,7 +60,7 @@ class MoveItemCommand(QUndoCommand):
         Saves the position of the moved nodes.
         :return: None
         """
-        # nodes are moved for the first time
+        # items are moved for the first time
         if not self.updated_positions:
             for config in self.moved_item_configs:
                 if isinstance(config, NodeConfig):

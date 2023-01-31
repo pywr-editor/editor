@@ -1,15 +1,18 @@
-from typing import Tuple
+from typing import Tuple, Type
 
 import pytest
-from PySide6 import QtGui
+from PySide6 import QtCore, QtGui
 from PySide6.QtCore import QEvent, QMimeData, QPoint, Qt, QTimer
 from PySide6.QtGui import QDragEnterEvent
 
 from pywr_editor import MainWindow
 from pywr_editor.form import ColorPickerWidget
-from pywr_editor.model import ModelConfig, RectangleShape
+from pywr_editor.model import LineArrowShape, ModelConfig, RectangleShape
 from pywr_editor.schematic import ResizeShapeCommand, Schematic
 from pywr_editor.schematic.commands.add_shape_command import AddShapeCommand
+from pywr_editor.schematic.shapes.abstract_schematic_shape import (
+    AbstractSchematicShape,
+)
 from pywr_editor.schematic.shapes.rectangle_shape import (
     Handles,
     SchematicRectangle,
@@ -38,8 +41,8 @@ class TestSchematicRectangleShape:
 
     def test_load_and_edit(self, qtbot, init_window):
         """
-        Test that the text shape is properly load on the schematic and, when edited,
-        its new configuration is saved.
+        Test that the rectangle shape is properly load on the schematic and, when
+        edited, its new configuration is saved.
         """
         window, schematic = init_window
         model_config = window.model_config
@@ -81,13 +84,18 @@ class TestSchematicRectangleShape:
 
     @staticmethod
     def is_shape_deleted(
-        model_config: ModelConfig, schematic: Schematic, shape_id: str
+        model_config: ModelConfig,
+        schematic: Schematic,
+        shape_id: str,
+        schematic_item_type: Type[AbstractSchematicShape] = SchematicRectangle,
     ) -> None:
         """
         Checks that the shape is deleted in the model configuration and schematic.
         :param model_config: The ModelConfig instance.
         :param schematic: The Schematic instance.
         :param shape_id: The shape ID to check.
+        :param schematic_item_type: The type of schematic item. Default to
+        SchematicRectangle.
         :return: None
         """
         # the shape is removed from the model configuration
@@ -100,7 +108,7 @@ class TestSchematicRectangleShape:
         shape_ids = [
             shape.id
             for shape in schematic.items()
-            if isinstance(shape, SchematicRectangle)
+            if isinstance(shape, schematic_item_type)
         ]
         assert shape_id not in shape_ids
 
@@ -108,13 +116,17 @@ class TestSchematicRectangleShape:
     def is_shape_restored(
         model_config: ModelConfig,
         schematic: Schematic,
-        shape_config: RectangleShape,
+        shape_config: RectangleShape | LineArrowShape,
+        schematic_item_type: Type[AbstractSchematicShape] = SchematicRectangle,
     ) -> None:
         """
         Checks that the shape exists in the model configuration and schematic.
         :param model_config: The ModelConfig instance.
         :param schematic: The Schematic instance.
         :param shape_config: The shape configuration instance.
+
+        :param schematic_item_type: The type of schematic item. Default to
+        SchematicRectangle.
         :return: None
         """
         assert model_config.shapes.find_shape(shape_config.id) == shape_config
@@ -122,7 +134,7 @@ class TestSchematicRectangleShape:
         shape_ids = [
             shape.id
             for shape in schematic.items()
-            if isinstance(shape, SchematicRectangle)
+            if isinstance(shape, schematic_item_type)
         ]
         assert shape_config.id in shape_ids
 
@@ -153,8 +165,6 @@ class TestSchematicRectangleShape:
             Qt.MouseButton.LeftButton,
             Qt.KeyboardModifier.NoModifier,
         )
-        from PySide6 import QtCore
-
         QtCore.QCoreApplication.sendEvent(schematic.viewport(), event)
 
         # drop the shape
@@ -368,9 +378,9 @@ class TestSchematicRectangleShape:
 
         # 4. Check undo command
         undo_command: ResizeShapeCommand = window.undo_stack.command(0)
-        assert undo_command.prev_size == (300, 300)
+        assert undo_command.prev_other_info == (300, 300)
         assert undo_command.prev_pos == (800, 800)
-        assert undo_command.updated_size == (
+        assert undo_command.updated_other_info == (
             shape_config.width,
             shape_config.height,
         )

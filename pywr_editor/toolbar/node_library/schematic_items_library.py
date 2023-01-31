@@ -21,7 +21,7 @@ from pywr_editor.style import Color, stylesheet_dict_to_str
 from pywr_editor.widgets import PushIconButton
 
 from .library_item import LibraryItem
-from .library_shapes import BaseShape, RectangleShape, TextShape
+from .library_shapes import ArrowShape, BaseShape, RectangleShape, TextShape
 
 if TYPE_CHECKING:
     from pywr_editor import MainWindow
@@ -130,7 +130,11 @@ class SchematicItemsLibrary(QWidget):
 class LibraryPanel(QGraphicsView):
     view_scale = 0.75
     """ The default scaling factor. """
-    shapes = {"Text box": TextShape, "Rectangle": RectangleShape}
+    shapes = {
+        "Text box": TextShape,
+        "Rectangle": RectangleShape,
+        "Arrow": ArrowShape,
+    }
     """ Dictionary with the shape labels and classes. """
 
     def __init__(self, parent: SchematicItemsLibrary):

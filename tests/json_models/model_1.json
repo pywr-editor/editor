@@ -129,6 +129,15 @@
         "border_size": 4,
         "x": 800,
         "y": 800
+      },
+      {
+        "id": "e3Ad60e",
+        "type": "arrow",
+        "length": 210,
+        "border_size": 3,
+        "angle": 300.0,
+        "x": 40.0,
+        "y": 40.0
       }
     ]
   }

@@ -71,7 +71,7 @@ class SchematicRectangle(AbstractSchematicShape, QGraphicsRectItem):
         self.pressed_mouse_pos = None
         self.pressed_mouse_rect = None
 
-        # border for the paint method
+        # shape styles for the paint method
         self.pen = QPen(shape.border_color)
         self.pen.setWidth(shape.border_size)
         self.brush = QBrush(shape.background_color)
@@ -223,7 +223,9 @@ class SchematicRectangle(AbstractSchematicShape, QGraphicsRectItem):
 
     def resize_shape(self, pos: QPointF) -> None:
         """
-        Resizes the shape on the schematic.
+        Resizes the shape on the schematic. This ensures that the rectangle is always
+        larger than the prescribed size and the shape is not dragged outside the canvas
+        edges.
         :return None.
         """
         offset = self.handle_size + self.handle_space

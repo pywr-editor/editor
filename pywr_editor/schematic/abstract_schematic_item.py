@@ -83,7 +83,7 @@ class AbstractSchematicItem:
         Returns the current item's position.
         :return: The position as tuple of floats.
         """
-        # noinspection PyUnresolvedReferences
+        self: "QGraphicsItem"
         return round(self.scenePos().x(), 5), round(self.scenePos().y(), 5)
 
     @Slot()

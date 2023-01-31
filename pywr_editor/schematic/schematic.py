@@ -17,6 +17,7 @@ from PySide6.QtWidgets import (
 from pywr_editor.model import (
     BaseShape,
     Edges,
+    LineArrowShape,
     ModelConfig,
     NodeConfig,
     RectangleShape,
@@ -31,6 +32,7 @@ from pywr_editor.schematic import (
     ConnectNodeCommand,
     DeleteItemCommand,
     MoveItemCommand,
+    SchematicArrow,
     SchematicBBoxUtils,
     SchematicNode,
     SchematicRectangle,
@@ -67,6 +69,7 @@ class Schematic(QGraphicsView):
     shape_class_map = {
         "TextShape": SchematicText,
         "RectangleShape": SchematicRectangle,
+        "LineArrowShape": SchematicArrow,
     }
     """ map of model class to schematic class for shapes """
 
@@ -91,7 +94,9 @@ class Schematic(QGraphicsView):
         self.nodes_wo_position = 0
         self.connecting_node_props = ConnectingNodeProps()
         self.node_items: dict[str, SchematicNode] = {}
-        self.shape_items: dict[str, SchematicText | SchematicRectangle] = {}
+        self.shape_items: dict[
+            str, SchematicText | SchematicRectangle | SchematicArrow
+        ] = {}
 
         self.schematic_move_event.connect(self.on_schematic_move)
         self.connect_node_event.connect(self.on_connect_node_end)
@@ -1006,22 +1011,29 @@ class Schematic(QGraphicsView):
             mime_type = event.mimeData().text()
             position = self.mapToScene(event.pos()).toTuple()
             position = tuple(map(lambda x: round(x, 5), position))
+            shape_obj = None
+
             if "Shape." in mime_type:
                 if "TextShape" in mime_type:
-                    shape_obj = TextShape.create(
-                        shape_id=QUuid().createUuid().toString()[1:7],
-                        position=position,
-                    )
-                    command = AddShapeCommand(
-                        schematic=self, added_shape_obj=shape_obj
-                    )
-                    self.app.undo_stack.push(command)
-                if "RectangleShape" in mime_type:
+                    shape_obj = TextShape.create(position=position)
+
+                elif "RectangleShape" in mime_type:
                     shape_obj = RectangleShape.create(
-                        shape_id=QUuid().createUuid().toString()[1:7],
                         position=position,
-                        size=[200, 100],
+                        size=[
+                            SchematicRectangle.min_rect_width,
+                            SchematicRectangle.min_rect_height,
+                        ],
                     )
+                elif "ArrowShape" in mime_type:
+                    shape_obj = LineArrowShape.create(
+                        position=position,
+                        length=SchematicArrow.min_line_length,
+                        angle=-45,
+                    )
+
+                # push command
+                if shape_obj:
                     command = AddShapeCommand(
                         schematic=self, added_shape_obj=shape_obj
                     )

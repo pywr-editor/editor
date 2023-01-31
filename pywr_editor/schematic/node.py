@@ -77,7 +77,7 @@ class SchematicNode(AbstractSchematicItem, QGraphicsItemGroup):
         self.setAcceptHoverEvents(True)
         # ensure that node is always stacked on top of its edges
         self.setZValue(0)
-        # set position
+        # set position - parent/scene coordinates
         self.setPos(self.x, self.y)
 
         # node
