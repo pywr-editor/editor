@@ -61,6 +61,8 @@ class MainWindow(QMainWindow):
         """
         super().__init__()
         self.logger = Logging().logger(self.__class__.__name__)
+        self.warning_info_message.connect(self.on_alert_info_message)
+        self.error_message.connect(self.on_error_message)
         self.setStyleSheet(AppStylesheet().get())
 
         # check the model file
@@ -79,6 +81,10 @@ class MainWindow(QMainWindow):
         # load configurations
         self.model_file = model_file
         self.model_config = ModelConfig(model_file)
+        # Show error if the JSON file does not load
+        if not self.model_config.is_valid():
+            self.error_message.emit(self.model_config.load_error, True)
+            return
         self.model_config.changes_tracker.change_applied.connect(
             self.on_model_change
         )
@@ -114,8 +120,6 @@ class MainWindow(QMainWindow):
         self.register_model_actions()
         self.register_nodes_actions()
         self.register_schematic_actions()
-        self.warning_info_message.connect(self.on_alert_info_message)
-        self.error_message.connect(self.on_error_message)
         self.save.connect(self.on_save)
 
         # Toolbar
@@ -131,11 +135,6 @@ class MainWindow(QMainWindow):
         # Show the window
         self.editor_settings.restore_window_attributes(self)
         self.show()
-
-        # Show error if the JSON file does not load
-        if not self.model_config.is_valid():
-            # noinspection PyUnresolvedReferences
-            self.error_message.emit(self.model_config.load_error, True)
 
         # Draw the widgets
         self.components_tree.draw()
