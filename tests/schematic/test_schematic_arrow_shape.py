@@ -19,8 +19,8 @@ from tests.schematic.test_schematic_rectangle_shape import (
 )
 from tests.utils import close_message_box, resolve_model_path
 
-init_source_point = QPoint(40, 40)
-init_target_point = QPointF(145, 222)
+init_source_point = QPoint(50, 50)
+init_target_point = QPointF(155, 232)
 
 
 class TestSchematicArrowShape:
@@ -55,7 +55,7 @@ class TestSchematicArrowShape:
         # 1. Check shape properties
         item: SchematicArrow = schematic.shape_items[self.shape_id]
         line = item.line()
-        assert line.p1().toTuple() == tuple([shape_config.x, shape_config.y])
+        assert item.pos().toTuple() == tuple([shape_config.x, shape_config.y])
         assert round(line.length(), 3) == shape_config.length
         assert round(line.angle(), 3) == shape_config.angle
 
@@ -190,7 +190,7 @@ class TestSchematicArrowShape:
             (
                 Handles.TARGET_POINT.value,
                 init_target_point,
-                QPoint(1, 1),
+                QPoint(9, 9),
             ),
             # to 2nd quadrant
             (
@@ -247,8 +247,8 @@ class TestSchematicArrowShape:
         handle_pos = schematic.mapFromScene(handle_point)
 
         shape_line = shape_item.line()
-        init_p1 = shape_line.p1()
-        init_p2 = shape_line.p2()
+        init_p1 = shape_item.mapToScene(shape_line.p1())
+        init_p2 = shape_item.mapToScene(shape_line.p2())
         init_length = round(shape_line.length(), 3)
         init_angle = round(shape_line.angle(), 3)
 
@@ -482,22 +482,26 @@ class TestSchematicArrowShape:
         )
 
         if handle == Handles.SOURCE_POINT.value:
-            assert shape_item.line().p1() == expected_target
+            assert (
+                shape_item.mapToScene(shape_item.line().p1()) == expected_target
+            )
         else:
-            assert shape_item.line().p2() == expected_target
+            assert (
+                shape_item.mapToScene(shape_item.line().p2()) == expected_target
+            )
 
     @pytest.mark.parametrize(
         "handle, handle_point, target_point",
         [
             # source handle - all quadrants
-            (Handles.SOURCE_POINT.value, init_source_point, QPoint(120, 200)),
-            (Handles.SOURCE_POINT.value, init_source_point, QPoint(160, 200)),
-            (Handles.SOURCE_POINT.value, init_source_point, QPoint(160, 230)),
-            (Handles.SOURCE_POINT.value, init_source_point, QPoint(100, 230)),
+            (Handles.SOURCE_POINT.value, init_source_point, QPoint(130, 210)),
+            (Handles.SOURCE_POINT.value, init_source_point, QPoint(170, 210)),
+            (Handles.SOURCE_POINT.value, init_source_point, QPoint(170, 240)),
+            (Handles.SOURCE_POINT.value, init_source_point, QPoint(110, 240)),
             # target handle - all quadrants
-            (Handles.TARGET_POINT.value, init_target_point, QPoint(10, 10)),
+            (Handles.TARGET_POINT.value, init_target_point, QPoint(20, 20)),
             (Handles.TARGET_POINT.value, init_target_point, QPoint(50, 30)),
-            (Handles.TARGET_POINT.value, init_target_point, QPoint(50, 50)),
+            (Handles.TARGET_POINT.value, init_target_point, QPoint(60, 60)),
             (Handles.TARGET_POINT.value, init_target_point, QPoint(30, 50)),
         ],
     )
