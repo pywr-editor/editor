@@ -1,9 +1,12 @@
 [tool.black]
 line-length = 80
+extend-exclude = "tests/json_models/files"
+
 [tool.pytest_ini_options]
 testpaths = ["test"]
 required_plugins = ["pytest-qt"]
 qt_api = "pyside6"
+
 [tool.bumpver]
 current_version = "1.2.0"
 version_pattern = "MAJOR.MINOR.PATCH"
@@ -11,6 +14,7 @@ commit_message = "bump version {old_version} -> {new_version}"
 commit = true
 tag = true
 push = false
+
 [tool.bumpver.file_patterns]
 "pyproject.toml" = [
     'current_version = "{version}"',
@@ -19,6 +23,7 @@ push = false
     '^__version__ = "{version}"$',
     '^__build_date__ = "YYYY-MM-DD"$',
 ]
+
 [tool.isort]
 profile = "black"
 line_length = 80
