@@ -113,13 +113,11 @@ class TestSchematicResize:
         window, schematic, size_panel = init_window
         _, measured, button = resize
 
+        limiting_item = schematic.shape_items["466eaX"]
+        rect = limiting_item.mapRectToScene(limiting_item.boundingRect())
         if "width" in request.node.callspec.id:
-            node = schematic.node_items["Link"]
-            rect = node.mapRectToScene(node.boundingRect())
             expected = rect.x() + rect.width()
         else:
-            node = schematic.node_items["Reservoir"]
-            rect = node.mapRectToScene(node.boundingRect())
             expected = rect.y() + rect.height()
 
         assert button.isEnabled() is False and expected == measured
