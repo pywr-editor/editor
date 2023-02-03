@@ -1,6 +1,6 @@
 [tool.black]
 line-length = 80
-extend-exclude = "tests/json_models/files"
+extend-exclude = "tests/json_models/files/*.py"
 
 [tool.pytest_ini_options]
 testpaths = ["test"]
