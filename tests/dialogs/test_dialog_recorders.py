@@ -104,7 +104,7 @@ class TestRecordersDialog:
         }
 
         # rename and save
-        node_widget.combo_box.setCurrentText("Reservoir (Reservoir)")
+        node_widget.combo_box.setCurrentText("Reservoir (Storage)")
         renamed_recorder_name = "A new shiny name"
         name_field.widget.setText(renamed_recorder_name)
 
