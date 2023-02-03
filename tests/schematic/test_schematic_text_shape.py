@@ -185,8 +185,11 @@ class TestSchematicTextShape:
         assert undo_button.isEnabled() is False
         assert redo_button.isEnabled() is True
 
-        shape_config.text = "I changed the label"
-        shape_config.font_size = 40
+        shape_config.shape_dict["text"] = "I changed the label"
+        shape_config.shape_dict["font_size"] = 40
+        shape_config.shape_dict["color"] = tuple(
+            shape_config.shape_dict["color"]
+        )
         self.is_shape_restored(model_config, schematic, shape_config)
 
     def test_add(self, qtbot, init_window):
@@ -272,9 +275,8 @@ class TestSchematicTextShape:
         assert undo_button.isEnabled() is True
         assert redo_button.isEnabled() is False
 
-        shape_config.text = "I changed the label"
-        shape_config.font_size = 40
-
+        shape_config.shape_dict["text"] = "I changed the label"
+        shape_config.shape_dict["font_size"] = 40
         self.is_shape_restored(model_config, schematic, shape_config)
 
         # 6. Delete again

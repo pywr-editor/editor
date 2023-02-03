@@ -140,13 +140,12 @@ class TestSchematicResize:
         """
         window, schematic, tab_panel = init_window
         _ = minimise
+        item = schematic.shape_items["466eaX"]
 
-        node = schematic.node_items["Link"]
-        rect = node.mapRectToScene(node.boundingRect())
+        rect = item.mapRectToScene(item.boundingRect())
         expected_width = rect.x() + rect.width()
 
-        node = schematic.node_items["Reservoir"]
-        rect = node.mapRectToScene(node.boundingRect())
+        rect = item.mapRectToScene(item.boundingRect())
         expected_height = rect.y() + rect.height()
 
         assert (
