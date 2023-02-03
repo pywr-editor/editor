@@ -455,7 +455,7 @@ class ModelConfig:
             return self.editor_config[schematic_size_key]
         else:
             # store the schematic size if it is not set or wrong
-            self.json[
+            self.editor_config[
                 Constants.SCHEMATIC_SIZE_KEY.value
             ] = default_schematic_size
             return default_schematic_size
