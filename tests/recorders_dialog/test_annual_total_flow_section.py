@@ -225,7 +225,7 @@ class TestAnnualTotalFlowSection:
         assert "Output" not in node_widget.combo_box.all_items
 
         # 2. Add a new entry and save the form
-        node_widget.combo_box.setCurrentText("Reservoir2 (Reservoir)")
+        node_widget.combo_box.setCurrentText("Reservoir2 (Storage)")
         # noinspection PyTypeChecker
         save_button: QPushButton = child_dialog.findChild(
             QPushButton, "save_button"
