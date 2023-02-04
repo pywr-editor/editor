@@ -61,6 +61,20 @@ class DataFrameParameterSection(FormSection):
             ],
             "Miscellaneous": [
                 {
+                    "name": "timestep_offset",
+                    "label": "Time offset",
+                    "field_type": "integer",
+                    # default to 0 to remove the offset on save
+                    "default_value": 0,
+                    "value": self.form.get_param_dict_value("timestep_offset"),
+                    "help_text": "When provided, the parameter will return the table "
+                    + "value corresponding to the current model time-step plus or "
+                    + "minus the offset. The offset can be used to look forward "
+                    + "(when positive) or backward (when negative) in the table. "
+                    + "If the offset takes the time index out of the data bounds, "
+                    + "the parameter will return the first or last value available",
+                },
+                {
                     "name": "checksum",
                     "field_type": CheckSumWidget,
                     "value": self.form.get_param_dict_value("checksum"),
