@@ -78,3 +78,7 @@ class TestStorageSection:
         QTimer.singleShot(100, partial(check_msg, error_message))
         save_button.setEnabled(True)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
+
+        # set both - no errors
+        initial_volume.widget.line_edit.setText("10")
+        qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
