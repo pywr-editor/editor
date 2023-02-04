@@ -23,7 +23,6 @@ class AbstractStorageSection(FormSection):
         :return: The validation instance.
         """
         # either initial_volume or initial_volume_pc must be provided
-        # NOTE: pywr doc says fields are optional, but they are not
         if (
             "initial_volume" not in form_data
             and "initial_volume_pc" not in form_data
@@ -31,7 +30,7 @@ class AbstractStorageSection(FormSection):
             return FormValidation(
                 validation=False,
                 error_message="You must provide the initial absolute or relative "
-                + "volume for the virtual storage",
+                + "volume for the storage",
             )
         # both volumes cannot be provided at the same time if max_volume
         # is not a parameter. Pywr will use "initial_volume_pc" first.
