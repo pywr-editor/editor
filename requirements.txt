@@ -4,3 +4,4 @@ pandas
 requests
 pyqtgraph
 pywin32
+pywr==1.20.0
