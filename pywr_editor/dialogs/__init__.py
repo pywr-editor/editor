@@ -228,6 +228,9 @@ from .parameters.sections.rectifier_parameter_section import (
 from .parameters.sections.recorder_threshold_parameter_section import (
     RecorderThresholdParameterSection,
 )
+from .parameters.sections.rolling_mean_flow_node_parameter_section import (
+    RollingMeanFlowNodeParameterSection,
+)
 from .parameters.sections.scaled_profile_parameter_section import (
     ScaledProfileParameterSection,
 )
