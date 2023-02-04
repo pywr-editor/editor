@@ -92,8 +92,8 @@ class TestMultiNodePickerWidget:
 
         # 1. Check values
         assert widget.combo_box.all_items == [
-            "Reservoir (Reservoir)",
-            "Reservoir2 (Reservoir)",
+            "Reservoir (Storage)",
+            "Reservoir2 (Storage)",
             "Virtual (Rolling virtual storage)",
             "Aggregated (Aggregated storage)",
         ]
@@ -141,8 +141,8 @@ class TestMultiNodePickerWidget:
 
         # 1. Check values
         assert widget.combo_box.all_items == [
-            "Reservoir (Reservoir)",
-            "Reservoir2 (Reservoir)",
+            "Reservoir (Storage)",
+            "Reservoir2 (Storage)",
             "Virtual (Rolling virtual storage)",
         ]
 

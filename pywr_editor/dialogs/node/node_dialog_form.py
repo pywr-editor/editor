@@ -303,6 +303,7 @@ class NodeDialogForm(Form):
             "name": "cost",
             "field_type": ParameterLineEditWidget,
             "field_args": {"is_mandatory": False},
+            "default_value": 0,
             "value": self.get_node_dict_value("cost"),
             "help_text": help_text,
         }

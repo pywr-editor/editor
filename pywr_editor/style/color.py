@@ -355,7 +355,6 @@ class Color:
 
     @property
     def qcolor(self) -> QColor:
-
         """
         Returns the color as QColor object.
         :return: The QColor object representing the color
