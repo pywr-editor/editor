@@ -1,6 +1,5 @@
 PySide6==6.4.1
 setuptools==65.6.3
-pywr==1.19.0
 pandas
 requests
 pyqtgraph
