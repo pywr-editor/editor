@@ -505,6 +505,7 @@ class Form(QScrollArea):
                     or value is None
                     or value == ""
                     or value == []
+                    or value == {}
                 ):
                     self.logger.debug(f"Ignoring {name} with value '{value}'")
                     continue
