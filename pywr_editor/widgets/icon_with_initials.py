@@ -10,7 +10,6 @@ from PySide6.QtGui import (
     QPen,
     QPixmap,
     Qt,
-    QTextOption,
     qRgba,
 )
 
@@ -82,10 +81,14 @@ class IconWithInitials(QIconEngine):
             | QPainter.TextAntialiasing
         )
 
+        # convert rectangle to square
+        if rect.width() > rect.height():
+            rect.setWidth(rect.height())
+
         if self.shape == "rectangle":
             painter.drawRoundedRect(rect, 4, 4)
         elif self.shape == "circle":
-            painter.drawEllipse(rect.center(), 8, 8)
+            painter.drawEllipse(rect)
         else:
             raise ValueError("Wrong shape type")
 
@@ -93,14 +96,15 @@ class IconWithInitials(QIconEngine):
         font = QFont()
         font.setPixelSize(12)
         color = Color(self.color, 700).qcolor
-        text_options = QTextOption()
-        text_options.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
         painter.setPen(QPen(color))
         painter.setBrush(color)
         painter.setFont(font)
         if self.label and isinstance(self.label, str):
-            painter.drawText(rect, self.label[0].upper(), text_options)
+            painter.drawText(
+                rect,
+                self.label[0].upper(),
+                Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignCenter,
+            )
 
     def get_color(self) -> ColorName:
         """
