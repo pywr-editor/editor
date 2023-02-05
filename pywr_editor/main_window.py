@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Literal
 
 import PySide6
-from PySide6.QtCore import QTimer, Signal, Slot
+from PySide6.QtCore import Signal, Slot
 from PySide6.QtGui import QAction, QKeySequence, Qt, QUndoStack
 from PySide6.QtWidgets import QFileDialog, QMainWindow, QMessageBox, QSplitter
 
@@ -32,20 +32,26 @@ from pywr_editor.utils import (
     Logging,
     Settings,
     browse_files,
+    get_signal_sender,
 )
 
 
 class MainWindow(QMainWindow):
     warning_info_message = Signal(str, str, str)
+    """ Signal emitted when a warning message is generated """
     error_message = Signal(str, bool)
+    """ Signal emitted when an error message is generated """
     status_message = Signal(str)
+    """ Signal emitted when the window status message is updated """
     save = Signal()
+    """ Signal emitted when the model is saved """
     store_geometry_widget: list[str] = [
         "toolbar",
         "splitter",
         "components_tree",
         "schematic",
     ]
+    """ List of class attributes pointing to widgets whose geometry must be saved """
 
     def __init__(self, model_file: str | None = None):
         """
@@ -56,7 +62,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.logger = Logging().logger(self.__class__.__name__)
 
-        # Check the model file
+        # check the model file
         if model_file is not None and not os.path.exists(model_file):
             QMessageBox().critical(
                 self,
@@ -69,23 +75,22 @@ class MainWindow(QMainWindow):
             self.logger.debug("No model file was provided")
             self.empty_model = True
 
-        # load widgets
+        # load configurations
         self.model_file = model_file
         self.model_config = ModelConfig(model_file)
+        self.model_config.changes_tracker.change_applied.connect(
+            self.on_model_change
+        )
+
         self.editor_settings = Settings(model_file)
         # store recent files
         if model_file is not None:
             self.editor_settings.save_recent_file(model_file)
 
+        # load widgets
         self.schematic = Schematic(model_config=self.model_config, app=self)
         self.components_tree = ComponentsTree(self.model_config, parent=self)
         self.jump_list = self.setup_jump_list()
-
-        # global timer to listen for changes
-        self.timer = QTimer()
-        # noinspection PyUnresolvedReferences
-        self.timer.timeout.connect(self.on_model_change)
-        self.timer.start(500)
 
         # layout
         self.splitter = QSplitter()
@@ -109,11 +114,8 @@ class MainWindow(QMainWindow):
         self.register_model_actions()
         self.register_nodes_actions()
         self.register_schematic_actions()
-        # noinspection PyUnresolvedReferences
         self.warning_info_message.connect(self.on_alert_info_message)
-        # noinspection PyUnresolvedReferences
         self.error_message.connect(self.on_error_message)
-        # noinspection PyUnresolvedReferences
         self.save.connect(self.on_save)
 
         # Toolbar
@@ -506,6 +508,7 @@ class MainWindow(QMainWindow):
         file_panel.add_button(self.actions.get("new-model"))
         file_panel.add_button(self.actions.get("open-model"))
         file_panel.add_button(self.actions.get("save-model"))
+        self.actions.get("save-model").setDisabled(True)
         file_panel.add_button(self.actions.get("open-json-reader"))
 
         settings_panel = model_tab.add_panel("Settings")
@@ -843,15 +846,22 @@ class MainWindow(QMainWindow):
         Slot called by the global timer. This listens for model changes.
         :return: None
         """
+        self.logger.debug(
+            f"Running on_model_change Slot from {get_signal_sender(self)}"
+        )
         # enable the "Save" button if there are changes
         save_button = self.actions.get("save-model")
         save_button.setEnabled(self.model_config.has_changes)
 
+    @Slot()
     def on_save(self) -> None:
         """
         Performs actions on model save.
         :return: None
         """
+        self.logger.debug(
+            f"Running on_save Slot from {get_signal_sender(self)}"
+        )
         self.statusBar().showMessage(
             f"Model last saved on {self.model_config.file.last_modified_on}"
         )

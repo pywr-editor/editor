@@ -77,6 +77,11 @@ class AppStylesheet:
                 "background": Color("neutral", 100).hex,
                 "color": Color("neutral", 600).hex,
             },
+            "QToolTip": {
+                "background": Color("neutral", 100).hex,
+                "border": f"1px solid{Color('neutral', 300).hex}",
+                "color": Color("neutral", 600).hex,
+            },
         }
 
     @property

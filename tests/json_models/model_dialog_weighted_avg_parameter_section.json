@@ -1,0 +1,62 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "nodes": [
+    {
+      "name": "Reservoir1",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35
+    },
+    {
+      "name": "Reservoir2",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35
+    },
+    {
+      "name": "Reservoir3",
+      "type": "reservoir",
+      "max_volume": 35,
+      "initial_volume": 35
+    },
+    {
+      "name": "Output",
+      "type": "output"
+    }
+  ],
+  "parameters": {
+    "monthly_profile": {
+      "type": "monthlyprofile",
+      "values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    },
+    "constant": {
+      "type": "constant",
+      "value": 5
+    },
+    "valid": {
+      "type": "WeightedAverageProfileParameter",
+      "storages": ["Reservoir2", "Reservoir3"],
+      "profiles": ["monthly_profile", "constant"]
+    },
+    "empty_data": {
+      "type": "WeightedAverageProfileParameter",
+      "storages": [],
+      "profiles": []
+    },
+    "wrong_profile_count": {
+      "type": "WeightedAverageProfileParameter",
+      "storages": ["Reservoir2", "Reservoir3"],
+      "profiles": ["monthly_profile"]
+    }
+  },
+  "pywr_editor_schematic_size": [1900, 1450]
+}

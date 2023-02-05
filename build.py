@@ -19,17 +19,8 @@ def freeze():
         fg=typer.colors.GREEN,
         bold=True,
     )
-    PyInstaller.__main__.run(
-        [
-            "main.spec",
-            "--noconfirm",
-        ]
-    )
-    typer.secho(
-        ">> Done :)",
-        fg=typer.colors.GREEN,
-        bold=True,
-    )
+    PyInstaller.__main__.run(["main.spec", "--noconfirm"])
+    typer.secho(">> Done :)", fg=typer.colors.GREEN, bold=True)
 
 
 @app.command()

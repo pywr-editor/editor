@@ -28,8 +28,9 @@ class RollingMeanFlowNodeRecorderSection(AbstractRecorderSection):
                 "default_value": 0,
                 "max_value": form.model_config.number_of_steps,
                 "value": form.get_recorder_dict_value("timesteps"),
-                "help_text": " The number of time-steps to calculate the mean flow "
-                + "for",
+                "help_text": "The number of time-steps to calculate the mean flow "
+                + "for. You can specify the number of days in the field below in "
+                + "place of this",
             },
             {
                 "name": "days",
@@ -39,7 +40,7 @@ class RollingMeanFlowNodeRecorderSection(AbstractRecorderSection):
                 "default_value": 0,
                 "max_value": form.model_config.number_of_steps
                 * form.model_config.time_delta,
-                "help_text": " The number of days to calculate the mean flow for",
+                "help_text": "The number of days to calculate the mean flow for",
             },
         ]
         super().__init__(
