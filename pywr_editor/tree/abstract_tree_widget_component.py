@@ -55,6 +55,7 @@ class AbstractTreeWidgetComponent:
                     )
                     or param_obj.key in custom_parameter_keys
                 )
+                and "recorders" not in comp_value.keys()
             ):
                 comp_obj = model_config.parameters.parameter(
                     config=comp_value, name=comp_name
@@ -169,7 +170,6 @@ class AbstractTreeWidgetComponent:
             item.setToolTip(column, f'The file "{value}" cannot be found')
         elif isinstance(value, str):
             item.setToolTip(column, value)
-
             # check if string is a model parameter. Add type to 2nd column
             if value in self.model_config.parameters.names:
                 param_obj = self.model_config.parameters.get_config_from_name(
@@ -187,7 +187,7 @@ class AbstractTreeWidgetComponent:
                 recorder_type = recorder_obj.humanised_type
                 item.setText(1, recorder_type)
                 item.setToolTip(1, f"Recorder of type {recorder_type}")
-                item.setIcon(1, QIcon(ParameterIcon(recorder_obj.key)))
+                item.setIcon(1, QIcon(RecorderIcon(recorder_obj.key)))
             # string is a model node
             elif value in self.model_config.nodes.names:
                 node_obj = self.model_config.nodes.get_node_config_from_name(
