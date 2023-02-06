@@ -15,8 +15,11 @@ All issue numbers are relative to https://github.com/pywr-editor/editor
 - Properly style tooltips ([#51](https://github.com/pywr-editor/editor/issues/51)).
 
 ### Fixed
+- The parameter and recorder icons are now properly scaled on any screen when used in `QlineEdit` or `QComboBox` 
+  widgets ([#5](https://github.com/pywr-editor/editor/issues/5)).
 - Any `Storage` node was recognised as `Reservoir` node. The node type is now visible in the node library and 
   properly identified in all widgets ([#53](https://github.com/pywr-editor/editor/issues/53)).
+
 
 ## v1.2.0 - 2023-01-02
 
