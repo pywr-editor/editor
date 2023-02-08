@@ -74,7 +74,7 @@ class ComponentsTree(QTreeWidget):
             1, QHeaderView.ResizeMode.ResizeToContents
         )
         self.header().setStretchLastSection(False)
-        self.setStyleSheet(self.stylesheet)
+        self.setStyleSheet(self.stylesheet())
 
     def draw(self) -> None:
         """
@@ -588,10 +588,12 @@ class ComponentsTree(QTreeWidget):
         key = "{}{}".format(key[0].upper(), key[1:])
         return key
 
-    @property
-    def stylesheet(self) -> str:
+    @staticmethod
+    def stylesheet(as_dict: bool = False) -> str | dict:
         """
         Returns the stylesheet.
+        :param as_dict: Whether to return the stylesheet as dictionary. Default to
+        False.
         :return: The stylesheet as string.
         """
         style = {
@@ -611,7 +613,9 @@ class ComponentsTree(QTreeWidget):
                 "border-image: url(:components-tree/branch-end) 0"
             },
         }
-        return stylesheet_dict_to_str(style)
+        if not as_dict:
+            return stylesheet_dict_to_str(style)
+        return style
 
 
 class StyleDelegate(QStyledItemDelegate):

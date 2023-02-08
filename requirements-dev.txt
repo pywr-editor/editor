@@ -3,7 +3,6 @@ pre-commit
 pytest
 pytest-qt
 pytest-cov
-numpy
 pyinstaller
 typer
 flake8
