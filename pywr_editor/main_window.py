@@ -23,7 +23,7 @@ from pywr_editor.dialogs import (
 from pywr_editor.model import ModelConfig
 from pywr_editor.schematic import Schematic, scaling_factor
 from pywr_editor.style import AppStylesheet
-from pywr_editor.toolbar import NodesLibrary, ToolbarWidget
+from pywr_editor.toolbar import NodesLibrary, RunWidget, ToolbarWidget
 from pywr_editor.tree import ComponentsTree
 from pywr_editor.utils import (
     Action,
@@ -148,10 +148,20 @@ class MainWindow(QMainWindow):
         :return: None
         """
         if self.model_config.has_changes is False or self.maybe_save():
-            event.accept()
+            # event.accept()
             self.editor_settings.save_window_attributes(self)
         else:
             event.ignore()
+
+        # check if the run worker is still running
+        try:
+            # noinspection PyTypeChecker
+            w: RunWidget = self.findChild(RunWidget)
+            if w.worker:
+                w.worker.kill()
+        except RuntimeError:
+            pass
+        event.accept()
 
     def register_model_actions(self) -> None:
         """
@@ -531,6 +541,16 @@ class MainWindow(QMainWindow):
         validation_panel.add_button(
             self.actions.get("find-orphaned-parameters"), is_large=False
         )
+
+        # Run tab
+        run = self.toolbar.add_tab("Run")
+        # time_stepper_panel = run.add_panel("Time-stepper")
+
+        # TODO add timestepper widget + inspector and graph
+        nodes_panel = run.add_panel("Control")
+        nodes_panel.add_widget(RunWidget(self))
+
+        # results_panel = run.add_panel("Results")
 
         # Nodes tab
         nodes = self.toolbar.add_tab("Nodes")

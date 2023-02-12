@@ -41,6 +41,10 @@
         <file alias="edit-slots">toolbar/connectorarrowend.svg</file>
         <file alias="undo">toolbar/undo.svg</file>
         <file alias="redo">toolbar/redo.svg</file>
+        <file alias="stop">toolbar/sc_basicstop.svg</file>
+        <file alias="step">toolbar/step.svg</file>
+        <file alias="run-to">toolbar/run_to.svg</file>
+        <file alias="run">toolbar/run.svg</file>
     </qresource>
     <qresource prefix="file-browser">
         <file alias="close">file_browser/x-circle.svg</file>

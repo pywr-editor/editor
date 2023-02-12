@@ -21,3 +21,5 @@ from .recorders import Recorders
 from .scenarios import Scenarios
 from .tables import Tables
 from .model_config import ModelConfig
+
+from .pywr_worker import PywrWorker, PywrProgress
