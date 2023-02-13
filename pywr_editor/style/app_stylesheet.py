@@ -62,12 +62,12 @@ class AppStylesheet:
                 **self.buttons,
                 **self.forms,
                 **self.scrollbar,
-                **self.misc,
+                **self.misc(),
             }
         )
 
-    @property
-    def misc(self) -> dict:
+    @staticmethod
+    def misc() -> dict:
         """
         Returns the style for the miscellaneous components.
         :return: The stylesheet dictionary.
@@ -82,15 +82,48 @@ class AppStylesheet:
                 "border": f"1px solid{Color('neutral', 300).hex}",
                 "color": Color("neutral", 600).hex,
             },
+            "QMenu": {
+                "background": Color("gray", 100).hex,
+                "border": f'1px solid {Color("gray", 300).hex}',
+                "border-radius": "6px",
+                "color": Color("gray", 600).hex,
+                "padding": "5px",
+                "margin": 0,
+                "::separator": {
+                    "background": Color("gray", 300).hex,
+                    "margin": "5px 1px",
+                    "height": "1px",
+                },
+                "::item": {
+                    "background-color": "transparent",
+                    "border": f'1px solid {Color("gray", 100).hex}',
+                    "padding": "4px 20px",
+                    "::selected, ::pressed": {
+                        "background-color": Color("blue", 200).hex,
+                        "border": f'1px solid {Color("blue", 300).hex}',
+                        "border-radius": "6px",
+                        "color": Color("gray", 700).hex,
+                    },
+                    "::disabled": {
+                        "color": Color("gray", 400).hex,
+                    },
+                    # title
+                    "QLabel": {
+                        "color": Color("gray", 600).hex,
+                        "font-weight": "bold",
+                        "padding": "4px 18px",
+                    },
+                },
+            },
         }
 
-    @property
-    def forms(self) -> dict:
+    @staticmethod
+    def spin_box() -> dict:
         """
-        Returns the style for the forms.
-        :return: The stylesheet dictionary.
+        Returns the stylesheet for a spin box as dictionary.
+        :return: The stylesheet as dictionary.
         """
-        spin_box = {
+        return {
             "padding-right": "15px",
             "border-width": "3",
             "background": "#FFF",
@@ -143,6 +176,13 @@ class AppStylesheet:
             },
         }
 
+    @property
+    def forms(self) -> dict:
+        """
+        Returns the style for the forms.
+        :return: The stylesheet dictionary.
+        """
+
         return {
             "QGroupBox": {
                 "border": f"1px solid {Color('neutral', 300).hex}",
@@ -178,6 +218,19 @@ class AppStylesheet:
             "QLineEdit:focus:hover, QTextEdit:focus:hover": {
                 "background": "#FFF",
             },
+            "QDateEdit": {
+                "background": "#FFF",
+                # TODO not working
+                "border": f"1px solid {Color('neutral', 300).hex}",
+                "border-radius": "4px",
+                "::drop-down": {
+                    "image": "url(:form/caret-down)",
+                    "width": "12px",
+                    "height": "12px",
+                    "right": "3px",
+                    "top": "5px",
+                },
+            },
             "QDialog": {
                 "background": "#FFF",
                 "border": f"1px solid {Color('neutral', 300).hex}",
@@ -187,8 +240,8 @@ class AppStylesheet:
             "QGroupBox, QLabel": {
                 "color": Color("neutral", 700).hex,
             },
-            "SpinBox": spin_box,
-            "DoubleSpinBox": spin_box,
+            "SpinBox": self.spin_box(),
+            "DoubleSpinBox": self.spin_box(),
         }
 
     @property
