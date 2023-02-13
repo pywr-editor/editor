@@ -222,7 +222,7 @@ class AppStylesheet:
                 "background": "#FFF",
                 # TODO not working
                 "border": f"1px solid {Color('neutral', 300).hex}",
-                "border-radius": "4px",
+                "padding": "2px",
                 "::drop-down": {
                     "image": "url(:form/caret-down)",
                     "width": "12px",
