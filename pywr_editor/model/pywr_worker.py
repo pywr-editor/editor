@@ -59,10 +59,11 @@ class PywrWorker(QObject):
         self.logger = Logging().logger(self.__class__.__name__)
         self.logger.debug("Init thread")
 
-        self.mode = None
+        self.mode: RunMode | None = None
         self.model_config = model_config
         self.model_folder = model_folder
-        self.run_to_date = None
+        self.run_to_date: Timestamp | None = None
+        self.pywr_model: Model | None = None
 
         self.is_paused = False
         self.is_killed = False
@@ -80,11 +81,11 @@ class PywrWorker(QObject):
             self.logger.debug("Loading model")
             self.status_update.emit("Loading model")
             # noinspection PyArgumentList
-            model: Model = Model.load(
+            self.pywr_model: Model = Model.load(
                 data=self.model_config, path=self.model_folder
             )
             # noinspection PyUnresolvedReferences
-            last_index = len(model.timestepper) - 1
+            last_index = len(self.pywr_model.timestepper) - 1
         except Exception:
             self.logger.debug(
                 f"Pywr failed to load because: {traceback.print_exc()}"
@@ -111,9 +112,9 @@ class PywrWorker(QObject):
             if self.mode == RunMode.STEP:
                 self.before_step.emit()
                 self.logger.debug("Stepping")
-                model.step()
+                self.pywr_model.step()
                 # noinspection PyUnresolvedReferences
-                current_timestep = model.timestepper.current
+                current_timestep = self.pywr_model.timestepper.current
 
                 self.logger.debug(
                     f"Stepped to {current_timestep} ({current_timestep.index+1}"
@@ -141,9 +142,9 @@ class PywrWorker(QObject):
                         >= self.run_to_date
                     )
                 ):
-                    model.step()
+                    self.pywr_model.step()
                     # noinspection PyUnresolvedReferences
-                    current_timestep = model.timestepper.current
+                    current_timestep = self.pywr_model.timestepper.current
                     self.progress_update.emit(
                         PywrProgress(
                             current_timestamp=current_timestep.period.to_timestamp(),
@@ -159,9 +160,10 @@ class PywrWorker(QObject):
 
                 self.pause()
 
-        del model
+        del self.pywr_model
         gc.collect()
         self.finished.emit()
+        self.pywr_model = None
 
     def pause(self) -> None:
         """
