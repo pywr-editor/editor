@@ -12,6 +12,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from pywr_editor.dialogs import InspectorDialog
 from pywr_editor.model import PywrProgress, PywrWorker
 from pywr_editor.style import Color, stylesheet_dict_to_str
 from pywr_editor.toolbar.small_button import ToolbarSmallButton
@@ -30,10 +31,12 @@ class RunWidget(QWidget):
         super().__init__()
         self.logger = Logging().logger(self.__class__.__name__)
         self.model_config = parent.model_config
+        self.inspector_action = parent.actions.get("run-inspector")
+        self.inspector_action.triggered.connect(self.open_inspector)
 
         # Worker
-        self.worker = None
-        self.thread = None
+        self.worker: PywrWorker | None = None
+        self.thread: QThread | None = None
         self.is_running = False
 
         # Control buttons
@@ -156,16 +159,14 @@ class RunWidget(QWidget):
         :return: None
         """
         self.logger.debug("Run done")
-
         self.is_running = False
         self.thread.exit()
-        # self.worker.deleteLater()
-        # self.thread.deleteLater()
 
         self.run_button.setEnabled(True)
         self.run_to_button.setEnabled(True)
         self.step_button.setEnabled(True)
         self.stop_button.setEnabled(False)
+        self.inspector_action.setEnabled(False)
 
     @Slot()
     def before_step(self) -> None:
@@ -177,6 +178,7 @@ class RunWidget(QWidget):
         self.run_to_button.setEnabled(False)
         self.step_button.setEnabled(False)
         self.stop_button.setEnabled(False)
+        self.inspector_action.setEnabled(False)
 
     @Slot()
     def step_done(self) -> None:
@@ -186,6 +188,7 @@ class RunWidget(QWidget):
         """
         self.step_button.setEnabled(True)
         self.stop_button.setEnabled(True)
+        self.inspector_action.setEnabled(True)
 
     @Slot()
     def before_run_to(self) -> None:
@@ -197,6 +200,7 @@ class RunWidget(QWidget):
         self.run_to_button.setEnabled(False)
         self.step_button.setEnabled(False)
         self.stop_button.setEnabled(False)
+        self.inspector_action.setEnabled(False)
 
     @Slot()
     def run_to_done(self) -> None:
@@ -206,6 +210,7 @@ class RunWidget(QWidget):
         """
         self.step_button.setEnabled(True)
         self.stop_button.setEnabled(True)
+        self.inspector_action.setEnabled(True)
 
     @Slot()
     def step(self) -> None:
@@ -262,3 +267,14 @@ class RunWidget(QWidget):
         :return: None
         """
         self.progress_status.setText(message)
+
+    @Slot()
+    def open_inspector(self) -> None:
+        """
+        Opens the run inspector dialog.
+        :return: None
+        """
+        dialog = InspectorDialog(
+            model_config=self.model_config, pywr_model=self.worker.pywr_model
+        )
+        dialog.show()
