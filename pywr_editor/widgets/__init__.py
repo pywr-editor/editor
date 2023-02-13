@@ -1,3 +1,4 @@
+from .calendar import CalendarWidget
 from .combo_box import ComboBox
 from .checkable_combo_box import CheckableComboBox
 from .contextual_menu import ContextualMenu
