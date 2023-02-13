@@ -24,6 +24,7 @@ from pywr_editor.model import ModelConfig
 from pywr_editor.schematic import Schematic, scaling_factor
 from pywr_editor.style import AppStylesheet
 from pywr_editor.toolbar import NodesLibrary, RunWidget, ToolbarWidget
+from pywr_editor.toolbar.run_controls.timestepper import TimeStepperWidget
 from pywr_editor.tree import ComponentsTree
 from pywr_editor.utils import (
     Action,
@@ -114,6 +115,7 @@ class MainWindow(QMainWindow):
         self.register_model_actions()
         self.register_nodes_actions()
         self.register_schematic_actions()
+        self.register_model_run_actions()
         self.warning_info_message.connect(self.on_alert_info_message)
         self.error_message.connect(self.on_error_message)
         self.save.connect(self.on_save)
@@ -507,6 +509,31 @@ class MainWindow(QMainWindow):
             )
         )
 
+    def register_model_run_actions(self) -> None:
+        """
+        Registers the action for the Run tab.
+        :return: None
+        """
+        self.actions.add(
+            Action(
+                key="plot-data",
+                name="Plot\nresults",
+                icon=":toolbar/plot-data",
+                tooltip="Plot the results at the end of a run",
+                is_disabled=True,
+            )
+        )
+        self.actions.add(
+            Action(
+                key="run-inspector",
+                name="Inspector",
+                icon=":toolbar/run-inspector",
+                tooltip="Inspect the properties of all model components for an "
+                + "active model run",
+                is_disabled=True,
+            )
+        )
+
     def setup_toolbar(self) -> None:
         """
         Setups the toolbar.
@@ -544,13 +571,15 @@ class MainWindow(QMainWindow):
 
         # Run tab
         run = self.toolbar.add_tab("Run")
-        # time_stepper_panel = run.add_panel("Time-stepper")
+        time_stepper_panel = run.add_panel("Time-stepper")
+        time_stepper_panel.add_widget(TimeStepperWidget(self))
 
-        # TODO add timestepper widget + inspector and graph
-        nodes_panel = run.add_panel("Control")
+        nodes_panel = run.add_panel("Controls")
         nodes_panel.add_widget(RunWidget(self))
 
-        # results_panel = run.add_panel("Results")
+        results_panel = run.add_panel("Results")
+        results_panel.add_button(self.actions.get("run-inspector"))
+        results_panel.add_button(self.actions.get("plot-data"))
 
         # Nodes tab
         nodes = self.toolbar.add_tab("Nodes")
