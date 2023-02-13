@@ -9,6 +9,7 @@ from pywr.model import Model
 from _misc.inspector.inspector_tree import InspectorTree
 from pywr_editor.form import FormTitle
 from pywr_editor.model import ModelConfig
+from pywr_editor.style import AppStylesheet
 from pywr_editor.widgets import PushButton
 
 if TYPE_CHECKING:
@@ -42,8 +43,8 @@ class InspectorDialog(QDialog):
         # noinspection PyUnresolvedReferences
         timestep: Timestep = pywr_model.timestepper.current
         title = FormTitle(
-            f"Model inspector - timestep {timestep.year}-{timestep.month}-"
-            + f"{timestep.day}"
+            f"Model inspector - timestep {timestep.day}/{timestep.month}/"
+            + f"{timestep.year}"
         )
         description = QLabel(
             "Inspect the values of the class attributes of the pywr model "
@@ -82,4 +83,7 @@ class InspectorDialog(QDialog):
         self.setLayout(layout)
         self.setWindowTitle("Model inspector")
         self.setMinimumSize(750, 650)
+        self.setStyleSheet(AppStylesheet().get())
         self.setWindowModality(Qt.WindowModality.WindowModal)
+        # always delete the dialog to release the model instance
+        self.setAttribute(Qt.WA_DeleteOnClose)
