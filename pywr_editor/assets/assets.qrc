@@ -45,6 +45,8 @@
         <file alias="step">toolbar/step.svg</file>
         <file alias="run-to">toolbar/run_to.svg</file>
         <file alias="run">toolbar/run.svg</file>
+        <file alias="plot-data">toolbar/sc_diagramtype.svg</file>
+        <file alias="run-inspector">toolbar/lc_morecontrols.svg</file>
     </qresource>
     <qresource prefix="file-browser">
         <file alias="close">file_browser/x-circle.svg</file>
@@ -94,6 +96,8 @@
         <file alias="paste">misc/paste.svg</file>
     </qresource>
     <qresource prefix="form">
+        <file alias="caret-left">form/caret-left-fill.svg</file>
+        <file alias="caret-right">form/caret-right-fill.svg</file>
         <file alias="caret-down">form/caret-down-fill.svg</file>
         <file alias="caret-up">form/caret-up-fill.svg</file>
         <file alias="caret-down-disabled">form/caret-down-fill-disabled.svg</file>
