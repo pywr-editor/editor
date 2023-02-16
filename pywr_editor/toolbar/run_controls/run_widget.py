@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 import pandas as pd
-from PySide6.QtCore import QThread, Slot
+from PySide6.QtCore import QThread, Signal, Slot
 from PySide6.QtGui import QAction, QIcon
 from PySide6.QtWidgets import (
     QHBoxLayout,
@@ -21,8 +21,17 @@ from pywr_editor.utils import Logging
 if TYPE_CHECKING:
     from pywr_editor import MainWindow
 
+"""
+ Widget used to control a model
+ run using pywr.
+"""
+
 
 class RunWidget(QWidget):
+    run_status_changed = Signal(bool)
+    """ Signal emitted when the run status changes. It returns True when
+    the model is running, False otherwise """
+
     def __init__(self, parent: "MainWindow"):
         """
         Initialises the widget.
@@ -89,7 +98,7 @@ class RunWidget(QWidget):
             QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed
         )
         self.progress_bar.setStyleSheet(self.progress_bar_style)
-        self.progress_status = QLabel("")
+        self.progress_status = QLabel("Ready to run")
         self.progress_status.setMinimumWidth(70)
 
         progress_layout = QHBoxLayout()
@@ -160,6 +169,7 @@ class RunWidget(QWidget):
         """
         self.logger.debug("Run done")
         self.is_running = False
+        self.run_status_changed.emit(False)
         self.thread.exit()
 
         self.run_button.setEnabled(True)
@@ -189,6 +199,7 @@ class RunWidget(QWidget):
         self.step_button.setEnabled(True)
         self.stop_button.setEnabled(True)
         self.inspector_action.setEnabled(True)
+        self.run_status_changed.emit(True)
 
     @Slot()
     def before_run_to(self) -> None:
@@ -211,6 +222,7 @@ class RunWidget(QWidget):
         self.step_button.setEnabled(True)
         self.stop_button.setEnabled(True)
         self.inspector_action.setEnabled(True)
+        self.run_status_changed.emit(True)
 
     @Slot()
     def step(self) -> None:
@@ -239,7 +251,7 @@ class RunWidget(QWidget):
         """
         self.logger.debug("Stopping thread")
         self.progress_bar.reset()
-        self.progress_status.setText("")
+        self.progress_status.setText("Ready to run")
         self.worker.kill()
 
     @Slot(PywrProgress)

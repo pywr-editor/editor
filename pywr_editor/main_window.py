@@ -124,6 +124,8 @@ class MainWindow(QMainWindow):
         self.toolbar = ToolbarWidget(self)
         self.addToolBar(self.toolbar)
         self.setup_toolbar()
+        # noinspection PyTypeChecker
+        self.run_widget: RunWidget = self.toolbar.findChild(RunWidget)
 
         # Status bar
         self.add_status_bar()
@@ -143,6 +145,9 @@ class MainWindow(QMainWindow):
         self.components_tree.draw()
         self.schematic.draw()
 
+        # handle schematic status during a model run
+        self.run_widget.run_status_changed.connect(self.on_model_run)
+
     def closeEvent(self, event: PySide6.QtGui.QCloseEvent) -> None:
         """
         Prompt whether to save the model and saves the widgets' geometry and state.
@@ -157,10 +162,8 @@ class MainWindow(QMainWindow):
 
         # check if the run worker is still running
         try:
-            # noinspection PyTypeChecker
-            w: RunWidget = self.findChild(RunWidget)
-            if w.worker:
-                w.worker.kill()
+            if self.run_widget.worker:
+                self.run_widget.worker.kill()
         except RuntimeError:
             pass
         event.accept()
@@ -901,6 +904,35 @@ class MainWindow(QMainWindow):
         # enable the "Save" button if there are changes
         save_button = self.actions.get("save-model")
         save_button.setEnabled(self.model_config.has_changes)
+
+    @Slot(bool)
+    def on_model_run(self, is_running: bool) -> None:
+        """
+        Handles the schematic and other widgets behaviour when the model is running.
+        :param is_running: Whether the model is running.
+        :return: None
+        """
+        # disable toolbar buttons
+        to_disable = [
+            "edit-metadata",
+            "edit-scenarios",
+            "edit-imports",
+            "edit-slots",
+            "edit-tables",
+            "edit-parameters",
+            "edit-recorders",
+            "find-orphaned-nodes",
+            "find-orphaned-parameters",
+        ]
+        for action_name in to_disable:
+            self.actions.get(action_name).setDisabled(is_running)
+
+        # disable the node library
+        # noinspection PyTypeChecker
+        node_library: NodesLibrary = self.toolbar.findChild(NodesLibrary)
+        node_library.setDisabled(is_running)
+
+        self.schematic.set_run_mode(is_running)
 
     @Slot()
     def on_save(self) -> None:

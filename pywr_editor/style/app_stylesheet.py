@@ -80,6 +80,7 @@ class AppStylesheet:
             "QToolTip": {
                 "background": Color("neutral", 100).hex,
                 "border": f"1px solid{Color('neutral', 300).hex}",
+                "border-radius": "5px",
                 "color": Color("neutral", 600).hex,
             },
             "QMenu": {
