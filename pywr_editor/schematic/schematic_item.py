@@ -373,7 +373,10 @@ class SchematicItem(QGraphicsItemGroup):
         :param event: The event being triggered.
         :return: None
         """
-        if self.view.connecting_node_props.enabled:
+        if (
+            self.view.is_model_running
+            or self.view.connecting_node_props.enabled
+        ):
             return
 
         self.view.de_select_all_items()

@@ -67,6 +67,7 @@ class Schematic(QGraphicsView):
         self.app = app
         self.editor_settings = self.app.editor_settings
         self.canvas_drag = False
+        self.is_model_running = False
 
         # initialises the schematic view
         schematic_size = model_config.schematic_size
@@ -652,15 +653,10 @@ class Schematic(QGraphicsView):
 
     @Slot()
     def export_current_view(self) -> None:
-        # # image = QImage(self.scene.sceneRect().size().toSize(), QImage.Format_RGBA64)
-        # image = QPixmap(self.scene.sceneRect().size().toSize())
-        # # image.fill(Qt.GlobalColor.transparent)
-        # p = QPainter(image)
-        #
-        # self.scene.render(p, self.scene.itemsBoundingRect())
-        # p.end()
-        # image.save('test.png')
-        # return
+        """
+        Exports the current view.
+        :return: None
+        """
         file = QFileDialog().getSaveFileName(
             self, "Save current view as image", "", "PNG (*.png)"
         )
@@ -698,11 +694,22 @@ class Schematic(QGraphicsView):
         :param enable: Whether the model is running.
         :return: None
         """
-        self.canvas.setOpacity(0.7 if enable else 1)
+        if enable:
+            self.canvas.setOpacity(0.7)
+            # use flag to disable contextual menu in item instance
+            self.is_model_running = True
+        else:
+            self.canvas.setOpacity(1)
+            self.is_model_running = False
 
         for item in self.items():
             if isinstance(item, SchematicItem):
                 if enable:
+                    # lock node position and selection
+                    item.setFlag(QGraphicsItem.ItemIsMovable, False)
+                    item.setFlag(QGraphicsItem.ItemIsSelectable, False)
+
+                    # draw new tooltip
                     model = self.app.run_widget.worker.pywr_model
 
                     cell_style = "style='padding:2px 6px;"
@@ -763,6 +770,11 @@ class Schematic(QGraphicsView):
                         tooltip_text += "</tr>"
                     tooltip_text += "</table>"
                 else:
+                    # unlock node position and selection
+                    item.setFlag(QGraphicsItem.ItemIsMovable, True)
+                    item.setFlag(QGraphicsItem.ItemIsSelectable, True)
+
+                    # restore tooltip
                     tooltip_text = item.tooltip_text
 
                 item.setToolTip(tooltip_text)
