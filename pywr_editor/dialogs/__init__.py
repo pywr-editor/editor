@@ -15,6 +15,7 @@ from .recorders.recorders_widget import RecordersWidget
 from .start_screen.start_screen import StartScreen
 from .scenarios.scenarios_dialog import ScenariosDialog
 from .about_dialog.about_button import AboutButton
+from .run_inspector.inspector_tree import InspectorTree
 from .run_inspector.inspector_dialog import InspectorDialog
 
 # section classes for node dialog

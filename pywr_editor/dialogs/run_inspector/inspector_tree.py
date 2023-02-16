@@ -1,5 +1,5 @@
 import inspect
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Tuple
 
 import numpy as np
 from PySide6.QtCore import QSize, Qt
@@ -116,40 +116,6 @@ class InspectorTree(QTreeWidget):
                 ):
                     continue
 
-                # render scenario-dependant attributes
-                if attr_raw_name in [
-                    "flow",
-                    "prev_flow",
-                    "current_pc",
-                    "volume",
-                ]:
-                    attr_item = QTreeWidgetItem(node_item)
-                    attr_item.setText(0, attr_name)
-                    if self.has_scenarios:
-                        attr_item.setToolTip(0, type(attr_value).__name__)
-                        attr_item.setText(
-                            1, f"{len(self.scenario_combinations)} combinations"
-                        )
-                        for sc_i, sc_name in enumerate(
-                            self.scenario_combinations
-                        ):
-                            sc_item = QTreeWidgetItem(attr_item)
-                            sc_item.setText(0, sc_name)
-                            sc_item.setText(1, str(attr_value[sc_i]))
-                            sc_item.setToolTip(
-                                1, type(attr_value[sc_i]).__name__
-                            )
-                    else:
-                        attr_item.setText(1, str(attr_value[0]))
-                        attr_item.setToolTip(1, type(attr_value[0]).__name__)
-                    continue
-
-                # only allow list of strings or numbers
-                if isinstance(attr_value, list) and not all(
-                    [isinstance(a, allowed_types) for a in attr_value]
-                ):
-                    continue
-
                 # exclude invalid types
                 if (
                     not isinstance(attr_value, allowed_types)
@@ -161,11 +127,37 @@ class InspectorTree(QTreeWidget):
                 ):
                     continue
 
+                # only allow list of strings or numbers
+                if isinstance(attr_value, list) and not all(
+                    [isinstance(a, allowed_types) for a in attr_value]
+                ):
+                    continue
+
                 # any other attribute (float, string or boolean)
                 attr_item = QTreeWidgetItem(node_item)
                 attr_item.setText(0, attr_name)
                 attr_item.setText(1, str(attr_value))
                 attr_item.setToolTip(1, type(attr_value).__name__)
+
+            # render scenario-dependant attributes
+            for attr_raw_name, result_data in self.get_node_value_dict(
+                self.pywr_model, all_attributes
+            ).items():
+                attr_name = node_config.humanise_attribute_name(attr_raw_name)
+
+                attr_item = QTreeWidgetItem(node_item)
+                attr_item.setText(0, attr_name)
+                if result_data["has_scenarios"]:
+                    attr_item.setToolTip(0, result_data["type"])
+                    attr_item.setText(1, result_data["combinations"])
+                    for sc_i, sc_value in enumerate(result_data["data"]):
+                        sc_item = QTreeWidgetItem(attr_item)
+                        sc_item.setText(0, sc_value["name"])
+                        sc_item.setText(1, sc_value["value"])
+                        sc_item.setToolTip(1, sc_value["type"])
+                else:
+                    attr_item.setText(1, result_data["data"]["value"])
+                    attr_item.setToolTip(1, result_data["data"]["type"])
 
     def add_parameters(self) -> None:
         """
@@ -459,3 +451,55 @@ class InspectorTree(QTreeWidget):
                 },
             }
         )
+
+    @staticmethod
+    def get_node_value_dict(
+        pywr_model: Model, all_attributes: list[Tuple[str, Any]]
+    ) -> dict[str, Any]:
+        """
+        Gets the node's results as dictionary.
+        :param pywr_model: The pywr model instance.
+        :param all_attributes: The pywr node attributes.
+        :return: The results as dictionary.
+        """
+        # noinspection PyUnresolvedReferences
+        has_scenarios = len(pywr_model.scenarios.scenarios)
+        # noinspection PyUnresolvedReferences
+        scenario_combinations = list(pywr_model.scenarios.combination_names)
+
+        value_dict = {}
+        for attr in all_attributes:
+            attr_name = attr[0]
+            attr_value = attr[1]
+
+            # render scenario-dependant attributes
+            if attr_name in [
+                "flow",
+                "prev_flow",
+                "current_pc",
+                "volume",
+            ]:
+                value_dict[attr_name] = {}
+                if has_scenarios:
+                    value_dict[attr_name]["has_scenarios"] = True
+                    value_dict[attr_name]["type"] = type(attr_value).__name__
+                    value_dict[attr_name][
+                        "combinations"
+                    ] = f"{len(scenario_combinations)} combinations"
+                    value_dict[attr_name]["data"] = []
+                    for sc_i, sc_name in enumerate(scenario_combinations):
+                        value_dict[attr_name]["data"].append(
+                            {
+                                "name": sc_name,
+                                "value": str(attr_value[sc_i]),
+                                "type": type(attr_value[sc_i]).__name__,
+                            }
+                        )
+                else:
+                    value_dict[attr_name]["has_scenarios"] = False
+                    value_dict[attr_name]["data"] = {
+                        "value": str(attr_value[0]),
+                        "type": type(attr_value[0]).__name__,
+                    }
+
+        return value_dict
