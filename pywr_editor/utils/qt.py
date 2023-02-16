@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import TYPE_CHECKING, Callable, Literal, Union
 
 from PySide6.QtCore import QObject
@@ -69,7 +70,7 @@ def browse_files(file_filter: str = "JSON file (*.json)") -> None | str:
     file_dialog.setNameFilter(file_filter)
     file_dialog.exec()
     files = file_dialog.selectedFiles()
-    if len(files) > 0:
+    if len(files) > 0 and Path(files[0]).is_file():
         return files[0]
     else:
         return None
