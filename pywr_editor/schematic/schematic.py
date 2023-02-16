@@ -1,3 +1,4 @@
+import inspect
 from typing import TYPE_CHECKING, Sequence, Union
 
 import PySide6
@@ -14,6 +15,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
+from pywr_editor.dialogs import InspectorTree
 from pywr_editor.model import Edges, ModelConfig, NodeConfig
 from pywr_editor.node_shapes import get_node_icon_classes
 from pywr_editor.schematic import (
@@ -690,6 +692,81 @@ class Schematic(QGraphicsView):
         """
         self.app.actions.get("decrease-height").setEnabled(enable)
 
+    def set_run_mode(self, enable: bool) -> None:
+        """
+        Enables the run mode when the model is running.
+        :param enable: Whether the model is running.
+        :return: None
+        """
+        self.canvas.setOpacity(0.7 if enable else 1)
+
+        for item in self.items():
+            if isinstance(item, SchematicItem):
+                if enable:
+                    model = self.app.run_widget.worker.pywr_model
+
+                    cell_style = "style='padding:2px 6px;"
+                    cell_style += (
+                        f"border:1px solid {Color('neutral', 400).hex}'"
+                    )
+
+                    tooltip_text = "<table>"
+                    tooltip_text += (
+                        "<tr><td colspan='2'><b style='font-size:12pt'>"
+                    )
+                    tooltip_text += f"{item.name}</td></tr>"
+
+                    node = model.nodes[item.name]
+                    all_attributes = inspect.getmembers(
+                        node,
+                        lambda a: not inspect.isroutine(a),
+                    )
+                    for (
+                        attr_raw_name,
+                        result_data,
+                    ) in InspectorTree.get_node_value_dict(
+                        model, all_attributes
+                    ).items():
+                        if attr_raw_name == "prev_flow":
+                            continue
+                        attr_name = item.model_node.humanise_attribute_name(
+                            attr_raw_name
+                        )
+                        tooltip_text += "<tr>"
+                        # data with scenarios
+                        if result_data["has_scenarios"]:
+                            tooltip_text += f"<td colspan='2'>{attr_name} "
+                            tooltip_text += "<table style='margin-left:10px;"
+                            tooltip_text += "border-collapse:collapse'>"
+                            tooltip_text += (
+                                f"<tr><td {cell_style}><b>Combination</b>"
+                            )
+                            tooltip_text += (
+                                f"</td><td {cell_style}><b>Value</b></td></tr>"
+                            )
+                            for sc_value in result_data["data"]:
+                                tooltip_text += f"<tr><td {cell_style}>"
+                                tooltip_text += f"{sc_value['name']}</td>"
+                                tooltip_text += (
+                                    f"<td {cell_style}>{sc_value['value']}"
+                                )
+                                tooltip_text += "</td></tr>"
+                            tooltip_text += "</table>"
+                        # single value
+                        else:
+                            tooltip_text += (
+                                f"<tr><td>{result_data['name']}</td>"
+                            )
+                            tooltip_text += (
+                                "<td>{result_data['value']}</td></tr>"
+                            )
+                        tooltip_text += "</tr>"
+                    tooltip_text += "</table>"
+                else:
+                    tooltip_text = item.tooltip_text
+
+                item.setToolTip(tooltip_text)
+
     @Slot()
     def select_all_items(self) -> None:
         """
@@ -958,6 +1035,7 @@ class Schematic(QGraphicsView):
             self.app.undo_stack.push(command)
         self.update()
 
+    @Slot()
     def on_scene_change(self) -> None:
         """
         Checks when new items are added to the schematic.

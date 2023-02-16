@@ -47,10 +47,10 @@ class SchematicItem(QGraphicsItemGroup):
         self.x, self.y = self.model_node.position
         self.edges: list[Edge] = []
         self.view = view
-        tooltip = ModelComponentTooltip(
+        self.tooltip_text = ModelComponentTooltip(
             model_config=view.model_config, comp_obj=self.model_node
-        )
-        self.setToolTip(tooltip.render())
+        ).render()
+        self.setToolTip(self.tooltip_text)
 
         self.padding_y: int = 5
         self.padding_x = 5
