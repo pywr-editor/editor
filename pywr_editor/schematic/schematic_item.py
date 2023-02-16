@@ -374,7 +374,7 @@ class SchematicItem(QGraphicsItemGroup):
         :return: None
         """
         if (
-            self.view.is_model_running
+            self.view.app.is_model_running
             or self.view.connecting_node_props.enabled
         ):
             return

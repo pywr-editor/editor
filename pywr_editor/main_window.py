@@ -72,6 +72,7 @@ class MainWindow(QMainWindow):
             )
             sys.exit(1)
         self.empty_model: bool = False
+
         if model_file is None:
             self.logger.debug("No model file was provided")
             self.empty_model = True
@@ -145,7 +146,8 @@ class MainWindow(QMainWindow):
         self.components_tree.draw()
         self.schematic.draw()
 
-        # handle schematic status during a model run
+        # handle schematic status during a model ru
+        self.is_model_running = False
         self.run_widget.run_status_changed.connect(self.on_model_run)
 
     def closeEvent(self, event: PySide6.QtGui.QCloseEvent) -> None:
@@ -912,6 +914,9 @@ class MainWindow(QMainWindow):
         :param is_running: Whether the model is running.
         :return: None
         """
+        # use flag to make other components aware the model is running
+        self.is_model_running = is_running
+
         # disable toolbar buttons
         to_disable = [
             "edit-metadata",

@@ -67,7 +67,6 @@ class Schematic(QGraphicsView):
         self.app = app
         self.editor_settings = self.app.editor_settings
         self.canvas_drag = False
-        self.is_model_running = False
 
         # initialises the schematic view
         schematic_size = model_config.schematic_size
@@ -696,11 +695,8 @@ class Schematic(QGraphicsView):
         """
         if enable:
             self.canvas.setOpacity(0.7)
-            # use flag to disable contextual menu in item instance
-            self.is_model_running = True
         else:
             self.canvas.setOpacity(1)
-            self.is_model_running = False
 
         for item in self.items():
             if isinstance(item, SchematicItem):

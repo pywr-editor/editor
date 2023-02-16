@@ -13,6 +13,7 @@ from PySide6.QtWidgets import (
 )
 
 from pywr_editor.dialogs import (
+    NodeDialog,
     ParametersDialog,
     ParametersWidget,
     RecordersDialog,
@@ -405,7 +406,31 @@ class ComponentsTree(QTreeWidget):
         :param pos: The position.
         :return: None
         """
+        # disable menu if model is running
+        if self.parent.is_model_running:
+            return
+
         item = self.itemAt(pos)
+
+        if isinstance(item, TreeWidgetNode):
+            node_name = item.name
+            context_menu = ContextualMenu()
+            context_menu.set_title(node_name)
+            # Edit node
+            edit_action = context_menu.addAction("Edit")
+            # noinspection PyUnresolvedReferences
+            edit_action.triggered.connect(
+                lambda *args, name=node_name: self.on_edit_node(name)
+            )
+
+            # Delete node
+            edit_action = context_menu.addAction("Delete")
+            # noinspection PyUnresolvedReferences
+            edit_action.triggered.connect(
+                lambda *args, name=node_name: self.on_delete_node(name)
+            )
+
+            context_menu.exec(self.mapToGlobal(pos))
         if isinstance(item, TreeWidgetTable):
             table_name = item.name
             context_menu = ContextualMenu()
@@ -473,6 +498,31 @@ class ComponentsTree(QTreeWidget):
             )
 
             context_menu.exec(self.mapToGlobal(pos))
+
+    @Slot(str)
+    def on_edit_node(self, node_name: str) -> None:
+        """
+        Opens the dialog to edit the selected node.
+        :param node_name: The node name to edit.
+        :return: None
+        """
+        dialog = NodeDialog(
+            node_name=node_name,
+            model_config=self.model_config,
+            parent=self.parent,
+        )
+        dialog.show()
+
+    @Slot(str)
+    def on_delete_node(self, node_name: str) -> None:
+        """
+        Deletes the selected node.
+        :param node_name: The node name to edit.
+        :return: None
+        """
+        self.parent.schematic.on_delete_nodes(
+            [self.parent.schematic.schematic_items[node_name]]
+        )
 
     @Slot(str)
     def on_edit_table(self, table_name: str) -> None:
