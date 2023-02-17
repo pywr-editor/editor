@@ -20,6 +20,7 @@ from pywr_editor.model import (
     PywrRecordersData,
     Recorders,
     Scenarios,
+    Shapes,
     Tables,
 )
 
@@ -59,6 +60,7 @@ class ModelConfig:
         self.tables = Tables(model=self)
         self.scenarios = Scenarios(model=self)
         self.includes = Includes(model=self)
+        self.shapes = Shapes(model=self)
 
         # pywr data
         self.pywr_parameter_data = PywrParametersData()
@@ -173,6 +175,7 @@ class ModelConfig:
             "nodes": [],
             "edges": [],
             "tables": {},
+            Constants.EDITOR_CONFIG_KEY.value: {Constants.SHAPES_KEY.value: []},
         }
 
     def load_model(self) -> None:
@@ -225,13 +228,22 @@ class ModelConfig:
             "timestepper",
             "metadata",
             "tables",
+            Constants.EDITOR_CONFIG_KEY.value,
         ]:
             if key not in self.json:
                 self.json[key] = {}
 
+        if (
+            Constants.SHAPES_KEY.value
+            not in self.json[Constants.EDITOR_CONFIG_KEY.value]
+        ):
+            self.json[Constants.EDITOR_CONFIG_KEY.value][
+                Constants.SHAPES_KEY.value
+            ] = []
+
         # check that the metadata dictionary and its key/value pairs are defined
         default_metadata = {
-            "minimum_version": "0.1",
+            "minimum_version": "1.19.0",
             "title": "Untitled",
             "description": "Missing description",
         }
@@ -427,6 +439,14 @@ class ModelConfig:
         return True
 
     @property
+    def editor_config(self) -> dict:
+        """
+        Returns the editor configuration dictionary.
+        :return: None
+        """
+        return self.json[Constants.EDITOR_CONFIG_KEY.value]
+
+    @property
     def schematic_size(self) -> list[float]:
         """
         Gets the size of the schematic.
@@ -436,14 +456,14 @@ class ModelConfig:
         schematic_size_key = Constants.SCHEMATIC_SIZE_KEY.value
         default_schematic_size = Constants.DEFAULT_SCHEMATIC_SIZE.value
         if (
-            schematic_size_key in self.json
-            and isinstance(self.json[schematic_size_key], list)
-            and len(self.json[schematic_size_key]) == 2
+            schematic_size_key in self.editor_config
+            and isinstance(self.editor_config[schematic_size_key], list)
+            and len(self.editor_config[schematic_size_key]) == 2
         ):
-            return self.json[schematic_size_key]
+            return self.editor_config[schematic_size_key]
         else:
             # store the schematic size if it is not set or wrong
-            self.json[
+            self.editor_config[
                 Constants.SCHEMATIC_SIZE_KEY.value
             ] = default_schematic_size
             return default_schematic_size
@@ -454,7 +474,7 @@ class ModelConfig:
         :param size: The width and height in pixel.
         :return: None
         """
-        self.json[Constants.SCHEMATIC_SIZE_KEY.value] = size
+        self.editor_config[Constants.SCHEMATIC_SIZE_KEY.value] = size
         self.changes_tracker.add(f"Changed schematic size to {size}")
 
     def normalize_file_path(self, file: str | None) -> str | None:

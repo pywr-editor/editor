@@ -1,224 +1,366 @@
 {
-    "metadata": {
-        "title": "Reservoir 1",
-        "description": "A model with a reservoir.",
-        "minimum_version": "0.1",
-        "author": "Stefano Simoncelli",
-        "email": "stefano.simoncelli@domain.com",
-        "maintainer": "Stefano Simoncelli",
-        "model_version": "2.1"
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
+  "nodes": [
+    {
+      "name": "Reservoir1",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35
     },
-    "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
-    "nodes": [
+    {
+      "name": "Reservoir2",
+      "type": "Storage",
+      "max_volume": 35,
+      "initial_volume": 35
+    },
+    {
+      "name": "Reservoir3",
+      "type": "reservoir",
+      "max_volume": 35,
+      "initial_volume": 35
+    },
+    {
+      "name": "Output",
+      "type": "output"
+    }
+  ],
+  "includes": [
+    "files/custom_parameter.py"
+  ],
+  "parameters": {
+    "constant": {
+      "type": "constant",
+      "value": 343.13
+    },
+    "valid_dicts": {
+      "type": "MultipleThresholdIndexParameter",
+      "node": "Reservoir2",
+      "thresholds": [
         {
-            "name": "Reservoir1",
-            "type": "Storage",
-            "max_volume": 35,
-            "initial_volume": 35
+          "type": "constant",
+          "value": 345.6
         },
         {
-            "name": "Reservoir2",
-            "type": "Storage",
-            "max_volume": 35,
-            "initial_volume": 35
-        },
-        {
-            "name": "Reservoir3",
-            "type": "reservoir",
-            "max_volume": 35,
-            "initial_volume": 35
-        },
-        {"name": "Output", "type": "output"}
-    ],
-    "includes": ["files/custom_parameter.py"],
-    "parameters": {
-        "constant": {"type": "constant", "value": 343.13},
-        "valid_dicts": {
-            "type": "MultipleThresholdIndexParameter",
-            "node": "Reservoir2",
-            "thresholds": [
-                {"type": "constant", "value": 345.6},
-                {"type": "weeklyprofile", "values": [1, 2, 3, 4, 5, 6, 7]}
-            ]
-        },
-        "valid_with_float": {
-            "type": "MultipleThresholdIndexParameter",
-            "node": "Reservoir2",
-            "thresholds": [
-                345.6,
-                {"type": "weeklyprofile", "values": [1, 2, 3, 4, 5, 6, 7]}
-            ]
-        },
-        "valid_with_str": {
-            "type": "MultipleThresholdIndexParameter",
-            "node": "Reservoir2",
-            "thresholds": [
-                345.6,
-                "constant",
-                {"type": "weeklyprofile", "values": [1, 2, 3, 4, 5, 6, 7]}
-            ]
-        },
-        "valid_with_only_floats": {
-            "type": "MultipleThresholdIndexParameter",
-            "node": "Reservoir2",
-            "thresholds": [345.6, 34]
-        },
-        "valid_no_key": {
-            "type": "MultipleThresholdIndexParameter",
-            "node": "Reservoir2"
-        },
-        "valid_empty_list": {
-            "type": "MultipleThresholdIndexParameter",
-            "node": "Reservoir2",
-            "thresholds": []
-        },
-        "valid_with_custom_parameter": {
-            "type": "AggregatedIndexParameter",
-            "parameters": [{"type": "my", "value": 5}]
-        },
-        "invalid_type": {
-            "type": "MultipleThresholdIndexParameter",
-            "node": "Reservoir2",
-            "thresholds": 12
-        },
-        "invalid_type_in_list": {
-            "type": "MultipleThresholdIndexParameter",
-            "node": "Reservoir2",
-            "thresholds": [12, false]
-        },
-        "invalid_wrong_param_dict": {
-            "type": "MultipleThresholdIndexParameter",
-            "node": "Reservoir2",
-            "thresholds": [345.6, {"values": [1, 2, 3, 4, 5, 6, 7]}]
-        },
-        "invalid_non_existing_param_name": {
-            "type": "MultipleThresholdIndexParameter",
-            "node": "Reservoir2",
-            "thresholds": [345.6, 34, "Non existing parameter"]
-        },
-        "invalid_with_wrong_custom_parameter_type": {
-            "type": "AggregatedIndexParameter",
-            "parameters": [{"type": "EnhancedMonthlyProfileParameter", "value": 5}]
-        },
-        "invalid_with_non_imported_custom_parameter": {
-            "type": "AggregatedIndexParameter",
-            "parameters": [{"type": "NonImportedParameter", "value": 5}]
-        },
-        "param": {
-            "type": "MultipleThresholdIndexParameter",
-            "node": "Reservoir2",
-            "thresholds": [
-                345.6,
-                {"type": "weeklyprofile", "values": [1, 2, 3, 4, 5, 6, 7]},
-                91.23,
-                {
-                    "type": "monthlyprofile",
-                    "values": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-                }
-            ]
-        },
-        "param_with_child_model_param": {
-            "type": "MultipleThresholdIndexParameter",
-            "node": "Reservoir2",
-            "thresholds": [
-                "control_curve_index",
-                {
-                    "type": "monthlyprofile",
-                    "values": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-                }
-            ]
-        },
-        "constant_param": {"type": "constant", "value": 45},
-        "control_curve_index": {
-            "type": "ControlCurveIndex",
-            "storage_node": "Reservoir1",
-            "control_curves": []
-        },
-        "param_threshold": {
-            "type": "StorageThresholdParameter",
-            "threshold": 23,
-            "values": [1.432, 53.033]
-        },
-        "index_valid": {
-            "type": "AggregatedIndexParameter",
-            "agg_func": "sum",
-            "parameters": [
-                {
-                    "type": "ControlCurveIndex",
-                    "storage_node": "Reservoir1",
-                    "control_curves": []
-                }
-            ]
-        },
-        "index_valid_with_model_param": {
-            "type": "AggregatedIndexParameter",
-            "agg_func": "sum",
-            "parameters": [
-                {
-                    "type": "ControlCurveIndex",
-                    "storage_node": "Reservoir1",
-                    "control_curves": []
-                },
-                "control_curve_index"
-            ]
-        },
-        "index_invalid_type": {
-            "type": "AggregatedIndexParameter",
-            "agg_func": "sum",
-            "parameters": [
-                123.98,
-                {
-                    "type": "ControlCurveIndex",
-                    "storage_node": "Reservoir1",
-                    "control_curves": []
-                }
-            ]
-        },
-        "index_all_invalid": {
-            "type": "AggregatedIndexParameter",
-            "agg_func": "sum",
-            "parameters": [123.98, 0]
-        },
-        "index_invalid_model_param_type": {
-            "type": "AggregatedIndexParameter",
-            "agg_func": "sum",
-            "parameters": [
-                {
-                    "type": "ControlCurveIndex",
-                    "storage_node": "Reservoir1",
-                    "control_curves": []
-                },
-                "constant_param"
-            ]
-        },
-        "index_invalid_non_existing_model_param": {
-            "type": "AggregatedIndexParameter",
-            "agg_func": "sum",
-            "parameters": [
-                {
-                    "type": "ControlCurveIndex",
-                    "storage_node": "Reservoir1",
-                    "control_curves": []
-                },
-                "missing"
-            ]
-        },
-        "agg_param": {
-            "type": "AggregatedIndexParameter",
-            "agg_func": "sum",
-            "parameters": [
-                {
-                    "type": "StorageThresholdParameter",
-                    "threshold": 23,
-                    "values": [1.432, 53.033]
-                }
-            ]
-        },
-        "agg_param_with_model_param": {
-            "type": "AggregatedIndexParameter",
-            "agg_func": "sum",
-            "parameters": ["param_threshold"]
+          "type": "weeklyprofile",
+          "values": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
         }
+      ]
     },
-    "pywr_editor_schematic_size": [1900, 1450]
+    "valid_with_float": {
+      "type": "MultipleThresholdIndexParameter",
+      "node": "Reservoir2",
+      "thresholds": [
+        345.6,
+        {
+          "type": "weeklyprofile",
+          "values": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        }
+      ]
+    },
+    "valid_with_str": {
+      "type": "MultipleThresholdIndexParameter",
+      "node": "Reservoir2",
+      "thresholds": [
+        345.6,
+        "constant",
+        {
+          "type": "weeklyprofile",
+          "values": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        }
+      ]
+    },
+    "valid_with_only_floats": {
+      "type": "MultipleThresholdIndexParameter",
+      "node": "Reservoir2",
+      "thresholds": [
+        345.6,
+        34
+      ]
+    },
+    "valid_no_key": {
+      "type": "MultipleThresholdIndexParameter",
+      "node": "Reservoir2"
+    },
+    "valid_empty_list": {
+      "type": "MultipleThresholdIndexParameter",
+      "node": "Reservoir2",
+      "thresholds": []
+    },
+    "valid_with_custom_parameter": {
+      "type": "AggregatedIndexParameter",
+      "parameters": [
+        {
+          "type": "my",
+          "value": 5
+        }
+      ]
+    },
+    "invalid_type": {
+      "type": "MultipleThresholdIndexParameter",
+      "node": "Reservoir2",
+      "thresholds": 12
+    },
+    "invalid_type_in_list": {
+      "type": "MultipleThresholdIndexParameter",
+      "node": "Reservoir2",
+      "thresholds": [
+        12,
+        false
+      ]
+    },
+    "invalid_wrong_param_dict": {
+      "type": "MultipleThresholdIndexParameter",
+      "node": "Reservoir2",
+      "thresholds": [
+        345.6,
+        {
+          "values": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        }
+      ]
+    },
+    "invalid_non_existing_param_name": {
+      "type": "MultipleThresholdIndexParameter",
+      "node": "Reservoir2",
+      "thresholds": [
+        345.6,
+        34,
+        "Non existing parameter"
+      ]
+    },
+    "invalid_with_wrong_custom_parameter_type": {
+      "type": "AggregatedIndexParameter",
+      "parameters": [
+        {
+          "type": "EnhancedMonthlyProfileParameter",
+          "value": 5
+        }
+      ]
+    },
+    "invalid_with_non_imported_custom_parameter": {
+      "type": "AggregatedIndexParameter",
+      "parameters": [
+        {
+          "type": "NonImportedParameter",
+          "value": 5
+        }
+      ]
+    },
+    "param": {
+      "type": "MultipleThresholdIndexParameter",
+      "node": "Reservoir2",
+      "thresholds": [
+        345.6,
+        {
+          "type": "weeklyprofile",
+          "values": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        },
+        91.23,
+        {
+          "type": "monthlyprofile",
+          "values": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ]
+    },
+    "param_with_child_model_param": {
+      "type": "MultipleThresholdIndexParameter",
+      "node": "Reservoir2",
+      "thresholds": [
+        "control_curve_index",
+        {
+          "type": "monthlyprofile",
+          "values": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12
+          ]
+        }
+      ]
+    },
+    "constant_param": {
+      "type": "constant",
+      "value": 45
+    },
+    "control_curve_index": {
+      "type": "ControlCurveIndex",
+      "storage_node": "Reservoir1",
+      "control_curves": []
+    },
+    "param_threshold": {
+      "type": "StorageThresholdParameter",
+      "threshold": 23,
+      "values": [
+        1.432,
+        53.033
+      ]
+    },
+    "index_valid": {
+      "type": "AggregatedIndexParameter",
+      "agg_func": "sum",
+      "parameters": [
+        {
+          "type": "ControlCurveIndex",
+          "storage_node": "Reservoir1",
+          "control_curves": []
+        }
+      ]
+    },
+    "index_valid_with_model_param": {
+      "type": "AggregatedIndexParameter",
+      "agg_func": "sum",
+      "parameters": [
+        {
+          "type": "ControlCurveIndex",
+          "storage_node": "Reservoir1",
+          "control_curves": []
+        },
+        "control_curve_index"
+      ]
+    },
+    "index_invalid_type": {
+      "type": "AggregatedIndexParameter",
+      "agg_func": "sum",
+      "parameters": [
+        123.98,
+        {
+          "type": "ControlCurveIndex",
+          "storage_node": "Reservoir1",
+          "control_curves": []
+        }
+      ]
+    },
+    "index_all_invalid": {
+      "type": "AggregatedIndexParameter",
+      "agg_func": "sum",
+      "parameters": [
+        123.98,
+        0
+      ]
+    },
+    "index_invalid_model_param_type": {
+      "type": "AggregatedIndexParameter",
+      "agg_func": "sum",
+      "parameters": [
+        {
+          "type": "ControlCurveIndex",
+          "storage_node": "Reservoir1",
+          "control_curves": []
+        },
+        "constant_param"
+      ]
+    },
+    "index_invalid_non_existing_model_param": {
+      "type": "AggregatedIndexParameter",
+      "agg_func": "sum",
+      "parameters": [
+        {
+          "type": "ControlCurveIndex",
+          "storage_node": "Reservoir1",
+          "control_curves": []
+        },
+        "missing"
+      ]
+    },
+    "agg_param": {
+      "type": "AggregatedIndexParameter",
+      "agg_func": "sum",
+      "parameters": [
+        {
+          "type": "StorageThresholdParameter",
+          "threshold": 23,
+          "values": [
+            1.432,
+            53.033
+          ]
+        }
+      ]
+    },
+    "agg_param_with_model_param": {
+      "type": "AggregatedIndexParameter",
+      "agg_func": "sum",
+      "parameters": [
+        "param_threshold"
+      ]
+    }
+  },
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ]
+  }
 }

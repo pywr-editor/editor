@@ -31,7 +31,10 @@
       "type": "Link",
       "min_flow": {
         "type": "custom_param",
-        "data": ["Table 3", "Table 1"]
+        "data": [
+          "Table 3",
+          "Table 1"
+        ]
       },
       "max_flow": {
         "type": "aggregated",
@@ -103,8 +106,10 @@
       "sheet_name": "Sheet 2"
     }
   },
-  "pywr_editor_schematic_size": [
-    1900,
-    1450
-  ]
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ]
+  }
 }

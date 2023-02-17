@@ -1,8 +1,9 @@
 import pytest
+from PySide6.QtCore import QTimer
 
-from pywr_editor.schematic import SchematicBBoxUtils, SchematicNodeUtils
-from tests.DummyMainWindow import MainWindow
-from tests.utils import resolve_model_path
+from pywr_editor import MainWindow
+from pywr_editor.schematic import SchematicBBoxUtils, SchematicItemUtils
+from tests.utils import close_message_box, resolve_model_path
 
 
 class TestBboxUtils:
@@ -15,36 +16,37 @@ class TestBboxUtils:
         :param qtbot: The QT bot fixture.
         :return The window instance.
         """
+        QTimer.singleShot(200, close_message_box)
         return MainWindow(self.model_file)
 
     def test_min_max_bounding_box_coordinates(self, qtbot, window):
         """
         Tests that the max and min coordinates of the nodes' bounding boxes are correct.
         """
-        schematic_items = window.schematic.schematic_items
+        schematic_items = window.schematic.node_items
         max_min_bbox = SchematicBBoxUtils(
             window.schematic.items()
         ).min_max_bounding_box_coordinates
 
-        assert max_min_bbox.max_x.node == schematic_items["Link1"]
+        assert max_min_bbox.max_x.item == schematic_items["Link1"]
         assert (
             max_min_bbox.max_x.value
             == schematic_items["Link1"].sceneBoundingRect().right()
         )
 
-        assert max_min_bbox.min_x.node == schematic_items["Link2"]
+        assert max_min_bbox.min_x.item == schematic_items["Link2"]
         assert (
             max_min_bbox.min_x.value
             == schematic_items["Link2"].sceneBoundingRect().left()
         )
 
-        assert max_min_bbox.max_y.node == schematic_items["Link3"]
+        assert max_min_bbox.max_y.item == schematic_items["Link3"]
         assert (
             max_min_bbox.max_y.value
             == schematic_items["Link3"].sceneBoundingRect().bottom()
         )
 
-        assert max_min_bbox.min_y.node == schematic_items["Link4"]
+        assert max_min_bbox.min_y.item == schematic_items["Link4"]
         assert (
             max_min_bbox.min_y.value
             == schematic_items["Link4"].sceneBoundingRect().top()
@@ -55,11 +57,11 @@ class TestBboxUtils:
         Tests the method that checks when a node is on the schematic right or bottom
         edge.
         """
-        schematic_items = window.schematic.schematic_items
+        schematic_items = window.schematic.node_items
 
         # test node initial position
-        node_utils_obj = SchematicNodeUtils(
-            node=schematic_items["Link1"],
+        node_utils_obj = SchematicItemUtils(
+            item=schematic_items["Link1"],
             schematic_size=[
                 window.schematic.schematic_width,
                 window.schematic.schematic_height,
@@ -67,7 +69,7 @@ class TestBboxUtils:
         )
         max_min_bbox = SchematicBBoxUtils(
             window.schematic.items()
-        ).are_nodes_on_edges(
+        ).are_items_on_edges(
             window.schematic.schematic_width, window.schematic.schematic_height
         )
         assert max_min_bbox[0] is False
@@ -77,7 +79,7 @@ class TestBboxUtils:
         node_utils_obj.move_to_bottom_edge()
         max_min_bbox = SchematicBBoxUtils(
             window.schematic.items()
-        ).are_nodes_on_edges(
+        ).are_items_on_edges(
             window.schematic.schematic_width, window.schematic.schematic_height
         )
         assert max_min_bbox[1] is True
@@ -86,7 +88,7 @@ class TestBboxUtils:
         node_utils_obj.move_to_right_edge()
         max_min_bbox = SchematicBBoxUtils(
             window.schematic.items()
-        ).are_nodes_on_edges(
+        ).are_items_on_edges(
             window.schematic.schematic_width, window.schematic.schematic_height
         )
         assert max_min_bbox[0] is True

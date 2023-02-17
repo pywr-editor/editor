@@ -26,7 +26,7 @@ def pytest_sessionfinish(session):
         if (
             cls is not None
             and hasattr(cls, "obj")
-            and hasattr(cls, "model_file")
+            and hasattr(cls.obj, "model_file")
         ):
             clean_env(cls.obj.model_file)
 

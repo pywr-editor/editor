@@ -108,7 +108,10 @@
       "type": "constant",
       "table": "csv_table",
       "column": "Column 3",
-      "index": [1, 2]
+      "index": [
+        1,
+        2
+      ]
     },
     "param_csv_table_no_index_col": {
       "type": "constant",
@@ -147,8 +150,10 @@
       "table": "h5_no_keys"
     }
   },
-  "pywr_editor_schematic_size": [
-    1900,
-    1450
-  ]
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ]
+  }
 }

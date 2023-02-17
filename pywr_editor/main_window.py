@@ -23,7 +23,7 @@ from pywr_editor.dialogs import (
 from pywr_editor.model import ModelConfig
 from pywr_editor.schematic import Schematic, scaling_factor
 from pywr_editor.style import AppStylesheet
-from pywr_editor.toolbar import NodesLibrary, ToolbarWidget
+from pywr_editor.toolbar import SchematicItemsLibrary, ToolbarWidget
 from pywr_editor.tree import ComponentsTree
 from pywr_editor.utils import (
     Action,
@@ -61,6 +61,9 @@ class MainWindow(QMainWindow):
         """
         super().__init__()
         self.logger = Logging().logger(self.__class__.__name__)
+        self.warning_info_message.connect(self.on_alert_info_message)
+        self.error_message.connect(self.on_error_message)
+        self.setStyleSheet(AppStylesheet().get())
 
         # check the model file
         if model_file is not None and not os.path.exists(model_file):
@@ -78,6 +81,10 @@ class MainWindow(QMainWindow):
         # load configurations
         self.model_file = model_file
         self.model_config = ModelConfig(model_file)
+        # Show error if the JSON file does not load
+        if not self.model_config.is_valid():
+            self.error_message.emit(self.model_config.load_error, True)
+            return
         self.model_config.changes_tracker.change_applied.connect(
             self.on_model_change
         )
@@ -105,17 +112,14 @@ class MainWindow(QMainWindow):
         self.setAutoFillBackground(True)
         self.setPalette(Qt.GlobalColor.white)
         self.setDockNestingEnabled(False)
-        self.setStyleSheet(AppStylesheet().get())
         self.setCentralWidget(self.splitter)
 
         # Actions
         self.undo_stack = QUndoStack(self)
-        self.actions = Actions(window=self)
+        self.app_actions = Actions(window=self)
         self.register_model_actions()
         self.register_nodes_actions()
         self.register_schematic_actions()
-        self.warning_info_message.connect(self.on_alert_info_message)
-        self.error_message.connect(self.on_error_message)
         self.save.connect(self.on_save)
 
         # Toolbar
@@ -131,11 +135,6 @@ class MainWindow(QMainWindow):
         # Show the window
         self.editor_settings.restore_window_attributes(self)
         self.show()
-
-        # Show error if the JSON file does not load
-        if not self.model_config.is_valid():
-            # noinspection PyUnresolvedReferences
-            self.error_message.emit(self.model_config.load_error, True)
 
         # Draw the widgets
         self.components_tree.draw()
@@ -158,7 +157,7 @@ class MainWindow(QMainWindow):
         Registers the action for the model tab.
         :return: None
         """
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="new-model",
                 name="New\n model",
@@ -168,7 +167,7 @@ class MainWindow(QMainWindow):
                 connection=self.new_empty_model,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="open-model",
                 name="Open\n model file",
@@ -178,7 +177,7 @@ class MainWindow(QMainWindow):
                 connection=self.open_model_file,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="save-model",
                 name="Save\n file",
@@ -188,7 +187,7 @@ class MainWindow(QMainWindow):
                 connection=self.save_model,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="open-json-reader",
                 name="Show\n JSON",
@@ -199,7 +198,7 @@ class MainWindow(QMainWindow):
             )
         )
 
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="edit-metadata",
                 name="Metadata",
@@ -209,7 +208,7 @@ class MainWindow(QMainWindow):
                 connection=self.open_metadata_dialog,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="edit-scenarios",
                 name="Scenarios",
@@ -218,7 +217,7 @@ class MainWindow(QMainWindow):
                 connection=self.open_scenarios_dialog,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="edit-imports",
                 name="Imports",
@@ -228,7 +227,7 @@ class MainWindow(QMainWindow):
                 connection=self.open_imports_dialog,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="edit-slots",
                 name="Slots",
@@ -237,7 +236,7 @@ class MainWindow(QMainWindow):
                 connection=self.open_edge_slots_dialog,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="edit-tables",
                 name="Tables",
@@ -247,7 +246,7 @@ class MainWindow(QMainWindow):
                 connection=self.open_tables_dialog,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="edit-parameters",
                 name="Parameters",
@@ -257,7 +256,7 @@ class MainWindow(QMainWindow):
                 connection=self.open_parameters_dialog,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="edit-recorders",
                 name="Recorders",
@@ -268,7 +267,7 @@ class MainWindow(QMainWindow):
             )
         )
 
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="find-orphaned-nodes",
                 name="Check network",
@@ -277,7 +276,7 @@ class MainWindow(QMainWindow):
                 connection=self.check_network,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="find-orphaned-parameters",
                 name="Find orphaned parameters",
@@ -293,7 +292,7 @@ class MainWindow(QMainWindow):
         Registers the action for the node tab.
         :return: None
         """
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="select-all",
                 name="Select all",
@@ -303,7 +302,7 @@ class MainWindow(QMainWindow):
                 connection=self.schematic.select_all_items,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="select-none",
                 name="Select none",
@@ -314,9 +313,9 @@ class MainWindow(QMainWindow):
                 is_disabled=True,
             )
         )
-        self.actions.add_undo(icon=":/toolbar/undo")
-        self.actions.add_redo(icon=":/toolbar/redo")
-        self.actions.add(
+        self.app_actions.add_undo(icon=":/toolbar/undo")
+        self.app_actions.add_redo(icon=":/toolbar/redo")
+        self.app_actions.add(
             Action(
                 key="remove-edges",
                 name="Disconnect",
@@ -326,7 +325,7 @@ class MainWindow(QMainWindow):
                 is_disabled=True,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="add-edge",
                 name="Connect",
@@ -335,17 +334,16 @@ class MainWindow(QMainWindow):
                 is_disabled=True,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="delete-node",
                 name="Delete",
                 icon=":/toolbar/delete-node",
                 tooltip="Delete the selected node and its edges from the schematic",
-                shortcut=QKeySequence.Delete,
                 is_disabled=True,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="edit-node",
                 name="Edit",
@@ -362,14 +360,14 @@ class MainWindow(QMainWindow):
             self.schematic.on_connect_node_end
         )
         self.addAction(connect_node_action)
-        self.actions.registry["connect-node-abort"] = connect_node_action
+        self.app_actions.registry["connect-node-abort"] = connect_node_action
 
     def register_schematic_actions(self) -> None:
         """
         Registers the action for the schematic tab.
         :return: None
         """
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="increase-width",
                 name="Increase\nwidth",
@@ -378,7 +376,7 @@ class MainWindow(QMainWindow):
                 connection=self.schematic.increase_width,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="decrease-width",
                 name="Decrease\nwidth",
@@ -388,7 +386,7 @@ class MainWindow(QMainWindow):
                 button_separator=True,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="increase-height",
                 name="Increase\nheight",
@@ -397,7 +395,7 @@ class MainWindow(QMainWindow):
                 connection=self.schematic.increase_height,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="decrease-height",
                 name="Decrease\nheight",
@@ -407,7 +405,7 @@ class MainWindow(QMainWindow):
                 button_separator=True,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="minimise",
                 name="Minimise",
@@ -417,7 +415,7 @@ class MainWindow(QMainWindow):
                 connection=self.schematic.minimise_size,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="lock",
                 name="Lock",
@@ -427,7 +425,7 @@ class MainWindow(QMainWindow):
                 connection=self.schematic.toggle_lock,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="toggle-labels",
                 name="Hide labels",
@@ -437,7 +435,7 @@ class MainWindow(QMainWindow):
                 connection=self.schematic.toggle_labels,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="toggle-arrows",
                 name="Hide arrows",
@@ -447,7 +445,7 @@ class MainWindow(QMainWindow):
                 connection=self.schematic.toggle_arrows,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="center",
                 name="Centre",
@@ -456,7 +454,7 @@ class MainWindow(QMainWindow):
                 connection=self.schematic.center_view_on,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="zoom-in",
                 name="Zoom\nin",
@@ -466,7 +464,7 @@ class MainWindow(QMainWindow):
                 connection=self.zoom_in,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="zoom-out",
                 name="Zoom\nout",
@@ -476,7 +474,7 @@ class MainWindow(QMainWindow):
                 connection=self.zoom_out,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="zoom-100",
                 name="100%",
@@ -486,7 +484,7 @@ class MainWindow(QMainWindow):
                 connection=self.zoom_100,
             )
         )
-        self.actions.add(
+        self.app_actions.add(
             Action(
                 key="export-current-view",
                 name="Export view",
@@ -497,6 +495,18 @@ class MainWindow(QMainWindow):
             )
         )
 
+        # register shortcut to delete schematic items
+        delete_item_action = QAction("Delete schematic item")
+        delete_item_action.setShortcut(QKeySequence.StandardKey.Delete)
+        # noinspection PyUnresolvedReferences
+        delete_item_action.triggered.connect(
+            lambda: self.schematic.on_delete_item(
+                self.schematic.scene.selectedItems()
+            )
+        )
+        self.schematic.addAction(delete_item_action)
+        self.app_actions.registry["delete-schematic-item"] = delete_item_action
+
     def setup_toolbar(self) -> None:
         """
         Setups the toolbar.
@@ -505,79 +515,83 @@ class MainWindow(QMainWindow):
         # Model tab
         model_tab = self.toolbar.add_tab("Model")
         file_panel = model_tab.add_panel("File")
-        file_panel.add_button(self.actions.get("new-model"))
-        file_panel.add_button(self.actions.get("open-model"))
-        file_panel.add_button(self.actions.get("save-model"))
-        self.actions.get("save-model").setDisabled(True)
-        file_panel.add_button(self.actions.get("open-json-reader"))
+        file_panel.add_button(self.app_actions.get("new-model"))
+        file_panel.add_button(self.app_actions.get("open-model"))
+        file_panel.add_button(self.app_actions.get("save-model"))
+        self.app_actions.get("save-model").setDisabled(True)
+        file_panel.add_button(self.app_actions.get("open-json-reader"))
 
         settings_panel = model_tab.add_panel("Settings")
-        settings_panel.add_button(self.actions.get("edit-metadata"))
+        settings_panel.add_button(self.app_actions.get("edit-metadata"))
         settings_panel.add_vertical_small_buttons(
             [
-                self.actions.get("edit-scenarios"),
-                self.actions.get("edit-imports"),
-                self.actions.get("edit-slots"),
+                self.app_actions.get("edit-scenarios"),
+                self.app_actions.get("edit-imports"),
+                self.app_actions.get("edit-slots"),
             ]
         )
-        settings_panel.add_button(self.actions.get("edit-tables"))
-        settings_panel.add_button(self.actions.get("edit-parameters"))
-        settings_panel.add_button(self.actions.get("edit-recorders"))
+        settings_panel.add_button(self.app_actions.get("edit-tables"))
+        settings_panel.add_button(self.app_actions.get("edit-parameters"))
+        settings_panel.add_button(self.app_actions.get("edit-recorders"))
 
         validation_panel = model_tab.add_panel("Validation", layout="vertical")
         validation_panel.add_button(
-            self.actions.get("find-orphaned-nodes"), is_large=False
+            self.app_actions.get("find-orphaned-nodes"), is_large=False
         )
         validation_panel.add_button(
-            self.actions.get("find-orphaned-parameters"), is_large=False
+            self.app_actions.get("find-orphaned-parameters"), is_large=False
         )
-
-        # Nodes tab
-        nodes = self.toolbar.add_tab("Nodes")
-        nodes_panel = nodes.add_panel("Undo", layout="vertical")
-        nodes_panel.add_button(self.actions.get("undo"), is_large=False)
-        nodes_panel.add_button(self.actions.get("redo"), is_large=False)
-
-        nodes_panel = nodes.add_panel("Selection", layout="vertical")
-        nodes_panel.add_button(self.actions.get("select-all"), is_large=False)
-        nodes_panel.add_button(self.actions.get("select-none"), is_large=False)
-
-        op_panel = nodes.add_panel("Operations")
-        op_panel.add_button(self.actions.get("add-edge"))
-        op_panel.add_button(self.actions.get("remove-edges"))
-        op_panel.add_button(self.actions.get("edit-node"))
-        op_panel.add_button(self.actions.get("delete-node"))
-
-        nodes_panel = nodes.add_panel("Nodes Library", show_name=False)
-        nodes_panel.add_widget(NodesLibrary(self))
 
         # Schematic tab
-        schematic = self.toolbar.add_tab("Schematic")
-        zoom_panel = schematic.add_panel("Zoom")
-        zoom_panel.add_button(self.actions.get("zoom-in"))
-        zoom_panel.add_button(self.actions.get("zoom-out"))
-        zoom_panel.add_button(self.actions.get("zoom-100"))
+        schematic_tab = self.toolbar.add_tab("Schematic")
+        nodes_panel = schematic_tab.add_panel("Undo", layout="vertical")
+        nodes_panel.add_button(self.app_actions.get("undo"), is_large=False)
+        nodes_panel.add_button(self.app_actions.get("redo"), is_large=False)
 
-        display_panel = schematic.add_panel("Display", layout="vertical")
+        nodes_panel = schematic_tab.add_panel("Selection", layout="vertical")
+        nodes_panel.add_button(
+            self.app_actions.get("select-all"), is_large=False
+        )
+        nodes_panel.add_button(
+            self.app_actions.get("select-none"), is_large=False
+        )
+
+        op_panel = schematic_tab.add_panel("Operations")
+        op_panel.add_button(self.app_actions.get("add-edge"))
+        op_panel.add_button(self.app_actions.get("remove-edges"))
+        op_panel.add_button(self.app_actions.get("edit-node"))
+        op_panel.add_button(self.app_actions.get("delete-node"))
+
+        nodes_panel = schematic_tab.add_panel("Nodes Library", show_name=False)
+        nodes_panel.add_widget(SchematicItemsLibrary(self))
+
+        # View tab
+        view_tab = self.toolbar.add_tab("View")
+        zoom_panel = view_tab.add_panel("Zoom")
+        zoom_panel.add_button(self.app_actions.get("zoom-in"))
+        zoom_panel.add_button(self.app_actions.get("zoom-out"))
+        zoom_panel.add_button(self.app_actions.get("zoom-100"))
+
+        display_panel = view_tab.add_panel("Display", layout="vertical")
         display_panel.add_button(
-            self.actions.get("toggle-labels"), is_large=False
+            self.app_actions.get("toggle-labels"), is_large=False
         )
         display_panel.add_button(
-            self.actions.get("toggle-arrows"), is_large=False
+            self.app_actions.get("toggle-arrows"), is_large=False
         )
-        display_panel.add_button(self.actions.get("center"), is_large=False)
+        display_panel.add_button(self.app_actions.get("center"), is_large=False)
 
-        size_panel = schematic.add_panel("Size")
-        size_panel.add_button(self.actions.get("increase-width"))
-        size_panel.add_button(self.actions.get("decrease-width"))
-        size_panel.add_button(self.actions.get("increase-height"))
-        size_panel.add_button(self.actions.get("decrease-height"))
-        size_panel.add_button(self.actions.get("minimise"), is_large=False)
+        size_panel = view_tab.add_panel("Size")
+        size_panel.add_button(self.app_actions.get("increase-width"))
+        size_panel.add_button(self.app_actions.get("decrease-width"))
+        size_panel.add_button(self.app_actions.get("increase-height"))
+        size_panel.add_button(self.app_actions.get("decrease-height"))
+        size_panel.add_button(self.app_actions.get("minimise"), is_large=False)
 
-        misc_panel = schematic.add_panel("Misc", layout="vertical")
-        misc_panel.add_button(self.actions.get("lock"), is_large=False)
+        misc_panel = view_tab.add_panel("Misc", layout="vertical")
+        misc_panel.add_button(self.app_actions.get("lock"), is_large=False)
         misc_panel.add_button(
-            self.actions.get("export-current-view"), is_large=False
+            self.app_actions.get("export-current-view"), is_large=False
         )
 
     def add_status_bar(self) -> None:
@@ -850,7 +864,7 @@ class MainWindow(QMainWindow):
             f"Running on_model_change Slot from {get_signal_sender(self)}"
         )
         # enable the "Save" button if there are changes
-        save_button = self.actions.get("save-model")
+        save_button = self.app_actions.get("save-model")
         save_button.setEnabled(self.model_config.has_changes)
 
     @Slot()
@@ -866,7 +880,7 @@ class MainWindow(QMainWindow):
             f"Model last saved on {self.model_config.file.last_modified_on}"
         )
         self.components_tree.reload()
-        self.actions.get("save-model").setDisabled(True)
+        self.app_actions.get("save-model").setDisabled(True)
         self.model_config.changes_tracker.reset_change_flag()
 
     def find_orphaned_parameters(self) -> None:

@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 from PySide6.QtCore import Qt, QTimer
-from PySide6.QtWidgets import QPushButton, QWidget
+from PySide6.QtWidgets import QMainWindow, QPushButton, QWidget
 
 from pywr_editor.form import (
     ColumnWidget,
@@ -20,7 +20,6 @@ from pywr_editor.form import (
 )
 from pywr_editor.model import ModelConfig, ParameterConfig
 from pywr_editor.widgets import ComboBox, PushButton
-from tests.DummyMainWindow import MainWindow
 from tests.utils import check_msg, resolve_model_path
 
 
@@ -107,7 +106,7 @@ class TestDialogParameterValuesAndExternalDataWidget:
         form_field: FormField = widget.form_field
 
         # register app to test field visibility
-        app = MainWindow("")
+        app = QMainWindow()
         app.setCentralWidget(widget)
         qtbot.addWidget(app)
         app.show()
@@ -279,7 +278,7 @@ class TestDialogParameterValuesAndExternalDataWidget:
         form_field: FormField = widget.form_field
 
         # register app to test field visibility
-        app = MainWindow("")
+        app = QMainWindow()
         app.setCentralWidget(widget)
         qtbot.addWidget(app)
         app.show()

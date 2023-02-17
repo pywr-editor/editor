@@ -37,19 +37,19 @@ class TestMissingSchematicProps:
         """
         schematic = window.schematic
         # node with missing editor_position key
-        assert schematic.schematic_items["Link1"].scenePos().toTuple() == (
+        assert schematic.node_items["Link1"].scenePos().toTuple() == (
             window.schematic.schematic_width / 2,
             window.schematic.schematic_height / 2,
         )
 
         # node with missing position key
-        assert schematic.schematic_items["Link2"].scenePos().toTuple() == (
+        assert schematic.node_items["Link2"].scenePos().toTuple() == (
             window.schematic.schematic_width / 2,
             window.schematic.schematic_height / 2,
         )
 
         # node with empty editor_position list
-        assert schematic.schematic_items["Link3"].scenePos().toTuple() == (
+        assert schematic.node_items["Link3"].scenePos().toTuple() == (
             window.schematic.schematic_width / 2,
             window.schematic.schematic_height / 2,
         )

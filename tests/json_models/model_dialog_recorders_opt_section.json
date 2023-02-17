@@ -8,31 +8,60 @@
     "maintainer": "Stefano Simoncelli",
     "model_version": "2.1"
   },
-  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
-  "includes": ["files/custom_parameter.py"],
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
+  "includes": [
+    "files/custom_parameter.py"
+  ],
   "nodes": [
     {
       "name": "Reservoir",
       "type": "Storage",
       "max_volume": 35,
       "initial_volume": 35,
-      "position": {"editor_position": [200, 500]}
+      "position": {
+        "editor_position": [
+          200,
+          500
+        ]
+      }
     },
     {
       "name": "Link",
       "type": "Link",
       "min_flow": {
         "type": "custom_param",
-        "data": ["Table 3", "CSV table"]
+        "data": [
+          "Table 3",
+          "CSV table"
+        ]
       },
       "max_flow": {
         "type": "aggregated",
-        "params": [{"table": "CSV table", "index": "1"}]
+        "params": [
+          {
+            "table": "CSV table",
+            "index": "1"
+          }
+        ]
       },
-      "position": {"editor_position": [1000, 300]}
+      "position": {
+        "editor_position": [
+          1000,
+          300
+        ]
+      }
     }
   ],
-  "edges": [["Reservoir", "Link"]],
+  "edges": [
+    [
+      "Reservoir",
+      "Link"
+    ]
+  ],
   "parameters": {
     "param1": {
       "type": "constant",
@@ -77,20 +106,42 @@
       "type": "NodeRecorder",
       "node": "Reservoir",
       "is_objective": "max",
-      "agg_func": {"func": "product"}
+      "agg_func": {
+        "func": "product"
+      }
     },
     "agg_func_percentile": {
       "type": "NodeRecorder",
       "node": "Reservoir",
       "is_objective": "max",
-      "agg_func": {"func": "percentile", "args": [70, 95], "kwargs": {"method": "weibull"}}
+      "agg_func": {
+        "func": "percentile",
+        "args": [
+          70,
+          95
+        ],
+        "kwargs": {
+          "method": "weibull"
+        }
+      }
     },
     "agg_func_percentileofscore": {
       "type": "NodeRecorder",
       "node": "Reservoir",
       "is_objective": "maximise",
-      "agg_func": {"func": "percentileofscore", "kwargs": {"score": 0.5, "kind": "strict"}}
+      "agg_func": {
+        "func": "percentileofscore",
+        "kwargs": {
+          "score": 0.5,
+          "kind": "strict"
+        }
+      }
     }
   },
-  "pywr_editor_schematic_size": [1900, 1450]
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ]
+  }
 }

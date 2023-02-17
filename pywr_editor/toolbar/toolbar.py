@@ -1,3 +1,4 @@
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QMainWindow, QTabWidget, QToolBar
 
 from pywr_editor.style import Color, stylesheet_dict_to_str
@@ -21,6 +22,9 @@ class ToolbarWidget(QToolBar):
         self.toolbar = QTabWidget(self)
         self.toolbar.setMaximumHeight(120)
         self.toolbar.setMinimumHeight(110)
+        self.toolbar.setContextMenuPolicy(
+            Qt.ContextMenuPolicy.PreventContextMenu
+        )
         self.setMovable(False)
         self.addWidget(self.toolbar)
 

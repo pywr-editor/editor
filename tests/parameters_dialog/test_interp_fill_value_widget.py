@@ -1,9 +1,8 @@
 import pytest
-from PySide6.QtWidgets import QPushButton, QWidget
+from PySide6.QtWidgets import QMainWindow, QPushButton, QWidget
 
 from pywr_editor.form import FormField, InterpFillValueWidget, ParameterForm
 from pywr_editor.model import ModelConfig, ParameterConfig
-from tests.DummyMainWindow import MainWindow
 
 
 class TestDialogParameterInterpFillValueWidget:
@@ -67,7 +66,7 @@ class TestDialogParameterInterpFillValueWidget:
         fill_value_field: FormField = fill_value_widget.form_field
 
         # register app to test field visibility
-        app = MainWindow()
+        app = QMainWindow()
         app.setCentralWidget(fill_value_widget)
         qtbot.addWidget(app)
         app.show()
@@ -129,7 +128,7 @@ class TestDialogParameterInterpFillValueWidget:
         fill_value_field: FormField = fill_value_widget.form_field
 
         # register app to test field visibility
-        app = MainWindow("")
+        app = QMainWindow()
         app.setCentralWidget(fill_value_widget)
         qtbot.addWidget(app)
         app.show()

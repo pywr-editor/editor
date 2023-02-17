@@ -124,11 +124,16 @@
     },
     "param5": {
       "type": "ConstantScenario",
-      "values": [1, 4]
+      "values": [
+        1,
+        4
+      ]
     }
   },
-  "pywr_editor_schematic_size": [
-    1900,
-    1450
-  ]
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ]
+  }
 }

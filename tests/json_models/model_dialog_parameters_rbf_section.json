@@ -8,36 +8,76 @@
     "maintainer": "Stefano Simoncelli",
     "model_version": "2.1"
   },
-  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
   "nodes": [
     {
       "name": "Reservoir",
       "type": "Storage",
       "max_volume": 35,
       "initial_volume": 35,
-      "position": {"editor_position": [200, 500]}
+      "position": {
+        "editor_position": [
+          200,
+          500
+        ]
+      }
     },
     {
       "name": "Link",
       "type": "Link",
       "min_flow": {
         "type": "custom_param",
-        "data": ["Table 3", "CSV table"]
+        "data": [
+          "Table 3",
+          "CSV table"
+        ]
       },
       "max_flow": {
         "type": "aggregated",
-        "params": [{"table": "CSV table", "index": "1"}]
+        "params": [
+          {
+            "table": "CSV table",
+            "index": "1"
+          }
+        ]
       },
-      "position": {"editor_position": [1000, 300]}
+      "position": {
+        "editor_position": [
+          1000,
+          300
+        ]
+      }
     }
   ],
-  "edges": [["Reservoir", "Link"]],
+  "edges": [
+    [
+      "Reservoir",
+      "Link"
+    ]
+  ],
   "parameters": {
     "rbf_param": {
       "type": "RbfProfileParameter",
-      "days_of_year": [1, 30, 50],
-      "values": [3.2, 7, 4.3]
+      "days_of_year": [
+        1,
+        30,
+        50
+      ],
+      "values": [
+        3.2,
+        7,
+        4.3
+      ]
     }
   },
-  "pywr_editor_schematic_size": [1900, 1450]
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ]
+  }
 }

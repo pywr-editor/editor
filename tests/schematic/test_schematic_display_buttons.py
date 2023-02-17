@@ -23,7 +23,7 @@ class TestSchematicDisplayButtons:
         window = MainWindow(resolve_model_path(self.model_file))
         window.hide()
         schematic = window.schematic
-        size_panel = window.toolbar.tabs["Schematic"].panels["Display"]
+        size_panel = window.toolbar.tabs["View"].panels["Display"]
 
         return window, schematic, size_panel
 
@@ -33,7 +33,9 @@ class TestSchematicDisplayButtons:
         and that the configuration is stored via QSettings.
         """
         window, schematic, size_panel = init_window
-        button = size_panel.buttons[window.actions.get("toggle-labels").text()]
+        button = size_panel.buttons[
+            window.app_actions.get("toggle-labels").text()
+        ]
 
         # disable labels
         qtbot.mouseClick(button, Qt.MouseButton.LeftButton)
@@ -71,7 +73,9 @@ class TestSchematicDisplayButtons:
         QSettings.
         """
         window, schematic, size_panel = init_window
-        button = size_panel.buttons[window.actions.get("toggle-labels").text()]
+        button = size_panel.buttons[
+            window.app_actions.get("toggle-labels").text()
+        ]
         # labels are initially hidden
         assert window.editor_settings.are_labels_hidden is True
 
@@ -90,7 +94,9 @@ class TestSchematicDisplayButtons:
         and that the configuration is stored via QSettings.
         """
         window, schematic, size_panel = init_window
-        button = size_panel.buttons[window.actions.get("toggle-arrows").text()]
+        button = size_panel.buttons[
+            window.app_actions.get("toggle-arrows").text()
+        ]
 
         # disable labels
         qtbot.mouseClick(button, Qt.MouseButton.LeftButton)
@@ -128,7 +134,9 @@ class TestSchematicDisplayButtons:
         QSettings.
         """
         window, schematic, size_panel = init_window
-        button = size_panel.buttons[window.actions.get("toggle-arrows").text()]
+        button = size_panel.buttons[
+            window.app_actions.get("toggle-arrows").text()
+        ]
         # labels are initially hidden
         assert window.editor_settings.are_edge_arrows_hidden is True
 

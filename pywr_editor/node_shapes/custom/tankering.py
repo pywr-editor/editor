@@ -6,11 +6,11 @@ from ..circle import Circle
 from ..svg_icon import IconProps
 
 if TYPE_CHECKING:
-    from pywr_editor.schematic import SchematicItem
+    from pywr_editor.schematic import SchematicNode
 
 
 class Tankering(Circle):
-    def __init__(self, parent: "SchematicItem"):
+    def __init__(self, parent: "SchematicNode"):
         """
         Initialises the class for a leak node.
         :param parent: The parent node

@@ -8,64 +8,100 @@
     "maintainer": "Stefano Simoncelli",
     "model_version": "2.1"
   },
-  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
   "nodes": [
     {
       "name": "Reservoir",
       "type": "Storage",
       "max_volume": 35,
       "initial_volume": 35,
-      "position": {"editor_position": [200, 500]}
+      "position": {
+        "editor_position": [
+          200,
+          500
+        ]
+      }
     },
     {
       "name": "Link",
       "type": "Link",
       "min_flow": {
         "type": "custom_param",
-        "data": ["Table 3", "CSV table"]
+        "data": [
+          "Table 3",
+          "CSV table"
+        ]
       },
       "max_flow": {
         "type": "aggregated",
-        "params": [{"table": "CSV table", "index": "1"}]
+        "params": [
+          {
+            "table": "CSV table",
+            "index": "1"
+          }
+        ]
       }
     }
   ],
-  "edges": [["Reservoir", "Link"]],
+  "edges": [
+    [
+      "Reservoir",
+      "Link"
+    ]
+  ],
   "parameters": {
     "valid_values": {
       "type": "StorageThresholdParameter",
       "threshold": 23,
-      "values": [1.432, 53.033]
+      "values": [
+        1.432,
+        53.033
+      ]
     },
     "empty_values": {
-       "type": "StorageThresholdParameter",
+      "type": "StorageThresholdParameter",
       "threshold": 23,
       "values": []
     },
     "values_not_provided": {
-       "type": "StorageThresholdParameter",
+      "type": "StorageThresholdParameter",
       "threshold": 23
     },
     "one_value": {
-       "type": "StorageThresholdParameter",
+      "type": "StorageThresholdParameter",
       "threshold": 23,
-      "values": [1]
+      "values": [
+        1
+      ]
     },
     "three_values": {
-       "type": "StorageThresholdParameter",
+      "type": "StorageThresholdParameter",
       "threshold": 23,
-      "values": [1, 2, 3]
+      "values": [
+        1,
+        2,
+        3
+      ]
     },
     "invalid_string": {
-       "type": "StorageThresholdParameter",
+      "type": "StorageThresholdParameter",
       "threshold": 23,
       "values": "s"
     },
     "invalid_number": {
-       "type": "StorageThresholdParameter",
+      "type": "StorageThresholdParameter",
       "threshold": 23,
       "values": 56.7
     }
   },
-  "pywr_editor_schematic_size": [1900, 1450]
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ]
+  }
 }

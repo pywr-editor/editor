@@ -1,13 +1,13 @@
 from typing import Literal, Tuple
 
 import pytest
-from PySide6.QtCore import Qt, QTimer
+from PySide6.QtCore import Qt
 
 from pywr_editor import MainWindow
 from pywr_editor.schematic import Schematic
 from pywr_editor.toolbar.base_button import ToolbarBaseButton
 from pywr_editor.toolbar.tab_panel import TabPanel
-from tests.utils import close_message_box, resolve_model_path
+from tests.utils import resolve_model_path
 
 
 class TestSchematicResize:
@@ -19,11 +19,11 @@ class TestSchematicResize:
         Initialises the window.
         :return: A tuple with the window, schematic and tab panel instances.
         """
-        QTimer.singleShot(100, close_message_box)
+        # QTimer.singleShot(100, close_message_box)
         window = MainWindow(self.model_file)
         window.hide()
         schematic = window.schematic
-        size_panel = window.toolbar.tabs["Schematic"].panels["Size"]
+        size_panel = window.toolbar.tabs["View"].panels["Size"]
 
         return window, schematic, size_panel
 
@@ -60,7 +60,7 @@ class TestSchematicResize:
             delta = -delta
 
         expected = getattr(schematic, attr) + delta
-        button = size_panel.buttons[window.actions.get(action).text()]
+        button = size_panel.buttons[window.app_actions.get(action).text()]
         for _ in range(0, n):
             qtbot.mouseClick(button, Qt.MouseButton.LeftButton)
         measured = getattr(schematic, attr)
@@ -76,7 +76,7 @@ class TestSchematicResize:
         :return: The clicked button instance.
         """
         window, schematic, size_panel = init_window
-        button = size_panel.buttons[window.actions.get("minimise").text()]
+        button = size_panel.buttons[window.app_actions.get("minimise").text()]
         qtbot.mouseClick(button, Qt.MouseButton.LeftButton)
 
         return button
@@ -113,13 +113,11 @@ class TestSchematicResize:
         window, schematic, size_panel = init_window
         _, measured, button = resize
 
+        limiting_item = schematic.shape_items["466eaX"]
+        rect = limiting_item.mapRectToScene(limiting_item.boundingRect())
         if "width" in request.node.callspec.id:
-            node = schematic.schematic_items["Link"]
-            rect = node.mapRectToScene(node.boundingRect())
             expected = rect.x() + rect.width()
         else:
-            node = schematic.schematic_items["Reservoir"]
-            rect = node.mapRectToScene(node.boundingRect())
             expected = rect.y() + rect.height()
 
         assert button.isEnabled() is False and expected == measured
@@ -130,7 +128,7 @@ class TestSchematicResize:
         else:
             increase_action = "increase-height"
         increase_button = size_panel.buttons[
-            window.actions.get(increase_action).text()
+            window.app_actions.get(increase_action).text()
         ]
         qtbot.mouseClick(increase_button, Qt.MouseButton.LeftButton)
         assert button.isEnabled() is True
@@ -142,22 +140,21 @@ class TestSchematicResize:
         """
         window, schematic, tab_panel = init_window
         _ = minimise
+        item = schematic.shape_items["466eaX"]
 
-        node = schematic.schematic_items["Link"]
-        rect = node.mapRectToScene(node.boundingRect())
+        rect = item.mapRectToScene(item.boundingRect())
         expected_width = rect.x() + rect.width()
 
-        node = schematic.schematic_items["Reservoir"]
-        rect = node.mapRectToScene(node.boundingRect())
+        rect = item.mapRectToScene(item.boundingRect())
         expected_height = rect.y() + rect.height()
 
         assert (
             tab_panel.buttons[
-                window.actions.get("decrease-width").text()
+                window.app_actions.get("decrease-width").text()
             ].isEnabled()
             is False
             and tab_panel.buttons[
-                window.actions.get("decrease-height").text()
+                window.app_actions.get("decrease-height").text()
             ].isEnabled()
             is False
             and schematic.schematic_width == expected_width

@@ -8,48 +8,126 @@
     "maintainer": "Stefano Simoncelli",
     "model_version": "2.1"
   },
-  "timestepper": {"start": "2015-01-01", "end": "2015-01-05", "timestep": 1},
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-01-05",
+    "timestep": 1
+  },
   "nodes": [
     {
       "name": "Reservoir",
       "type": "Storage",
       "max_volume": 35,
       "initial_volume": 35,
-      "position": {"editor_position": [200, 500]}
+      "position": {
+        "editor_position": [
+          200,
+          500
+        ]
+      }
     },
     {
       "name": "Link",
       "type": "Link",
       "min_flow": {
         "type": "custom_param",
-        "data": ["Table 3", "CSV table"]
+        "data": [
+          "Table 3",
+          "CSV table"
+        ]
       }
     }
   ],
-  "edges": [["Reservoir", "Link"]],
+  "edges": [
+    [
+      "Reservoir",
+      "Link"
+    ]
+  ],
   "scenarios": [
-    {"name": "scenario A", "size": 10},
+    {
+      "name": "scenario A",
+      "size": 10
+    },
     {
       "name": "scenario B",
       "size": 2,
-      "ensemble_names": ["First", "Second"]
+      "ensemble_names": [
+        "First",
+        "Second"
+      ]
     },
-    {"name": "scenario C", "size": 20}
+    {
+      "name": "scenario C",
+      "size": 20
+    }
   ],
   "parameters": {
     "valid_values": {
       "type": "ScenarioMonthlyProfile",
       "scenario": "scenario B",
       "values": [
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-        [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120]
+        [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        [
+          10,
+          20,
+          30,
+          40,
+          50,
+          60,
+          70,
+          80,
+          90,
+          100,
+          110,
+          120
+        ]
       ]
     },
     "valid_values_no_scenario": {
       "type": "ScenarioMonthlyProfile",
       "values": [
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-        [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120]
+        [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        [
+          10,
+          20,
+          30,
+          40,
+          50,
+          60,
+          70,
+          80,
+          90,
+          100,
+          110,
+          120
+        ]
       ]
     },
     "valid_no_values": {
@@ -64,51 +142,172 @@
     "invalid_no_nested_lists": {
       "type": "ScenarioMonthlyProfile",
       "scenario": "scenario B",
-      "values": [1, 6, 19]
+      "values": [
+        1,
+        6,
+        19
+      ]
     },
     "invalid_only_numbers_str": {
       "type": "ScenarioMonthlyProfile",
       "scenario": "scenario B",
-      "values": [[1, 6, 19], ["s", 6, 1]]
+      "values": [
+        [
+          1,
+          6,
+          19
+        ],
+        [
+          "s",
+          6,
+          1
+        ]
+      ]
     },
     "invalid_only_numbers_bool": {
       "type": "ScenarioMonthlyProfile",
       "scenario": "scenario B",
-      "values": [[1, 6, 19], [true, 6, 1]]
+      "values": [
+        [
+          1,
+          6,
+          19
+        ],
+        [
+          true,
+          6,
+          1
+        ]
+      ]
     },
     "invalid_only_numbers_null": {
       "type": "ScenarioMonthlyProfile",
       "scenario": "scenario B",
-      "values": [[1, 6, 19], [null, 6, 1]]
+      "values": [
+        [
+          1,
+          6,
+          19
+        ],
+        [
+          null,
+          6,
+          1
+        ]
+      ]
     },
     "invalid_profile_size": {
       "type": "ScenarioMonthlyProfile",
       "scenario": "scenario B",
-      "values": [[1, 6, 19], [4, 6, 1]]
+      "values": [
+        [
+          1,
+          6,
+          19
+        ],
+        [
+          4,
+          6,
+          1
+        ]
+      ]
     },
     "invalid_scenario_size": {
       "type": "ScenarioMonthlyProfile",
       "scenario": "scenario B",
       "values": [
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-        [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
-        [110, 420, 330, 240, 150, 160, 170, 800, 900, 1000, 1010, 1020]
+        [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ],
+        [
+          10,
+          20,
+          30,
+          40,
+          50,
+          60,
+          70,
+          80,
+          90,
+          100,
+          110,
+          120
+        ],
+        [
+          110,
+          420,
+          330,
+          240,
+          150,
+          160,
+          170,
+          800,
+          900,
+          1000,
+          1010,
+          1020
+        ]
       ]
     },
     "invalid_profile_and_scenario_size": {
       "type": "ScenarioMonthlyProfile",
       "scenario": "scenario B",
-      "values": [[1, 6, 19]]
+      "values": [
+        [
+          1,
+          6,
+          19
+        ]
+      ]
     },
-    "valid_array_indexed_scenario":  {
+    "valid_array_indexed_scenario": {
       "type": "ArrayIndexedScenario",
       "scenario": "scenario B",
-      "values": [[1, 6, 19, 5, 21], [10, 60, 190, 23, 65]]
+      "values": [
+        [
+          1,
+          6,
+          19,
+          5,
+          21
+        ],
+        [
+          10,
+          60,
+          190,
+          23,
+          65
+        ]
+      ]
     },
-    "invalid_array_indexed_scenario":  {
+    "invalid_array_indexed_scenario": {
       "type": "ArrayIndexedScenario",
       "scenario": "scenario B",
-      "values": [[1, 6, 19], [10, 60, 190, 23, 65]]
+      "values": [
+        [
+          1,
+          6,
+          19
+        ],
+        [
+          10,
+          60,
+          190,
+          23,
+          65
+        ]
+      ]
     }
   },
   "tables": {
@@ -117,5 +316,10 @@
       "index_col": "Demand centre"
     }
   },
-  "pywr_editor_schematic_size": [1900, 1450]
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ]
+  }
 }

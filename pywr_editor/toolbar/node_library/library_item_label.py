@@ -6,13 +6,13 @@ from PySide6.QtWidgets import QGraphicsItem, QGraphicsSimpleTextItem
 from pywr_editor.style import Color
 
 if TYPE_CHECKING:
-    from .library_node import LibraryNode
+    from .library_item import LibraryItem
 
 
-class LibraryNodeLabel(QGraphicsSimpleTextItem):
+class LibraryItemLabel(QGraphicsSimpleTextItem):
     def __init__(
         self,
-        parent: "LibraryNode",
+        parent: "LibraryItem",
         name: str,
         color: Color,
     ):
@@ -24,7 +24,7 @@ class LibraryNodeLabel(QGraphicsSimpleTextItem):
         """
         super().__init__(parent)
         self.parent = parent
-        self.symbol = parent.node
+        self.symbol = parent.item
 
         self.setFont(self.font)
         self.setText(name)

@@ -8,24 +8,50 @@
     "maintainer": "Stefano Simoncelli",
     "model_version": "2.1"
   },
-  "timestepper": {"start": "1973-01-01", "end": "2015-12-31", "timestep": 1},
-  "includes": ["files/custom_parameters.py"],
+  "timestepper": {
+    "start": "1973-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
+  "includes": [
+    "files/custom_parameters.py"
+  ],
   "nodes": [
     {
       "name": "Reservoir",
       "type": "Storage",
       "max_volume": 35,
       "initial_volume": 35,
-      "position": {"editor_position": [200, 500]}
+      "position": {
+        "editor_position": [
+          200,
+          500
+        ]
+      }
     },
     {
       "name": "Link",
       "type": "Link",
-      "position": {"editor_position": [200, 500]}
+      "position": {
+        "editor_position": [
+          200,
+          500
+        ]
+      }
     }
   ],
-  "edges": [["Reservoir", "Link"]],
-  "scenarios": [{"name": "scenario A", "size": 2}],
+  "edges": [
+    [
+      "Reservoir",
+      "Link"
+    ]
+  ],
+  "scenarios": [
+    {
+      "name": "scenario A",
+      "size": 2
+    }
+  ],
   "parameters": {
     "custom_parameter": {
       "type": "my",
@@ -58,17 +84,95 @@
         "type": "ScenarioMonthlyProfile",
         "scenario": "scenario B",
         "values": [
-          [12.5, 45, 12.5, 45, 12.5, 45, 12.5, 12.5, 45, 99, 12, 12]
+          [
+            12.5,
+            45,
+            12.5,
+            45,
+            12.5,
+            45,
+            12.5,
+            12.5,
+            45,
+            99,
+            12,
+            12
+          ]
         ]
       },
       "value_2d_array": [
-        [12.5, 45, 12.5, 45, 12.5, 45, 12.5, 12.5, 45, 99, 12, 12],
-        [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120]
+        [
+          12.5,
+          45,
+          12.5,
+          45,
+          12.5,
+          45,
+          12.5,
+          12.5,
+          45,
+          99,
+          12,
+          12
+        ],
+        [
+          10,
+          20,
+          30,
+          40,
+          50,
+          60,
+          70,
+          80,
+          90,
+          100,
+          110,
+          120
+        ]
       ],
       "value_3d_array": [
-        [12.5, 45, 12.5, 45, 12.5, 45, 12.5, 12.5, 45, 99, 12, 12],
-        [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120],
-        [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200]
+        [
+          12.5,
+          45,
+          12.5,
+          45,
+          12.5,
+          45,
+          12.5,
+          12.5,
+          45,
+          99,
+          12,
+          12
+        ],
+        [
+          10,
+          20,
+          30,
+          40,
+          50,
+          60,
+          70,
+          80,
+          90,
+          100,
+          110,
+          120
+        ],
+        [
+          100,
+          200,
+          300,
+          400,
+          500,
+          600,
+          700,
+          800,
+          900,
+          1000,
+          1100,
+          1200
+        ]
       ],
       "value_parameter": "monthly_param",
       "value_node": "Link",
@@ -85,7 +189,20 @@
       "type": "ScenarioMonthlyProfile",
       "scenario": "scenario B",
       "values": [
-        [12.5, 45, 12.5, 45, 12.5, 45, 12.5, 12.5, 45, 99, 12, 12]
+        [
+          12.5,
+          45,
+          12.5,
+          45,
+          12.5,
+          45,
+          12.5,
+          12.5,
+          45,
+          99,
+          12,
+          12
+        ]
       ]
     }
   },
@@ -116,5 +233,10 @@
       "start": 1
     }
   },
-  "pywr_editor_schematic_size": [1900, 1450]
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ]
+  }
 }

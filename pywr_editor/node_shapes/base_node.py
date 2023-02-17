@@ -9,7 +9,7 @@ from pywr_editor.style import Color
 
 if TYPE_CHECKING:
     from pywr_editor.node_shapes import DummyGraphicsItem
-    from pywr_editor.schematic import SchematicItem
+    from pywr_editor.schematic import SchematicNode
 
 
 class BaseNode(QGraphicsItemGroup):
@@ -17,7 +17,7 @@ class BaseNode(QGraphicsItemGroup):
 
     def __init__(
         self,
-        parent: Union["SchematicItem", "DummyGraphicsItem"],
+        parent: Union["SchematicNode", "DummyGraphicsItem"],
         fill: Color | None = None,
         outline: Color | None = None,
         label: Color | None = None,

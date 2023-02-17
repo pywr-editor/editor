@@ -49,7 +49,7 @@ class ScenarioOptionsWidget(FormCustomWidget):
             total_rows=self.scenario_config.size,
         )
         # noinspection PyUnresolvedReferences
-        self.model.dataChanged.connect(self.on_value_change)
+        self.model.dataChanged.connect(self.form.on_field_changed)
 
         # Set table widget
         self.table = TableView(self.model)
@@ -200,14 +200,6 @@ class ScenarioOptionsWidget(FormCustomWidget):
         self.model.total_rows = new_size
         # noinspection PyUnresolvedReferences
         self.model.layoutChanged.emit()
-
-    @Slot()
-    def on_value_change(self) -> None:
-        """
-        Enables the form button when the widget is updated.
-        :return: None
-        """
-        self.form.save_button.setEnabled(True)
 
     def get_value(self) -> dict[str, list[int | str]]:
         """

@@ -3,8 +3,8 @@ from typing import Tuple
 
 import pytest
 
-from pywr_editor.schematic import SchematicItem, SchematicNodeUtils
-from tests.DummyMainWindow import MainWindow
+from pywr_editor import MainWindow
+from pywr_editor.schematic import SchematicItemUtils, SchematicNode
 from tests.utils import resolve_model_path
 
 
@@ -32,7 +32,7 @@ class BaseTestClass:
     @pytest.fixture
     def add_node(
         self, window: MainWindow, node_props: dict
-    ) -> Tuple[SchematicItem, SchematicNodeUtils]:
+    ) -> Tuple[SchematicNode, SchematicItemUtils]:
         """
         Adds a node to the schematic.
         :param window: The window instance.
@@ -40,11 +40,11 @@ class BaseTestClass:
         :return: A tuple with the schematic item and the schematic utility instances.
         """
         schematic = window.schematic
-        node_obj = SchematicItem(view=schematic, node_props=node_props)
+        node_obj = SchematicNode(view=schematic, node_props=node_props)
         schematic.scene.addItem(node_obj)
 
-        return node_obj, SchematicNodeUtils(
-            node=node_obj,
+        return node_obj, SchematicItemUtils(
+            item=node_obj,
             schematic_size=[
                 schematic.schematic_width,
                 schematic.schematic_height,
@@ -58,7 +58,7 @@ class TestNodesOutsideCanvas(BaseTestClass):
     )
     def test_node_inside(self, qtbot, window, add_node, node_props):
         """
-        Tests the SchematicNodeUtils when a node is inside the schematic canvas.
+        Tests the SchematicItemUtils when a node is inside the schematic canvas.
         """
         node_obj, node_utils_obj = add_node
         assert (
@@ -73,7 +73,7 @@ class TestNodesOutsideCanvas(BaseTestClass):
     )
     def test_node_outside_left_edge(self, qtbot, window, add_node, node_props):
         """
-        Tests the SchematicNodeUtils when a node is inside the schematic canvas.
+        Tests the SchematicItemUtils when a node is inside the schematic canvas.
         """
         node_obj, node_utils_obj = add_node
         assert (
@@ -91,7 +91,7 @@ class TestNodesOutsideCanvas(BaseTestClass):
     )
     def test_node_outside_top_edge(self, qtbot, window, add_node, node_props):
         """
-        Tests the SchematicNodeUtils when a node is inside the schematic canvas.
+        Tests the SchematicItemUtils when a node is inside the schematic canvas.
         """
         node_obj, node_utils_obj = add_node
         assert (
@@ -109,7 +109,7 @@ class TestNodesOutsideCanvas(BaseTestClass):
     )
     def test_node_outside_right_edge(self, qtbot, window, add_node, node_props):
         """
-        Tests the SchematicNodeUtils when a node is inside the schematic canvas.
+        Tests the SchematicItemUtils when a node is inside the schematic canvas.
         """
         node_obj, node_utils_obj = add_node
         assert (
@@ -129,7 +129,7 @@ class TestNodesOutsideCanvas(BaseTestClass):
         self, qtbot, window, add_node, node_props
     ):
         """
-        Tests the SchematicNodeUtils when a node is inside the schematic canvas.
+        Tests the SchematicItemUtils when a node is inside the schematic canvas.
         """
         node_obj, node_utils_obj = add_node
         assert (
@@ -156,8 +156,8 @@ class TestMoveNodesToCanvasEdge(BaseTestClass):
         node_utils_obj.move_to_left_edge()
 
         # reload utility
-        node_utils_obj = SchematicNodeUtils(
-            node=node_obj,
+        node_utils_obj = SchematicItemUtils(
+            item=node_obj,
             schematic_size=[
                 node_utils_obj.schematic_size[0],
                 node_utils_obj.schematic_size[1],
@@ -181,8 +181,8 @@ class TestMoveNodesToCanvasEdge(BaseTestClass):
         node_utils_obj.move_to_top_edge()
 
         # reload utility
-        node_utils_obj = SchematicNodeUtils(
-            node=node_obj,
+        node_utils_obj = SchematicItemUtils(
+            item=node_obj,
             schematic_size=[
                 node_utils_obj.schematic_size[0],
                 node_utils_obj.schematic_size[1],
@@ -206,8 +206,8 @@ class TestMoveNodesToCanvasEdge(BaseTestClass):
         node_utils_obj.move_to_right_edge()
 
         # reload utility
-        node_utils_obj = SchematicNodeUtils(
-            node=node_obj,
+        node_utils_obj = SchematicItemUtils(
+            item=node_obj,
             schematic_size=[
                 node_utils_obj.schematic_size[0],
                 node_utils_obj.schematic_size[1],
@@ -231,8 +231,8 @@ class TestMoveNodesToCanvasEdge(BaseTestClass):
         node_utils_obj.move_to_bottom_edge()
 
         # reload utility
-        node_utils_obj = SchematicNodeUtils(
-            node=node_obj,
+        node_utils_obj = SchematicItemUtils(
+            item=node_obj,
             schematic_size=[
                 node_utils_obj.schematic_size[0],
                 node_utils_obj.schematic_size[1],

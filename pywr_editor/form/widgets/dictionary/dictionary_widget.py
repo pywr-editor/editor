@@ -65,7 +65,7 @@ class DictionaryWidget(FormCustomWidget):
             dictionary=dictionary, model_config=self.model_config
         )
         # noinspection PyUnresolvedReferences
-        self.model.layoutChanged.connect(self.on_value_change)
+        self.model.layoutChanged.connect(self.form.on_field_changed)
 
         # Buttons
         self.button_layout = QHBoxLayout()
@@ -119,14 +119,6 @@ class DictionaryWidget(FormCustomWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.table)
         layout.addLayout(self.button_layout)
-
-    @Slot()
-    def on_value_change(self) -> None:
-        """
-        Enables the form button when the widget is updated.
-        :return: None
-        """
-        self.form.save_button.setEnabled(True)
 
     @Slot()
     def on_selection_changed(self) -> None:

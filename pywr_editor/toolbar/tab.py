@@ -19,6 +19,8 @@ class Tab(QWidget):
         """
         super().__init__(parent=parent)
         self.setObjectName(f"toolbar_tab_{name}")
+        self.setContextMenuPolicy(Qt.ContextMenuPolicy.PreventContextMenu)
+
         self.panels: dict[str, TabPanel] = {}
 
         # layout containing the panels

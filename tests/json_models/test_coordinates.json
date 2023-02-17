@@ -1282,8 +1282,10 @@
       }
     }
   ],
-  "pywr_editor_schematic_size": [
-    1000,
-    400
-  ]
+  "pywr_editor": {
+    "schematic_size": [
+      1000,
+      400
+    ]
+  }
 }

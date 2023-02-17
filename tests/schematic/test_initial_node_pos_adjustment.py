@@ -3,7 +3,7 @@ from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QApplication
 
 from pywr_editor import MainWindow
-from pywr_editor.schematic import SchematicNodeUtils
+from pywr_editor.schematic import SchematicItemUtils
 from tests.utils import resolve_model_path
 
 
@@ -18,7 +18,6 @@ class TestInitialWrongPosition:
         :return: The window instance.
         """
         QTimer.singleShot(100, self.get_warning_message)
-        # QTimer.singleShot(100, close_message_box)
         window = MainWindow(self.model_file)
         window.hide()
 
@@ -40,9 +39,9 @@ class TestInitialWrongPosition:
         """
         schematic = window.schematic
 
-        item = schematic.schematic_items["Link"]
-        item_utils = SchematicNodeUtils(
-            node=item,
+        item = schematic.node_items["Link"]
+        item_utils = SchematicItemUtils(
+            item=item,
             schematic_size=[
                 schematic.schematic_width,
                 schematic.schematic_height,
@@ -51,9 +50,9 @@ class TestInitialWrongPosition:
         assert item_utils.is_outside_left_edge is False
         assert item.sceneBoundingRect().left() == 0.0
 
-        item = schematic.schematic_items["Output"]
-        item_utils = SchematicNodeUtils(
-            node=item,
+        item = schematic.node_items["Output"]
+        item_utils = SchematicItemUtils(
+            item=item,
             schematic_size=[
                 schematic.schematic_width,
                 schematic.schematic_height,
@@ -62,4 +61,4 @@ class TestInitialWrongPosition:
 
         assert item_utils.is_outside_left_edge is False
         assert item.sceneBoundingRect().bottom() == schematic.schematic_height
-        assert "2 nodes were outside" in self.dialog_text
+        assert "2 items were outside" in self.dialog_text

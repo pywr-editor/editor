@@ -64,6 +64,7 @@ def get_app_path() -> Path:
     :return: The Path instance of the application.
     """
     if is_app_frozen():
+        # noinspection PyProtectedMember
         return Path(sys._MEIPASS)
     else:
         return Path(__file__).parent.parent.parent

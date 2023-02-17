@@ -39,6 +39,7 @@ class TabPanel(QWidget):
         """
         super().__init__(parent=parent)
         self.setObjectName(f"toolbar_panel_{name}")
+        self.setContextMenuPolicy(Qt.ContextMenuPolicy.PreventContextMenu)
         self.buttons: dict[str, ToolbarLargeButton | ToolbarSmallButton] = {}
         self.widgets: list[QWidget] = []
 

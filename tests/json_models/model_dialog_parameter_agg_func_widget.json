@@ -8,60 +8,103 @@
     "maintainer": "Stefano Simoncelli",
     "model_version": "2.1"
   },
-  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
   "nodes": [
     {
       "name": "Reservoir",
       "type": "Storage",
       "max_volume": 35,
       "initial_volume": 35,
-      "position": {"editor_position": [200, 500]}
+      "position": {
+        "editor_position": [
+          200,
+          500
+        ]
+      }
     },
     {
       "name": "Link",
       "type": "Link",
       "min_flow": {
         "type": "custom_param",
-        "data": ["Table 3", "CSV table"]
+        "data": [
+          "Table 3",
+          "CSV table"
+        ]
       }
     }
   ],
-  "edges": [["Reservoir", "Link"]],
+  "edges": [
+    [
+      "Reservoir",
+      "Link"
+    ]
+  ],
   "parameters": {
     "valid_func1": {
       "type": "AggregatedParameter",
-      "parameters": [23, 91.23],
+      "parameters": [
+        23,
+        91.23
+      ],
       "agg_func": "sum"
     },
     "valid_func2": {
       "type": "AggregatedParameter",
-      "parameters": [23, 91.23],
+      "parameters": [
+        23,
+        91.23
+      ],
       "agg_func": "Product"
     },
     "valid_func3": {
       "type": "AggregatedParameter",
-      "parameters": [23, 91.23],
+      "parameters": [
+        23,
+        91.23
+      ],
       "agg_func": "MeAn"
     },
     "empty_string": {
       "type": "AggregatedParameter",
-      "parameters": [23, 91.23],
+      "parameters": [
+        23,
+        91.23
+      ],
       "agg_func": ""
     },
     "wrong_type": {
       "type": "AggregatedParameter",
-      "parameters": [23, 91.23],
-      "agg_func":  12
+      "parameters": [
+        23,
+        91.23
+      ],
+      "agg_func": 12
     },
     "wrong_func": {
       "type": "AggregatedParameter",
-      "parameters": [23, 91.23],
-      "agg_func":  "a"
+      "parameters": [
+        23,
+        91.23
+      ],
+      "agg_func": "a"
     },
     "not_provided": {
       "type": "AggregatedParameter",
-      "parameters": [23, 91.23]
+      "parameters": [
+        23,
+        91.23
+      ]
     }
   },
-  "pywr_editor_schematic_size": [1900, 1450]
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ]
+  }
 }

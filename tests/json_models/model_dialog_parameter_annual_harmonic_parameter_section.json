@@ -8,44 +8,81 @@
     "maintainer": "Stefano Simoncelli",
     "model_version": "2.1"
   },
-  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 5},
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 5
+  },
   "nodes": [
     {
       "name": "Reservoir",
       "type": "Storage",
       "max_volume": 35,
       "initial_volume": 35,
-      "position": {"editor_position": [200, 500]}
+      "position": {
+        "editor_position": [
+          200,
+          500
+        ]
+      }
     },
     {
       "name": "Link",
       "type": "Output"
     }
   ],
-  "edges": [["Reservoir", "Link"]],
+  "edges": [
+    [
+      "Reservoir",
+      "Link"
+    ]
+  ],
   "parameters": {
     "valid_harmonic": {
       "type": "AnnualHarmonicSeries",
       "mean": 98,
-      "amplitudes": [5, 5],
-      "phases": [7, 9]
+      "amplitudes": [
+        5,
+        5
+      ],
+      "phases": [
+        7,
+        9
+      ]
     },
     "invalid_mean": {
       "type": "AnnualHarmonicSeries",
-      "amplitudes": [5, 5],
-      "phases": [7, 67]
+      "amplitudes": [
+        5,
+        5
+      ],
+      "phases": [
+        7,
+        67
+      ]
     },
     "invalid_phases": {
       "type": "AnnualHarmonicSeries",
       "mean": 98,
-      "amplitudes": [5, 5],
-      "phases": [7]
+      "amplitudes": [
+        5,
+        5
+      ],
+      "phases": [
+        7
+      ]
     },
     "invalid_amplitudes": {
       "type": "AnnualHarmonicSeries",
       "mean": 98,
-      "amplitudes": [5],
-      "phases": [7, 9, 4]
+      "amplitudes": [
+        5
+      ],
+      "phases": [
+        7,
+        9,
+        4
+      ]
     },
     "invalid_harmonic_no_values": {
       "type": "AnnualHarmonicSeries",
@@ -54,10 +91,23 @@
     "invalid_phase_upper_bounds": {
       "type": "AnnualHarmonicSeries",
       "mean": 98,
-      "amplitudes": [5, 78, 42],
-      "phases": [7, 9, 4],
+      "amplitudes": [
+        5,
+        78,
+        42
+      ],
+      "phases": [
+        7,
+        9,
+        4
+      ],
       "phase_upper_bounds": 500
     }
   },
-  "pywr_editor_schematic_size": [1900, 1450]
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ]
+  }
 }
