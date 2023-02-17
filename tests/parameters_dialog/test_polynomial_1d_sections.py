@@ -88,7 +88,7 @@ class TestDialogParameterPolynomial1DParameterSection:
         )
 
         # 2. Set storage_node
-        storage.combo_box.setCurrentText("Reservoir (Reservoir)")
+        storage.combo_box.setCurrentText("Reservoir (Storage)")
         assert storage.get_value() == "Reservoir"
         self.validate(qtbot, save_button, None)
 

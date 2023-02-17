@@ -150,14 +150,10 @@ def get_nodes() -> str:
             if name in to_exclude or "Parameter" in name:
                 continue
 
-            new_name = humanise(name)
-            if name == "Storage":
-                new_name = "Reservoir"
-
             nodes_data[name.lower()] = {
                 "class": name,
                 "sub_classes": get_node_subclasses(obj),
-                "name": new_name,
+                "name": humanise(name),
             }
 
     file = Path(__file__).parent / "pywr_data" / "node_data.json"
