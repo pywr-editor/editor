@@ -157,7 +157,7 @@ class LibraryPanel(QGraphicsView):
 
         # behaviour
         self.setFixedHeight(90)
-        self.setMinimumWidth(500)
+        self.setMinimumWidth(550)
         self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -282,7 +282,7 @@ class LibraryPanel(QGraphicsView):
         :return: None
         """
         # make scroll smoother
-        delta = 2
+        delta = 4
         if event.angleDelta().y() > 0:
             scroll_delta = -delta
         else:
