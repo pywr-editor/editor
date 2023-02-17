@@ -99,7 +99,7 @@ Source: "dist\main\base_library.zip"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\LEGAL NOTICES.md"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\libcrypto-1_1.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\libffi-7.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "dist\main\libopenblas.*.gfortran-win_amd64.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "dist\main\libopenblas*.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\libssl-1_1.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\mfc140u.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\pyexpat.pyd"; DestDir: "{app}"; Flags: ignoreversion
