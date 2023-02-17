@@ -249,6 +249,7 @@ class UrlWidget(FormCustomWidget):
                 )
                 continue
 
+            # noinspection PyTypeChecker
             form_widget: FormCustomWidget = form_field.widget
             if not hasattr(form_widget, "update_field"):
                 raise NotImplementedError(
@@ -279,6 +280,7 @@ class UrlWidget(FormCustomWidget):
                 )
                 continue
 
+            # noinspection PyTypeChecker
             form_widget = form_field.widget
             if not hasattr(form_widget, "update_field"):
                 raise NotImplementedError(
