@@ -1,7 +1,7 @@
 from typing import Literal
 
 import PySide6
-from PySide6.QtCore import QRect
+from PySide6.QtCore import QPoint, QRect
 from PySide6.QtGui import (
     QFont,
     QIconEngine,
@@ -10,7 +10,6 @@ from PySide6.QtGui import (
     QPen,
     QPixmap,
     Qt,
-    QTextOption,
     qRgba,
 )
 
@@ -52,8 +51,7 @@ class IconWithInitials(QIconEngine):
             image, Qt.ImageConversionFlag.NoFormatConversion
         )
         painter = QPainter(pixmap)
-        # set empty rectangle. This is set in the painter directly
-        self.paint(painter, QRect(), mode, state)
+        self.paint(painter, QRect(QPoint(0, 0), size), mode, state)
         return pixmap
 
     def paint(
@@ -83,17 +81,14 @@ class IconWithInitials(QIconEngine):
             | QPainter.TextAntialiasing
         )
 
-        font_rect = QRect(rect.x() + 2, rect.y(), 15, 15)
-        # font_rect = QRect(rect.x(), rect.y(), 15, 15)
-        # for pixmap
-        if rect.isEmpty():
-            # font_rect = QRect(rect.x(), rect.y(), 15, 15)
-            font_rect = QRect(rect.x(), rect.y(), 19, 19)
+        # convert rectangle to square
+        if rect.width() > rect.height():
+            rect.setWidth(rect.height())
 
         if self.shape == "rectangle":
-            painter.drawRoundedRect(font_rect, 4, 4)
+            painter.drawRoundedRect(rect, 4, 4)
         elif self.shape == "circle":
-            painter.drawEllipse(font_rect.center(), 8, 8)
+            painter.drawEllipse(rect)
         else:
             raise ValueError("Wrong shape type")
 
@@ -101,14 +96,15 @@ class IconWithInitials(QIconEngine):
         font = QFont()
         font.setPixelSize(12)
         color = Color(self.color, 700).qcolor
-        text_options = QTextOption()
-        text_options.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
         painter.setPen(QPen(color))
         painter.setBrush(color)
         painter.setFont(font)
         if self.label and isinstance(self.label, str):
-            painter.drawText(font_rect, self.label[0].upper(), text_options)
+            painter.drawText(
+                rect,
+                self.label[0].upper(),
+                Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignCenter,
+            )
 
     def get_color(self) -> ColorName:
         """
