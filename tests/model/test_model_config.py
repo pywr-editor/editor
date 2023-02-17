@@ -43,7 +43,7 @@ class TestModelConfig:
         is provided.
         """
         model = self.model()
-        assert model.json["metadata"]["minimum_version"] == "0.1"
+        assert model.json["metadata"]["minimum_version"] == "1.19.0"
         assert model.json["metadata"]["title"] == "New model"
         assert "Model created on" in model.json["metadata"]["description"]
 
