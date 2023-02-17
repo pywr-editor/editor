@@ -175,7 +175,7 @@ class ModelConfig:
             "nodes": [],
             "edges": [],
             "tables": {},
-            Constants.EDITOR_CONFIG_KEY.value: {},
+            Constants.EDITOR_CONFIG_KEY.value: {Constants.SHAPES_KEY.value: []},
         }
 
     def load_model(self) -> None:
@@ -233,9 +233,17 @@ class ModelConfig:
             if key not in self.json:
                 self.json[key] = {}
 
+        if (
+            Constants.SHAPES_KEY.value
+            not in self.json[Constants.EDITOR_CONFIG_KEY.value]
+        ):
+            self.json[Constants.EDITOR_CONFIG_KEY.value][
+                Constants.SHAPES_KEY.value
+            ] = []
+
         # check that the metadata dictionary and its key/value pairs are defined
         default_metadata = {
-            "minimum_version": "0.1",
+            "minimum_version": "1.19.0",
             "title": "Untitled",
             "description": "Missing description",
         }
