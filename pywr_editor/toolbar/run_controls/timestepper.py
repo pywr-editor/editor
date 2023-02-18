@@ -1,10 +1,11 @@
 from functools import partial
 from typing import TYPE_CHECKING, Literal
 
-from PySide6.QtCore import QDate, Slot
-from PySide6.QtWidgets import QGridLayout, QLabel, QWidget
+from PySide6.QtCore import QDate, Qt, Slot
+from PySide6.QtWidgets import QGridLayout, QLabel, QSizePolicy, QWidget
 
-from pywr_editor.widgets import DateEdit
+from pywr_editor.style import Color
+from pywr_editor.widgets import DateEdit, SpinBox
 
 if TYPE_CHECKING:
     from pywr_editor import MainWindow
@@ -39,7 +40,24 @@ class TimeStepperWidget(QWidget):
         end_date.dateChanged.connect(partial(self.date_changed, "end_date"))
         main_layout.addWidget(end_date, 1, 1)
 
-        main_layout.addWidget(QLabel("Run to date"), 0, 3)
+        # timestep
+        main_layout.addWidget(QLabel("Timestep"), 0, 3)
+        time_step = SpinBox()
+        time_step.setValue(self.model_config.time_delta)
+        time_step.setRange(1, 365)
+        time_step.setSuffix(" days")
+        time_step.setObjectName("time_step")
+        time_step.setStyleSheet(
+            "#time_step { padding: 2px; border: 1px solid "
+            + Color("neutral", 300).hex
+            + "}"
+        )
+        # noinspection PyUnresolvedReferences
+        time_step.valueChanged.connect(self.time_step_changed)
+        main_layout.addWidget(time_step, 0, 4)
+
+        # run to date
+        main_layout.addWidget(QLabel("Run to date"), 1, 3)
         run_to_date = DateEdit(parent.editor_settings.run_to_date)
         # noinspection PyUnresolvedReferences
         run_to_date.dateChanged.connect(
@@ -47,8 +65,18 @@ class TimeStepperWidget(QWidget):
                 date.toString("yyyy-MM-dd")
             )
         )
-        # save_run_to_date
-        main_layout.addWidget(run_to_date, 0, 4)
+        main_layout.addWidget(run_to_date, 1, 4)
+
+        # separator
+        separator = QWidget()
+        separator.setFixedHeight(60)
+        separator.setFixedWidth(1)
+        separator.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        separator.setStyleSheet(f"background-color: {Color('gray', 300).hex}")
+        main_layout.addWidget(
+            separator, 0, 2, 0, 1, Qt.AlignmentFlag.AlignHCenter
+        )
+        main_layout.setColumnMinimumWidth(2, 15)
 
         self.setLayout(main_layout)
 
@@ -59,8 +87,7 @@ class TimeStepperWidget(QWidget):
         date: QDate,
     ) -> None:
         """
-        Updates the timestepper dates in the model when the date field
-        is changed.
+        Updates the timestepper dates in the model when the date field is changed.
         :param date_type: The changed date ("start_date" or "end_date").
         :param date: The new date.
         :return: None
@@ -74,3 +101,16 @@ class TimeStepperWidget(QWidget):
             self.app.components_tree.reload()
         else:
             raise ValueError("date_type can only be 'start_date' or 'end_date'")
+
+    @Slot(int)
+    def time_step_changed(
+        self,
+        step: int,
+    ) -> None:
+        """
+        Updates the timestepper timestep in the model when the field is changed.
+        :param step: The timestep as number of days.
+        :return: None
+        """
+        self.model_config.time_delta = step
+        self.app.components_tree.reload()
