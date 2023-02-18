@@ -1,11 +1,11 @@
 from datetime import date
 
 import pytest
-from PySide6.QtCore import QDate
+from PySide6.QtCore import QDate, QTimer
 
 from pywr_editor import MainWindow
 from pywr_editor.widgets import DateEdit
-from tests.utils import resolve_model_path
+from tests.utils import close_message_box, resolve_model_path
 
 
 class TestTimeStepperWidget:
@@ -56,6 +56,7 @@ class TestTimeStepperWidget:
         """
         Tests when the start or end date is None.
         """
+        QTimer.singleShot(1000, close_message_box)
         window = MainWindow(
             resolve_model_path("invalid_model_missing_props.json")
         )
