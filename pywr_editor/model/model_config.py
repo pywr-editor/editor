@@ -4,8 +4,9 @@ from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
+from typing import Tuple
 
-from pandas import Timestamp, period_range, to_datetime
+from pandas import period_range
 
 from pywr_editor.model import (
     ChangesTracker,
@@ -94,29 +95,81 @@ class ModelConfig:
         return self.json["timestepper"]
 
     @property
-    def start_date(self) -> Timestamp | None:
+    def start_date(self) -> str | None:
         """
         Returns the timestepper start date.
-        :return: The start date as Pandas Timestamp instance, None when not available.
+        :return: The start date or None when not available.
         """
-        if "start" in self.timestepper:
-            try:
-                return to_datetime(self.timestepper["start"])
-            except ValueError:
-                pass
+        if (
+            "start" in self.timestepper
+            and isinstance(self.timestepper["start"], str)
+            and len(self.timestepper["start"].split("-")) == 3
+        ):
+            return self.timestepper["start"]
+        return None
+
+    @start_date.setter
+    def start_date(self, date: str) -> None:
+        """
+        Updates the start date.
+        :param date: The date as string.
+        :return: None
+        """
+        self.changes_tracker.add(f"Changed start date to {date}")
+        self.json["timestepper"]["start"] = date
+
+    @property
+    def start_date_tuple(self) -> Tuple[int, int, int] | None:
+        """
+        Returns the start date as tuple.
+        :return: A tuple containing the year, month and day or None
+        if the date is not valid.
+        """
+        # noinspection PyBroadException
+        try:
+            year, month, day = self.start_date.split("-")
+            return int(year), int(month), int(day)
+        except Exception:
+            pass
         return None
 
     @property
-    def end_date(self) -> Timestamp | None:
+    def end_date(self) -> str | None:
         """
         Returns the timestepper end date.
-        :return: The end date as Pandas Timestamp instance, None when not available.
+        :return: The end date as string or None when not available.
         """
-        if "end" in self.timestepper:
-            try:
-                return to_datetime(self.timestepper["end"])
-            except ValueError:
-                pass
+        if (
+            "end" in self.timestepper
+            and isinstance(self.timestepper["end"], str)
+            and len(self.timestepper["end"].split("-")) == 3
+        ):
+            return self.timestepper["end"]
+        return None
+
+    @end_date.setter
+    def end_date(self, date: str) -> None:
+        """
+        Updates the end date.
+        :param date: The date as string.
+        :return: None
+        """
+        self.changes_tracker.add(f"Changed end date to {date}")
+        self.json["timestepper"]["end"] = date
+
+    @property
+    def end_date_tuple(self) -> Tuple[int, int, int] | None:
+        """
+        Returns the end date as tuple.
+        :return: A tuple containing the year, month and day or None
+        if the date is not valid.
+        """
+        # noinspection PyBroadException
+        try:
+            year, month, day = self.end_date.split("-")
+            return int(year), int(month), int(day)
+        except Exception:
+            pass
         return None
 
     @property
