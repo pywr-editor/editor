@@ -66,5 +66,4 @@ class TestTimeStepperWidget:
 
         # check set date - widget defaults to 1/1/2000
         assert window.model_config.start_date is None
-        assert window.model_config.start_date_tuple is None
         assert widget.date().toPython() == date(2000, 1, 1)

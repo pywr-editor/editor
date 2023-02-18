@@ -4,7 +4,6 @@ from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Tuple
 
 from pandas import period_range
 
@@ -119,21 +118,6 @@ class ModelConfig:
         self.json["timestepper"]["start"] = date
 
     @property
-    def start_date_tuple(self) -> Tuple[int, int, int] | None:
-        """
-        Returns the start date as tuple.
-        :return: A tuple containing the year, month and day or None
-        if the date is not valid.
-        """
-        # noinspection PyBroadException
-        try:
-            year, month, day = self.start_date.split("-")
-            return int(year), int(month), int(day)
-        except Exception:
-            pass
-        return None
-
-    @property
     def end_date(self) -> str | None:
         """
         Returns the timestepper end date.
@@ -156,21 +140,6 @@ class ModelConfig:
         """
         self.changes_tracker.add(f"Changed end date to {date}")
         self.json["timestepper"]["end"] = date
-
-    @property
-    def end_date_tuple(self) -> Tuple[int, int, int] | None:
-        """
-        Returns the end date as tuple.
-        :return: A tuple containing the year, month and day or None
-        if the date is not valid.
-        """
-        # noinspection PyBroadException
-        try:
-            year, month, day = self.end_date.split("-")
-            return int(year), int(month), int(day)
-        except Exception:
-            pass
-        return None
 
     @property
     def time_delta(self) -> int | None:
