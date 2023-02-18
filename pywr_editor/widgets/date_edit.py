@@ -1,4 +1,7 @@
+from typing import Tuple
+
 import PySide6
+from PySide6.QtCore import QDate
 from PySide6.QtWidgets import QDateEdit, QWidget
 
 from pywr_editor.style import Color, stylesheet_dict_to_str
@@ -6,12 +9,22 @@ from pywr_editor.widgets import CalendarWidget
 
 
 class DateEdit(QDateEdit):
-    def __init__(self, date: PySide6.QtCore.QDate, parent: QWidget = None):
+    def __init__(
+        self,
+        date: PySide6.QtCore.QDate | Tuple[int, int, int],
+        parent: QWidget = None,
+    ):
         """
         Initialises the widget.
-        :param date: The date to set.
+        :param date: The date to set as QDate instance or tuple with year, month and
+        day.
         :param parent: The parent widget. Default to None.
         """
+        if isinstance(date, tuple):
+            date = QDate(*date)
+        if date is None:
+            date = QDate()
+
         super().__init__(date, parent)
         self.setDisplayFormat("dd/MM/yyyy")
         self.setCalendarPopup(True)
