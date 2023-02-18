@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import TYPE_CHECKING
 
 import pandas as pd
@@ -17,6 +18,7 @@ from pywr_editor.model import PywrProgress, PywrWorker
 from pywr_editor.style import Color, stylesheet_dict_to_str
 from pywr_editor.toolbar.small_button import ToolbarSmallButton
 from pywr_editor.utils import Logging
+from pywr_editor.widgets import DateEdit
 
 if TYPE_CHECKING:
     from pywr_editor import MainWindow
@@ -38,6 +40,7 @@ class RunWidget(QWidget):
         :param parent: The parent widget.
         """
         super().__init__()
+        self.app = parent
         self.logger = Logging().logger(self.__class__.__name__)
         self.model_config = parent.model_config
         self.inspector_action = parent.actions.get("run-inspector")
@@ -132,10 +135,18 @@ class RunWidget(QWidget):
             }
         )
 
-    def run_worker(self):
+    def run_worker(self) -> bool | None:
+        """
+        Starts the worker and thread process.
+        :return: Whether the worker was started or None if the worker is already
+        running.
+        """
         if self.is_running:
             self.logger.debug("Worker is already running")
             return
+
+        if not self.validate_timestepper():
+            return False
 
         self.logger.debug("Starting a new worker")
         self.worker = PywrWorker(
@@ -159,6 +170,8 @@ class RunWidget(QWidget):
 
         self.thread.start()
         self.is_running = True
+
+        return True
 
     @Slot()
     def run_done(self) -> None:
@@ -230,7 +243,8 @@ class RunWidget(QWidget):
         Increase the timestep.
         :return: None
         """
-        self.run_worker()
+        if self.run_worker() is False:
+            return
         self.worker.step()
 
     @Slot()
@@ -239,9 +253,16 @@ class RunWidget(QWidget):
         Runs the model until the Run to date.
         :return: None
         """
-        self.run_worker()
-        # TODO: fetch date from widget
-        self.worker.run_to(date=pd.Timestamp("2020-10-3"))
+        if self.run_worker() is False:
+            return
+        if not self.validate_run_to():
+            return
+
+        # noinspection PyTypeChecker
+        run_to_widget: DateEdit = self.app.findChild(DateEdit, "run_to_date")
+        self.worker.run_to(
+            date=pd.Timestamp(run_to_widget.date().toString("yyyy-MM-dd"))
+        )
 
     @Slot()
     def stop(self) -> None:
@@ -290,3 +311,57 @@ class RunWidget(QWidget):
             model_config=self.model_config, pywr_model=self.worker.pywr_model
         )
         dialog.show()
+
+    def validate_timestepper(self) -> bool:
+        """
+        Checks that the timestep dates are properly configured and valid.
+        :return: True if the timestepper dates are valid, False otherwise.
+        # noinspection PyUnresolvedReferences
+        """
+        # noinspection PyUnresolvedReferences
+        start_date: datetime = (
+            self.app.findChild(DateEdit, "start_date").date().toPython()
+        )
+        # noinspection PyUnresolvedReferences
+        end_date: datetime = (
+            self.app.findChild(DateEdit, "end_date").date().toPython()
+        )
+
+        if start_date >= end_date:
+            self.app.on_error_message(
+                f"The start date ({start_date.strftime('%d/%m/%Y')}) must be smaller "
+                + f"than the end date ({end_date.strftime('%d/%m/%Y')}). Please make "
+                + "sure that the date fields are properly configured",
+                False,
+                "Cannot run the model",
+            )
+            return False
+
+        return True
+
+    def validate_run_to(self) -> bool:
+        """
+        Checks that the timestep dates are properly configured and valid.
+        :return: True if the timestepper dates are valid, False otherwise.
+        # noinspection PyUnresolvedReferences
+        """
+        # noinspection PyUnresolvedReferences
+        start_date = (
+            self.app.findChild(DateEdit, "start_date").date().toPython()
+        )
+        # noinspection PyUnresolvedReferences
+        run_to_date = (
+            self.app.findChild(DateEdit, "run_to_date").date().toPython()
+        )
+
+        if start_date >= run_to_date:
+            self.app.on_error_message(
+                f"The start date ({start_date.strftime('%d/%m/%Y')}) must be smaller "
+                + f"than the end date ({run_to_date.strftime('%d/%m/%Y')}). Please "
+                + "make sure that the date fields are properly configured",
+                False,
+                "Cannot run the model",
+            )
+            return False
+
+        return True

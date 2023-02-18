@@ -884,14 +884,17 @@ class MainWindow(QMainWindow):
         dialog(self, title, message)
 
     @Slot(str, bool)
-    def on_error_message(self, message: str, close: bool) -> None:
+    def on_error_message(
+        self, message: str, close: bool, title: str = "An error occurred"
+    ) -> None:
         """
         Shows an error message. This closes the application.
         :param message: The error message.
         :param close: Whether to close the application.
+        :param title: The error message title. Optional
         :return: None
         """
-        QMessageBox().critical(self, "An error occurred", message)
+        QMessageBox().critical(self, title, message)
         if close:
             sys.exit(1)
 
