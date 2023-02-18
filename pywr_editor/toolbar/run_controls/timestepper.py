@@ -24,7 +24,7 @@ class TimeStepperWidget(QWidget):
 
         # start date
         main_layout.addWidget(QLabel("Start date"), 0, 0)
-        start_date = DateEdit(self.model_config.start_date_tuple)
+        start_date = DateEdit(self.model_config.start_date)
         start_date.setObjectName("start_date")
         # noinspection PyUnresolvedReferences
         start_date.dateChanged.connect(partial(self.date_changed, "start_date"))
@@ -32,14 +32,21 @@ class TimeStepperWidget(QWidget):
 
         # end date
         main_layout.addWidget(QLabel("End date"), 1, 0)
-        end_date = DateEdit(self.model_config.end_date_tuple)
+        end_date = DateEdit(self.model_config.end_date)
         end_date.setObjectName("end_date")
         # noinspection PyUnresolvedReferences
         end_date.dateChanged.connect(partial(self.date_changed, "end_date"))
         main_layout.addWidget(end_date, 1, 1)
 
         main_layout.addWidget(QLabel("Run to date"), 0, 3)
-        run_to_date = DateEdit(self.model_config.end_date_tuple)
+        run_to_date = DateEdit(parent.editor_settings.run_to_date)
+        # noinspection PyUnresolvedReferences
+        run_to_date.dateChanged.connect(
+            lambda date: parent.editor_settings.save_run_to_date(
+                date.toString("yyyy-MM-dd")
+            )
+        )
+        # save_run_to_date
         main_layout.addWidget(run_to_date, 0, 4)
 
         self.setLayout(main_layout)
