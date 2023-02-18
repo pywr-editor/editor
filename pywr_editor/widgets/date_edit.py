@@ -23,7 +23,7 @@ class DateEdit(QDateEdit):
         if isinstance(date, tuple):
             date = QDate(*date)
         if date is None:
-            date = QDate()
+            date = QDate(2000, 1, 1)
 
         super().__init__(date, parent)
         self.setDisplayFormat("dd/MM/yyyy")
