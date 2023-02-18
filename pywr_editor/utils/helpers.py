@@ -45,6 +45,7 @@ def is_excel_installed() -> bool:
     try:
         excel = win32com.client.Dispatch("Excel.Application")
         _ = excel.version
+        excel.Quit()
         return True
     except Exception:
         return False
