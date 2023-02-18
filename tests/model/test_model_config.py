@@ -188,6 +188,11 @@ class TestModelConfig:
         model.end_date = "2009-1010"
         assert model.end_date is None
 
+        # check and change the timestep
+        assert model.time_delta == 1
+        model.time_delta = 3
+        assert model.time_delta == 3
+
     @pytest.mark.parametrize(
         "path, ignore_outside_model_path, expected",
         [

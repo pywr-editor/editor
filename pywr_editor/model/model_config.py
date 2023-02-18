@@ -142,10 +142,10 @@ class ModelConfig:
         self.json["timestepper"]["end"] = date
 
     @property
-    def time_delta(self) -> int | None:
+    def time_delta(self) -> int:
         """
-        Returns the timestepper timestamp.
-        :return: The end date as datetime instance, None when not available.
+        Returns the timestepper timestep.
+        :return: The timestep or 1 when not available.
         """
         if "timestep" in self.timestepper and isinstance(
             self.timestepper["timestep"], int
@@ -153,8 +153,18 @@ class ModelConfig:
             try:
                 return int(self.timestepper["timestep"])
             except ValueError:
-                return None
-        return None
+                return 1
+        return 1
+
+    @time_delta.setter
+    def time_delta(self, time_delta: int) -> None:
+        """
+        Updates the timestepper timestep.
+        :param time_delta: The new timestep as number of days.
+        :return: The end date as datetime instance, None when not available.
+        """
+        self.changes_tracker.add(f"Changed timestep to {time_delta} days")
+        self.json["timestepper"]["timestep"] = time_delta
 
     @property
     def number_of_steps(self) -> int | None:
