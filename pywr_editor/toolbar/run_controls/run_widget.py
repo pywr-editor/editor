@@ -253,9 +253,11 @@ class RunWidget(QWidget):
         Runs the model until the Run to date.
         :return: None
         """
-        if self.run_worker() is False:
-            return
+        # validate run-to date before run_worker()
         if not self.validate_run_to():
+            return
+
+        if self.run_worker() is False:
             return
 
         # noinspection PyTypeChecker
@@ -346,11 +348,11 @@ class RunWidget(QWidget):
         # noinspection PyUnresolvedReferences
         """
         # noinspection PyUnresolvedReferences
-        start_date = (
+        start_date: datetime = (
             self.app.findChild(DateEdit, "start_date").date().toPython()
         )
         # noinspection PyUnresolvedReferences
-        run_to_date = (
+        run_to_date: datetime = (
             self.app.findChild(DateEdit, "run_to_date").date().toPython()
         )
 
