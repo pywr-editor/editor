@@ -17,6 +17,7 @@ class TimeStepperWidget(QWidget):
         :param parent: The parent widget.
         """
         super().__init__(parent)
+        self.app = parent
         self.model_config = parent.model_config
 
         main_layout = QGridLayout()
@@ -67,7 +68,9 @@ class TimeStepperWidget(QWidget):
         date_str = date.toString("yyyy-MM-dd")
         if date_type == "start_date":
             self.model_config.start_date = date_str
+            self.app.components_tree.reload()
         elif date_type == "end_date":
             self.model_config.end_date = date_str
+            self.app.components_tree.reload()
         else:
             raise ValueError("date_type can only be 'start_date' or 'end_date'")
