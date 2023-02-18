@@ -1,6 +1,7 @@
 from functools import partial
 
 from PySide6.QtCore import QDate, Qt, QTimer
+from PySide6.QtTest import QSignalSpy
 
 from pywr_editor import MainWindow
 from pywr_editor.toolbar.run_controls.run_widget import RunWidget
@@ -34,7 +35,7 @@ class TestRunWidget:
 
         # try running the model
         QTimer.singleShot(
-            600,
+            100,
             partial(check_msg, "The start date (01/01/2015) must be smaller"),
         )
         # noinspection PyTypeChecker
@@ -61,9 +62,33 @@ class TestRunWidget:
 
         # try running the model
         QTimer.singleShot(
-            600,
+            100,
             partial(check_msg, "The start date (01/01/2015) must be smaller"),
         )
         # noinspection PyTypeChecker
         run_widget: RunWidget = window.findChild(RunWidget)
         qtbot.mouseClick(run_widget.run_to_button, Qt.MouseButton.LeftButton)
+
+    def test_loading_model_error_msg(self, qtbot):
+        """
+        Tests that the error message is shown if a model fails to load.
+        """
+        window = MainWindow(resolve_model_path("model_1.json"))
+        window.hide()
+
+        # try running the model
+        QTimer.singleShot(
+            100,
+            partial(
+                check_msg,
+                "An exception occurred while trying to load the pywr model",
+            ),
+        )
+        # noinspection PyTypeChecker
+        run_widget: RunWidget = window.findChild(RunWidget)
+        qtbot.mouseClick(run_widget.step_button, Qt.MouseButton.LeftButton)
+        spy = QSignalSpy(run_widget.worker.model_load_error)
+
+        # check that the signal was emitted
+        qtbot.wait(200)
+        assert spy.count() == 1

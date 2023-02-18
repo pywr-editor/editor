@@ -3,10 +3,11 @@ from typing import TYPE_CHECKING
 
 import pandas as pd
 from PySide6.QtCore import QThread, Signal, Slot
-from PySide6.QtGui import QAction, QIcon
+from PySide6.QtGui import QAction, QIcon, Qt
 from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
+    QMessageBox,
     QProgressBar,
     QSizePolicy,
     QVBoxLayout,
@@ -168,6 +169,8 @@ class RunWidget(QWidget):
         self.worker.progress_update.connect(self.update_progress)
         self.worker.status_update.connect(self.update_status)
 
+        self.worker.model_load_error.connect(self.on_model_error)
+
         self.thread.start()
         self.is_running = True
 
@@ -302,6 +305,32 @@ class RunWidget(QWidget):
         :return: None
         """
         self.progress_status.setText(message)
+
+    @Slot(str)
+    def on_model_error(self, exception: str) -> None:
+        """
+        Shows an error dialog with the exception if the model fails to load.
+        :param exception: The exception message.
+        :return: None
+        """
+        message = QMessageBox()
+        message.setWindowTitle("Model error")
+        message.setIcon(QMessageBox.Icon.Critical)
+        message.setText(
+            "An exception occurred while trying to load the pywr model. "
+            + "The complete stack trace has been reported below. "
+        )
+        message.setDetailedText(exception)
+        message.setTextInteractionFlags(
+            Qt.TextInteractionFlag.TextSelectableByMouse
+        )
+
+        # open thr exception message box
+        for button in message.buttons():
+            if message.buttonRole(button) == QMessageBox.ButtonRole.ActionRole:
+                button.click()
+                break
+        message.exec()
 
     @Slot()
     def open_inspector(self) -> None:

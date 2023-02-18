@@ -87,10 +87,9 @@ class PywrWorker(QObject):
             # noinspection PyUnresolvedReferences
             last_index = len(self.pywr_model.timestepper) - 1
         except Exception:
-            self.logger.debug(
-                f"Pywr failed to load because: {traceback.print_exc()}"
-            )
-            self.model_load_error.emit(traceback.print_exc())
+            e = traceback.format_exc()
+            self.logger.debug(f"Pywr failed to load because: {e}")
+            self.model_load_error.emit(e)
             self.finished.emit()
             return
 
