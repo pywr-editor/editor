@@ -35,6 +35,7 @@ from pywr_editor.utils import (
     browse_files,
     get_signal_sender,
 )
+from pywr_editor.widgets import DateEdit, SpinBox
 
 
 class MainWindow(QMainWindow):
@@ -938,6 +939,16 @@ class MainWindow(QMainWindow):
         node_library.setDisabled(is_running)
 
         self.schematic.set_run_mode(is_running)
+
+        # handle the timestepper fields
+        # noinspection PyUnresolvedReferences
+        self.findChild(DateEdit, "start_date").setDisabled(is_running)
+        # noinspection PyUnresolvedReferences
+        self.findChild(DateEdit, "end_date").setDisabled(is_running)
+        # noinspection PyUnresolvedReferences
+        self.findChild(DateEdit, "run_to_date").setDisabled(is_running)
+        # noinspection PyUnresolvedReferences
+        self.findChild(SpinBox, "time_step").setDisabled(is_running)
 
     @Slot()
     def on_save(self) -> None:
