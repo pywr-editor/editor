@@ -317,7 +317,7 @@ class RunWidget(QWidget):
         message.setWindowTitle("Model error")
         message.setIcon(QMessageBox.Icon.Critical)
         message.setText(
-            "An exception occurred while trying to load the pywr model. "
+            "An exception occurred while running the pywr model. "
             + "The complete stack trace has been reported below. "
         )
         message.setDetailedText(exception)

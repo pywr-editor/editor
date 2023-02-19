@@ -1,6 +1,8 @@
 import gc
+import sys
 import traceback
 from enum import Enum
+from io import StringIO
 from typing import TypedDict
 
 from pandas import Timestamp
@@ -111,7 +113,20 @@ class PywrWorker(QObject):
             if self.mode == RunMode.STEP:
                 self.before_step.emit()
                 self.logger.debug("Stepping")
-                self.pywr_model.step()
+                # noinspection PyBroadException
+                try:
+                    with CaptureSolverOutput() as solver_output:
+                        self.pywr_model.step()
+                except Exception:
+                    e = self.format_error_message(
+                        str(traceback.format_exc()), solver_output
+                    )
+                    self.logger.debug(f"Pywr failed to step because: {e}")
+                    self.model_load_error.emit(e)
+                    self.finished.emit()
+                    # exit worker loop
+                    break
+
                 # noinspection PyUnresolvedReferences
                 current_timestep = self.pywr_model.timestepper.current
 
@@ -133,6 +148,7 @@ class PywrWorker(QObject):
                 self.before_run_to.emit()
 
                 # run the model until the Run to date or the end of the run is reached
+                failed = False
                 while not (
                     current_timestep
                     and (
@@ -141,7 +157,20 @@ class PywrWorker(QObject):
                         >= self.run_to_date
                     )
                 ):
-                    self.pywr_model.step()
+                    # noinspection PyBroadException
+                    try:
+                        with CaptureSolverOutput() as solver_output:
+                            self.pywr_model.step()
+                    except Exception:
+                        e = self.format_error_message(
+                            str(traceback.format_exc()), solver_output
+                        )
+                        self.logger.debug(f"Pywr failed to step because: {e}")
+                        self.model_load_error.emit(e)
+                        self.finished.emit()
+                        failed = True
+                        break
+
                     # noinspection PyUnresolvedReferences
                     current_timestep = self.pywr_model.timestepper.current
                     self.progress_update.emit(
@@ -151,6 +180,11 @@ class PywrWorker(QObject):
                             last_index=last_index,
                         )
                     )
+
+                # exit worker loop
+                if failed:
+                    break
+
                 self.logger.debug(
                     f"Run to {current_timestep} ({current_timestep.index+1}"
                     + f"/{last_index+1})"
@@ -224,3 +258,33 @@ class PywrWorker(QObject):
         self.mutex.lock()
         self.is_killed = True
         self.mutex.unlock()
+
+    @staticmethod
+    def format_error_message(e: str, solver_output: list[str]) -> str:
+        """
+        Formats the exception message with the output from the solver.
+        :param e: The exception stack trace.
+        :param solver_output: The solver output as list of strings.
+        :return: The formatted message.
+        """
+        if solver_output:
+            e += "------------------------\nSolver output:\n"
+            e += "\n".join(solver_output)
+        return e
+
+
+class CaptureSolverOutput(list):
+    """
+    Captures the stdout. This is used to capture
+    the print statement output from the solver.
+    """
+
+    def __enter__(self):
+        self._stdout = sys.stdout
+        sys.stdout = self._stringio = StringIO()
+        return self
+
+    def __exit__(self, *args):
+        self.extend(self._stringio.getvalue().splitlines())
+        del self._stringio  # free up some memory
+        sys.stdout = self._stdout
