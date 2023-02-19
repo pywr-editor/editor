@@ -151,8 +151,8 @@ class RunWidget(QWidget):
 
         self.logger.debug("Starting a new worker")
         self.worker = PywrWorker(
-            model_config=self.model_config.json,
-            model_folder=self.model_config.file.file_path,
+            model_dict=self.model_config.json,
+            model_file=self.model_config.json_file,
         )
         self.thread = QThread(self)
         self.worker.moveToThread(self.thread)

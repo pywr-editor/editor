@@ -78,6 +78,10 @@ class LicenseParameter(Parameter, MyClass):
 
 
 # noinspection PyArgumentList
+LicenseParameter.register()
+
+
+# noinspection PyArgumentList
 class SumParameter:
     def __init__(self, model, parameters, **kwargs):
         super().__init__(model, **kwargs)

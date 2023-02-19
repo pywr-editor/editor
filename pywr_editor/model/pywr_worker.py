@@ -48,11 +48,11 @@ class PywrWorker(QObject):
     model_load_error = Signal(str)
     """ Signal emitted when the model fails to load """
 
-    def __init__(self, model_config: dict, model_folder: str):
+    def __init__(self, model_dict: dict, model_file: str):
         """
         Initialises the worker to run the pywr model.
-        :param model_config: The dictionary containing the model.
-        :param model_folder: The absolute path to the model file. This is used
+        :param model_dict: The dictionary containing the model.
+        :param model_file: The absolute path to the model file. This is used
         to let pywr resolve relative files in the JSON file.
         """
         super().__init__()
@@ -60,8 +60,8 @@ class PywrWorker(QObject):
         self.logger.debug("Init thread")
 
         self.mode: RunMode | None = None
-        self.model_config = model_config
-        self.model_folder = model_folder
+        self.model_config = model_dict
+        self.model_file = model_file
         self.run_to_date: Timestamp | None = None
         self.pywr_model: Model | None = None
 
@@ -82,7 +82,7 @@ class PywrWorker(QObject):
             self.status_update.emit("Loading model")
             # noinspection PyArgumentList
             self.pywr_model: Model = Model.load(
-                data=self.model_config, path=self.model_folder
+                data=self.model_config, path=self.model_file
             )
             # noinspection PyUnresolvedReferences
             last_index = len(self.pywr_model.timestepper) - 1
