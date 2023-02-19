@@ -47,8 +47,8 @@ class PywrWorker(QObject):
     finished = Signal()
     """ Signal emitted when the worker has finished running and it instance is not
     needed anymore """
-    model_load_error = Signal(str)
-    """ Signal emitted when the model fails to load """
+    model_error = Signal(str)
+    """ Signal emitted when the model fails to load or run """
 
     def __init__(self, model_dict: dict, model_file: str):
         """
@@ -91,7 +91,7 @@ class PywrWorker(QObject):
         except Exception:
             e = traceback.format_exc()
             self.logger.debug(f"Pywr failed to load because: {e}")
-            self.model_load_error.emit(e)
+            self.model_error.emit(e)
             self.finished.emit()
             return
 
@@ -122,7 +122,7 @@ class PywrWorker(QObject):
                         str(traceback.format_exc()), solver_output
                     )
                     self.logger.debug(f"Pywr failed to step because: {e}")
-                    self.model_load_error.emit(e)
+                    self.model_error.emit(e)
                     self.finished.emit()
                     # exit worker loop
                     break
@@ -166,7 +166,7 @@ class PywrWorker(QObject):
                             str(traceback.format_exc()), solver_output
                         )
                         self.logger.debug(f"Pywr failed to step because: {e}")
-                        self.model_load_error.emit(e)
+                        self.model_error.emit(e)
                         self.finished.emit()
                         failed = True
                         break

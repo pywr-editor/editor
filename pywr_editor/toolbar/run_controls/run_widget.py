@@ -1,3 +1,4 @@
+import gc
 from datetime import datetime
 from typing import TYPE_CHECKING
 
@@ -169,7 +170,7 @@ class RunWidget(QWidget):
         self.worker.progress_update.connect(self.update_progress)
         self.worker.status_update.connect(self.update_status)
 
-        self.worker.model_load_error.connect(self.on_model_error)
+        self.worker.model_error.connect(self.on_model_error)
 
         self.thread.start()
         self.is_running = True
@@ -186,7 +187,11 @@ class RunWidget(QWidget):
         self.logger.debug("Run done")
         self.is_running = False
         self.run_status_changed.emit(False)
+
         self.thread.exit()
+        self.thread.deleteLater()
+        del self.thread
+        gc.collect()
 
         self.run_button.setEnabled(True)
         self.run_to_button.setEnabled(True)
