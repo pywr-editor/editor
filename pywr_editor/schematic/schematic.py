@@ -754,14 +754,12 @@ class Schematic(QGraphicsView):
                                     f"<td {cell_style}>{sc_value['value']}"
                                 )
                                 tooltip_text += "</td></tr>"
-                            tooltip_text += "</table>"
+                            tooltip_text += "</table></td>"
                         # single value
                         else:
+                            tooltip_text += f"<td>{attr_name}:</td>"
                             tooltip_text += (
-                                f"<tr><td>{result_data['name']}</td>"
-                            )
-                            tooltip_text += (
-                                "<td>{result_data['value']}</td></tr>"
+                                f"<td>{result_data['data']['value']}</td>"
                             )
                         tooltip_text += "</tr>"
                     tooltip_text += "</table>"
