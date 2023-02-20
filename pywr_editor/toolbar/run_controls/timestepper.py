@@ -58,7 +58,10 @@ class TimeStepperWidget(QWidget):
 
         # run to date
         main_layout.addWidget(QLabel("Run to date"), 1, 3)
-        run_to_date = DateEdit(parent.editor_settings.run_to_date)
+        saved_run_to_date = parent.editor_settings.run_to_date
+        if saved_run_to_date is None:
+            saved_run_to_date = self.model_config.end_date
+        run_to_date = DateEdit(saved_run_to_date)
         run_to_date.setObjectName("run_to_date")
         # noinspection PyUnresolvedReferences
         run_to_date.dateChanged.connect(
