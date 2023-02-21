@@ -1,9 +1,11 @@
-from PySide6.QtCore import Qt
+import pandas as pd
+from PySide6.QtCore import QDate, Qt
 from PySide6.QtTest import QSignalSpy
 
 from pywr_editor import MainWindow
 from pywr_editor.model.pywr_worker import RunMode
 from pywr_editor.toolbar.run_controls.run_widget import RunWidget
+from pywr_editor.widgets import DateEdit
 from tests.utils import resolve_model_path
 
 
@@ -100,18 +102,72 @@ class TestRunWidget:
     def test_step_until_end(self, qtbot):
         """
         Tests when the Step button is clicked and the end date is reached.
+        This also tests that the run to button is disabled past the run-to date.
         """
         window = MainWindow(resolve_model_path("model_to_run.json"))
         window.hide()
         # noinspection PyTypeChecker
         run_widget: RunWidget = window.findChild(RunWidget)
+        # noinspection PyTypeChecker
+        run_to_date_widget: DateEdit = window.findChild(DateEdit, "run_to_date")
 
+        run_to_date = QDate(2015, 1, 3)
+        run_to_date_widget.setDate(run_to_date)
         window.model_config.end_date = "2015-01-05"
 
-        for _ in range(6):
-            qtbot.mouseClick(run_widget.stop_button, Qt.MouseButton.LeftButton)
+        # 1. Step until the end date
+        for d in range(5):
+            qtbot.mouseClick(run_widget.step_button, Qt.MouseButton.LeftButton)
+            qtbot.wait(200)
+
+            # check progress
+            # noinspection PyUnresolvedReferences
+            t = (
+                run_widget.worker.pywr_model.timestepper.current.period.to_timestamp()
+            )
+            assert t == pd.Timestamp(2015, 1, d + 1)
+            assert run_widget.progress_status.text() == pd.Timestamp(
+                2015, 1, d + 1
+            ).strftime("%d/%m/%Y")
+
+            # the model is still paused to let user inspect results
+            assert run_widget.worker.is_paused is True
+
+            # check run-to button status. Button is disabled after the run -to date
+            if t < pd.Timestamp(run_to_date.toPython()):
+                assert run_widget.run_to_button.isEnabled() is True
+            else:
+                assert run_widget.run_to_button.isEnabled() is False
+
+            # run button is still enabled until the last time step
+            if t != pd.Timestamp(window.model_config.end_date):
+                assert run_widget.run_button.isEnabled() is True
+
+            # timestepper fields are disabled
+            assert all(
+                [not w.isEnabled() for w in window.findChildren(DateEdit)]
+            )
+
+        assert run_widget.worker is not None
+
+        # step button is disabled because end date was reached
+        assert run_widget.step_button.isEnabled() is False
+        assert run_widget.run_to_button.isEnabled() is False
+        assert run_widget.stop_button.isEnabled() is True
+        assert run_widget.run_button.isEnabled() is False
+
+        # 2. Stop the run
+        qtbot.mouseClick(run_widget.stop_button, Qt.MouseButton.LeftButton)
+        qtbot.wait(200)
+
+        assert run_widget.progress_status.text() == "Ready to run"
 
         # model has stopped because it run past the end date
-        assert run_widget.worker is None
+        assert run_widget.worker.is_killed is True
+        assert run_widget.run_button.isEnabled() is True
+        assert run_widget.run_to_button.isEnabled() is True
         assert run_widget.step_button.isEnabled() is True
         assert run_widget.stop_button.isEnabled() is False
+
+        # timestepper fields are enabled
+        assert all([w.isEnabled() for w in window.findChildren(DateEdit)])

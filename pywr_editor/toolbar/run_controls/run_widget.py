@@ -1,4 +1,3 @@
-import gc
 from datetime import datetime
 from typing import TYPE_CHECKING
 
@@ -47,18 +46,24 @@ class RunWidget(QWidget):
         self.model_config = parent.model_config
         self.inspector_action = parent.actions.get("run-inspector")
         self.inspector_action.triggered.connect(self.open_inspector)
+        # noinspection PyTypeChecker
+        self.run_to_widget: DateEdit = self.app.findChild(
+            DateEdit, "run_to_date"
+        )
 
         # Worker
         self.worker: PywrWorker | None = None
         self.thread: QThread | None = None
         self.is_running = False
+        self.is_past_run_to_date = False
+        self.is_end_date_reached = False
 
         # Control buttons
         action_obj = QAction(
             icon=QIcon(":toolbar/run"), text="Run", parent=parent
         )
         # noinspection PyUnresolvedReferences
-        action_obj.triggered.connect(self.run_to)
+        action_obj.triggered.connect(self.full_run)
         action_obj.setToolTip("Run the model until the end date")
         self.run_button = ToolbarSmallButton(action=action_obj, parent=self)
 
@@ -151,21 +156,36 @@ class RunWidget(QWidget):
             return False
 
         self.logger.debug("Starting a new worker")
+        # noinspection PyUnresolvedReferences
+        end_date: datetime = (
+            self.app.findChild(DateEdit, "end_date").date().toPython()
+        )
+        # noinspection PyUnresolvedReferences
+        run_to_date: datetime = (
+            self.app.findChild(DateEdit, "run_to_date").date().toPython()
+        )
         self.worker = PywrWorker(
             model_dict=self.model_config.json,
             model_file=self.model_config.json_file,
+            end_date=pd.Timestamp(end_date),
+            run_to_date=pd.Timestamp(run_to_date),
         )
         self.thread = QThread(self)
         self.worker.moveToThread(self.thread)
 
         # noinspection PyUnresolvedReferences
         self.thread.started.connect(self.worker.run)
-        self.worker.finished.connect(self.run_done)
+        self.worker.finished.connect(self.worker_has_finished)
 
         self.worker.before_step.connect(self.before_step)
         self.worker.step_done.connect(self.step_done)
         self.worker.before_run_to.connect(self.before_run_to)
         self.worker.run_to_done.connect(self.run_to_done)
+        self.worker.before_run.connect(self.before_full_run)
+        self.worker.run_done.connect(self.full_run_done)
+
+        self.worker.run_to_date_reached.connect(self.run_to_date_reached)
+        self.worker.end_date_reached.connect(self.end_date_reached)
 
         self.worker.progress_update.connect(self.update_progress)
         self.worker.status_update.connect(self.update_status)
@@ -174,11 +194,13 @@ class RunWidget(QWidget):
 
         self.thread.start()
         self.is_running = True
+        self.is_past_run_to_date = False
+        self.is_end_date_reached = False
 
         return True
 
     @Slot()
-    def run_done(self) -> None:
+    def worker_has_finished(self) -> None:
         """
         Slot called when the run is completed (i.e. the thread is killed
         or the run completes when the thread exits normally).
@@ -190,8 +212,6 @@ class RunWidget(QWidget):
 
         self.thread.exit()
         self.thread.deleteLater()
-        del self.thread
-        gc.collect()
 
         self.run_button.setEnabled(True)
         self.run_to_button.setEnabled(True)
@@ -217,10 +237,14 @@ class RunWidget(QWidget):
         Handles the button status when the timestep is advanced.
         :return: None
         """
-        self.step_button.setEnabled(True)
+        self.step_button.setEnabled(not self.is_end_date_reached)
+        self.run_button.setEnabled(not self.is_end_date_reached)
         self.stop_button.setEnabled(True)
         self.inspector_action.setEnabled(True)
         self.run_status_changed.emit(True)
+
+        # enable run to button only if current timestep is before the run-to date
+        self.run_to_button.setDisabled(self.is_past_run_to_date)
 
     @Slot()
     def before_run_to(self) -> None:
@@ -240,10 +264,39 @@ class RunWidget(QWidget):
         Handles the button status when the model is run until the Run to date.
         :return: None
         """
-        self.step_button.setEnabled(True)
+        self.step_button.setEnabled(not self.is_end_date_reached)
+        self.run_button.setEnabled(not self.is_end_date_reached)
         self.stop_button.setEnabled(True)
+        self.run_to_button.setEnabled(False)
         self.inspector_action.setEnabled(True)
+
         self.run_status_changed.emit(True)
+
+    @Slot()
+    def before_full_run(self) -> None:
+        """
+        Handles the button status when the Run button is clicked.
+        :return: None
+        """
+        self.run_button.setEnabled(False)
+        self.run_to_button.setEnabled(False)
+        self.step_button.setEnabled(False)
+        self.stop_button.setEnabled(False)
+        self.inspector_action.setEnabled(False)
+
+    @Slot()
+    def full_run_done(self) -> None:
+        """
+        Handles the button status when the model is run to the end date.
+        :return: None
+        """
+        self.run_button.setEnabled(True)
+        self.step_button.setEnabled(True)
+        self.stop_button.setEnabled(False)
+        self.run_to_button.setEnabled(True)
+        self.inspector_action.setEnabled(False)
+
+        self.reset_progress()
 
     @Slot()
     def step(self) -> None:
@@ -261,18 +314,21 @@ class RunWidget(QWidget):
         Runs the model until the Run to date.
         :return: None
         """
-        # validate run-to date before run_worker()
-        if not self.validate_run_to():
-            return
-
         if self.run_worker() is False:
             return
 
-        # noinspection PyTypeChecker
-        run_to_widget: DateEdit = self.app.findChild(DateEdit, "run_to_date")
-        self.worker.run_to(
-            date=pd.Timestamp(run_to_widget.date().toString("yyyy-MM-dd"))
-        )
+        self.worker.run_to()
+
+    @Slot()
+    def full_run(self) -> None:
+        """
+        Runs the model to the end date.
+        :return: None
+        """
+        if self.run_worker() is False:
+            return
+
+        self.worker.full_run()
 
     @Slot()
     def stop(self) -> None:
@@ -281,9 +337,16 @@ class RunWidget(QWidget):
         :return: None
         """
         self.logger.debug("Stopping thread")
+        self.reset_progress()
+        self.worker.kill()
+
+    def reset_progress(self) -> None:
+        """
+        Resets the progress bar and status.
+        :return: None
+        """
         self.progress_bar.reset()
         self.progress_status.setText("Ready to run")
-        self.worker.kill()
 
     @Slot(PywrProgress)
     def update_progress(self, progress_data: PywrProgress) -> None:
@@ -292,15 +355,12 @@ class RunWidget(QWidget):
         :param progress_data: The progress data from the thread.
         :return: None
         """
-        per = progress_data["current_index"] / progress_data["last_index"] * 100
-        if per == 100:
-            self.progress_bar.reset()
-            self.progress_status.setText("")
-        else:
-            self.progress_bar.setValue(per)
-            self.progress_status.setText(
-                progress_data["current_timestamp"].strftime("%d/%m/%Y")
-            )
+        self.progress_bar.setValue(
+            progress_data["current_index"] / progress_data["last_index"] * 100
+        )
+        self.progress_status.setText(
+            progress_data["current_timestamp"].strftime("%d/%m/%Y")
+        )
 
     @Slot(str)
     def update_status(self, message: str) -> None:
@@ -338,6 +398,32 @@ class RunWidget(QWidget):
         message.exec()
 
     @Slot()
+    def run_to_date_reached(self) -> None:
+        """
+        Updates the button status and the flag when the run-to date is reached. The
+        model is paused.
+        :return: None
+        """
+        self.logger.debug("Run-to date is reached")
+        self.run_to_button.setEnabled(False)
+
+        self.is_past_run_to_date = True
+
+    @Slot()
+    def end_date_reached(self) -> None:
+        """
+        Updates the button status and the flag when the end date is reached. The model
+        is paused.
+        :return: None
+        """
+        self.logger.debug("End date is reached")
+        self.run_button.setEnabled(False)
+        self.run_to_button.setEnabled(False)
+        self.step_button.setEnabled(False)
+
+        self.is_end_date_reached = True
+
+    @Slot()
     def open_inspector(self) -> None:
         """
         Opens the run inspector dialog.
@@ -362,41 +448,43 @@ class RunWidget(QWidget):
         end_date: datetime = (
             self.app.findChild(DateEdit, "end_date").date().toPython()
         )
-
-        if start_date >= end_date:
-            self.app.on_error_message(
-                f"The start date ({start_date.strftime('%d/%m/%Y')}) must be smaller "
-                + f"than the end date ({end_date.strftime('%d/%m/%Y')}). Please make "
-                + "sure that the date fields are properly configured",
-                False,
-                "Cannot run the model",
-            )
-            return False
-
-        return True
-
-    def validate_run_to(self) -> bool:
-        """
-        Checks that the timestep dates are properly configured and valid.
-        :return: True if the timestepper dates are valid, False otherwise.
-        # noinspection PyUnresolvedReferences
-        """
-        # noinspection PyUnresolvedReferences
-        start_date: datetime = (
-            self.app.findChild(DateEdit, "start_date").date().toPython()
-        )
         # noinspection PyUnresolvedReferences
         run_to_date: datetime = (
             self.app.findChild(DateEdit, "run_to_date").date().toPython()
         )
 
+        title = "Cannot run the model"
+        suffix_msg = (
+            "Please make sure that the date fields are properly configured"
+        )
+        date_fmt = "%d/%m/%Y"
+
+        if start_date >= end_date:
+            self.app.on_error_message(
+                f"The start date ({start_date.strftime(date_fmt)}) must be smaller "
+                + f"than the end date ({end_date.strftime(date_fmt)}). "
+                + suffix_msg,
+                False,
+                title,
+            )
+            return False
         if start_date >= run_to_date:
             self.app.on_error_message(
-                f"The start date ({start_date.strftime('%d/%m/%Y')}) must be smaller "
-                + f"than the end date ({run_to_date.strftime('%d/%m/%Y')}). Please "
-                + "make sure that the date fields are properly configured",
+                f"The start date ({start_date.strftime(date_fmt)}) must be smaller "
+                + f"than the run-to date ({run_to_date.strftime(date_fmt)}). "
+                + suffix_msg,
                 False,
-                "Cannot run the model",
+                title,
+            )
+            return False
+
+        if run_to_date > end_date:
+            self.app.on_error_message(
+                f"The run-to date ({run_to_date.strftime(date_fmt)}) must be "
+                + f"smaller than the end date ({end_date.strftime(date_fmt)}). "
+                + suffix_msg,
+                False,
+                title,
             )
             return False
 

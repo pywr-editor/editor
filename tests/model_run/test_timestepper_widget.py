@@ -57,6 +57,24 @@ class TestTimeStepperWidget:
         assert window.model_config.start_date is None
         assert widget.date().toPython() == date(2000, 1, 1)
 
+    def test_empty_run_to_date(self, qtbot):
+        """
+        Tests when the run-tp date is None.
+        """
+        QTimer.singleShot(1000, close_message_box)
+        window = MainWindow(resolve_model_path("model_2.json"))
+        window.hide()
+        # noinspection PyTypeChecker
+        end_date_widget: DateEdit = window.findChild(DateEdit, "end_date")
+        # noinspection PyTypeChecker
+        run_to_date_widget: DateEdit = window.findChild(DateEdit, "run_to_date")
+
+        assert window.editor_settings.run_to_date is None
+        assert (
+            run_to_date_widget.date().toPython()
+            == end_date_widget.date().toPython()
+        )
+
     def test_timestep(self, qtbot):
         """
         Tests that the timestep field is correctly initialised and it is updated when

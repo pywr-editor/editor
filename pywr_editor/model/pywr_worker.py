@@ -5,6 +5,7 @@ from enum import Enum
 from io import StringIO
 from typing import TypedDict
 
+import pandas as pd
 from pandas import Timestamp
 from PySide6.QtCore import QMutex, QObject, QWaitCondition, Signal
 from pywr.model import Model
@@ -16,9 +17,9 @@ class RunMode(Enum):
     STEP = 0
     """ Run Model.step() """
     RUN_TO = 1
-    """ Run Model.step() in a loop """
+    """ Run Model.step() in a loop until the Run-to date """
     RUN = 2
-    """ Run Model.run() """
+    """ Run Model.step() in a loop until the end date """
 
 
 class PywrProgress(TypedDict):
@@ -44,27 +45,47 @@ class PywrWorker(QObject):
     'Run to' date """
     run_to_done = Signal()
     """ The worker has run the model up to the provided date """
+    before_run = Signal()
+    """ Signal emitted just before the worker runs Model.step() in loop to reach the
+    end date """
+    run_done = Signal()
+    """ The worker has run the model to the end date """
     finished = Signal()
     """ Signal emitted when the worker has finished running and it instance is not
     needed anymore """
     model_error = Signal(str)
     """ Signal emitted when the model fails to load or run """
+    run_to_date_reached = Signal()
+    """ Signal emitted when the run-to date is reached """
+    end_date_reached = Signal()
+    """ Signal emitted when the end date is reached """
 
-    def __init__(self, model_dict: dict, model_file: str):
+    def __init__(
+        self,
+        model_dict: dict,
+        model_file: str,
+        end_date: pd.Timestamp,
+        run_to_date: pd.Timestamp,
+    ):
         """
         Initialises the worker to run the pywr model.
         :param model_dict: The dictionary containing the model.
         :param model_file: The absolute path to the model file. This is used
         to let pywr resolve relative files in the JSON file.
+        :param end_date: The end date of the run.
+        :param run_to_date: The run-to date.
         """
         super().__init__()
         self.logger = Logging().logger(self.__class__.__name__)
         self.logger.debug("Init thread")
+        self.end_date = end_date
+        self.run_to_date = run_to_date
 
         self.mode: RunMode | None = None
         self.model_config = model_dict
         self.model_file = model_file
-        self.run_to_date: Timestamp | None = None
+        # this applies for the Run-to or Run mode
+        self._run_end_date: Timestamp | None = None
         self.pywr_model: Model | None = None
 
         self.is_paused = False
@@ -98,11 +119,26 @@ class PywrWorker(QObject):
         # start the worker loop
         current_timestep = None
         while self.is_killed is False:
-            # stop the thread when the last timestep has been reached
-            if current_timestep and (current_timestep.index >= last_index):
-                self.logger.debug("Last timestep reached")
-                self.kill()
-                break
+            if current_timestep:
+                # pause the model in Run-to and Step mode at last time step so that the
+                # time-step results are available. The run must be manually stopped.
+                if (
+                    current_timestep.index == last_index
+                    and self.mode != RunMode.RUN
+                ):
+                    self.end_date_reached.emit()
+
+                # model is past the run-to date
+                if current_timestep.period.to_timestamp() >= self.run_to_date:
+                    self.run_to_date_reached.emit()
+
+                # stop the thread when the last timestep has been reached only in Run
+                # mode
+                if current_timestep.index >= last_index:
+                    self.logger.debug("Last timestep reached")
+                    if self.mode == RunMode.RUN:
+                        self.kill()
+                        break
 
             # pause the thread loop
             self.mutex.lock()
@@ -131,8 +167,8 @@ class PywrWorker(QObject):
                 current_timestep = self.pywr_model.timestepper.current
 
                 self.logger.debug(
-                    f"Stepped to {current_timestep} ({current_timestep.index+1}"
-                    + f"/{last_index+1})"
+                    f"Stepped to {current_timestep} ({current_timestep.index + 1}"
+                    + f"/{last_index + 1})"
                 )
                 self.step_done.emit()
                 self.progress_update.emit(
@@ -143,18 +179,33 @@ class PywrWorker(QObject):
                     )
                 )
                 self.pause()
-            elif self.mode == RunMode.RUN_TO and self.run_to_date:
-                self.logger.debug(f"Running to {self.run_to_date}")
-                self.before_run_to.emit()
+            elif (
+                self.mode in [RunMode.RUN_TO, RunMode.RUN]
+                and self._run_end_date
+            ):
+                if self.mode == RunMode.RUN_TO:
+                    self.before_run_to.emit()
+                else:
+                    self.before_run.emit()
 
-                # run the model until the Run to date or the end of the run is reached
+                if current_timestep:
+                    self.logger.debug(
+                        f"Running from {current_timestep.period} to "
+                        + self._run_end_date
+                    )
+                else:
+                    self.logger.debug(
+                        f"Running from start to {self._run_end_date}"
+                    )
+
+                # run the model until the Run to or End date date
                 failed = False
                 while not (
                     current_timestep
                     and (
                         (current_timestep.index >= last_index)
                         or current_timestep.period.to_timestamp()
-                        >= self.run_to_date
+                        >= self._run_end_date
                     )
                 ):
                     # noinspection PyBroadException
@@ -186,12 +237,22 @@ class PywrWorker(QObject):
                     break
 
                 self.logger.debug(
-                    f"Run to {current_timestep} ({current_timestep.index+1}"
-                    + f"/{last_index+1})"
+                    f"Run to {current_timestep} ({current_timestep.index + 1}"
+                    + f"/{last_index + 1})"
                 )
-                self.run_to_done.emit()
+                if self.mode == RunMode.RUN_TO:
+                    self.run_to_done.emit()
+                else:
+                    self.run_done.emit()
 
-                self.pause()
+                # pause the model when Run-to and the date is less or equal to the end
+                # date to let the user inspect the results. In Run mode the model is
+                # stopped.
+                if (
+                    self.mode == RunMode.RUN_TO
+                    and current_timestep.index <= last_index
+                ):
+                    self.pause()
 
         del self.pywr_model
         gc.collect()
@@ -206,7 +267,7 @@ class PywrWorker(QObject):
         self.mutex.lock()
         self.is_paused = True
         self.mode = None
-        self.run_to_date = None
+        self._run_end_date = None
         self.mutex.unlock()
 
     def resume(self) -> None:
@@ -233,10 +294,9 @@ class PywrWorker(QObject):
         self.mode = RunMode.STEP
         self.mutex.unlock()
 
-    def run_to(self, date: Timestamp) -> None:
+    def run_to(self) -> None:
         """
         Runs the model until the provided date.
-        :param date: The date to run the model to.
         :return: None
         """
         if self.is_paused:
@@ -244,7 +304,20 @@ class PywrWorker(QObject):
 
         self.mutex.lock()
         self.mode = RunMode.RUN_TO
-        self.run_to_date = date
+        self._run_end_date = self.run_to_date
+        self.mutex.unlock()
+
+    def full_run(self) -> None:
+        """
+        Runs the model to the end date.
+        :return: None
+        """
+        if self.is_paused:
+            self.resume()
+
+        self.mutex.lock()
+        self.mode = RunMode.RUN
+        self._run_end_date = self.end_date
         self.mutex.unlock()
 
     def kill(self) -> None:
