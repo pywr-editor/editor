@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from pywr_editor.schematic import SchematicNode
 
 
-class CustomNodeShape(Circle):
+class CustomNode(Circle):
     def __init__(self, parent: "SchematicNode"):
         """
         Initialises the class for a pumping station node.
