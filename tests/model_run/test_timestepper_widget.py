@@ -1,9 +1,11 @@
 from datetime import date
 
 import pytest
-from PySide6.QtCore import QDate, QTimer
+from PySide6.QtCore import QDate, Qt, QTimer
+from PySide6.QtWidgets import QWidget
 
 from pywr_editor import MainWindow
+from pywr_editor.toolbar.run_controls.run_widget import RunWidget
 from pywr_editor.widgets import DateEdit, SpinBox
 from tests.utils import close_message_box, resolve_model_path
 
@@ -45,7 +47,7 @@ class TestTimeStepperWidget:
         """
         Tests when the start or end date is None.
         """
-        QTimer.singleShot(1000, close_message_box)
+        QTimer.singleShot(400, close_message_box)
         window = MainWindow(
             resolve_model_path("invalid_model_missing_props.json")
         )
@@ -61,7 +63,7 @@ class TestTimeStepperWidget:
         """
         Tests when the run-tp date is None.
         """
-        QTimer.singleShot(1000, close_message_box)
+        QTimer.singleShot(400, close_message_box)
         window = MainWindow(resolve_model_path("model_2.json"))
         window.hide()
         # noinspection PyTypeChecker
@@ -80,7 +82,7 @@ class TestTimeStepperWidget:
         Tests that the timestep field is correctly initialised and it is updated when
         the field is changed.
         """
-        QTimer.singleShot(1000, close_message_box)
+        QTimer.singleShot(400, close_message_box)
         window = MainWindow(resolve_model_path("model_1.json"))
         window.hide()
         # noinspection PyTypeChecker
@@ -90,3 +92,34 @@ class TestTimeStepperWidget:
 
         widget.setValue(4)
         assert widget.value() == 4
+        assert window.model_config.time_delta == 4
+
+    def test_timestepper_status_while_running(self, qtbot):
+        """
+        Tests that all the timestepper fields are disabled when the model is running.
+        """
+        window = MainWindow(resolve_model_path("model_to_run.json"))
+        window.hide()
+
+        # noinspection PyTypeChecker
+        run_widget: RunWidget = window.findChild(RunWidget)
+
+        # noinspection PyTypeChecker
+        timestepper_widgets: list[QWidget] = [
+            window.findChild(DateEdit, name)
+            for name in ["start_date", "end_date", "run_to_date"]
+        ]
+        # noinspection PyTypeChecker
+        timestepper_widgets.append(window.findChild(SpinBox, "time_step"))
+
+        assert all([w.isEnabled() for w in timestepper_widgets]) is True
+
+        # run the model
+        qtbot.mouseClick(run_widget.step_button, Qt.MouseButton.LeftButton)
+        qtbot.wait(200)
+        assert all([w.isEnabled() for w in timestepper_widgets]) is False
+
+        # stop it
+        qtbot.mouseClick(run_widget.stop_button, Qt.MouseButton.LeftButton)
+        qtbot.wait(200)
+        assert all([w.isEnabled() for w in timestepper_widgets]) is True
