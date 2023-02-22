@@ -191,7 +191,7 @@ class PywrWorker(QObject):
                 if current_timestep:
                     self.logger.debug(
                         f"Running from {current_timestep.period} to "
-                        + self._run_end_date
+                        + f"{self._run_end_date}"
                     )
                 else:
                     self.logger.debug(
