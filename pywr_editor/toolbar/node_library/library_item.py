@@ -29,19 +29,23 @@ class LibraryItem(QGraphicsItemGroup):
     def __init__(
         self,
         view: "LibraryPanel",
-        item_class_type: Type[QGraphicsItem],
+        item_class_type: Type[QGraphicsItem | QGraphicsItemGroup],
         name: str,
+        node_type: str | None = None,
     ):
         """
         Initialise the class.
         :param view: The view where to draw the item.
-        :param item_class_type: The name of the node class.
-        :param name: The name of the node to show under the node's shape.
+        :param item_class_type: The name of the graphical node or shape class.
+        :param name: The name of the node or shape to show under the graphical item.
+        :param node_type: For nodes, the pywr node type.
         :return None
         """
         super().__init__()
         self.item_class_type = item_class_type
         self.name = name
+        self.node_type = node_type
+
         self.view = view
         self.x: float = 0
         self.y: float = 0

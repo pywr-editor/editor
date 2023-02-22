@@ -232,12 +232,12 @@ class LibraryPanel(QGraphicsView):
                 node_class_type = getattr(pywr_editor.node_shapes, node_type)
             except AttributeError:
                 # node name is not a built-in component
-                node_class_type = getattr(
-                    pywr_editor.node_shapes, "CustomNodeShape"
-                )
-
+                node_class_type = getattr(pywr_editor.node_shapes, "CustomNode")
             node_obj = LibraryItem(
-                view=self, item_class_type=node_class_type, name=node_name
+                view=self,
+                item_class_type=node_class_type,
+                name=node_name,
+                node_type=node_type,
             )
             self.scene.addItem(node_obj)
 
@@ -311,7 +311,7 @@ class LibraryPanel(QGraphicsView):
             mime_data.setText(f"Shape.{lib_item.item.__class__.__name__}")
         # set the node class name
         else:
-            mime_data.setText(lib_item.item.__class__.__name__)
+            mime_data.setText(lib_item.node_type)
 
         drag = QDrag(self)
         drag.setMimeData(mime_data)

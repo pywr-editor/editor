@@ -12,8 +12,13 @@ from pywr_editor.form.widgets.parameter_line_edit_widget import (
     ParameterLineEditWidget,
 )
 from pywr_editor.model import ParameterConfig
+from pywr_editor.node_shapes import CustomNode
 from pywr_editor.schematic import Edge, Schematic, SchematicNode
 from pywr_editor.schematic.commands.add_node_command import AddNodeCommand
+from pywr_editor.toolbar.node_library.library_item import LibraryItem
+from pywr_editor.toolbar.node_library.schematic_items_library import (
+    LibraryPanel,
+)
 from pywr_editor.toolbar.tab_panel import TabPanel
 from tests.utils import resolve_model_path
 
@@ -208,3 +213,24 @@ class TestAddNodes:
             if isinstance(edge, Edge)
         ]
         assert new_edge[0:2] in all_schematic_edges
+
+    def test_mime_type_custom_nodes(self, qtbot, init_window):
+        """
+        Checks that the correct mime type is set for custom nodes.
+        """
+        window, schematic, _ = init_window
+        # noinspection PyTypeChecker
+        panel: LibraryPanel = window.findChild(LibraryPanel)
+
+        # check available nodes
+        assert "CustomNode" in panel.node_dict
+        assert "LeakyPipe" in panel.node_dict
+
+        # check the type set
+        custom_nodes: list[LibraryItem] = [
+            i
+            for i in panel.items()
+            if isinstance(i, LibraryItem) and isinstance(i.item, CustomNode)
+        ]
+        assert custom_nodes[0].node_type == "CustomNode"
+        assert custom_nodes[1].node_type == "LeakyPipe"

@@ -2,7 +2,7 @@
 from .base_node import BaseNode
 from .base_reservoir import BaseReservoir
 from .circle import Circle
-from .custom_node_shape import CustomNodeShape
+from .custom_node_shape import CustomNode
 from .svg_icon import SvgIcon, IconProps
 from .plain_nodes import *
 
