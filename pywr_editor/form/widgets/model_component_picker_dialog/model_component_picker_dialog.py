@@ -149,6 +149,13 @@ class ModelComponentPickerDialog(QDialog):
         else:
             del form_data["comp_source"]
 
+        # enable the save button in the parent dialog
+        save_button: QPushButton = self.parent().findChild(
+            QPushButton, "save_button"
+        )
+        if save_button:
+            save_button.setEnabled(True)
+
         # callback function
         self.after_form_save(form_data, self.additional_data)
 
