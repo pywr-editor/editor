@@ -1,6 +1,7 @@
 import pandas as pd
 from PySide6.QtCore import QDate, Qt
 from PySide6.QtTest import QSignalSpy
+from PySide6.QtWidgets import QGraphicsItem
 
 from pywr_editor import MainWindow
 from pywr_editor.model.pywr_worker import RunMode
@@ -23,6 +24,7 @@ class TestRunWidget:
         # noinspection PyTypeChecker
         run_widget: RunWidget = window.findChild(RunWidget)
         run_status_changed_spy = QSignalSpy(run_widget.run_status_changed)
+        node_item = window.schematic.schematic_items["Input"]
 
         # check button status before running the model
         assert run_widget.step_button.isEnabled() is True
@@ -68,8 +70,25 @@ class TestRunWidget:
 
         # check schematic
         assert window.schematic.canvas.opacity != 1
+        # items are locked and not selectable
+        assert (
+            bool(
+                node_item.flags()
+                & QGraphicsItem.GraphicsItemFlag.ItemIsSelectable
+            )
+            is False
+        )
+        assert (
+            bool(
+                node_item.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsMovable
+            )
+            is False
+        )
+
         # tooltip contains the model results
-        assert "Flow" in window.schematic.schematic_items["Input"].toolTip()
+        assert "Flow" in node_item.toolTip()
+
+        # TODO check toolbar buttons and all contextual menu!
 
         # 2. Stop the model
         qtbot.mouseClick(run_widget.stop_button, Qt.MouseButton.LeftButton)
@@ -95,6 +114,19 @@ class TestRunWidget:
 
         # schematic status and tooltip are restored
         assert window.schematic.canvas.opacity() == 1
+        assert (
+            bool(
+                node_item.flags()
+                & QGraphicsItem.GraphicsItemFlag.ItemIsSelectable
+            )
+            is True
+        )
+        assert (
+            bool(
+                node_item.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsMovable
+            )
+            is True
+        )
         # tooltip contains the model results
         item = window.schematic.schematic_items["Input"]
         assert item.toolTip() == item.tooltip_text
@@ -133,7 +165,7 @@ class TestRunWidget:
             # the model is still paused to let user inspect results
             assert run_widget.worker.is_paused is True
 
-            # check run-to button status. Button is disabled after the run -to date
+            # check run-to button status. Button is disabled after the run-to date
             if t < pd.Timestamp(run_to_date.toPython()):
                 assert run_widget.run_to_button.isEnabled() is True
             else:
@@ -149,6 +181,7 @@ class TestRunWidget:
             )
 
         assert run_widget.worker is not None
+        assert run_widget.worker.is_paused is True
 
         # step button is disabled because end date was reached
         assert run_widget.step_button.isEnabled() is False
