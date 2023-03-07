@@ -99,6 +99,8 @@ class AbstractControlCurveParameterSection(FormSection):
                     "label": "Constant values",
                     "field_type": ValuesAndExternalDataWidget,
                     "value": self.form.get_param_dict_value("values"),
+                    # value (for example cost) may be negative
+                    "field_args": {"lower_bound": -pow(10, 6)},
                     "validate_fun": partial(
                         self._check_size, field_name="values"
                     ),
