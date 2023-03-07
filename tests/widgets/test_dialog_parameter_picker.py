@@ -3,7 +3,7 @@ from typing import Any
 
 import pytest
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QPushButton
+from PySide6.QtWidgets import QPushButton, QWidget
 
 from pywr_editor.dialogs.node.node_dialog import NodeDialog
 from pywr_editor.dialogs.parameters.sections.constant_parameter_section import (
@@ -67,10 +67,13 @@ class TestDialogParameterPicker:
         param_obj = model_config.parameters.get_config_from_name(
             child_param_name, as_dict=False
         )
+        parent = QWidget()
+        qtbot.addWidget(parent)
         dialog = ModelComponentPickerDialog(
             model_config=model_config,
             component_obj=param_obj,
             component_type="parameter",
+            parent=parent,
             after_form_save=self.get_form_data,
         )
         dialog.show()
@@ -219,10 +222,14 @@ class TestDialogParameterPicker:
         """
         # object passed by ParameterLineEditWidget
         param_obj = ParameterConfig(props=param_dict)
+
+        parent = QWidget()
+        qtbot.addWidget(parent)
         dialog = ModelComponentPickerDialog(
             model_config=model_config,
             component_obj=param_obj,
             component_type="parameter",
+            parent=parent,
             after_form_save=self.get_form_data,
         )
         dialog.show()
