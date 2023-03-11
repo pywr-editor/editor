@@ -55,3 +55,37 @@ class OrangeCircle(Circle):
         super().__init__(
             parent=parent, fill=Color("amber", 200), outline=Color("amber", 600)
         )
+
+
+class RedCircle(Circle):
+    def __init__(self, parent: "SchematicNode"):
+        """
+        Initialises the shape for an red circle.
+        """
+        super().__init__(
+            parent=parent, fill=Color("red", 200), outline=Color("red", 600)
+        )
+
+
+class PurpleCircle(Circle):
+    def __init__(self, parent: "SchematicNode"):
+        """
+        Initialises the shape for an purple circle.
+        """
+        super().__init__(
+            parent=parent,
+            fill=Color("purple", 200),
+            outline=Color("purple", 600),
+        )
+
+
+class PinkCircle(Circle):
+    def __init__(self, parent: "SchematicNode"):
+        """
+        Initialises the shape for an pink circle.
+        """
+        super().__init__(
+            parent=parent,
+            fill=Color("pink", 200),
+            outline=Color("pink", 600),
+        )

@@ -117,7 +117,7 @@ Source: "dist\main\win32evtlog.pyd"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\win32pdh.pyd"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\win32trace.pyd"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\win32ui.pyd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "dist\main\markupsafe\*"; DestDir: "{app}\markupsafe"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "dist\main\markupsafe\*"; DestDir: "{app}\markupsafe"; Flags: ignoreversion recursesubdirs createallsubdirs skipifsourcedoesntexist
 Source: "dist\main\numexpr\*"; DestDir: "{app}\numexpr"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "dist\main\numpy\*"; DestDir: "{app}\numpy"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "dist\main\pandas\*"; DestDir: "{app}\pandas"; Flags: ignoreversion recursesubdirs createallsubdirs
