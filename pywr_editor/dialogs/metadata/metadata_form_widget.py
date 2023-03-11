@@ -141,3 +141,6 @@ class MetadataFormWidget(Form):
             self.dialog.parent.statusBar().showMessage(
                 "Successfully updated the model metadata"
             )
+
+        # update the window title
+        self.dialog.parent.set_window_title()
