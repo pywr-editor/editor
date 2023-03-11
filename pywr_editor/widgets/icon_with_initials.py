@@ -96,7 +96,7 @@ class IconWithInitials(QIconEngine):
         font = QFont()
         font.setPixelSize(12)
         color = Color(self.color, 700).qcolor
-        painter.setPen(QPen(color))
+        painter.setPen(color)
         painter.setBrush(color)
         painter.setFont(font)
         if self.label and isinstance(self.label, str):
