@@ -77,6 +77,8 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
                         table_dict[var_name] = value[vi]
                     except IndexError:
                         table_dict[var_name] = []
+            elif value is None:
+                table_dict = {var_name: [] for var_name in variable_names}
             else:
                 table_dict = {self.one_var_name: []}
         else:
