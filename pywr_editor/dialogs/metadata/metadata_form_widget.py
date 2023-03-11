@@ -135,12 +135,11 @@ class MetadataFormWidget(Form):
             f"Updated model metadata to {form_data}"
         )
 
-        # reload the components tree
         if self.dialog.parent is not None:
+            # reload the components tree
             self.dialog.parent.components_tree.reload()
+            # update the window title
+            self.dialog.parent.set_window_title()
             self.dialog.parent.statusBar().showMessage(
                 "Successfully updated the model metadata"
             )
-
-        # update the window title
-        self.dialog.parent.set_window_title()
