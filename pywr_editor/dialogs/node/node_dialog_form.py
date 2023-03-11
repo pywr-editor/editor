@@ -359,7 +359,7 @@ class NodeDialogForm(Form):
         :param value: The storage.
         :return: The validation instance.
         """
-        if not 0 <= value <= 1:
+        if value and not 0 <= value <= 1:
             return FormValidation(
                 validation=False,
                 error_message="The relative storage must be a number between 0 and 1",
