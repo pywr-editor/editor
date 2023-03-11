@@ -3,7 +3,6 @@ from typing import Any
 from PySide6.QtWidgets import QMessageBox, QPushButton, QWidget
 
 from pywr_editor.form import (
-    AbstractAggFuncWidget,
     AggFuncPercentileListWidget,
     AggFuncPercentileMethodWidget,
     AggFuncPercentileOfScoreKindWidget,
@@ -258,9 +257,8 @@ class RecorderForm(ModelComponentForm):
             return False
 
         if self.section_form_data["enable_optimisation_section"] is True:
-            func_widget: AbstractAggFuncWidget = self.find_field_by_name(
-                "agg_func"
-            ).widget
-            func_widget.merge_form_dict_fields(form_data)
+            func_field = self.find_field_by_name("agg_func")
+            if func_field:
+                func_field.widget.merge_form_dict_fields(form_data)
 
         return form_data
