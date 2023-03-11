@@ -340,8 +340,28 @@ class NodeDialogForm(Form):
         """
         return {
             "name": "initial_volume_pc",
-            "label": "Initial volume (%)",
+            "label": "Initial volume",
             "value": self.get_node_dict_value("initial_volume_pc"),
             "field_type": FloatWidget,
-            "help_text": "The relative absolute volume for the storage",
+            "validate_fun": self.validate_initial_volume_pc,
+            "help_text": "The relative volume for the storage. This is a number "
+            + "between 0 (when empty) and 1 (when full)",
         }
+
+    @staticmethod
+    def validate_initial_volume_pc(
+        name: str, label: str, value: float | int
+    ) -> FormValidation:
+        """
+        Checks that the relative storage is a number between 0 and 1.
+        :param name: The field name.
+        :param label: The field label.
+        :param value: The storage.
+        :return: The validation instance.
+        """
+        if value and not 0 <= value <= 1:
+            return FormValidation(
+                validation=False,
+                error_message="The relative storage must be a number between 0 and 1",
+            )
+        return FormValidation(validation=True)
