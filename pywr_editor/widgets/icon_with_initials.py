@@ -99,7 +99,12 @@ class IconWithInitials(QIconEngine):
         painter.setPen(color)
         painter.setBrush(color)
         painter.setFont(font)
-        painter.drawText(rect, "A")
+        if self.label and isinstance(self.label, str):
+            painter.drawText(
+                rect,
+                self.label[0].upper(),
+                Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignCenter,
+            )
 
     def get_color(self) -> ColorName:
         """
