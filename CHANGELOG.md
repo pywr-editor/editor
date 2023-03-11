@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 All issue numbers are relative to https://github.com/pywr-editor/editor
 
+## v1.4.0 - 2023-03-11
+### Added
+- Custom shapes can now be added onto the schematic (text, arrow and rectangle) using the node panel in the toolbar. Their
+  appearance can also be customised and all shapes are stored in the JSON file
+  ([#44](https://github.com/pywr-editor/editor/issues/44)).
+
+### Changed
+- Only unique values from a DataFrame index are not provided when setting up a table   
+  ([#61](https://github.com/pywr-editor/editor/issues/61)).
+
+### Fixed
+- The Windows installer release did not build on GitHub actions due to a wrong file 
+  pattern in the `.iss` config file ([#58](https://github.com/pywr-editor/editor/issues/58)).
+- Fixed an exception when the dialog to open a new JSON file was disregarded   
+  ([#59](https://github.com/pywr-editor/editor/issues/59)).
+- Custom nodes could not be added on the schematic when dragged from the node panel   
+  ([#64](https://github.com/pywr-editor/editor/issues/64)).
+- When changing a nested parameter for a node, the "Save button" in the main form did not get enabled.
+  Users were not able to save the node form ([#66](https://github.com/pywr-editor/editor/issues/66)).
+- A tooltip in the parameter dialog was not rendering the node name ([#68](https://github.com/pywr-editor/editor/issues/68)).
+- Allow users to input negative numbers when setting up a control curve ([#70](https://github.com/pywr-editor/editor/issues/70)).
+- Fixed an exception when validating the form for `ControlCurvePiecewiseInterpolatedParameter` 
+  ([#72](https://github.com/pywr-editor/editor/issues/72)).
+- Fixed an exception when saving a recorder form ([#74](https://github.com/pywr-editor/editor/issues/74)).
+
 ## v1.3.0 - 2023-02-06
 ### Added
 - Added support for pywr-1.20.0. The editor (1) recognises the new `RollingMeanFlowNodeParameter`; (2) it makes the relative and 
