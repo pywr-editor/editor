@@ -33,12 +33,19 @@ def is_windows() -> bool:
     return platform.system() == "Windows"
 
 
-def is_excel_installed() -> bool:
+def is_excel_installed(winapi: bool = False) -> bool:
     """
-    Returns True if Microsoft Excel is installed on Windows.
-    This method is slow as it relies on the WIN32 API.
+    Returns True if Microsoft Excel is installed on Windows by checking if EXCEL.EXE
+    exist.
+    :param winapi: Whether to use the WIN32 API to test if Excel is installed and can
+    run. This method is slower.
     :return: True if Excel is installed, False otherwise.
     """
+    if not winapi:
+        return Path(
+            r"C:\Program Files\Microsoft Office\root\Office16\EXCEL.EXE"
+        ).exists()
+
     import win32com.client
 
     # noinspection PyBroadException
