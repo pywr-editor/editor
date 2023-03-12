@@ -9,7 +9,7 @@ import pywr_editor.node_shapes as all_nodes
 from pywr_editor.model import NodeConfig
 
 from .base_node import BaseNode
-from .custom_node_shape import CustomNodeShape
+from .custom_node_shape import CustomNode
 from .pywr.pywr_node import PywrNode
 
 
@@ -25,7 +25,7 @@ def get_node_icon_classes(include_pywr_nodes: bool = True) -> list[str]:
         "BaseReservoir",
         "SvgIcon",
         "Circle",
-        "CustomNodeShape",
+        "CustomNode",
     ]
     if not include_pywr_nodes:
         node_to_exclude += [
@@ -76,7 +76,7 @@ def get_node_icon(
         return getattr(all_nodes, available_classes[pos])
     # custom node
     else:
-        return CustomNodeShape
+        return CustomNode
 
 
 class DummyGraphicsItem(QGraphicsItemGroup):

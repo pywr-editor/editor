@@ -25,7 +25,7 @@ class TestDeleteEdges:
         window = MainWindow(self.model_file)
         window.hide()
         schematic = window.schematic
-        size_panel = window.toolbar.tabs["Schematic"].panels["Size"]
+        size_panel = window.toolbar.tabs["View"].panels["Size"]
 
         return window, schematic, size_panel
 
@@ -36,12 +36,12 @@ class TestDeleteEdges:
         """
         window, schematic, size_panel = init_window
         model_config = schematic.model_config
-        panel = schematic.app.toolbar.tabs["Nodes"].panels["Undo"]
+        panel = schematic.app.toolbar.tabs["Schematic"].panels["Undo"]
         undo_button = panel.buttons["Undo"]
         redo_button = panel.buttons["Redo"]
 
-        source_node = schematic.schematic_items["Reservoir"]
-        target_node = schematic.schematic_items["Link1"]  # target is Link1
+        source_node = schematic.node_items["Reservoir"]
+        target_node = schematic.node_items["Link1"]  # target is Link1
 
         # 1. Disconnect the nodes
         dummy_action = QAction()
@@ -57,9 +57,7 @@ class TestDeleteEdges:
         assert len(source_node.edges) == 1
 
         # target node Link1 is connected to Link2 only
-        assert target_node.edges == [
-            schematic.schematic_items["Link2"].edges[1]
-        ]
+        assert target_node.edges == [schematic.node_items["Link2"].edges[1]]
 
         # edge is gone from schematic
         all_schematic_edges = []

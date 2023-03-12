@@ -99,7 +99,7 @@ Source: "dist\main\base_library.zip"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\LEGAL NOTICES.md"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\libcrypto-1_1.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\libffi-7.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "dist\main\libopenblas.*.gfortran-win_amd64.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "dist\main\libopenblas*.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\libssl-1_1.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\mfc140u.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\pyexpat.pyd"; DestDir: "{app}"; Flags: ignoreversion
@@ -117,7 +117,7 @@ Source: "dist\main\win32evtlog.pyd"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\win32pdh.pyd"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\win32trace.pyd"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\win32ui.pyd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "dist\main\markupsafe\*"; DestDir: "{app}\markupsafe"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "dist\main\markupsafe\*"; DestDir: "{app}\markupsafe"; Flags: ignoreversion recursesubdirs createallsubdirs skipifsourcedoesntexist
 Source: "dist\main\numexpr\*"; DestDir: "{app}\numexpr"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "dist\main\numpy\*"; DestDir: "{app}\numpy"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "dist\main\pandas\*"; DestDir: "{app}\pandas"; Flags: ignoreversion recursesubdirs createallsubdirs

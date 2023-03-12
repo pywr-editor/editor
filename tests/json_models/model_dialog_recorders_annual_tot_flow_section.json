@@ -8,71 +8,156 @@
     "maintainer": "Stefano Simoncelli",
     "model_version": "2.1"
   },
-  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
   "nodes": [
     {
       "name": "Reservoir",
       "type": "Storage",
       "max_volume": 35,
       "initial_volume": 35
-    }, {
+    },
+    {
       "name": "Reservoir2",
       "type": "Storage",
       "max_volume": 120,
       "initial_volume": 35
     },
-    {"name": "Link", "type": "Link", "min_flow": 1, "max_flow": 6},
-    {"name": "LinkX", "type": "Link", "min_flow": 10, "max_flow": 60},
-    {"name": "LinkXX", "type": "Link", "min_flow": 10, "max_flow": 60},
-    {"name": "Output", "type": "Output", "max_flow": 2}
+    {
+      "name": "Link",
+      "type": "Link",
+      "min_flow": 1,
+      "max_flow": 6
+    },
+    {
+      "name": "LinkX",
+      "type": "Link",
+      "min_flow": 10,
+      "max_flow": 60
+    },
+    {
+      "name": "LinkXX",
+      "type": "Link",
+      "min_flow": 10,
+      "max_flow": 60
+    },
+    {
+      "name": "Output",
+      "type": "Output",
+      "max_flow": 2
+    }
   ],
-  "edges": [["Reservoir", "Link"], ["Link", "Output"]],
+  "edges": [
+    [
+      "Reservoir",
+      "Link"
+    ],
+    [
+      "Link",
+      "Output"
+    ]
+  ],
   "recorders": {
-    "valid_no_values": {"type": "AnnualTotalFlowRecorder"},
+    "valid_no_values": {
+      "type": "AnnualTotalFlowRecorder"
+    },
     "valid_value_with_nodes": {
       "type": "AnnualTotalFlowRecorder",
-      "nodes": ["Link", "Output"]
+      "nodes": [
+        "Link",
+        "Output"
+      ]
     },
     "valid_value_with_nodes_and_factors": {
       "type": "AnnualTotalFlowRecorder",
-      "nodes": ["Link", "Output"],
-      "factors": [11, -18]
+      "nodes": [
+        "Link",
+        "Output"
+      ],
+      "factors": [
+        11,
+        -18
+      ]
     },
     "valid_value_with_nodes_and_one_factors": {
       "type": "AnnualTotalFlowRecorder",
-      "nodes": ["Link", "Output"],
-      "factors": [1, 1]
+      "nodes": [
+        "Link",
+        "Output"
+      ],
+      "factors": [
+        1,
+        1
+      ]
     },
     "invalid_nodes_not_list": {
       "type": "AnnualTotalFlowRecorder",
       "nodes": "Link",
-      "factors": [10, 29]
+      "factors": [
+        10,
+        29
+      ]
     },
     "invalid_factors_not_list": {
       "type": "AnnualTotalFlowRecorder",
-      "nodes": ["Link"],
+      "nodes": [
+        "Link"
+      ],
       "factors": -10
     },
     "invalid_list_size": {
       "type": "AnnualTotalFlowRecorder",
-      "nodes": ["Link", "Reservoir"],
-      "factors": [12, 45, 67]
+      "nodes": [
+        "Link",
+        "Reservoir"
+      ],
+      "factors": [
+        12,
+        45,
+        67
+      ]
     },
     "invalid_node_type": {
       "type": "AnnualTotalFlowRecorder",
-      "nodes": ["Link", 12],
-      "factors": [12, 67]
+      "nodes": [
+        "Link",
+        12
+      ],
+      "factors": [
+        12,
+        67
+      ]
     },
     "invalid_factor_type": {
       "type": "AnnualTotalFlowRecorder",
-      "nodes": ["Link", "Output"],
-      "factors": [12, "1"]
+      "nodes": [
+        "Link",
+        "Output"
+      ],
+      "factors": [
+        12,
+        "1"
+      ]
     },
     "invalid_non_existing_node": {
       "type": "AnnualTotalFlowRecorder",
-      "nodes": ["Link", "Link2"],
-      "factors": [12, 67]
+      "nodes": [
+        "Link",
+        "Link2"
+      ],
+      "factors": [
+        12,
+        67
+      ]
     }
   },
-  "pywr_editor_schematic_size": [1900, 1450]
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ]
+  }
 }

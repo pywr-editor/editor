@@ -24,7 +24,7 @@
     },
     {
       "name": "Link1",
-      "type": "Link",
+      "type": "link",
       "position": {
         "editor_position": [
           1000,
@@ -34,7 +34,7 @@
     },
     {
       "name": "Link2",
-      "type": "Link",
+      "type": "link",
       "position": {
         "editor_position": [
           100,
@@ -44,7 +44,7 @@
     },
     {
       "name": "Link3",
-      "type": "Link",
+      "type": "link",
       "position": {
         "editor_position": [
           50,
@@ -54,7 +54,7 @@
     },
     {
       "name": "Link4",
-      "type": "Link",
+      "type": "link",
       "position": {
         "editor_position": [
           70,
@@ -102,8 +102,10 @@
       "value": 5
     }
   },
-  "pywr_editor_schematic_size": [
-    1900,
-    1450
-  ]
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ]
+  }
 }

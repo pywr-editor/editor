@@ -37,6 +37,8 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
         variable_names: list[str] = None,
         row_number_label: str = "Row",
         min_total_values: int | None = None,
+        upper_bound: float | None = None,
+        lower_bound: float | None = None,
     ):
         """
         Initialises the widget.
@@ -52,6 +54,8 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
         :param row_number_label: The column label for the row numbers. Default to Row.
         :param min_total_values: The minimum total values each variable must have in
         the table. Default to None to avoid any initial check and form validation.
+        :param lower_bound: The allowed minimum number. Optional.
+        :param upper_bound: The allowed maximum number. Optional.
         """
         if multiple_variables and (
             not variable_names or not isinstance(variable_names, list)
@@ -73,20 +77,27 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
                         table_dict[var_name] = value[vi]
                     except IndexError:
                         table_dict[var_name] = []
+            elif value is None:
+                table_dict = {var_name: [] for var_name in variable_names}
             else:
                 table_dict = {self.one_var_name: []}
         else:
             table_dict = {self.one_var_name: value}
 
-        super().__init__(
-            name,
+        table_args = dict(
+            name=name,
             # TableValuesWidget wants a dictionary
-            table_dict,
-            parent,
+            value=table_dict,
+            parent=parent,
             show_row_numbers=show_row_numbers,
             row_number_label=row_number_label,
             min_total_values=min_total_values,
         )
+        if lower_bound:
+            table_args["lower_bound"] = lower_bound
+        if upper_bound:
+            table_args["upper_bound"] = upper_bound
+        super().__init__(**table_args)
 
         self.init = True
         self.model_config = self.form.model_config

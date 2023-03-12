@@ -374,9 +374,9 @@ class ComponentsTree(QTreeWidget):
         if (
             isinstance(clicked_item, TreeWidgetNode)
             and hasattr(clicked_item, "name")
-            and clicked_item.name in schematic.schematic_items
+            and clicked_item.name in schematic.node_items
         ):
-            item = schematic.schematic_items[clicked_item.name]
+            item = schematic.node_items[clicked_item.name]
             item.setSelected(True)
             schematic.center_view_on(item.scenePos())
 

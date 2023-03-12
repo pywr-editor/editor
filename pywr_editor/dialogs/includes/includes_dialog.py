@@ -292,12 +292,12 @@ class IncludesDialog(QDialog):
 
         # update the node panel
         if self.app:
-            from pywr_editor.toolbar.node_library.nodes_library import (
-                NodesLibraryPanel,
+            from pywr_editor.toolbar.node_library.schematic_items_library import (
+                LibraryPanel,
             )
 
             # noinspection PyTypeChecker
-            panel: NodesLibraryPanel = self.app.findChild(NodesLibraryPanel)
+            panel: LibraryPanel = self.app.findChild(LibraryPanel)
             panel.reload()
 
         self.save_button.setEnabled(False)

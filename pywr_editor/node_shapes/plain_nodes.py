@@ -5,11 +5,11 @@ from pywr_editor.style import Color
 from .circle import Circle
 
 if TYPE_CHECKING:
-    from pywr_editor.schematic import SchematicItem
+    from pywr_editor.schematic import SchematicNode
 
 
 class BlueCircle(Circle):
-    def __init__(self, parent: "SchematicItem"):
+    def __init__(self, parent: "SchematicNode"):
         """
         Initialises the shape for a blue circle.
         """
@@ -22,7 +22,7 @@ class BlueCircle(Circle):
 
 
 class GrayCircle(Circle):
-    def __init__(self, parent: "SchematicItem"):
+    def __init__(self, parent: "SchematicNode"):
         """
         Initialises the shape for a gray circle.
         """
@@ -35,7 +35,7 @@ class GrayCircle(Circle):
 
 
 class GreenCircle(Circle):
-    def __init__(self, parent: "SchematicItem"):
+    def __init__(self, parent: "SchematicNode"):
         """
         Initialises the shape for a blue circle.
         """
@@ -48,10 +48,44 @@ class GreenCircle(Circle):
 
 
 class OrangeCircle(Circle):
-    def __init__(self, parent: "SchematicItem"):
+    def __init__(self, parent: "SchematicNode"):
         """
         Initialises the shape for an orange circle.
         """
         super().__init__(
             parent=parent, fill=Color("amber", 200), outline=Color("amber", 600)
+        )
+
+
+class RedCircle(Circle):
+    def __init__(self, parent: "SchematicNode"):
+        """
+        Initialises the shape for an red circle.
+        """
+        super().__init__(
+            parent=parent, fill=Color("red", 200), outline=Color("red", 600)
+        )
+
+
+class PurpleCircle(Circle):
+    def __init__(self, parent: "SchematicNode"):
+        """
+        Initialises the shape for an purple circle.
+        """
+        super().__init__(
+            parent=parent,
+            fill=Color("purple", 200),
+            outline=Color("purple", 600),
+        )
+
+
+class PinkCircle(Circle):
+    def __init__(self, parent: "SchematicNode"):
+        """
+        Initialises the shape for an pink circle.
+        """
+        super().__init__(
+            parent=parent,
+            fill=Color("pink", 200),
+            outline=Color("pink", 600),
         )

@@ -1,8 +1,8 @@
-from typing import TYPE_CHECKING, Any, Literal, Optional, TypedDict, Union
+from typing import TYPE_CHECKING, Any, Literal, TypedDict, Union
 
 import PySide6
 from PySide6.QtCore import Slot
-from PySide6.QtGui import QAction, QFont, QPainterPath, QPen
+from PySide6.QtGui import QAction, QFont, QPainterPath
 from PySide6.QtWidgets import (
     QGraphicsItem,
     QGraphicsItemGroup,
@@ -15,9 +15,9 @@ from pywr_editor.style import Color
 from pywr_editor.utils import ModelComponentTooltip
 from pywr_editor.widgets import ContextualMenu
 
+from .abstract_schematic_item import AbstractSchematicItem
 from .commands.disconnect_node_command import DisconnectNodeCommand
 from .edge import Edge
-from .schematic_node_utils import SchematicNodeUtils
 
 if TYPE_CHECKING:
     from pywr_editor.node_shapes import BaseNode
@@ -25,23 +25,34 @@ if TYPE_CHECKING:
 
 
 class ConnectedNodeProps(TypedDict):
-    source_nodes: list["SchematicItem"]
+    source_nodes: list["SchematicNode"]
     """ the list of SchematicItem instances connected to the node """
-    target_nodes: list["SchematicItem"]
+    target_nodes: list["SchematicNode"]
     """ the list of SchematicItem instances connected from the node """
     count: int
     """ the total number of connected nodes """
 
 
-class SchematicItem(QGraphicsItemGroup):
+class SchematicNode(AbstractSchematicItem, QGraphicsItemGroup):
+    padding_y: int = 5
+    """ The bounding rectangle x padding """
+    padding_x: int = 5
+    """ The bounding rectangle y padding """
+    outline_width: int = 2
+    """ The outline width of the bounding rectangle """
+    disabled_node_opacity: float = 0.3
+    """ The opacity of the nodes when they are disabled """
+
     def __init__(self, node_props: dict, view: "Schematic"):
         """
-        Initialises the class.
+        Initialise the class.
         :param node_props: The node properties from the model dictionary.
-        :param view: THe view where to draw the item.
+        :param view: The view where to draw the item.
         :return None
         """
-        super().__init__()
+        AbstractSchematicItem.__init__(self, view)
+        QGraphicsItemGroup.__init__(self)
+
         self.model_node = view.model_config.nodes.node(node_props)
         self.name = self.model_node.name
         self.x, self.y = self.model_node.position
@@ -51,11 +62,6 @@ class SchematicItem(QGraphicsItemGroup):
             model_config=view.model_config, comp_obj=self.model_node
         ).render()
         self.setToolTip(self.tooltip_text)
-
-        self.padding_y: int = 5
-        self.padding_x = 5
-        self.outline_width = 2
-        self.disabled_node_opacity = 0.3
 
         # allow interaction
         self.setFlag(
@@ -71,7 +77,7 @@ class SchematicItem(QGraphicsItemGroup):
         self.setAcceptHoverEvents(True)
         # ensure that node is always stacked on top of its edges
         self.setZValue(0)
-        # set position
+        # set position - parent/scene coordinates
         self.setPos(self.x, self.y)
 
         # node
@@ -138,7 +144,7 @@ class SchematicItem(QGraphicsItemGroup):
         self,
         painter: PySide6.QtGui.QPainter,
         option: PySide6.QtWidgets.QStyleOptionGraphicsItem,
-        widget: Optional[PySide6.QtWidgets.QWidget] = ...,
+        widget: PySide6.QtWidgets.QWidget | None = ...,
     ) -> None:
         """
         Paints the node. Prevents the bounding box from being display when the group
@@ -151,24 +157,8 @@ class SchematicItem(QGraphicsItemGroup):
         if self.isSelected() or (
             self.view.connecting_node_props.enabled and self.node.hover
         ):
-            pen = QPen()
-            pen.setColor(Color("red", 500).qcolor)
-            painter.setPen(pen)
-            # painter.setRenderHints(
-            #     QPainter.Antialiasing
-            #     | QPainter.SmoothPixmapTransform
-            #     | QPainter.TextAntialiasing
-            # )
-
-            # avoid flickering by increasing the bbox size by the rectangle outline
-            # width
-            line_width = 1
-            rect = self.boundingRect()
-            rect.setX(rect.x() + line_width)
-            rect.setY(rect.y() + line_width)
-            rect.setWidth(rect.width() - line_width)
-            rect.setHeight(rect.height() - line_width)
-            painter.drawRoundedRect(rect, 4, 4)
+            self.draw_outline(painter, option)
+        super().paint(painter, option, widget)
 
     def hoverEnterEvent(
         self, event: PySide6.QtWidgets.QGraphicsSceneHoverEvent
@@ -211,52 +201,6 @@ class SchematicItem(QGraphicsItemGroup):
 
         return super().itemChange(change, value)
 
-    def adjust_node_position(self) -> bool:
-        """
-        Checks that the node bounding box is always within the canvas edges. If it is
-        not, the item is re-positioned on the schematic edge.
-        :return: True if the node position is adjusted, False otherwise.
-        """
-        # prevent the nodes from being moved outside the schematic edges.
-        item_utils = SchematicNodeUtils(
-            node=self,
-            schematic_size=[
-                self.view.schematic_width,
-                self.view.schematic_height,
-            ],
-        )
-
-        was_node_moved = False
-        if item_utils.is_outside_left_edge:
-            item_utils.move_to_left_edge()
-            was_node_moved = True
-        elif item_utils.is_outside_right_edge:
-            item_utils.move_to_right_edge()
-            was_node_moved = True
-        if item_utils.is_outside_top_edge:
-            item_utils.move_to_top_edge()
-            was_node_moved = True
-        elif item_utils.is_outside_bottom_edge:
-            item_utils.move_to_bottom_edge()
-            was_node_moved = True
-
-        return was_node_moved
-
-    @property
-    def position(self) -> [float, float]:
-        """
-        Returns the current node's position.
-        :return: The position as tuple of floats.
-        """
-        return round(self.scenePos().x(), 5), round(self.scenePos().y(), 5)
-
-    def has_position_changed(self) -> bool:
-        """
-        Checks if the node has been moved.
-        :return: True if the node was moved, False otherwise.
-        """
-        return self.position != self.prev_position
-
     def save_position_if_moved(self) -> None:
         """
         Saves the new node position in the configuration file.
@@ -278,7 +222,7 @@ class SchematicItem(QGraphicsItemGroup):
         edge.adjust()
 
     def is_connectable(
-        self, connected_node: Union["SchematicItem", None] = None
+        self, connected_node: Union["SchematicNode", None] = None
     ) -> bool:
         """
         Checks that the node can be connected to another one.
@@ -408,9 +352,8 @@ class SchematicItem(QGraphicsItemGroup):
 
         # delete node action
         delete_node_action = context_menu.addAction("Delete node")
-        # delete_node_action.setShortcut(QKeySequence.Delete)
         # noinspection PyUnresolvedReferences
-        delete_node_action.triggered.connect(self.on_delete_node)
+        delete_node_action.triggered.connect(self.on_delete_item)
         self.view.addAction(delete_node_action)
 
         # connect/disconnect edges - skip virtual nodes
@@ -456,13 +399,13 @@ class SchematicItem(QGraphicsItemGroup):
             f'Deleted edge from "{source_node.name}" to "{target_node.name}"'
         )
 
-    @Slot()
-    def on_delete_node(self) -> None:
-        """
-        Deletes a node and its edges from the schematic and model configuration.
-        :return: None
-        """
-        self.view.on_delete_nodes([self])
+    # @Slot()
+    # def on_delete_node(self) -> None:
+    #     """
+    #     Deletes a node and its edges from the schematic and model configuration.
+    #     :return: None
+    #     """
+    #     self.view.on_delete_item([self])
 
     @Slot()
     def on_edit_node(self) -> None:
@@ -481,12 +424,12 @@ class SchematicItem(QGraphicsItemGroup):
 
 
 class SchematicLabel(QGraphicsTextItem):
-    # Boundary box vertical padding
     padding_y: str = 2
+    """ Boundary box vertical padding """
 
     def __init__(
         self,
-        parent: "SchematicItem",
+        parent: "SchematicNode",
         name: str,
         color: Color,
         hide_label: bool = False,

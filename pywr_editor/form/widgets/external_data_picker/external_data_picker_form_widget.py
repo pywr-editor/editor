@@ -121,5 +121,13 @@ class ExternalDataPickerFormWidget(ModelComponentForm):
             self.save_button.setEnabled(True)
             return False
 
+        # enable the save button in the parent dialog
+        # noinspection PyTypeChecker
+        save_button: QPushButton = self.parent.findChild(
+            QPushButton, "save_button"
+        )
+        if save_button:
+            save_button.setEnabled(True)
+
         # callback function
         self.after_save(form_data)

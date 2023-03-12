@@ -23,7 +23,7 @@ class FieldConfig(TypedDict):
     allow_empty: bool
     """ if False, the form validation fails if the field is empty. Optional """
     hide_label: bool
-    """ set to True to hide the label. Default to False, Optional """
+    """ set to True to hide the label. Default to False """
     validate_fun: Callable[[str, str, QWidget], FormValidation]
     """ a custom validation function that receives the field name, label, value
      and returns an instance of FormValidation. Optional"""

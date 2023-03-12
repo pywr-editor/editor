@@ -77,7 +77,7 @@ class ScenarioValuesWidget(FormCustomWidget):
         # # noinspection PyCallingNonCallable
         self.model = ScenarioValuesModel(values=self.value)
         # noinspection PyUnresolvedReferences
-        self.model.layoutChanged.connect(self.on_value_change)
+        self.model.layoutChanged.connect(self.form.on_field_changed)
 
         # Action buttons
         buttons_layout = QHBoxLayout()
@@ -284,17 +284,6 @@ class ScenarioValuesWidget(FormCustomWidget):
 
         # noinspection PyUnresolvedReferences
         self.model.layoutChanged.emit()
-
-    @Slot()
-    def on_value_change(self) -> None:
-        """
-        Enables the form button when the widget is updated.
-        :return: None
-        """
-        self.logger.debug(
-            f"Running on_value_change Slot from {get_signal_sender(self)}"
-        )
-        self.form.save_button.setEnabled(True)
 
     def sanitise_value(
         self, value: list[list[int | float]] | None

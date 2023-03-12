@@ -3,8 +3,9 @@ from typing import Any
 
 import pytest
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QPushButton
+from PySide6.QtWidgets import QPushButton, QWidget
 
+from pywr_editor.dialogs.node.node_dialog import NodeDialog
 from pywr_editor.dialogs.parameters.sections.constant_parameter_section import (
     ConstantParameterSection,
 )
@@ -19,6 +20,10 @@ from pywr_editor.form import (
     ModelComponentSourceSelectorWidget,
     ParameterPickerWidget,
     SourceSelectorWidget,
+)
+from pywr_editor.form.widgets.float_widget import FloatWidget
+from pywr_editor.form.widgets.parameter_line_edit_widget import (
+    ParameterLineEditWidget,
 )
 from pywr_editor.model import ModelConfig, ParameterConfig
 from tests.utils import resolve_model_path
@@ -62,10 +67,13 @@ class TestDialogParameterPicker:
         param_obj = model_config.parameters.get_config_from_name(
             child_param_name, as_dict=False
         )
+        parent = QWidget()
+        qtbot.addWidget(parent)
         dialog = ModelComponentPickerDialog(
             model_config=model_config,
             component_obj=param_obj,
             component_type="parameter",
+            parent=parent,
             after_form_save=self.get_form_data,
         )
         dialog.show()
@@ -214,10 +222,14 @@ class TestDialogParameterPicker:
         """
         # object passed by ParameterLineEditWidget
         param_obj = ParameterConfig(props=param_dict)
+
+        parent = QWidget()
+        qtbot.addWidget(parent)
         dialog = ModelComponentPickerDialog(
             model_config=model_config,
             component_obj=param_obj,
             component_type="parameter",
+            parent=parent,
             after_form_save=self.get_form_data,
         )
         dialog.show()
@@ -285,3 +297,49 @@ class TestDialogParameterPicker:
         assert model_param_field.message.text() == ""
         assert model_param_field.isHidden() is False
         assert model_param_widget.combo_box.currentText() == "None"
+
+    def test_save_button_status(self, qtbot):
+        """
+        Tests that the save button in the parent form is enabled if a change is applied
+        to the child form. This is tested by changing a node property.
+        """
+        dialog = NodeDialog(
+            model_config=ModelConfig(
+                resolve_model_path("model_dialog_node_storage_section.json")
+            ),
+            node_name="Reservoir",
+        )
+        dialog.hide()
+
+        form = dialog.form
+        save_button = form.save_button
+        # the button is initially disabled
+        assert save_button.isEnabled() is False
+
+        # open the dialog and update the child form
+        volume_widget: ParameterLineEditWidget = form.find_field_by_name(
+            "max_volume"
+        ).widget
+        qtbot.mouseClick(volume_widget.select_button, Qt.MouseButton.LeftButton)
+
+        # noinspection PyTypeChecker
+        child_dialog: ModelComponentPickerDialog = dialog.findChild(
+            ModelComponentPickerDialog
+        )
+        # noinspection PyTypeChecker
+        child_save_button: QPushButton = child_dialog.findChild(
+            QPushButton, "save_button"
+        )
+        assert child_save_button.isEnabled() is False
+
+        # type a number
+        value_widget: FloatWidget = child_dialog.form.find_field_by_name(
+            "value"
+        ).widget
+        qtbot.keyPress(value_widget.line_edit, Qt.Key.Key_1)
+        # the nested save button is enabled
+        assert child_save_button.isEnabled() is True
+
+        # save the form and the main save button gets enabled
+        qtbot.mouseClick(child_save_button, Qt.MouseButton.LeftButton)
+        assert save_button.isEnabled() is True

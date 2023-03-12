@@ -9,8 +9,10 @@ from PySide6.QtWidgets import QApplication, QPushButton
 from pywr_editor import MainWindow
 from pywr_editor.dialogs import IncludesDialog
 from pywr_editor.model import ModelConfig
-from pywr_editor.toolbar.node_library.library_node_label import LibraryNodeLabel
-from pywr_editor.toolbar.node_library.nodes_library import NodesLibraryPanel
+from pywr_editor.toolbar.node_library.library_item import LibraryItemLabel
+from pywr_editor.toolbar.node_library.schematic_items_library import (
+    LibraryPanel,
+)
 from tests.utils import check_msg, model_path, resolve_model_path
 
 
@@ -56,7 +58,7 @@ class TestTablesIncludes:
         """
         window = MainWindow(resolve_model_path("model_1.json"))
         model_config = window.model_config
-        panel: NodesLibraryPanel = window.toolbar.findChild(NodesLibraryPanel)
+        panel: LibraryPanel = window.toolbar.findChild(LibraryPanel)
         window.hide()
 
         window.open_imports_dialog()
@@ -108,7 +110,7 @@ class TestTablesIncludes:
             if "custom_node2.py" in file.as_posix():
                 found_imported = False
                 for item in panel.items():
-                    if isinstance(item, LibraryNodeLabel):
+                    if isinstance(item, LibraryItemLabel):
                         if item.text() == "MyNewNode":
                             found_imported = True
                 assert found_imported is True

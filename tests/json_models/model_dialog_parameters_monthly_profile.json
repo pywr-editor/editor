@@ -31,7 +31,10 @@
       "type": "Link",
       "min_flow": {
         "type": "custom_param",
-        "data": ["Table 3", "CSV table"]
+        "data": [
+          "Table 3",
+          "CSV table"
+        ]
       },
       "max_flow": {
         "type": "aggregated",
@@ -60,14 +63,28 @@
     "profile_table": {
       "url": "files/monthly_profile_vba.xlsm",
       "sheet_name": "Horizontal_table",
-      "index_col": [0, 1]
+      "index_col": [
+        0,
+        1
+      ]
     }
   },
   "parameters": {
     "valid_monthly_profile_param": {
       "type": "MonthlyProfile",
       "values": [
-        10.1, 20.1, 30.1, 40.1, 50.1, 60.1, 70.1, 80.1, 90.1, 100.1, 110.1, 120.1
+        10.1,
+        20.1,
+        30.1,
+        40.1,
+        50.1,
+        60.1,
+        70.1,
+        80.1,
+        90.1,
+        100.1,
+        110.1,
+        120.1
       ]
     },
     "invalid_size_monthly_profile_param": {
@@ -83,15 +100,32 @@
     "invalid_type_monthly_profile_param": {
       "type": "MonthlyProfile",
       "values": [
-        10.1, "s", 30.1, 40.1, 50.1, 60.1, 70.1, 80.1, 90.1, 100.1, 110.1, 120.1
+        10.1,
+        "s",
+        30.1,
+        40.1,
+        50.1,
+        60.1,
+        70.1,
+        80.1,
+        90.1,
+        100.1,
+        110.1,
+        120.1
       ]
     },
     "monthly_profile_param_url": {
       "type": "MonthlyProfile",
       "url": "files/monthly_profile_vba.xlsm",
       "sheet_name": "Horizontal_table",
-      "index_col": [0, 1],
-      "index": ["A", "C"]
+      "index_col": [
+        0,
+        1
+      ],
+      "index": [
+        "A",
+        "C"
+      ]
     },
     "monthly_profile_param_url_h5": {
       "type": "MonthlyProfile",
@@ -103,11 +137,16 @@
     "monthly_profile_param_table": {
       "type": "MonthlyProfile",
       "table": "profile_table",
-      "index": ["A", "C"]
+      "index": [
+        "A",
+        "C"
+      ]
     }
   },
-  "pywr_editor_schematic_size": [
-    1900,
-    1450
-  ]
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ]
+  }
 }

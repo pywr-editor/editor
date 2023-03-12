@@ -42,7 +42,7 @@ class TestModelConfig:
         is provided.
         """
         model = self.model()
-        assert model.json["metadata"]["minimum_version"] == "0.1"
+        assert model.json["metadata"]["minimum_version"] == "1.19.0"
         assert model.json["metadata"]["title"] == "New model"
         assert "Model created on" in model.json["metadata"]["description"]
 
@@ -82,7 +82,7 @@ class TestModelConfig:
         model = self.model("model_2.json")
         assert (
             model.schematic_size == Constants.DEFAULT_SCHEMATIC_SIZE.value
-            and model.json[Constants.SCHEMATIC_SIZE_KEY.value]
+            and model.editor_config[Constants.SCHEMATIC_SIZE_KEY.value]
             == Constants.DEFAULT_SCHEMATIC_SIZE.value
         )
 

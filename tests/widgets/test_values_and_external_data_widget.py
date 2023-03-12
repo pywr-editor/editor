@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 from PySide6.QtCore import Qt, QTimer
-from PySide6.QtWidgets import QPushButton, QWidget
+from PySide6.QtWidgets import QMainWindow, QPushButton, QWidget
 
 from pywr_editor.form import (
     ColumnWidget,
@@ -20,7 +20,6 @@ from pywr_editor.form import (
 )
 from pywr_editor.model import ModelConfig, ParameterConfig
 from pywr_editor.widgets import ComboBox, PushButton
-from tests.DummyMainWindow import MainWindow
 from tests.utils import check_msg, resolve_model_path
 
 
@@ -95,6 +94,13 @@ class TestDialogParameterValuesAndExternalDataWidget:
                 "external",
                 {"url": "file.csv"},
             ],
+            # multiple variables but with no values
+            [
+                None,
+                {"multiple_variables": True, "variable_names": ["x", "y"]},
+                "values",
+                [[], []],
+            ],
         ],
     )
     def test_valid(
@@ -107,7 +113,7 @@ class TestDialogParameterValuesAndExternalDataWidget:
         form_field: FormField = widget.form_field
 
         # register app to test field visibility
-        app = MainWindow("")
+        app = QMainWindow()
         app.setCentralWidget(widget)
         qtbot.addWidget(app)
         app.show()
@@ -158,9 +164,16 @@ class TestDialogParameterValuesAndExternalDataWidget:
         widget.reset()
         assert widget.line_edit.text() == "None"
         assert widget.external_data_dict is None
-        if field_args and "multiple_variables" in field_args:
-            assert widget.model.values == [[] for _ in range(0, len(value))]
+        if (
+            field_args
+            and "multiple_variables" in field_args
+            and combo_box_key == "values"
+        ):
+            assert widget.model.values == [
+                [] for _ in range(0, len(field_args["variable_names"]))
+            ]
         else:
+            # TableView with url is empty and does not have the variables
             assert widget.model.values == [[]]
         # default choice
         assert widget.combo_box.currentText() == widget.labels_map["values"]
@@ -279,7 +292,7 @@ class TestDialogParameterValuesAndExternalDataWidget:
         form_field: FormField = widget.form_field
 
         # register app to test field visibility
-        app = MainWindow("")
+        app = QMainWindow()
         app.setCentralWidget(widget)
         qtbot.addWidget(app)
         app.show()

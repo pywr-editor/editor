@@ -8,7 +8,11 @@
     "maintainer": "Stefano Simoncelli",
     "model_version": "2.1"
   },
-  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
   "includes": [
     "files/custom_parameter.py",
     "files/custom_node.py",
@@ -18,11 +22,17 @@
     "model_2.json"
   ],
   "scenarios": [
-    {"name": "scenario A", "size": 10},
+    {
+      "name": "scenario A",
+      "size": 10
+    },
     {
       "name": "scenario B",
       "size": 2,
-      "ensemble_names": ["First", "Second"]
+      "ensemble_names": [
+        "First",
+        "Second"
+      ]
     }
   ],
   "nodes": [
@@ -31,15 +41,30 @@
       "type": "Storage",
       "max_volume": 35,
       "initial_volume": 35,
-      "position": {"editor_position": [200, 500]}
+      "position": {
+        "editor_position": [
+          200,
+          500
+        ]
+      }
     },
     {
       "name": "Link",
       "type": "Link",
-      "position": {"editor_position": [1000, 300]}
+      "position": {
+        "editor_position": [
+          1000,
+          300
+        ]
+      }
     }
   ],
-  "edges": [["Reservoir", "Link"]],
+  "edges": [
+    [
+      "Reservoir",
+      "Link"
+    ]
+  ],
   "parameters": {
     "param1": {"type": "constant", "value": 4},
     "param2": {"type": "constant", "value": 5},
@@ -57,5 +82,47 @@
       "node": "Reservoir"
     }
   },
-  "pywr_editor_schematic_size": [1900, 1450]
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ],
+    "shapes": [
+      {
+        "id": "c60bfe",
+        "text": "This is a label",
+        "color": [
+          255,
+          170,
+          0
+        ],
+        "type": "text",
+        "x": 410.1829,
+        "y": 124.644
+      },
+      {
+        "id": "466eaX",
+        "width": 300,
+        "height": 300,
+        "type": "rectangle",
+        "border_color": [
+          255,
+          170,
+          127
+        ],
+        "border_size": 4,
+        "x": 800,
+        "y": 800
+      },
+      {
+        "id": "e3Ad60e",
+        "type": "arrow",
+        "length": 210,
+        "border_size": 3,
+        "angle": 300.0,
+        "x": 50.0,
+        "y": 50.0
+      }
+    ]
+  }
 }

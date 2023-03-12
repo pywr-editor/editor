@@ -8,15 +8,26 @@
     "maintainer": "Stefano Simoncelli",
     "model_version": "2.1"
   },
-  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
-  "includes": ["files/custom_parameter.py"],
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
+  "includes": [
+    "files/custom_parameter.py"
+  ],
   "nodes": [
     {
       "name": "Reservoir",
       "type": "Storage",
       "max_volume": 35,
       "initial_volume": 35,
-      "position": {"editor_position": [200, 500]}
+      "position": {
+        "editor_position": [
+          200,
+          500
+        ]
+      }
     }
   ],
   "edges": [],
@@ -24,18 +35,42 @@
     "valid_no_targets": {
       "type": "FlowDurationCurveDeviationRecorder",
       "node": "Reservoir",
-      "percentiles": [30, 40, 50, 80, 95]
+      "percentiles": [
+        30,
+        40,
+        50,
+        80,
+        95
+      ]
     },
     "valid_with_one_target": {
       "type": "FlowDurationCurveDeviationRecorder",
       "node": "Reservoir",
-      "percentiles": [30, 40, 50, 80, 95],
-      "lower_target_fdc": [13, 56, 90, 101, 200]
+      "percentiles": [
+        30,
+        40,
+        50,
+        80,
+        95
+      ],
+      "lower_target_fdc": [
+        13,
+        56,
+        90,
+        101,
+        200
+      ]
     },
     "valid_with_external_target": {
       "type": "FlowDurationCurveDeviationRecorder",
       "node": "Reservoir",
-      "percentiles": [30, 40, 50, 80, 95],
+      "percentiles": [
+        30,
+        40,
+        50,
+        80,
+        95
+      ],
       "lower_target_fdc": {
         "url": "files/table.csv",
         "index": 0
@@ -44,9 +79,24 @@
     "invalid_target_size": {
       "type": "FlowDurationCurveDeviationRecorder",
       "node": "Reservoir",
-      "percentiles": [30, 40, 50, 80, 95],
-      "lower_target_fdc": [13, 101, 200]
+      "percentiles": [
+        30,
+        40,
+        50,
+        80,
+        95
+      ],
+      "lower_target_fdc": [
+        13,
+        101,
+        200
+      ]
     }
   },
-  "pywr_editor_schematic_size": [1900, 1450]
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ]
+  }
 }

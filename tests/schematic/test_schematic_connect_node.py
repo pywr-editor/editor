@@ -4,7 +4,7 @@ import pytest
 from PySide6.QtCore import QPoint, Qt
 
 from pywr_editor import MainWindow
-from pywr_editor.schematic import Edge, Schematic, SchematicItem
+from pywr_editor.schematic import Edge, Schematic, SchematicNode
 from pywr_editor.schematic.commands.connect_node_command import (
     ConnectNodeCommand,
 )
@@ -24,7 +24,7 @@ class TestSchematicConnectNodes:
         window = MainWindow(self.model_file)
         window.hide()
         schematic = window.schematic
-        node_op_panel = window.toolbar.tabs["Nodes"].panels["Operations"]
+        node_op_panel = window.toolbar.tabs["Schematic"].panels["Operations"]
 
         return window, schematic, node_op_panel
 
@@ -34,7 +34,7 @@ class TestSchematicConnectNodes:
         """
         window, schematic, node_op_panel = init_window
         model_config = schematic.model_config
-        panel = schematic.app.toolbar.tabs["Nodes"].panels["Undo"]
+        panel = schematic.app.toolbar.tabs["Schematic"].panels["Undo"]
         undo_button = panel.buttons["Undo"]
         redo_button = panel.buttons["Redo"]
 
@@ -50,7 +50,7 @@ class TestSchematicConnectNodes:
         )
         found = False
         for node in schematic.items():
-            if isinstance(node, SchematicItem) and node.name == "Link3":
+            if isinstance(node, SchematicNode) and node.name == "Link3":
                 found = True
                 assert node.isSelected() is True
         assert found is True
@@ -101,8 +101,8 @@ class TestSchematicConnectNodes:
         )
 
         # check internal Edges in schematic nodes
-        assert len(schematic.schematic_items["Link3"].edges) == 1
-        assert len(schematic.schematic_items["Reservoir"].edges) == 1
+        assert len(schematic.node_items["Link3"].edges) == 1
+        assert len(schematic.node_items["Reservoir"].edges) == 1
 
         # check edge item in schematic
         all_schematic_edges = [
@@ -126,8 +126,8 @@ class TestSchematicConnectNodes:
         ]
 
         # check internal Edges in schematic nodes
-        assert len(schematic.schematic_items["Link3"].edges) == 2
-        assert len(schematic.schematic_items["Reservoir"].edges) == 2
+        assert len(schematic.node_items["Link3"].edges) == 2
+        assert len(schematic.node_items["Reservoir"].edges) == 2
 
         # check edge item in schematic
         all_schematic_edges = [

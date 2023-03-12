@@ -70,7 +70,7 @@ class ConnectNodeCommand(QUndoCommand):
                 self.logger.debug(f"Restored edge: {self.edge_config}")
             else:
                 # When a node is renamed after the edge is deleted, its edge cannot
-                # be restored. This also ensures consistency with all commands
+                # be restored
                 self.logger.debug(
                     f"Operation for '{self.source_node.name}' and "
                     + f"'{self.target_node.name}' is now obsolete"
@@ -83,8 +83,11 @@ class ConnectNodeCommand(QUndoCommand):
 
         self.schematic.scene.addItem(
             Edge(
-                source=self.schematic.schematic_items[self.source_node.name],
-                target=self.schematic.schematic_items[self.target_node.name],
+                source=self.schematic.node_items[self.source_node.name],
+                target=self.schematic.node_items[self.target_node.name],
+                edge_color_name=self.model_config.edges.get_edge_color(
+                    self.source_node.name
+                ),
                 hide_arrow=self.app.editor_settings.are_edge_arrows_hidden,
             )
         )
@@ -116,13 +119,13 @@ class ConnectNodeCommand(QUndoCommand):
         self.logger.debug(f"Deleted edge: {self.edge_config}")
 
         # remove edge from the edges list for the source node
-        node_item = self.schematic.schematic_items[self.source_node.name]
+        node_item = self.schematic.node_items[self.source_node.name]
         edge_to_delete = node_item.delete_edge(
             node_name=self.target_node.name, edge_type="target"
         )
 
         # remove edge from the edges list for the target node
-        node_item = self.schematic.schematic_items[self.target_node.name]
+        node_item = self.schematic.node_items[self.target_node.name]
         node_item.delete_edge(
             node_name=self.source_node.name, edge_type="source"
         )

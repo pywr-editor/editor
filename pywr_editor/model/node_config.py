@@ -1,4 +1,5 @@
 from copy import deepcopy as dp
+from typing import Sequence
 
 from pywr_editor.model import Constants, PywrNodesData
 
@@ -175,9 +176,7 @@ class NodeConfig:
         return " ".join(prop_list)
 
     @staticmethod
-    def create(
-        name: str, node_type: str, position: list[float] | tuple[float]
-    ) -> dict:
+    def create(name: str, node_type: str, position: Sequence[float]) -> dict:
         """
         Creates a new dictionary with the node properties.
         :param name: The node name.

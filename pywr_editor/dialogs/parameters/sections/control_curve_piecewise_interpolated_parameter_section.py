@@ -110,7 +110,6 @@ class ControlCurvePiecewiseInterpolatedParameterSection(FormSection):
         name: str,
         label: str,
         value: list[str | dict | float | int],
-        field_name: str,
     ) -> FormValidation:
         """
         Checks that the number of values equals the number of control

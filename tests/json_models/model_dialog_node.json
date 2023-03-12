@@ -1,72 +1,105 @@
 {
-    "metadata": {
-        "title": "Reservoir 1",
-        "description": "A model with a reservoir.",
-        "minimum_version": "0.1",
-        "author": "Stefano Simoncelli",
-        "email": "stefano.simoncelli@domain.com",
-        "maintainer": "Stefano Simoncelli",
-        "model_version": "2.1"
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
+  "includes": [
+    "files/custom_parameter.py",
+    "files/custom_node.py"
+  ],
+  "nodes": [
+    {
+      "name": "only_type",
+      "type": "Input",
+      "max_flow": "param1"
     },
-    "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
-    "includes": ["files/custom_parameter.py", "files/custom_node.py"],
-    "nodes": [
-        {"name": "only_type", "type": "Input", "max_flow": "param1"},
-        {
-            "name": "node_with_edge_color",
-            "type": "Input",
-            "position": {"edge_color": "sky"}
-        },
-        {
-            "name": "node_with_custom_style",
-            "type": "Input",
-            "position": {"node_style": "works"}
-        },
-        {
-            "name": "node_with_wrong_custom_style",
-            "type": "Input",
-            "position": {"node_style": "wtw"}
-        },
-        {
-            "name": "node_with_wrong_edge_color",
-            "type": "Input",
-            "position": {"edge_color": "hhh"}
-        },
-        {
-            "name": "aggregated_node",
-            "type": "AggregatedNode",
-            "nodes": ["node_with_wrong_custom_style", "node_with_wrong_edge_color"]
-        },
-        {
-            "name": "leaky_pipe",
-            "type": "LeakyPipe"
-        },
-        {
-            "name": "custom_node",
-            "type": "MyCustomNode",
-            "value": 5,
-            "other_node": "leaky_pipe"
-        }
+    {
+      "name": "node_with_edge_color",
+      "type": "Input",
+      "position": {
+        "edge_color": "sky"
+      }
+    },
+    {
+      "name": "node_with_custom_style",
+      "type": "Input",
+      "position": {
+        "node_style": "works"
+      }
+    },
+    {
+      "name": "node_with_wrong_custom_style",
+      "type": "Input",
+      "position": {
+        "node_style": "wtw"
+      }
+    },
+    {
+      "name": "node_with_wrong_edge_color",
+      "type": "Input",
+      "position": {
+        "edge_color": "hhh"
+      }
+    },
+    {
+      "name": "aggregated_node",
+      "type": "AggregatedNode",
+      "nodes": [
+        "node_with_wrong_custom_style",
+        "node_with_wrong_edge_color"
+      ]
+    },
+    {
+      "name": "leaky_pipe",
+      "type": "LeakyPipe"
+    },
+    {
+      "name": "custom_node",
+      "type": "MyCustomNode",
+      "value": 5,
+      "other_node": "leaky_pipe"
+    }
+  ],
+  "edges": [
+    [
+      "node_with_wrong_edge_color",
+      "node_with_wrong_custom_style"
     ],
-    "edges": [
-        ["node_with_wrong_edge_color", "node_with_wrong_custom_style"],
-        ["only_type", "node_with_custom_style"]
-    ],
-    "parameters": {
-        "param1": {
-            "type": "constant",
-            "value": 4,
-            "scale": 8,
-            "offset": -1,
-            "comment": "Last updated on 12/12/2021"
-        }
-    },
-    "tables": {
-        "Table 1": {
-            "url": "file1.csv",
-            "index_col": "Demand centre",
-            "index": "node_with_custom_style"
-        }
-    },
-    "pywr_editor_schematic_size": [1900, 1450]
+    [
+      "only_type",
+      "node_with_custom_style"
+    ]
+  ],
+  "parameters": {
+    "param1": {
+      "type": "constant",
+      "value": 4,
+      "scale": 8,
+      "offset": -1,
+      "comment": "Last updated on 12/12/2021"
+    }
+  },
+  "tables": {
+    "Table 1": {
+      "url": "file1.csv",
+      "index_col": "Demand centre",
+      "index": "node_with_custom_style"
+    }
+  },
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ]
+  }
 }

@@ -3,10 +3,11 @@ from typing import TYPE_CHECKING, Literal
 
 import PySide6
 from PySide6.QtCore import QMimeData, QPointF, QSize, Slot
-from PySide6.QtGui import QDrag, QPainter, Qt
+from PySide6.QtGui import QDrag, QFont, QPainter, Qt
 from PySide6.QtWidgets import (
     QFrame,
     QGraphicsScene,
+    QGraphicsTextItem,
     QGraphicsView,
     QHBoxLayout,
     QSizePolicy,
@@ -14,25 +15,28 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+import pywr_editor
+import pywr_editor.node_shapes
 from pywr_editor.style import Color, stylesheet_dict_to_str
 from pywr_editor.widgets import PushIconButton
 
-from .library_node import LibraryNode
+from .library_item import LibraryItem
+from .library_shapes import ArrowShape, BaseShape, RectangleShape, TextShape
 
 if TYPE_CHECKING:
     from pywr_editor import MainWindow
 
 
-class NodesLibrary(QWidget):
+class SchematicItemsLibrary(QWidget):
     def __init__(self, parent: "MainWindow"):
         """
-        Initialises the node's library.
+        Initialise the items' library.
         :param parent: The parent widget.
         """
         super().__init__()
 
         self.window = parent
-        self.panel = NodesLibraryPanel(self)
+        self.panel = LibraryPanel(self)
 
         # Scroll buttons
         self.scroll_up = PushIconButton(
@@ -67,7 +71,7 @@ class NodesLibrary(QWidget):
         :param direction: The direction of scroll ("up" or "down").
         :return: None
         """
-        delta = 30 if direction == "down" else -30
+        delta = 26 if direction == "down" else -26
         self.panel.verticalScrollBar().setValue(
             self.panel.verticalScrollBar().value() + delta
         )
@@ -123,10 +127,17 @@ class NodesLibrary(QWidget):
         return stylesheet_dict_to_str(style_dict)
 
 
-class NodesLibraryPanel(QGraphicsView):
+class LibraryPanel(QGraphicsView):
     view_scale = 0.75
+    """ The default scaling factor. """
+    shapes = {
+        "Text box": TextShape,
+        "Rectangle": RectangleShape,
+        "Arrow": ArrowShape,
+    }
+    """ Dictionary with the shape labels and classes. """
 
-    def __init__(self, parent: NodesLibrary):
+    def __init__(self, parent: SchematicItemsLibrary):
         """
         :return: None
         """
@@ -146,12 +157,12 @@ class NodesLibraryPanel(QGraphicsView):
 
         # behaviour
         self.setFixedHeight(90)
-        self.setMinimumWidth(700)
+        self.setMinimumWidth(550)
         self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setToolTip(
-            "Add a new node by dragging and dropping it onto the schematic"
+            "Add a new item by dragging and dropping it onto the schematic"
         )
 
         # appearance
@@ -167,7 +178,7 @@ class NodesLibraryPanel(QGraphicsView):
         # draw the scene
         self.scene = QGraphicsScene(parent=self)
         self.setScene(self.scene)
-        self.add_nodes()
+        self.add_items()
         self.init = True
 
     def update_available_nodes(self) -> None:
@@ -185,21 +196,48 @@ class NodesLibraryPanel(QGraphicsView):
                 item["name"]: item["name"]
                 for item in self.window.model_config.includes.get_custom_nodes().values()  # noqa: E501
             },
-            "CustomNode": LibraryNode.not_import_custom_node_name,
+            "CustomNode": LibraryItem.not_import_custom_node_name,
         }
 
-    def add_nodes(self) -> None:
+    def draw_section_title(self, text: str, position: list[float]) -> None:
         """
-        Adds the node to the scene widget.
+        Draw a section title.
+        :param text: The text.
+        :param position: The title position.
         :return: None
         """
+        title = QGraphicsTextItem(text)
+        font = QFont()
+        font.setPixelSize(16)
+        font.setBold(True)
+        title.setFont(font)
+        title.setPos(QPointF(*position))
+        title.setDefaultTextColor(Color("gray", 700).qcolor)
+        self.scene.addItem(title)
+
+    def add_items(self) -> None:
+        """
+        Adds the nodes and the shapes to the scene widget.
+        :return: None
+        """
+        self.draw_section_title("Nodes", [-5, -15])
+
         # position nodes on the dummy schematic
         x0 = 10
-        y = 0
+        y = 35
         x = x0
         for ni, (node_type, node_name) in enumerate(self.node_dict.items()):
-            node_obj = LibraryNode(
-                view=self, node_class_type=node_type, node_name=node_name
+            # node icon
+            try:
+                node_class_type = getattr(pywr_editor.node_shapes, node_type)
+            except AttributeError:
+                # node name is not a built-in component
+                node_class_type = getattr(pywr_editor.node_shapes, "CustomNode")
+            node_obj = LibraryItem(
+                view=self,
+                item_class_type=node_class_type,
+                name=node_name,
+                node_type=node_type,
             )
             self.scene.addItem(node_obj)
 
@@ -210,18 +248,32 @@ class NodesLibraryPanel(QGraphicsView):
                 y += 35
             node_obj.setPos(QPointF(x, y))
 
+        self.draw_section_title("Shapes", [-5, y + 25])
+        y += 35
+        # position shapes
+        for name, shape_type in self.shapes.items():
+            shape_obj = LibraryItem(
+                view=self, item_class_type=shape_type, name=name
+            )
+            self.scene.addItem(shape_obj)
+            x += 220
+            if x >= self.width() - 10:
+                x = x0
+                y += 35
+            shape_obj.setPos(QPointF(x, y))
+
         self.setSceneRect(-20, -20, self.width(), y + 35)
         if not self.init:
             self.scale(self.view_scale, self.view_scale)
 
     def reload(self) -> None:
         """
-        Updates the node library.
+        Updates the library.
         :return: None
         """
         self.scene.clear()
         self.update_available_nodes()
-        self.add_nodes()
+        self.add_items()
 
     def wheelEvent(self, event: PySide6.QtGui.QWheelEvent) -> None:
         """
@@ -230,7 +282,7 @@ class NodesLibraryPanel(QGraphicsView):
         :return: None
         """
         # make scroll smoother
-        delta = 2
+        delta = 4
         if event.angleDelta().y() > 0:
             scroll_delta = -delta
         else:
@@ -247,18 +299,24 @@ class NodesLibraryPanel(QGraphicsView):
         :param event: The event being triggered.
         :return: None
         """
-        nodes = self.items(event.pos())
-        nodes = [node for node in nodes if isinstance(node, LibraryNode)]
-        if len(nodes) == 0:
+        items = self.items(event.pos())
+        items = [i for i in items if isinstance(i, LibraryItem)]
+        if len(items) == 0:
             return
-        node = nodes[0]
+
+        lib_item = items[0]
         mime_data = QMimeData()
-        mime_data.setText(node.node_class_type)
+        # set the shape type
+        if isinstance(lib_item.item, BaseShape):
+            mime_data.setText(f"Shape.{lib_item.item.__class__.__name__}")
+        # set the node class name
+        else:
+            mime_data.setText(lib_item.node_type)
 
         drag = QDrag(self)
         drag.setMimeData(mime_data)
 
-        drag.setPixmap(node.pixmap_from_item())
+        drag.setPixmap(lib_item.pixmap_from_item())
         drag.exec()
 
     def dragMoveEvent(self, event: PySide6.QtGui.QDragMoveEvent) -> None:
@@ -278,10 +336,12 @@ class NodesLibraryPanel(QGraphicsView):
         """
         return stylesheet_dict_to_str(
             {
-                "NodesLibraryPanel": {
+                "LibraryPanel": {
+                    # explicitly set background to properly set border radius
+                    "background-color": "palette(base)",
                     "border": f"1px solid {Color('gray', 300).hex}",
                     "border-radius": "4px",
-                    "margin-top": "6px",
+                    "margin-top": "5px",
                 },
             },
         )

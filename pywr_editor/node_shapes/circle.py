@@ -10,13 +10,13 @@ from .base_node import BaseNode
 from .svg_icon import IconProps, SvgIcon
 
 if TYPE_CHECKING:
-    from pywr_editor.schematic import SchematicItem
+    from pywr_editor.schematic import SchematicNode
 
 
 class Circle(BaseNode):
     def __init__(
         self,
-        parent: "SchematicItem",
+        parent: "SchematicNode",
         fill: Color,
         outline: Color,
         label: Color | None = None,

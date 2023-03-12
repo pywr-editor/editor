@@ -3,6 +3,8 @@ from datetime import datetime
 
 from PySide6.QtCore import QObject, Signal
 
+from pywr_editor.utils import Logging
+
 
 @dataclass
 class Change:
@@ -27,6 +29,7 @@ class ChangesTracker(QObject):
         super().__init__()
         self.changed = False
         self.change_log = []
+        self.logger = Logging().logger(self.__class__.__name__)
 
     def add(self, message: str) -> None:
         """
@@ -38,6 +41,7 @@ class ChangesTracker(QObject):
         self.change_log.append(
             Change(timestamp=datetime.now().timestamp(), message=message)
         )
+        self.logger.debug(message)
         self.changed = True
         self.change_applied.emit()
 

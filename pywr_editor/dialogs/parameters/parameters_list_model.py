@@ -56,7 +56,7 @@ class ParametersListModel(QAbstractTableModel):
                     pywr_param_name = self.params_data.name(parameter_obj.key)
                     if pywr_param_name is not None:
                         return (
-                            "{parameter_name} "
+                            f"{parameter_name} "
                             + f"({self.params_data.name(parameter_obj.key)})"
                         )
                     else:

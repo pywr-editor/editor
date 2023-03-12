@@ -8,22 +8,55 @@
     "maintainer": "Stefano Simoncelli",
     "model_version": "2.1"
   },
-  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
   "nodes": [
     {
       "name": "Reservoir",
       "type": "Storage",
       "max_volume": 35,
       "initial_volume": 35,
-      "position": {"editor_position": [200, 500]}
+      "position": {
+        "editor_position": [
+          200,
+          500
+        ]
+      }
     },
     {
       "name": "Link",
       "type": "Link",
-      "position": {"editor_position": [1000, 300]}
+      "position": {
+        "editor_position": [
+          1000,
+          300
+        ]
+      }
     }
   ],
-  "edges": [["Reservoir", "Link"]],
-  "parameters": {"polynomial": {"type": "polynomial1d", "coefficients": [123, 67, 4e-18]}},
-  "pywr_editor_schematic_size": [1900, 1450]
+  "edges": [
+    [
+      "Reservoir",
+      "Link"
+    ]
+  ],
+  "parameters": {
+    "polynomial": {
+      "type": "polynomial1d",
+      "coefficients": [
+        123,
+        67,
+        4e-18
+      ]
+    }
+  },
+  "pywr_editor": {
+    "schematic_size": [
+      1900,
+      1450
+    ]
+  }
 }

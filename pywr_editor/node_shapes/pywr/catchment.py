@@ -11,7 +11,7 @@ from ..svg_icon import IconProps, SvgIcon
 from .pywr_node import PywrNode
 
 if TYPE_CHECKING:
-    from pywr_editor.schematic import SchematicItem
+    from pywr_editor.schematic import SchematicNode
 
 
 class Catchment(BaseNode, PywrNode):
@@ -19,7 +19,7 @@ class Catchment(BaseNode, PywrNode):
     # with other nodes. The shape is scaled below by 20%.
     size: list[int] = [22, 22]
 
-    def __init__(self, parent: "SchematicItem"):
+    def __init__(self, parent: "SchematicNode"):
         """
         Initialises the class for a node output.
         :param parent The schematic item.

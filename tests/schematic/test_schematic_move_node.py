@@ -5,7 +5,7 @@ from PySide6.QtCore import QPoint, Qt
 
 from pywr_editor import MainWindow
 from pywr_editor.schematic import Schematic
-from pywr_editor.schematic.commands.move_node_command import MoveNodeCommand
+from pywr_editor.schematic.commands.move_item_command import MoveItemCommand
 from pywr_editor.toolbar.tab_panel import TabPanel
 from tests.utils import resolve_model_path
 
@@ -22,7 +22,7 @@ class TestSchematicMoveNodes:
         window = MainWindow(self.model_file)
         window.hide()
         schematic = window.schematic
-        node_op_panel = window.toolbar.tabs["Nodes"].panels["Operations"]
+        node_op_panel = window.toolbar.tabs["Schematic"].panels["Operations"]
 
         return window, schematic, node_op_panel
 
@@ -32,13 +32,13 @@ class TestSchematicMoveNodes:
         """
         window, schematic, node_op_panel = init_window
         model_config = schematic.model_config
-        panel = schematic.app.toolbar.tabs["Nodes"].panels["Undo"]
+        panel = schematic.app.toolbar.tabs["Schematic"].panels["Undo"]
         undo_button = panel.buttons["Undo"]
         redo_button = panel.buttons["Redo"]
         node_name = "Link3"
 
         # 1. Move Link3
-        node_item = schematic.schematic_items[node_name]
+        node_item = schematic.node_items[node_name]
         initial_pos = node_item.position
         assert node_item.prev_position == initial_pos
         new_pos = QPoint(150, 100)
@@ -46,9 +46,9 @@ class TestSchematicMoveNodes:
         # mock drag and drop
         node_item.setPos(new_pos)
         node_item.setSelected(True)
-        command = MoveNodeCommand(
+        command = MoveItemCommand(
             schematic=schematic,
-            selected_nodes=schematic.scene.selectedItems(),
+            selected_items=schematic.scene.selectedItems(),
         )
         window.undo_stack.push(command)
 
@@ -63,7 +63,7 @@ class TestSchematicMoveNodes:
         )
 
         # 2. Check init of undo command
-        undo_command: MoveNodeCommand = window.undo_stack.command(0)
+        undo_command: MoveItemCommand = window.undo_stack.command(0)
         assert undo_button.isEnabled() is True
         assert redo_button.isEnabled() is False
         assert undo_command.prev_positions == [initial_pos]
@@ -74,7 +74,7 @@ class TestSchematicMoveNodes:
         assert undo_button.isEnabled() is False
         assert redo_button.isEnabled() is True
 
-        node_item = schematic.schematic_items[node_name]
+        node_item = schematic.node_items[node_name]
         assert node_item.scenePos().toTuple() == initial_pos
         assert node_item.position == initial_pos
         assert (
@@ -89,7 +89,7 @@ class TestSchematicMoveNodes:
         assert undo_button.isEnabled() is True
         assert redo_button.isEnabled() is False
 
-        node_item = schematic.schematic_items[node_name]
+        node_item = schematic.node_items[node_name]
         assert node_item.scenePos() == new_pos
         assert node_item.position == new_pos.toTuple()
         assert (

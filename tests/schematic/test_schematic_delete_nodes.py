@@ -5,18 +5,20 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QPushButton
 
 from pywr_editor import MainWindow
-from pywr_editor.model import ModelConfig
+from pywr_editor.dialogs.node.node_dialog import NodeDialog
+from pywr_editor.form import ParameterLineEditWidget
+from pywr_editor.model import ModelConfig, ParameterConfig
 from pywr_editor.schematic import (
-    DeleteNodeCommand,
+    DeleteItemCommand,
     Edge,
     Schematic,
-    SchematicItem,
+    SchematicNode,
 )
 from pywr_editor.toolbar.tab_panel import TabPanel
 from tests.utils import resolve_model_path
 
 
-class TestSchematicNodes:
+class TestDeleteSchematicNodes:
     model_file = resolve_model_path("model_delete_nodes.json")
 
     @pytest.fixture
@@ -28,7 +30,7 @@ class TestSchematicNodes:
         window = MainWindow(self.model_file)
         window.hide()
         schematic = window.schematic
-        node_op_panel = window.toolbar.tabs["Nodes"].panels["Operations"]
+        node_op_panel = window.toolbar.tabs["Schematic"].panels["Operations"]
 
         return window, schematic, node_op_panel
 
@@ -52,13 +54,13 @@ class TestSchematicNodes:
         assert model_config.nodes.find_node_index_by_name(node_name) is None
 
         # node is removed from the items list
-        assert node_name not in schematic.schematic_items.keys()
+        assert node_name not in schematic.node_items.keys()
 
         # node is removed from the schematic as graphical item
         node_names = [
             node.name
             for node in schematic.items()
-            if isinstance(node, SchematicItem)
+            if isinstance(node, SchematicNode)
         ]
         assert node_name not in node_names
 
@@ -91,7 +93,7 @@ class TestSchematicNodes:
     @staticmethod
     def undo_and_check(
         qtbot,
-        undo_command: DeleteNodeCommand,
+        undo_command: DeleteItemCommand,
         original_node_config: dict,
         original_edges: list[str | int],
         undo_button: QPushButton,
@@ -128,11 +130,11 @@ class TestSchematicNodes:
             model_config.nodes.get_node_config_from_name(node_name)
             == original_node_config
         )
-        assert node_name in schematic.schematic_items.keys()
+        assert node_name in schematic.node_items.keys()
         node_names = [
             node.name
             for node in schematic.items()
-            if isinstance(node, SchematicItem)
+            if isinstance(node, SchematicNode)
         ]
         assert node_name in node_names
 
@@ -161,13 +163,13 @@ class TestSchematicNodes:
         # check node internal connections
         assert model_config.edges.get_sources(node_name) == [
             item.name
-            for item in schematic.schematic_items[node_name].connected_nodes[
+            for item in schematic.node_items[node_name].connected_nodes[
                 "source_nodes"
             ]
         ]
         assert model_config.edges.get_targets(node_name) == [
             item.name
-            for item in schematic.schematic_items[node_name].connected_nodes[
+            for item in schematic.node_items[node_name].connected_nodes[
                 "target_nodes"
             ]
         ]
@@ -187,13 +189,13 @@ class TestSchematicNodes:
             edge for edge in model_config.edges.get_all() if node_name in edge
         ]
 
-        panel = schematic.app.toolbar.tabs["Nodes"].panels["Undo"]
+        panel = schematic.app.toolbar.tabs["Schematic"].panels["Undo"]
         undo_button = panel.buttons["Undo"]
         redo_button = panel.buttons["Redo"]
 
-        node = schematic.schematic_items[node_name]
+        node = schematic.node_items[node_name]
         removed_edges = node.edges
-        node.on_delete_node()
+        node.on_delete_item()
 
         assert undo_button.isEnabled() is True
         assert redo_button.isEnabled() is False
@@ -209,7 +211,7 @@ class TestSchematicNodes:
 
         # 2. Test undo operation
         assert window.undo_stack.canUndo() is True
-        undo_command: DeleteNodeCommand = window.undo_stack.command(0)
+        undo_command: DeleteItemCommand = window.undo_stack.command(0)
         self.undo_and_check(
             qtbot=qtbot,
             undo_command=undo_command,
@@ -221,22 +223,26 @@ class TestSchematicNodes:
             schematic=schematic,
         )
 
-        # 3. Rename node to test the new node configuration is used when the node
-        # is restored
+        # 3. Change the node configuration and test that the new settings are restored
+        node.on_edit_node()
+        # noinspection PyTypeChecker
+        dialog: NodeDialog = window.findChild(NodeDialog)
+        dialog_form = dialog.form
+
         new_name = "New node name"
-        # mock node renaming in NodeDialogForm
-        model_config.nodes.rename(node_name, new_name)
-        schematic.reload()
-        for oi, or_edge in enumerate(original_edges):
-            try:
-                i = or_edge.index(node_name)
-                original_edges[oi][i] = or_edge[i].replace(node_name, new_name)
-            except IndexError:
-                continue
+        dialog_form.find_field_by_name("name").widget.setText(new_name)
+        cost_widget: ParameterLineEditWidget = dialog_form.find_field_by_name(
+            "cost"
+        ).widget
+        cost_widget.component_obj = ParameterConfig(
+            {"type": "constant", "value": 9000}
+        )
+        qtbot.mouseClick(dialog_form.save_button, Qt.MouseButton.LeftButton)
+        dialog.close()
 
         # 4. Test redo operation
         # get new schematic item instance
-        node = schematic.schematic_items[new_name]
+        node = schematic.node_items[new_name]
         removed_edges = node.edges
 
         qtbot.mouseClick(redo_button, Qt.MouseButton.LeftButton)
@@ -251,7 +257,16 @@ class TestSchematicNodes:
         )
 
         # 5. Restore node with new configuration
-        assert original_node_config["name"] == new_name
+        original_node_config["name"] = new_name
+        original_node_config["cost"] = 9000
+
+        for oi, or_edge in enumerate(original_edges):
+            try:
+                i = or_edge.index(node_name)
+                original_edges[oi][i] = or_edge[i].replace(node_name, new_name)
+            except IndexError:
+                continue
+
         self.undo_and_check(
             qtbot=qtbot,
             undo_command=undo_command,
@@ -272,13 +287,13 @@ class TestSchematicNodes:
         node_name = "Link2"
         window, schematic, node_op_panel = init_window
         model_config = schematic.model_config
-        node_item = schematic.schematic_items[node_name]
+        node_item = schematic.node_items[node_name]
         assert len(node_item.edges) == 3
 
-        panel = schematic.app.toolbar.tabs["Nodes"].panels["Undo"]
+        panel = schematic.app.toolbar.tabs["Schematic"].panels["Undo"]
         undo_button = panel.buttons["Undo"]
 
-        node_item.on_delete_node()
+        node_item.on_delete_item()
 
         # rename Link1 and undo
         model_config.nodes.rename("Link1", "New Link1")
@@ -289,7 +304,7 @@ class TestSchematicNodes:
         assert model_config.edges.find_edge("New Link1", node_name)[0] is None
 
         # edge item on schematic is not restored
-        node_item = schematic.schematic_items[node_name]
+        node_item = schematic.node_items[node_name]
         assert len(node_item.edges) == 2
 
         assert [n.name for n in node_item.connected_nodes["source_nodes"]] == [
@@ -320,12 +335,12 @@ class TestSchematicNodes:
 
         # 1. Select 3 nodes
         for node in nodes_to_delete:
-            schematic_item = schematic.schematic_items[node]
+            schematic_item = schematic.node_items[node]
             schematic_item.setSelected(True)
             deleted_schematic_edge_dict[node] = schematic_item.edges
 
         # delete them
-        panel = window.toolbar.tabs["Nodes"].panels["Operations"]
+        panel = window.toolbar.tabs["Schematic"].panels["Operations"]
         qtbot.mouseClick(panel.buttons["Delete"], Qt.MouseButton.LeftButton)
 
         assert model_config.has_changes is True
@@ -346,7 +361,7 @@ class TestSchematicNodes:
 
         # 3. Undo operation
         assert window.undo_stack.canUndo() is True
-        undo_command: DeleteNodeCommand = window.undo_stack.command(0)
+        undo_command: DeleteItemCommand = window.undo_stack.command(0)
         for ni, node_config in enumerate(undo_command.deleted_node_configs):
             assert (
                 node_config.props == original_node_config_dict[node_config.name]
@@ -361,7 +376,7 @@ class TestSchematicNodes:
         node_names = [
             node.name
             for node in schematic.items()
-            if isinstance(node, SchematicItem)
+            if isinstance(node, SchematicNode)
         ]
         all_schematic_edges = [
             [edge.source.name, edge.target.name]
@@ -373,7 +388,7 @@ class TestSchematicNodes:
                 model_config.nodes.find_node_index_by_name(node_name)
                 is not None
             )
-            assert node_name in schematic.schematic_items.keys()
+            assert node_name in schematic.node_items.keys()
             assert node_name in node_names
 
             # check edges in schematic
@@ -390,15 +405,15 @@ class TestSchematicNodes:
             all_restored_edges += [[node_name, name] for name in targets]
             assert sources == [
                 item.name
-                for item in schematic.schematic_items[
-                    node_name
-                ].connected_nodes["source_nodes"]
+                for item in schematic.node_items[node_name].connected_nodes[
+                    "source_nodes"
+                ]
             ]
             assert targets == [
                 item.name
-                for item in schematic.schematic_items[
-                    node_name
-                ].connected_nodes["target_nodes"]
+                for item in schematic.node_items[node_name].connected_nodes[
+                    "target_nodes"
+                ]
             ]
 
         # all edges are restored
@@ -407,7 +422,7 @@ class TestSchematicNodes:
         # 4. Test redo operation
         # get new schematic item instance
         for node_name in nodes_to_delete:
-            schematic_item = schematic.schematic_items[node_name]
+            schematic_item = schematic.node_items[node_name]
             deleted_schematic_edge_dict[node_name] = schematic_item.edges
 
         undo_command.redo()
