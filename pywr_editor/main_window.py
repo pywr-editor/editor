@@ -382,6 +382,18 @@ class MainWindow(QMainWindow):
         self.addAction(connect_node_action)
         self.app_actions.registry["connect-node-abort"] = connect_node_action
 
+        # register shortcut to delete schematic items
+        delete_item_action = QAction("Delete schematic item")
+        delete_item_action.setShortcut(QKeySequence.StandardKey.Delete)
+        # noinspection PyUnresolvedReferences
+        delete_item_action.triggered.connect(
+            lambda: self.schematic.on_delete_item(
+                self.schematic.scene.selectedItems()
+            )
+        )
+        self.schematic.addAction(delete_item_action)
+        self.app_actions.registry["delete-schematic-item"] = delete_item_action
+
     def register_schematic_actions(self) -> None:
         """
         Registers the action for the schematic tab.
@@ -515,7 +527,6 @@ class MainWindow(QMainWindow):
             )
         )
 
-    # <<<<<<< HEAD
     def register_model_run_actions(self) -> None:
         """
         Registers the action for the Run tab.
@@ -540,20 +551,6 @@ class MainWindow(QMainWindow):
                 is_disabled=True,
             )
         )
-
-    # =======
-    #         # register shortcut to delete schematic items
-    #         delete_item_action = QAction("Delete schematic item")
-    #         delete_item_action.setShortcut(QKeySequence.StandardKey.Delete)
-    #         # noinspection PyUnresolvedReferences
-    #         delete_item_action.triggered.connect(
-    #             lambda: self.schematic.on_delete_item(
-    #                 self.schematic.scene.selectedItems()
-    #             )
-    #         )
-    #         self.schematic.addAction(delete_item_action)
-    #         self.app_actions.registry["delete-schematic-item"] = delete_item_action
-    # >>>>>>> main
 
     def setup_toolbar(self) -> None:
         """
