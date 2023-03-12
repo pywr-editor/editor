@@ -85,6 +85,9 @@ class ConnectNodeCommand(QUndoCommand):
             Edge(
                 source=self.schematic.node_items[self.source_node.name],
                 target=self.schematic.node_items[self.target_node.name],
+                edge_color_name=self.model_config.edges.get_edge_color(
+                    self.source_node.name
+                ),
                 hide_arrow=self.app.editor_settings.are_edge_arrows_hidden,
             )
         )
