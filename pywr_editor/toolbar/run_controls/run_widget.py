@@ -44,7 +44,7 @@ class RunWidget(QWidget):
         self.app = parent
         self.logger = Logging().logger(self.__class__.__name__)
         self.model_config = parent.model_config
-        self.inspector_action = parent.actions.get("run-inspector")
+        self.inspector_action = parent.app_actions.get("run-inspector")
         self.inspector_action.triggered.connect(self.open_inspector)
         # noinspection PyTypeChecker
         self.run_to_widget: DateEdit = self.app.findChild(
