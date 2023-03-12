@@ -103,7 +103,7 @@ class IconWithInitials(QIconEngine):
             painter.drawText(
                 rect,
                 self.label[0].upper(),
-                # Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignCenter,
+                Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignCenter,
             )
 
     def get_color(self) -> ColorName:
