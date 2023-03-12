@@ -113,8 +113,8 @@ class PywrWorker(QObject):
             e = traceback.format_exc()
             self.logger.debug(f"Pywr failed to load because: {e}")
             self.model_error.emit(e)
-            self.finished.emit()
-            return
+            # stop the thread
+            self.is_killed = True
 
         # start the worker loop
         current_timestep = None
