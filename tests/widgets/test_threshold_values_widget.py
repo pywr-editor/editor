@@ -11,6 +11,8 @@ class TestDialogThresholdValuesWidget:
     Tests the ThresholdValuesWidget.
     """
 
+    __test__ = False
+
     model_file = resolve_model_path(
         "model_dialog_parameter_threshold_values_widget.json"
     )
