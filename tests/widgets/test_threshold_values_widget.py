@@ -52,7 +52,7 @@ class TestDialogThresholdValuesWidget:
         "param_name, message",
         [
             # with None or empty list, no warning is shown
-            # ("empty_values", ""),
+            ("empty_values", ""),
             ("values_not_provided", ""),
             ("one_value", "must contains two values"),
             ("three_values", "must contains two values"),
