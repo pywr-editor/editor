@@ -1,6 +1,6 @@
-PySide6==6.4.2
+PySide6==6.4.1
 setuptools
 pandas
 requests
-pyqtgraph
+pyqtgraph==0.13.2
 pywin32
