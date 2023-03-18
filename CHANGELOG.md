@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 All issue numbers are relative to https://github.com/pywr-editor/editor
 
+
+## v1.4.1 - 2023-03-18
+### Added
+- A red, purple or pink circle can now be set to customise the appearance of a schematic node
+  ([#86](https://github.com/pywr-editor/editor/issues/86)).
+
+### Changed
+- Improved label and description of relative storage field in nodes. The editor now checks that the provided storage
+  is between 0 and 1 ([#77](https://github.com/pywr-editor/editor/issues/77)).
+- If the model title is changed, the window title is now updated to use the new
+  model name ([#83](https://github.com/pywr-editor/editor/issues/83)).
+
+### Fixed
+- Fixed `TableValuesWidget` initialisation when widget uses multiple variables and the provided value is `None` 
+  ([#79](https://github.com/pywr-editor/editor/issues/79)).
+- When a node, with an already-set edge colour, is connected, the edge color is set to gray instead of the 
+  preferred colour ([#81](https://github.com/pywr-editor/editor/issues/81)).
+- Fixed Inno Setup installation script
+
 ## v1.4.0 - 2023-03-11
 ### Added
 - Custom shapes can now be added onto the schematic (text, arrow and rectangle) using the node panel in the toolbar. Their
