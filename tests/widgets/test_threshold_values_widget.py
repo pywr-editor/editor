@@ -53,7 +53,7 @@ class TestDialogThresholdValuesWidget:
         [
             # with None or empty list, no warning is shown
             # ("empty_values", ""),
-            # ("values_not_provided", ""),
+            ("values_not_provided", ""),
             ("one_value", "must contains two values"),
             ("three_values", "must contains two values"),
             ("invalid_string", "is not valid"),
