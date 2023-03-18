@@ -1,7 +1,7 @@
 import pytest
 
-# from pywr_editor.dialogs import ParametersDialog
-# from pywr_editor.form import FormField, ThresholdValuesWidget
+from pywr_editor.dialogs import ParametersDialog
+from pywr_editor.form import FormField, ThresholdValuesWidget
 from pywr_editor.model import ModelConfig
 from tests.utils import resolve_model_path
 
@@ -23,31 +23,31 @@ class TestDialogThresholdValuesWidget:
         """
         return ModelConfig(self.model_file)
 
-    # @pytest.mark.parametrize(
-    #     "param_name, values", [("valid_values", [1.432, 53.033])]
-    # )
-    # def test_valid_values(self, qtbot, model_config, param_name, values):
-    #     """
-    #     Tests that the values are loaded correctly.
-    #     """
-    #     dialog = ParametersDialog(model_config, param_name)
-    #     dialog.hide()
-    #
-    #     selected_page = dialog.pages_widget.currentWidget()
-    #     assert selected_page.findChild(FormField, "name").value() == param_name
-    #
-    #     values_field: FormField = selected_page.findChild(FormField, "values")
-    #     values_widget: ThresholdValuesWidget = values_field.widget
-    #
-    #     assert values_field.message.text() == ""
-    #
-    #     # check values in boxes
-    #     for si, spin_box in enumerate(values_widget.spin_boxes):
-    #         assert spin_box.value() == values[si]
-    #
-    #     # check returned value by the widget
-    #     assert values_widget.get_value() == values
-    #
+    @pytest.mark.parametrize(
+        "param_name, values", [("valid_values", [1.432, 53.033])]
+    )
+    def test_valid_values(self, qtbot, model_config, param_name, values):
+        """
+        Tests that the values are loaded correctly.
+        """
+        dialog = ParametersDialog(model_config, param_name)
+        dialog.hide()
+
+        selected_page = dialog.pages_widget.currentWidget()
+        assert selected_page.findChild(FormField, "name").value() == param_name
+
+        values_field: FormField = selected_page.findChild(FormField, "values")
+        values_widget: ThresholdValuesWidget = values_field.widget
+
+        assert values_field.message.text() == ""
+
+        # check values in boxes
+        for si, spin_box in enumerate(values_widget.spin_boxes):
+            assert spin_box.value() == values[si]
+
+        # check returned value by the widget
+        assert values_widget.get_value() == values
+
     # @pytest.mark.parametrize(
     #     "param_name, message",
     #     [
