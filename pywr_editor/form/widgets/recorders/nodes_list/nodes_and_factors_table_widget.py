@@ -276,7 +276,7 @@ class NodesAndFactorsTableWidget(FormCustomWidget):
                 _value["nodes"] = value["nodes"]
                 # do not assign factors if nodes are not valid
                 # if empty, use and show default value
-                if value["factors"] is None:
+                if not value["factors"]:
                     _value["factors"] = [self.get_default_factor] * len(
                         _value["nodes"]
                     )
@@ -355,5 +355,6 @@ class NodesAndFactorsTableWidget(FormCustomWidget):
         :return: None
         """
         for key, value in form_dict["nodes_and_factors"].items():
-            form_dict[key] = value
+            if value:
+                form_dict[key] = value
         del form_dict["nodes_and_factors"]
