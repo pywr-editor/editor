@@ -56,7 +56,7 @@ class TestDialogThresholdValuesWidget:
             # ("values_not_provided", ""),
             # ("one_value", "must contains two values"),
             # ("three_values", "must contains two values"),
-            # ("invalid_string", "is not valid"),
+            ("invalid_string", "is not valid"),
             ("invalid_number", "is not valid"),
         ],
     )
