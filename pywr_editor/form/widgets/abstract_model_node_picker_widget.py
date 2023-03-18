@@ -90,7 +90,6 @@ class AbstractModelNodePickerWidget(FormCustomWidget):
 
         # add node names
         self.combo_box = ComboBox()
-        self.combo_box.addItem("None", None)
         valid_model_nodes = []
         for name in model_nodes:
             node_obj = self.model_config.nodes.get_node_config_from_name(
@@ -112,6 +111,11 @@ class AbstractModelNodePickerWidget(FormCustomWidget):
 
             valid_model_nodes.append(name)
             self.combo_box.addItem(f"{name} ({node_obj.humanised_type})", name)
+
+        # sort node alphabetically
+        self.combo_box.model().sort(0)
+        # place default value at the top
+        self.combo_box.insertItem(0, "None", None)
 
         # set selected
         if value is None or value == "":
