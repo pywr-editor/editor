@@ -116,6 +116,7 @@ class AbstractModelNodePickerWidget(FormCustomWidget):
         self.combo_box.model().sort(0)
         # place default value at the top
         self.combo_box.insertItem(0, "None", None)
+        self.combo_box.setCurrentIndex(0)
 
         # set selected
         if value is None or value == "":
