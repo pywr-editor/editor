@@ -276,7 +276,7 @@ class NodesAndFactorsTableWidget(FormCustomWidget):
                 _value["nodes"] = value["nodes"]
                 # do not assign factors if nodes are not valid
                 # if empty, use and show default value
-                if value["factors"] is None:
+                if not value["factors"]:
                     _value["factors"] = [self.get_default_factor] * len(
                         _value["nodes"]
                     )
@@ -343,3 +343,18 @@ class NodesAndFactorsTableWidget(FormCustomWidget):
             )
 
         return FormValidation(validation=True)
+
+    def after_validate(
+        self, form_dict: dict[str, Any], form_field_name: str
+    ) -> None:
+        """
+        Unpacks the widget value.
+        :param form_dict: The dictionary containing the data of the form
+        the widget is child of.
+        :param form_field_name: The name of the parent FormField.
+        :return: None
+        """
+        for key, value in form_dict["nodes_and_factors"].items():
+            if value:
+                form_dict[key] = value
+        del form_dict["nodes_and_factors"]
