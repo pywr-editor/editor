@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from pandas import DataFrame
 from PySide6.QtCore import QModelIndex, Slot
@@ -387,3 +387,15 @@ class AbstractColumnsSelectorWidget(FormCustomWidget):
         :return: The FormValidation instance.
         """
         return FormValidation(validation=True)
+
+    def after_validate(
+        self, form_dict: dict[str, Any], form_field_name: str
+    ) -> None:
+        # convert names to int with Excel - Pandas does not support strings when
+        # setting an index as column
+        if self.is_index_selector:
+            url_form_field: "UrlWidget" = self.form.fields["url"].widget
+            if url_form_field.file_ext and "xls" in url_form_field.file_ext:
+                form_dict[self.name] = [
+                    self.columns.index(col) for col in self.value
+                ]
