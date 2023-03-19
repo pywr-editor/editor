@@ -122,6 +122,7 @@ Source: "dist\main\numexpr\*"; DestDir: "{app}\numexpr"; Flags: ignoreversion re
 Source: "dist\main\numpy\*"; DestDir: "{app}\numpy"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "dist\main\pandas\*"; DestDir: "{app}\pandas"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "dist\main\PIL\*"; DestDir: "{app}\PIL"; Flags: ignoreversion recursesubdirs createallsubdirs skipifsourcedoesntexist
+Source: "dist\main\psutils\*"; DestDir: "{app}\psutils"; Flags: ignoreversion recursesubdirs createallsubdirs skipifsourcedoesntexist
 Source: "dist\main\PySide6\*"; DestDir: "{app}\PySide6"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "dist\main\pyqtgraph\*"; DestDir: "{app}\pyqtgraph"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "dist\main\pytz\*"; DestDir: "{app}\pytz"; Flags: ignoreversion recursesubdirs createallsubdirs
