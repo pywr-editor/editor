@@ -4,7 +4,7 @@ on:
     tags:
     - '*'
 jobs:
-  windows_release:
+  Windows-release:
     runs-on: windows-latest
     steps:
       - name: Python Setup
@@ -24,7 +24,7 @@ jobs:
            pyinstaller main.spec --noconfirm
       - name: Zip Windows bin folder
         run: |
-          & "C:\Program Files\7-Zip\7z.exe" a "Windows_binary.zip" "dist/main"
+          & "C:\Program Files\7-Zip\7z.exe" a "Windows_binary.zip" "./dist/main/*"
       - name: Upload binary ZIP file
         uses: actions/upload-artifact@v3
         with:
