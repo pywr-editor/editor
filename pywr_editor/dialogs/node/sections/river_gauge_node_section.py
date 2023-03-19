@@ -29,6 +29,7 @@ class RiverGaugeSection(FormSection):
                     "name": "mrf",
                     "label": "Minimum residual flow",
                     "field_type": ParameterLineEditWidget,
+                    "field_args": {"is_mandatory": False},
                     "default_value": 0,
                     "value": self.form.get_node_dict_value("mrf"),
                     "help_text": "The minimum residual flow (MRF) to maintain at the "
@@ -40,6 +41,7 @@ class RiverGaugeSection(FormSection):
                     "name": "mrf_cost",
                     "label": "Minimum residual flow cost",
                     "field_type": ParameterLineEditWidget,
+                    "field_args": {"is_mandatory": False},
                     "default_value": 0,
                     "value": self.form.get_node_dict_value("mrf_cost"),
                     "help_text": "The cost to associate to the link with the minimum "
@@ -49,6 +51,7 @@ class RiverGaugeSection(FormSection):
                     "name": "cost",
                     "label": "Other cost",
                     "field_type": ParameterLineEditWidget,
+                    "field_args": {"is_mandatory": False},
                     "default_value": 0,
                     "value": self.form.get_node_dict_value("cost"),
                     "help_text": "The cost to associate to the other route. "
