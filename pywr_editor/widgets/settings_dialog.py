@@ -1,4 +1,4 @@
-from PySide6.QtCore import Qt
+from PySide6.QtCore import QSortFilterProxyModel, Qt
 from PySide6.QtWidgets import (
     QDialog,
     QDialogButtonBox,
@@ -75,6 +75,13 @@ class SettingsDialog(QDialog):
         menu: TableView = left_widget.findChild(TableView)
         menu.verticalHeader().setDefaultSectionSize(30)
         menu.setStyleSheet(self.menu_stylesheet)
+
+        # sort components by name
+        proxy_model = QSortFilterProxyModel(self)
+        proxy_model.setSourceModel(menu.model)
+        proxy_model.setSortCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
+        menu.setModel(proxy_model)
+        menu.sortByColumn(0, Qt.SortOrder.AscendingOrder)
 
     @staticmethod
     def left_widget_stylesheet(widget_name: str) -> str:
