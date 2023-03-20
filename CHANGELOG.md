@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 All issue numbers are relative to https://github.com/pywr-editor/editor
 
 
+## v1.4.2 - 2023-03-20
+### Changed
+- Recent projects in the start screen are now sorted by date ([#89](https://github.com/pywr-editor/editor/issues/89)).
+- Node names are now sorted alphabetically in any drop-down menus ([#90](https://github.com/pywr-editor/editor/issues/90)).
+- The `mrf`, `mrf_cost` and `cost` attributes of a`RiverGauge` node are now optional
+  ([#94](https://github.com/pywr-editor/editor/issues/94)).
+- Some component types (nodes and recorders) were not detected correctly in tree widget
+  ([#100](https://github.com/pywr-editor/editor/issues/100)).
+- Improved release of Windows binary files using GitHub Actions
+  ([#102](https://github.com/pywr-editor/editor/issues/102)).
+
+### Fixed
+- `NodesAndFactorsTableWidget` was not loading correctly when the flow factor list was
+ empty or did not save the form data for certain node types
+ ([#93](https://github.com/pywr-editor/editor/issues/93)).
+- Pandas `read_excel` only supports integers as `index_col`. The editor now stores the index as integers
+  instead of strings ([#98](https://github.com/pywr-editor/editor/issues/98)).
+
 ## v1.4.1 - 2023-03-18
 ### Added
 - A red, purple or pink circle can now be set to customise the appearance of a schematic node
