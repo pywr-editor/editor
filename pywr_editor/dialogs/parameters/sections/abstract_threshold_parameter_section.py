@@ -45,6 +45,7 @@ class AbstractThresholdParameterSection(FormSection):
         section_data: dict,
         log_name: str,
         threshold_description: str,
+        value_rel_symbol_description: str,
         value_dict: ValueDict | None = None,
     ):
         """
@@ -54,6 +55,8 @@ class AbstractThresholdParameterSection(FormSection):
         :param value_dict: An instance of ValueDict that describes the field for
         the widget that provides the threshold value. Optional.
         :param threshold_description: The description to use for the "threshold" field.
+        :param value_rel_symbol_description: The description to insert in the help text
+        of the relation symbol to define the value to compare in the predicate.
         :param log_name: The name to use in the logger.
         """
         super().__init__(form, section_data)
@@ -68,6 +71,7 @@ class AbstractThresholdParameterSection(FormSection):
             self.has_value_field = False
 
         self.threshold_description = threshold_description
+        self.value_rel_symbol_description = value_rel_symbol_description
 
     @property
     def data(self):
@@ -93,10 +97,11 @@ class AbstractThresholdParameterSection(FormSection):
                     "label": "Relation symbol",
                     "field_type": ThresholdRelationSymbolWidget,
                     "value": self.form.get_param_dict_value("predicate"),
-                    "help_text": "This defines the predicate, which is the parameter's"
-                    + " value above, followed by the relation symbol, followed by the "
-                    + "threshold. For example, if the symbol is '>', Pywr  will assess "
-                    + "the following predicate: parameter's value > threshold",
+                    "help_text": "This defines the predicate, which is the "
+                    + f"{self.value_rel_symbol_description}, followed by the relation "
+                    + "symbol, followed by the threshold. For example, if the symbol "
+                    + "is '>', Pywr  will assess the following predicate: "
+                    + f"{self.value_rel_symbol_description} > threshold",
                 },
                 {
                     "name": "values",
@@ -105,8 +110,8 @@ class AbstractThresholdParameterSection(FormSection):
                     "help_text": "If the predicate is false, this parameter will "
                     + "return  the left value above, otherwise the right value "
                     + "will be used. For example, if the predicate is '<' and the "
-                    + " parameter's value is less than the threshold, the predicate "
-                    + "is true and the right value is returned",
+                    + f"{self.value_rel_symbol_description} is less than the threshold,"
+                    + " the predicate is true and the right value is returned",
                 },
                 {
                     "name": "ratchet",

@@ -17,4 +17,5 @@ class CurrentYearThresholdParameterSection(AbstractThresholdParameterSection):
             log_name=self.__class__.__name__,
             threshold_description="Returns one of two values depending on the year of "
             + "the current timestep",
+            value_rel_symbol_description="current year",
         )
