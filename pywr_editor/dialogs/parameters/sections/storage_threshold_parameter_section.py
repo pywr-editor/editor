@@ -24,4 +24,5 @@ class StorageThresholdParameterSection(AbstractThresholdParameterSection):
             ),
             threshold_description="Compare the storage, from the node specified "
             + "below, against this threshold",
+            value_rel_symbol_description="storage",
         )

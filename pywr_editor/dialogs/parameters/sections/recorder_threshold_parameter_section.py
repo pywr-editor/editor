@@ -24,4 +24,5 @@ class RecorderThresholdParameterSection(AbstractThresholdParameterSection):
             ),
             threshold_description="Compare the values of the recorder the node "
             + "specified below against this threshold",
+            value_rel_symbol_description="recorder's value",
         )
