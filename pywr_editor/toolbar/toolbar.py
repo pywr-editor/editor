@@ -50,9 +50,9 @@ class ToolbarWidget(QToolBar):
             "QToolBar": {"padding": 0},
             "QTabWidget": {
                 ":pane": {
-                    "background-color": Color("gray", 100).hex,
-                    # 'border-bottom': f'1px solid {Color("gray", 300).hex}',
-                    "border-top": f'1px solid {Color("gray", 300).hex}',
+                    "background-color": Color("neutral", 200).hex,
+                    # 'border-bottom': f'1px solid {Color("neutral", 300).hex}',
+                    "border-top": f'1px solid {Color("neutral", 300).hex}',
                     "border-radius": 0,
                     "margin": 0,
                     "padding": 0,
@@ -62,27 +62,25 @@ class ToolbarWidget(QToolBar):
             },
             "QTabBar": {
                 "::tab": {
-                    # 'border-radius': 0,
                     "border-top-left-radius": "4px",
                     "border-top-right-radius": "4px",
-                    "color": Color("gray", 600).hex,
+                    "color": Color("neutral", 600).hex,
                     "margin-right": "5px",
                     "padding-bottom": "4px",
                     "padding-right": "12px",
                     "padding-left": "12px",
                     "padding-top": " 4px",
                 },
-                "::tab#toolbar_tab_Model": {"background": "yellow"},
                 "::tab:hover": {
-                    "background": Color("gray", 50).hex,
-                    "border": f'1px solid {Color("gray", 200).hex}',
-                    "border-bottom-color": Color("gray", 300).hex,
+                    "background": Color("neutral", 50).hex,
+                    "border": f'1px solid {Color("neutral", 200).hex}',
+                    "border-bottom-color": Color("neutral", 300).hex,
                 },
                 "::tab:selected": {
-                    "background": Color("gray", 100).hex,
-                    "border": f'1px solid {Color("gray", 300).hex}',
-                    "border-bottom-color": Color("gray", 100).hex,
-                    "color": Color("gray", 700).hex,
+                    "background": Color("neutral", 200).hex,
+                    "border": f'1px solid {Color("neutral", 300).hex}',
+                    "border-bottom-color": Color("neutral", 200).hex,
+                    "color": Color("neutral", 700).hex,
                 },
             },
         }

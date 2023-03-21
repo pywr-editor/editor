@@ -73,8 +73,11 @@ class AppStylesheet:
         :return: The stylesheet dictionary.
         """
         return {
-            "QStatusBar": {
+            "QMainWindow": {
                 "background": Color("neutral", 100).hex,
+            },
+            "QStatusBar": {
+                "background": Color("neutral", 200).hex,
                 "color": Color("neutral", 600).hex,
             },
             "QToolTip": {
@@ -179,7 +182,7 @@ class AppStylesheet:
                 "background": "#FFF",
             },
             "QDialog": {
-                "background": "#FFF",
+                "background": Color("neutral", 100).hex,
                 "border": f"1px solid {Color('neutral', 300).hex}",
                 # "background": Color("neutral", 50).hex,
                 "color": Color("neutral", 600).hex,

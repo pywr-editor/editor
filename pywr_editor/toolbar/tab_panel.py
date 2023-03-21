@@ -66,7 +66,7 @@ class TabPanel(QWidget):
         # set the panel name
         label = QLabel(name)
         label.setAlignment(Qt.AlignCenter)
-        label.setStyleSheet(f'color: {Color("gray", 500).hex}')
+        label.setStyleSheet(f'color: {Color("gray", 600).hex}')
 
         # add to vertical layout the panel name and the button container
         actions_container_widget = QWidget(self)
@@ -179,7 +179,7 @@ class TabPanelSeparator(QWidget):
         """
         painter = QPainter()
         painter.begin(self)
-        painter.setPen(QPen(Color("gray", 300).qcolor))
+        painter.setPen(QPen(Color("neutral", 300).qcolor))
         painter.drawLine(
             QPointF(self.width() / 2, 2),
             QPointF(self.width() / 2, self.height()),
