@@ -1,11 +1,5 @@
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import (
-    QDialog,
-    QDialogButtonBox,
-    QHBoxLayout,
-    QVBoxLayout,
-    QWidget,
-)
+from PySide6.QtWidgets import QDialog, QHBoxLayout, QVBoxLayout, QWidget
 
 from pywr_editor.style import Color, stylesheet_dict_to_str
 
@@ -39,21 +33,13 @@ class SettingsDialog(QDialog):
         :param right_widget: The widget to add to the left side of the dialog layout.
         :return: None
         """
-        # dialog buttons
-        button_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
-        # noinspection PyUnresolvedReferences
-        button_box.rejected.connect(self.reject)
-        button_box.setStyleSheet("margin-bottom:10px")
-
         # list + form layout
         right_layout = QVBoxLayout()
         right_layout.addWidget(right_widget)
-        right_layout.addWidget(button_box)
 
         # modal layout
         modal_layout = QHBoxLayout()
         modal_layout.setContentsMargins(0, 0, 20, 0)
-        # modal_layout.setSpacing(0)
         modal_layout.addWidget(left_widget)
         modal_layout.addLayout(right_layout)
         self.setLayout(modal_layout)
@@ -86,9 +72,9 @@ class SettingsDialog(QDialog):
         return stylesheet_dict_to_str(
             {
                 widget_name: {
-                    "background-color": Color("gray", 50).hex,
-                    "border-top": f'1px solid {Color("gray", 200).hex}',
-                    "border-right": f'1px solid {Color("gray", 200).hex}',
+                    "background-color": Color("neutral", 200).hex,
+                    "border-top": f'1px solid {Color("neutral", 300).hex}',
+                    "border-right": f'1px solid {Color("neutral", 300).hex}',
                 }
             }
         )
