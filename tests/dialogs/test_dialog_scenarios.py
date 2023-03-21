@@ -63,13 +63,7 @@ class TestScenariosDialog:
         )
         assert new_model_index.data() == new_name
         # the item is selected
-        assert (
-            scenario_list_widget.list.selectionModel().isSelected(
-                new_model_index
-            )
-            is True
-        )
-
+        assert scenario_list_widget.list.selectedIndexes()[0].data() == new_name
         # Page widget
         selected_page = pages_widget.currentWidget()
         selected_page.findChild(ScenarioFormWidget).load_fields()
@@ -183,8 +177,8 @@ class TestScenariosDialog:
         # delete button is enabled and the item is selected
         assert scenario_list_widget.delete_button.isEnabled() is True
         assert (
-            scenario_list_widget.list.selectionModel().isSelected(model_index)
-            is True
+            scenario_list_widget.list.selectedIndexes()[0].data()
+            == deleted_scenario
         )
 
         # delete

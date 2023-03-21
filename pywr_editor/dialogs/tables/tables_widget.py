@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from PySide6.QtCore import QUuid, Slot
+from PySide6.QtCore import QSortFilterProxyModel, Qt, QUuid, Slot
 from PySide6.QtWidgets import (
     QHBoxLayout,
     QMessageBox,
@@ -45,9 +45,20 @@ class TablesWidget(QWidget):
         )
 
         # Tables list
-        self.list = TablesListWidget(
-            model=self.model, delete_button=self.delete_button, parent=self
+        # sort components by name
+        self.proxy_model = QSortFilterProxyModel(self)
+        self.proxy_model.setSourceModel(self.model)
+        self.proxy_model.setSortCaseSensitivity(
+            Qt.CaseSensitivity.CaseInsensitive
         )
+        self.list = TablesListWidget(
+            model=self.model,
+            proxy_model=self.proxy_model,
+            delete_button=self.delete_button,
+            parent=self,
+        )
+        self.list.setModel(self.proxy_model)
+        self.list.sortByColumn(0, Qt.SortOrder.AscendingOrder)
 
         # Buttons
         button_layout = QHBoxLayout()
@@ -132,10 +143,12 @@ class TablesWidget(QWidget):
         self.model.table_names.append(table_name)
         # noinspection PyUnresolvedReferences
         self.model.layoutChanged.emit()
-        # select the item (this is always added as last)
-        self.list.setCurrentIndex(
-            self.model.index(self.model.rowCount() - 1, 0)
+
+        # select the item
+        new_index = self.proxy_model.mapFromSource(
+            self.list.find_index_by_name(table_name)
         )
+        self.list.setCurrentIndex(new_index)
 
         # add the empty dictionary to the model
         self.model_config.tables.update(table_name, {})

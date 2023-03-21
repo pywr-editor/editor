@@ -63,12 +63,7 @@ class TestRecordersDialog:
         assert new_model_index.data() == new_name
 
         # the item is selected
-        assert (
-            recorder_list_widget.list.selectionModel().isSelected(
-                new_model_index
-            )
-            is True
-        )
+        assert recorder_list_widget.list.selectedIndexes()[0].data() == new_name
 
         # Page widget
         selected_page = pages_widget.currentWidget()
@@ -198,8 +193,8 @@ class TestRecordersDialog:
         # delete button is enabled and the item is selected
         assert recorder_list_widget.delete_button.isEnabled() is True
         assert (
-            recorder_list_widget.list.selectionModel().isSelected(model_index)
-            is True
+            recorder_list_widget.list.selectedIndexes()[0].data()
+            == deleted_recorder
         )
 
         # delete
