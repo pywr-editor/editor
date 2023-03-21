@@ -32,8 +32,10 @@ class MetadataCustomFieldsWidget(FormCustomWidget):
         self.logger.debug(f"Loading widget with {value}")
 
         # Initialise the table view
-        add_button = PushIconButton(icon=":misc/plus", label="Add")
-        delete_button = PushIconButton(icon=":misc/minus", label="Delete")
+        add_button = PushIconButton(icon=":misc/plus", label="Add", small=True)
+        delete_button = PushIconButton(
+            icon=":misc/minus", label="Delete", small=True
+        )
         self.model = MetadataCustomFieldsModel(fields=value)
         # noinspection PyUnresolvedReferences
         self.model.dataChanged.connect(self.on_value_change)
