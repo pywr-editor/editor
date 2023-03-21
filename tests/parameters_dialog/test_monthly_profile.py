@@ -231,7 +231,7 @@ class TestDialogParameterMonthlyValuesWidget:
             "type": "monthlyprofile",
             "url": url_widget.get_value(),
             "sheet_name": "Horizontal_table",
-            "index_col": ["Index 1", "Index 2"],
+            "index_col": [0, 1],
             "index": ["A", "C"],
             "comment": "Updated by me",
         }

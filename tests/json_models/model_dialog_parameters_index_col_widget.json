@@ -91,6 +91,20 @@
         3
       ]
     },
+    "param_with_index_col_list_of_str_csv": {
+      "type": "constant",
+      "url": "files/table.csv",
+      "index_col": [
+        "Column 1",
+        " Date"
+      ],
+      "parse_dates": true,
+      "column": 1,
+      "index": [
+        1,
+        3
+      ]
+    },
     "param_with_index_col_list_of_str_unsorted": {
       "type": "constant",
       "url": "files/table.xlsx",

@@ -3,6 +3,43 @@
 All notable changes to this project will be documented in this file.
 All issue numbers are relative to https://github.com/pywr-editor/editor
 
+
+## v1.4.2 - 2023-03-20
+### Changed
+- Recent projects in the start screen are now sorted by date ([#89](https://github.com/pywr-editor/editor/issues/89)).
+- Node names are now sorted alphabetically in any drop-down menus ([#90](https://github.com/pywr-editor/editor/issues/90)).
+- The `mrf`, `mrf_cost` and `cost` attributes of a`RiverGauge` node are now optional
+  ([#94](https://github.com/pywr-editor/editor/issues/94)).
+- Some component types (nodes and recorders) were not detected correctly in tree widget
+  ([#100](https://github.com/pywr-editor/editor/issues/100)).
+- Improved release of Windows binary files using GitHub Actions
+  ([#102](https://github.com/pywr-editor/editor/issues/102)).
+
+### Fixed
+- `NodesAndFactorsTableWidget` was not loading correctly when the flow factor list was
+ empty or did not save the form data for certain node types
+ ([#93](https://github.com/pywr-editor/editor/issues/93)).
+- Pandas `read_excel` only supports integers as `index_col`. The editor now stores the index as integers
+  instead of strings ([#98](https://github.com/pywr-editor/editor/issues/98)).
+
+## v1.4.1 - 2023-03-18
+### Added
+- A red, purple or pink circle can now be set to customise the appearance of a schematic node
+  ([#86](https://github.com/pywr-editor/editor/issues/86)).
+
+### Changed
+- Improved label and description of relative storage field in nodes. The editor now checks that the provided storage
+  is between 0 and 1 ([#77](https://github.com/pywr-editor/editor/issues/77)).
+- If the model title is changed, the window title is now updated to use the new
+  model name ([#83](https://github.com/pywr-editor/editor/issues/83)).
+
+### Fixed
+- Fixed `TableValuesWidget` initialisation when widget uses multiple variables and the provided value is `None` 
+  ([#79](https://github.com/pywr-editor/editor/issues/79)).
+- When a node, with an already-set edge colour, is connected, the edge color is set to gray instead of the 
+  preferred colour ([#81](https://github.com/pywr-editor/editor/issues/81)).
+- Fixed Inno Setup installation script
+
 ## v1.4.0 - 2023-03-11
 ### Added
 - Custom shapes can now be added onto the schematic (text, arrow and rectangle) using the node panel in the toolbar. Their

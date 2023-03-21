@@ -9,10 +9,12 @@ on:
       - develop
       - main
 jobs:
-  windows_tests:
+  Test-On-Windows:
     runs-on: windows-latest
     timeout-minutes: 15
     steps:
+#      - name: Collect Workflow Telemetry
+#        uses: runforesight/workflow-telemetry-action@v1
       - name: Python Setup
         uses: actions/setup-python@v4
         with:

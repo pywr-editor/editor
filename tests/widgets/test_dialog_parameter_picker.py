@@ -284,6 +284,8 @@ class TestDialogParameterPicker:
 
         # send form
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
+        if "sheet_name" in param_dict:
+            param_dict["index_col"] = [1]
         assert self._form_data == param_dict
 
         # 7. Change source to new model parameter
