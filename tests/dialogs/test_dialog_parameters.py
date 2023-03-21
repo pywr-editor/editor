@@ -71,10 +71,7 @@ class TestParametersDialog:
 
         # the item is selected
         assert (
-            parameter_list_widget.list.selectionModel().isSelected(
-                new_model_index
-            )
-            is True
+            parameter_list_widget.list.selectedIndexes()[0].data() == new_name
         )
 
         # Page widget
@@ -197,8 +194,8 @@ class TestParametersDialog:
         # delete button is enabled and the item is selected
         assert parameter_list_widget.delete_button.isEnabled() is True
         assert (
-            parameter_list_widget.list.selectionModel().isSelected(model_index)
-            is True
+            parameter_list_widget.list.selectedIndexes()[0].data()
+            == deleted_parameter
         )
 
         # delete

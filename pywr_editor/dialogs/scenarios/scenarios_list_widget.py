@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 import PySide6
+from PySide6.QtCore import QSortFilterProxyModel, Qt
 from PySide6.QtWidgets import QAbstractItemView, QPushButton
 
 from pywr_editor.widgets import TableView
@@ -15,6 +16,7 @@ class ScenariosListWidget(TableView):
     def __init__(
         self,
         model: ScenariosListModel,
+        proxy_model: QSortFilterProxyModel,
         delete_button: QPushButton,
         parent: "ScenariosWidget",
     ):
@@ -22,10 +24,11 @@ class ScenariosListWidget(TableView):
         Initialises the widget showing the list of the model scenarios and buttons
         to add or remove them.
         :param model: The model.
+        :param proxy_model: The model to use as proxy for sorting the data.
         :param delete_button: The delete button.
         :param parent: The parent widget.
         """
-        super().__init__(model, delete_button, parent)
+        super().__init__(proxy_model, delete_button, parent)
         self.model = model
         self.parent = parent
 
@@ -54,8 +57,8 @@ class ScenariosListWidget(TableView):
         if len(selected.indexes()) == 0:
             pages_widget.set_empty_page()
         else:
-            scenario_name = self.model.scenario_names[
-                selected.indexes()[0].row()
-            ]
+            scenario_name = selected.indexes()[0].data(
+                Qt.ItemDataRole.DisplayRole
+            )
             pages_widget.set_current_widget_by_name(scenario_name)
         super().selectionChanged(selected, deselected)

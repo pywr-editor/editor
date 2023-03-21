@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 import PySide6
+from PySide6.QtCore import QSortFilterProxyModel, Qt
 from PySide6.QtWidgets import QAbstractItemView, QPushButton
 
 from pywr_editor.widgets import TableView
@@ -15,6 +16,7 @@ class TablesListWidget(TableView):
     def __init__(
         self,
         model: TablesListModel,
+        proxy_model: QSortFilterProxyModel,
         delete_button: QPushButton,
         parent: "TablesWidget",
     ):
@@ -22,11 +24,12 @@ class TablesListWidget(TableView):
         Initialises the widget showing the list of the model tables and buttons to add
         or remove tables.
         :param model: The model.
+        :param proxy_model: The model to use as proxy for sorting the data.
         :param delete_button: The delete button connected to the table.
         :param parent: The parent widget.
         """
         super().__init__(
-            model=model,
+            model=proxy_model,
             toggle_buttons_on_selection=delete_button,
             parent=parent,
         )
@@ -57,6 +60,6 @@ class TablesListWidget(TableView):
         if len(selected.indexes()) == 0:
             pages_widget.set_empty_page()
         else:
-            table_name = self.model.table_names[selected.indexes()[0].row()]
+            table_name = selected.indexes()[0].data(Qt.ItemDataRole.DisplayRole)
             pages_widget.set_current_widget_by_name(table_name)
         super().selectionChanged(selected, deselected)

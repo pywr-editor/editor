@@ -73,10 +73,7 @@ class TestTablesDialog:
         )
         assert new_model_index.data() == new_name
         # the item is selected
-        assert (
-            table_list_widget.list.selectionModel().isSelected(new_model_index)
-            is True
-        )
+        assert table_list_widget.list.selectedIndexes()[0].data() == new_name
 
         # Page widget
         selected_page = pages_widget.currentWidget()
@@ -215,8 +212,7 @@ class TestTablesDialog:
         # delete button is enabled and the item is selected
         assert table_list_widget.delete_button.isEnabled() is True
         assert (
-            table_list_widget.list.selectionModel().isSelected(model_index)
-            is True
+            table_list_widget.list.selectedIndexes()[0].data() == deleted_table
         )
 
         # delete
