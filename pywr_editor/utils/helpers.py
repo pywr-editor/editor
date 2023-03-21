@@ -2,6 +2,8 @@ import platform
 import sys
 from pathlib import Path
 
+from PySide6.QtWidgets import QMessageBox, QWidget
+
 
 def humanise_label(key: str) -> str:
     """
@@ -76,3 +78,39 @@ def get_app_path() -> Path:
         return Path(sys._MEIPASS)
     else:
         return Path(__file__).parent.parent.parent
+
+
+def maybe_delete_component(
+    component_name: str, total_times: int, parent: QWidget
+) -> bool:
+    """
+    Asks user if they want to delete a component that's being used.
+    :param component_name: The component name to delete.
+    :param total_times: The number of times the component is used by the model.
+    :param parent: The parent widget.
+    :return: True whether to delete the component, False otherwise.
+    """
+    message = "Do you want to delete the selected item?"
+    if total_times > 0:
+        times = "time"
+        if total_times > 1:
+            times = f"{times}s"
+        message = (
+            f"The item you would like to delete is used {total_times} "
+            + f"{times} by other model components. If you delete it, the "
+            + "model will not be able to run anymore.\n\n"
+            + "Do you want to continue?"
+        )
+
+    answer = QMessageBox.warning(
+        parent,
+        "Warning",
+        message,
+        QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+    )
+    if answer == QMessageBox.StandardButton.Yes:
+        return True
+    elif answer == QMessageBox.StandardButton.No:
+        return False
+    # on discard
+    return False
