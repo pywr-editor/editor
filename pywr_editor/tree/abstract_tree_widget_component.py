@@ -7,6 +7,8 @@ from pywr_editor.model import ModelConfig, ParameterConfig, RecorderConfig
 from pywr_editor.style import Color
 from pywr_editor.widgets import ParameterIcon, RecorderIcon
 
+compType = Literal["parameter", "recorder"] | None
+
 
 class AbstractTreeWidgetComponent:
     def __init__(
@@ -14,7 +16,7 @@ class AbstractTreeWidgetComponent:
         comp_value: dict | list,
         model_config: ModelConfig,
         parent_type: Type[dict | list] = None,
-        comp_type: Literal["parameter", "recorder"] | None = None,
+        comp_type: compType = None,
         comp_name: str | None = None,
         parent: QTreeWidgetItem | None = None,
     ):
@@ -177,7 +179,13 @@ class AbstractTreeWidgetComponent:
                     value, as_dict=False
                 )
                 param_type = param_obj.humanised_type
-                item.setText(1, value)
+
+                # change label when the parameter is rendered outside
+                # the parameter section
+                if item.text(0) == "Parameter":
+                    item.setText(1, value)
+                else:
+                    item.setText(1, param_type)
                 item.setToolTip(1, f"Parameter of type {param_type}")
                 item.setIcon(1, QIcon(ParameterIcon(param_obj.key)))
             # check if string is a model recorder
