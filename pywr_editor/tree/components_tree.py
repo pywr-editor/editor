@@ -12,16 +12,10 @@ from PySide6.QtWidgets import (
     QTreeWidgetItem,
 )
 
-from pywr_editor.dialogs import (
-    ParametersDialog,
-    ParametersWidget,
-    RecordersDialog,
-    RecordersWidget,
-    TablesDialog,
-    TablesWidget,
-)
+from pywr_editor.dialogs import ParametersDialog, RecordersDialog, TablesDialog
 from pywr_editor.model import Constants, ModelConfig
 from pywr_editor.style import Color, stylesheet_dict_to_str
+from pywr_editor.utils import maybe_delete_component
 from pywr_editor.widgets import ContextualMenu
 
 from .expanded_item_states import ExpandedItemStates
@@ -499,7 +493,7 @@ class ComponentsTree(QTreeWidget):
         total_components = self.model_config.tables.is_used(table_name)
 
         # ask before deleting
-        if TablesWidget.maybe_delete(table_name, total_components, self):
+        if maybe_delete_component(table_name, total_components, self):
             # delete the table from the model configuration
             self.model_config.tables.delete(table_name)
             # update tree and status bar
@@ -531,9 +525,7 @@ class ComponentsTree(QTreeWidget):
         total_components = self.model_config.parameters.is_used(parameter_name)
 
         # ask before deleting
-        if ParametersWidget.maybe_delete(
-            parameter_name, total_components, self
-        ):
+        if maybe_delete_component(parameter_name, total_components, self):
             # delete the parameter from the model configuration
             self.model_config.parameters.delete(parameter_name)
             # update tree and status bar
@@ -567,7 +559,7 @@ class ComponentsTree(QTreeWidget):
         total_components = self.model_config.parameters.is_used(recorder_name)
 
         # ask before deleting
-        if RecordersWidget.maybe_delete(recorder_name, total_components, self):
+        if maybe_delete_component(recorder_name, total_components, self):
             # delete the parameter from the model configuration
             self.model_config.parameters.delete(recorder_name)
             # update tree and status bar
