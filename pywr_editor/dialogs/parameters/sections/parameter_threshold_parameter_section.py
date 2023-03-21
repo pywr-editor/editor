@@ -24,4 +24,5 @@ class ParameterThresholdParameterSection(AbstractThresholdParameterSection):
             ),
             threshold_description="Compare the values of the parameter specified "
             + "below against this threshold",
+            value_rel_symbol_description="parameter's value",
         )

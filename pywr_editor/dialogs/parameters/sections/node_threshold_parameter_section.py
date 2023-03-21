@@ -21,7 +21,9 @@ class NodeThresholdParameterSection(AbstractThresholdParameterSection):
             value_dict=ValueDict(
                 key="node",
                 widget=NodePickerWidget,
+                help_text="Use the flow of the node provided above",
             ),
             threshold_description="Compare the flow values of the node specified below "
             + "against this threshold",
+            value_rel_symbol_description="node's previous flow",
         )
