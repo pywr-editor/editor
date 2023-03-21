@@ -46,7 +46,12 @@ class TablePageWidget(QWidget):
         self.set_page_title(name)
 
         # button
-        button_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Save)
+        button_box = QDialogButtonBox(
+            QDialogButtonBox.StandardButton.Close
+            | QDialogButtonBox.StandardButton.Save
+        )
+        # noinspection PyUnresolvedReferences
+        button_box.rejected.connect(parent.dialog.reject)
         # noinspection PyTypeChecker
         save_button: QPushButton = button_box.findChild(QPushButton)
         save_button.setObjectName("save_button")
