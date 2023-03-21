@@ -20,7 +20,7 @@ class ToolbarWidget(QToolBar):
 
         self.setObjectName("toolbar")
         self.toolbar = QTabWidget(self)
-        self.toolbar.setMaximumHeight(120)
+        self.toolbar.setMaximumHeight(125)
         self.toolbar.setMinimumHeight(110)
         self.toolbar.setContextMenuPolicy(
             Qt.ContextMenuPolicy.PreventContextMenu
@@ -72,7 +72,7 @@ class ToolbarWidget(QToolBar):
                     "padding-top": " 4px",
                 },
                 "::tab:hover": {
-                    "background": Color("neutral", 50).hex,
+                    "background": Color("neutral", 100).hex,
                     "border": f'1px solid {Color("neutral", 200).hex}',
                     "border-bottom-color": Color("neutral", 300).hex,
                 },
@@ -81,6 +81,7 @@ class ToolbarWidget(QToolBar):
                     "border": f'1px solid {Color("neutral", 300).hex}',
                     "border-bottom-color": Color("neutral", 200).hex,
                     "color": Color("neutral", 700).hex,
+                    "font-weight": 600,
                 },
             },
         }

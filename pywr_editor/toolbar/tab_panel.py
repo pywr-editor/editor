@@ -66,7 +66,7 @@ class TabPanel(QWidget):
         # set the panel name
         label = QLabel(name)
         label.setAlignment(Qt.AlignCenter)
-        label.setStyleSheet(f'color: {Color("gray", 600).hex}')
+        label.setStyleSheet(f'color: {Color("gray", 500).hex}')
 
         # add to vertical layout the panel name and the button container
         actions_container_widget = QWidget(self)
