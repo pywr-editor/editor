@@ -1,17 +1,13 @@
 from typing import TYPE_CHECKING
 
 import PySide6
-from PySide6.QtCore import Qt
-from PySide6.QtWidgets import (
-    QDialogButtonBox,
-    QPushButton,
-    QVBoxLayout,
-    QWidget,
-)
+from PySide6.QtCore import Qt, Slot
+from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget
 
 from pywr_editor.form import FormTitle
 from pywr_editor.model import ModelConfig
-from pywr_editor.utils import Logging
+from pywr_editor.utils import Logging, maybe_delete_component
+from pywr_editor.widgets import PushButton
 
 from .table_form_widget import TableFormWidget
 
@@ -46,16 +42,30 @@ class TablePageWidget(QWidget):
         self.set_page_title(name)
 
         # button
-        button_box = QDialogButtonBox(
-            QDialogButtonBox.StandardButton.Close
-            | QDialogButtonBox.StandardButton.Save
-        )
+        # buttons
+        close_button = PushButton("Close")
         # noinspection PyUnresolvedReferences
-        button_box.rejected.connect(parent.dialog.reject)
+        close_button.clicked.connect(parent.dialog.reject)
+
         # noinspection PyTypeChecker
-        save_button: QPushButton = button_box.findChild(QPushButton)
+        save_button = PushButton("Save table")
         save_button.setObjectName("save_button")
-        save_button.setText("Update table")
+
+        add_button = PushButton("Add new table")
+        add_button.setObjectName("add_button")
+        # noinspection PyUnresolvedReferences
+        add_button.clicked.connect(parent.on_add_new_table)
+
+        delete_button = PushButton("Delete table")
+        # noinspection PyUnresolvedReferences
+        delete_button.clicked.connect(self.on_delete_table)
+
+        button_box = QHBoxLayout()
+        button_box.addWidget(save_button)
+        button_box.addWidget(delete_button)
+        button_box.addStretch()
+        button_box.addWidget(add_button)
+        button_box.addWidget(close_button)
 
         # form
         self.form = TableFormWidget(
@@ -66,11 +76,11 @@ class TablePageWidget(QWidget):
             parent=self,
         )
         # noinspection PyUnresolvedReferences
-        button_box.accepted.connect(self.form.on_save)
+        save_button.clicked.connect(self.form.on_save)
 
         layout.addWidget(self.title)
         layout.addWidget(self.form)
-        layout.addWidget(button_box)
+        layout.addLayout(button_box)
 
     def set_page_title(self, table_name: str) -> None:
         """
@@ -79,6 +89,45 @@ class TablePageWidget(QWidget):
         :return: None
         """
         self.title.setText(f"Table: {table_name}")
+
+    @Slot()
+    def on_delete_table(self) -> None:
+        """
+        Deletes the selected table.
+        :return: None
+        """
+        dialog = self.pages.dialog
+        list_widget = dialog.table_list_widget.list
+        list_model = list_widget.model
+        # check if table is being used and warn before deleting
+        total_components = self.model_config.tables.is_used(self.name)
+
+        # ask before deleting
+        if maybe_delete_component(self.name, total_components, self):
+            # remove the table from the table model
+            # noinspection PyUnresolvedReferences
+            list_model.layoutAboutToBeChanged.emit()
+            list_model.table_names.remove(self.name)
+            # noinspection PyUnresolvedReferences
+            list_model.layoutChanged.emit()
+            list_widget.clear_selection()
+
+            # remove the page widget
+            page_widget = dialog.pages_widget.pages[self.name]
+            page_widget.deleteLater()
+            del dialog.pages_widget.pages[self.name]
+
+            # delete the table from the model configuration
+            self.model_config.tables.delete(self.name)
+
+            # update tree and status bar
+            if dialog.app is not None:
+                if hasattr(dialog.app, "components_tree"):
+                    dialog.app.components_tree.reload()
+                if hasattr(dialog.app, "statusBar"):
+                    dialog.app.statusBar().showMessage(
+                        f'Deleted table "{self.name}"'
+                    )
 
     def showEvent(self, event: PySide6.QtGui.QShowEvent) -> None:
         """

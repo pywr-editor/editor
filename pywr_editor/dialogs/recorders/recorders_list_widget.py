@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 import PySide6
 from PySide6.QtCore import QSortFilterProxyModel, Qt
-from PySide6.QtWidgets import QAbstractItemView, QPushButton
+from PySide6.QtWidgets import QAbstractItemView
 
 from pywr_editor.widgets import TableView
 
@@ -17,7 +17,6 @@ class RecordersListWidget(TableView):
         self,
         model: RecordersListModel,
         proxy_model: QSortFilterProxyModel,
-        delete_button: QPushButton,
         parent: "RecordersWidget",
     ):
         """
@@ -25,12 +24,10 @@ class RecordersListWidget(TableView):
         to add or remove recorders.
         :param model: The model.
         :param proxy_model: The model to use as proxy for sorting the data.
-        :param delete_button: The delete button connected to the recorder.
         :param parent: The parent widget.
         """
         super().__init__(
             model=proxy_model,
-            toggle_buttons_on_selection=delete_button,
             parent=parent,
         )
         self.model = model

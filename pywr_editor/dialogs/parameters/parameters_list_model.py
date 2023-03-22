@@ -13,6 +13,7 @@ class ParametersListModel(QAbstractTableModel):
         """
         Initialises the model.
         :param parameter_names: The list of parameter names.
+        :param model_config: The ModelConfig instance.
         """
         super().__init__()
         self.parameter_names = parameter_names
