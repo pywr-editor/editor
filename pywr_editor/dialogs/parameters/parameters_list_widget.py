@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 import PySide6
 from PySide6.QtCore import QSortFilterProxyModel, Qt
-from PySide6.QtWidgets import QAbstractItemView, QPushButton
+from PySide6.QtWidgets import QAbstractItemView
 
 from pywr_editor.widgets import TableView
 
@@ -17,7 +17,6 @@ class ParametersListWidget(TableView):
         self,
         model: ParametersListModel,
         proxy_model: QSortFilterProxyModel,
-        delete_button: QPushButton,
         parent: "ParametersWidget",
     ):
         """
@@ -25,14 +24,9 @@ class ParametersListWidget(TableView):
         add or remove parameters.
         :param model: The model.
         :param proxy_model: The model to use as proxy for sorting the data.
-        :param delete_button: The delete button connected to the parameter.
         :param parent: The parent widget.
         """
-        super().__init__(
-            model=proxy_model,
-            toggle_buttons_on_selection=delete_button,
-            parent=parent,
-        )
+        super().__init__(model=proxy_model, parent=parent)
         self.model = model
         self.parent = parent
 

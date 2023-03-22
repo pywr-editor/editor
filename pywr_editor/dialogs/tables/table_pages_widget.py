@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from PySide6.QtCore import QUuid, Slot
 from PySide6.QtWidgets import QStackedWidget
 
 from pywr_editor.model import ModelConfig
@@ -22,7 +23,7 @@ class TablePagesWidget(QStackedWidget):
         self.model_config = model_config
         self.dialog = parent
 
-        self.empty_page = TableEmptyPageWidget()
+        self.empty_page = TableEmptyPageWidget(self)
         self.addWidget(self.empty_page)
 
         self.pages = {}
@@ -66,3 +67,47 @@ class TablePagesWidget(QStackedWidget):
         """
         if table_name in self.pages.keys():
             self.setCurrentWidget(self.pages[table_name])
+
+    @Slot()
+    def on_add_new_table(self) -> None:
+        """
+        Adds a new table. This creates a new table in the model and adds, and selects
+        the form page.
+        :return: None
+        """
+        list_widget = self.dialog.table_list_widget.list
+        list_model = self.dialog.table_list_widget.model
+        proxy_model = self.dialog.table_list_widget.proxy_model
+
+        # generate unique name
+        table_name = f"Table {QUuid().createUuid().toString()[1:7]}"
+
+        # add the page
+        pages_widget: TablePagesWidget = self.dialog.pages_widget
+        pages_widget.add_new_page(table_name)
+        pages_widget.set_current_widget_by_name(table_name)
+
+        # add it to the list model
+        # noinspection PyUnresolvedReferences
+        list_model.layoutAboutToBeChanged.emit()
+        list_model.table_names.append(table_name)
+        # noinspection PyUnresolvedReferences
+        list_model.layoutChanged.emit()
+
+        # select the item
+        new_index = proxy_model.mapFromSource(
+            list_widget.find_index_by_name(table_name)
+        )
+        list_widget.setCurrentIndex(new_index)
+
+        # add the empty dictionary to the model
+        self.model_config.tables.update(table_name, {})
+
+        # update tree and status bar
+        if self.dialog.app is not None:
+            if hasattr(self.dialog.app, "components_tree"):
+                self.dialog.app.components_tree.reload()
+            if hasattr(self.dialog.app, "statusBar"):
+                self.dialog.app.statusBar().showMessage(
+                    f'Added new table "{table_name}"'
+                )
