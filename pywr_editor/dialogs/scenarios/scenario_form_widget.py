@@ -135,7 +135,7 @@ class ScenarioFormWidget(ModelComponentForm):
 
             # update the scenario list
             scenarios_model: ScenariosListModel = (
-                self.page.pages.dialog.list.model
+                self.page.pages.dialog.scenarios_list_widget.model
             )
             idx = scenarios_model.scenario_names.index(self.name)
 
@@ -157,7 +157,7 @@ class ScenarioFormWidget(ModelComponentForm):
         self.model_config.scenarios.update(self.name, form_data)
 
         # update the parameter list in case the name changed
-        self.dialog.list.update()
+        self.dialog.scenarios_list_widget.update()
 
         # update tree and status bar
         app = self.dialog.app

@@ -41,7 +41,6 @@ class TablePageWidget(QWidget):
         self.title = FormTitle()
         self.set_page_title(name)
 
-        # button
         # buttons
         close_button = PushButton("Close")
         # noinspection PyUnresolvedReferences
@@ -113,9 +112,9 @@ class TablePageWidget(QWidget):
             list_widget.clear_selection()
 
             # remove the page widget
-            page_widget = dialog.pages_widget.pages[self.name]
+            page_widget = self.pages.pages[self.name]
             page_widget.deleteLater()
-            del dialog.pages_widget.pages[self.name]
+            del self.pages.pages[self.name]
 
             # delete the table from the model configuration
             self.model_config.tables.delete(self.name)

@@ -45,7 +45,7 @@ class TestScenariosDialog:
         """
         Tests that a new scenario can be correctly added.
         """
-        scenario_list_widget = dialog.list
+        scenario_list_widget = dialog.scenarios_list_widget
         pages_widget = dialog.pages
         qtbot.mouseClick(
             scenario_list_widget.add_button, Qt.MouseButton.LeftButton
@@ -63,7 +63,12 @@ class TestScenariosDialog:
         )
         assert new_model_index.data() == new_name
         # the item is selected
-        assert scenario_list_widget.list.selectedIndexes()[0].data() == new_name
+        assert (
+            scenario_list_widget.scenarios_list_widget.selectedIndexes()[
+                0
+            ].data()
+            == new_name
+        )
         # Page widget
         selected_page = pages_widget.currentWidget()
         selected_page.findChild(ScenarioFormWidget).load_fields()
@@ -164,20 +169,22 @@ class TestScenariosDialog:
         Tests that a scenario is deleted correctly.
         """
         deleted_scenario = "scenario A"
-        scenario_list_widget = dialog.list
+        scenario_list_widget = dialog.scenarios_list_widget
         pages_widget = dialog.pages
 
         # select a parameter from the list
         model_index = scenario_list_widget.model.index(0, 0)
         assert model_index.data() == deleted_scenario
-        scenario_list_widget.list.selectionModel().select(
+        scenario_list_widget.scenarios_list_widget.selectionModel().select(
             model_index, QItemSelectionModel.Select
         )
 
         # delete button is enabled and the item is selected
         assert scenario_list_widget.delete_button.isEnabled() is True
         assert (
-            scenario_list_widget.list.selectedIndexes()[0].data()
+            scenario_list_widget.scenarios_list_widget.selectedIndexes()[
+                0
+            ].data()
             == deleted_scenario
         )
 

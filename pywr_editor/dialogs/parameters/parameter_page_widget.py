@@ -112,9 +112,9 @@ class ParameterPageWidget(QWidget):
             list_widget.clear_selection()
 
             # remove the page widget
-            page_widget = dialog.pages_widget.pages[self.name]
+            page_widget = self.pages.pages[self.name]
             page_widget.deleteLater()
-            del dialog.pages_widget.pages[self.name]
+            del self.pages.pages[self.name]
 
             # delete the parameter from the model configuration
             self.model_config.parameters.delete(self.name)
