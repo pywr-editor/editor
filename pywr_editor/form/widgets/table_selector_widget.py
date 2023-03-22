@@ -4,7 +4,8 @@ from typing import TYPE_CHECKING
 
 import pandas as pd
 from pandas import read_csv, read_excel, read_hdf
-from PySide6.QtCore import Signal, Slot
+from PySide6.QtCore import QSize, Signal, Slot
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QHBoxLayout, QMessageBox, QSizePolicy
 
 from pywr_editor.form import FormCustomWidget, FormField, FormValidation
@@ -16,7 +17,7 @@ from pywr_editor.utils import (
     reset_pandas_index_names,
     set_table_index,
 )
-from pywr_editor.widgets import ComboBox, PushButton
+from pywr_editor.widgets import ComboBox, ExtensionIcon, PushButton
 
 if TYPE_CHECKING:
     from pywr_editor.form import ModelComponentForm
@@ -97,8 +98,13 @@ class TableSelectorWidget(FormCustomWidget):
 
         # populate ComboBox
         self.combo_box = ComboBox()
-        self.combo_box.addItems(["None"] + self.table_names)
-
+        self.combo_box.setIconSize(QSize(21, 18))
+        self.combo_box.addItems(["None"])
+        for name in self.table_names:
+            ext = self.model_config.tables.get_table_extension(table_name=name)
+            if ext is None:
+                ext = "N/A"
+            self.combo_box.addItem(QIcon(ExtensionIcon(ext)), name)
         # Open button
         self.open_button = PushButton("Open", small=True)
         self.open_button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
