@@ -113,9 +113,9 @@ class RecorderPageWidget(QWidget):
             list_widget.clear_selection()
 
             # remove the page widget
-            page_widget = dialog.pages_widget.pages[self.name]
+            page_widget = self.pages.pages[self.name]
             page_widget.deleteLater()
-            del dialog.pages_widget.pages[self.name]
+            del self.pages.pages[self.name]
 
             # delete the recorder from the model configuration
             self.model_config.recorders.delete(self.name)

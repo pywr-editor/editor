@@ -12,6 +12,7 @@ from PySide6.QtWidgets import (
 
 from pywr_editor.form import FormTitle
 from pywr_editor.style import Color
+from pywr_editor.widgets import PushButton
 
 if TYPE_CHECKING:
     from .scenario_pages_widget import ScenarioPagesWidget
@@ -45,9 +46,25 @@ class ScenarioEmptyPageWidget(QWidget):
         icon.setFixedSize(200, 200)
         icon_layout.addWidget(icon)
 
+        # buttons
+        close_button = PushButton("Close")
+        # noinspection PyUnresolvedReferences
+        close_button.clicked.connect(parent.dialog.reject)
+
+        add_button = PushButton("Add new scenario")
+        add_button.setObjectName("add_button")
+        # noinspection PyUnresolvedReferences
+        add_button.clicked.connect(parent.on_add_new_scenario)
+
+        button_box = QHBoxLayout()
+        button_box.addStretch()
+        button_box.addWidget(add_button)
+        button_box.addWidget(close_button)
+
         layout.addWidget(title)
         layout.addLayout(icon_layout)
         layout.addWidget(label)
         layout.addItem(
             QSpacerItem(10, 30, QSizePolicy.Expanding, QSizePolicy.Expanding)
         )
+        layout.addLayout(button_box)
