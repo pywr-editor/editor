@@ -2,16 +2,21 @@ from typing import Any
 
 import PySide6
 from PySide6.QtCore import QAbstractTableModel
-from PySide6.QtGui import Qt
+from PySide6.QtGui import QIcon, Qt
+
+from pywr_editor.model import ModelConfig
+from pywr_editor.widgets import ExtensionIcon
 
 
 class TablesListModel(QAbstractTableModel):
-    def __init__(self, table_names: list[str]):
+    def __init__(self, table_names: list[str], model_config: ModelConfig):
         """
         Initialises the model.
         :param table_names: The list of table names.
+        :param model_config: The ModelConfig instance.
         """
         super().__init__()
+        self.model_config = model_config
         self.table_names = table_names
         # provide alphabetical list like in components tree
         self.table_names.sort()
@@ -28,13 +33,25 @@ class TablesListModel(QAbstractTableModel):
         :param role: The item role.
         :return: The item key or value.
         """
+        table_name = self.table_names[index.row()]
         if (
             role == Qt.ItemDataRole.DisplayRole
             or role == Qt.ItemDataRole.EditRole
+        ):
+            return table_name
+        elif (
+            role == Qt.ItemDataRole.DecorationRole
             or role == Qt.ItemDataRole.ToolTipRole
         ):
-            text = self.table_names[index.row()]
-            return text
+            ext = self.model_config.tables.get_table_extension(
+                table_name=table_name
+            )
+            if ext is None:
+                ext = "csv"
+
+            if role == Qt.ItemDataRole.ToolTipRole:
+                return f"{ext.upper().replace('.', '')} table"
+            return QIcon(ExtensionIcon(ext))
 
     def rowCount(
         self,

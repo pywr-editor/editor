@@ -1,5 +1,6 @@
 from copy import deepcopy
 from dataclasses import dataclass
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from pywr_editor.model import JsonUtils
@@ -94,6 +95,19 @@ class Tables:
         if deep_copy:
             return deepcopy(table_dict)
         return table_dict
+
+    def get_table_extension(self, table_name: str) -> str | None:
+        """
+        Gets the file extension from the table name.
+        :param table_name: The table name to look for.
+        :return: The file extension or None if the table has no file.
+        """
+        table_dict = self.get_table_config_from_name(table_name=table_name)
+        # noinspection PyBroadException
+        try:
+            return Path(table_dict["url"]).suffix
+        except Exception:
+            return
 
     def update(self, table_name: str, table_dict: dict) -> None:
         """
