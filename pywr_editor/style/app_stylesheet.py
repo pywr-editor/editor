@@ -148,15 +148,16 @@ class AppStylesheet:
 
         return {
             "QGroupBox": {
-                "border": f"1px solid {Color('neutral', 300).hex}",
-                "border-radius": "5px",
-                "font-size": "14px",
+                "border": 0,
+                "font-weight": "bold",
+                "border-bottom": f"2px solid {Color('neutral', 200).hex}",
+                "font-size": "15px",
                 "margin-top": "15px",
                 "padding": "7px 0px",
                 ":title": {
                     "subcontrol-origin": "margin",
                     "top": "4px",
-                    "left": "8px",
+                    "left": "0px",
                     "padding": "0px 4px",
                     "subcontrol-position": "top left",
                 },
@@ -173,7 +174,7 @@ class AppStylesheet:
                 "padding": "5px 6px",
             },
             "QLineEdit:hover, QTextEdit:hover": {
-                "background": Color("neutral", 100).hex,
+                "background": Color("neutral", 50).hex,
             },
             "QLineEdit:focus, QTextEdit:focus": {
                 "border": f"1px solid {Color('blue', 400).hex}",
@@ -183,6 +184,7 @@ class AppStylesheet:
             },
             "QDialog": {
                 "background": Color("neutral", 100).hex,
+                # "background": Color("neutral", 100).hex,
                 "border": f"1px solid {Color('neutral', 300).hex}",
                 # "background": Color("neutral", 50).hex,
                 "color": Color("neutral", 600).hex,
@@ -205,8 +207,7 @@ class AppStylesheet:
                 "background": "rgba(0, 0, 0, 7)",
                 "border": "1px solid rgba(0, 0, 0, 20)",
                 "border-radius": "4px",
-                "min-height": "18px",
-                "padding": "6px 18px",
+                "padding": "6px 10px",
             },
             "QPushButton:pressed": {"color": "rgba(0, 0, 0, 150)"},
             "QPushButton:hover": {
@@ -270,7 +271,6 @@ class AppStylesheet:
                 },
                 "::sub-line:horizontal": {
                     "image": "url(:scrollbar/scroll-left)",
-                    # "margin-left": "5px",
                     "height": "10px",
                     "width": "10px",
                     "subcontrol-origin": "margin",

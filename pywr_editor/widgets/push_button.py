@@ -14,4 +14,4 @@ class PushButton(QPushButton):
         super().__init__(label, parent)
 
         if small:
-            self.setStyleSheet("padding: 4px 8px")
+            self.setStyleSheet("padding: 4px 6px")

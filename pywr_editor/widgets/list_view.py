@@ -119,7 +119,7 @@ class ListView(QListView):
                         "color": Color("neutral", 900).hex,
                     },
                     "::hover": {
-                        "background-color": Color("neutral", 300).hex,
+                        "background-color": Color("neutral", 200).hex,
                     },
                     "::selected::hover": {
                         "background-color": Color("blue", 300).hex,
