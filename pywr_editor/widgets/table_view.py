@@ -5,6 +5,7 @@ from PySide6.QtCore import (
     QAbstractTableModel,
     QItemSelectionModel,
     QModelIndex,
+    QSortFilterProxyModel,
     Slot,
 )
 from PySide6.QtGui import Qt
@@ -19,6 +20,7 @@ class TableView(QTableView):
     def __init__(
         self,
         model: QAbstractTableModel,
+        proxy_model: QSortFilterProxyModel | None = None,
         toggle_buttons_on_selection: Union[
             QPushButton, list[QPushButton], None
         ] = None,
@@ -27,6 +29,7 @@ class TableView(QTableView):
         """
         Initialises the TableView.
         :param model: The model.
+        :param proxy_model: The proxy model if set. Default to None.
         :param toggle_buttons_on_selection: The buttons to enable when at least one
         table item is selected, or to disable when no item is selected. Default to
         None. When available, the button is disabled if no table item is selected
@@ -43,6 +46,7 @@ class TableView(QTableView):
 
         self.parent = parent
         self.model = model
+        self.proxy_model = proxy_model
 
         # style
         self.setSortingEnabled(False)
@@ -57,7 +61,7 @@ class TableView(QTableView):
             Qt.ContextMenuPolicy.NoContextMenu
         )
 
-        self.setModel(model)
+        self.setModel(model if not self.proxy_model else proxy_model)
 
         # disable buttons when there are no items
         if self.toggle_buttons_on_selection is not None:
@@ -139,6 +143,9 @@ class TableView(QTableView):
         """
         index = self.find_index_by_name(name, column)
         if index is not None:
+            # with proxy model remap index
+            if self.proxy_model:
+                index = self.proxy_model.mapFromSource(index)
             self.selectionModel().select(index, QItemSelectionModel.Select)
             self.scrollTo(index, QTableView.ScrollHint.PositionAtCenter)
 
