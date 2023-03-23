@@ -137,7 +137,7 @@ class AbstractModelComponentsListPickerWidget(FormCustomWidget):
         )
         # noinspection PyUnresolvedReferences
         self.add_button.clicked.connect(self.on_add_new_component)
-        self.add_button.setToolTip(f"Add a new {component_type} as threshold")
+        self.add_button.setToolTip(f"Add a new {component_type}")
 
         self.edit_button = PushIconButton(
             icon=":misc/edit",
