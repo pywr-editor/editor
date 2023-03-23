@@ -139,7 +139,7 @@ class NodeDialogForm(Form):
         first_section: QGroupBox = self.findChild(QGroupBox, "Node")
         first_section.setTitle("")
         first_section.setStyleSheet(
-            "QGroupBox{border:0;padding:0;padding-top:15px; margin-top:-15px}"
+            "QGroupBox{padding-top:15px; margin-top:-15px}"
         )
 
         # disable type field
