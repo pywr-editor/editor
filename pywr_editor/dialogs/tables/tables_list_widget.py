@@ -26,7 +26,7 @@ class TablesListWidget(TableView):
         :param proxy_model: The model to use as proxy for sorting the data.
         :param parent: The parent widget.
         """
-        super().__init__(model=proxy_model, parent=parent)
+        super().__init__(model=model, proxy_model=proxy_model, parent=parent)
         self.model = model
         self.parent = parent
 
