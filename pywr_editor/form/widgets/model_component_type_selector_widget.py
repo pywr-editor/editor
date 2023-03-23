@@ -130,7 +130,7 @@ class ModelComponentTypeSelectorWidget(FormCustomWidget):
         self.doc_button.setEnabled(False)
         # noinspection PyUnresolvedReferences
         self.doc_button.clicked.connect(self.on_doc_button_click)
-        self.doc_button.setMaximumWidth(30)
+        self.doc_button.setMaximumWidth(25)
 
         # populate the field with the available components - key does not have
         # component suffix
