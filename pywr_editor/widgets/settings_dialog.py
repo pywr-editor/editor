@@ -63,9 +63,9 @@ class SettingsDialog(QDialog):
         return stylesheet_dict_to_str(
             {
                 widget_name: {
-                    "background-color": Color("neutral", 200).hex,
-                    "border-top": f'1px solid {Color("neutral", 300).hex}',
-                    "border-right": f'1px solid {Color("neutral", 300).hex}',
+                    "background-color": Color("gray", 200).hex,
+                    "border-top": f'1px solid {Color("gray", 300).hex}',
+                    "border-right": f'1px solid {Color("gray", 300).hex}',
                 }
             }
         )

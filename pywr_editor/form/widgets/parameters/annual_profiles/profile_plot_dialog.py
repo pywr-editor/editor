@@ -17,7 +17,7 @@ class ChartOptions:
         x_tick_spacing: list[int, int] | None = None,
         show_points: bool = False,
         step_mode: bool = False,
-        background: str | Color = Color("neutral", 50).qcolor,
+        background: str | Color = Color("gray", 50).qcolor,
         foreground: str | Color = "k",
         line_color: str | Color = Color("teal", 600).qcolor,
         line_width: int = 3,

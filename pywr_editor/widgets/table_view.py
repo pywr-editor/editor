@@ -172,12 +172,12 @@ class TableView(QTableView):
         new_style["TableView"]["::item"]["border-radius"] = "0px"
         # style section
         new_style["QHeaderView::section"] = {
-            "background": Color("neutral", 100).hex,
+            "background": Color("gray", 200).hex,
             "height": "20px",
             "padding-top": "4px",
             "padding-left": "6px",
             "font-size": "110%",
-            "border": f"1px solid {Color('neutral', 300).hex}",
+            "border": f"1px solid {Color('gray', 300).hex}",
         }
 
         if as_string:
