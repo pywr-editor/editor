@@ -73,7 +73,7 @@ class StartScreenActionButton(QWidget):
             },
             "QPushButton:hover, QPushButton:pressed": {
                 "background-color": Color("blue", 100).hex,
-                "border": f'1px solid {Color("blue", 300).hex}',
+                "border": f'1px solid {Color("blue", 400).hex}',
             },
         }
 
