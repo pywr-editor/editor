@@ -98,7 +98,7 @@ class TableSelectorWidget(FormCustomWidget):
 
         # populate ComboBox
         self.combo_box = ComboBox()
-        self.combo_box.setIconSize(QSize(21, 18))
+        self.combo_box.setIconSize(QSize(21, 16))
         self.combo_box.addItems(["None"])
         for name in self.table_names:
             ext = self.model_config.tables.get_table_extension(table_name=name)
