@@ -70,14 +70,14 @@ class ComboBox(QComboBox):
             {
                 "QComboBox": {
                     "background": "#FFF",
-                    "border": f"1px solid {Color('neutral', 300).hex}",
+                    "border": f"1px solid {Color('gray', 300).hex}",
                     "border-radius": "4px",
                     "padding": "5px 6px",
                     ":focus": {
                         "border": f"1px solid {Color('blue', 400).hex}",
                     },
                     ":hover": {
-                        "background": Color("neutral", 50).hex,
+                        "background": Color("gray", 50).hex,
                     },
                     ":focus:hover": {
                         "background": "#FFF",
@@ -97,17 +97,17 @@ class ComboBox(QComboBox):
                         "border": f"1px solid {Color('blue', 400).hex}",
                     },
                     ":disabled": {
-                        "background": Color("neutral", 100).hex,
-                        "border": f"1px solid {Color('neutral', 300).hex}",
+                        "background": Color("gray", 100).hex,
+                        "border": f"1px solid {Color('gray', 300).hex}",
                     },
                     "::drop-down:disabled": {
-                        "border-color": Color("neutral", 300).hex,
-                        "background": Color("neutral", 100).hex,
+                        "border-color": Color("gray", 300).hex,
+                        "background": Color("gray", 100).hex,
                     },
                 },
                 "ComboBox QAbstractItemView": {
                     "background": "#FFF",
-                    "border": f"1px solid {Color('neutral', 300).hex}",
+                    "border": f"1px solid {Color('gray', 300).hex}",
                     "border-radius": "6px",
                     "outline": 0,
                     "padding": "3px",
@@ -119,13 +119,13 @@ class ComboBox(QComboBox):
                     "::item:selected": {
                         "background": Color("blue", 100).hex,
                         "border": f"1px solid {Color('blue', 300).hex}",
-                        "color": Color("neutral", 800).hex,
+                        "color": Color("gray", 800).hex,
                         "font-weight": "bold",
                     },
                     "::item:hover": {
                         "background": Color("blue", 100).hex,
                         "border": f"1px solid {Color('blue', 300).hex}",
-                        "color": Color("neutral", 800).hex,
+                        "color": Color("gray", 800).hex,
                     },
                 },
             }

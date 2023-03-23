@@ -64,7 +64,7 @@ class ExtensionIcon(QIconEngine):
         """
         pen = QPen()
         pen.setWidthF(0.7)
-        pen.setColor(Color("neutral", 700).qcolor)
+        pen.setColor(Color("gray", 700).qcolor)
         painter.setPen(pen)
         painter.setRenderHints(
             QPainter.Antialiasing
@@ -82,7 +82,7 @@ class ExtensionIcon(QIconEngine):
         font = QFont("Monospace")
         font.setStyleHint(QFont.TypeWriter)
         font.setPixelSize(font_size)
-        color = Color("neutral", 700).qcolor
+        color = Color("gray", 700).qcolor
         painter.setPen(color)
         painter.setFont(font)
         painter.drawText(

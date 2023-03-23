@@ -40,33 +40,33 @@ class ContextualMenu(QMenu):
         return stylesheet_dict_to_str(
             {
                 "QMenu": {
-                    "background": Color("neutral", 200).hex,
-                    "border": f'1px solid {Color("neutral", 300).hex}',
+                    "background": Color("gray", 200).hex,
+                    "border": f'1px solid {Color("gray", 300).hex}',
                     "border-radius": "6px",
-                    "color": Color("neutral", 600).hex,
+                    "color": Color("gray", 600).hex,
                     "padding": "5px",
                     "margin": 0,
                     "::separator": {
-                        "background": Color("neutral", 400).hex,
+                        "background": Color("gray", 400).hex,
                         "margin": "5px 1px",
                         "height": "1px",
                     },
                     "::item": {
                         "background-color": "transparent",
-                        "border": f'1px solid {Color("neutral", 200).hex}',
+                        "border": f'1px solid {Color("gray", 200).hex}',
                         "padding": "4px 20px",
                         "::selected, ::pressed": {
                             "background-color": Color("blue", 200).hex,
                             "border": f'1px solid {Color("blue", 400).hex}',
                             "border-radius": "6px",
-                            "color": Color("neutral", 700).hex,
+                            "color": Color("gray", 700).hex,
                         },
                         "::disabled": {
-                            "color": Color("neutral", 400).hex,
+                            "color": Color("gray", 400).hex,
                         },
                         # title
                         "QLabel": {
-                            "color": Color("neutral", 600).hex,
+                            "color": Color("gray", 600).hex,
                             "font-weight": "bold",
                             "padding": "4px 18px",
                         },

@@ -179,7 +179,7 @@ class TabPanelSeparator(QWidget):
         """
         painter = QPainter()
         painter.begin(self)
-        painter.setPen(QPen(Color("neutral", 300).qcolor))
+        painter.setPen(QPen(Color("gray", 300).qcolor))
         painter.drawLine(
             QPointF(self.width() / 2, 2),
             QPointF(self.width() / 2, self.height()),
