@@ -42,7 +42,7 @@ class TestParametersDialog:
         :return: The ParameterDialog instance.
         """
         dialog = ParametersDialog(model_config)
-        dialog.hide()
+        dialog.show()
         return dialog
 
     def test_add_new_parameter(self, qtbot, model_config, dialog):
@@ -51,9 +51,11 @@ class TestParametersDialog:
         """
         parameter_list_widget = dialog.parameters_list_widget
         pages_widget = dialog.pages_widget
-        qtbot.mouseClick(
-            parameter_list_widget.add_button, Qt.MouseButton.LeftButton
+        add_button: QPushButton = pages_widget.empty_page.findChild(
+            QPushButton, "add_button"
         )
+        qtbot.mouseClick(add_button, Qt.MouseButton.LeftButton)
+        qtbot.wait(100)
 
         # new name is random
         new_name = list(pages_widget.pages.keys())[-1]
@@ -109,6 +111,7 @@ class TestParametersDialog:
         name_field.widget.setText(renamed_parameter_name)
         value_field.widget.line_edit.setText(str(new_value))
 
+        assert save_button.isEnabled() is True
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         assert name_field.message.text() == ""
         assert value_field.message.text() == ""
@@ -148,6 +151,7 @@ class TestParametersDialog:
         assert name_field.value() == current_name
         name_field.widget.setText(new_name)
 
+        qtbot.wait(200)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         assert name_field.message.text() == ""
         assert selected_page.findChild(FormField, "index").message.text() == ""
@@ -183,6 +187,7 @@ class TestParametersDialog:
         deleted_parameter = "const_param_with_values"
         parameter_list_widget = dialog.parameters_list_widget
         pages_widget = dialog.pages_widget
+        dialog.show()
 
         # select a parameter from the list
         model_index = parameter_list_widget.model.index(1, 0)
@@ -191,8 +196,12 @@ class TestParametersDialog:
             model_index, QItemSelectionModel.Select
         )
 
+        delete_button: QPushButton = pages_widget.pages[
+            deleted_parameter
+        ].findChild(QPushButton, "delete_button")
+
         # delete button is enabled and the item is selected
-        assert parameter_list_widget.delete_button.isEnabled() is True
+        assert delete_button.isEnabled() is True
         assert (
             parameter_list_widget.list.selectedIndexes()[0].data()
             == deleted_parameter
@@ -205,10 +214,8 @@ class TestParametersDialog:
                 widget.findChild(QPushButton), Qt.MouseButton.LeftButton
             )
 
-        QTimer.singleShot(100, confirm_deletion)
-        qtbot.mouseClick(
-            parameter_list_widget.delete_button, Qt.MouseButton.LeftButton
-        )
+        QTimer.singleShot(200, confirm_deletion)
+        qtbot.mouseClick(delete_button, Qt.MouseButton.LeftButton)
 
         assert isinstance(
             pages_widget.currentWidget(), ParameterEmptyPageWidget
@@ -297,12 +304,11 @@ class TestParametersDialog:
         Tests that a new custom parameter can be correctly added. This tests
         the validation and filter in the CustomParameterSection
         """
-        parameter_list_widget = dialog.parameters_list_widget
         pages_widget = dialog.pages_widget
-        qtbot.mouseClick(
-            parameter_list_widget.add_button, Qt.MouseButton.LeftButton
+        add_button: QPushButton = pages_widget.empty_page.findChild(
+            QPushButton, "add_button"
         )
-        dialog.show()
+        qtbot.mouseClick(add_button, Qt.MouseButton.LeftButton)
 
         # Page widget
         selected_page = pages_widget.currentWidget()

@@ -116,7 +116,7 @@ class TestDialogParameterColumnWidget:
         all_columns = {"Column 1", "Column 2", "Column 3", "Column 4"}
         dialog = ParametersDialog(model_config, param_name)
         selected_page = dialog.pages_widget.currentWidget()
-        dialog.hide()
+        dialog.show()
 
         # noinspection PyUnresolvedReferences
         assert selected_page.findChild(FormField, "name").value() == param_name
@@ -535,7 +535,7 @@ class TestDialogParameterColumnWidget:
 
         dialog = ParametersDialog(model_config, param_name)
         selected_page = dialog.pages_widget.currentWidget()
-        dialog.hide()
+        dialog.show()
 
         # noinspection PyUnresolvedReferences
         assert selected_page.findChild(FormField, "name").value() == param_name

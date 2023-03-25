@@ -41,7 +41,9 @@ class MetadataCustomFieldsWidget(FormCustomWidget):
         self.model.dataChanged.connect(self.on_value_change)
         # noinspection PyUnresolvedReferences
         self.model.layoutChanged.connect(self.on_value_change)
-        self.table = TableView(self.model, delete_button)
+        self.table = TableView(
+            model=self.model, toggle_buttons_on_selection=delete_button
+        )
 
         # Buttons
         button_layout = QHBoxLayout()

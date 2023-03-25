@@ -81,7 +81,9 @@ class IncludesDialog(QDialog):
         # noinspection PyUnresolvedReferences
         self.model.layoutChanged.connect(self.on_value_change)
 
-        self.table = TableView(self.model, self.delete_button)
+        self.table = TableView(
+            model=self.model, toggle_buttons_on_selection=self.delete_button
+        )
         self.table.setSelectionBehavior(
             QAbstractItemView.SelectionBehavior.SelectRows
         )

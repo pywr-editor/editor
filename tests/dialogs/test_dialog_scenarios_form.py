@@ -75,7 +75,7 @@ class TestScenariosDialog:
         Tests that the values are loaded correctly.
         """
         dialog = ScenariosDialog(model_config, scenario_name)
-        dialog.hide()
+        dialog.show()
 
         selected_page = dialog.pages.currentWidget()
         # noinspection PyTypeChecker
@@ -198,7 +198,7 @@ class TestScenariosDialog:
         Tests the widget when an invalid configuration is used.
         """
         dialog = ScenariosDialog(model_config, scenario_name)
-        dialog.hide()
+        dialog.show()
 
         selected_page = dialog.pages.currentWidget()
 

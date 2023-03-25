@@ -132,7 +132,7 @@ class TestDialogParameterParametersListPickerWidget:
         IndexParametersListPickerWidget.
         """
         dialog = ParametersDialog(model_config, param_name)
-        dialog.hide()
+        dialog.show()
 
         selected_page = dialog.pages_widget.currentWidget()
         # noinspection PyUnresolvedReferences
@@ -347,7 +347,7 @@ class TestDialogParameterParametersListPickerWidget:
         dialog = ParametersDialog(
             model_config, self.general_anonymous_param_name
         )
-        dialog.hide()
+        dialog.show()
 
         selected_page = dialog.pages_widget.currentWidget()
         # noinspection PyUnresolvedReferences
@@ -413,7 +413,7 @@ class TestDialogParameterParametersListPickerWidget:
         main_save_button: QPushButton = selected_page.findChild(
             QPushButton, "save_button"
         )
-        assert "Update" in main_save_button.text()
+        assert "Save" in main_save_button.text()
 
         # button in parent form is enabled as soon as the child form is saved
         assert main_save_button.isEnabled() is True
@@ -435,7 +435,7 @@ class TestDialogParameterParametersListPickerWidget:
         dialog = ParametersDialog(
             model_config, self.general_anonymous_param_name
         )
-        dialog.hide()
+        dialog.show()
 
         selected_page = dialog.pages_widget.currentWidget()
         # noinspection PyUnresolvedReferences
@@ -478,7 +478,7 @@ class TestDialogParameterParametersListPickerWidget:
         main_save_button: QPushButton = selected_page.findChild(
             QPushButton, "save_button"
         )
-        assert "Update" in main_save_button.text()
+        assert "Save" in main_save_button.text()
 
         # button in parent form is enabled as soon as the child form is saved
         assert main_save_button.isEnabled() is True
@@ -507,7 +507,7 @@ class TestDialogParameterParametersListPickerWidget:
         dialog = ParametersDialog(
             model_config, self.general_anonymous_param_name
         )
-        dialog.hide()
+        dialog.show()
 
         selected_page = dialog.pages_widget.currentWidget()
         # noinspection PyUnresolvedReferences
@@ -577,7 +577,7 @@ class TestDialogParameterParametersListPickerWidget:
         main_save_button: QPushButton = selected_page.findChild(
             QPushButton, "save_button"
         )
-        assert "Update" in main_save_button.text()
+        assert "Save" in main_save_button.text()
 
         # button in parent form is enabled as soon as the child form is saved
         assert main_save_button.isEnabled() is True
@@ -606,7 +606,7 @@ class TestDialogParameterParametersListPickerWidget:
         """
         param_name = "agg_param"
         dialog = ParametersDialog(model_config, param_name)
-        dialog.hide()
+        dialog.show()
 
         selected_page = dialog.pages_widget.currentWidget()
         # noinspection PyUnresolvedReferences
@@ -718,7 +718,7 @@ class TestDialogParameterParametersListPickerWidget:
         main_save_button: QPushButton = selected_page.findChild(
             QPushButton, "save_button"
         )
-        assert "Update" in main_save_button.text()
+        assert "Save" in main_save_button.text()
 
         # button in parent form is enabled as soon as the child form is saved
         assert main_save_button.isEnabled() is True
@@ -738,7 +738,7 @@ class TestDialogParameterParametersListPickerWidget:
         """
         param_name = "param_with_child_model_param"
         dialog = ParametersDialog(model_config, param_name)
-        dialog.hide()
+        dialog.show()
 
         selected_page = dialog.pages_widget.currentWidget()
         # noinspection PyUnresolvedReferences
@@ -799,7 +799,7 @@ class TestDialogParameterParametersListPickerWidget:
         main_save_button: QPushButton = selected_page.findChild(
             QPushButton, "save_button"
         )
-        assert "Update" in main_save_button.text()
+        assert "Save" in main_save_button.text()
 
         # button in parent form is enabled as soon as the child form is saved
         assert main_save_button.isEnabled() is True
@@ -826,7 +826,7 @@ class TestDialogParameterParametersListPickerWidget:
         """
         param_name = "agg_param_with_model_param"
         dialog = ParametersDialog(model_config, param_name)
-        dialog.hide()
+        dialog.show()
 
         selected_page = dialog.pages_widget.currentWidget()
         # noinspection PyUnresolvedReferences
@@ -910,7 +910,7 @@ class TestDialogParameterParametersListPickerWidget:
         main_save_button: QPushButton = selected_page.findChild(
             QPushButton, "save_button"
         )
-        assert "Update" in main_save_button.text()
+        assert "Save" in main_save_button.text()
 
         # button in parent form is enabled as soon as the child form is saved
         assert main_save_button.isEnabled() is True

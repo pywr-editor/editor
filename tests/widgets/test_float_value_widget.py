@@ -58,7 +58,7 @@ class TestDialogParameterConstantValue:
         """
         param_name = "const_param_with_values"
         dialog = ParametersDialog(model_config, param_name)
-        dialog.hide()
+        dialog.show()
 
         selected_page = dialog.pages_widget.currentWidget()
         # noinspection PyTypeChecker
@@ -124,7 +124,7 @@ class TestDialogParameterConstantValue:
         """
         param_name = "const_param_wrong_type"
         dialog = ParametersDialog(model_config, param_name)
-        dialog.hide()
+        dialog.show()
 
         selected_page = dialog.pages_widget.currentWidget()
         # noinspection PyUnresolvedReferences

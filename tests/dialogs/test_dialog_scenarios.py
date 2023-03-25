@@ -38,7 +38,7 @@ class TestScenariosDialog:
         :return: The ScenariosDialog instance.
         """
         dialog = ScenariosDialog(model_config)
-        dialog.hide()
+        dialog.show()
         return dialog
 
     def test_add_new_scenario(self, qtbot, model_config, dialog):
@@ -47,9 +47,12 @@ class TestScenariosDialog:
         """
         scenario_list_widget = dialog.scenarios_list_widget
         pages_widget = dialog.pages
-        qtbot.mouseClick(
-            scenario_list_widget.add_button, Qt.MouseButton.LeftButton
+        add_button: QPushButton = pages_widget.empty_page.findChild(
+            QPushButton, "add_button"
         )
+
+        qtbot.mouseClick(add_button, Qt.MouseButton.LeftButton)
+        qtbot.wait(100)
         # new name is random
         new_name = list(pages_widget.pages.keys())[-1]
 
@@ -63,12 +66,7 @@ class TestScenariosDialog:
         )
         assert new_model_index.data() == new_name
         # the item is selected
-        assert (
-            scenario_list_widget.scenarios_list_widget.selectedIndexes()[
-                0
-            ].data()
-            == new_name
-        )
+        assert scenario_list_widget.list.selectedIndexes()[0].data() == new_name
         # Page widget
         selected_page = pages_widget.currentWidget()
         selected_page.findChild(ScenarioFormWidget).load_fields()
@@ -139,6 +137,7 @@ class TestScenariosDialog:
         assert name_field.value() == current_name
         name_field.widget.setText(new_name)
 
+        qtbot.wait(200)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         assert name_field.message.text() == ""
         assert selected_page.findChild(FormField, "name").message.text() == ""
@@ -175,16 +174,17 @@ class TestScenariosDialog:
         # select a parameter from the list
         model_index = scenario_list_widget.model.index(0, 0)
         assert model_index.data() == deleted_scenario
-        scenario_list_widget.scenarios_list_widget.selectionModel().select(
+        scenario_list_widget.list.selectionModel().select(
             model_index, QItemSelectionModel.Select
         )
 
         # delete button is enabled and the item is selected
-        assert scenario_list_widget.delete_button.isEnabled() is True
+        delete_button: QPushButton = pages_widget.pages[
+            deleted_scenario
+        ].findChild(QPushButton, "delete_button")
+        assert delete_button.isEnabled() is True
         assert (
-            scenario_list_widget.scenarios_list_widget.selectedIndexes()[
-                0
-            ].data()
+            scenario_list_widget.list.selectedIndexes()[0].data()
             == deleted_scenario
         )
 
@@ -196,9 +196,7 @@ class TestScenariosDialog:
             )
 
         QTimer.singleShot(100, confirm_deletion)
-        qtbot.mouseClick(
-            scenario_list_widget.delete_button, Qt.MouseButton.LeftButton
-        )
+        qtbot.mouseClick(delete_button, Qt.MouseButton.LeftButton)
 
         assert isinstance(pages_widget.currentWidget(), ScenarioEmptyPageWidget)
         assert deleted_scenario not in pages_widget.pages.keys()
