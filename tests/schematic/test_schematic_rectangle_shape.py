@@ -145,7 +145,7 @@ class TestSchematicRectangleShape:
         window, schematic = init_window
         model_config = window.model_config
         item_count = len(schematic.shape_items)
-        panel = schematic.app.toolbar.tabs["Schematic"].panels["Undo"]
+        panel = schematic.app.toolbar.tabs["Operations"].panels["Undo"]
         undo_button = panel.buttons["Undo"]
         redo_button = panel.buttons["Redo"]
 
@@ -314,7 +314,7 @@ class TestSchematicRectangleShape:
         window, schematic = init_window
         model_config = window.model_config
 
-        panel = schematic.app.toolbar.tabs["Schematic"].panels["Undo"]
+        panel = schematic.app.toolbar.tabs["Operations"].panels["Undo"]
         undo_button = panel.buttons["Undo"]
         redo_button = panel.buttons["Redo"]
 

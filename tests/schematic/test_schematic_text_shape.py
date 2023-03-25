@@ -138,7 +138,7 @@ class TestSchematicTextShape:
         model_config = window.model_config
         shape_config = model_config.shapes.find_shape(self.shape_id)
 
-        panel = schematic.app.toolbar.tabs["Schematic"].panels["Undo"]
+        panel = schematic.app.toolbar.tabs["Operations"].panels["Undo"]
         undo_button = panel.buttons["Undo"]
         redo_button = panel.buttons["Redo"]
 
@@ -199,7 +199,7 @@ class TestSchematicTextShape:
         window, schematic = init_window
         model_config = window.model_config
         item_count = len(schematic.shape_items)
-        panel = schematic.app.toolbar.tabs["Schematic"].panels["Undo"]
+        panel = schematic.app.toolbar.tabs["Operations"].panels["Undo"]
         undo_button = panel.buttons["Undo"]
         redo_button = panel.buttons["Redo"]
 

@@ -25,7 +25,7 @@ class TestDeleteEdges:
         window = MainWindow(self.model_file)
         window.hide()
         schematic = window.schematic
-        size_panel = window.toolbar.tabs["View"].panels["Size"]
+        size_panel = window.toolbar.tabs["Schematic"].panels["Size"]
 
         return window, schematic, size_panel
 
@@ -36,7 +36,7 @@ class TestDeleteEdges:
         """
         window, schematic, size_panel = init_window
         model_config = schematic.model_config
-        panel = schematic.app.toolbar.tabs["Schematic"].panels["Undo"]
+        panel = schematic.app.toolbar.tabs["Operations"].panels["Undo"]
         undo_button = panel.buttons["Undo"]
         redo_button = panel.buttons["Redo"]
 
