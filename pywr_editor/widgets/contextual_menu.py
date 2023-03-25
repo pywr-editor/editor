@@ -47,7 +47,7 @@ class ContextualMenu(QMenu):
                     "padding": "5px",
                     "margin": 0,
                     "::separator": {
-                        "background": Color("gray", 400).hex,
+                        "background": Color("gray", 300).hex,
                         "margin": "5px 1px",
                         "height": "1px",
                     },
