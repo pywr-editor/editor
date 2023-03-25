@@ -20,7 +20,6 @@ class ToolbarSmallButton(ToolbarBaseButton):
         self.setStyleSheet(self.stylesheet)
         # aspect
         self.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
-        self.setMaximumWidth(170)
         self.setMinimumHeight(28)
         self.setMaximumHeight(28)
         self.setIconSize(QSize(20, 20))
@@ -33,7 +32,7 @@ class ToolbarSmallButton(ToolbarBaseButton):
         """
         style = self.base_stylesheet
         style["QToolButton"]["margin-right"] = "2px"
-        style["QToolButton"]["margin-bottom"] = "3px"
+        style["QToolButton"]["margin-bottom"] = "1px"
         style["QToolButton"]["margin-left"] = "2px"
 
         return stylesheet_dict_to_str(style)
