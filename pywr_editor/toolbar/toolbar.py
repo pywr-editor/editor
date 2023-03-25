@@ -51,12 +51,11 @@ class ToolbarWidget(QToolBar):
             "QTabWidget": {
                 ":pane": {
                     "background-color": Color("gray", 200).hex,
-                    # 'border-bottom': f'1px solid {Color("gray", 300).hex}',
-                    "border-top": f'1px solid {Color("gray", 300).hex}',
+                    "border-top": f'1px solid {Color("gray", 400).hex}',
                     "border-radius": 0,
                     "margin": 0,
                     "padding": 0,
-                    "top": "-1",
+                    "top": "-1px",
                 },
                 "::tab-bar": {"left": "5px"},
             },
@@ -73,15 +72,15 @@ class ToolbarWidget(QToolBar):
                 },
                 "::tab:hover": {
                     "background": Color("gray", 100).hex,
-                    "border": f'1px solid {Color("gray", 200).hex}',
-                    "border-bottom-color": Color("gray", 300).hex,
+                    "border": f'1px solid {Color("gray", 300).hex}',
+                    "border-bottom-color": Color("gray", 400).hex,
                 },
                 "::tab:selected": {
                     "background": Color("gray", 200).hex,
-                    "border": f'1px solid {Color("gray", 300).hex}',
+                    "border": f'1px solid {Color("gray", 400).hex}',
                     "border-bottom-color": Color("gray", 200).hex,
                     "color": Color("gray", 700).hex,
-                    "font-weight": 600,
+                    "margin-bottom": "-1px",
                 },
             },
         }
