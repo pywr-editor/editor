@@ -1,12 +1,13 @@
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+import qtawesome as qta
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QLineEdit
 
 from pywr_editor.form import FormCustomWidget, FormField, FormValidation
 from pywr_editor.utils import Logging, get_signal_sender
-from pywr_editor.widgets import PushButton
+from pywr_editor.widgets import PushIconButton
 
 if TYPE_CHECKING:
     from pywr_editor.form import ModelComponentForm
@@ -60,7 +61,9 @@ class FileBrowserWidget(FormCustomWidget):
         self.line_edit.editingFinished.connect(self.on_edit_finished)
 
         # browse button
-        self.browse_button = PushButton("Browse...", small=True)
+        self.browse_button = PushIconButton(
+            icon=qta.icon("msc.folder-opened"), label="Browse...", small=True
+        )
         # noinspection PyUnresolvedReferences
         self.browse_button.clicked.connect(self.on_browse)
 

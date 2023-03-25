@@ -1,6 +1,7 @@
 import os
 import traceback
 
+import qtawesome as qta
 from pandas import read_csv, read_excel, read_hdf
 from PySide6.QtCore import Signal, SignalInstance, Slot
 from PySide6.QtWidgets import (
@@ -19,7 +20,7 @@ from pywr_editor.utils import (
     reset_pandas_index_names,
     set_table_index,
 )
-from pywr_editor.widgets import PushButton
+from pywr_editor.widgets import PushIconButton
 
 """
  This widget loads and handles slots and signals for an external
@@ -136,16 +137,22 @@ class UrlWidget(FormCustomWidget):
         self.file_changed = self.line_edit.textChanged
 
         # browse button
-        self.browse_button = PushButton("Browse...", small=True)
+        self.browse_button = PushIconButton(
+            icon=qta.icon("msc.folder-opened"), label="Browse...", small=True
+        )
 
         # open file
-        self.open_button = PushButton("Open", small=True)
+        self.open_button = PushIconButton(
+            icon=qta.icon("msc.table"), label="Open", small=True
+        )
         self.open_button.setToolTip(
             "Open the file externally with the associated application"
         )
 
         # reload button
-        self.reload_button = PushButton("Reload", small=True)
+        self.reload_button = PushIconButton(
+            icon=qta.icon("msc.refresh"), label="Reload", small=True
+        )
         self.reload_button.setToolTip(
             "Reload the table file in case its content changed"
         )

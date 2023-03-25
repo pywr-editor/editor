@@ -1,6 +1,7 @@
 import operator
 from typing import TYPE_CHECKING, Any, Literal
 
+import qtawesome as qta
 from PySide6.QtCore import QSize, Slot
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout
 
@@ -82,14 +83,14 @@ class ScenarioValuesWidget(FormCustomWidget):
         # Action buttons
         buttons_layout = QHBoxLayout()
         self.add_button = PushIconButton(
-            icon=":misc/plus", label="Add", small=True
+            icon=qta.icon("msc.add"), label="Add", small=True
         )
         # noinspection PyUnresolvedReferences
         self.add_button.clicked.connect(self.on_add_new_ensemble)
         self.add_button.setToolTip("Add a new ensemble")
 
         self.edit_button = PushIconButton(
-            icon=":misc/edit",
+            icon=qta.icon("msc.edit"),
             label="Edit",
             small=True,
             icon_size=QSize(10, 10),
@@ -100,7 +101,7 @@ class ScenarioValuesWidget(FormCustomWidget):
         self.edit_button.setToolTip("Edit the values for the selected ensemble")
 
         self.delete_button = PushIconButton(
-            icon=":misc/minus", label="Delete", small=True
+            icon=qta.icon("msc.remove"), label="Delete", small=True
         )
         self.delete_button.setDisabled(True)
         self.delete_button.setToolTip("Delete the selected ensemble values")
