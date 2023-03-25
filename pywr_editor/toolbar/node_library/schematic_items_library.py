@@ -157,7 +157,7 @@ class LibraryPanel(QGraphicsView):
 
         # behaviour
         self.setFixedHeight(90)
-        self.setMinimumWidth(550)
+        self.setMinimumWidth(600)
         self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
