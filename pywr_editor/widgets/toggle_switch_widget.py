@@ -53,7 +53,7 @@ class ToggleSwitchWidget(QCheckBox):
                 "ToggleSwitchWidget": {
                     ":disabled": {"color": "rgba(0, 0, 0, 110)"},
                     "::indicator": {
-                        "background-color": "rgba(0, 0, 0, 0)",
+                        "background-color": "rgba(0, 0, 0, 15)",
                         "border-radius": "9px",
                         "border": "1px solid #CCC",
                         "height": size,
@@ -63,7 +63,7 @@ class ToggleSwitchWidget(QCheckBox):
                         "padding-left": 0,
                         "width": size,
                         ":hover": {
-                            "background-color": "rgba(0, 0, 0, 15)",
+                            "background-color": "rgba(0, 0, 0, 25)",
                             "image": "url(:/form/toggle-switch-off-hover)",
                         },
                         ":pressed": {
