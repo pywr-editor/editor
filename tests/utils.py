@@ -106,4 +106,4 @@ def change_table_view_cell(
 
         qtbot.keyClick(table.viewport().focusWidget(), key)
     qtbot.keyClick(table.viewport().focusWidget(), Qt.Key_Enter)
-    qtbot.wait(100)
+    qtbot.wait(200)

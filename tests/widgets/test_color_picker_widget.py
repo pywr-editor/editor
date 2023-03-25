@@ -7,7 +7,7 @@ from PySide6.QtWidgets import QColorDialog, QPushButton, QSpinBox, QWidget
 
 from pywr_editor.form import ColorPickerWidget, Form
 from pywr_editor.utils import is_windows
-from pywr_editor.widgets import PushButton
+from pywr_editor.widgets import PushIconButton
 
 
 class TestColorPickerWidget:
@@ -89,7 +89,7 @@ class TestColorPickerWidget:
 
             QTimer.singleShot(200, set_color)
             qtbot.mouseClick(
-                widget.findChild(PushButton), Qt.MouseButton.LeftButton
+                widget.findChild(PushIconButton), Qt.MouseButton.LeftButton
             )
             new_color_rgb = tuple([new_color_value] * 3)
             assert widget.get_value() == new_color_rgb
