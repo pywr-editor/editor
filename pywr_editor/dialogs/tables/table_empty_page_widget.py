@@ -68,3 +68,4 @@ class TableEmptyPageWidget(QWidget):
             QSpacerItem(10, 30, QSizePolicy.Expanding, QSizePolicy.Expanding)
         )
         layout.addLayout(button_box)
+        close_button.setFocus()
