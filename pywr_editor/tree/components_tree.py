@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 import PySide6
 from PySide6.QtCore import QPoint, Qt, Slot
-from PySide6.QtGui import QAction
+from PySide6.QtGui import QAction, QIcon
 from PySide6.QtWidgets import (
     QAbstractItemView,
     QHeaderView,
@@ -16,7 +16,7 @@ from pywr_editor.dialogs import ParametersDialog, RecordersDialog, TablesDialog
 from pywr_editor.model import Constants, ModelConfig
 from pywr_editor.style import Color, stylesheet_dict_to_str
 from pywr_editor.utils import maybe_delete_component
-from pywr_editor.widgets import ContextualMenu
+from pywr_editor.widgets import ContextualMenu, ExtensionIcon
 
 from .expanded_item_states import ExpandedItemStates
 from .tree_widget_node import TreeWidgetNode
@@ -272,6 +272,10 @@ class ComponentsTree(QTreeWidget):
                 model_config=self.model_config,
             )
             item.setText(0, table_name)
+            ext = self.model_config.tables.get_table_extension(table_name)
+            if ext:
+                item.setToolTip(0, f"{table_name} ({ext} table)")
+                item.setIcon(0, QIcon(ExtensionIcon(ext)))
 
         self.items["tables"] = tables
 
