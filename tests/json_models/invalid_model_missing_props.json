@@ -9,7 +9,13 @@
       "name": "Reservoir",
       "type": "Storage",
       "max_volume": 35,
-      "initial_volume": 35
+      "initial_volume": 35,
+      "position": {
+        "editor_position": [
+          200,
+          500
+        ]
+      }
     }
   ],
   "edges": []

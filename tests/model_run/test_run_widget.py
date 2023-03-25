@@ -24,7 +24,7 @@ class TestRunWidget:
         # noinspection PyTypeChecker
         run_widget: RunWidget = window.findChild(RunWidget)
         run_status_changed_spy = QSignalSpy(run_widget.run_status_changed)
-        node_item = window.schematic.schematic_items["Input"]
+        node_item = window.schematic.node_items["Input"]
 
         # check button status before running the model
         assert run_widget.step_button.isEnabled() is True
@@ -128,7 +128,7 @@ class TestRunWidget:
             is True
         )
         # tooltip contains the model results
-        item = window.schematic.schematic_items["Input"]
+        item = window.schematic.node_items["Input"]
         assert item.toolTip() == item.tooltip_text
 
     def test_step_until_end(self, qtbot):
