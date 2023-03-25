@@ -1090,7 +1090,7 @@ class Schematic(QGraphicsView):
         if self.connecting_node_props.enabled is True:
             return
 
-        panel = self.app.toolbar.tabs["Schematic"].panels["Operations"]
+        panel = self.app.toolbar.tabs["Operations"].panels["Operations"]
         delete_edge_button = panel.buttons["Disconnect"]
         delete_edge_action = self.app.app_actions.get("remove-edges")
         add_edge_action = self.app.app_actions.get("add-edge")
