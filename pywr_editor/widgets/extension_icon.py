@@ -62,10 +62,21 @@ class ExtensionIcon(QIconEngine):
         :param state: The item state.
         :return: None
         """
+        color_name = "gray"
+        if "csv" in self.label:
+            color_name = "orange"
+        if "txt" in self.label:
+            color_name = "purple"
+        elif "xls" in self.label:
+            color_name = "blue"
+        elif "h5" in self.label:
+            color_name = "green"
+
         pen = QPen()
         pen.setWidthF(0.7)
-        pen.setColor(Color("gray", 700).qcolor)
+        pen.setColor(Color(color_name, 700).qcolor)
         painter.setPen(pen)
+        painter.setBrush(Color(color_name, 100).qcolor)
         painter.setRenderHints(
             QPainter.Antialiasing
             | QPainter.SmoothPixmapTransform
@@ -82,8 +93,7 @@ class ExtensionIcon(QIconEngine):
         font = QFont("Monospace")
         font.setStyleHint(QFont.TypeWriter)
         font.setPixelSize(font_size)
-        color = Color("gray", 700).qcolor
-        painter.setPen(color)
+        painter.setPen(Color(color_name, 800).qcolor)
         painter.setFont(font)
         painter.drawText(
             rect,
