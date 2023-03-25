@@ -543,12 +543,12 @@ class MainWindow(QMainWindow):
         )
 
         # Schematic tab
-        schematic_tab = self.toolbar.add_tab("Schematic")
-        nodes_panel = schematic_tab.add_panel("Undo", layout="vertical")
+        operation_tab = self.toolbar.add_tab("Operations")
+        nodes_panel = operation_tab.add_panel("Undo", layout="vertical")
         nodes_panel.add_button(self.app_actions.get("undo"), is_large=False)
         nodes_panel.add_button(self.app_actions.get("redo"), is_large=False)
 
-        nodes_panel = schematic_tab.add_panel("Selection", layout="vertical")
+        nodes_panel = operation_tab.add_panel("Selection", layout="vertical")
         nodes_panel.add_button(
             self.app_actions.get("select-all"), is_large=False
         )
@@ -556,23 +556,23 @@ class MainWindow(QMainWindow):
             self.app_actions.get("select-none"), is_large=False
         )
 
-        op_panel = schematic_tab.add_panel("Operations")
+        op_panel = operation_tab.add_panel("Operations")
         op_panel.add_button(self.app_actions.get("add-edge"))
         op_panel.add_button(self.app_actions.get("remove-edges"))
         op_panel.add_button(self.app_actions.get("edit-node"))
         op_panel.add_button(self.app_actions.get("delete-node"))
 
-        nodes_panel = schematic_tab.add_panel("Nodes Library", show_name=False)
+        nodes_panel = operation_tab.add_panel("Nodes Library", show_name=False)
         nodes_panel.add_widget(SchematicItemsLibrary(self))
 
         # View tab
-        view_tab = self.toolbar.add_tab("View")
-        zoom_panel = view_tab.add_panel("Zoom")
+        schematic_tab = self.toolbar.add_tab("Schematic")
+        zoom_panel = schematic_tab.add_panel("Zoom")
         zoom_panel.add_button(self.app_actions.get("zoom-in"))
         zoom_panel.add_button(self.app_actions.get("zoom-out"))
         zoom_panel.add_button(self.app_actions.get("zoom-100"))
 
-        display_panel = view_tab.add_panel("Display", layout="vertical")
+        display_panel = schematic_tab.add_panel("Display", layout="vertical")
         display_panel.add_button(
             self.app_actions.get("toggle-labels"), is_large=False
         )
@@ -581,14 +581,14 @@ class MainWindow(QMainWindow):
         )
         display_panel.add_button(self.app_actions.get("center"), is_large=False)
 
-        size_panel = view_tab.add_panel("Size")
+        size_panel = schematic_tab.add_panel("Size")
         size_panel.add_button(self.app_actions.get("increase-width"))
         size_panel.add_button(self.app_actions.get("decrease-width"))
         size_panel.add_button(self.app_actions.get("increase-height"))
         size_panel.add_button(self.app_actions.get("decrease-height"))
         size_panel.add_button(self.app_actions.get("minimise"), is_large=False)
 
-        misc_panel = view_tab.add_panel("Misc", layout="vertical")
+        misc_panel = schematic_tab.add_panel("Misc", layout="vertical")
         misc_panel.add_button(self.app_actions.get("lock"), is_large=False)
         misc_panel.add_button(
             self.app_actions.get("export-current-view"), is_large=False
