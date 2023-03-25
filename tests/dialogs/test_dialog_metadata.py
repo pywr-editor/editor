@@ -1,7 +1,7 @@
 import pytest
 from PySide6.QtCore import QItemSelectionModel, QTimer
 from PySide6.QtGui import Qt
-from PySide6.QtWidgets import QDialogButtonBox, QPushButton
+from PySide6.QtWidgets import QPushButton
 
 from pywr_editor.dialogs import MetadataDialog
 from pywr_editor.dialogs.metadata.metadata_custom_fields_widget import (
@@ -51,11 +51,8 @@ class TestMetadataDialog:
             form_field.widget.setText(new_value)
 
         # save the form
-        save_button: QPushButton = dialog.button_box.button(
-            QDialogButtonBox.StandardButton.Save
-        )
-        assert save_button.isEnabled() is True
-        qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
+        assert dialog.save_button.isEnabled() is True
+        qtbot.mouseClick(dialog.save_button, Qt.MouseButton.LeftButton)
 
         assert model_config.has_changes is True
         for field_name, new_value in new_values.items():
@@ -74,11 +71,8 @@ class TestMetadataDialog:
         # try saving the form
         QTimer.singleShot(100, close_message_box)
 
-        save_button: QPushButton = dialog.button_box.button(
-            QDialogButtonBox.StandardButton.Save
-        )
-        assert save_button.isEnabled() is True
-        qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
+        assert dialog.save_button.isEnabled() is True
+        qtbot.mouseClick(dialog.save_button, Qt.MouseButton.LeftButton)
         assert model_config.has_changes is False
 
     def test_add_new_custom_field(self, qtbot, dialog, model_config):
@@ -92,10 +86,7 @@ class TestMetadataDialog:
         custom_fields_widget: MetadataCustomFieldsWidget = (
             custom_fields_field.widget
         )
-        add_button: QPushButton = dialog.findChild(QPushButton)
-        save_button: QPushButton = dialog.button_box.button(
-            QDialogButtonBox.StandardButton.Save
-        )
+        add_button: QPushButton = custom_fields_widget.findChild(QPushButton)
         assert add_button.text() == "Add"
 
         # 1. Add a new item
@@ -109,8 +100,8 @@ class TestMetadataDialog:
         assert model_new_field == [expected_key, expected_value]
 
         # 3. Save the form
-        assert save_button.isEnabled() is True
-        qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
+        assert dialog.save_button.isEnabled() is True
+        qtbot.mouseClick(dialog.save_button, Qt.MouseButton.LeftButton)
 
         assert custom_fields_field.message.text() == ""
         assert expected_key in model_config.metadata
@@ -129,9 +120,6 @@ class TestMetadataDialog:
         custom_fields_widget: MetadataCustomFieldsWidget = (
             custom_fields_field.widget
         )
-        save_button: QPushButton = dialog.button_box.button(
-            QDialogButtonBox.StandardButton.Save
-        )
         model = custom_fields_widget.model
 
         row_id = 2
@@ -142,8 +130,8 @@ class TestMetadataDialog:
         model.layoutChanged.emit()
 
         # save the form
-        assert save_button.isEnabled() is True
-        qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
+        assert dialog.save_button.isEnabled() is True
+        qtbot.mouseClick(dialog.save_button, Qt.MouseButton.LeftButton)
         assert model_config.has_changes is True
         assert model_config.metadata[key] == expected_value
 
@@ -223,9 +211,6 @@ class TestMetadataDialog:
         custom_fields_widget: MetadataCustomFieldsWidget = (
             custom_fields_field.widget
         )
-        save_button: QPushButton = dialog.button_box.button(
-            QDialogButtonBox.StandardButton.Save
-        )
         delete_button: QPushButton = dialog.findChildren(QPushButton)[1]
         assert delete_button.text() == "Delete"
 
@@ -239,8 +224,8 @@ class TestMetadataDialog:
         qtbot.mouseClick(delete_button, Qt.MouseButton.LeftButton)
 
         # save the form
-        assert save_button.isEnabled() is True
-        qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
+        assert dialog.save_button.isEnabled() is True
+        qtbot.mouseClick(dialog.save_button, Qt.MouseButton.LeftButton)
 
         # deleted fields
         assert key_to_delete not in model_config.metadata.keys()
@@ -259,10 +244,6 @@ class TestMetadataDialog:
             custom_fields_field.widget
         )
         model = custom_fields_widget.model
-
-        save_button: QPushButton = dialog.button_box.button(
-            QDialogButtonBox.StandardButton.Save
-        )
         delete_button: QPushButton = dialog.findChildren(QPushButton)[1]
         assert delete_button.text() == "Delete"
 
@@ -278,6 +259,6 @@ class TestMetadataDialog:
         assert all([key[0] not in keys_to_delete for key in model.fields])
 
         # save the form
-        qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
+        qtbot.mouseClick(dialog.save_button, Qt.MouseButton.LeftButton)
         all([key not in model_config.metadata.keys() for key in keys_to_delete])
         assert model_config.has_changes is True
