@@ -2,13 +2,14 @@ import os
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+import qtawesome as qta
 from pandas import HDFStore
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QLineEdit
 
 from pywr_editor.form import FormCustomWidget, FormField, FormValidation
 from pywr_editor.utils import Logging, get_signal_sender
-from pywr_editor.widgets import PushButton
+from pywr_editor.widgets import PushIconButton
 
 if TYPE_CHECKING:
     from pywr_editor.dialogs import ParameterDialogForm
@@ -51,12 +52,16 @@ class H5FileWidget(FormCustomWidget):
         self.file_changed.connect(self.on_update_file)
 
         # browse button
-        self.browse_button = PushButton("Browse...", small=True)
+        self.browse_button = PushIconButton(
+            icon=qta.icon("msc.folder-opened"), label="Browse...", small=True
+        )
         # noinspection PyUnresolvedReferences
         self.browse_button.clicked.connect(self.on_browse_table_file)
 
         # reload button
-        self.reload_button = PushButton("Reload", small=True)
+        self.reload_button = PushIconButton(
+            icon=qta.icon("msc.refresh"), label="Reload", small=True
+        )
         self.reload_button.setToolTip(
             "Reload the table file in case its content changed"
         )

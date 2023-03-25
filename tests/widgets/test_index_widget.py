@@ -225,7 +225,7 @@ class TestDialogParameterIndexWidget:
 
         dialog = ParametersDialog(model_config, param_name)
         selected_page = dialog.pages_widget.currentWidget()
-        dialog.hide()
+        dialog.show()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
 

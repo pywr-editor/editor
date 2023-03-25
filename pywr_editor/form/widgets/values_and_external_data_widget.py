@@ -1,5 +1,6 @@
 from typing import Any
 
+import qtawesome as qta
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QHBoxLayout, QLineEdit, QVBoxLayout, QWidget
 
@@ -218,14 +219,18 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
         line_edit.setText("None")
 
         # buttons
-        select_button = PushButton("Select")
+        select_button = PushIconButton(
+            icon=qta.icon("msc.inspect"), label="Select", small=True
+        )
         select_button.setToolTip(
             "Select an existing model parameter or define a new one"
         )
         # noinspection PyUnresolvedReferences
         select_button.clicked.connect(self.open_data_picker)
 
-        clear_button = PushButton("Clear")
+        clear_button = PushIconButton(
+            icon=qta.icon("msc.remove"), label="Clear", small=True
+        )
         clear_button.setToolTip("Empty the field")
         # noinspection PyUnresolvedReferences
         clear_button.clicked.connect(self.reset_line_edit)

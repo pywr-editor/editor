@@ -58,9 +58,10 @@ class TestTablesDialog:
 
         table_list_widget = dialog.table_list_widget
         pages_widget = dialog.pages_widget
-        qtbot.mouseClick(
-            table_list_widget.add_button, Qt.MouseButton.LeftButton
+        add_button: QPushButton = pages_widget.empty_page.findChild(
+            QPushButton, "add_button"
         )
+        qtbot.mouseClick(add_button, Qt.MouseButton.LeftButton)
         # new name is random
         new_name = list(pages_widget.pages.keys())[-1]
 
@@ -73,10 +74,7 @@ class TestTablesDialog:
         )
         assert new_model_index.data() == new_name
         # the item is selected
-        assert (
-            table_list_widget.list.selectionModel().isSelected(new_model_index)
-            is True
-        )
+        assert table_list_widget.list.selectedIndexes()[0].data() == new_name
 
         # Page widget
         selected_page = pages_widget.currentWidget()
@@ -201,6 +199,8 @@ class TestTablesDialog:
         Tests that a table is deleted correctly.
         """
         dialog = TablesDialog(model_config)
+        dialog.show()
+
         table_list_widget = dialog.table_list_widget
         pages_widget = dialog.pages_widget
 
@@ -213,10 +213,12 @@ class TestTablesDialog:
         )
 
         # delete button is enabled and the item is selected
-        assert table_list_widget.delete_button.isEnabled() is True
+        delete_button: QPushButton = pages_widget.pages[
+            deleted_table
+        ].findChild(QPushButton, "delete_button")
+        assert delete_button.isEnabled() is True
         assert (
-            table_list_widget.list.selectionModel().isSelected(model_index)
-            is True
+            table_list_widget.list.selectedIndexes()[0].data() == deleted_table
         )
 
         # delete
@@ -227,9 +229,7 @@ class TestTablesDialog:
             )
 
         QTimer.singleShot(100, confirm_deletion)
-        qtbot.mouseClick(
-            table_list_widget.delete_button, Qt.MouseButton.LeftButton
-        )
+        qtbot.mouseClick(delete_button, Qt.MouseButton.LeftButton)
 
         assert isinstance(pages_widget.currentWidget(), TableEmptyPageWidget)
         assert deleted_table not in pages_widget.pages.keys()
@@ -336,8 +336,7 @@ class TestTablesDialog:
         url_widget: TableUrlWidget = url_field.widget
         form = url_widget.form
 
-        dialog.hide()
-
+        dialog.show()
         assert form.find_field_by_name("name").value() == table_name
 
         # 1. the url field is without errors or warnings
@@ -390,6 +389,10 @@ class TestTablesDialog:
             fields += ["key"]
         for f in fields:
             value = form.find_field_by_name(f).widget.get_value()
+            # convert index_col to integer
+            if f == "index_col" and table_name == "excel_file":
+                all_cols = list(url_widget.table.columns)
+                value = [all_cols.index(col_name) for col_name in value]
             if value:
                 model_table_dict[f] = value
 
@@ -407,6 +410,8 @@ class TestTablesDialog:
         table_name = "csv_table"
         model_config = ModelConfig(self.model_file_table_selector)
         dialog = TablesDialog(model_config, table_name)
+        dialog.show()
+
         selected_page = dialog.pages_widget.currentWidget()
         # noinspection PyUnresolvedReferences
         url_widget: TableUrlWidget = selected_page.findChild(

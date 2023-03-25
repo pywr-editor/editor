@@ -1,6 +1,7 @@
 import os
 from typing import TYPE_CHECKING, Literal, Union
 
+import qtawesome as qta
 from PySide6.QtCore import QSize, Signal, Slot
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QHBoxLayout, QSizePolicy
@@ -122,15 +123,17 @@ class ModelComponentTypeSelectorWidget(FormCustomWidget):
             )
 
         # button to pywr API
-        self.doc_button = PushIconButton(icon=":/misc/help", parent=self)
+        self.doc_button = PushIconButton(
+            icon=qta.icon("msc.question"), parent=self
+        )
         self.doc_button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
         self.doc_button.setToolTip(
             f"Open the pywr manual page for this {self.type}"
         )
         self.doc_button.setEnabled(False)
+        self.doc_button.setMaximumWidth(25)
         # noinspection PyUnresolvedReferences
         self.doc_button.clicked.connect(self.on_doc_button_click)
-        self.doc_button.setMaximumWidth(30)
 
         # populate the field with the available components - key does not have
         # component suffix

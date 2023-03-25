@@ -1,11 +1,12 @@
 from typing import Sequence
 
+import qtawesome as qta
 from PySide6.QtCore import Signal, Slot
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QColorDialog, QHBoxLayout, QWidget
 
 from pywr_editor.form import FormCustomWidget, FormField
-from pywr_editor.widgets import PushButton
+from pywr_editor.widgets import PushIconButton
 
 
 class ColorPickerWidget(FormCustomWidget):
@@ -55,7 +56,9 @@ class ColorPickerWidget(FormCustomWidget):
         self.preview_color_box.setFixedSize(30, 30)
         self.set_preview_color(self.value)
 
-        button = PushButton("Select colour")
+        button = PushIconButton(
+            icon=qta.icon("msc.symbol-color"), label="Select colour"
+        )
         # noinspection PyUnresolvedReferences
         button.clicked.connect(self.open_color_picker)
 

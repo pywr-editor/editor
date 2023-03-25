@@ -59,6 +59,7 @@ class TestNodeDialog:
         Tests that the nodes are loaded correctly.
         """
         dialog = self.node_dialog(node_name)
+        dialog.show()
         form = dialog.form
 
         assert form.find_field_by_name("name").value() == node_name

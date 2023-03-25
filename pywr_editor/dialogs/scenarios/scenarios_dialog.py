@@ -37,12 +37,12 @@ class ScenariosDialog(SettingsDialog):
 
         # scenarios list
         self.model_config = model_config
-        self.list = ScenariosWidget(
+        self.scenarios_list_widget = ScenariosWidget(
             model_config=model_config,
             parent=self,
         )
 
-        self.setup(self.list, self.pages)
+        self.setup(self.scenarios_list_widget, self.pages)
         self.setWindowTitle("Model scenarios")
         self.setMinimumSize(800, 600)
 
@@ -59,5 +59,5 @@ class ScenariosDialog(SettingsDialog):
             self.pages.currentWidget().form.load_fields()
 
             # set the selected item in the list
-            scenarios_list = self.list.list
+            scenarios_list = self.scenarios_list_widget.list
             scenarios_list.select_row_by_name(selected_scenario_name)

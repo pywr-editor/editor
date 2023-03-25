@@ -73,15 +73,18 @@ class AppStylesheet:
         :return: The stylesheet dictionary.
         """
         return {
+            "QMainWindow": {
+                "background": Color("gray", 100).hex,
+            },
             "QStatusBar": {
-                "background": Color("neutral", 100).hex,
-                "color": Color("neutral", 600).hex,
+                "background": Color("gray", 200).hex,
+                "color": Color("gray", 600).hex,
             },
             "QToolTip": {
-                "background": Color("neutral", 100).hex,
-                "border": f"1px solid{Color('neutral', 300).hex}",
+                "background": Color("gray", 100).hex,
+                "border": f"1px solid{Color('gray', 300).hex}",
                 "border-radius": "5px",
-                "color": Color("neutral", 600).hex,
+                "color": Color("gray", 600).hex,
             },
             "QMenu": {
                 "background": Color("gray", 100).hex,
@@ -128,11 +131,11 @@ class AppStylesheet:
             "padding-right": "15px",
             "border-width": "3",
             "background": "#FFF",
-            "border": f"1px solid {Color('neutral', 300).hex}",
+            "border": f"1px solid {Color('gray', 300).hex}",
             "border-radius": "4px",
             "padding": "5px 6px",
             ":hover": {
-                "background": Color("neutral", 100).hex,
+                "background": Color("gray", 100).hex,
             },
             ":focus": {
                 "border": f"1px solid {Color('blue', 400).hex}",
@@ -186,32 +189,33 @@ class AppStylesheet:
 
         return {
             "QGroupBox": {
-                "border": f"1px solid {Color('neutral', 300).hex}",
-                "border-radius": "5px",
-                "font-size": "14px",
+                "border": 0,
+                "font-weight": "bold",
+                "border-bottom": f"2px solid {Color('gray', 200).hex}",
+                "font-size": "15px",
                 "margin-top": "15px",
                 "padding": "7px 0px",
                 ":title": {
                     "subcontrol-origin": "margin",
                     "top": "4px",
-                    "left": "8px",
+                    "left": "0px",
                     "padding": "0px 4px",
                     "subcontrol-position": "top left",
                 },
             },
             "QPlainTextEdit": {
                 "background": "#FFF",
-                "border": f"1px solid {Color('neutral', 300).hex}",
+                "border": f"1px solid {Color('gray', 300).hex}",
                 "border-radius": "4px",
             },
             "QLineEdit, QTextEdit": {
                 "background": "#FFF",
-                "border": f"1px solid {Color('neutral', 300).hex}",
+                "border": f"1px solid {Color('gray', 300).hex}",
                 "border-radius": "4px",
                 "padding": "5px 6px",
             },
             "QLineEdit:hover, QTextEdit:hover": {
-                "background": Color("neutral", 100).hex,
+                "background": Color("gray", 50).hex,
             },
             "QLineEdit:focus, QTextEdit:focus": {
                 "border": f"1px solid {Color('blue', 400).hex}",
@@ -233,13 +237,14 @@ class AppStylesheet:
                 },
             },
             "QDialog": {
-                "background": "#FFF",
-                "border": f"1px solid {Color('neutral', 300).hex}",
-                # "background": Color("neutral", 50).hex,
-                "color": Color("neutral", 600).hex,
+                "background": Color("gray", 100).hex,
+                # "background": Color("gray", 100).hex,
+                "border": f"1px solid {Color('gray', 300).hex}",
+                # "background": Color("gray", 50).hex,
+                "color": Color("gray", 600).hex,
             },
             "QGroupBox, QLabel": {
-                "color": Color("neutral", 700).hex,
+                "color": Color("gray", 700).hex,
             },
             "SpinBox": self.spin_box(),
             "DoubleSpinBox": self.spin_box(),
@@ -253,28 +258,28 @@ class AppStylesheet:
         """
         return {
             "QPushButton": {
-                "background": "rgba(0, 0, 0, 7)",
-                "border": "1px solid rgba(0, 0, 0, 20)",
+                "background": Color("gray", 200).hex,
+                "border": f"1px solid {Color('gray', 300).hex}",
                 "border-radius": "4px",
-                "min-height": "18px",
-                "padding": "6px 18px",
+                "padding": "6px 10px",
             },
             "QPushButton:pressed": {"color": "rgba(0, 0, 0, 150)"},
             "QPushButton:hover": {
-                "background-color": "rgba(0, 0, 0, 20)",
-                "border": "1px solid rgba(0, 0, 0, 28)",
+                "background": Color("gray", 300).hex,
+                "border": f"1px solid {Color('gray', 300).hex}",
             },
             "QPushButton:disabled": {
-                "background": "rgba(0, 0, 0, 7)",
-                "border": "1px solid rgba(0, 0, 0, 5)",
-                "color": "rgba(0, 0, 0, 80)",
+                "background": Color("gray", 100).hex,
+                "border": f"1px solid {Color('gray', 200).hex}",
+                "color": Color("gray", 400).hex,
             },
             # PushIconButton
             "QPushButton QLabel:disabled": {
-                "color": Color("neutral", 200).hex,
+                "color": Color("gray", 200).hex,
             },
             "QPushButton:focus": {
                 "background-color": Color("blue", 100).hex,
+                "border": f"1px solid {Color('blue', 300).hex}",
             },
         }
 
@@ -301,12 +306,12 @@ class AppStylesheet:
                 },
                 ":horizontal:hover": {"border": "5px solid rgba(0, 0, 0, 0)"},
                 "::handle:vertical": {
-                    "background-color": Color("neutral", 400).hex,
+                    "background-color": Color("gray", 400).hex,
                     "border-radius": "2px",
                     "min-height": "25px",
                 },
                 "::handle:horizontal": {
-                    "background-color": Color("neutral", 400).hex,
+                    "background-color": Color("gray", 400).hex,
                     "border-radius": "2px",
                     "min-width": "25px",
                 },
@@ -321,7 +326,6 @@ class AppStylesheet:
                 },
                 "::sub-line:horizontal": {
                     "image": "url(:scrollbar/scroll-left)",
-                    # "margin-left": "5px",
                     "height": "10px",
                     "width": "10px",
                     "subcontrol-origin": "margin",

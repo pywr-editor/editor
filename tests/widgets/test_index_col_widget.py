@@ -42,6 +42,7 @@ class TestDialogParameterIndexColWidget:
             ("param_with_index_col_int", ["Column 2"]),
             # index_col is a list of strings
             ("param_with_index_col_list_of_str", ["Column 1", "Column 4"]),
+            ("param_with_index_col_list_of_str_csv", ["Column 1", " Date"]),
             # same as above but columns are not sorted
             (
                 "param_with_index_col_list_of_str_unsorted",
@@ -70,12 +71,11 @@ class TestDialogParameterIndexColWidget:
         """
         Tests that the field loads the columns and sets the column properly.
         """
-        all_columns = [
-            "Column 1",
-            "Column 2",
-            "Column 3",
-            "Column 4",
-        ]
+        if "csv" in param_name:
+            all_columns = ["Column 1", "Demand centre", "Column 3", " Date"]
+        else:
+            all_columns = ["Column 1", "Column 2", "Column 3", "Column 4"]
+
         # different sorting for H5 with index (index always comes first)
         if param_name in [
             "param_with_h5_table_index",
@@ -87,7 +87,7 @@ class TestDialogParameterIndexColWidget:
 
         dialog = ParametersDialog(model_config, param_name)
         selected_page = dialog.pages_widget.currentWidget()
-        dialog.hide()
+        dialog.show()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
 
@@ -162,6 +162,9 @@ class TestDialogParameterIndexColWidget:
             fields += ["key"]
         for f in fields:
             value = form.find_field_by_name(f).widget.get_value()
+            # convert to index
+            if f == "index_col" and url_widget.file_ext == ".xlsx":
+                value = [all_columns.index(v) for v in value]
             if value or value == 0:
                 model_param_dict[f] = value
 

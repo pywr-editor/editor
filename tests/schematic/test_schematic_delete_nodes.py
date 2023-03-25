@@ -30,7 +30,7 @@ class TestDeleteSchematicNodes:
         window = MainWindow(self.model_file)
         window.hide()
         schematic = window.schematic
-        node_op_panel = window.toolbar.tabs["Schematic"].panels["Operations"]
+        node_op_panel = window.toolbar.tabs["Operations"].panels["Operations"]
 
         return window, schematic, node_op_panel
 
@@ -189,7 +189,7 @@ class TestDeleteSchematicNodes:
             edge for edge in model_config.edges.get_all() if node_name in edge
         ]
 
-        panel = schematic.app.toolbar.tabs["Schematic"].panels["Undo"]
+        panel = schematic.app.toolbar.tabs["Operations"].panels["Undo"]
         undo_button = panel.buttons["Undo"]
         redo_button = panel.buttons["Redo"]
 
@@ -290,7 +290,7 @@ class TestDeleteSchematicNodes:
         node_item = schematic.node_items[node_name]
         assert len(node_item.edges) == 3
 
-        panel = schematic.app.toolbar.tabs["Schematic"].panels["Undo"]
+        panel = schematic.app.toolbar.tabs["Operations"].panels["Undo"]
         undo_button = panel.buttons["Undo"]
 
         node_item.on_delete_item()
@@ -340,7 +340,7 @@ class TestDeleteSchematicNodes:
             deleted_schematic_edge_dict[node] = schematic_item.edges
 
         # delete them
-        panel = window.toolbar.tabs["Schematic"].panels["Operations"]
+        panel = window.toolbar.tabs["Operations"].panels["Operations"]
         qtbot.mouseClick(panel.buttons["Delete"], Qt.MouseButton.LeftButton)
 
         assert model_config.has_changes is True

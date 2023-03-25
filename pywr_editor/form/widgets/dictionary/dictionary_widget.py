@@ -1,7 +1,8 @@
 from copy import deepcopy
 from typing import TYPE_CHECKING, Any
 
-from PySide6.QtCore import QSize, Slot
+import qtawesome as qta
+from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QAbstractItemView, QHBoxLayout, QVBoxLayout
 
 from pywr_editor.form import FormCustomWidget, FormField, FormValidation
@@ -70,17 +71,14 @@ class DictionaryWidget(FormCustomWidget):
         # Buttons
         self.button_layout = QHBoxLayout()
         self.add_button = PushIconButton(
-            icon=":misc/plus", label="Add", small=True
+            icon=qta.icon("msc.add"), label="Add", small=True
         )
         self.add_button.setToolTip("Add a new dictionary item")
         # noinspection PyUnresolvedReferences
         self.add_button.clicked.connect(self.on_add_new_item)
 
         self.edit_button = PushIconButton(
-            icon=":misc/edit",
-            label="Edit",
-            small=True,
-            icon_size=QSize(10, 10),
+            icon=qta.icon("msc.edit"), label="Edit", small=True
         )
         self.edit_button.setEnabled(False)
         # noinspection PyUnresolvedReferences
@@ -88,7 +86,7 @@ class DictionaryWidget(FormCustomWidget):
         self.edit_button.setToolTip("Edit the dictionary item")
 
         self.delete_button = PushIconButton(
-            icon=":misc/minus", label="Delete", small=True
+            icon=qta.icon("msc.remove"), label="Delete", small=True
         )
         self.delete_button.setToolTip("Delete the selected dictionary item")
         self.delete_button.setDisabled(True)

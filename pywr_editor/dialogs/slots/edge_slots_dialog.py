@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Union
 
+import qtawesome as qta
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QWindow
 from PySide6.QtWidgets import (
@@ -7,6 +8,7 @@ from PySide6.QtWidgets import (
     QDialogButtonBox,
     QGroupBox,
     QLabel,
+    QPushButton,
     QVBoxLayout,
 )
 
@@ -50,6 +52,8 @@ class EdgeSlotsDialog(QDialog):
         button_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
         # noinspection PyUnresolvedReferences
         button_box.rejected.connect(self.reject)
+        # noinspection PyUnresolvedReferences
+        button_box.findChild(QPushButton).setIcon(qta.icon("msc.close"))
 
         # Form
         fields: dict[str, list[FieldConfig]] = {

@@ -1,14 +1,8 @@
 from typing import Any, Callable
 
+import qtawesome as qta
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import (
-    QDialog,
-    QDialogButtonBox,
-    QLabel,
-    QPushButton,
-    QVBoxLayout,
-    QWidget,
-)
+from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
 from pywr_editor.form import (
     ExternalDataPickerFormWidget,
@@ -18,6 +12,7 @@ from pywr_editor.form import (
     FormTitle,
 )
 from pywr_editor.model import ModelConfig
+from pywr_editor.widgets import PushIconButton
 
 """
  This widgets shows a dialog with a form to configure
@@ -71,15 +66,17 @@ class ExternalDataPickerDialogWidget(QDialog):
         )
 
         # Buttons
-        button_box = QDialogButtonBox(
-            QDialogButtonBox.StandardButton.Save
-            | QDialogButtonBox.StandardButton.Close
-        )
-        # noinspection PyTypeChecker
-        save_button: QPushButton = button_box.findChild(QPushButton)
-        save_button.setObjectName("save_button")
+        button_box = QHBoxLayout()
+        close_button = PushIconButton(icon=qta.icon("msc.close"), label="Close")
         # noinspection PyUnresolvedReferences
-        button_box.rejected.connect(self.reject)
+        close_button.clicked.connect(self.reject)
+
+        save_button = PushIconButton(icon=qta.icon("msc.save"), label="Save")
+        save_button.setObjectName("save_button")
+
+        button_box.addStretch()
+        button_box.addWidget(save_button)
+        button_box.addWidget(close_button)
 
         # Form
         self.form = ExternalDataPickerFormWidget(
@@ -90,13 +87,13 @@ class ExternalDataPickerDialogWidget(QDialog):
             parent=self,
         )
         # noinspection PyUnresolvedReferences
-        button_box.accepted.connect(self.form.on_save)
+        save_button.clicked.connect(self.form.on_save)
 
         # Layout
         layout.addWidget(title)
         layout.addWidget(description)
         layout.addWidget(self.form)
-        layout.addWidget(button_box)
+        layout.addLayout(button_box)
 
         self.setLayout(layout)
         self.setWindowTitle(title.text())

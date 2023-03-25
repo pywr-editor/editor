@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import TYPE_CHECKING, Union
 
 import pywr
+import qtawesome as qta
 from PySide6.QtCore import QSize
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import (
@@ -88,6 +89,8 @@ class AboutDialog(QDialog):
         button_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
         # noinspection PyUnresolvedReferences
         button_box.rejected.connect(self.reject)
+        # noinspection PyUnresolvedReferences
+        button_box.findChild(QPushButton).setIcon(qta.icon("msc.close"))
 
         # Logo + legal widgets layout
         logo_layout = QVBoxLayout()

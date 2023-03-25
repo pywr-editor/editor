@@ -1,14 +1,8 @@
 from typing import Any, Callable, Literal
 
+import qtawesome as qta
 from PySide6.QtCore import Qt, Slot
-from PySide6.QtWidgets import (
-    QDialog,
-    QDialogButtonBox,
-    QLabel,
-    QPushButton,
-    QVBoxLayout,
-    QWidget,
-)
+from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
 from pywr_editor.form import (
     FloatWidget,
@@ -20,6 +14,7 @@ from pywr_editor.form import (
 )
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import Logging
+from pywr_editor.widgets import PushIconButton
 
 """
  Defines a dialog widget and form to add a node and its factor
@@ -81,15 +76,17 @@ class NodesAndFactorsDialog(QDialog):
             raise ValueError("mode can only be set to 'edit' or 'add'")
 
         # Buttons
-        button_box = QDialogButtonBox(
-            QDialogButtonBox.StandardButton.Save
-            | QDialogButtonBox.StandardButton.Close
-        )
-        # noinspection PyTypeChecker
-        save_button: QPushButton = button_box.findChild(QPushButton)
-        save_button.setObjectName("save_button")
+        button_box = QHBoxLayout()
+        close_button = PushIconButton(icon=qta.icon("msc.close"), label="Close")
         # noinspection PyUnresolvedReferences
-        button_box.rejected.connect(self.reject)
+        close_button.clicked.connect(self.reject)
+
+        save_button = PushIconButton(icon=qta.icon("msc.save"), label="Save")
+        save_button.setObjectName("save_button")
+
+        button_box.addStretch()
+        button_box.addWidget(save_button)
+        button_box.addWidget(close_button)
 
         # Form
         self.form = Form(
@@ -116,13 +113,13 @@ class NodesAndFactorsDialog(QDialog):
         self.form.load_fields()
 
         # noinspection PyUnresolvedReferences
-        button_box.accepted.connect(self.on_save)
+        save_button.clicked.connect(self.on_save)
 
         # Layout
         layout.addWidget(title)
         layout.addWidget(description)
         layout.addWidget(self.form)
-        layout.addWidget(button_box)
+        layout.addLayout(button_box)
 
         self.setLayout(layout)
         self.setWindowTitle(title.text())

@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Any, TypeVar, Union
 
+import qtawesome as qta
 from PySide6.QtCore import QSize, Slot
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout
 
@@ -49,14 +50,14 @@ class NodesAndFactorsTableWidget(FormCustomWidget):
         # Action buttons
         buttons_layout = QHBoxLayout()
         self.add_button = PushIconButton(
-            icon=":misc/plus", label="Add", small=True
+            icon=qta.icon("msc.add"), label="Add", small=True
         )
         # noinspection PyUnresolvedReferences
         self.add_button.clicked.connect(self.on_add_row)
         self.add_button.setToolTip("Add a new node")
 
         self.edit_button = PushIconButton(
-            icon=":misc/edit",
+            icon=qta.icon("msc.edit"),
             label="Edit",
             small=True,
             icon_size=QSize(10, 10),
@@ -69,7 +70,7 @@ class NodesAndFactorsTableWidget(FormCustomWidget):
         )
 
         self.delete_button = PushIconButton(
-            icon=":misc/minus", label="Delete", small=True
+            icon=qta.icon("msc.remove"), label="Delete", small=True
         )
         self.delete_button.setDisabled(True)
         self.delete_button.setToolTip("Delete the selected row")
@@ -276,7 +277,7 @@ class NodesAndFactorsTableWidget(FormCustomWidget):
                 _value["nodes"] = value["nodes"]
                 # do not assign factors if nodes are not valid
                 # if empty, use and show default value
-                if value["factors"] is None:
+                if not value["factors"]:
                     _value["factors"] = [self.get_default_factor] * len(
                         _value["nodes"]
                     )
@@ -343,3 +344,18 @@ class NodesAndFactorsTableWidget(FormCustomWidget):
             )
 
         return FormValidation(validation=True)
+
+    def after_validate(
+        self, form_dict: dict[str, Any], form_field_name: str
+    ) -> None:
+        """
+        Unpacks the widget value.
+        :param form_dict: The dictionary containing the data of the form
+        the widget is child of.
+        :param form_field_name: The name of the parent FormField.
+        :return: None
+        """
+        for key, value in form_dict["nodes_and_factors"].items():
+            if value:
+                form_dict[key] = value
+        del form_dict["nodes_and_factors"]

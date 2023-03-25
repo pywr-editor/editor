@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 import PySide6
 from PySide6.QtCore import QPoint, Qt, Slot
-from PySide6.QtGui import QAction
+from PySide6.QtGui import QAction, QIcon
 from PySide6.QtWidgets import (
     QAbstractItemView,
     QHeaderView,
@@ -12,19 +12,13 @@ from PySide6.QtWidgets import (
     QTreeWidgetItem,
 )
 
-from pywr_editor.dialogs import (
-    NodeDialog,
-    ParametersDialog,
-    ParametersWidget,
-    RecordersDialog,
-    RecordersWidget,
-    TablesDialog,
-    TablesWidget,
-)
+from pywr_editor.dialogs import ParametersDialog, RecordersDialog, TablesDialog
 from pywr_editor.model import Constants, ModelConfig
 from pywr_editor.style import Color, stylesheet_dict_to_str
-from pywr_editor.widgets import ContextualMenu
+from pywr_editor.utils import maybe_delete_component
+from pywr_editor.widgets import ContextualMenu, ExtensionIcon
 
+from ..dialogs.node.node_dialog import NodeDialog
 from .expanded_item_states import ExpandedItemStates
 from .tree_widget_node import TreeWidgetNode
 from .tree_widget_parameter import TreeWidgetParameter, TreeWidgetParameterName
@@ -279,6 +273,10 @@ class ComponentsTree(QTreeWidget):
                 model_config=self.model_config,
             )
             item.setText(0, table_name)
+            ext = self.model_config.tables.get_table_extension(table_name)
+            if ext:
+                item.setToolTip(0, f"{table_name} ({ext} table)")
+                item.setIcon(0, QIcon(ExtensionIcon(ext)))
 
         self.items["tables"] = tables
 
@@ -549,7 +547,7 @@ class ComponentsTree(QTreeWidget):
         total_components = self.model_config.tables.is_used(table_name)
 
         # ask before deleting
-        if TablesWidget.maybe_delete(table_name, total_components, self):
+        if maybe_delete_component(table_name, total_components, self):
             # delete the table from the model configuration
             self.model_config.tables.delete(table_name)
             # update tree and status bar
@@ -581,9 +579,7 @@ class ComponentsTree(QTreeWidget):
         total_components = self.model_config.parameters.is_used(parameter_name)
 
         # ask before deleting
-        if ParametersWidget.maybe_delete(
-            parameter_name, total_components, self
-        ):
+        if maybe_delete_component(parameter_name, total_components, self):
             # delete the parameter from the model configuration
             self.model_config.parameters.delete(parameter_name)
             # update tree and status bar
@@ -617,7 +613,7 @@ class ComponentsTree(QTreeWidget):
         total_components = self.model_config.parameters.is_used(recorder_name)
 
         # ask before deleting
-        if RecordersWidget.maybe_delete(recorder_name, total_components, self):
+        if maybe_delete_component(recorder_name, total_components, self):
             # delete the parameter from the model configuration
             self.model_config.parameters.delete(recorder_name)
             # update tree and status bar

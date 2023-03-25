@@ -63,7 +63,7 @@
     "excel_file": {
       "url": "files/table2.xlsx",
       "sheet_name": 0,
-      "index_col": "Centre"
+      "index_col": 0
     },
     "csv_table": {
       "url": "files/table.csv",

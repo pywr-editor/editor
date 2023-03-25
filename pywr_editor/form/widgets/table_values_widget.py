@@ -2,6 +2,7 @@ import traceback
 from itertools import groupby
 
 import PySide6
+import qtawesome as qta
 from PySide6.QtAxContainer import QAxObject
 from PySide6.QtCore import QCoreApplication, Qt, Slot
 from PySide6.QtGui import QGuiApplication
@@ -16,12 +17,7 @@ from PySide6.QtWidgets import (
 
 from pywr_editor.form import FormCustomWidget, FormValidation, TableValuesModel
 from pywr_editor.utils import Logging, get_signal_sender, is_windows, move_row
-from pywr_editor.widgets import (
-    DoubleSpinBox,
-    PushButton,
-    PushIconButton,
-    TableView,
-)
+from pywr_editor.widgets import DoubleSpinBox, PushIconButton, TableView
 
 """
  Displays a widget with a table with the variable
@@ -119,27 +115,31 @@ class TableValuesWidget(FormCustomWidget):
         # Buttons
         self.button_layout = QHBoxLayout()
         self.add_button = PushIconButton(
-            icon=":misc/plus", label="Add", small=True
+            icon=qta.icon("msc.add"), label="Add", small=True
         )
         self.add_button.setToolTip("Add a new row to the table")
         # noinspection PyUnresolvedReferences
         self.add_button.clicked.connect(self.on_add_new_row)
 
         self.delete_button = PushIconButton(
-            icon=":misc/minus", label="Delete", small=True
+            icon=qta.icon("msc.remove"), label="Delete", small=True
         )
         self.delete_button.setToolTip("Delete the selected row in the table")
         self.delete_button.setDisabled(True)
         # noinspection PyUnresolvedReferences
         self.delete_button.clicked.connect(self.on_delete_row)
 
-        self.move_up = PushButton(label="Move up", small=True)
+        self.move_up = PushIconButton(
+            icon=qta.icon("msc.chevron-up"), label="Move up", small=True
+        )
         self.move_up.setDisabled(True)
         self.move_up.setToolTip("Move the selected row up in the table")
         # noinspection PyUnresolvedReferences
         self.move_up.clicked.connect(self.on_move_up)
 
-        self.move_down = PushButton(label="Move down", small=True)
+        self.move_down = PushIconButton(
+            icon=qta.icon("msc.chevron-down"), label="Move down", small=True
+        )
         self.move_down.setDisabled(True)
         self.move_down.setToolTip("Move the selected row down in the table")
         # noinspection PyUnresolvedReferences
@@ -153,7 +153,7 @@ class TableValuesWidget(FormCustomWidget):
 
         if is_windows():
             self.paste_button = PushIconButton(
-                icon=":misc/paste", label="Paste from Excel", small=True
+                icon=qta.icon("msc.reply"), label="Paste from Excel", small=True
             )
             self.paste_button.setToolTip(
                 "Paste data copied from a column from an Excel spreadsheet"
@@ -162,7 +162,9 @@ class TableValuesWidget(FormCustomWidget):
             self.paste_button.clicked.connect(self.paste_from_excel)
 
             self.export_button = PushIconButton(
-                icon=":misc/export", label="Export to Excel", small=True
+                icon=qta.icon("msc.export"),
+                label="Export to Excel",
+                small=True,
             )
             self.export_button.setToolTip(
                 "Create an Excel spreadsheet containing the data from the table above"
@@ -174,7 +176,9 @@ class TableValuesWidget(FormCustomWidget):
             self.button_layout.addWidget(self.export_button)
 
         # Table
-        self.table = TableView(self.model, self.delete_button)
+        self.table = TableView(
+            model=self.model, toggle_buttons_on_selection=self.delete_button
+        )
         self.table.setMaximumHeight(200)
         # resize first column with row numbers if shown
         if show_row_numbers:

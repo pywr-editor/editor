@@ -90,11 +90,7 @@ class AbstractStringModelComponentPickerWidget(FormCustomWidget):
             if include_comp_key is not None and key not in include_comp_key:
                 continue
 
-            self.combo_box.addItem(
-                QIcon(icon_class(key)),
-                name,
-                key,  # TODO fix icon with high-DPI screens
-            )
+            self.combo_box.addItem(QIcon(icon_class(key)), name, key)
 
         # set selected
         if value is None or value == "":

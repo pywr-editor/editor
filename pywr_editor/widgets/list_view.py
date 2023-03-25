@@ -106,7 +106,7 @@ class ListView(QListView):
         style = {
             "ListView": {
                 "background": "#FFF",
-                "border": f"1px solid {Color('neutral', 300).hex}",
+                "border": f"1px solid {Color('gray', 300).hex}",
                 "border-radius": "6px",
                 "outline": 0,
                 "color": Color("gray", 700).hex,
@@ -115,14 +115,14 @@ class ListView(QListView):
                     "border-radius": "5px",
                     "color": Color("gray", 700).hex,
                     "::selected": {
-                        "background-color": Color("blue", 200).hex,
+                        "background-color": Color("blue", 300).hex,
                         "color": Color("gray", 900).hex,
                     },
                     "::hover": {
                         "background-color": Color("gray", 200).hex,
                     },
                     "::selected::hover": {
-                        "background-color": Color("blue", 100).hex,
+                        "background-color": Color("blue", 300).hex,
                     },
                 },
             },

@@ -1,17 +1,16 @@
 from pathlib import Path
 
 import PySide6
+import qtawesome as qta
 from PySide6.QtCore import Slot
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import (
     QAbstractItemView,
     QDialog,
-    QDialogButtonBox,
     QFileDialog,
     QHBoxLayout,
     QLabel,
     QMessageBox,
-    QPushButton,
     QStyledItemDelegate,
     QVBoxLayout,
     QWidget,
@@ -54,14 +53,14 @@ class IncludesDialog(QDialog):
 
         # Table buttons
         self.add_button = PushIconButton(
-            icon=":misc/plus", label="Add file", small=True
+            icon=qta.icon("msc.add"), label="Add file", small=True
         )
         self.add_button.setToolTip("Add a new file to import in the model")
         # noinspection PyUnresolvedReferences
         self.add_button.clicked.connect(self.on_add_new_file)
 
         self.delete_button = PushIconButton(
-            icon=":misc/minus", label="Delete file(s)", small=True
+            icon=qta.icon("msc.remove"), label="Delete file(s)", small=True
         )
         self.delete_button.setToolTip("Delete the selected import")
         self.delete_button.setDisabled(True)
@@ -78,7 +77,9 @@ class IncludesDialog(QDialog):
         # noinspection PyUnresolvedReferences
         self.model.layoutChanged.connect(self.on_value_change)
 
-        self.table = TableView(self.model, self.delete_button)
+        self.table = TableView(
+            model=self.model, toggle_buttons_on_selection=self.delete_button
+        )
         self.table.setSelectionBehavior(
             QAbstractItemView.SelectionBehavior.SelectRows
         )
@@ -91,25 +92,29 @@ class IncludesDialog(QDialog):
         table_buttons_layout.addWidget(self.delete_button)
 
         # dialog buttons
-        button_box = QDialogButtonBox(
-            QDialogButtonBox.StandardButton.Save
-            | QDialogButtonBox.StandardButton.Close
-        )
+        button_box = QHBoxLayout()
+        close_button = PushIconButton(icon=qta.icon("msc.close"), label="Close")
         # noinspection PyUnresolvedReferences
-        button_box.rejected.connect(self.reject)
-        button_box.setStyleSheet("margin-top: 20px")
-        # noinspection PyTypeChecker
-        self.save_button: QPushButton = button_box.findChild(QPushButton)
+        close_button.clicked.connect(self.reject)
+
+        self.save_button = PushIconButton(
+            icon=qta.icon("msc.save"), label="Save"
+        )
         self.save_button.setEnabled(False)
         # noinspection PyUnresolvedReferences
         self.save_button.clicked.connect(self.on_save)
+
+        button_box.addStretch()
+        button_box.addWidget(self.save_button)
+        button_box.addWidget(close_button)
 
         layout = QVBoxLayout()
         layout.addWidget(title)
         layout.addWidget(description)
         layout.addWidget(self.table)
         layout.addLayout(table_buttons_layout)
-        layout.addWidget(button_box)
+        layout.addStretch()
+        layout.addLayout(button_box)
 
         self.setLayout(layout)
         self.setMinimumSize(630, 300)

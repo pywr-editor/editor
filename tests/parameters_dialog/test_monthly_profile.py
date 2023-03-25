@@ -179,7 +179,7 @@ class TestDialogParameterMonthlyValuesWidget:
         """
         param_name = "monthly_profile_param_url"
         dialog = ParametersDialog(model_config, param_name)
-        dialog.hide()
+        dialog.show()
 
         selected_page = dialog.pages_widget.currentWidget()
         fields: dict[str, FormField] = {}
@@ -231,7 +231,7 @@ class TestDialogParameterMonthlyValuesWidget:
             "type": "monthlyprofile",
             "url": url_widget.get_value(),
             "sheet_name": "Horizontal_table",
-            "index_col": ["Index 1", "Index 2"],
+            "index_col": [0, 1],
             "index": ["A", "C"],
             "comment": "Updated by me",
         }
@@ -245,7 +245,7 @@ class TestDialogParameterMonthlyValuesWidget:
         """
         param_name = "monthly_profile_param_url_h5"
         dialog = ParametersDialog(model_config, param_name)
-        dialog.hide()
+        dialog.show()
 
         selected_page = dialog.pages_widget.currentWidget()
         fields: dict[str, FormField] = {}
@@ -313,7 +313,7 @@ class TestDialogParameterMonthlyValuesWidget:
         """
         param_name = "monthly_profile_param_table"
         dialog = ParametersDialog(model_config, param_name)
-        dialog.hide()
+        dialog.show()
 
         selected_page = dialog.pages_widget.currentWidget()
         fields: dict[str, FormField] = {}

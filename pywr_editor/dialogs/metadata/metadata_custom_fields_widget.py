@@ -1,6 +1,7 @@
 from collections import Counter
 from typing import Any
 
+import qtawesome as qta
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import (
     QHBoxLayout,
@@ -32,14 +33,20 @@ class MetadataCustomFieldsWidget(FormCustomWidget):
         self.logger.debug(f"Loading widget with {value}")
 
         # Initialise the table view
-        add_button = PushIconButton(icon=":misc/plus", label="Add")
-        delete_button = PushIconButton(icon=":misc/minus", label="Delete")
+        add_button = PushIconButton(
+            icon=qta.icon("msc.add"), label="Add", small=True
+        )
+        delete_button = PushIconButton(
+            icon=qta.icon("msc.remove"), label="Delete", small=True
+        )
         self.model = MetadataCustomFieldsModel(fields=value)
         # noinspection PyUnresolvedReferences
         self.model.dataChanged.connect(self.on_value_change)
         # noinspection PyUnresolvedReferences
         self.model.layoutChanged.connect(self.on_value_change)
-        self.table = TableView(self.model, delete_button)
+        self.table = TableView(
+            model=self.model, toggle_buttons_on_selection=delete_button
+        )
 
         # Buttons
         button_layout = QHBoxLayout()

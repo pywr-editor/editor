@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 
-from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QPushButton
 
 from pywr_editor.form import FormValidation, ModelComponentForm
@@ -8,7 +7,6 @@ from pywr_editor.model import ModelConfig
 from pywr_editor.utils import Logging
 
 from .scenario_options_widget import ScenarioOptionsWidget
-from .scenarios_list_model import ScenariosListModel
 
 if TYPE_CHECKING:
     from .scenario_page_widget import ScenarioPageWidget
@@ -107,62 +105,3 @@ class ScenarioFormWidget(ModelComponentForm):
                 "Please provide a different name.",
             )
         return FormValidation(validation=True)
-
-    @Slot()
-    def on_save(self) -> None:
-        """
-        Slot called when user clicks on the "Update" button. Only visible fields are
-        exported.
-        :return: None
-        """
-        self.logger.debug("Saving form")
-
-        form_data = self.save()
-        if form_data is False:
-            return
-
-        new_name = form_data["name"]
-        # rename scenario
-        if form_data["name"] != self.name:
-            # update the model configuration
-            self.model_config.scenarios.rename(self.name, new_name)
-
-            # update the page name in the list
-            self.page.pages.rename_page(self.name, new_name)
-
-            # update the page title
-            self.page.set_page_title(new_name)
-
-            # update the scenario list
-            scenarios_model: ScenariosListModel = (
-                self.page.pages.dialog.list.model
-            )
-            idx = scenarios_model.scenario_names.index(self.name)
-
-            # noinspection PyUnresolvedReferences
-            scenarios_model.layoutAboutToBeChanged.emit()
-            scenarios_model.scenario_names[idx] = new_name
-            # noinspection PyUnresolvedReferences
-            scenarios_model.layoutChanged.emit()
-
-            self.name = new_name
-
-        # move dictionary items from "options" field to form_data
-        for key, value in form_data["options"].items():
-            if value:
-                form_data[key] = value
-        del form_data["options"]
-
-        # update the model with the new dictionary
-        self.model_config.scenarios.update(self.name, form_data)
-
-        # update the parameter list in case the name changed
-        self.dialog.list.update()
-
-        # update tree and status bar
-        app = self.dialog.app
-        if app is not None:
-            if hasattr(app, "components_tree"):
-                app.components_tree.reload()
-            if hasattr(app, "statusBar"):
-                app.statusBar().showMessage(f'Scenario "{self.name}" updated')

@@ -44,7 +44,7 @@ class TestDialogParameterRbfSection:
         """
         param_name = "rbf_param"
         dialog = ParametersDialog(model_config, param_name)
-        dialog.hide()
+        dialog.show()
 
         selected_page = dialog.pages_widget.currentWidget()
         values_field: FormField = selected_page.findChild(FormField, "values")
@@ -114,7 +114,7 @@ class TestDialogParameterRbfSection:
         """
         param_name = "rbf_param"
         dialog = ParametersDialog(model_config, param_name)
-        dialog.hide()
+        dialog.show()
 
         selected_page: ParameterPageWidget = dialog.pages_widget.currentWidget()
         form = selected_page.form

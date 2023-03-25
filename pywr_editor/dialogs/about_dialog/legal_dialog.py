@@ -1,8 +1,10 @@
+import qtawesome as qta
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import (
     QDialog,
     QDialogButtonBox,
     QLabel,
+    QPushButton,
     QTextEdit,
     QVBoxLayout,
     QWidget,
@@ -48,6 +50,8 @@ class LegalDialog(QDialog):
         button_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
         # noinspection PyUnresolvedReferences
         button_box.rejected.connect(self.reject)
+        # noinspection PyUnresolvedReferences
+        button_box.findChild(QPushButton).setIcon(qta.icon("msc.close"))
 
         layout.addWidget(title)
         layout.addWidget(text_area)

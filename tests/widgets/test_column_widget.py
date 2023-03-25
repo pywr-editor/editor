@@ -116,7 +116,7 @@ class TestDialogParameterColumnWidget:
         all_columns = {"Column 1", "Column 2", "Column 3", "Column 4"}
         dialog = ParametersDialog(model_config, param_name)
         selected_page = dialog.pages_widget.currentWidget()
-        dialog.hide()
+        dialog.show()
 
         # noinspection PyUnresolvedReferences
         assert selected_page.findChild(FormField, "name").value() == param_name
@@ -218,6 +218,11 @@ class TestDialogParameterColumnWidget:
             for f in fields:
                 # noinspection PyArgumentList
                 value = form.find_field_by_name(f).widget.get_value()
+                # convert index_col to integer
+                if f == "index_col" and "xlsx" in widget_with_table.file_ext:
+                    all_cols = list(widget_with_table.table.columns)
+                    value = [all_cols.index(col_name) for col_name in value]
+
                 if value:
                     model_param_dict[f] = value
 
@@ -530,7 +535,7 @@ class TestDialogParameterColumnWidget:
 
         dialog = ParametersDialog(model_config, param_name)
         selected_page = dialog.pages_widget.currentWidget()
-        dialog.hide()
+        dialog.show()
 
         # noinspection PyUnresolvedReferences
         assert selected_page.findChild(FormField, "name").value() == param_name

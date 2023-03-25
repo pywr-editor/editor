@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 
-from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QPushButton
 
 from pywr_editor.form import (
@@ -10,8 +9,6 @@ from pywr_editor.form import (
 )
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import Logging
-
-from .recorders_list_model import RecordersListModel
 
 if TYPE_CHECKING:
     from .recorder_page_widget import RecorderPageWidget
@@ -109,57 +106,3 @@ class RecorderDialogForm(RecorderForm):
                 + "a different name.",
             )
         return FormValidation(validation=True)
-
-    @Slot()
-    def on_save(self) -> None:
-        """
-        Slot called when user clicks on the "Update" button. Only visible fields
-        are exported.
-        :return: None
-        """
-        self.logger.debug("Saving form")
-
-        form_data = self.save()
-        if form_data is False:
-            return
-
-        new_name = form_data["name"]
-        if form_data["name"] != self.name:
-            # update the model configuration
-            self.model_config.recorders.rename(self.name, new_name)
-
-            # update the page name in the list
-            # noinspection PyUnresolvedReferences
-            self.page.pages.rename_page(self.name, new_name)
-
-            # update the page title
-            self.page.set_page_title(new_name)
-
-            # update the recorder list
-            recorder_model: RecordersListModel = (
-                self.page.pages.dialog.recorders_list_widget.model
-            )
-            idx = recorder_model.recorder_names.index(self.name)
-            # noinspection PyUnresolvedReferences
-            recorder_model.layoutAboutToBeChanged.emit()
-            recorder_model.recorder_names[idx] = new_name
-
-            # noinspection PyUnresolvedReferences
-            recorder_model.layoutChanged.emit()
-
-            self.name = new_name
-
-        # update the model with the new dictionary
-        del form_data["name"]
-        self.model_config.recorders.update(self.name, form_data)
-
-        # update the recorder list in case the name or the type (icon) need updating
-        self.dialog.recorders_list_widget.update()
-
-        # update tree and status bar
-        app = self.dialog.app
-        if app is not None:
-            if hasattr(app, "components_tree"):
-                app.components_tree.reload()
-            if hasattr(app, "statusBar"):
-                app.statusBar().showMessage(f'Recorder "{self.name}" updated')

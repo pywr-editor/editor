@@ -13,10 +13,10 @@ class MinimumVolumeStorageRecorderSection(AbstractRecorderSection):
         """
         fields = [
             {
-                "name": "storage",
+                "name": "node",
                 "label": "Storage node",
                 "field_type": StoragePickerWidget,
-                "value": form.get_recorder_dict_value("storage"),
+                "value": form.get_recorder_dict_value("node"),
                 "help_text": "Store the minimum volume of the storage node "
                 + "provided above for each scenario at the end of the simulation",
             },

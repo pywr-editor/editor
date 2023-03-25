@@ -1,5 +1,6 @@
 from typing import Any, TypeVar
 
+import qtawesome as qta
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout
 
@@ -49,14 +50,14 @@ class KeatingStreamsWidget(FormCustomWidget):
         # Buttons
         button_layout = QHBoxLayout()
         self.add_stream_button = PushIconButton(
-            icon=":misc/plus", label="Add stream", small=True
+            icon=qta.icon("msc.add"), label="Add stream", small=True
         )
         self.add_stream_button.setToolTip("Add a new row to the table")
         # noinspection PyUnresolvedReferences
         self.add_stream_button.clicked.connect(self.on_add_new_row)
 
         self.delete_stream_button = PushIconButton(
-            icon=":misc/minus", label="Delete stream", small=True
+            icon=qta.icon("msc.remove"), label="Delete stream", small=True
         )
         self.delete_stream_button.setToolTip(
             "Delete the selected row in the table"
@@ -66,14 +67,14 @@ class KeatingStreamsWidget(FormCustomWidget):
         self.delete_stream_button.clicked.connect(self.on_delete_row)
 
         self.add_level_button = PushIconButton(
-            icon=":misc/plus", label="Add level", small=True
+            icon=qta.icon("msc.add"), label="Add level", small=True
         )
         self.add_level_button.setToolTip("Add a new column to the table")
         # noinspection PyUnresolvedReferences
         self.add_level_button.clicked.connect(self.on_add_new_column)
 
         self.delete_level_button = PushIconButton(
-            icon=":misc/minus", label="Delete level", small=True
+            icon=qta.icon("msc.remove"), label="Delete level", small=True
         )
         self.delete_level_button.setToolTip(
             "Delete the selected column in the table"

@@ -9,7 +9,7 @@ def about_dialog_stylesheet() -> str:
     style = {
         "QDialog": {
             "background-color": Color("gray", 100).hex,
-            "border": f'1px solid {Color("neutral", 300).hex}',
+            "border": f'1px solid {Color("gray", 400).hex}',
         }
     }
 

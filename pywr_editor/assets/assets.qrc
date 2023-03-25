@@ -83,17 +83,8 @@
         <file alias="scroll-right">scroll_bar/scroll-right.svg</file>
     </qresource>
     <qresource prefix="misc">
-        <file alias="reload">misc/arrow-repeat.svg</file>
-        <file alias="plus">misc/plus.svg</file>
-        <file alias="minus">misc/dash.svg</file>
-        <file alias="edit">misc/pencil-fill.svg</file>
         <file alias="help">misc/question-circle.svg</file>
-        <file alias="external">misc/box-arrow-up-right.svg</file>
         <file alias="table-dialog">misc/tabledialog.svg</file>
-        <file alias="plot">misc/graph-up.svg</file>
-        <file alias="import">misc/box-arrow-in-down.svg</file>
-        <file alias="export">misc/box-arrow-up.svg</file>
-        <file alias="paste">misc/paste.svg</file>
     </qresource>
     <qresource prefix="form">
         <file alias="caret-left">form/caret-left-fill.svg</file>

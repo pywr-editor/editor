@@ -77,7 +77,7 @@ class ComboBox(QComboBox):
                         "border": f"1px solid {Color('blue', 400).hex}",
                     },
                     ":hover": {
-                        "background": Color("neutral", 100).hex,
+                        "background": Color("gray", 50).hex,
                     },
                     ":focus:hover": {
                         "background": "#FFF",

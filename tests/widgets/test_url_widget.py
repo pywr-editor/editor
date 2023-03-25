@@ -166,7 +166,7 @@ class TestDialogParameterUrlWidget:
         url_widget: UrlWidget = url_field.widget
         form = url_widget.form
 
-        dialog.hide()
+        dialog.show()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
 
@@ -224,6 +224,11 @@ class TestDialogParameterUrlWidget:
             model_param_dict["start"] = form.find_field_by_name("start").value()
         for f in fields:
             value = form.find_field_by_name(f).widget.get_value()
+            # convert index_col to integer
+            if f == "index_col" and param_name == "param_excel_file":
+                all_cols = list(url_widget.table.columns)
+                value = [all_cols.index(col_name) for col_name in value]
+
             if value:
                 model_param_dict[f] = value
 

@@ -56,7 +56,7 @@ class WindowTitle(QLabel):
             stylesheet_dict_to_str(
                 {
                     "QLabel": {
-                        "color": Color("sky", 600).hex,
+                        "color": Color("sky", 700).hex,
                         "font-size": "20px",
                     }
                 }

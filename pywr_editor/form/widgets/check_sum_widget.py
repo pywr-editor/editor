@@ -5,6 +5,7 @@ import traceback
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
+import qtawesome as qta
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import (
     QHBoxLayout,
@@ -19,7 +20,7 @@ from pywr_editor.form import (
     FormField,
     FormValidation,
 )
-from pywr_editor.widgets import PushButton
+from pywr_editor.widgets import PushIconButton
 
 if TYPE_CHECKING:
     from pywr_editor.form import ModelComponentForm
@@ -103,7 +104,9 @@ class CheckSumWidget(AbstractStringComboBoxWidget):
         line_edit_layout.addWidget(QLabel("Algorithm"))
         line_edit_layout.addWidget(self.line_edit)
 
-        calculate_button = PushButton("Calculate", small=True)
+        calculate_button = PushIconButton(
+            icon=qta.icon("msc.file-binary"), label="Calculate", small=True
+        )
         calculate_button.setToolTip(
             "Calculate the file hash using the selected algorith"
         )
@@ -185,7 +188,9 @@ class CheckSumWidget(AbstractStringComboBoxWidget):
         """
         self.form: "ModelComponentForm"
         # noinspection PyTypeChecker
-        button: PushButton = self.findChild(PushButton, "calculate_button")
+        button: PushIconButton = self.findChild(
+            PushIconButton, "calculate_button"
+        )
         button.setEnabled(False)
         or_text = button.text()
         button.setText("Calculating")

@@ -1,6 +1,7 @@
 import hashlib
 import json
 import os
+from datetime import datetime
 from typing import TYPE_CHECKING
 
 from PySide6.QtCore import QPointF, QSettings
@@ -244,6 +245,12 @@ class Settings:
                                     "last_updated": ModelFileInfo(
                                         json_file
                                     ).last_modified_on,
+                                    "last_updated_obj": datetime.strptime(
+                                        ModelFileInfo(
+                                            json_file
+                                        ).last_modified_on,
+                                        "%d-%m-%Y %H:%M",
+                                    ),
                                 }
                             )
                             valid_files.append(json_file)
@@ -253,7 +260,9 @@ class Settings:
         # store only existing files
         self.global_instance.setValue(self.recent_projects_key, valid_files)
 
-        return file_info
+        return sorted(
+            file_info, key=lambda d: d["last_updated_obj"], reverse=True
+        )
 
     def save_recent_file(self, file: str) -> None:
         """

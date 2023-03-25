@@ -14,3 +14,4 @@ from .toggle_switch_widget import ToggleSwitchWidget
 from .settings_dialog import SettingsDialog
 from .parameter_icon import ParameterIcon
 from .recorder_icon import RecorderIcon
+from .extension_icon import ExtensionIcon

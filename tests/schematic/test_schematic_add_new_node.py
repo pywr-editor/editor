@@ -41,7 +41,7 @@ class TestAddNodes:
         window = MainWindow(self.model_file)
         window.hide()
         schematic = window.schematic
-        node_lib_panel = window.toolbar.tabs["Schematic"].panels[
+        node_lib_panel = window.toolbar.tabs["Operations"].panels[
             "Nodes Library"
         ]
 
@@ -56,7 +56,7 @@ class TestAddNodes:
         window, schematic, _ = init_window
         model_config = schematic.model_config
         item_count = len(schematic.node_items)
-        panel = schematic.app.toolbar.tabs["Schematic"].panels["Undo"]
+        panel = schematic.app.toolbar.tabs["Operations"].panels["Undo"]
         undo_button = panel.buttons["Undo"]
         redo_button = panel.buttons["Redo"]
 

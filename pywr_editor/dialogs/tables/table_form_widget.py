@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING, Any
 
-from PySide6.QtCore import Slot
-from PySide6.QtWidgets import QMessageBox, QPushButton
+from PySide6.QtWidgets import QPushButton
 
 from pywr_editor.form import (
     FieldConfig,
@@ -12,11 +11,9 @@ from pywr_editor.form import (
     ParseDatesWidget,
     SheetNameWidget,
 )
-from pywr_editor.model import JsonUtils, ModelConfig
-from pywr_editor.utils import get_columns
+from pywr_editor.model import ModelConfig
 
 from .table_url_widget import TableUrlWidget
-from .tables_list_model import TablesListModel
 
 if TYPE_CHECKING:
     from .table_page_widget import TablePageWidget
@@ -197,131 +194,3 @@ class TableFormWidget(Form):
                 + "Please provide a different name.",
             )
         return FormValidation(validation=True)
-
-    def maybe_new_index(self) -> bool:
-        """
-        Asks user if they want to change the table index.
-        :return: True whether to continue, False otherwise.
-        """
-        dict_utils = JsonUtils(self.model_config.json)
-        output = dict_utils.find_str(self.name, match_key="table")
-
-        if output.occurrences == 0:
-            return True
-
-        comp_list = [f"   - {p.replace('/table', '')}" for p in output.paths]
-        # truncate list if it's too long
-        if len(comp_list) > 10:
-            comp_list = comp_list[0:10] + [
-                f"\n and {len(comp_list)-10} more components"
-            ]
-
-        answer = QMessageBox.warning(
-            self,
-            "Warning",
-            "You are going to change the index names of the table. This may break the "
-            + "configuration of the following model components, if they rely on the "
-            + "table index to fetch their values: \n\n"
-            + "\n".join(comp_list)
-            + "\n\n"
-            "Do you want to continue?",
-            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-        )
-        if answer == QMessageBox.StandardButton.Yes:
-            return True
-        # on discard or No
-        return False
-
-    @Slot()
-    def on_save(self) -> None:
-        """
-        Slot called when user clicks on the "Update" button. Only visible fields are
-         exported.
-        :return: None
-        """
-        form_data = self.validate()
-        if form_data is False:
-            return
-
-        # delete empty fields (None or empty list - for example parse_dates is
-        # optional)
-        keys_to_delete = []
-        [
-            keys_to_delete.append(key)
-            for key, value in form_data.items()
-            if not value
-        ]
-        [form_data.pop(key, None) for key in keys_to_delete]
-
-        # check changes to index
-        prev_index = self.get_table_dict_value("index_col")
-        new_index = (
-            form_data["index_col"] if "index_col" in form_data.keys() else None
-        )
-        url_widget: TableUrlWidget = self.find_field_by_name("url").widget
-        if (
-            prev_index
-            and new_index
-            and url_widget.table is not None
-            and url_widget.file_ext != ".h5"
-        ):
-            # if index was numeric, check that it has not changed when converted to str
-            if isinstance(prev_index[0], int):
-                # noinspection PyBroadException
-                try:
-                    column_names = get_columns(
-                        url_widget.table, include_index=True
-                    )
-                    prev_index = [column_names[idx] for idx in prev_index]
-                except Exception:
-                    pass
-            # convert to same type
-            if isinstance(prev_index, list) and len(prev_index) == 1:
-                prev_index = prev_index[0]
-            if isinstance(new_index, list) and len(new_index) == 1:
-                new_index = new_index[0]
-
-            # abort if the user select No
-            if new_index != prev_index:
-                if self.maybe_new_index() is False:
-                    self.save_button.setEnabled(True)
-                    return
-
-        # check if table name has changed
-        new_name = form_data["name"]
-        if form_data["name"] != self.name:
-            # update the model configuration
-            self.model_config.tables.rename(self.name, new_name)
-
-            # update the page name in the list
-            # noinspection PyUnresolvedReferences
-            self.page.pages.rename_page(self.name, new_name)
-
-            # update the page title
-            self.page.set_page_title(new_name)
-
-            # update the table list
-            # noinspection PyUnresolvedReferences
-            table_model: TablesListModel = (
-                self.page.pages.dialog.table_list_widget.model
-            )
-            idx = table_model.table_names.index(self.name)
-            # noinspection PyUnresolvedReferences
-            table_model.layoutAboutToBeChanged.emit()
-            table_model.table_names[idx] = new_name
-            # noinspection PyUnresolvedReferences
-            table_model.layoutChanged.emit()
-
-            self.name = new_name
-
-        # update the model with the new dictionary
-        del form_data["name"]
-        self.model_config.tables.update(self.name, form_data)
-
-        # update tree and status bar
-        app = self.page.pages.dialog.app
-        if app is not None:
-            if hasattr(app, "components_tree"):
-                app.components_tree.reload()
-            if hasattr(app, "statusBar"):
-                app.statusBar().showMessage(f'Table "{self.name}" updated')

@@ -1,9 +1,11 @@
 from typing import TYPE_CHECKING, Union
 
+import qtawesome as qta
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QDialog, QDialogButtonBox, QVBoxLayout
+from PySide6.QtWidgets import QDialog, QHBoxLayout, QVBoxLayout
 
 from pywr_editor.model import ModelConfig
+from pywr_editor.widgets import PushIconButton
 
 from .metadata_form_widget import MetadataFormWidget
 
@@ -28,12 +30,20 @@ class MetadataDialog(QDialog):
         self.setAttribute(Qt.WA_DeleteOnClose)
 
         # dialog buttons
-        self.button_box = QDialogButtonBox(
-            QDialogButtonBox.StandardButton.Save
-            | QDialogButtonBox.StandardButton.Close
+        # Buttons
+        button_box = QHBoxLayout()
+        self.save_button = PushIconButton(
+            icon=qta.icon("msc.save"), label="Save"
         )
+        self.save_button.setObjectName("save_button")
+
+        close_button = PushIconButton(icon=qta.icon("msc.close"), label="Close")
         # noinspection PyUnresolvedReferences
-        self.button_box.rejected.connect(self.reject)
+        close_button.clicked.connect(self.reject)
+
+        button_box.addStretch()
+        button_box.addWidget(self.save_button)
+        button_box.addWidget(close_button)
 
         # form
         self.form = MetadataFormWidget(model_config=model_config, parent=self)
@@ -43,7 +53,7 @@ class MetadataDialog(QDialog):
         # set layout
         layout = QVBoxLayout()
         layout.addWidget(self.form)
-        layout.addWidget(self.button_box)
+        layout.addLayout(button_box)
         self.setLayout(layout)
 
         self.setWindowTitle("Model metadata")

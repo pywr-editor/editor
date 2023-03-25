@@ -7,6 +7,8 @@ from pywr_editor.model import ModelConfig, ParameterConfig, RecorderConfig
 from pywr_editor.style import Color
 from pywr_editor.widgets import ParameterIcon, RecorderIcon
 
+compType = Literal["parameter", "recorder"] | None
+
 
 class AbstractTreeWidgetComponent:
     def __init__(
@@ -14,7 +16,7 @@ class AbstractTreeWidgetComponent:
         comp_value: dict | list,
         model_config: ModelConfig,
         parent_type: Type[dict | list] = None,
-        comp_type: Literal["parameter", "recorder"] | None = None,
+        comp_type: compType = None,
         comp_name: str | None = None,
         parent: QTreeWidgetItem | None = None,
     ):
@@ -159,6 +161,7 @@ class AbstractTreeWidgetComponent:
         :param is_file: Whether the string represent a file path. Default to False.
         :return None
         """
+        label = item.text(0)
         item.setText(column, str(value))
 
         # the parameter contains the url key to fetch external data
@@ -176,16 +179,25 @@ class AbstractTreeWidgetComponent:
                     value, as_dict=False
                 )
                 param_type = param_obj.humanised_type
-                item.setText(1, param_type)
+
+                # change label when the parameter is rendered outside
+                # the parameter section
+                if item.text(0) == "Parameter":
+                    item.setText(1, value)
+                else:
+                    item.setText(1, param_type)
                 item.setToolTip(1, f"Parameter of type {param_type}")
                 item.setIcon(1, QIcon(ParameterIcon(param_obj.key)))
             # check if string is a model recorder
-            elif value in self.model_config.recorders.names:
+            elif value in self.model_config.recorders.names and label in [
+                "Recorder",
+                "Recorders",
+            ]:
                 recorder_obj = self.model_config.recorders.get_config_from_name(
                     value, as_dict=False
                 )
                 recorder_type = recorder_obj.humanised_type
-                item.setText(1, recorder_type)
+                item.setText(1, value)
                 item.setToolTip(1, f"Recorder of type {recorder_type}")
                 item.setIcon(1, QIcon(RecorderIcon(recorder_obj.key)))
             # string is a model node
@@ -194,5 +206,5 @@ class AbstractTreeWidgetComponent:
                     value, as_dict=False
                 )
                 node_type = node_obj.humanised_type
-                item.setText(1, node_type)
+                item.setText(1, f"{value} ({node_type})")
                 item.setToolTip(1, f"Node of type {node_type}")

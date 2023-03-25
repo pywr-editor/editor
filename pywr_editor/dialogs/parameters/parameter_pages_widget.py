@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from PySide6.QtCore import QUuid, Slot
 from PySide6.QtWidgets import QStackedWidget
 
 from pywr_editor.model import ModelConfig
@@ -22,7 +23,7 @@ class ParameterPagesWidget(QStackedWidget):
         self.model_config = model_config
         self.dialog = parent
 
-        self.empty_page = ParameterEmptyPageWidget()
+        self.empty_page = ParameterEmptyPageWidget(self)
         self.addWidget(self.empty_page)
 
         self.pages: dict[str, ParameterPageWidget] = {}
@@ -68,3 +69,51 @@ class ParameterPagesWidget(QStackedWidget):
             self.setCurrentWidget(self.pages[parameter_name])
             return True
         return False
+
+    @Slot()
+    def on_add_new_parameter(self, configuration: dict | None = None) -> None:
+        """
+        Adds a new parameter. This creates a new scenario in the model and adds, and
+        selects the form page.
+        :param configuration: The configuration to use when the parameter is added. When
+        omitted a constant parameter with 0 as value is used.
+        :return: None
+        """
+        list_widget = self.dialog.parameters_list_widget.list
+        list_model = self.dialog.parameters_list_widget.model
+        proxy_model = self.dialog.parameters_list_widget.proxy_model
+
+        # generate unique name
+        parameter_name = f"Parameter {QUuid().createUuid().toString()[1:7]}"
+
+        status_label = f'Cloned parameter as "{parameter_name}"'
+        if not configuration:
+            configuration = {"type": "constant", "value": 0}
+            status_label = f'Added new parameter "{parameter_name}"'
+
+        # add the dictionary to the model. Default to ConstantParameter
+        self.model_config.parameters.update(parameter_name, configuration)
+
+        # add the page
+        pages_widget: ParameterPagesWidget = self.dialog.pages_widget
+        pages_widget.add_new_page(parameter_name)
+        pages_widget.set_current_widget_by_name(parameter_name)
+
+        # add it to the list model
+        # noinspection PyUnresolvedReferences
+        list_model.layoutAboutToBeChanged.emit()
+        list_model.parameter_names.append(parameter_name)
+        # noinspection PyUnresolvedReferences
+        list_model.layoutChanged.emit()
+        # select the item
+        new_index = proxy_model.mapFromSource(
+            list_widget.find_index_by_name(parameter_name)
+        )
+        list_widget.setCurrentIndex(new_index)
+
+        # update tree and status bar
+        if self.dialog.app is not None:
+            if hasattr(self.dialog.app, "components_tree"):
+                self.dialog.app.components_tree.reload()
+            if hasattr(self.dialog.app, "statusBar"):
+                self.dialog.app.statusBar().showMessage(status_label)

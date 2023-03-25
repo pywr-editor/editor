@@ -73,15 +73,15 @@ class ToolbarBaseButton(QToolButton):
                 "text-align": "left",
             },
             "QToolButton:hover, QToolButton:pressed": {
-                "background-color": Color("blue", 100).hex,
-                "border": f'1px solid {Color("blue", 300).hex}',
+                "background-color": Color("blue", 200).hex,
+                "border": f'1px solid {Color("blue", 400).hex}',
             },
             "QToolButton:checked": {
-                "background-color": Color("blue", 100).hex,
-                "border": f'1px solid {Color("blue", 300).hex}',
+                "background-color": Color("blue", 200).hex,
+                "border": f'1px solid {Color("blue", 400).hex}',
             },
             "QToolButton:disabled": {
-                "color": Color("gray", 300).hex,
+                "color": Color("gray", 400).hex,
             },
             "QToolButton::menu-indicator": {
                 "padding-top": "3px",
@@ -97,6 +97,6 @@ class ToolbarBaseButton(QToolButton):
         if self.separator:
             style["QToolButton"][
                 "border-right"
-            ] = f'1px solid {Color("slate", 300).hex}'
+            ] = f'1px solid {Color("gray", 300).hex}'
 
         return style

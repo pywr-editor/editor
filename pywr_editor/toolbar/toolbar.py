@@ -20,7 +20,7 @@ class ToolbarWidget(QToolBar):
 
         self.setObjectName("toolbar")
         self.toolbar = QTabWidget(self)
-        self.toolbar.setMaximumHeight(120)
+        self.toolbar.setMaximumHeight(125)
         self.toolbar.setMinimumHeight(110)
         self.setContextMenuPolicy(Qt.ContextMenuPolicy.PreventContextMenu)
         self.setMovable(False)
@@ -51,19 +51,17 @@ class ToolbarWidget(QToolBar):
             "QToolBar": {"padding": 0},
             "QTabWidget": {
                 ":pane": {
-                    "background-color": Color("gray", 100).hex,
-                    # 'border-bottom': f'1px solid {Color("gray", 300).hex}',
-                    "border-top": f'1px solid {Color("gray", 300).hex}',
+                    "background-color": Color("gray", 200).hex,
+                    "border-top": f'1px solid {Color("gray", 400).hex}',
                     "border-radius": 0,
                     "margin": 0,
                     "padding": 0,
-                    "top": "-1",
+                    "top": "-1px",
                 },
                 "::tab-bar": {"left": "5px"},
             },
             "QTabBar": {
                 "::tab": {
-                    # 'border-radius': 0,
                     "border-top-left-radius": "4px",
                     "border-top-right-radius": "4px",
                     "color": Color("gray", 600).hex,
@@ -73,17 +71,17 @@ class ToolbarWidget(QToolBar):
                     "padding-left": "12px",
                     "padding-top": " 4px",
                 },
-                "::tab#toolbar_tab_Model": {"background": "yellow"},
                 "::tab:hover": {
-                    "background": Color("gray", 50).hex,
-                    "border": f'1px solid {Color("gray", 200).hex}',
-                    "border-bottom-color": Color("gray", 300).hex,
-                },
-                "::tab:selected": {
                     "background": Color("gray", 100).hex,
                     "border": f'1px solid {Color("gray", 300).hex}',
-                    "border-bottom-color": Color("gray", 100).hex,
+                    "border-bottom-color": Color("gray", 400).hex,
+                },
+                "::tab:selected": {
+                    "background": Color("gray", 200).hex,
+                    "border": f'1px solid {Color("gray", 400).hex}',
+                    "border-bottom-color": Color("gray", 200).hex,
                     "color": Color("gray", 700).hex,
+                    "margin-bottom": "-1px",
                 },
             },
         }
