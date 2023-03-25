@@ -221,11 +221,15 @@ class TestDialogParameterLineEditWidget:
         ParametersDialog and ParameterPageWidget instances.
         """
         dialog = ParametersDialog(model_config)
+        dialog.show()
+
+        add_button: QPushButton = dialog.pages_widget.empty_page.findChild(
+            QPushButton, "add_button"
+        )
 
         # 1. Add new parameter and select ThresholdParameter
-        qtbot.mouseClick(
-            dialog.parameters_list_widget.add_button, Qt.MouseButton.LeftButton
-        )
+        qtbot.mouseClick(add_button, Qt.MouseButton.LeftButton)
+        qtbot.wait(100)
 
         # 2. Load fields
         page = dialog.pages_widget.currentWidget()
@@ -286,11 +290,13 @@ class TestDialogParameterLineEditWidget:
         main_save_button: QPushButton = page.findChild(
             QPushButton, "save_button"
         )
-        assert "Update" in main_save_button.text()
+        assert "Save" in main_save_button.text()
 
         # button in parent form is enabled as soon as the child form is saved
         assert main_save_button.isEnabled() is True
+        qtbot.wait(200)
         qtbot.mouseClick(main_save_button, Qt.MouseButton.LeftButton)
+
         name = page.form.find_field_by_name("name").widget.text()
         assert model_config.parameters.get_config_from_name(name) == value
 

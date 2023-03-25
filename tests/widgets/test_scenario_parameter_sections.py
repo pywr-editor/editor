@@ -208,7 +208,7 @@ class TestDialogParameterControlCurveParameterSection:
         """
         param_name = "invalid_scenario_size"
         dialog = ParametersDialog(model_config, param_name)
-        dialog.hide()
+        dialog.show()
 
         selected_page = dialog.pages_widget.currentWidget()
         # noinspection PyUnresolvedReferences
@@ -240,7 +240,7 @@ class TestDialogParameterControlCurveParameterSection:
         main_save_button: QPushButton = selected_page.findChild(
             QPushButton, "save_button"
         )
-        assert "Update" in main_save_button.text()
+        assert "Save" in main_save_button.text()
 
         # button in parent form is enabled as soon as the child form is saved
         assert main_save_button.isEnabled() is True
@@ -263,7 +263,7 @@ class TestDialogParameterControlCurveParameterSection:
         """
         param_name = "valid_values"
         dialog = ParametersDialog(model_config, param_name)
-        dialog.hide()
+        dialog.show()
 
         selected_page = dialog.pages_widget.currentWidget()
         # noinspection PyUnresolvedReferences
@@ -333,7 +333,7 @@ class TestDialogParameterControlCurveParameterSection:
         main_save_button: QPushButton = selected_page.findChild(
             QPushButton, "save_button"
         )
-        assert "Update" in main_save_button.text()
+        assert "Save" in main_save_button.text()
 
         # button in parent form is enabled as soon as the child form is saved
         assert main_save_button.isEnabled() is True
@@ -352,7 +352,7 @@ class TestDialogParameterControlCurveParameterSection:
         """
         param_name = "valid_values"
         dialog = ParametersDialog(model_config, param_name)
-        dialog.hide()
+        dialog.show()
 
         selected_page = dialog.pages_widget.currentWidget()
         # noinspection PyUnresolvedReferences
@@ -377,7 +377,7 @@ class TestDialogParameterControlCurveParameterSection:
         save_button: QPushButton = selected_page.findChild(
             QPushButton, "save_button"
         )
-        assert "Update" in save_button.text()
+        assert "Save" in save_button.text()
         save_button.setEnabled(True)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
 
@@ -394,7 +394,7 @@ class TestDialogParameterControlCurveParameterSection:
         """
         param_name = "valid_values"
         dialog = ParametersDialog(model_config, param_name)
-        dialog.hide()
+        dialog.show()
 
         selected_page = dialog.pages_widget.currentWidget()
         # noinspection PyUnresolvedReferences
@@ -419,7 +419,7 @@ class TestDialogParameterControlCurveParameterSection:
         save_button: QPushButton = selected_page.findChild(
             QPushButton, "save_button"
         )
-        assert "Update" in save_button.text()
+        assert "Save" in save_button.text()
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
 
         assert model_config.has_changes is True

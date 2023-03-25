@@ -174,7 +174,9 @@ class TableValuesWidget(FormCustomWidget):
             self.button_layout.addWidget(self.export_button)
 
         # Table
-        self.table = TableView(self.model, self.delete_button)
+        self.table = TableView(
+            model=self.model, toggle_buttons_on_selection=self.delete_button
+        )
         self.table.setMaximumHeight(200)
         # resize first column with row numbers if shown
         if show_row_numbers:

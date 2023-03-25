@@ -220,7 +220,7 @@ class TestDialogRecorderRecordersListPickerWidget:
         dialog = RecordersDialog(
             model_config, self.general_anonymous_recorder_name
         )
-        dialog.hide()
+        dialog.show()
 
         selected_page = dialog.pages_widget.currentWidget()
         # noinspection PyUnresolvedReferences
@@ -293,7 +293,7 @@ class TestDialogRecorderRecordersListPickerWidget:
         main_save_button: QPushButton = selected_page.findChild(
             QPushButton, "save_button"
         )
-        assert "Update" in main_save_button.text()
+        assert "Save" in main_save_button.text()
 
         # button in parent form is enabled as soon as the child form is saved
         assert main_save_button.isEnabled() is True
@@ -315,7 +315,7 @@ class TestDialogRecorderRecordersListPickerWidget:
         """
         recorder_name = "valid_with_str"
         dialog = RecordersDialog(model_config, recorder_name)
-        dialog.hide()
+        dialog.show()
 
         selected_page = dialog.pages_widget.currentWidget()
         # noinspection PyUnresolvedReferences
@@ -370,7 +370,7 @@ class TestDialogRecorderRecordersListPickerWidget:
         main_save_button: QPushButton = selected_page.findChild(
             QPushButton, "save_button"
         )
-        assert "Update" in main_save_button.text()
+        assert "Save" in main_save_button.text()
 
         # button in parent form is enabled as soon as the child form is saved
         assert main_save_button.isEnabled() is True

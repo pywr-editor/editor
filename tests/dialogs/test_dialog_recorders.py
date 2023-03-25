@@ -36,7 +36,7 @@ class TestRecordersDialog:
         :return: The RecordersDialog instance.
         """
         dialog = RecordersDialog(model_config)
-        dialog.hide()
+        dialog.show()
         return dialog
 
     def test_add_new_recorder(self, qtbot, model_config, dialog):
@@ -45,9 +45,11 @@ class TestRecordersDialog:
         """
         recorder_list_widget = dialog.recorders_list_widget
         pages_widget = dialog.pages_widget
-        qtbot.mouseClick(
-            recorder_list_widget.add_button, Qt.MouseButton.LeftButton
+        add_button: QPushButton = pages_widget.empty_page.findChild(
+            QPushButton, "add_button"
         )
+        qtbot.mouseClick(add_button, Qt.MouseButton.LeftButton)
+        qtbot.wait(100)
 
         # new name is random
         new_name = list(pages_widget.pages.keys())[-1]
@@ -136,13 +138,17 @@ class TestRecordersDialog:
         form: RecorderDialogForm = selected_page.form
 
         form.load_fields()
-        save_button: QPushButton = form.save_button
+        # noinspection PyTypeChecker
+        save_button: QPushButton = selected_page.findChild(
+            QPushButton, "save_button"
+        )
         name_field = form.find_field_by_name("name")
 
         # Change the name and save
         assert name_field.value() == current_name
         name_field.widget.setText(new_name)
 
+        qtbot.wait(200)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         assert name_field.message.text() == ""
 
@@ -191,7 +197,10 @@ class TestRecordersDialog:
         )
 
         # delete button is enabled and the item is selected
-        assert recorder_list_widget.delete_button.isEnabled() is True
+        delete_button: QPushButton = pages_widget.pages[
+            deleted_recorder
+        ].findChild(QPushButton, "delete_button")
+        assert delete_button.isEnabled() is True
         assert (
             recorder_list_widget.list.selectedIndexes()[0].data()
             == deleted_recorder
@@ -205,9 +214,7 @@ class TestRecordersDialog:
             )
 
         QTimer.singleShot(100, confirm_deletion)
-        qtbot.mouseClick(
-            recorder_list_widget.delete_button, Qt.MouseButton.LeftButton
-        )
+        qtbot.mouseClick(delete_button, Qt.MouseButton.LeftButton)
 
         assert isinstance(pages_widget.currentWidget(), RecorderEmptyPageWidget)
         assert deleted_recorder not in pages_widget.pages.keys()

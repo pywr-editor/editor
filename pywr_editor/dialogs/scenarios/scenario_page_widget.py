@@ -10,6 +10,7 @@ from pywr_editor.utils import maybe_delete_component
 from pywr_editor.widgets import PushButton
 
 from .scenario_form_widget import ScenarioFormWidget
+from .scenarios_list_model import ScenariosListModel
 
 if TYPE_CHECKING:
     from .scenario_pages_widget import ScenarioPagesWidget
@@ -47,23 +48,26 @@ class ScenarioPageWidget(QWidget):
         close_button.clicked.connect(parent.dialog.reject)
 
         # noinspection PyTypeChecker
-        save_button = PushButton("Save scenario")
+        save_button = PushButton("Save")
         save_button.setObjectName("save_button")
+        # noinspection PyUnresolvedReferences
+        save_button.clicked.connect(self.on_save)
 
-        add_button = PushButton("Add new scenario")
+        add_button = PushButton("Add new")
         add_button.setObjectName("add_button")
         # noinspection PyUnresolvedReferences
         add_button.clicked.connect(parent.on_add_new_scenario)
 
-        delete_button = PushButton("Delete scenario")
+        delete_button = PushButton("Delete")
+        delete_button.setObjectName("delete_button")
         # noinspection PyUnresolvedReferences
         delete_button.clicked.connect(self.on_delete_scenario)
 
         button_box = QHBoxLayout()
+        button_box.addWidget(add_button)
+        button_box.addStretch()
         button_box.addWidget(save_button)
         button_box.addWidget(delete_button)
-        button_box.addStretch()
-        button_box.addWidget(add_button)
         button_box.addWidget(close_button)
 
         # form
@@ -86,6 +90,63 @@ class ScenarioPageWidget(QWidget):
         :return: None
         """
         self.title.setText(f"Scenario: {scenario_name}")
+
+    @Slot()
+    def on_save(self) -> None:
+        """
+        Slot called when user clicks on the "Update" button. Only visible fields are
+        exported.
+        :return: None
+        """
+        form_data = self.form.save()
+        if form_data is False:
+            return
+
+        new_name = form_data["name"]
+        # rename scenario
+        if form_data["name"] != self.name:
+            # update the model configuration
+            self.model_config.scenarios.rename(self.name, new_name)
+
+            # update the page name in the list
+            self.pages.rename_page(self.name, new_name)
+
+            # update the page title
+            self.set_page_title(new_name)
+
+            # update the scenario list
+            scenarios_model: ScenariosListModel = (
+                self.pages.dialog.scenarios_list_widget.model
+            )
+            idx = scenarios_model.scenario_names.index(self.name)
+
+            # noinspection PyUnresolvedReferences
+            scenarios_model.layoutAboutToBeChanged.emit()
+            scenarios_model.scenario_names[idx] = new_name
+            # noinspection PyUnresolvedReferences
+            scenarios_model.layoutChanged.emit()
+
+            self.name = new_name
+
+        # move dictionary items from "options" field to form_data
+        for key, value in form_data["options"].items():
+            if value:
+                form_data[key] = value
+        del form_data["options"]
+
+        # update the model with the new dictionary
+        self.model_config.scenarios.update(self.name, form_data)
+
+        # update the parameter list in case the name changed
+        self.pages.dialog.scenarios_list_widget.update()
+
+        # update tree and status bar
+        app = self.pages.dialog.app
+        if app is not None:
+            if hasattr(app, "components_tree"):
+                app.components_tree.reload()
+            if hasattr(app, "statusBar"):
+                app.statusBar().showMessage(f'Scenario "{self.name}" updated')
 
     @Slot()
     def on_delete_scenario(self) -> None:
@@ -117,6 +178,9 @@ class ScenarioPageWidget(QWidget):
 
             # delete the scenario from the model configuration
             self.model_config.scenarios.delete(self.name)
+
+            # set default page
+            self.pages.set_empty_page()
 
             # update tree and status bar
             if dialog.app is not None:

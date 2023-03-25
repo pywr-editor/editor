@@ -166,7 +166,7 @@ class TestDialogParameterUrlWidget:
         url_widget: UrlWidget = url_field.widget
         form = url_widget.form
 
-        dialog.hide()
+        dialog.show()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
 

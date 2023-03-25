@@ -13,6 +13,7 @@ from .parameter_dialog_form import ParameterDialogForm
 
 if TYPE_CHECKING:
     from .parameter_pages_widget import ParameterPagesWidget
+    from .parameters_list_model import ParametersListModel
 
 
 class ParameterPageWidget(QWidget):
@@ -46,24 +47,26 @@ class ParameterPageWidget(QWidget):
         # noinspection PyUnresolvedReferences
         close_button.clicked.connect(parent.dialog.reject)
 
-        add_button = PushButton("Add new parameter")
+        add_button = PushButton("Add new")
         add_button.setObjectName("add_button")
         # noinspection PyUnresolvedReferences
         add_button.clicked.connect(parent.on_add_new_parameter)
 
-        save_button = PushButton("Save parameter")
+        save_button = PushButton("Save")
         save_button.setObjectName("save_button")
+        # noinspection PyUnresolvedReferences
+        save_button.clicked.connect(self.on_save)
 
-        delete_button = PushButton("Delete parameter")
+        delete_button = PushButton("Delete")
         delete_button.setObjectName("delete_button")
         # noinspection PyUnresolvedReferences
         delete_button.clicked.connect(self.on_delete_parameter)
 
         button_box = QHBoxLayout()
+        button_box.addWidget(add_button)
+        button_box.addStretch()
         button_box.addWidget(save_button)
         button_box.addWidget(delete_button)
-        button_box.addStretch()
-        button_box.addWidget(add_button)
         button_box.addWidget(close_button)
 
         # form
@@ -74,8 +77,6 @@ class ParameterPageWidget(QWidget):
             save_button=save_button,
             parent=self,
         )
-        # noinspection PyUnresolvedReferences
-        save_button.clicked.connect(self.form.on_save)
 
         layout.addWidget(self.title)
         layout.addWidget(self.form)
@@ -88,6 +89,58 @@ class ParameterPageWidget(QWidget):
         :return: None
         """
         self.title.setText(f"Parameter: {parameter_name}")
+
+    @Slot()
+    def on_save(self) -> None:
+        """
+        Slot called when user clicks on the "Save" button. Only visible fields are
+        exported.
+        :return: None
+        """
+        form_data = self.form.save()
+        if form_data is False:
+            return
+
+        new_name = form_data["name"]
+        if form_data["name"] != self.name:
+            # update the model configuration
+            self.model_config.parameters.rename(self.name, new_name)
+
+            # update the page name in the list
+            # noinspection PyUnresolvedReferences
+            self.pages.rename_page(self.name, new_name)
+
+            # update the page title
+            self.set_page_title(new_name)
+
+            # update the parameter list
+            parameter_model: "ParametersListModel" = (
+                self.pages.dialog.parameters_list_widget.model
+            )
+            idx = parameter_model.parameter_names.index(self.name)
+            # noinspection PyUnresolvedReferences
+            parameter_model.layoutAboutToBeChanged.emit()
+            parameter_model.parameter_names[idx] = new_name
+
+            # noinspection PyUnresolvedReferences
+            parameter_model.layoutChanged.emit()
+
+            self.name = new_name
+
+        # update the model with the new dictionary
+        del form_data["name"]
+        self.model_config.parameters.update(self.name, form_data)
+
+        # update the parameter list in case the name or the type (icon) need updating
+        self.pages.dialog.parameters_list_widget.update()
+
+        # update tree and status bar
+        app = self.pages.dialog.app
+        if app is not None:
+            if hasattr(app, "components_tree"):
+                app.components_tree.reload()
+            if hasattr(app, "statusBar"):
+                app.statusBar().showMessage(f'Parameter "{self.name}" updated')
 
     @Slot()
     def on_delete_parameter(self) -> None:
@@ -118,6 +171,9 @@ class ParameterPageWidget(QWidget):
 
             # delete the parameter from the model configuration
             self.model_config.parameters.delete(self.name)
+
+            # set default page
+            self.pages.set_empty_page()
 
             # update tree and status bar
             if dialog.app is not None:
