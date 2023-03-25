@@ -19,7 +19,7 @@ from pywr_editor.form import (
     ValuesAndExternalDataWidget,
 )
 from pywr_editor.model import ModelConfig, ParameterConfig
-from pywr_editor.widgets import ComboBox, PushButton
+from pywr_editor.widgets import ComboBox, PushIconButton
 from tests.utils import check_msg, resolve_model_path
 
 
@@ -346,8 +346,8 @@ class TestDialogParameterValuesAndExternalDataWidget:
         )
 
         # 1. Open the dialog
-        select_button: PushButton = (
-            widget.line_edit_widget_container.findChildren(PushButton)[0]
+        select_button: PushIconButton = (
+            widget.line_edit_widget_container.findChildren(PushIconButton)[0]
         )
         qtbot.mouseClick(select_button, Qt.MouseButton.LeftButton)
         child_dialog: ExternalDataPickerDialogWidget = (
