@@ -1,14 +1,8 @@
 from typing import Any, Callable
 
+import qtawesome as qta
 from PySide6.QtCore import Qt, Slot
-from PySide6.QtWidgets import (
-    QDialog,
-    QDialogButtonBox,
-    QLabel,
-    QPushButton,
-    QVBoxLayout,
-    QWidget,
-)
+from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
 from pywr_editor.form import (
     DailyValuesWidget,
@@ -23,6 +17,7 @@ from pywr_editor.form import (
 )
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import Logging
+from pywr_editor.widgets import PushIconButton
 
 
 class ScenarioValuesPickerDialogWidget(QDialog):
@@ -85,15 +80,17 @@ class ScenarioValuesPickerDialogWidget(QDialog):
             raise ValueError(f"The data type '{data_type}' is not supported")
 
         # Buttons
-        button_box = QDialogButtonBox(
-            QDialogButtonBox.StandardButton.Save
-            | QDialogButtonBox.StandardButton.Close
-        )
-        # noinspection PyTypeChecker
-        save_button: QPushButton = button_box.findChild(QPushButton)
-        save_button.setObjectName("save_button")
+        button_box = QHBoxLayout()
+        close_button = PushIconButton(icon=qta.icon("msc.close"), label="Close")
         # noinspection PyUnresolvedReferences
-        button_box.rejected.connect(self.reject)
+        close_button.clicked.connect(self.reject)
+
+        save_button = PushIconButton(icon=qta.icon("msc.save"), label="Save")
+        save_button.setObjectName("save_button")
+
+        button_box.addStretch()
+        button_box.addWidget(save_button)
+        button_box.addWidget(close_button)
 
         available_fields = {
             "Configuration": [
@@ -118,7 +115,7 @@ class ScenarioValuesPickerDialogWidget(QDialog):
         self.form.load_fields()
         save_button.setEnabled(True)
         # noinspection PyUnresolvedReferences
-        button_box.accepted.connect(self.on_save)
+        save_button.clicked.connect(self.on_save)
 
         # Layout
         layout = QVBoxLayout(self)
@@ -126,12 +123,12 @@ class ScenarioValuesPickerDialogWidget(QDialog):
         layout.addWidget(title)
         layout.addWidget(description)
         layout.addWidget(self.form)
-        layout.addWidget(button_box)
+        layout.addLayout(button_box)
 
         self.setLayout(layout)
         self.setWindowTitle(title.text())
         self.setWindowModality(Qt.WindowModality.WindowModal)
-        self.setMinimumSize(600, 600)
+        self.setMinimumSize(650, 600)
 
     @Slot()
     def on_save(self) -> None:

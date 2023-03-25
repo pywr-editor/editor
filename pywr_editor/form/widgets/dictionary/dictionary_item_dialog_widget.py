@@ -1,17 +1,12 @@
 from typing import Any, Callable
 
+import qtawesome as qta
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import (
-    QDialog,
-    QDialogButtonBox,
-    QLabel,
-    QPushButton,
-    QVBoxLayout,
-    QWidget,
-)
+from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
 from pywr_editor.form import Form, FormCustomWidget, FormField, FormTitle
 from pywr_editor.model import ModelConfig
+from pywr_editor.widgets import PushIconButton
 
 from .dictionary_item_form_widget import DictionaryItemFormWidget
 
@@ -52,15 +47,17 @@ class DictionaryItemDialogWidget(QDialog):
         description = QLabel("Configure the dictionary key and its value")
 
         # Buttons
-        button_box = QDialogButtonBox(
-            QDialogButtonBox.StandardButton.Save
-            | QDialogButtonBox.StandardButton.Close
-        )
-        # noinspection PyTypeChecker
-        save_button: QPushButton = button_box.findChild(QPushButton)
-        save_button.setObjectName("save_button")
+        button_box = QHBoxLayout()
+        close_button = PushIconButton(icon=qta.icon("msc.close"), label="Close")
         # noinspection PyUnresolvedReferences
-        button_box.rejected.connect(self.reject)
+        close_button.clicked.connect(self.reject)
+
+        save_button = PushIconButton(icon=qta.icon("msc.save"), label="Save")
+        save_button.setObjectName("save_button")
+
+        button_box.addStretch()
+        button_box.addWidget(save_button)
+        button_box.addWidget(close_button)
 
         # Form
         self.form = DictionaryItemFormWidget(
@@ -73,13 +70,13 @@ class DictionaryItemDialogWidget(QDialog):
             parent=self,
         )
         # noinspection PyUnresolvedReferences
-        button_box.accepted.connect(self.form.on_save)
+        save_button.clicked.connect(self.form.on_save)
 
         # Layout
         layout.addWidget(title)
         layout.addWidget(description)
         layout.addWidget(self.form)
-        layout.addWidget(button_box)
+        layout.addLayout(button_box)
 
         self.setLayout(layout)
         self.setWindowTitle(title.text())
