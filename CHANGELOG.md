@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 All issue numbers are relative to https://github.com/pywr-editor/editor
 
 
+## v1.4.3 - 2023-03-25
+### Changed
+- Parameter, recorder, scenarios and tables are now sorted by name in the setting dialogs
+  The components can now be easily identified in the left-hand side widget in the modal dialogs.
+  ([#107](https://github.com/pywr-editor/editor/issues/107)). 
+- Improve description of threshold parameters ([#109](https://github.com/pywr-editor/editor/issues/109)).
+- Colour contrasts and some layouts have been changed to improve accessibility. 
+  Tables also display an icon next to their names to identify the file extension
+  ([#111](https://github.com/pywr-editor/editor/issues/111)).
+
+### Fixed
+- Fixed the form attribute name identifying the storage node in `MinimumVolumeStorageRecorder`. The recorder uses `node`
+  instead of `storage` ([#105](https://github.com/pywr-editor/editor/issues/105)).
+
 ## v1.4.2 - 2023-03-20
 ### Changed
 - Recent projects in the start screen are now sorted by date ([#89](https://github.com/pywr-editor/editor/issues/89)).
