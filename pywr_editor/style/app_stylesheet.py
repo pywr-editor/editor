@@ -87,7 +87,7 @@ class AppStylesheet:
                 "color": Color("gray", 600).hex,
             },
             "QMenu": {
-                "background": Color("gray", 100).hex,
+                "background": Color("gray", 200).hex,
                 "border": f'1px solid {Color("gray", 300).hex}',
                 "border-radius": "6px",
                 "color": Color("gray", 600).hex,
@@ -100,11 +100,11 @@ class AppStylesheet:
                 },
                 "::item": {
                     "background-color": "transparent",
-                    "border": f'1px solid {Color("gray", 100).hex}',
+                    "border": f'1px solid {Color("gray", 200).hex}',
                     "padding": "4px 20px",
                     "::selected, ::pressed": {
                         "background-color": Color("blue", 200).hex,
-                        "border": f'1px solid {Color("blue", 300).hex}',
+                        "border": f'1px solid {Color("blue", 400).hex}',
                         "border-radius": "6px",
                         "color": Color("gray", 700).hex,
                     },
