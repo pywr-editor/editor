@@ -2,13 +2,14 @@ from functools import partial
 from typing import TYPE_CHECKING
 
 import PySide6
+import qtawesome as qta
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget
 
 from pywr_editor.form import FormTitle
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import maybe_delete_component
-from pywr_editor.widgets import PushButton
+from pywr_editor.widgets import PushIconButton
 
 from .recorder_dialog_form import RecorderDialogForm
 from .recorders_list_model import RecordersListModel
@@ -44,22 +45,23 @@ class RecorderPageWidget(QWidget):
         self.set_page_title(name)
 
         # buttons
-        close_button = PushButton("Close")
+        close_button = PushIconButton(icon=qta.icon("msc.close"), label="Close")
         # noinspection PyUnresolvedReferences
         close_button.clicked.connect(parent.dialog.reject)
 
         # noinspection PyTypeChecker
-        save_button = PushButton("Save")
+        save_button = PushIconButton(icon=qta.icon("msc.save"), label="Save")
+
         save_button.setObjectName("save_button")
         # noinspection PyUnresolvedReferences
         save_button.clicked.connect(self.on_save)
+        add_button = PushIconButton(icon=qta.icon("msc.add"), label="Add new")
 
-        add_button = PushButton("Add new")
         add_button.setObjectName("add_button")
         # noinspection PyUnresolvedReferences
         add_button.clicked.connect(parent.on_add_new_recorder)
 
-        clone_button = PushButton("Clone")
+        clone_button = PushIconButton(icon=qta.icon("msc.copy"), label="Clone")
         clone_button.setToolTip(
             "Create a new recorder and copy this recorder's configuration"
         )
@@ -69,7 +71,9 @@ class RecorderPageWidget(QWidget):
             partial(parent.on_add_new_recorder, self.recorder_dict)
         )
 
-        delete_button = PushButton("Delete")
+        delete_button = PushIconButton(
+            icon=qta.icon("msc.remove"), label="Delete"
+        )
         delete_button.setObjectName("delete_button")
         # noinspection PyUnresolvedReferences
         delete_button.clicked.connect(self.on_delete_recorder)

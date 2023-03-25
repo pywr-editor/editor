@@ -1,6 +1,15 @@
-PySide6==6.4.1
+PySide6
 setuptools==67.6.0
 pandas
 requests
-pyqtgraph==0.13.2
+pyqtgraph
 pywin32
+pywr
+numpy
+matplotlib
+pytest
+pyinstaller
+typer
+tables
+QtAwesome
+shiboken6

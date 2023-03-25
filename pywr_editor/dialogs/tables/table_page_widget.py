@@ -1,13 +1,14 @@
 from typing import TYPE_CHECKING
 
 import PySide6
+import qtawesome as qta
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QHBoxLayout, QMessageBox, QVBoxLayout, QWidget
 
 from pywr_editor.form import FormTitle
 from pywr_editor.model import JsonUtils, ModelConfig
 from pywr_editor.utils import Logging, get_columns, maybe_delete_component
-from pywr_editor.widgets import PushButton
+from pywr_editor.widgets import PushIconButton
 
 from .table_form_widget import TableFormWidget
 from .table_url_widget import TableUrlWidget
@@ -44,22 +45,28 @@ class TablePageWidget(QWidget):
         self.set_page_title(name)
 
         # buttons
-        close_button = PushButton("Close")
+        close_button = PushIconButton(icon=qta.icon("msc.close"), label="Close")
+
         # noinspection PyUnresolvedReferences
         close_button.clicked.connect(parent.dialog.reject)
 
         # noinspection PyTypeChecker
-        self.save_button = PushButton("Save")
+        self.save_button = PushIconButton(
+            icon=qta.icon("msc.save"), label="Save"
+        )
         self.save_button.setObjectName("save_button")
         # noinspection PyUnresolvedReferences
         self.save_button.clicked.connect(self.on_save)
 
-        add_button = PushButton("Add new")
+        add_button = PushIconButton(icon=qta.icon("msc.add"), label="Add new")
+
         add_button.setObjectName("add_button")
         # noinspection PyUnresolvedReferences
         add_button.clicked.connect(parent.on_add_new_table)
 
-        delete_button = PushButton("Delete")
+        delete_button = PushIconButton(
+            icon=qta.icon("msc.remove"), label="Delete"
+        )
         delete_button.setObjectName("delete_button")
         # noinspection PyUnresolvedReferences
         delete_button.clicked.connect(self.on_delete_table)
