@@ -1,3 +1,4 @@
+from functools import partial
 from typing import TYPE_CHECKING
 
 import PySide6
@@ -52,6 +53,16 @@ class ParameterPageWidget(QWidget):
         # noinspection PyUnresolvedReferences
         add_button.clicked.connect(parent.on_add_new_parameter)
 
+        clone_button = PushButton("Clone")
+        clone_button.setToolTip(
+            "Create a new parameter and copy this parameter's configuration"
+        )
+        clone_button.setObjectName("clone_button")
+        # noinspection PyUnresolvedReferences
+        clone_button.clicked.connect(
+            partial(parent.on_add_new_parameter, self.parameter_dict)
+        )
+
         save_button = PushButton("Save")
         save_button.setObjectName("save_button")
         # noinspection PyUnresolvedReferences
@@ -64,6 +75,7 @@ class ParameterPageWidget(QWidget):
 
         button_box = QHBoxLayout()
         button_box.addWidget(add_button)
+        button_box.addWidget(clone_button)
         button_box.addStretch()
         button_box.addWidget(save_button)
         button_box.addWidget(delete_button)
