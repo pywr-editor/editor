@@ -123,6 +123,45 @@ class TestRecordersDialog:
             renamed_recorder_name
         ) == {"type": "node", "node": "Reservoir"}
 
+    def test_clone_recorder(self, qtbot, model_config, dialog):
+        """
+        Tests the clone recorder button.
+        """
+        pages_widget = dialog.pages_widget
+        current_recorder = "node_aggregated_rec"
+
+        # Page widget
+        pages_widget.set_current_widget_by_name(current_recorder)
+        selected_page = pages_widget.currentWidget()
+        # noinspection PyUnresolvedReferences
+        selected_page.findChild(RecorderDialogForm).load_fields()
+
+        assert selected_page.name == current_recorder
+
+        # Clone the recorder
+        # noinspection PyTypeChecker
+        clone_button: QPushButton = selected_page.findChild(
+            QPushButton, "clone_button"
+        )
+        qtbot.mouseClick(clone_button, Qt.MouseButton.LeftButton)
+
+        # new name is random
+        new_name = list(pages_widget.pages.keys())[-1]
+        assert "Recorder " in new_name
+        # the recorder is in the widgets list
+        assert new_name in pages_widget.pages.keys()
+
+        # the form page is selected
+        assert pages_widget.currentWidget() == pages_widget.pages[new_name]
+
+        # the model is updated
+        assert model_config.has_changes is True
+        assert model_config.recorders.does_recorder_exist(new_name) is True
+        assert model_config.recorders.get_config_from_name(new_name) == {
+            "type": "AggregatedRecorder",
+            "recorders": ["node_numpy_rec_dict", "node_link_rec"],
+        }
+
     def test_rename_recorder(self, qtbot, model_config, dialog):
         """
         Tests that a recorder is renamed correctly.

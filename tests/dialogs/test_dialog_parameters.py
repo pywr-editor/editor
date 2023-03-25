@@ -130,6 +130,46 @@ class TestParametersDialog:
             renamed_parameter_name
         ) == {"type": "constant", "value": new_value}
 
+    def test_clone_parameter(self, qtbot, model_config, dialog):
+        """
+        Tests the clone parameter button.
+        """
+        pages_widget = dialog.pages_widget
+        current_param = "dataframe_param"
+
+        # Page widget
+        pages_widget.set_current_widget_by_name(current_param)
+        selected_page = pages_widget.currentWidget()
+        # noinspection PyUnresolvedReferences
+        selected_page.findChild(ParameterDialogForm).load_fields()
+
+        assert selected_page.name == current_param
+
+        # Clone the parameter
+        # noinspection PyTypeChecker
+        clone_button: QPushButton = selected_page.findChild(
+            QPushButton, "clone_button"
+        )
+        qtbot.mouseClick(clone_button, Qt.MouseButton.LeftButton)
+
+        # new name is random
+        new_name = list(pages_widget.pages.keys())[-1]
+        assert "Parameter " in new_name
+        # the parameter is in the widgets list
+        assert new_name in pages_widget.pages.keys()
+
+        # the form page is selected
+        assert pages_widget.currentWidget() == pages_widget.pages[new_name]
+
+        # the model is updated
+        assert model_config.has_changes is True
+        assert model_config.parameters.does_parameter_exist(new_name) is True
+        assert model_config.parameters.get_config_from_name(new_name) == {
+            "type": "dataframe",
+            "url": "files/table.csv",
+            "column": 0,
+        }
+
     def test_rename_parameter(self, qtbot, model_config, dialog):
         """
         Tests that a parameter is renamed correctly.

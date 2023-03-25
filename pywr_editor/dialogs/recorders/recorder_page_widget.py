@@ -1,3 +1,4 @@
+from functools import partial
 from typing import TYPE_CHECKING
 
 import PySide6
@@ -58,6 +59,16 @@ class RecorderPageWidget(QWidget):
         # noinspection PyUnresolvedReferences
         add_button.clicked.connect(parent.on_add_new_recorder)
 
+        clone_button = PushButton("Clone")
+        clone_button.setToolTip(
+            "Create a new recorder and copy this recorder's configuration"
+        )
+        clone_button.setObjectName("clone_button")
+        # noinspection PyUnresolvedReferences
+        clone_button.clicked.connect(
+            partial(parent.on_add_new_recorder, self.recorder_dict)
+        )
+
         delete_button = PushButton("Delete")
         delete_button.setObjectName("delete_button")
         # noinspection PyUnresolvedReferences
@@ -65,6 +76,7 @@ class RecorderPageWidget(QWidget):
 
         button_box = QHBoxLayout()
         button_box.addWidget(add_button)
+        button_box.addWidget(clone_button)
         button_box.addStretch()
         button_box.addWidget(save_button)
         button_box.addWidget(delete_button)

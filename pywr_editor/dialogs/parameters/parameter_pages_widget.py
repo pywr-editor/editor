@@ -71,10 +71,12 @@ class ParameterPagesWidget(QStackedWidget):
         return False
 
     @Slot()
-    def on_add_new_parameter(self) -> None:
+    def on_add_new_parameter(self, configuration: dict | None = None) -> None:
         """
         Adds a new parameter. This creates a new scenario in the model and adds, and
         selects the form page.
+        :param configuration: The configuration to use when the parameter is added. When
+        omitted a constant parameter with 0 as value is used.
         :return: None
         """
         list_widget = self.dialog.parameters_list_widget.list
@@ -84,10 +86,13 @@ class ParameterPagesWidget(QStackedWidget):
         # generate unique name
         parameter_name = f"Parameter {QUuid().createUuid().toString()[1:7]}"
 
+        status_label = f'Cloned parameter as "{parameter_name}"'
+        if not configuration:
+            configuration = {"type": "constant", "value": 0}
+            status_label = f'Added new parameter "{parameter_name}"'
+
         # add the dictionary to the model. Default to ConstantParameter
-        self.model_config.parameters.update(
-            parameter_name, {"type": "constant", "value": 0}
-        )
+        self.model_config.parameters.update(parameter_name, configuration)
 
         # add the page
         pages_widget: ParameterPagesWidget = self.dialog.pages_widget
@@ -111,6 +116,4 @@ class ParameterPagesWidget(QStackedWidget):
             if hasattr(self.dialog.app, "components_tree"):
                 self.dialog.app.components_tree.reload()
             if hasattr(self.dialog.app, "statusBar"):
-                self.dialog.app.statusBar().showMessage(
-                    f'Added new parameter "{parameter_name}"'
-                )
+                self.dialog.app.statusBar().showMessage(status_label)

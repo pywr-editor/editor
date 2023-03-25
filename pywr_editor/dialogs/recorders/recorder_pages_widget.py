@@ -71,10 +71,12 @@ class RecorderPagesWidget(QStackedWidget):
         return False
 
     @Slot()
-    def on_add_new_recorder(self) -> None:
+    def on_add_new_recorder(self, configuration: dict | None = None) -> None:
         """
         Adds a new recorder. This creates a new scenario in the model and adds, and
         selects the form page.
+        :param configuration: The configuration to use when the parameter is added. When
+        omitted a constant parameter with 0 as value is used.
         :return: None
         """
         list_widget = self.dialog.recorders_list_widget.list
@@ -84,9 +86,14 @@ class RecorderPagesWidget(QStackedWidget):
         # generate unique name
         recorder_name = f"Recorder {QUuid().createUuid().toString()[1:7]}"
 
+        status_label = f'Cloned recorder as "{recorder_name}"'
+        if not configuration:
+            configuration = {"type": "node"}
+            status_label = f'Added new recorder "{recorder_name}"'
+
         # add the dictionary to the model. Default to NodeRecorder
         # NOTE: the node is not specified and the recorder is not valid
-        self.model_config.recorders.update(recorder_name, {"type": "node"})
+        self.model_config.recorders.update(recorder_name, configuration)
 
         # add the page
         pages_widget: RecorderPagesWidget = self.dialog.pages_widget
@@ -110,6 +117,4 @@ class RecorderPagesWidget(QStackedWidget):
             if hasattr(self.dialog.app, "components_tree"):
                 self.dialog.app.components_tree.reload()
             if hasattr(self.dialog.app, "statusBar"):
-                self.dialog.app.statusBar().showMessage(
-                    f'Added new recorder "{recorder_name}"'
-                )
+                self.dialog.app.statusBar().showMessage(status_label)
