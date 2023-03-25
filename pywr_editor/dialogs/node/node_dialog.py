@@ -1,16 +1,9 @@
 from typing import TYPE_CHECKING, Type, Union
 
+import qtawesome as qta
 from PySide6.QtCore import QSize, Qt
 from PySide6.QtGui import QWindow
-from PySide6.QtWidgets import (
-    QDialog,
-    QDialogButtonBox,
-    QHBoxLayout,
-    QLabel,
-    QPushButton,
-    QVBoxLayout,
-    QWidget,
-)
+from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
 from pywr_editor.form import FormTitle
 from pywr_editor.model import ModelConfig
@@ -20,6 +13,7 @@ from pywr_editor.node_shapes import (
     get_pixmap_from_type,
 )
 
+from ...widgets import PushIconButton
 from .node_dialog_form import NodeDialogForm
 
 if TYPE_CHECKING:
@@ -51,15 +45,17 @@ class NodeDialog(QDialog):
         self.title = NodeDialogTitle(node_name, get_node_icon(node_config))
 
         # Buttons
-        button_box = QDialogButtonBox(
-            QDialogButtonBox.StandardButton.Save
-            | QDialogButtonBox.StandardButton.Close
-        )
-        # noinspection PyTypeChecker
-        save_button: QPushButton = button_box.findChild(QPushButton)
+        button_box = QHBoxLayout()
+        save_button = PushIconButton(icon=qta.icon("msc.save"), label="Save")
         save_button.setObjectName("save_button")
+
+        close_button = PushIconButton(icon=qta.icon("msc.close"), label="Close")
         # noinspection PyUnresolvedReferences
-        button_box.rejected.connect(self.reject)
+        close_button.clicked.connect(self.reject)
+
+        button_box.addStretch()
+        button_box.addWidget(save_button)
+        button_box.addWidget(close_button)
 
         # Form
         self.form = NodeDialogForm(
@@ -73,7 +69,7 @@ class NodeDialog(QDialog):
 
         layout.addWidget(self.title)
         layout.addWidget(self.form)
-        layout.addWidget(button_box)
+        layout.addLayout(button_box)
 
         self.setLayout(layout)
         self.setWindowTitle(f"Edit node - {node_name}")

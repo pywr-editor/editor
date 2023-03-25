@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Union
 
+import qtawesome as qta
 from PySide6.QtSvgWidgets import QSvgWidget
 from PySide6.QtWidgets import (
     QHBoxLayout,
@@ -12,7 +13,7 @@ from PySide6.QtWidgets import (
 
 from pywr_editor.form import FormTitle
 from pywr_editor.style import Color
-from pywr_editor.widgets import PushButton
+from pywr_editor.widgets import PushIconButton
 
 if TYPE_CHECKING:
     from .recorder_pages_widget import RecorderPagesWidget
@@ -47,11 +48,11 @@ class RecorderEmptyPageWidget(QWidget):
         icon_layout.addWidget(icon)
 
         # buttons
-        close_button = PushButton("Close")
+        close_button = PushIconButton(icon=qta.icon("msc.close"), label="Close")
         # noinspection PyUnresolvedReferences
         close_button.clicked.connect(parent.dialog.reject)
 
-        add_button = PushButton("Add new")
+        add_button = PushIconButton(icon=qta.icon("msc.add"), label="Add new")
         add_button.setObjectName("add_button")
         # noinspection PyUnresolvedReferences
         add_button.clicked.connect(parent.on_add_new_recorder)

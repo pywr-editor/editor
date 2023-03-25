@@ -2,7 +2,6 @@ import re
 from typing import TYPE_CHECKING, Any
 
 from PySide6.QtCore import Slot
-from PySide6.QtWidgets import QDialogButtonBox
 
 from pywr_editor.form import FieldConfig, Form, FormValidation
 from pywr_editor.model import ModelConfig
@@ -72,15 +71,13 @@ class MetadataFormWidget(Form):
 
         super().__init__(
             available_fields=available_fields,
-            save_button=parent.button_box.button(
-                QDialogButtonBox.StandardButton.Save
-            ),
+            save_button=parent.save_button,
             parent=parent,
         )
 
         # save form with button click
         # noinspection PyUnresolvedReferences
-        parent.button_box.accepted.connect(self.on_save)
+        parent.save_button.clicked.connect(self.on_save)
 
     @staticmethod
     def _check_version_number(

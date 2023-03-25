@@ -43,4 +43,4 @@ class PushIconButton(QPushButton):
         if small:
             self.setStyleSheet("PushIconButton {padding: 4px 6px}")
         else:
-            self.setStyleSheet("PushIconButton {padding: 6px 15px}")
+            self.setStyleSheet("PushIconButton {padding: 6px 10px}")
