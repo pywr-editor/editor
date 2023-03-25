@@ -3,6 +3,7 @@ import traceback
 from typing import TYPE_CHECKING
 
 import pandas as pd
+import qtawesome as qta
 from pandas import read_csv, read_excel, read_hdf
 from PySide6.QtCore import QSize, Signal, Slot
 from PySide6.QtGui import QIcon
@@ -17,7 +18,7 @@ from pywr_editor.utils import (
     reset_pandas_index_names,
     set_table_index,
 )
-from pywr_editor.widgets import ComboBox, ExtensionIcon, PushButton
+from pywr_editor.widgets import ComboBox, ExtensionIcon, PushIconButton
 
 if TYPE_CHECKING:
     from pywr_editor.form import ModelComponentForm
@@ -106,16 +107,20 @@ class TableSelectorWidget(FormCustomWidget):
                 ext = "N/A"
             self.combo_box.addItem(QIcon(ExtensionIcon(ext)), name)
         # Open button
-        self.open_button = PushButton("Open", small=True)
+        self.open_button = PushIconButton(
+            icon=qta.icon("msc.table"), label="Open", small=True
+        )
         self.open_button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
         self.open_button.setToolTip(
-            "Open the table file externally with the associated application"
+            "Open the table file externally with the default associated application"
         )
         # noinspection PyUnresolvedReferences
         self.open_button.clicked.connect(self.on_open_file)
 
         # Reload button
-        self.reload_button = PushButton("Reload")
+        self.reload_button = PushIconButton(
+            icon=qta.icon("msc.refresh"), label="Reload"
+        )
         self.reload_button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         self.reload_button.setToolTip(
             "Reload the column names from the file in case its content changed"

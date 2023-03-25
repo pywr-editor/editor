@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Any
 
+import qtawesome as qta
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QVBoxLayout
 
@@ -12,7 +13,7 @@ from pywr_editor.form import (
 from pywr_editor.model import NodeConfig
 from pywr_editor.style import Color
 from pywr_editor.utils import Logging, get_signal_sender, move_row
-from pywr_editor.widgets import PushButton, TableView
+from pywr_editor.widgets import PushIconButton, TableView
 
 if TYPE_CHECKING:
     from pywr_editor.dialogs import NodeDialogForm
@@ -189,13 +190,17 @@ class SlotsTableWidget(FormCustomWidget):
 
         # Buttons
         button_layout = QHBoxLayout()
-        self.move_up = PushButton(label="Move up", small=True)
+        self.move_up = PushIconButton(
+            icon=qta.icon("msc.chevron-up"), label="Move up", small=True
+        )
         self.move_up.setDisabled(True)
         self.move_up.setToolTip("Move the selected slot up in the table")
         # noinspection PyUnresolvedReferences
         self.move_up.clicked.connect(self.on_move_up)
 
-        self.move_down = PushButton(label="Move down", small=True)
+        self.move_down = PushIconButton(
+            icon=qta.icon("msc.chevron-down"), label="Move down", small=True
+        )
         self.move_down.setDisabled(True)
         self.move_down.setToolTip("Move the selected slot down in the table")
         # noinspection PyUnresolvedReferences
