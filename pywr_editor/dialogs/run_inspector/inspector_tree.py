@@ -165,14 +165,15 @@ class InspectorTree(QTreeWidget):
         :return: None
         """
         root = QTreeWidgetItem(self)
-        root.setText(0, f"Parameters ({len(self.pywr_model.parameters)})")
         root.setExpanded(True)
 
+        total_parameters = 0
         for parameter in self.pywr_model.parameters:
             parameter: Parameter
             # render model parameters only
             if parameter.name is None:
                 continue
+            total_parameters += 1
             parameter_config = (
                 self.model_config.parameters.get_config_from_name(
                     parameter.name, as_dict=False
@@ -202,20 +203,24 @@ class InspectorTree(QTreeWidget):
                 parameter=parameter, root_item=parameter_item
             )
 
+        root.setText(0, f"Parameters ({total_parameters})")
+
     def add_recorders(self) -> None:
         """
         Adds the recorders and their attributes to the tree.
         :return: None
         """
         root = QTreeWidgetItem(self)
-        root.setText(0, f"Recorders ({len(self.pywr_model.recorders)})")
         root.setExpanded(True)
 
+        total_recorders = 0
         for recorder in self.pywr_model.recorders:
             recorder: Recorder
             # render model parameters only
             if recorder.name is None:
                 continue
+
+            total_recorders += 1
             recorder_config = self.model_config.recorders.get_config_from_name(
                 recorder.name, as_dict=False
             )
@@ -240,6 +245,8 @@ class InspectorTree(QTreeWidget):
             self.render_recorder_values(
                 recorder=recorder, root_item=recorder_item
             )
+
+        root.setText(0, f"Recorders ({total_recorders})")
 
     def render_component_attribute(
         self, attr: tuple[str, Any], attr_name: str, root_item: QTreeWidgetItem
