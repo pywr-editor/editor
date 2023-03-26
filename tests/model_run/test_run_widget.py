@@ -5,8 +5,11 @@ from PySide6.QtWidgets import QGraphicsItem
 
 from pywr_editor import MainWindow
 from pywr_editor.model.pywr_worker import RunMode
+from pywr_editor.toolbar.node_library.schematic_items_library import (
+    SchematicItemsLibrary,
+)
 from pywr_editor.toolbar.run_controls.run_widget import RunWidget
-from pywr_editor.widgets import DateEdit
+from pywr_editor.widgets import DateEdit, SpinBox
 from tests.utils import resolve_model_path
 
 
@@ -88,15 +91,49 @@ class TestRunWidget:
         # tooltip contains the model results
         assert "Flow" in node_item.toolTip()
 
-        # TODO check toolbar buttons and all contextual menu!
+        # check toolbar buttons
+        disabled_actions = [
+            "edit-metadata",
+            "edit-scenarios",
+            "edit-imports",
+            "edit-slots",
+            "edit-tables",
+            "edit-parameters",
+            "edit-recorders",
+            "find-orphaned-nodes",
+            "find-orphaned-parameters",
+        ]
+        for action_name in disabled_actions:
+            assert (
+                window.app_actions.get(action_name).isEnabled() is False
+            ), action_name
+
+        # node library is disabled
+        node_library: SchematicItemsLibrary = window.toolbar.findChild(
+            SchematicItemsLibrary
+        )
+        assert node_library.isEnabled() is False
+
+        # date widgets are disabled
+        for widget_name in [
+            "start_date",
+            "end_date",
+            "run_to_date",
+        ]:
+            assert (
+                window.toolbar.findChild(DateEdit, widget_name).isEnabled()
+                is False
+            )
+        assert (
+            window.toolbar.findChild(SpinBox, "time_step").isEnabled() is False
+        )
 
         # 2. Stop the model
         qtbot.mouseClick(run_widget.stop_button, Qt.MouseButton.LeftButton)
 
         # check worker status just before is killed
         assert worker.is_killed is True
-
-        qtbot.wait(500)
+        qtbot.wait(200)
         assert worker.pywr_model is None
 
         # worker and widget emits the signals
@@ -130,6 +167,25 @@ class TestRunWidget:
         # tooltip contains the model results
         item = window.schematic.node_items["Input"]
         assert item.toolTip() == item.tooltip_text
+
+        # check toolbar buttons
+        for action_name in disabled_actions:
+            assert window.app_actions.get(action_name).isEnabled(), action_name
+
+        # node library is enabled
+        node_library: SchematicItemsLibrary = window.toolbar.findChild(
+            SchematicItemsLibrary
+        )
+        assert node_library.isEnabled()
+
+        # date widgets are enabled
+        for widget_name in [
+            "start_date",
+            "end_date",
+            "run_to_date",
+        ]:
+            assert window.toolbar.findChild(DateEdit, widget_name).isEnabled()
+        assert window.toolbar.findChild(SpinBox, "time_step").isEnabled()
 
     def test_step_until_end(self, qtbot):
         """
