@@ -133,6 +133,9 @@ class TestRunWidgetErrors:
             qtbot.wait(200)
             assert spy.count() == 1
 
+            # progress status is reset
+            assert "Ready" in run_widget.progress_status.text()
+
     def test_close_editor_while_running(self, qtbot):
         """
         Tests that no exceptions are thrown when the model is running and the main

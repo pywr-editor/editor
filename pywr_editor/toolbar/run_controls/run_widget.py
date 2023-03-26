@@ -133,7 +133,7 @@ class RunWidget(QWidget):
             {
                 "QProgressBar": {
                     "background": "white",
-                    "border": f"1px solid {Color('neutral', 300).hex}",
+                    "border": f"1px solid {Color('gray', 400).hex}",
                     "border-radius": "5px",
                     "height": "10px",
                     "text-align": "center",
@@ -378,6 +378,8 @@ class RunWidget(QWidget):
         :param exception: The exception message.
         :return: None
         """
+        self.reset_progress()
+
         message = QMessageBox()
         message.setWindowTitle("Model error")
         message.setIcon(QMessageBox.Icon.Critical)
@@ -390,7 +392,7 @@ class RunWidget(QWidget):
             Qt.TextInteractionFlag.TextSelectableByMouse
         )
 
-        # open thr exception message box
+        # open the exception message box
         for button in message.buttons():
             if message.buttonRole(button) == QMessageBox.ButtonRole.ActionRole:
                 button.click()
