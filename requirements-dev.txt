@@ -10,3 +10,4 @@ isort
 flake8-black
 flake8-isort
 black
+requests

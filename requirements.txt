@@ -1,13 +1,10 @@
 PySide6
 setuptools==67.6.0
 pandas
-requests
 pywr==1.20.1
 pyqtgraph
 pywin32
 numpy
-pytest
-pyinstaller
 typer
 tables
 QtAwesome
