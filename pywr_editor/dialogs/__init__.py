@@ -405,3 +405,6 @@ from .recorders.sections.total_parameter_recorder_section import (
     TotalParameterRecorderSection,
 )
 from .recorders.sections.custom_recorder_section import CustomRecorderSection
+
+# search bar
+from .search.search_dialog import SearchDialog
