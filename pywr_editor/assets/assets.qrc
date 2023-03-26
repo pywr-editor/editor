@@ -41,6 +41,7 @@
         <file alias="edit-slots">toolbar/connectorarrowend.svg</file>
         <file alias="undo">toolbar/undo.svg</file>
         <file alias="redo">toolbar/redo.svg</file>
+        <file alias="search">toolbar/searchdialog.svg</file>
     </qresource>
     <qresource prefix="file-browser">
         <file alias="close">file_browser/x-circle.svg</file>
