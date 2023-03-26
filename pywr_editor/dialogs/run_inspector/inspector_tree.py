@@ -392,7 +392,6 @@ class InspectorTree(QTreeWidget):
                         sc_item.setText(1, str(values[sc_i]))
                         sc_item.setToolTip(1, type(values[sc_i]).__name__)
                 else:
-
                     value_item.setText(1, str(values))
                     value_item.setToolTip(1, type(values).__name__)
             except Exception:
@@ -442,12 +441,12 @@ class InspectorTree(QTreeWidget):
         return stylesheet_dict_to_str(
             {
                 "QWidget::section": {
-                    "background": Color("neutral", 100).hex,
+                    "background": Color("gray", 200).hex,
                     "height": "20px",
                     "padding-top": "4px",
                     "padding-left": "6px",
                     "font-size": "110%",
-                    "border": f"1px solid {Color('neutral', 300).hex}",
+                    "border": f"1px solid {Color('gray', 300).hex}",
                 },
             }
         )
