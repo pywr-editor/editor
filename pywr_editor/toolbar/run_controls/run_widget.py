@@ -297,6 +297,7 @@ class RunWidget(QWidget):
         self.inspector_action.setEnabled(False)
 
         self.reset_progress()
+        self.app.statusBar().showMessage("Run has ended")
 
     @Slot()
     def step(self) -> None:
