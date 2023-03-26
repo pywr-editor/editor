@@ -27,7 +27,7 @@ class CalendarWidget(QCalendarWidget):
         # change style of weekend's days
         w_format = QTextCharFormat()
         w_format.setForeground(
-            QBrush(Color("neutral", 800).qcolor, Qt.BrushStyle.SolidPattern)
+            QBrush(Color("gray", 800).qcolor, Qt.BrushStyle.SolidPattern)
         )
         self.setWeekdayTextFormat(Qt.DayOfWeek.Saturday, w_format)
         self.setWeekdayTextFormat(Qt.DayOfWeek.Sunday, w_format)
@@ -77,7 +77,7 @@ class CalendarWidget(QCalendarWidget):
         Returns the style.
         :return: The stylesheet as string.
         """
-        header_color = Color("neutral", 600).hex
+        header_color = Color("gray", 600).hex
         spin_box = AppStylesheet.spin_box()
         spin_box["padding"] = "2px 6px"
 
@@ -85,7 +85,7 @@ class CalendarWidget(QCalendarWidget):
             {
                 "CalendarWidget": {
                     "border-radius": "5px",
-                    "border": f"1px solid {Color('neutral', 400).hex}",
+                    "border": f"1px solid {Color('gray', 400).hex}",
                     # month selector
                     "QToolButton": {
                         "background-color": header_color,
@@ -99,14 +99,14 @@ class CalendarWidget(QCalendarWidget):
                         "background": header_color
                     },
                     "#qt_calendar_yearbutton, #qt_calendar_monthbutton": {
-                        "color": Color("neutral", 100).hex
+                        "color": Color("gray", 100).hex
                     },
                     "#qt_calendar_yearbutton:hover, #qt_calendar_monthbutton:hover": {
-                        "color": Color("neutral", 300).hex
+                        "color": Color("gray", 300).hex
                     },
                     # row with days
                     "QWidget": {
-                        "alternate-background-color": Color("neutral", 200).hex,
+                        "alternate-background-color": Color("gray", 200).hex,
                     },
                     # icons
                     "QWidget#qt_calendar_prevmonth": {

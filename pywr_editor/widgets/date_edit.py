@@ -50,7 +50,7 @@ class DateEdit(QDateEdit):
             {
                 "DateEdit": {
                     "background": "#FFF",
-                    "border": f"1px solid {Color('neutral', 300).hex}",
+                    "border": f"1px solid {Color('gray', 400).hex}",
                     "padding": "2px",
                     "border-radius": "4px",
                     "::drop-down": {

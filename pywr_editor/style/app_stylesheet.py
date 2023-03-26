@@ -225,8 +225,7 @@ class AppStylesheet:
             },
             "QDateEdit": {
                 "background": "#FFF",
-                # TODO not working
-                "border": f"1px solid {Color('neutral', 300).hex}",
+                "border": f"1px solid {Color('gray', 300).hex}",
                 "padding": "2px",
                 "::drop-down": {
                     "image": "url(:form/caret-down)",

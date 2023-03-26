@@ -405,18 +405,10 @@ class InspectorTree(QTreeWidget):
         """
         style = {
             "InspectorTree": {
-                "border": f"1px solid {Color('neutral', 300).hex}",
+                "border": f"1px solid {Color('gray', 300).hex}",
                 "border-radius": "6px",
                 "outline": 0,
                 "color": Color("gray", 700).hex,
-            },
-            "QHeaderView::header": {
-                "background": Color("red", 100).hex,
-                "height": "20px",
-                "padding-top": "4px",
-                "padding-left": "6px",
-                "font-size": "110%",
-                "border": f"1px solid {Color('neutral', 300).hex}",
             },
             "InspectorTree::item": {"color": Color("gray", 900).hex},
             "InspectorTree::branch:has-siblings:!adjoins-item": {

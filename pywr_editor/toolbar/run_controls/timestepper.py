@@ -49,7 +49,7 @@ class TimeStepperWidget(QWidget):
         time_step.setObjectName("time_step")
         time_step.setStyleSheet(
             "#time_step { padding: 2px; border: 1px solid "
-            + Color("neutral", 300).hex
+            + Color("gray", 400).hex
             + "}"
         )
         # noinspection PyUnresolvedReferences
