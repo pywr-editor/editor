@@ -1,16 +1,17 @@
 from typing import TYPE_CHECKING, Union
 
+import qtawesome as qta
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QWindow
 from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QVBoxLayout
 from pywr.core import Timestep
 from pywr.model import Model
 
-from _misc.inspector.inspector_tree import InspectorTree
+from pywr_editor.dialogs import InspectorTree
 from pywr_editor.form import FormTitle
 from pywr_editor.model import ModelConfig
 from pywr_editor.style import AppStylesheet
-from pywr_editor.widgets import PushButton
+from pywr_editor.widgets import PushIconButton
 
 if TYPE_CHECKING:
     from pywr_editor import MainWindow
@@ -58,14 +59,18 @@ class InspectorDialog(QDialog):
         )
 
         # Buttons
-        expand_all = PushButton(label="Expand all")
+        expand_all = PushIconButton(
+            icon=qta.icon("msc.expand-all"), label="Expand all"
+        )
         # noinspection PyUnresolvedReferences
         expand_all.clicked.connect(tree.expandAll)
-        collapse_all = PushButton(label="Collapse all")
+        collapse_all = PushIconButton(
+            icon=qta.icon("msc.collapse-all"), label="Collapse all"
+        )
         # noinspection PyUnresolvedReferences
         collapse_all.clicked.connect(tree.collapseAll)
 
-        close_button = PushButton(label="Close")
+        close_button = PushIconButton(icon=qta.icon("msc.close"), label="Close")
         # noinspection PyUnresolvedReferences
         close_button.clicked.connect(self.close)
 
