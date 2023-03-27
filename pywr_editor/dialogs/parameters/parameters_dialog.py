@@ -44,7 +44,7 @@ class ParametersDialog(SettingsDialog):
 
         self.setup(self.parameters_list_widget, self.pages_widget)
         self.setWindowTitle("Model parameters")
-        self.setMinimumSize(930, 700)
+        self.setMinimumSize(950, 700)
         # self.setMinimumSize(850, 700)
 
         # select a parameter
