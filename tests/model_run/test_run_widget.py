@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pandas as pd
 from PySide6.QtCore import QDate, Qt
 from PySide6.QtTest import QSignalSpy
@@ -260,3 +262,73 @@ class TestRunWidget:
 
         # timestepper fields are enabled
         assert all([w.isEnabled() for w in window.findChildren(DateEdit)])
+
+    def test_run_to(self, qtbot):
+        """
+        Tests when the "Run to" button is clicked.
+        """
+        window = MainWindow(resolve_model_path("model_to_run.json"))
+        window.hide()
+        run_to_date = (2015, 8, 1)
+
+        # noinspection PyTypeChecker
+        run_widget: RunWidget = window.findChild(RunWidget)
+        run_status_changed_spy = QSignalSpy(run_widget.run_status_changed)
+
+        # check button status before running the model
+        assert run_widget.step_button.isEnabled() is True
+        assert run_widget.stop_button.isEnabled() is False
+        assert run_widget.run_button.isEnabled() is True
+        assert run_widget.run_to_button.isEnabled() is True
+        assert run_widget.inspector_action.isEnabled() is False
+
+        # 1. Set run to and run the model
+        run_to: DateEdit = window.toolbar.findChild(DateEdit, "run_to_date")
+        run_to.setDate(QDate(*run_to_date))
+        qtbot.mouseClick(run_widget.run_to_button, Qt.MouseButton.LeftButton)
+
+        # worker instance becomes available when model is running
+        worker = run_widget.worker
+        finished_spy = QSignalSpy(worker.finished)
+        before_run_to_spy = QSignalSpy(worker.before_run_to)
+        run_to_done_spy = QSignalSpy(worker.run_to_done)
+        progress_update_spy = QSignalSpy(worker.progress_update)
+
+        assert worker.mode == RunMode.RUN_TO
+        assert worker.is_killed is False
+        assert run_widget.is_running is True
+
+        # model has paused
+        qtbot.wait(400)
+        assert run_widget.step_button.isEnabled() is True
+        assert run_widget.stop_button.isEnabled() is True
+        assert run_widget.run_button.isEnabled() is True
+        assert run_widget.run_to_button.isEnabled() is False
+        assert run_widget.inspector_action.isEnabled() is True
+
+        # check signals
+        assert run_status_changed_spy.count() == 1
+        assert finished_spy.count() == 0
+        assert before_run_to_spy.count() == 1
+        assert run_to_done_spy.count() == 1
+        delta_date = datetime(*run_to_date) - datetime(2015, 1, 1)
+        assert progress_update_spy.count() == delta_date.days + 1
+
+        # check worker status flags
+        assert worker.is_killed is False
+        assert worker.is_paused is True
+        assert worker.mode is None
+
+        # 2. Check current date
+        assert run_widget.progress_status.text() == datetime(
+            *run_to_date
+        ).strftime("%d/%m/%Y")
+
+        # noinspection PyUnresolvedReferences
+        c = run_widget.worker.pywr_model.timestepper.current
+        assert c.day == run_to_date[-1]
+        assert c.month == run_to_date[1]
+        assert c.year == run_to_date[0]
+
+        # 3. stop run to prevent test to exit with code > 0
+        qtbot.mouseClick(run_widget.stop_button, Qt.MouseButton.LeftButton)
