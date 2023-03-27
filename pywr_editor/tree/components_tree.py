@@ -81,7 +81,6 @@ class ComponentsTree(QTreeWidget):
         self.sortByColumn(0, Qt.SortOrder.AscendingOrder)
 
         self._populate_model_info()
-        self._populate_timestepper()
         self._populate_nodes()
         self._populate_parameters()
         self._populate_tables()
@@ -188,24 +187,6 @@ class ComponentsTree(QTreeWidget):
         else:
             self.expanded_state.store_state(parent_item)
         self.items["parameters"] = parent_item
-
-    def _populate_timestepper(self) -> None:
-        """
-        Populates the tree widget for the timestepper key.
-        :return: None
-        """
-        # timestepper
-        if self.model_config.timestepper is None:
-            return
-
-        time_step_info = QTreeWidgetItem(self)
-        time_step_info.setText(0, "Timestepper")
-        for key, value in self.model_config.timestepper.items():
-            item = QTreeWidgetItem(time_step_info)
-            item.setText(0, key.title())
-            item.setText(1, str(value))
-
-        self.items["timestepper"] = time_step_info
 
     def _populate_model_info(self) -> None:
         """
