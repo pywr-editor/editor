@@ -82,17 +82,13 @@ class ExtensionIcon(QIconEngine):
             | QPainter.SmoothPixmapTransform
             | QPainter.TextAntialiasing
         )
-        # not from QPixmap
-        if rect.x() != 0:
-            painter.drawRoundedRect(rect, 4, 4)
-            font_size = 10
-        else:
-            font_size = 15
+        painter.drawRoundedRect(rect, 4, 4)
 
         # text
         font = QFont("Monospace")
         font.setStyleHint(QFont.TypeWriter)
-        font.setPixelSize(font_size)
+        font.setStyleStrategy(QFont.StyleStrategy.PreferAntialias)
+        font.setPixelSize(10)
         painter.setPen(Color(color_name, 800).qcolor)
         painter.setFont(font)
         painter.drawText(
