@@ -18,8 +18,6 @@ class RbfOptBoundWidget(AbstractFloatListWidget):
         super().__init__(
             name=name,
             value=value,
-            # only list of ints is allowed
-            only_list=True,
             allowed_item_types=int,
             final_type=int,
             log_name=self.__class__.__name__,
