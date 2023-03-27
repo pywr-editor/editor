@@ -1,4 +1,3 @@
-from functools import partial
 from typing import TYPE_CHECKING
 
 import PySide6
@@ -63,13 +62,11 @@ class RecorderPageWidget(QWidget):
 
         clone_button = PushIconButton(icon=qta.icon("msc.copy"), label="Clone")
         clone_button.setToolTip(
-            "Create a new recorder and copy this recorder's configuration"
+            "Create a new recorder and copy this recorder's last saved configuration"
         )
         clone_button.setObjectName("clone_button")
         # noinspection PyUnresolvedReferences
-        clone_button.clicked.connect(
-            partial(parent.on_add_new_recorder, self.recorder_dict)
-        )
+        clone_button.clicked.connect(self.on_clone_recorder)
 
         delete_button = PushIconButton(
             icon=qta.icon("msc.remove"), label="Delete"
@@ -158,6 +155,16 @@ class RecorderPageWidget(QWidget):
                 app.components_tree.reload()
             if hasattr(app, "statusBar"):
                 app.statusBar().showMessage(f'Recorder "{self.name}" updated')
+
+    @Slot()
+    def on_clone_recorder(self) -> None:
+        """
+        Clones the selected recorder.
+        :return: None
+        """
+        self.pages.on_add_new_recorder(
+            self.model_config.recorders.get_config_from_name(self.name)
+        )
 
     @Slot()
     def on_delete_recorder(self) -> None:
