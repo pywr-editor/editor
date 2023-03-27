@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 All issue numbers are relative to https://github.com/pywr-editor/editor
 
 
+## v1.5 - 2023-03-27
+### Added
+- The configuration of a selected recorder or parameter can now be copied as a new recorder or parameter by using the 
+  "Clone" button in the dialogs ([#115](https://github.com/pywr-editor/editor/issues/115)).
+- New icons (QtAwesome) have been added to all buttons to improve design and UI accessibility
+  ([#117](https://github.com/pywr-editor/editor/issues/117)).
+- Tables in the tree widget now display an icon depending on the table type ([#119](https://github.com/pywr-editor/editor/issues/119)).
+- A new search functionality was added. Users can now search and quickly edit nodes, parameters, tables and recorders 
+  by clicking on the "Search" button in the toolbar or pressing `CTRL+F` ([#123](https://github.com/pywr-editor/editor/issues/123)).
+
 ## v1.4.3 - 2023-03-25
 ### Changed
 - Parameter, recorder, scenarios and tables are now sorted by name in the setting dialogs
