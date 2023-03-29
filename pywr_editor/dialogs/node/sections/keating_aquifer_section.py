@@ -95,8 +95,9 @@ class KeatingAquiferSection(FormSection):
                 {
                     "name": "area",
                     "field_type": FloatWidget,
+                    "field_args": {"min_value": 0, "suffix": "m<sup>2</sup>"},
                     "value": self.form.get_node_dict_value("area"),
-                    "help_text": "The area of the aquifer in m<sup>2</sup>",
+                    "help_text": "The area of the aquifer",
                 },
                 {
                     "name": "storativity",

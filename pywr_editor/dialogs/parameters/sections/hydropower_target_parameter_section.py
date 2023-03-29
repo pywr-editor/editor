@@ -53,6 +53,7 @@ class HydropowerTargetParameterSection(FormSection):
                 {
                     "name": "turbine_elevation",
                     "field_type": FloatWidget,
+                    "field_args": {"min_value": 0},
                     "value": self.form.get_param_dict_value(
                         "turbine_elevation"
                     ),
@@ -73,10 +74,13 @@ class HydropowerTargetParameterSection(FormSection):
                     "name": "density",
                     "label": "Water density",
                     "field_type": FloatWidget,
+                    "field_args": {
+                        "min_value": 0,
+                        "suffix": "kg/m<sup>3</sup>",
+                    },
                     "value": self.form.get_param_dict_value("density"),
                     "default_value": 1000,
-                    "help_text": "Density of water in kg/m<sup>3</sup> used in the "
-                    + "hydropower equation",
+                    "help_text": "Density of water used in the hydropower equation",
                 },
             ],
             "Unit conversion factors": [
@@ -84,6 +88,7 @@ class HydropowerTargetParameterSection(FormSection):
                     "name": "flow_unit_conversion",
                     "label": " Flow unit conversion factor",
                     "field_type": FloatWidget,
+                    "field_args": {"min_value": 0},
                     "value": self.form.get_param_dict_value(
                         "flow_unit_conversion"
                     ),
@@ -97,6 +102,7 @@ class HydropowerTargetParameterSection(FormSection):
                     "name": "energy_unit_conversion ",
                     "label": " Energy unit conversion factor",
                     "field_type": FloatWidget,
+                    "field_args": {"min_value": 0},
                     "value": self.form.get_param_dict_value(
                         "energy_unit_conversion "
                     ),
@@ -132,6 +138,7 @@ class HydropowerTargetParameterSection(FormSection):
                     "name": "min_head",
                     "label": "Minimum head",
                     "field_type": FloatWidget,
+                    "field_args": {"min_value": 0},
                     "default_value": 0,
                     "value": self.form.get_param_dict_value("min_head"),
                     "help_text": "Always ensure that the working head (the difference "

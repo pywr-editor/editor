@@ -37,6 +37,7 @@ class FlowParameterSection(FormSection):
                     "name": "initial_value",
                     "field_type": FloatWidget,
                     "default_value": 0,
+                    "field_args": {"min_value": 0},
                     "value": self.form.get_param_dict_value("initial_value"),
                     "allow_empty": False,
                     "help_text": "The value to return on the first time step when the "

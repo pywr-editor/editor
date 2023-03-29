@@ -80,6 +80,7 @@ class ControlCurvePiecewiseInterpolatedParameterSection(FormSection):
                     "name": "minimum",
                     "label": "Minimum storage",
                     "field_type": FloatWidget,
+                    "field_args": {"min_value": 0, "max_value": 1},
                     "default_value": 0,
                     "value": self.form.get_param_dict_value("minimum"),
                     "help_text": "The minimum storage between 0 and 1 to use for the "
@@ -89,6 +90,7 @@ class ControlCurvePiecewiseInterpolatedParameterSection(FormSection):
                     "name": "maximum",
                     "label": "Maximum storage",
                     "field_type": FloatWidget,
+                    "field_args": {"min_value": 0, "max_value": 1},
                     "default_value": 1,
                     "value": self.form.get_param_dict_value("maximum"),
                     "help_text": "The maximum storage between 0 and 1 to use for the "

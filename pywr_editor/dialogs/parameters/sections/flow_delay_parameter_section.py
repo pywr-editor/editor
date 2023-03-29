@@ -65,6 +65,7 @@ class FlowDelayParameterSection(FormSection):
                 {
                     "name": "initial_value",
                     "field_type": FloatWidget,
+                    "field_args": {"min_value": 0},
                     "default_value": 0,
                     "value": self.form.get_param_dict_value("initial_value"),
                     "allow_empty": False,

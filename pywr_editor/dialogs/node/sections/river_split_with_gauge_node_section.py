@@ -31,6 +31,7 @@ class RiverSplitWithGaugeSection(FormSection):
                     "name": "mrf",
                     "label": "Minimum residual flow",
                     "field_type": FloatWidget,
+                    "field_args": {"min_value": 0},
                     "default_value": 0,
                     "value": self.form.get_node_dict_value("mrf"),
                     "help_text": "The minimum residual flow (MRF) to maintain at the "
