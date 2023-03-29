@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from pywr_editor.model import JsonUtils, RecorderConfig
+from pywr_editor.model import JsonUtils, Parameters, RecorderConfig
 
 if TYPE_CHECKING:
     from pywr_editor.model import ModelConfig
@@ -144,7 +144,9 @@ class Recorders:
         # by nodes or parameters
         self.model.json["recorders"] = JsonUtils(
             self.model.json["recorders"]
-        ).replace_str(old=recorder_name, new=new_name)
+        ).replace_str(
+            old=recorder_name, new=new_name, exclude_key=Parameters.exclude_key
+        )
         self.model.changes_tracker.add(
             f"Change recorder name from {recorder_name} to {new_name}"
         )

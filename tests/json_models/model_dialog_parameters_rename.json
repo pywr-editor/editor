@@ -1,0 +1,19 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir."
+  },
+  "nodes": [
+    {"name": "Reservoir", "type": "storage"},
+    {"name": "Output", "type": "Output"}
+  ],
+  "edges": [["Reservoir", "Output"]],
+  "parameters": {
+    "Reservoir": {"type": "constant", "value": 4},
+    "Param 1": {"type": "aggregated", "parameters": [4, "Reservoir"]},
+    "Param 2": {
+      "type": "threshold",
+      "node": "Reservoir"
+    }
+  }
+}
