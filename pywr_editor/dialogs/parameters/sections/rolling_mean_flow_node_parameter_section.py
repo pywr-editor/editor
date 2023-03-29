@@ -58,9 +58,9 @@ class RollingMeanFlowNodeParameterSection(FormSection):
                 {
                     "name": "initial_flow",
                     "field_type": FloatWidget,
+                    "field_args": {"min_value": 0},
                     "value": self.form.get_param_dict_value("initial_flow"),
                     "default_value": 0,
-                    "min_value": 0,
                     "help_text": "The initial value to use at the first model timestep "
                     + "before any flows have been recorded. Default to 0",
                 },

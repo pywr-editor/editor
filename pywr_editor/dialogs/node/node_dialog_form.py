@@ -329,6 +329,7 @@ class NodeDialogForm(Form):
             "name": "initial_volume",
             "value": self.get_node_dict_value("initial_volume"),
             "field_type": FloatWidget,
+            "field_args": {"min_value": 0},
             "help_text": "The initial absolute volume for the storage",
         }
 
@@ -340,9 +341,10 @@ class NodeDialogForm(Form):
         """
         return {
             "name": "initial_volume_pc",
-            "label": "Initial volume",
+            "label": "Initial volume (relative)",
             "value": self.get_node_dict_value("initial_volume_pc"),
             "field_type": FloatWidget,
+            "field_args": {"min_value": 0, "max_value": 1},
             "validate_fun": self.validate_initial_volume_pc,
             "help_text": "The relative volume for the storage. This is a number "
             + "between 0 (when empty) and 1 (when full)",

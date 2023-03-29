@@ -32,6 +32,7 @@ class GaussianKDEStorageRecorderSection(AbstractRecorderSection):
                 "name": "target_volume_pc",
                 "label": "Target volume",
                 "field_type": FloatWidget,
+                "field_args": {"min_value": 0, "max_value": 1},
                 "allow_empty": False,
                 "validate_fun": self.check_volume_pc,
                 "value": form.get_recorder_dict_value("target_volume_pc"),
