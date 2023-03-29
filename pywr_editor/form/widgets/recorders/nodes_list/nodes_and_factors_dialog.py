@@ -100,6 +100,7 @@ class NodesAndFactorsDialog(QDialog):
                     {
                         "name": "factor",
                         "field_type": FloatWidget,
+                        "field_args": {"min_value": 0},
                         "default_value": 1,
                         "value": factor,
                     },

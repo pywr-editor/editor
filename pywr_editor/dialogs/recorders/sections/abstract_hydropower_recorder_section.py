@@ -47,6 +47,7 @@ class AbstractHydropowerRecorderSection(AbstractRecorderSection):
             {
                 "name": "turbine_elevation",
                 "field_type": FloatWidget,
+                "field_args": {"min_value": 0},
                 "value": form.get_recorder_dict_value("turbine_elevation"),
                 "default_value": 0,
                 "help_text": "Elevation of the turbine",
@@ -65,10 +66,10 @@ class AbstractHydropowerRecorderSection(AbstractRecorderSection):
                 "name": "density",
                 "label": "Water density",
                 "field_type": FloatWidget,
+                "field_args": {"min_value": 0, "suffix": "m<sup>2</sup>"},
                 "value": form.get_recorder_dict_value("density"),
                 "default_value": 1000,
-                "help_text": "Density of water in kg/m<sup>3</sup> used in the "
-                + "hydropower equation",
+                "help_text": "Density of water used in the hydropower equation",
             },
         ]
         additional_sections = {
@@ -77,6 +78,7 @@ class AbstractHydropowerRecorderSection(AbstractRecorderSection):
                     "name": "flow_unit_conversion",
                     "label": " Flow unit conversion factor",
                     "field_type": FloatWidget,
+                    "field_args": {"min_value": 0},
                     "value": form.get_recorder_dict_value(
                         "flow_unit_conversion"
                     ),
@@ -91,6 +93,7 @@ class AbstractHydropowerRecorderSection(AbstractRecorderSection):
                     "name": "energy_unit_conversion ",
                     "label": " Energy unit conversion factor",
                     "field_type": FloatWidget,
+                    "field_args": {"min_value": 0},
                     "value": form.get_recorder_dict_value(
                         "energy_unit_conversion "
                     ),

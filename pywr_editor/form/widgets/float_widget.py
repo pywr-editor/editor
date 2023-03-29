@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QHBoxLayout, QLineEdit
+from PySide6.QtWidgets import QHBoxLayout, QLabel, QLineEdit
 
 from pywr_editor.form import FormCustomWidget, FormField, FormValidation
 from pywr_editor.utils import Logging
@@ -12,6 +12,7 @@ class FloatWidget(FormCustomWidget):
         parent: FormField,
         min_value: int | float | None = None,
         max_value: int | float | None = None,
+        suffix: str | None = None,
     ):
         """
         Initialises the widget that provides a constant float.
@@ -20,6 +21,7 @@ class FloatWidget(FormCustomWidget):
         :param parent: The parent widget.
         :param min_value: The minimum value. Optional.
         :param max_value: The maximum value. Optional.
+        :param suffix: A suffix label to add to the field. Optional.
         """
         super().__init__(name, value, parent)
         self.logger = Logging().logger(self.__class__.__name__)
@@ -31,6 +33,7 @@ class FloatWidget(FormCustomWidget):
 
         self.line_edit = QLineEdit()
         self.line_edit.setObjectName(f"{name}_line_edit")
+        self.line_edit.setMaximumWidth(100)
 
         self.line_edit.blockSignals(True)
         # value is provided
@@ -63,6 +66,9 @@ class FloatWidget(FormCustomWidget):
         layout = QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.line_edit)
+        if suffix:
+            layout.addWidget(QLabel(suffix))
+        layout.addStretch()
 
     def get_default_value(self) -> float | None:
         """
