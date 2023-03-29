@@ -124,3 +124,28 @@ class TestParameters:
             model.nodes.get_node_config_from_name("Link4")["max_flow"]
             == "paramX"
         )
+
+    def test_rename_with_same_node_name(self):
+        """
+        Tests that, when a parameter has the same name of a node, the node name and
+        its edges are not renamed as well.
+        """
+        model_config = ModelConfig(
+            resolve_model_path("model_dialog_parameters_rename.json")
+        )
+        model_config.parameters.rename("Reservoir", "XX_YY")
+
+        assert model_config.json["nodes"] == [
+            {"name": "Reservoir", "type": "storage"},
+            {"name": "Output", "type": "Output"},
+        ]
+
+        assert model_config.json["edges"] == [["Reservoir", "Output"]]
+        assert model_config.json["parameters"] == {
+            "XX_YY": {"type": "constant", "value": 4},
+            "Param 1": {
+                "type": "aggregated",
+                "parameters": [4, "XX_YY"],
+            },
+            "Param 2": {"type": "threshold", "node": "Reservoir"},
+        }

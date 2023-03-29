@@ -15,6 +15,22 @@ if TYPE_CHECKING:
 class Parameters:
     model: "ModelConfig"
     """ The ModelConfig instance """
+    exclude_key: list[str] = (
+        "table",
+        "type",
+        "name",
+        "edges",
+        "node",
+        "nodes",
+        "storage_node",
+        "index_col",
+        "index",
+        "column",
+        "parse_dates",
+        "url",
+        "agg_func",
+    )
+    """ List of dictionary keys to exclude when renaming a parameter """
 
     def get_all(self) -> dict:
         """
@@ -200,21 +216,9 @@ class Parameters:
 
         # rename references in model components
         self.model.json = JsonUtils(self.model.json).replace_str(
-            old=parameter_name,
-            new=new_name,
-            exclude_key=[
-                # exclude name to prevent node replacement
-                "table",
-                "type",
-                "name",
-                "index_col",
-                "index",
-                "column",
-                "parse_dates",
-                "url",
-                "agg_func",
-            ],
+            old=parameter_name, new=new_name, exclude_key=self.exclude_key
         )
+
         self.model.changes_tracker.add(
             f"Change parameter name from {parameter_name} to {new_name}"
         )
