@@ -18,6 +18,7 @@ from pywr_editor.dialogs import (
     ParametersDialog,
     RecordersDialog,
     ScenariosDialog,
+    SearchDialog,
     TablesDialog,
 )
 from pywr_editor.model import ModelConfig
@@ -205,6 +206,16 @@ class MainWindow(QMainWindow):
                 tooltip="Save the Pywr model file",
                 shortcut=QKeySequence.Save,
                 connection=self.save_model,
+            )
+        )
+        self.app_actions.add(
+            Action(
+                key="search-in-model",
+                name="Search",
+                icon=":/toolbar/search",
+                tooltip="Search the model for parameters, recorders, nodes and tables",
+                shortcut=QKeySequence.StandardKey.Find,
+                connection=self.search_in_model,
             )
         )
         self.app_actions.add(
@@ -564,6 +575,7 @@ class MainWindow(QMainWindow):
         file_panel.add_button(self.app_actions.get("open-model"))
         file_panel.add_button(self.app_actions.get("save-model"))
         self.app_actions.get("save-model").setDisabled(True)
+        file_panel.add_button(self.app_actions.get("search-in-model"))
         file_panel.add_button(self.app_actions.get("open-json-reader"))
 
         settings_panel = model_tab.add_panel("Settings")
@@ -797,6 +809,15 @@ class MainWindow(QMainWindow):
                 return False
 
         return True
+
+    @Slot()
+    def search_in_model(self) -> None:
+        """
+        Opens the search bar.
+        :return: None
+        """
+        viewer = SearchDialog(parent=self, model_config=self.model_config)
+        viewer.exec()
 
     @Slot()
     def show_json(self) -> None:

@@ -203,10 +203,6 @@ class RecentFileListWidget(QListWidget):
                 )
                 item.setToolTip(file_info["file"])
                 self.addItem(item)
-
-                # display the 5 most recent files
-                if fi >= 4:
-                    break
         else:
             self.add_no_item_description()
 

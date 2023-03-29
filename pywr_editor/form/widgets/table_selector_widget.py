@@ -477,7 +477,7 @@ class TableSelectorWidget(FormCustomWidget):
                 validation=False,
                 error_message="You must select a valid table from the list",
             )
-        elif self.table is None:
+        elif not self.static and self.table is None:
             self.logger.debug("Validation failed")
             return FormValidation(
                 validation=False,

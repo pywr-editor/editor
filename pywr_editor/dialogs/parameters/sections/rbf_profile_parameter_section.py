@@ -91,6 +91,12 @@ class RbfProfileParameterSection(FormSection):
                     "value": self.form.get_param_dict_value("smooth"),
                 },
             ],
+            "Miscellaneous": [
+                {
+                    "name": "comment",
+                    "value": self.form.get_param_dict_value("comment"),
+                },
+            ],
             self.form.optimisation_config_group_name: [
                 self.form.is_variable_field,
                 {
@@ -157,7 +163,11 @@ class RbfProfileParameterSection(FormSection):
         days_value = days.value()
         days_label = self.form.get_field_label_from_name("days_of_year")
 
-        if isinstance(value, list) and len(days_value) != len(value):
+        if (
+            isinstance(value, list)
+            and isinstance(days_value, list)
+            and len(days_value) != len(value)
+        ):
             return FormValidation(
                 validation=False,
                 error_message="The number of items must be the same as in "
@@ -213,6 +223,9 @@ class RbfProfileParameterSection(FormSection):
         """
         days = self.form.find_field_by_name("days_of_year")
         days_value = days.value()
+        if not isinstance(days_value, list):
+            return FormValidation(validation=True)
+
         day_spacing_valid = any(
             [
                 j - i <= 2 * value

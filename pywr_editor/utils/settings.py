@@ -226,6 +226,8 @@ class Settings:
 
         if recent_files is not None:
             for json_file in recent_files:
+                json_file = os.path.normpath(json_file)
+
                 # remove non-existing files
                 if not os.path.exists(json_file):
                     continue
@@ -257,8 +259,10 @@ class Settings:
                 except Exception:
                     pass
 
-        # store only existing files
-        self.global_instance.setValue(self.recent_projects_key, valid_files)
+        # store only existing and non-duplicated files
+        self.global_instance.setValue(
+            self.recent_projects_key, list(set(valid_files))
+        )
 
         return sorted(
             file_info, key=lambda d: d["last_updated_obj"], reverse=True
