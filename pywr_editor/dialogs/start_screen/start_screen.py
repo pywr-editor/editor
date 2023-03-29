@@ -58,7 +58,7 @@ class StartScreen(QDialog):
         style = {
             "QDialog": {
                 "background-color": Color("gray", 200).hex,
-                "border": f'1px solid {Color("gray", 300).hex}',
+                "border": f'1px solid {Color("gray", 400).hex}',
             }
         }
         return AppStylesheet().get() + stylesheet_dict_to_str(style)
