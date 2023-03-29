@@ -5,10 +5,11 @@ import pandas as pd
 import pytest
 import win32com.client
 from PySide6.QtCore import QPoint, Qt, QTimer
-from PySide6.QtWidgets import QLineEdit, QPushButton
+from PySide6.QtWidgets import QPushButton
 
 from pywr_editor.dialogs import ParametersDialog
 from pywr_editor.form import (
+    CommentWidget,
     FormField,
     H5KeyWidget,
     IndexColWidget,
@@ -216,10 +217,10 @@ class TestDialogParameterMonthlyValuesWidget:
         )
         # button is disabled
         assert save_button.isEnabled() is False
-        comment_widget: QLineEdit = selected_page.findChild(
+        comment_widget: CommentWidget = selected_page.findChild(
             FormField, "comment"
         ).widget
-        comment_widget.setText("Updated by me")
+        comment_widget.field.insertPlainText("Updated by me")
         assert save_button.isEnabled() is True
 
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
@@ -286,10 +287,10 @@ class TestDialogParameterMonthlyValuesWidget:
         )
         # button is disabled
         assert save_button.isEnabled() is False
-        comment_widget: QLineEdit = selected_page.findChild(
+        comment_widget: CommentWidget = selected_page.findChild(
             FormField, "comment"
         ).widget
-        comment_widget.setText("Updated by me")
+        comment_widget.field.insertPlainText("Updated by me")
         assert save_button.isEnabled() is True
 
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
@@ -339,10 +340,10 @@ class TestDialogParameterMonthlyValuesWidget:
         )
         # button is disabled
         assert save_button.isEnabled() is False
-        comment_widget: QLineEdit = selected_page.findChild(
+        comment_widget: CommentWidget = selected_page.findChild(
             FormField, "comment"
         ).widget
-        comment_widget.setText("Updated by me")
+        comment_widget.field.insertPlainText("Updated by me")
         assert save_button.isEnabled() is True
 
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
