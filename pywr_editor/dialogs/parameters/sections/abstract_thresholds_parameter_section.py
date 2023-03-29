@@ -61,12 +61,7 @@ class AbstractThresholdsParameterSection(FormSection):
                     + "be either 0 (above both), 1 (in between), or 2 (below both)",
                 },
             ],
-            "Miscellaneous": [
-                {
-                    "name": "comment",
-                    "value": self.form.get_param_dict_value("comment"),
-                },
-            ],
+            "Miscellaneous": [self.form.comment],
         }
 
         return data_dict

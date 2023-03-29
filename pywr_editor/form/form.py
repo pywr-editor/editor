@@ -9,6 +9,7 @@ from PySide6.QtWidgets import (
     QLabel,
     QLineEdit,
     QMessageBox,
+    QPlainTextEdit,
     QPushButton,
     QScrollArea,
     QSpinBox,
@@ -180,6 +181,7 @@ class Form(QScrollArea):
             for form_field in children_container.findChildren(FormField):
                 for field in (
                     form_field.findChildren(QLineEdit)
+                    + form_field.findChildren(QPlainTextEdit)
                     + form_field.findChildren(SpinBox)
                     + form_field.findChildren(QSpinBox)
                     + form_field.findChildren(QDoubleSpinBox)

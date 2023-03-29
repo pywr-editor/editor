@@ -142,14 +142,7 @@ class AbstractCustomComponentSection(FormSection):
                 optional_index_field,
                 optional_col_field,
             ],
-            "Miscellaneous": [
-                {
-                    "name": "comment",
-                    "value": self.form.get_dict_value(
-                        "comment", self.form_dict
-                    ),
-                },
-            ],
+            "Miscellaneous": [self.form.comment],
             **self.additional_sections,
         }
 

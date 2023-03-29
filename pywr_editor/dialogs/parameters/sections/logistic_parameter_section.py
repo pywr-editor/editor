@@ -80,12 +80,7 @@ class LogisticParameterSection(FormSection):
                     + "Default to 6",
                 },
             ],
-            "Miscellaneous": [
-                {
-                    "name": "comment",
-                    "value": self.form.get_param_dict_value("comment"),
-                },
-            ],
+            "Miscellaneous": [self.form.comment],
         }
 
         # disable optimisation section

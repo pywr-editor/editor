@@ -42,10 +42,7 @@ class CustomNodeSection(FormSection):
                     "help_text": "Configure the node by providing its dictionary "
                     + "keys and values",
                 },
-                {
-                    "name": "comment",
-                    "value": self.form.get_node_dict_value("comment"),
-                },
+                self.form.comment,
             ],
         }
 
