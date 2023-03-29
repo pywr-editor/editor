@@ -5,6 +5,7 @@ from PySide6.QtWidgets import QGroupBox, QLineEdit, QPushButton
 
 import pywr_editor.dialogs
 from pywr_editor.form import (
+    CommentWidget,
     EdgeColorPickerWidget,
     FloatWidget,
     Form,
@@ -316,6 +317,7 @@ class NodeDialogForm(Form):
         """
         return {
             "name": "comment",
+            "field_type": CommentWidget,
             "value": self.get_node_dict_value("comment"),
         }
 

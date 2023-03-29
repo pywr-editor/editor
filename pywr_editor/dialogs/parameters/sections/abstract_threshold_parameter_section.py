@@ -122,12 +122,7 @@ class AbstractThresholdParameterSection(FormSection):
                     + "parameter value will not change anymore",
                 },
             ],
-            "Miscellaneous": [
-                {
-                    "name": "comment",
-                    "value": self.form.get_param_dict_value("comment"),
-                },
-            ],
+            "Miscellaneous": [self.form.comment],
         }
 
         # for some parameters, it is not needed to specify a value to compare

@@ -47,12 +47,7 @@ class InterpolatedFlowParameterSection(AbstractInterpolationSection):
                 },
             ],
             "Interpolation settings": self.interp_settings,
-            "Miscellaneous": [
-                {
-                    "name": "comment",
-                    "value": self.form.get_param_dict_value("comment"),
-                },
-            ],
+            "Miscellaneous": [self.form.comment],
         }
 
         return data_dict

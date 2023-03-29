@@ -4,6 +4,7 @@ from PySide6.QtWidgets import QPushButton, QWidget
 
 from pywr_editor.form import (
     ColumnWidget,
+    CommentWidget,
     Form,
     H5KeyWidget,
     IndexColWidget,
@@ -312,5 +313,6 @@ class ModelComponentForm(Form):
         """
         return {
             "name": "comment",
+            "field_type": CommentWidget,
             "value": self.get_form_dict_value("comment"),
         }

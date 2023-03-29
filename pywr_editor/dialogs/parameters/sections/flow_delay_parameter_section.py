@@ -72,12 +72,7 @@ class FlowDelayParameterSection(FormSection):
                     "node does not have any past flow. Default to 0",
                 },
             ],
-            "Miscellaneous": [
-                {
-                    "name": "comment",
-                    "value": self.form.get_param_dict_value("comment"),
-                },
-            ],
+            "Miscellaneous": [self.form.comment],
         }
 
         return data_dict

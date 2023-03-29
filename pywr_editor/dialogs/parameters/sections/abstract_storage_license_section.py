@@ -63,12 +63,7 @@ class AbstractStorageLicenseSection(FormSection):
                 },
             ]
             + self.additional_fields,
-            "Miscellaneous": [
-                {
-                    "name": "comment",
-                    "value": self.form.get_param_dict_value("comment"),
-                },
-            ],
+            "Miscellaneous": [self.form.comment],
         }
 
         return data_dict
