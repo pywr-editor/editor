@@ -19,6 +19,7 @@ from pywr_editor.dialogs import (
     RecordersDialog,
     ScenariosDialog,
     SearchDialog,
+    StartScreen,
     TablesDialog,
 )
 from pywr_editor.model import ModelConfig
@@ -32,7 +33,6 @@ from pywr_editor.utils import (
     JumpList,
     Logging,
     Settings,
-    browse_files,
     get_signal_sender,
 )
 
@@ -975,9 +975,8 @@ class MainWindow(QMainWindow):
         Browse for a new file and load it in the editor.
         :return: None
         """
-        file = browse_files()
-        if file:
-            MainWindow(file)
+        dialog = StartScreen()
+        dialog.show()
 
     @Slot()
     def reload_model_file(self) -> None:
