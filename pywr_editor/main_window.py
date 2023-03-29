@@ -190,6 +190,15 @@ class MainWindow(QMainWindow):
         )
         self.app_actions.add(
             Action(
+                key="reload-model",
+                name="Reload\n file",
+                icon=":/toolbar/reload",
+                tooltip="Reload the JSON file if it was externally edited",
+                connection=self.reload_model_file,
+            )
+        )
+        self.app_actions.add(
+            Action(
                 key="search-in-model",
                 name="Search",
                 icon=":/toolbar/search",
@@ -530,6 +539,7 @@ class MainWindow(QMainWindow):
         file_panel.add_button(self.app_actions.get("open-model"))
         file_panel.add_button(self.app_actions.get("save-model"))
         self.app_actions.get("save-model").setDisabled(True)
+        file_panel.add_button(self.app_actions.get("reload-model"))
         file_panel.add_button(self.app_actions.get("search-in-model"))
         file_panel.add_button(self.app_actions.get("open-json-reader"))
 
@@ -950,6 +960,7 @@ class MainWindow(QMainWindow):
         )
 
     @staticmethod
+    @Slot()
     def new_empty_model() -> None:
         """
         Opens a new editor instance to start a new empty model.
@@ -958,6 +969,7 @@ class MainWindow(QMainWindow):
         MainWindow()
 
     @staticmethod
+    @Slot()
     def open_model_file() -> None:
         """
         Browse for a new file and load it in the editor.
@@ -966,3 +978,26 @@ class MainWindow(QMainWindow):
         file = browse_files()
         if file:
             MainWindow(file)
+
+    @Slot()
+    def reload_model_file(self) -> None:
+        """
+        Reloads the JSON file.
+        :return: None
+        """
+        message = QMessageBox(self)
+        message.setWindowTitle("Reload model")
+        message.setIcon(QMessageBox.Icon.Information)
+        message.setText(
+            "Do you really want to reload the model? Any unsaved changes will be lost"
+        )
+        # message.setInformativeText("Do you want to save your changes?")
+        message.setStandardButtons(
+            QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel
+        )
+        message.setDefaultButton(QMessageBox.StandardButton.Cancel)
+
+        answer = message.exec()
+        if answer == QMessageBox.StandardButton.Ok:
+            MainWindow(self.model_file)
+            self.close()
