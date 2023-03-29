@@ -1,17 +1,15 @@
-# from functools import partial
+from functools import partial
 
-# import pandas as pd
+import pandas as pd
 import pytest
-
-# import win32com.client
-from PySide6.QtCore import QItemSelection, QItemSelectionModel, Qt  # , QTimer
+import win32com.client
+from PySide6.QtCore import QItemSelection, QItemSelectionModel, Qt, QTimer
 from PySide6.QtWidgets import QPushButton, QWidget
 
 from pywr_editor.form import FormField, ParameterForm, TableValuesWidget
 from pywr_editor.model import ModelConfig, ParameterConfig
-
-# from pywr_editor.utils import is_excel_installed
-# from tests.utils import check_msg, model_path
+from pywr_editor.utils import is_excel_installed
+from tests.utils import check_msg, model_path
 
 
 class TestDialogParameterTableValuesWidget:
@@ -439,51 +437,51 @@ class TestDialogParameterTableValuesWidget:
             )
         assert table_widget.get_value() == new_values
 
-    # @pytest.mark.skipif(not is_excel_installed(), reason="requires Excel")
-    # def test_paste_from_excel(self, qtbot):
-    #     """
-    #     Tests the paste feature from Excel.
-    #     """
-    #     table_widget = self.widget(
-    #         value=self.default_values,
-    #     )
-    #
-    #     assert table_widget.move_up.isEnabled() is False
-    #
-    #     # copy spreadsheet data using VBA
-    #     excel_file = str(model_path() / "files" / "monthly_profile_vba.xlsm")
-    #     vba_module = "monthly_profile_vba.xlsm!MainModule"
-    #     xl = win32com.client.Dispatch("Excel.Application")
-    #     xl.Workbooks.Open(
-    #         excel_file,
-    #         ReadOnly=1,
-    #     )
-    #
-    #     # valid clipboard data
-    #     xl.Application.Run(f"{vba_module}.CopyToClipboardTable2")
-    #     table = pd.read_excel(excel_file, sheet_name="Table")
-    #     new_values = {
-    #         "x": list(table.iloc[:, 0].values),
-    #         "y": list(table.iloc[:, 1].values),
-    #     }
-    #     qtbot.mouseClick(table_widget.paste_button, Qt.MouseButton.LeftButton)
-    #     assert table_widget.get_value() == new_values
-    #
-    #     # invalid data
-    #     routines = [
-    #         "CopyToClipboardTable",
-    #         "CopyToClipboardAll",
-    #     ]
-    #     messages = [
-    #         "must contain valid numbers",
-    #         "must contain 2 columns",
-    #     ]
-    #     for routine, message in zip(routines, messages):
-    #         xl.Application.Run(f"{vba_module}.{routine}")
-    #         QTimer.singleShot(100, partial(check_msg, message))
-    #         qtbot.mouseClick(
-    #             table_widget.paste_button, Qt.MouseButton.LeftButton
-    #         )
-    #         assert table_widget.get_value() == new_values
-    #
-    #     xl.Quit()
+    @pytest.mark.skipif(not is_excel_installed(), reason="requires Excel")
+    def test_paste_from_excel(self, qtbot):
+        """
+        Tests the paste feature from Excel.
+        """
+        table_widget = self.widget(
+            value=self.default_values,
+        )
+
+        assert table_widget.move_up.isEnabled() is False
+
+        # copy spreadsheet data using VBA
+        excel_file = str(model_path() / "files" / "monthly_profile_vba.xlsm")
+        vba_module = "monthly_profile_vba.xlsm!MainModule"
+        xl = win32com.client.Dispatch("Excel.Application")
+        xl.Workbooks.Open(
+            excel_file,
+            ReadOnly=1,
+        )
+
+        # valid clipboard data
+        xl.Application.Run(f"{vba_module}.CopyToClipboardTable2")
+        table = pd.read_excel(excel_file, sheet_name="Table")
+        new_values = {
+            "x": list(table.iloc[:, 0].values),
+            "y": list(table.iloc[:, 1].values),
+        }
+        qtbot.mouseClick(table_widget.paste_button, Qt.MouseButton.LeftButton)
+        assert table_widget.get_value() == new_values
+
+        # invalid data
+        routines = [
+            "CopyToClipboardTable",
+            "CopyToClipboardAll",
+        ]
+        messages = [
+            "must contain valid numbers",
+            "must contain 2 columns",
+        ]
+        for routine, message in zip(routines, messages):
+            xl.Application.Run(f"{vba_module}.{routine}")
+            QTimer.singleShot(100, partial(check_msg, message))
+            qtbot.mouseClick(
+                table_widget.paste_button, Qt.MouseButton.LeftButton
+            )
+            assert table_widget.get_value() == new_values
+
+        xl.Quit()
