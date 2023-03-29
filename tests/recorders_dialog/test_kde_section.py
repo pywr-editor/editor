@@ -103,7 +103,7 @@ class TestDialogRecorderKDESection:
             (
                 "invalid_kde_wrong_volume_pc",
                 "target_volume_pc",
-                "must be a number between 0 and 1",
+                "The value is above the allowed maximum of 1",
             ),
         ],
     )
