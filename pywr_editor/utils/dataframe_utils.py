@@ -16,19 +16,23 @@ def get_columns(
     if table is None:
         return None
     else:
-        columns = table.columns.values.tolist()
-        if include_index:
-            return columns
+        # noinspection PyBroadException
+        try:
+            columns = table.columns.values.tolist()
+            if include_index:
+                return columns
 
-        # filter out the index
-        if "index" in table.attrs.keys():
-            diff_columns = list(set(columns) - set(table.attrs["index"]))
-            # sets are unordered, preserve the same initial colum order
-            columns = [
-                col_name for col_name in columns if col_name in diff_columns
-            ]
-        else:
-            return columns
+            # filter out the index
+            if "index" in table.attrs.keys():
+                diff_columns = list(set(columns) - set(table.attrs["index"]))
+                # sets are unordered, preserve the same initial colum order
+                columns = [
+                    col_name for col_name in columns if col_name in diff_columns
+                ]
+            else:
+                return columns
+        except Exception:
+            return []
 
     return columns
 
