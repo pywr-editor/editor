@@ -94,8 +94,11 @@
     },
     "h5_table_index_col": {
       "url": "files/table_index.h5",
-      "key": "/flow",
-      "index_col": 2
+      "key": "/flow"
+    },
+    "h5_ints_table": {
+      "url": "files/table_ints.h5",
+      "key": "/table"
     }
   },
   "parameters": {
@@ -107,9 +110,8 @@
     },
     "param_with_column_int": {
       "type": "constant",
-      "table": "excel_table",
-      "column": 2,
-      "index": 6
+      "table": "h5_ints_table",
+      "column": 5
     },
     "param_no_index_col": {
       "type": "constant",
@@ -142,12 +144,12 @@
     "param_non_existing_file": {
       "type": "constant",
       "table": "missing_table_file",
-      "column": 1
+      "column": " Date"
     },
     "param_empty_sheet": {
       "type": "constant",
       "table": "empty_table",
-      "column": 1
+      "column": "Column 2"
     },
     "param_with_h5_table_index_col": {
       "type": "constant",
