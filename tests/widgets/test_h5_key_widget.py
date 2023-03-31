@@ -87,7 +87,7 @@ class TestDialogParameterH5KeyWidget:
         ).widget
         form = index_col_widget.form
         assert index_col_widget.isEnabled() is False
-        assert parse_dates_widget.isEnabled() is True
+        assert parse_dates_widget.isEnabled() is False
 
         # 4. test validate method
         output = key_widget.validate("key", "Key", key_widget.get_value())

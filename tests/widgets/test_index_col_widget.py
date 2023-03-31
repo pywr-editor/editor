@@ -76,15 +76,12 @@ class TestDialogParameterIndexColWidget:
         else:
             all_columns = ["Column 1", "Column 2", "Column 3", "Column 4"]
 
-        # different sorting for H5 with index (index always comes first)
-        if param_name in [
+        # index is already set and cannot be changed for H5 with index
+        is_h5 = param_name in [
             "param_with_h5_table_index",
             "param_with_h5_table_index_col",
-        ]:
-            c0 = all_columns[0]
-            all_columns[0] = all_columns[1]
-            all_columns[1] = c0
-
+            "param_with_h5_table_ano_index",
+        ]
         dialog = ParametersDialog(model_config, param_name)
         selected_page = dialog.pages_widget.currentWidget()
         dialog.show()
@@ -100,12 +97,19 @@ class TestDialogParameterIndexColWidget:
         form = url_widget.form
 
         # 1. Columns are loaded without warning messages
-        assert index_col_widget.combo_box.all_items == all_columns
+        if not is_h5:
+            assert index_col_widget.combo_box.all_items == all_columns
+        else:
+            assert index_col_widget.combo_box.all_items == []
+            assert index_col_widget.combo_box.isVisible() is False
         assert index_col_field.message.text() == ""
 
         # 2. Selected columns are checked and index is set on the table
-        assert index_col_widget.get_value() == expected
-
+        if not is_h5:
+            assert index_col_widget.get_value() == expected
+        else:
+            # index column cannot be set for H5 files
+            assert index_col_widget.get_value() == []
         # when index is not set, method returns default index name
         if not expected:
             assert get_index_names(url_widget.table) == [default_index_name]
@@ -124,8 +128,18 @@ class TestDialogParameterIndexColWidget:
         # field is properly reloaded
         qtbot.mouseClick(reload_button, Qt.MouseButton.LeftButton)
         assert index_col_field.message.text() == ""
-        assert index_col_widget.combo_box.all_items == all_columns
-        assert index_col_field.value() == expected
+        if not is_h5:
+            assert index_col_widget.combo_box.all_items == all_columns
+        else:
+            assert index_col_widget.combo_box.all_items == []
+            assert index_col_widget.combo_box.isVisible() is False
+
+        if not is_h5:
+            assert index_col_widget.get_value() == expected
+        else:
+            # index column cannot be set for H5 files
+            assert index_col_widget.get_value() == []
+
         # check that Signals are emitted
         assert spy_table.count() == 1
         # index is not updated
