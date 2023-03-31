@@ -195,6 +195,7 @@ class MainWindow(QMainWindow):
                 icon=":/toolbar/reload",
                 tooltip="Reload the JSON file if it was externally edited",
                 connection=self.reload_model_file,
+                button_separator=True,
             )
         )
         self.app_actions.add(
