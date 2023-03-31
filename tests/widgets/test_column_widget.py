@@ -63,7 +63,6 @@ class TestDialogParameterColumnWidget:
                 # column is a string
                 ("param_with_column_str", "Column 3", ""),
                 # column is an integer
-                ("param_with_column_int", "Column 4", ""),
                 # column does not exist
                 ("param_with_non_existing_column", None, "does not exist"),
                 # column is index and therefore not available
@@ -78,6 +77,10 @@ class TestDialogParameterColumnWidget:
                 # column has invalid type (null)
                 ("param_with_invalid_column_type2", None, ""),
             ],
+        },
+        "test_column_with_ints": {
+            "params": "param_name",
+            "scenarios": [("param_with_column_int",)],
         },
         "test_non_existing_file": {
             "params": "param_name",
@@ -231,6 +234,41 @@ class TestDialogParameterColumnWidget:
                 == model_param_dict
             )
 
+    def test_column_with_ints(self, qtbot, model_file, widget_name, param_name):
+        """
+        Tests when the column names are integers.
+        """
+        model_config = self.get_model_config(model_file)
+
+        dialog = ParametersDialog(model_config, param_name)
+        selected_page = dialog.pages_widget.currentWidget()
+        dialog.show()
+
+        # noinspection PyUnresolvedReferences
+        assert selected_page.findChild(FormField, "name").value() == param_name
+        # noinspection PyTypeChecker
+        column_field: FormField = selected_page.findChild(FormField, "column")
+        # noinspection PyTypeChecker
+        column_widget: ColumnWidget = column_field.widget
+
+        assert column_widget.value == 5
+        assert column_widget.combo_box.currentData() == int
+        assert column_widget.get_value() == 5
+        assert (
+            column_widget.validate("", "", column_widget.get_value()).validation
+            is True
+        )
+
+        # set None and check type and validation
+        column_widget.combo_box.setCurrentText("None")
+        assert column_widget.combo_box.currentData() is None
+        assert column_widget.get_value() is None
+
+        assert (
+            column_widget.validate("", "", column_widget.get_value()).validation
+            is False
+        )
+
     def test_non_existing_file(
         self, qtbot, model_file, widget_name, param_name
     ):
@@ -262,7 +300,7 @@ class TestDialogParameterColumnWidget:
         # no message is set on the field (just the url field)
         assert column_field.message.text() == ""
         # value are not changed - in case file is fixed in url field
-        assert column_widget.value == 1
+        assert column_widget.value == " Date"
         assert column_field.value() is None
         assert spy_updated_table.count() == 0
 

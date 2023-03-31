@@ -93,7 +93,7 @@ class DataFrameParameterSection(FormSection):
         :return: The FormValidation instance.
         """
         base_message = "You must select a column to use as a series or a "
-        base_message += "scenario to use the entire table"
+        base_message += "scenario, to use the entire table"
 
         # the scenario or column must be provided
         if "scenario" not in form_data and "column" not in form_data:
