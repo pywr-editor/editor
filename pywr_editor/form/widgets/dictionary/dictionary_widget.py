@@ -35,13 +35,18 @@ if TYPE_CHECKING:
 
 class DictionaryWidget(FormCustomWidget):
     def __init__(
-        self, name: str, value: dict[str, Any] | None, parent: FormField
+        self,
+        name: str,
+        value: dict[str, Any] | None,
+        parent: FormField,
+        is_mandatory: bool = True,
     ):
         """
         Initialises the widget.
         :param name: The field name.
         :param value: The field value.
         :param parent: The parent widget.
+        :param is_mandatory: Whether the widget value is mandatory. Default to True.
         """
         self.logger = Logging().logger(self.__class__.__name__)
         self.logger.debug(f"Loading widget {name} with value {value}")
@@ -49,6 +54,7 @@ class DictionaryWidget(FormCustomWidget):
         super().__init__(name=name, value=value, parent=parent)
         self.form: "ModelComponentForm"
         self.model_config = self.form.model_config
+        self.is_mandatory = is_mandatory
 
         # Check value
         if value is None:
@@ -279,7 +285,7 @@ class DictionaryWidget(FormCustomWidget):
         """
         self.logger.debug("Validating field")
 
-        if not self.get_value():
+        if not self.get_value() and self.is_mandatory:
             return FormValidation(
                 validation=False,
                 error_message="You must provide the dictionary configuration",
