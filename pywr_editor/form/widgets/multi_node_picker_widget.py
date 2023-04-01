@@ -99,14 +99,6 @@ class MultiNodePickerWidget(FormCustomWidget):
         # set selected
         if not value:
             self.logger.debug("Value is None or empty. No value set")
-        # there are no nodes in the model
-        elif len(self.combo_box.all_items) == 0:
-            message = "There are no nodes available"
-            self.logger.debug(message)
-            self.form_field.set_warning_message(
-                message
-                + ". Add a new node first, before setting up this option"
-            )
         # value must be a list of strings
         elif not isinstance(value, list):
             message = "The node names must be a list"
@@ -162,6 +154,15 @@ class MultiNodePickerWidget(FormCustomWidget):
                 self.logger.debug(message)
                 self.form_field.set_warning_message(message)
 
+        # there are no nodes in the model
+        if len(self.combo_box.all_items) == 0:
+            self.combo_box.setEnabled(False)
+            message = "There are no nodes available"
+            self.logger.debug(message)
+            self.form_field.set_warning_message(
+                message
+                + ". Add a new node first, before setting up this option"
+            )
         # layout
         layout = QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
