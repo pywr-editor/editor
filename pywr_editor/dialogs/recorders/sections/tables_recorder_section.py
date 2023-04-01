@@ -129,6 +129,7 @@ class TablesRecorderSection(FormSection):
                 {
                     "name": "metadata",
                     "field_type": DictionaryWidget,
+                    "field_args": {"is_mandatory": False},
                     "value": self.form.get_recorder_dict_value("metadata"),
                     "help_text": "Additional attributes to store in the H5 file",
                 },
