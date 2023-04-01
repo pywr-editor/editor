@@ -101,7 +101,7 @@
     "param_excel_file": {
       "type": "constant",
       "table": "excel_file",
-      "column": 0,
+      "column": "Demand",
       "index": "Tywi"
     },
     "param_csv_file": {
@@ -123,7 +123,7 @@
       "type": "constant",
       "table": "h5_table",
       "index": 1,
-      "column": 2
+      "column": "Column 3"
     },
     "param_non_existing_file": {
       "type": "constant",

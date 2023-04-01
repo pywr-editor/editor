@@ -271,7 +271,7 @@ class TestDialogParameterMonthlyValuesWidget:
         # 2. IndexColWidget - this is hidden
         index_col_widget: IndexColWidget = fields["index_col"].widget
         assert index_col_widget.isVisible() is False
-        assert index_col_widget.get_value() == ["Index 1"]
+        assert index_col_widget.get_value() == []
 
         # 3. IndexWidget
         index_widget: IndexWidget = fields["index"].widget
