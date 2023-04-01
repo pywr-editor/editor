@@ -7,6 +7,7 @@
         <file alias="decrease-width">toolbar/smallest_width.svg</file>
         <file alias="open">toolbar/open.svg</file>
         <file alias="save">toolbar/save.svg</file>
+        <file alias="reload">toolbar/lc_reload.svg</file>
         <file alias="lock-schematic">toolbar/protect.svg</file>
         <file alias="zoom-in">toolbar/zoomin.svg</file>
         <file alias="zoom-out">toolbar/zoomout.svg</file>

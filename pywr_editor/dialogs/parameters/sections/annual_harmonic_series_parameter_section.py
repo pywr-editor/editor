@@ -73,6 +73,7 @@ class AnnualHarmonicSeriesParameterSection(FormSection):
                 {
                     "name": "amplitude_lower_bounds",
                     "field_type": FloatWidget,
+                    "field_args": {"min_value": 0},
                     "value": self.form.get_param_dict_value(
                         "amplitude_lower_bounds"
                     ),
@@ -83,6 +84,7 @@ class AnnualHarmonicSeriesParameterSection(FormSection):
                 {
                     "name": "amplitude_upper_bounds",
                     "field_type": FloatWidget,
+                    "field_args": {"min_value": 0},
                     "value": self.form.get_param_dict_value(
                         "amplitude_upper_bounds"
                     ),
@@ -93,6 +95,7 @@ class AnnualHarmonicSeriesParameterSection(FormSection):
                 {
                     "name": "phase_lower_bounds",
                     "field_type": FloatWidget,
+                    "field_args": {"min_value": 0},
                     "value": self.form.get_param_dict_value(
                         "phase_lower_bounds"
                     ),

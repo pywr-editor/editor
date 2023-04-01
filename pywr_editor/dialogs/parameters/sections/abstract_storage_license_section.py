@@ -57,6 +57,7 @@ class AbstractStorageLicenseSection(FormSection):
                     "name": "amount",
                     "label": "License amount",
                     "field_type": FloatWidget,
+                    "field_args": {"min_value": 0},
                     "allow_empty": False,
                     "value": self.form.get_param_dict_value("amount"),
                     "help_text": self.amount_help_text,

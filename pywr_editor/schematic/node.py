@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING, Any, Literal, TypedDict, Union
 
 import PySide6
+import qtawesome as qta
 from PySide6.QtCore import Slot
 from PySide6.QtGui import QAction, QFont, QPainterPath
 from PySide6.QtWidgets import (
@@ -333,15 +334,29 @@ class SchematicNode(AbstractSchematicItem, QGraphicsItemGroup):
         if len(label) > max_size:
             label = f"{label[0:max_size]}..."
         context_menu.set_title(label)
+        icon_color = Color("gray", 500).qcolor
 
         # edit node action
-        edit_node_action = context_menu.addAction("Edit node")
+        edit_node_action = context_menu.addAction(
+            qta.icon("msc.edit", color=icon_color), "Edit node"
+        )
         # noinspection PyUnresolvedReferences
         edit_node_action.triggered.connect(self.on_edit_node)
         self.view.addAction(edit_node_action)
 
+        # delete node action
+        delete_node_action = context_menu.addAction(
+            qta.icon("msc.trash", color=icon_color), "Delete node"
+        )
+        # noinspection PyUnresolvedReferences
+        delete_node_action.triggered.connect(self.on_delete_item)
+        self.view.addAction(delete_node_action)
+
         # locate action
-        locate_action = context_menu.addAction("Locate in components tree")
+        locate_action = context_menu.addAction(
+            qta.icon("msc.list-tree", color=icon_color),
+            "Locate in components tree",
+        )
         locate_action.setData(self.name)
         # noinspection PyUnresolvedReferences
         locate_action.triggered.connect(
@@ -350,16 +365,12 @@ class SchematicNode(AbstractSchematicItem, QGraphicsItemGroup):
             )
         )
 
-        # delete node action
-        delete_node_action = context_menu.addAction("Delete node")
-        # noinspection PyUnresolvedReferences
-        delete_node_action.triggered.connect(self.on_delete_item)
-        self.view.addAction(delete_node_action)
-
         # connect/disconnect edges - skip virtual nodes
         if not self.model_node.is_virtual:
             context_menu.addSeparator()
-            connect_action = context_menu.addAction("Connect to...")
+            connect_action = context_menu.addAction(
+                qta.icon("msc.arrow-both", color=icon_color), "Connect to..."
+            )
             # noinspection PyUnresolvedReferences
             connect_action.triggered.connect(
                 lambda *args, node=self: self.view.on_connect_node_start(node)

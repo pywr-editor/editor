@@ -101,7 +101,8 @@ class AppStylesheet:
                 "::item": {
                     "background-color": "transparent",
                     "border": f'1px solid {Color("gray", 200).hex}',
-                    "padding": "4px 20px",
+                    "padding": "4px 15px",
+                    "padding-left": "5px",
                     "::selected, ::pressed": {
                         "background-color": Color("blue", 200).hex,
                         "border": f'1px solid {Color("blue", 400).hex}',
@@ -116,6 +117,7 @@ class AppStylesheet:
                         "color": Color("gray", 600).hex,
                         "font-weight": "bold",
                         "padding": "4px 18px",
+                        "padding-left": "5px",
                     },
                 },
             },

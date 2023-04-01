@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 All issue numbers are relative to https://github.com/pywr-editor/editor
 
 
+## v1.5.1 - 2023-03-29
+### Added
+- A new reload button was added to the toolbar to reload the JSON file in case it was externally edited 
+  ([#148](https://github.com/pywr-editor/editor/issues/148)).
+- Added comment field in the form of RBF parameter ([#126](https://github.com/pywr-editor/editor/issues/126)).
+
+### Changed
+- The width of form widgets handling float numbers have been shrank. Some fields also now restrict the value to a
+  specific range (for ex `initial_volume_pc` is now constrained between 0 and 1) 
+  ([#144](https://github.com/pywr-editor/editor/issues/144)).
+- When cloning a recorder or parameter, the latest saved configuration is now used ([#138](https://github.com/pywr-editor/editor/issues/138)).
+- Integers are now allowed in the upper and lower bounds of a RBF parameter. Previously only a list of integers was allowed ([#136](https://github.com/pywr-editor/editor/issues/136)). 
+- Increased the minimum width of the parameter dialog to hide the horizontal scrollbar in the scrollable area of the form. Some forms are too large to properly fit into the child widget. ([#127](https://github.com/pywr-editor/editor/issues/127)).
+
+### Fixed
+- When a parameter or recorder, sharing the same name of a node, was renamed, the node name was being replaced in 
+  the `edges` as well ([#142](https://github.com/pywr-editor/editor/issues/142)).  
+- To prevent duplicated entries, the paths in the recent projects are now normalised ([#140](https://github.com/pywr-editor/editor/issues/140)).
+- Fixed appearance of ComboBox icon with tables. The icon appeared too large on some screens ([#134](https://github.com/pywr-editor/editor/issues/134)).
+- Fixed validation of custom parameters when user attempted to add a table in the dictionary ([#132](https://github.com/pywr-editor/editor/issues/132)).
+- Fixed validation of RBF parameter when the day field is empty or invalid. The form used to throw a TypeError exception ([#128](https://github.com/pywr-editor/editor/issues/128)).
+
 ## v1.5 - 2023-03-27
 ### Added
 - The configuration of a selected recorder or parameter can now be copied as a new recorder or parameter by using the 

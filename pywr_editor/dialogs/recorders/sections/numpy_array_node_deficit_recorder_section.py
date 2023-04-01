@@ -27,6 +27,7 @@ class NumpyArrayNodeDeficitRecorderSection(AbstractNumpyRecorderSection):
                 "name": "factor",
                 "field_type": FloatWidget,
                 "default_value": 1,
+                "field_args": {"min_value": 0},
                 "value": form.get_recorder_dict_value("factor"),
                 "help_text": "Scale the deficit by the provided factor",
             },

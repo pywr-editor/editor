@@ -37,6 +37,7 @@ class AbstractNodeSection(FormSection):
                 {
                     "name": "conversion_factor",
                     "field_type": FloatWidget,
+                    "field_args": {"min_value": 0},
                     "default_value": 1,
                     "value": self.form.get_node_dict_value("conversion_factor"),
                     "help_text": "The conversion between inflow and outflow for the "

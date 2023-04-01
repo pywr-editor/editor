@@ -25,6 +25,7 @@ class NumpyArrayNodeRecorderSection(AbstractNumpyRecorderSection):
             {
                 "name": "factor",
                 "field_type": FloatWidget,
+                "field_args": {"min_value": 0},
                 "default_value": 1,
                 "value": form.get_recorder_dict_value("factor"),
                 "help_text": "Scale the flows by the provided factor (e.g. for "

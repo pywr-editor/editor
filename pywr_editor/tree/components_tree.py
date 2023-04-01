@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 import PySide6
+import qtawesome as qta
 from PySide6.QtCore import QPoint, Qt, Slot
 from PySide6.QtGui import QAction, QIcon
 from PySide6.QtWidgets import (
@@ -390,25 +391,27 @@ class ComponentsTree(QTreeWidget):
             return
 
         item = self.itemAt(pos)
+        icon_color = Color("gray", 500).qcolor
+        edit_icon = qta.icon("msc.edit", color=icon_color)
+        delete_icon = qta.icon("msc.trash", color=icon_color)
 
         if isinstance(item, TreeWidgetNode):
             node_name = item.name
             context_menu = ContextualMenu()
             context_menu.set_title(node_name)
             # Edit node
-            edit_action = context_menu.addAction("Edit")
+            edit_action = context_menu.addAction(edit_icon, "Edit")
             # noinspection PyUnresolvedReferences
             edit_action.triggered.connect(
                 lambda *args, name=node_name: self.on_edit_node(name)
             )
 
             # Delete node
-            edit_action = context_menu.addAction("Delete")
+            edit_action = context_menu.addAction(delete_icon, "Delete")
             # noinspection PyUnresolvedReferences
             edit_action.triggered.connect(
                 lambda *args, name=node_name: self.on_delete_node(name)
             )
-
             context_menu.exec(self.mapToGlobal(pos))
         if isinstance(item, TreeWidgetTable):
             table_name = item.name
@@ -416,14 +419,14 @@ class ComponentsTree(QTreeWidget):
             context_menu.set_title(table_name)
 
             # Edit table
-            edit_action = context_menu.addAction("Edit")
+            edit_action = context_menu.addAction(edit_icon, "Edit")
             # noinspection PyUnresolvedReferences
             edit_action.triggered.connect(
                 lambda *args, name=table_name: self.on_edit_table(name)
             )
 
             # Delete table
-            edit_action = context_menu.addAction("Delete...")
+            edit_action = context_menu.addAction(delete_icon, "Delete...")
             # noinspection PyUnresolvedReferences
             edit_action.triggered.connect(
                 lambda *args, name=table_name: self.on_delete_table(name)
@@ -436,7 +439,7 @@ class ComponentsTree(QTreeWidget):
             context_menu.set_title(parameter_name)
 
             # Edit parameter
-            edit_action = context_menu.addAction("Edit")
+            edit_action = context_menu.addAction(edit_icon, "Edit")
             # noinspection PyUnresolvedReferences
             edit_action.triggered.connect(
                 lambda *args, name=parameter_name: self.on_edit_parameter(
@@ -445,7 +448,7 @@ class ComponentsTree(QTreeWidget):
             )
 
             # Delete parameter
-            edit_action = context_menu.addAction("Delete...")
+            edit_action = context_menu.addAction(delete_icon, "Delete...")
             # noinspection PyUnresolvedReferences
             edit_action.triggered.connect(
                 lambda *args, name=parameter_name: self.on_delete_parameter(
@@ -459,7 +462,7 @@ class ComponentsTree(QTreeWidget):
             context_menu.set_title(recoder_name)
 
             # Edit recorder
-            edit_action = context_menu.addAction("Edit")
+            edit_action = context_menu.addAction(edit_icon, "Edit")
             # noinspection PyUnresolvedReferences
             edit_action.triggered.connect(
                 lambda *args, name=recoder_name: self.on_edit_recorder(
@@ -468,7 +471,7 @@ class ComponentsTree(QTreeWidget):
             )
 
             # Delete recorder
-            edit_action = context_menu.addAction("Delete...")
+            edit_action = context_menu.addAction(delete_icon, "Delete...")
             # noinspection PyUnresolvedReferences
             edit_action.triggered.connect(
                 lambda *args, name=recoder_name: self.on_delete_recorder(

@@ -19,6 +19,7 @@ from pywr_editor.dialogs import (
     RecordersDialog,
     ScenariosDialog,
     SearchDialog,
+    StartScreen,
     TablesDialog,
 )
 from pywr_editor.model import ModelConfig
@@ -33,7 +34,6 @@ from pywr_editor.utils import (
     JumpList,
     Logging,
     Settings,
-    browse_files,
     get_signal_sender,
 )
 from pywr_editor.widgets import DateEdit, SpinBox
@@ -206,6 +206,16 @@ class MainWindow(QMainWindow):
                 tooltip="Save the Pywr model file",
                 shortcut=QKeySequence.Save,
                 connection=self.save_model,
+            )
+        )
+        self.app_actions.add(
+            Action(
+                key="reload-model",
+                name="Reload\n file",
+                icon=":/toolbar/reload",
+                tooltip="Reload the JSON file if it was externally edited",
+                connection=self.reload_model_file,
+                button_separator=True,
             )
         )
         self.app_actions.add(
@@ -575,6 +585,7 @@ class MainWindow(QMainWindow):
         file_panel.add_button(self.app_actions.get("open-model"))
         file_panel.add_button(self.app_actions.get("save-model"))
         self.app_actions.get("save-model").setDisabled(True)
+        file_panel.add_button(self.app_actions.get("reload-model"))
         file_panel.add_button(self.app_actions.get("search-in-model"))
         file_panel.add_button(self.app_actions.get("open-json-reader"))
 
@@ -1015,15 +1026,17 @@ class MainWindow(QMainWindow):
         """
         parameter_names = self.model_config.parameters.find_orphans()
         if parameter_names is None:
+            status = "info"
             message = "The model does not have any orphaned parameters"
         else:
+            status = "warn"
             message = (
                 f"The model has {len(parameter_names)} orphaned "
                 + f"parameter(s): {', '.join(parameter_names)}"
             )
 
         # noinspection PyUnresolvedReferences
-        self.warning_info_message.emit("Orphaned parameters", message, "warn")
+        self.warning_info_message.emit("Orphaned parameters", message, status)
 
     def check_network(self) -> None:
         """
@@ -1032,8 +1045,10 @@ class MainWindow(QMainWindow):
         """
         orphaned_nodes = self.model_config.nodes.find_orphans()
         if orphaned_nodes is None:
+            status = "info"
             message = "All nodes are properly connected"
         else:
+            status = "warn"
             for node_name in orphaned_nodes:
                 self.schematic.select_node_by_name(node_name)
             if len(orphaned_nodes) == 1:
@@ -1050,10 +1065,11 @@ class MainWindow(QMainWindow):
 
         # noinspection PyUnresolvedReferences
         self.warning_info_message.emit(
-            "Model network validation", message, "warn"
+            "Model network validation", message, status
         )
 
     @staticmethod
+    @Slot()
     def new_empty_model() -> None:
         """
         Opens a new editor instance to start a new empty model.
@@ -1062,11 +1078,34 @@ class MainWindow(QMainWindow):
         MainWindow()
 
     @staticmethod
+    @Slot()
     def open_model_file() -> None:
         """
         Browse for a new file and load it in the editor.
         :return: None
         """
-        file = browse_files()
-        if file:
-            MainWindow(file)
+        dialog = StartScreen()
+        dialog.show()
+
+    @Slot()
+    def reload_model_file(self) -> None:
+        """
+        Reloads the JSON file.
+        :return: None
+        """
+        message = QMessageBox(self)
+        message.setWindowTitle("Reload model")
+        message.setIcon(QMessageBox.Icon.Information)
+        message.setText(
+            "Do you really want to reload the model? Any unsaved changes will be lost"
+        )
+        # message.setInformativeText("Do you want to save your changes?")
+        message.setStandardButtons(
+            QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel
+        )
+        message.setDefaultButton(QMessageBox.StandardButton.Cancel)
+
+        answer = message.exec()
+        if answer == QMessageBox.StandardButton.Ok:
+            MainWindow(self.model_file)
+            self.close()

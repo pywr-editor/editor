@@ -1,4 +1,3 @@
-from functools import partial
 from typing import TYPE_CHECKING
 
 import PySide6
@@ -61,14 +60,11 @@ class ParameterPageWidget(QWidget):
 
         clone_button = PushIconButton(icon=qta.icon("msc.copy"), label="Clone")
         clone_button.setToolTip(
-            "Create a new parameter and copy this parameter's configuration"
+            "Create a new parameter and copy this parameter's last saved configuration"
         )
         clone_button.setObjectName("clone_button")
         # noinspection PyUnresolvedReferences
-
-        clone_button.clicked.connect(
-            partial(parent.on_add_new_parameter, self.parameter_dict)
-        )
+        clone_button.clicked.connect(self.on_clone_parameter)
 
         delete_button = PushIconButton(
             icon=qta.icon("msc.remove"), label="Delete"
@@ -157,6 +153,16 @@ class ParameterPageWidget(QWidget):
                 app.components_tree.reload()
             if hasattr(app, "statusBar"):
                 app.statusBar().showMessage(f'Parameter "{self.name}" updated')
+
+    @Slot()
+    def on_clone_parameter(self) -> None:
+        """
+        Clones the selected parameter.
+        :return: None
+        """
+        self.pages.on_add_new_parameter(
+            self.model_config.parameters.get_config_from_name(self.name)
+        )
 
     @Slot()
     def on_delete_parameter(self) -> None:
