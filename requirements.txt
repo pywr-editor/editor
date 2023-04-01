@@ -1,4 +1,4 @@
-PySide6==6.4.1
+PySide6==6.4.3
 setuptools==67.6.1
 pandas
 requests
@@ -12,4 +12,4 @@ pyinstaller==5.9.0
 typer
 tables==3.8.0
 QtAwesome
-shiboken6==6.4.1
+shiboken6==6.4.3
