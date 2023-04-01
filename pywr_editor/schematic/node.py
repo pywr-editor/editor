@@ -331,10 +331,11 @@ class SchematicNode(AbstractSchematicItem, QGraphicsItemGroup):
         if len(label) > max_size:
             label = f"{label[0:max_size]}..."
         context_menu.set_title(label)
+        icon_color = Color("gray", 500).qcolor
 
         # edit node action
         edit_node_action = context_menu.addAction(
-            qta.icon("msc.edit"), "Edit node"
+            qta.icon("msc.edit", color=icon_color), "Edit node"
         )
         # noinspection PyUnresolvedReferences
         edit_node_action.triggered.connect(self.on_edit_node)
@@ -342,7 +343,7 @@ class SchematicNode(AbstractSchematicItem, QGraphicsItemGroup):
 
         # delete node action
         delete_node_action = context_menu.addAction(
-            qta.icon("msc.trash"), "Delete node"
+            qta.icon("msc.trash", color=icon_color), "Delete node"
         )
         # noinspection PyUnresolvedReferences
         delete_node_action.triggered.connect(self.on_delete_item)
@@ -350,7 +351,8 @@ class SchematicNode(AbstractSchematicItem, QGraphicsItemGroup):
 
         # locate action
         locate_action = context_menu.addAction(
-            qta.icon("msc.list-tree"), "Locate in components tree"
+            qta.icon("msc.list-tree", color=icon_color),
+            "Locate in components tree",
         )
         locate_action.setData(self.name)
         # noinspection PyUnresolvedReferences
@@ -364,7 +366,7 @@ class SchematicNode(AbstractSchematicItem, QGraphicsItemGroup):
         if not self.model_node.is_virtual:
             context_menu.addSeparator()
             connect_action = context_menu.addAction(
-                qta.icon("msc.arrow-both"), "Connect to..."
+                qta.icon("msc.arrow-both", color=icon_color), "Connect to..."
             )
             # noinspection PyUnresolvedReferences
             connect_action.triggered.connect(
