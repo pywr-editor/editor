@@ -136,7 +136,8 @@ class TestRunWidgetErrors:
             # progress status is reset
             assert "Ready" in run_widget.progress_status.text()
 
-    def test_close_editor_while_running(self, qtbot):
+    @pytest.mark.parametrize("button", ["step_button", "run_to_button"])
+    def test_close_editor_while_running(self, qtbot, button):
         """
         Tests that no exceptions are thrown when the model is running and the main
         window is closed.
@@ -149,7 +150,9 @@ class TestRunWidgetErrors:
         window.model_config.end_date = "2015-01-05"
 
         with CaptureSolverOutput() as out:
-            qtbot.mouseClick(run_widget.step_button, Qt.MouseButton.LeftButton)
+            qtbot.mouseClick(
+                getattr(run_widget, button), Qt.MouseButton.LeftButton
+            )
             QTimer.singleShot(
                 300,
                 partial(check_msg, "The model has been modified"),
