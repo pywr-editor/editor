@@ -130,7 +130,7 @@
     "monthly_profile_param_url_h5": {
       "type": "MonthlyProfile",
       "url": "files/monthly_profile.h5",
-      "key": "monthly_profile",
+      "key": "/monthly_profile",
       "index_col": 0,
       "index": "A"
     },

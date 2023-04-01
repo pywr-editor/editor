@@ -65,7 +65,7 @@
       "url": "files/table.xlsx",
       "sheet_name": "Sheet 1",
       "index_col": "Column 2",
-      "column": 1,
+      "column": "Column 3",
       "index": 1
     },
     "param_csv_file": {
@@ -75,7 +75,7 @@
         0,
         1
       ],
-      "column": 1,
+      "column": "Column 3",
       "index": [
         1,
         2
@@ -85,7 +85,7 @@
       "type": "constant",
       "url": "files/table.h5",
       "key": "/flow",
-      "column": 1,
+      "column": "Column 2",
       "index": 1,
       "start": 1
     },

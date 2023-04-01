@@ -123,10 +123,7 @@
     },
     "empty_h5_table": {
       "url": "files/table_index.h5",
-      "key": "/empty_table",
-      "index_col": [
-        "Demand centre"
-      ]
+      "key": "/empty_table"
     },
     "h5_table": {
       "url": "files/table_index.h5",
@@ -134,8 +131,7 @@
     },
     "h5_table_index_col": {
       "url": "files/table_index.h5",
-      "key": "/flow",
-      "index_col": 2
+      "key": "/flow"
     },
     "h5_table_ano_index": {
       "url": "files/table.h5",
@@ -159,7 +155,7 @@
       "type": "constant",
       "table": "csv_no_index",
       "index": 1,
-      "column": 3
+      "column": " Date"
     },
     "param_with_index_list_int": {
       "type": "constant",
@@ -168,7 +164,7 @@
         7,
         6
       ],
-      "column": 0
+      "column": "Column 1"
     },
     "param_with_index_list_str": {
       "type": "constant",
@@ -177,7 +173,7 @@
         "c",
         6
       ],
-      "column": 1
+      "column": " Date"
     },
     "param_with_indexes_key": {
       "type": "constant",
@@ -186,7 +182,7 @@
         "c",
         6
       ],
-      "column": 1
+      "column": " Date"
     },
     "param_with_index_col_as_list_int": {
       "type": "constant",
@@ -195,32 +191,32 @@
         3,
         "c"
       ],
-      "column": 1
+      "column": " Date"
     },
     "param_h5_file": {
       "type": "constant",
       "table": "h5_table",
       "index": 22,
-      "column": 1
+      "column": "Column 4"
     },
     "param_with_h5_table_index_col": {
       "type": "constant",
       "table": "h5_table_index_col",
       "index_col": 2,
       "index": 10,
-      "column": 0
+      "column": "Column 4"
     },
     "param_with_h5_table_ano_index": {
       "type": "constant",
       "table": "h5_table_ano_index",
       "index": 2,
-      "column": 0
+      "column": "Column 4"
     },
     "param_with_invalid_index_one_value_only_int": {
       "type": "constant",
       "table": "csv_2_indexes_2",
       "index": 1,
-      "column": 3
+      "column": " Date"
     },
     "param_with_invalid_index_one_value_only_list": {
       "type": "constant",
@@ -228,30 +224,30 @@
       "index": [
         "c"
       ],
-      "column": 3
+      "column": " Date"
     },
     "param_with_no_index_values": {
       "type": "constant",
       "table": "csv_2_indexes_2",
-      "column": 3
+      "column": " Date"
     },
     "param_with_empty_list": {
       "type": "constant",
       "table": "csv_2_indexes_2",
       "index": [],
-      "column": 3
+      "column": " Date"
     },
     "param_with_wrong_anonymous_index": {
       "type": "constant",
       "table": "csv_no_index",
       "index": 100,
-      "column": 3
+      "column": " Date"
     },
     "param_non_existing_value": {
       "type": "constant",
       "table": "csv_col1",
       "index": -9,
-      "column": 3
+      "column": " Date"
     },
     "param_non_existing_values": {
       "type": "constant",
@@ -260,7 +256,7 @@
         6,
         -9
       ],
-      "column": 3
+      "column": " Date"
     },
     "param_wrong_type": {
       "type": "constant",
@@ -269,7 +265,7 @@
         "6",
         -9
       ],
-      "column": 3
+      "column": " Date"
     },
     "param_non_existing_table": {
       "type": "constant",
@@ -278,7 +274,7 @@
         6,
         "c"
       ],
-      "column": 3
+      "column": " Date"
     },
     "param_empty_table": {
       "type": "constant",
@@ -287,15 +283,15 @@
         6,
         "c"
       ],
-      "column": 3
+      "column": " Date"
     },
     "param_empty_h5_table": {
       "type": "constant",
       "table": "empty_h5_table",
       "index": [
-        6
+        1
       ],
-      "column": 3
+      "column": " Date"
     },
     "param_table_no_rows": {
       "type": "constant",
@@ -304,7 +300,7 @@
         6,
         "c"
       ],
-      "column": 3
+      "column": " Date"
     }
   },
   "pywr_editor": {
