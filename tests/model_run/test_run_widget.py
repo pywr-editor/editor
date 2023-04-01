@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import pandas as pd
+import pytest
 from PySide6.QtCore import QDate, Qt
 from PySide6.QtTest import QSignalSpy
 from PySide6.QtWidgets import QGraphicsItem
@@ -263,13 +264,13 @@ class TestRunWidget:
         # timestepper fields are enabled
         assert all([w.isEnabled() for w in window.findChildren(DateEdit)])
 
-    def test_run_to(self, qtbot):
+    @pytest.mark.parametrize("run_to_date", [(2015, 8, 1), (2015, 12, 31)])
+    def test_run_to(self, qtbot, run_to_date: tuple[int]):
         """
         Tests when the "Run to" button is clicked.
         """
         window = MainWindow(resolve_model_path("model_to_run.json"))
         window.hide()
-        run_to_date = (2015, 8, 1)
 
         # noinspection PyTypeChecker
         run_widget: RunWidget = window.findChild(RunWidget)
@@ -300,9 +301,11 @@ class TestRunWidget:
 
         # model has paused
         qtbot.wait(400)
-        assert run_widget.step_button.isEnabled() is True
+        is_end_date = run_to_date == (2015, 12, 31)
+        # step and run buttons are disabled if end date ir reached
+        assert run_widget.step_button.isEnabled() is not is_end_date
         assert run_widget.stop_button.isEnabled() is True
-        assert run_widget.run_button.isEnabled() is True
+        assert run_widget.run_button.isEnabled() is not is_end_date
         assert run_widget.run_to_button.isEnabled() is False
         assert run_widget.inspector_action.isEnabled() is True
 
