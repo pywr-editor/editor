@@ -61,8 +61,8 @@ class ToolbarWidget(QToolBar):
             },
             "QTabBar": {
                 "::tab": {
-                    "border-top-left-radius": "4px",
-                    "border-top-right-radius": "4px",
+                    "border-top-left-radius": "5px",
+                    "border-top-right-radius": "5px",
                     "color": Color("gray", 600).hex,
                     "margin-right": "5px",
                     "padding-bottom": "4px",
