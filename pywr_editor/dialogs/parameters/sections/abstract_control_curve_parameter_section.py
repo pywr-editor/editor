@@ -124,12 +124,7 @@ class AbstractControlCurveParameterSection(FormSection):
                     "number of control curves plus one",
                 },
             ],
-            "Miscellaneous": [
-                {
-                    "name": "comment",
-                    "value": self.form.get_param_dict_value("comment"),
-                },
-            ],
+            "Miscellaneous": [self.form.comment],
         }
 
         return data_dict

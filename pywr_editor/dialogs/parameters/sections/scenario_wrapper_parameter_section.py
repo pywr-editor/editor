@@ -50,12 +50,7 @@ class ScenarioWrapperParameterSection(FormSection):
                     "(for example for control curves or interpolation parameters)",
                 },
             ],
-            "Miscellaneous": [
-                {
-                    "name": "comment",
-                    "value": self.form.get_param_dict_value("comment"),
-                },
-            ],
+            "Miscellaneous": [self.form.comment],
         }
 
         return data_dict

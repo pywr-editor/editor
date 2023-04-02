@@ -113,12 +113,7 @@ class AnnualHarmonicSeriesParameterSection(FormSection):
                     "The constrain is the same for all harmonic cosine function",
                 },
             ],
-            "Miscellaneous": [
-                {
-                    "name": "comment",
-                    "value": self.form.get_param_dict_value("comment"),
-                },
-            ],
+            "Miscellaneous": [self.form.comment],
         }
 
         # disable optimisation section

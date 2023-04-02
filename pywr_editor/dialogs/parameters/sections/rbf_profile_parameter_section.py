@@ -91,12 +91,7 @@ class RbfProfileParameterSection(FormSection):
                     "value": self.form.get_param_dict_value("smooth"),
                 },
             ],
-            "Miscellaneous": [
-                {
-                    "name": "comment",
-                    "value": self.form.get_param_dict_value("comment"),
-                },
-            ],
+            "Miscellaneous": [self.form.comment],
             self.form.optimisation_config_group_name: [
                 self.form.is_variable_field,
                 {

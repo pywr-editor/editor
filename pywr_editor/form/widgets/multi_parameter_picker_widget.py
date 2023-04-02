@@ -42,14 +42,6 @@ class MultiParameterPickerWidget(FormCustomWidget):
         # set selected
         if not value:
             self.logger.debug("Value is None or empty. No value set")
-        # there are no parameters in the model
-        elif len(self.combo_box.all_items) == 0:
-            message = "There are no parameters available"
-            self.logger.debug(message)
-            self.form_field.set_warning_message(
-                message
-                + ". Add a new parameter first, before setting up this option"
-            )
         # value must be a list of strings
         elif not isinstance(value, list):
             message = "The parameter names must be a list"
@@ -82,6 +74,16 @@ class MultiParameterPickerWidget(FormCustomWidget):
                 )
                 self.logger.debug(message)
                 self.form_field.set_warning_message(message)
+
+        # there are no parameters in the model
+        if len(self.combo_box.all_items) == 0:
+            self.combo_box.setEnabled(False)
+            message = "There are no parameters available"
+            self.logger.debug(message)
+            self.form_field.set_warning_message(
+                message
+                + ". Add a new parameter first, before setting up this option"
+            )
 
         # layout
         layout = QHBoxLayout(self)

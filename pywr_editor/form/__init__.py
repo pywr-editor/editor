@@ -25,6 +25,7 @@ from .widgets.abstract_string_model_component_picker_widget import (
 )
 from .widgets.check_sum_widget import CheckSumWidget
 from .widgets.color_picker_widget import ColorPickerWidget
+from .widgets.comment_widget import CommentWidget
 from .widgets.custom_component_external_data_toggle import (
     CustomComponentExternalDataToggle,
 )
