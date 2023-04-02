@@ -1,7 +1,8 @@
 # from pathlib import Path
 # from typing import List, Tuple
 #
-# import pandas as pd
+import pandas as pd
+
 # import pytest
 # from PySide6.QtCore import Qt, QTimer
 # from PySide6.QtTest import QSignalSpy
@@ -16,32 +17,35 @@
 #     UrlWidget,
 # )
 # from pywr_editor.model import ModelConfig
+from pywr_editor.utils import default_index_name
+
 # from pywr_editor.utils import default_index_name, get_index_names
 # from pywr_editor.widgets import ComboBox
 # from tests.utils import close_message_box, model_path, resolve_model_path
 #
-#
-# def df_from_h5(
-#     file: str, key: str, start: int = 0
-# ) -> Tuple[pd.DataFrame, List[str]]:
-#     """
-#     Reads the DataFrame and reset the index.
-#     :param file: The H5 file.
-#     :param key: The store key.
-#     :param start: The starting table row. Default to 0.
-#     :return: The DataFrame and the index names in a tuple.
-#     """
-#     # noinspection PyTypeChecker
-#     df: pd.DataFrame = pd.read_hdf(file, key=key, start=start)
-#     index_names = list(df.index.names)
-#     if index_names != [None]:
-#         df.reset_index(inplace=True)
-#     else:
-#         index_names = [default_index_name]
-#
-#     return df, index_names
-#
-#
+
+
+def df_from_h5(
+    file: str, key: str, start: int = 0
+) -> [pd.DataFrame, list[str]]:
+    """
+    Reads the DataFrame and reset the index.
+    :param file: The H5 file.
+    :param key: The store key.
+    :param start: The starting table row. Default to 0.
+    :return: The DataFrame and the index names in a tuple.
+    """
+    # noinspection PyTypeChecker
+    df: pd.DataFrame = pd.read_hdf(file, key=key, start=start)
+    index_names = list(df.index.names)
+    if index_names != [None]:
+        df.reset_index(inplace=True)
+    else:
+        index_names = [default_index_name]
+
+    return df, index_names
+
+
 # class TestDialogParameterUrlWidget:
 #     """
 #     Tests the UrlWidget in the parameter dialog. This is used for anonymous tables
