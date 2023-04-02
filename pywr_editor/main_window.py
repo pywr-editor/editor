@@ -676,11 +676,10 @@ class MainWindow(QMainWindow):
         Sets the window title.
         :return: None
         """
-        title = ""
-        if self.model_config.title is not None:
-            title += f"{self.model_config.title} - "
-        title += self.model_config.json_file
-
+        if self.model_config.json_file:
+            title = f"{self.model_config.title} - {self.model_config.file.name}"
+        else:
+            title = "New empty model"
         self.setWindowTitle(title)
 
     def set_zoom(self, scene_scale_factor: float) -> None:
