@@ -1,19 +1,17 @@
+from pathlib import Path
+
 import pandas as pd
 import pytest
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QPushButton
+from PySide6.QtTest import QSignalSpy
+from PySide6.QtWidgets import QLineEdit, QPushButton, QSpinBox
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.form import (  # IndexColWidget,
-    ColumnWidget,
-    FormField,
-    IndexWidget,
-    UrlWidget,
-)
+from pywr_editor.form import ColumnWidget, FormField, IndexWidget, UrlWidget
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import default_index_name, get_index_names
 from pywr_editor.widgets import ComboBox
-from tests.utils import resolve_model_path
+from tests.utils import model_path, resolve_model_path
 
 
 def df_from_h5(
@@ -275,90 +273,90 @@ class TestDialogParameterUrlWidget:
         # assert form_data is False
         # assert "The file must exist" in url_field.message.text()
 
+    def test_file_changed_signal(self, qtbot, model_config):
+        """
+        Checks that, when the file changes, the file_changed Signal is triggered. The
+        Signal calls the on_reload_all_data and on_update_file methods.
+        """
+        param_name = "param_csv_file"
+        dialog = ParametersDialog(model_config, param_name)
+        selected_page = dialog.pages_widget.currentWidget()
+        url_field: FormField = selected_page.findChild(FormField, "url")
+        # noinspection PyTypeChecker
+        url_widget: UrlWidget = url_field.widget
+        dialog.hide()
 
-#     def test_file_changed_signal(self, qtbot, model_config):
-#         """
-#         Checks that, when the file changes, the file_changed Signal is triggered. The
-#         Signal calls the on_reload_all_data and on_update_file methods.
-#         """
-#         param_name = "param_csv_file"
-#         dialog = ParametersDialog(model_config, param_name)
-#         selected_page = dialog.pages_widget.currentWidget()
-#         url_field: FormField = selected_page.findChild(FormField, "url")
-#         # noinspection PyTypeChecker
-#         url_widget: UrlWidget = url_field.widget
-#         dialog.hide()
-#
-#         # 1. Init signal spy
-#         # noinspection PyTypeChecker
-#         spy = QSignalSpy(url_widget.file_changed)
-#         assert selected_page.findChild(FormField, "name").value() == param_name
-#         assert spy.isValid() is True
-#         assert spy.count() == 0
-#
-#         # 2. check that Signal is emitted and values are updated when relative path
-#         # is set
-#         rel_new_file = "files/table.xlsx"
-#         abs_new_file = str(model_path() / rel_new_file)
-#         url_widget.line_edit.setText(rel_new_file)
-#         assert spy.count() == 1
-#         assert (
-#             url_widget.get_value() == rel_new_file
-#         )  # relative path to JSON file
-#         assert url_widget.full_file == abs_new_file
-#         assert url_widget.file_ext == ".xlsx"
-#
-#         # 3. check that Signal is emitted and values are updated when absolute path
-#         # is set
-#         url_widget.line_edit.setText(abs_new_file)
-#         # signal is still triggered only once after changing the line_edit text
-#         assert spy.count() == 2
-#         # this is set to relative to model path
-#         assert Path(url_widget.get_value()) == Path(rel_new_file)
-#         assert url_widget.full_file == abs_new_file
-#         assert url_widget.file_ext == ".xlsx"
-#
-#     def test_force_table_update(self, qtbot, model_config):
-#         """
-#         Checks that, when one of the fields needed to parse the table file is changed,
-#         the changed widget triggers the on_table_reload Slot of the UrlWidget.
-#         """
-#         param_name = "param_csv_file"
-#         dialog = ParametersDialog(model_config, param_name)
-#         selected_page = dialog.pages_widget.currentWidget()
-#         url_field: FormField = selected_page.findChild(FormField, "url")
-#         # noinspection PyTypeChecker
-#         url_widget: UrlWidget = url_field.widget
-#         dialog.hide()
-#
-#         assert selected_page.findChild(FormField, "name").value() == param_name
-#
-#         for field_name in url_widget.force_table_update:
-#             widget = selected_page.findChild(FormField, field_name).widget
-#             if isinstance(widget, QLineEdit):
-#                 # noinspection PyTypeChecker
-#                 spy = QSignalSpy(widget.textChanged)
-#                 widget.setText(";")
-#             elif isinstance(widget, QSpinBox):
-#                 # noinspection PyTypeChecker
-#                 spy = QSignalSpy(widget.textChanged)
-#                 widget.setValue(3)
-#             elif isinstance(widget, ComboBox):
-#                 # noinspection PyUnresolvedReferences
-#                 spy = QSignalSpy(widget.currentIndexChanged)
-#                 # set index different from default value
-#                 value = widget.currentIndex()
-#                 if value == 0:
-#                     widget.setCurrentIndex(1)
-#                 else:
-#                     widget.setCurrentIndex(0)
-#             else:
-#                 # ignore custom widget, these are tested in their own test files
-#                 continue
-#
-#             # individual Signal is triggered only once for each widget instance
-#             assert spy.count() == 1
-#
+        # 1. Init signal spy
+        # noinspection PyTypeChecker
+        spy = QSignalSpy(url_widget.file_changed)
+        assert selected_page.findChild(FormField, "name").value() == param_name
+        assert spy.isValid() is True
+        assert spy.count() == 0
+
+        # 2. check that Signal is emitted and values are updated when relative path
+        # is set
+        rel_new_file = "files/table.xlsx"
+        abs_new_file = str(model_path() / rel_new_file)
+        url_widget.line_edit.setText(rel_new_file)
+        assert spy.count() == 1
+        assert (
+            url_widget.get_value() == rel_new_file
+        )  # relative path to JSON file
+        assert url_widget.full_file == abs_new_file
+        assert url_widget.file_ext == ".xlsx"
+
+        # 3. check that Signal is emitted and values are updated when absolute path
+        # is set
+        url_widget.line_edit.setText(abs_new_file)
+        # signal is still triggered only once after changing the line_edit text
+        assert spy.count() == 2
+        # this is set to relative to model path
+        assert Path(url_widget.get_value()) == Path(rel_new_file)
+        assert url_widget.full_file == abs_new_file
+        assert url_widget.file_ext == ".xlsx"
+
+    def test_force_table_update(self, qtbot, model_config):
+        """
+        Checks that, when one of the fields needed to parse the table file is changed,
+        the changed widget triggers the on_table_reload Slot of the UrlWidget.
+        """
+        param_name = "param_csv_file"
+        dialog = ParametersDialog(model_config, param_name)
+        selected_page = dialog.pages_widget.currentWidget()
+        url_field: FormField = selected_page.findChild(FormField, "url")
+        # noinspection PyTypeChecker
+        url_widget: UrlWidget = url_field.widget
+        dialog.hide()
+
+        assert selected_page.findChild(FormField, "name").value() == param_name
+
+        for field_name in url_widget.force_table_update:
+            widget = selected_page.findChild(FormField, field_name).widget
+            if isinstance(widget, QLineEdit):
+                # noinspection PyTypeChecker
+                spy = QSignalSpy(widget.textChanged)
+                widget.setText(";")
+            elif isinstance(widget, QSpinBox):
+                # noinspection PyTypeChecker
+                spy = QSignalSpy(widget.textChanged)
+                widget.setValue(3)
+            elif isinstance(widget, ComboBox):
+                # noinspection PyUnresolvedReferences
+                spy = QSignalSpy(widget.currentIndexChanged)
+                # set index different from default value
+                value = widget.currentIndex()
+                if value == 0:
+                    widget.setCurrentIndex(1)
+                else:
+                    widget.setCurrentIndex(0)
+            else:
+                # ignore custom widget, these are tested in their own test files
+                continue
+
+            # individual Signal is triggered only once for each widget instance
+            assert spy.count() == 1
+
+
 #     def test_register_updated_table(self, qtbot, model_config):
 #         """
 #         Checks that, when the table changes, the IndexColWidget and ParseDatesWidget
