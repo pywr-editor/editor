@@ -270,17 +270,17 @@ class TestDialogParameterTableSelectorWidget:
         assert table_widget.get_value() is None
         assert "does not exist" in table_field.message.text()
 
-        # # 2. buttons are disabled
-        # assert table_widget.open_button.isEnabled() is False
-        # assert table_widget.reload_button.isEnabled() is False
-        #
-        # # 3. test validate method
-        # message = "You must select a valid table from the list"
-        # output = table_widget.validate(
-        #     "table", "Table", table_widget.get_value()
-        # )
-        # assert output.validation is False
-        # assert message in output.error_message
+        # 2. buttons are disabled
+        assert table_widget.open_button.isEnabled() is False
+        assert table_widget.reload_button.isEnabled() is False
+
+        # 3. test validate method
+        message = "You must select a valid table from the list"
+        output = table_widget.validate(
+            "table", "Table", table_widget.get_value()
+        )
+        assert output.validation is False
+        assert message in output.error_message
 
     #     # 4. test form validation - False is returned with an error message set on
     #     # the field
