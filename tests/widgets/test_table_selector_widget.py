@@ -275,12 +275,12 @@ class TestDialogParameterTableSelectorWidget:
         assert table_widget.reload_button.isEnabled() is False
 
         # 3. test validate method
-        message = "You must select a valid table from the list"
-        output = table_widget.validate(
-            "table", "Table", table_widget.get_value()
-        )
-        assert output.validation is False
-        assert message in output.error_message
+        # message = "You must select a valid table from the list"
+        # output = table_widget.validate(
+        #     "table", "Table", table_widget.get_value()
+        # )
+        # assert output.validation is False
+        # assert message in output.error_message
 
     #     # 4. test form validation - False is returned with an error message set on
     #     # the field
@@ -289,64 +289,64 @@ class TestDialogParameterTableSelectorWidget:
     #     assert form_data is False
     #     assert message in table_field.message.text()
 
-    # def test_tables_not_available(self, qtbot, model_config_empty_table):
-    #     """
-    #     Test the widget when the no tables are provided in the model configuration.
-    #     """
-    #     param_name = "param4"
-    #     dialog = ParametersDialog(model_config_empty_table, param_name)
-    #     selected_page = dialog.pages_widget.currentWidget()
-    #     table_field: FormField = selected_page.findChild(FormField, "table")
-    #     # noinspection PyTypeChecker
-    #     table_widget: TableSelectorWidget = table_field.widget
-    #     dialog.show()
-    #
-    #     assert selected_page.findChild(FormField, "name").value() == param_name
-    #
-    #     assert table_widget.combo_box.isEnabled() is False
-    #     assert table_widget.combo_box.currentText() == "None"
-    #     assert "no tables defined" in table_field.message.text()
-    #
-    #     # 2. buttons are disabled
-    #     assert table_widget.open_button.isEnabled() is False
-    #     assert table_widget.reload_button.isEnabled() is False
-    #
-    #     # 3. test validate method
-    #     message = "You must select a valid table from the list"
-    #     output = table_widget.validate(
-    #         "table", "Table", table_widget.get_value()
-    #     )
-    #     assert output.validation is False
-    #     assert output.error_message == message
-    #
-    #     # 4. test form validation - False is returned with an error message set on
-    #     # the field
-    #     QTimer.singleShot(100, close_message_box)
-    #     form_data = table_widget.form.validate()
-    #     assert form_data is False
-    #     assert table_field.message.text() == message
-    #
-    # def test_reset(self, qtbot, model_config):
-    #     """
-    #     Tests the reset method
-    #     """
-    #     param_name = "param_csv_file"
-    #     dialog = ParametersDialog(model_config, param_name)
-    #     selected_page = dialog.pages_widget.currentWidget()
-    #     table_field: FormField = selected_page.findChild(FormField, "table")
-    #     # noinspection PyTypeChecker
-    #     table_widget: TableSelectorWidget = table_field.widget
-    #
-    #     dialog.show()
-    #     spy = QSignalSpy(table_widget.updated_table)
-    #     table_widget.reset()
-    #
-    #     assert spy.count() == 1
-    #     # field is reset/empty
-    #     assert table_widget.isEnabled() is True
-    #     assert table_widget.table is None
-    #     assert table_widget.combo_box.currentText() == "None"
-    #
+    def test_tables_not_available(self, qtbot, model_config_empty_table):
+        """
+        Test the widget when the no tables are provided in the model configuration.
+        """
+        param_name = "param4"
+        dialog = ParametersDialog(model_config_empty_table, param_name)
+        selected_page = dialog.pages_widget.currentWidget()
+        table_field: FormField = selected_page.findChild(FormField, "table")
+        # noinspection PyTypeChecker
+        table_widget: TableSelectorWidget = table_field.widget
+        dialog.show()
+
+        assert selected_page.findChild(FormField, "name").value() == param_name
+
+        assert table_widget.combo_box.isEnabled() is False
+        assert table_widget.combo_box.currentText() == "None"
+        assert "no tables defined" in table_field.message.text()
+
+        # 2. buttons are disabled
+        assert table_widget.open_button.isEnabled() is False
+        assert table_widget.reload_button.isEnabled() is False
+
+        # 3. test validate method
+        message = "You must select a valid table from the list"
+        output = table_widget.validate(
+            "table", "Table", table_widget.get_value()
+        )
+        assert output.validation is False
+        assert output.error_message == message
+
+        # 4. test form validation - False is returned with an error message set on
+        # the field
+        QTimer.singleShot(100, close_message_box)
+        form_data = table_widget.form.validate()
+        assert form_data is False
+        assert table_field.message.text() == message
+
+    def test_reset(self, qtbot, model_config):
+        """
+        Tests the reset method
+        """
+        param_name = "param_csv_file"
+        dialog = ParametersDialog(model_config, param_name)
+        selected_page = dialog.pages_widget.currentWidget()
+        table_field: FormField = selected_page.findChild(FormField, "table")
+        # noinspection PyTypeChecker
+        table_widget: TableSelectorWidget = table_field.widget
+
+        dialog.show()
+        spy = QSignalSpy(table_widget.updated_table)
+        table_widget.reset()
+
+        assert spy.count() == 1
+        # field is reset/empty
+        assert table_widget.isEnabled() is True
+        assert table_widget.table is None
+        assert table_widget.combo_box.currentText() == "None"
+
     # def test_parse_error_h5(self, qtbot, model_config):
     #     """
     #     Tests that, when the file cannot be parsed (for example when a data store does
