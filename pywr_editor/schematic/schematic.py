@@ -1053,6 +1053,7 @@ class Schematic(QGraphicsView):
                 self.app.undo_stack.push(command)
         self.update()
 
+    @Slot()
     def on_scene_change(self) -> None:
         """
         Checks when new items are added to the schematic.
