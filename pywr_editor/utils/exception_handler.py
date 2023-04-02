@@ -34,6 +34,7 @@ class ExceptionHandler(QObject):
         if issubclass(exc_type, KeyboardInterrupt):
             sys.__excepthook__(exc_type, exc_value, exc_traceback)
         else:
+            exc_info = (exc_type, exc_value, exc_traceback)
             log_msg = "\n".join(
                 [
                     "".join(traceback.format_tb(exc_traceback)),
@@ -49,7 +50,7 @@ class ExceptionHandler(QObject):
             # force logs to be on in case the app is started without logging
             logging.disable(logging.INFO)
 
-            log.critical(f"Uncaught exception:\n {log_msg}")
+            log.critical(f"Uncaught exception:\n {0}", exc_info=exc_info)
             self.exception_signal.emit(log_msg, str(log_file))
 
     @staticmethod
