@@ -1,25 +1,19 @@
-# from pathlib import Path
-
 import pandas as pd
 import pytest
+from PySide6.QtCore import Qt, QTimer
+from PySide6.QtWidgets import QPushButton
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.form import (  # IndexColWidget,; UrlWidget,
+from pywr_editor.form import (  # IndexColWidget,
     ColumnWidget,
     FormField,
     IndexWidget,
+    UrlWidget,
 )
 from pywr_editor.model import ModelConfig
-from pywr_editor.utils import default_index_name
+from pywr_editor.utils import default_index_name, get_index_names
 from pywr_editor.widgets import ComboBox
-from tests.utils import resolve_model_path
-
-# from PySide6.QtCore import Qt, QTimer
-# from PySide6.QtTest import QSignalSpy
-# from PySide6.QtWidgets import QLineEdit, QPushButton, QSpinBox
-
-
-#
+from tests.utils import close_message_box, resolve_model_path
 
 
 def df_from_h5(
@@ -156,133 +150,132 @@ class TestDialogParameterUrlWidget:
         else:
             assert column_widget.combo_box.isEnabled() is True
 
-    # @pytest.mark.parametrize(
+    @pytest.mark.parametrize(
+        "param_name",
+        ["param_csv_file", "param_excel_file", "param_h5_file"],
+    )
+    def test_valid_table_file(self, qtbot, model_config, param_name):
+        dialog = ParametersDialog(model_config, param_name)
+        selected_page = dialog.pages_widget.currentWidget()
+        url_field: FormField = selected_page.findChild(FormField, "url")
+        # noinspection PyTypeChecker
+        url_widget: UrlWidget = url_field.widget
+        form = url_widget.form
+
+        dialog.show()
+
+        assert selected_page.findChild(FormField, "name").value() == param_name
+
+        # 1. the url field is enabled without errors or warnings
+        assert url_widget.isEnabled() is True
+        assert url_field.message.text() == ""
+        if "csv" in url_widget.full_file:
+            assert url_widget.table.equals(pd.read_csv(url_widget.full_file))
+        elif "h5" in url_widget.full_file:
+            df, index_names = df_from_h5(
+                url_widget.full_file, key="/flow", start=1
+            )
+            assert url_widget.table.equals(df)
+            assert get_index_names(url_widget.table) == index_names
+        else:
+            assert url_widget.table.equals(pd.read_excel(url_widget.full_file))
+
+        # 2. buttons are enabled
+        assert url_widget.open_button.isEnabled() is True
+        assert url_widget.reload_button.isEnabled() is True
+
+        # 3. test validate method
+        output = url_widget.validate("url", "Url", url_widget.get_value())
+        assert output.validation is True
+
+        # 4. test form validation - a valid dictionary is returned without error
+        # message on the field skip other invalid fields
+        form_data = form.validate()
+        assert url_field.message.text() == ""
+
+        assert isinstance(form_data, dict)
+        assert form_data["name"] == param_name
+        assert form_data["type"] == "constant"
+        assert form_data["url"] == url_widget.get_value()
+
+        # 5. Save form to test filter
+        save_button: QPushButton = selected_page.findChild(
+            QPushButton, "save_button"
+        )
+        # enable button (disabled due to no changes)
+        assert model_config.has_changes is False
+        assert save_button.isEnabled() is False
+        save_button.setEnabled(True)
+        qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
+        assert model_config.has_changes is True
+
+        fields = ["url", "index", "column"]
+        model_param_dict = {"type": "constant"}
+        if url_widget.file_ext == ".csv":
+            fields += ["index_col", "parse_dates"]
+        elif url_widget.file_ext == ".xlsx":
+            fields += ["index_col", "parse_dates", "sheet_name"]
+        else:
+            fields += ["key"]
+            model_param_dict["start"] = form.find_field_by_name("start").value()
+        for f in fields:
+            value = form.find_field_by_name(f).widget.get_value()
+            # convert index_col to integer
+            if f == "index_col" and param_name == "param_excel_file":
+                all_cols = list(url_widget.table.columns)
+                value = [all_cols.index(col_name) for col_name in value]
+
+            if value:
+                model_param_dict[f] = value
+
+        assert (
+            model_config.parameters.get_config_from_name(param_name)
+            == model_param_dict
+        )
+
+    @pytest.mark.parametrize(
+        "param_name, message",
+        [
+            ("param_non_existing_file", "The table file does not exist"),
+            ("param_file_ext_not_supported", "is not supported"),
+        ],
+    )
+    def test_invalid_table_file(self, qtbot, model_config, param_name, message):
+        """
+        Test the widget when the table file does not exist or is not supported.
+        """
+        dialog = ParametersDialog(model_config, param_name)
+        selected_page = dialog.pages_widget.currentWidget()
+        url_field: FormField = selected_page.findChild(FormField, "url")
+        # noinspection PyTypeChecker
+        url_widget: UrlWidget = url_field.widget
+        dialog.hide()
+
+        assert selected_page.findChild(FormField, "name").value() == param_name
+
+        # 1. the url field is enabled but with errors or warnings
+        assert url_widget.isEnabled() is True
+        assert message in url_field.message.text()
+        assert url_widget.table is None
+
+        # 2. check buttons status
+        assert url_widget.open_button.isEnabled() is False
+        # reload button is always enabled in case the file gets created
+        assert url_widget.reload_button.isEnabled() is True
+
+        # 3. test validate method
+        output = url_widget.validate("url", "Url", url_widget.get_value())
+        assert output.validation is False
+        assert "The file must exist" in output.error_message
+
+        # 4. test form validation - False is returned with an error message set on the
+        # field
+        QTimer.singleShot(100, close_message_box)
+        form_data = url_widget.form.validate()
+        assert form_data is False
+        assert "The file must exist" in url_field.message.text()
 
 
-#         "param_name",
-#         ["param_csv_file", "param_excel_file", "param_h5_file"],
-#     )
-#     def test_valid_table_file(self, qtbot, model_config, param_name):
-#         dialog = ParametersDialog(model_config, param_name)
-#         selected_page = dialog.pages_widget.currentWidget()
-#         url_field: FormField = selected_page.findChild(FormField, "url")
-#         # noinspection PyTypeChecker
-#         url_widget: UrlWidget = url_field.widget
-#         form = url_widget.form
-#
-#         dialog.show()
-#
-#         assert selected_page.findChild(FormField, "name").value() == param_name
-#
-#         # 1. the url field is enabled without errors or warnings
-#         assert url_widget.isEnabled() is True
-#         assert url_field.message.text() == ""
-#         if "csv" in url_widget.full_file:
-#             assert url_widget.table.equals(pd.read_csv(url_widget.full_file))
-#         elif "h5" in url_widget.full_file:
-#             df, index_names = df_from_h5(
-#                 url_widget.full_file, key="/flow", start=1
-#             )
-#             assert url_widget.table.equals(df)
-#             assert get_index_names(url_widget.table) == index_names
-#         else:
-#             assert url_widget.table.equals(pd.read_excel(url_widget.full_file))
-#
-#         # 2. buttons are enabled
-#         assert url_widget.open_button.isEnabled() is True
-#         assert url_widget.reload_button.isEnabled() is True
-#
-#         # 3. test validate method
-#         output = url_widget.validate("url", "Url", url_widget.get_value())
-#         assert output.validation is True
-#
-#         # 4. test form validation - a valid dictionary is returned without error
-#         # message on the field skip other invalid fields
-#         form_data = form.validate()
-#         assert url_field.message.text() == ""
-#
-#         assert isinstance(form_data, dict)
-#         assert form_data["name"] == param_name
-#         assert form_data["type"] == "constant"
-#         assert form_data["url"] == url_widget.get_value()
-#
-#         # 5. Save form to test filter
-#         save_button: QPushButton = selected_page.findChild(
-#             QPushButton, "save_button"
-#         )
-#         # enable button (disabled due to no changes)
-#         assert model_config.has_changes is False
-#         assert save_button.isEnabled() is False
-#         save_button.setEnabled(True)
-#         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
-#         assert model_config.has_changes is True
-#
-#         fields = ["url", "index", "column"]
-#         model_param_dict = {"type": "constant"}
-#         if url_widget.file_ext == ".csv":
-#             fields += ["index_col", "parse_dates"]
-#         elif url_widget.file_ext == ".xlsx":
-#             fields += ["index_col", "parse_dates", "sheet_name"]
-#         else:
-#             fields += ["key"]
-#             model_param_dict["start"] = form.find_field_by_name("start").value()
-#         for f in fields:
-#             value = form.find_field_by_name(f).widget.get_value()
-#             # convert index_col to integer
-#             if f == "index_col" and param_name == "param_excel_file":
-#                 all_cols = list(url_widget.table.columns)
-#                 value = [all_cols.index(col_name) for col_name in value]
-#
-#             if value:
-#                 model_param_dict[f] = value
-#
-#         assert (
-#             model_config.parameters.get_config_from_name(param_name)
-#             == model_param_dict
-#         )
-#
-#     @pytest.mark.parametrize(
-#         "param_name, message",
-#         [
-#             ("param_non_existing_file", "The table file does not exist"),
-#             ("param_file_ext_not_supported", "is not supported"),
-#         ],
-#     )
-#     def test_invalid_table_file(self, qtbot, model_config, param_name, message):
-#         """
-#         Test the widget when the table file does not exist or is not supported.
-#         """
-#         dialog = ParametersDialog(model_config, param_name)
-#         selected_page = dialog.pages_widget.currentWidget()
-#         url_field: FormField = selected_page.findChild(FormField, "url")
-#         # noinspection PyTypeChecker
-#         url_widget: UrlWidget = url_field.widget
-#         dialog.hide()
-#
-#         assert selected_page.findChild(FormField, "name").value() == param_name
-#
-#         # 1. the url field is enabled but with errors or warnings
-#         assert url_widget.isEnabled() is True
-#         assert message in url_field.message.text()
-#         assert url_widget.table is None
-#
-#         # 2. check buttons status
-#         assert url_widget.open_button.isEnabled() is False
-#         # reload button is always enabled in case the file gets created
-#         assert url_widget.reload_button.isEnabled() is True
-#
-#         # 3. test validate method
-#         output = url_widget.validate("url", "Url", url_widget.get_value())
-#         assert output.validation is False
-#         assert "The file must exist" in output.error_message
-#
-#         # 4. test form validation - False is returned with an error message set on the
-#         # field
-#         QTimer.singleShot(100, close_message_box)
-#         form_data = url_widget.form.validate()
-#         assert form_data is False
-#         assert "The file must exist" in url_field.message.text()
-#
 #     def test_file_changed_signal(self, qtbot, model_config):
 #         """
 #         Checks that, when the file changes, the file_changed Signal is triggered. The
