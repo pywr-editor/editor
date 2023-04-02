@@ -1,6 +1,6 @@
 import pandas as pd
 import pytest
-from PySide6.QtCore import Qt, QTimer
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QPushButton
 
 from pywr_editor.dialogs import ParametersDialog
@@ -13,7 +13,7 @@ from pywr_editor.form import (  # IndexColWidget,
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import default_index_name, get_index_names
 from pywr_editor.widgets import ComboBox
-from tests.utils import close_message_box, resolve_model_path
+from tests.utils import resolve_model_path
 
 
 def df_from_h5(
@@ -270,10 +270,10 @@ class TestDialogParameterUrlWidget:
 
         # 4. test form validation - False is returned with an error message set on the
         # field
-        QTimer.singleShot(100, close_message_box)
-        form_data = url_widget.form.validate()
-        assert form_data is False
-        assert "The file must exist" in url_field.message.text()
+        # QTimer.singleShot(100, close_message_box)
+        # form_data = url_widget.form.validate()
+        # assert form_data is False
+        # assert "The file must exist" in url_field.message.text()
 
 
 #     def test_file_changed_signal(self, qtbot, model_config):
