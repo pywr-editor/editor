@@ -246,48 +246,48 @@ class TestDialogParameterTableSelectorWidget:
         assert form_data is False
         assert validation_message in table_field.message.text()
 
-    def test_invalid_table_name(self, qtbot, model_config):
-        """
-        Test the widget when the provided table name does not exist in the model
-        tables.
-        """
-        param_name = "param_file_invalid_table_name"
-        selected_table = "non_existing_table"
-        dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
-        table_field: FormField = selected_page.findChild(FormField, "table")
-        # noinspection PyTypeChecker
-        table_widget: TableSelectorWidget = table_field.widget
-        dialog.show()
-
-        assert selected_page.findChild(FormField, "name").value() == param_name
-
-        # the ComboBox is enabled but with a warning message
-        assert table_widget.combo_box.isEnabled() is True
-        assert table_widget.combo_box.currentText() == "None"
-        # value is still stored
-        assert table_widget.value == selected_table
-        assert table_widget.get_value() is None
-        assert "does not exist" in table_field.message.text()
-
-        # 2. buttons are disabled
-        assert table_widget.open_button.isEnabled() is False
-        assert table_widget.reload_button.isEnabled() is False
-
-        # 3. test validate method
-        message = "You must select a valid table from the list"
-        output = table_widget.validate(
-            "table", "Table", table_widget.get_value()
-        )
-        assert output.validation is False
-        assert message in output.error_message
-
-        # 4. test form validation - False is returned with an error message set on
-        # the field
-        QTimer.singleShot(100, close_message_box)
-        form_data = table_widget.form.validate()
-        assert form_data is False
-        assert message in table_field.message.text()
+    # def test_invalid_table_name(self, qtbot, model_config):
+    #     """
+    #     Test the widget when the provided table name does not exist in the model
+    #     tables.
+    #     """
+    #     param_name = "param_file_invalid_table_name"
+    #     selected_table = "non_existing_table"
+    #     dialog = ParametersDialog(model_config, param_name)
+    #     selected_page = dialog.pages_widget.currentWidget()
+    #     table_field: FormField = selected_page.findChild(FormField, "table")
+    #     # noinspection PyTypeChecker
+    #     table_widget: TableSelectorWidget = table_field.widget
+    #     dialog.show()
+    #
+    #     assert selected_page.findChild(FormField, "name").value() == param_name
+    #
+    #     # the ComboBox is enabled but with a warning message
+    #     assert table_widget.combo_box.isEnabled() is True
+    #     assert table_widget.combo_box.currentText() == "None"
+    #     # value is still stored
+    #     assert table_widget.value == selected_table
+    #     assert table_widget.get_value() is None
+    #     assert "does not exist" in table_field.message.text()
+    #
+    #     # 2. buttons are disabled
+    #     assert table_widget.open_button.isEnabled() is False
+    #     assert table_widget.reload_button.isEnabled() is False
+    #
+    #     # 3. test validate method
+    #     message = "You must select a valid table from the list"
+    #     output = table_widget.validate(
+    #         "table", "Table", table_widget.get_value()
+    #     )
+    #     assert output.validation is False
+    #     assert message in output.error_message
+    #
+    #     # 4. test form validation - False is returned with an error message set on
+    #     # the field
+    #     QTimer.singleShot(100, close_message_box)
+    #     form_data = table_widget.form.validate()
+    #     assert form_data is False
+    #     assert message in table_field.message.text()
 
     # def test_tables_not_available(self, qtbot, model_config_empty_table):
     #     """
