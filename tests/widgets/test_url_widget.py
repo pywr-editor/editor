@@ -2,16 +2,17 @@ from pathlib import Path
 
 import pandas as pd
 import pytest
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QTimer
 from PySide6.QtTest import QSignalSpy
 from PySide6.QtWidgets import QLineEdit, QPushButton, QSpinBox
 
 from pywr_editor.dialogs import ParametersDialog
 from pywr_editor.form import ColumnWidget, FormField, IndexWidget, UrlWidget
+from pywr_editor.form.widgets.index_col_widget import IndexColWidget
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import default_index_name, get_index_names
 from pywr_editor.widgets import ComboBox
-from tests.utils import model_path, resolve_model_path
+from tests.utils import close_message_box, model_path, resolve_model_path
 
 
 def df_from_h5(
@@ -356,142 +357,141 @@ class TestDialogParameterUrlWidget:
             # individual Signal is triggered only once for each widget instance
             assert spy.count() == 1
 
+    def test_register_updated_table(self, qtbot, model_config):
+        """
+        Checks that, when the table changes, the IndexColWidget and ParseDatesWidget
+        fields are properly updated.
+        """
+        param_name = "param_csv_file"
+        dialog = ParametersDialog(model_config, param_name)
+        selected_page = dialog.pages_widget.currentWidget()
+        url_field: FormField = selected_page.findChild(FormField, "url")
+        # noinspection PyTypeChecker
+        url_widget: UrlWidget = url_field.widget
+        spy = QSignalSpy(url_widget.updated_table)
+        dialog.hide()
 
-#     def test_register_updated_table(self, qtbot, model_config):
-#         """
-#         Checks that, when the table changes, the IndexColWidget and ParseDatesWidget
-#         fields are properly updated.
-#         """
-#         param_name = "param_csv_file"
-#         dialog = ParametersDialog(model_config, param_name)
-#         selected_page = dialog.pages_widget.currentWidget()
-#         url_field: FormField = selected_page.findChild(FormField, "url")
-#         # noinspection PyTypeChecker
-#         url_widget: UrlWidget = url_field.widget
-#         spy = QSignalSpy(url_widget.updated_table)
-#         dialog.hide()
-#
-#         assert selected_page.findChild(FormField, "name").value() == param_name
-#
-#         # trigger table update by reloading the data
-#         qtbot.mouseClick(url_widget.reload_button, Qt.MouseButton.LeftButton)
-#         assert spy.count() == 1
-#
-#     def test_index_changed(self, qtbot, model_config):
-#         """
-#         Test that, when a new index on the table is set, the IndexWidget and
-#         ColumnWidget are updated.
-#         """
-#         param_name = "param_csv_file"
-#         dialog = ParametersDialog(model_config, param_name)
-#         selected_page = dialog.pages_widget.currentWidget()
-#         url_field: FormField = selected_page.findChild(FormField, "url")
-#         # noinspection PyTypeChecker
-#         url_widget: UrlWidget = url_field.widget
-#         spy = QSignalSpy(url_widget.index_changed)
-#         dialog.hide()
-#
-#         # trigger index_changed Signal by selecting Column 3
-#         index_col_widget: IndexColWidget = selected_page.findChild(
-#             FormField, "index_col"
-#         ).widget
-#         index_col_widget.combo_box.check_items(2)
-#
-#         assert spy.count() == 1
-#
-#         # check that the ColumnWidget is updated
-#         index_widget: ColumnWidget = selected_page.findChild(
-#             FormField, "column"
-#         ).widget
-#         assert index_widget.combo_box.all_items == [
-#             "None",
-#             " Date",
-#         ]
-#
-#     def test_reset(self, qtbot, model_config):
-#         """
-#         Tests the reset method.
-#         """
-#         param_name = "param_csv_file"
-#         dialog = ParametersDialog(model_config, param_name)
-#         selected_page = dialog.pages_widget.currentWidget()
-#         url_field: FormField = selected_page.findChild(FormField, "url")
-#         # noinspection PyTypeChecker
-#         url_widget: UrlWidget = url_field.widget
-#         spy = QSignalSpy(url_widget.updated_table)
-#         dialog.hide()
-#
-#         url_widget.reset()
-#
-#         assert spy.count() == 1
-#         # field is reset/empty
-#         assert url_field.message.text() == ""
-#         assert url_widget.isEnabled() is True
-#         assert url_widget.table is None
-#         assert url_widget.full_file is None
-#         assert url_widget.file_ext == ""
-#
-#     def test_parse_error_h5(self, qtbot, model_config):
-#         """
-#         Tests that, when the file cannot be parsed (for example when a data store does
-#         not have any key), the field is disabled with a warning message and the other
-#         fields are shown to let user change the parser options.
-#         """
-#         selected_parameter = "param_with_h5_no_keys"
-#         dialog = ParametersDialog(model_config, selected_parameter)
-#         dialog.show()
-#
-#         selected_page = dialog.pages_widget.currentWidget()
-#         key_field: FormField = selected_page.findChild(FormField, "key")
-#         url_field: FormField = selected_page.findChild(FormField, "url")
-#         # noinspection PyTypeChecker
-#         url_widget: UrlWidget = url_field.widget
-#
-#         assert (
-#             selected_page.findChild(FormField, "name").value()
-#             == selected_parameter
-#         )
-#         assert "Cannot parse the file" in url_field.message.text()
-#         assert (
-#             key_field.message.text() == "The H5 file does not contain any key"
-#         )
-#
-#         # H5 and common fields are visible
-#         for field_name in self.h5_fields + list(
-#             set(self.common_fields) - set(self.hidden_h5_fields)
-#         ):
-#             shown_field: FormField = selected_page.findChild(
-#                 FormField, field_name
-#             )
-#             assert shown_field.isVisible() is True
-#
-#             # table is not available. Index_col is always disabled, key is disabled
-#             # because no keys are available
-#             if field_name in ["index", "column", "index_col", "key"]:
-#                 if field_name != "index":
-#                     assert shown_field.widget.combo_box.isEnabled() is False
-#                 else:
-#                     assert all(
-#                         [
-#                             f.isEnabled() is False
-#                             for f in shown_field.findChildren(ComboBox)
-#                         ]
-#                     )
-#             else:
-#                 assert shown_field.isEnabled() is True
-#
-#             # warning message on key field
-#             if field_name == "key":
-#                 assert "does not contain" in shown_field.message.text()
-#
-#         # 3. test validate method
-#         output = url_widget.validate("url", "Url", url_widget.get_value())
-#         assert output.validation is False
-#         assert "The file must exist" in output.error_message
-#
-#         # 4. test form validation - False is returned with an error message set on
-#         # the field
-#         QTimer.singleShot(100, close_message_box)
-#         form_data = url_widget.form.validate()
-#         assert form_data is False
-#         assert "The file must exist" in url_field.message.text()
+        assert selected_page.findChild(FormField, "name").value() == param_name
+
+        # trigger table update by reloading the data
+        qtbot.mouseClick(url_widget.reload_button, Qt.MouseButton.LeftButton)
+        assert spy.count() == 1
+
+    def test_index_changed(self, qtbot, model_config):
+        """
+        Test that, when a new index on the table is set, the IndexWidget and
+        ColumnWidget are updated.
+        """
+        param_name = "param_csv_file"
+        dialog = ParametersDialog(model_config, param_name)
+        selected_page = dialog.pages_widget.currentWidget()
+        url_field: FormField = selected_page.findChild(FormField, "url")
+        # noinspection PyTypeChecker
+        url_widget: UrlWidget = url_field.widget
+        spy = QSignalSpy(url_widget.index_changed)
+        dialog.hide()
+
+        # trigger index_changed Signal by selecting Column 3
+        index_col_widget: IndexColWidget = selected_page.findChild(
+            FormField, "index_col"
+        ).widget
+        index_col_widget.combo_box.check_items(2)
+
+        assert spy.count() == 1
+
+        # check that the ColumnWidget is updated
+        index_widget: ColumnWidget = selected_page.findChild(
+            FormField, "column"
+        ).widget
+        assert index_widget.combo_box.all_items == [
+            "None",
+            " Date",
+        ]
+
+    def test_reset(self, qtbot, model_config):
+        """
+        Tests the reset method.
+        """
+        param_name = "param_csv_file"
+        dialog = ParametersDialog(model_config, param_name)
+        selected_page = dialog.pages_widget.currentWidget()
+        url_field: FormField = selected_page.findChild(FormField, "url")
+        # noinspection PyTypeChecker
+        url_widget: UrlWidget = url_field.widget
+        spy = QSignalSpy(url_widget.updated_table)
+        dialog.hide()
+
+        url_widget.reset()
+
+        assert spy.count() == 1
+        # field is reset/empty
+        assert url_field.message.text() == ""
+        assert url_widget.isEnabled() is True
+        assert url_widget.table is None
+        assert url_widget.full_file is None
+        assert url_widget.file_ext == ""
+
+    def test_parse_error_h5(self, qtbot, model_config):
+        """
+        Tests that, when the file cannot be parsed (for example when a data store does
+        not have any key), the field is disabled with a warning message and the other
+        fields are shown to let user change the parser options.
+        """
+        selected_parameter = "param_with_h5_no_keys"
+        dialog = ParametersDialog(model_config, selected_parameter)
+        dialog.show()
+
+        selected_page = dialog.pages_widget.currentWidget()
+        key_field: FormField = selected_page.findChild(FormField, "key")
+        url_field: FormField = selected_page.findChild(FormField, "url")
+        # noinspection PyTypeChecker
+        url_widget: UrlWidget = url_field.widget
+
+        assert (
+            selected_page.findChild(FormField, "name").value()
+            == selected_parameter
+        )
+        assert "Cannot parse the file" in url_field.message.text()
+        assert (
+            key_field.message.text() == "The H5 file does not contain any key"
+        )
+
+        # H5 and common fields are visible
+        for field_name in self.h5_fields + list(
+            set(self.common_fields) - set(self.hidden_h5_fields)
+        ):
+            shown_field: FormField = selected_page.findChild(
+                FormField, field_name
+            )
+            assert shown_field.isVisible() is True
+
+            # table is not available. Index_col is always disabled, key is disabled
+            # because no keys are available
+            if field_name in ["index", "column", "index_col", "key"]:
+                if field_name != "index":
+                    assert shown_field.widget.combo_box.isEnabled() is False
+                else:
+                    assert all(
+                        [
+                            f.isEnabled() is False
+                            for f in shown_field.findChildren(ComboBox)
+                        ]
+                    )
+            else:
+                assert shown_field.isEnabled() is True
+
+            # warning message on key field
+            if field_name == "key":
+                assert "does not contain" in shown_field.message.text()
+
+        # 3. test validate method
+        output = url_widget.validate("url", "Url", url_widget.get_value())
+        assert output.validation is False
+        assert "The file must exist" in output.error_message
+
+        # 4. test form validation - False is returned with an error message set on
+        # the field
+        QTimer.singleShot(100, close_message_box)
+        form_data = url_widget.form.validate()
+        assert form_data is False
+        assert "The file must exist" in url_field.message.text()
