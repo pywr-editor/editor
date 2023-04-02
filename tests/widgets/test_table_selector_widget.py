@@ -2,12 +2,13 @@ import pandas as pd
 import pytest
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtTest import QSignalSpy
-from PySide6.QtWidgets import QPushButton
+from PySide6.QtWidgets import QPushButton, QWidget
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.form import FormField, TableSelectorWidget
-from pywr_editor.model import ModelConfig
+from pywr_editor.form import FormField, ParameterForm, TableSelectorWidget
+from pywr_editor.model import ModelConfig, ParameterConfig
 from pywr_editor.utils import default_index_name, get_index_names
+from pywr_editor.widgets import ComboBox
 from tests.utils import close_message_box, model_path, resolve_model_path
 from tests.widgets.test_url_widget import df_from_h5
 
@@ -347,119 +348,119 @@ class TestDialogParameterTableSelectorWidget:
         assert table_widget.table is None
         assert table_widget.combo_box.currentText() == "None"
 
-    # def test_parse_error_h5(self, qtbot, model_config):
-    #     """
-    #     Tests that, when the file cannot be parsed (for example when a data store does
-    #     not have any key), the field is disabled with a warning message and the other
-    #     fields are shown to let user change the parser options.
-    #     """
-    #     selected_parameter = "param_with_h5_no_keys"
-    #     dialog = ParametersDialog(model_config, selected_parameter)
-    #     dialog.show()
-    #
-    #     selected_page = dialog.pages_widget.currentWidget()
-    #     table_field: FormField = selected_page.findChild(FormField, "table")
-    #     # noinspection PyTypeChecker
-    #     table_widget: TableSelectorWidget = table_field.widget
-    #
-    #     assert (
-    #         selected_page.findChild(FormField, "name").value()
-    #         == selected_parameter
-    #     )
-    #     assert "Cannot parse the file" in table_field.message.text()
-    #
-    #     # common fields are visible but disabled
-    #     for field_name in ["index", "column"]:
-    #         shown_field: FormField = selected_page.findChild(
-    #             FormField, field_name
-    #         )
-    #         assert shown_field.isVisible() is True
-    #
-    #         if field_name != "index":
-    #             assert shown_field.widget.combo_box.isEnabled() is False
-    #         else:
-    #             assert all(
-    #                 [
-    #                     f.isEnabled() is False
-    #                     for f in shown_field.findChildren(ComboBox)
-    #                 ]
-    #             )
-    #
-    #     # 3. test validate method
-    #     message = "The table file is not valid"
-    #     output = table_widget.validate(
-    #         "table", "Table", table_widget.get_value()
-    #     )
-    #     assert output.validation is False
-    #     assert message in output.error_message
-    #
-    #     # 4. test form validation - False is returned with an error message set on the
-    #     # field
-    #     QTimer.singleShot(100, close_message_box)
-    #     form_data = table_widget.form.validate()
-    #     assert form_data is False
-    #     assert message in table_field.message.text()
-    #
-    # @pytest.mark.parametrize(
-    #     "selected_table, empty_model, init_message, value",
-    #     [
-    #         # parsing/file errors are suppressed
-    #         ("non_existing_table", False, None, None),
-    #         ("param_file_ext_not_supported", False, None, None),
-    #         ("param_file_non_parsable", False, None, None),
-    #         # no model tables
-    #         (None, True, "no tables defined", None),
-    #         # valid table
-    #         (
-    #             "csv_table",
-    #             False,
-    #             None,
-    #             "csv_table",
-    #         ),
-    #     ],
-    # )
-    # def test_is_static(
-    #     self, qtbot, selected_table, empty_model, init_message, value
-    # ):
-    #     """
-    #     Checks when the static argument is set to True.
-    #     """
-    #     if empty_model:
-    #         model_file = self.model_file_empty
-    #     else:
-    #         model_file = self.model_file
-    #
-    #     # mock widgets
-    #     form = ParameterForm(
-    #         model_config=ModelConfig(model_file),
-    #         parameter_obj=ParameterConfig({}),
-    #         available_fields={
-    #             "Section": [
-    #                 {
-    #                     "name": "value",
-    #                     "field_type": TableSelectorWidget,
-    #                     "field_args": {"static": True},
-    #                     "value": selected_table,
-    #                 }
-    #             ]
-    #         },
-    #         save_button=QPushButton("Save"),
-    #         parent=QWidget(),
-    #     )
-    #     form.enable_optimisation_section = False
-    #     form.load_fields()
-    #
-    #     form_field = form.find_field_by_name("value")
-    #
-    #     # buttons are hidden
-    #     assert not form_field.findChild(QPushButton) is True
-    #
-    #     # check init message
-    #     if init_message:
-    #         assert init_message in form_field.message.text()
-    #     else:
-    #         assert form_field.message.text() == ""
-    #
-    #     # check values
-    #     assert form_field.value() == value
-    #     assert form_field.widget.file is None
+    def test_parse_error_h5(self, qtbot, model_config):
+        """
+        Tests that, when the file cannot be parsed (for example when a data store does
+        not have any key), the field is disabled with a warning message and the other
+        fields are shown to let user change the parser options.
+        """
+        selected_parameter = "param_with_h5_no_keys"
+        dialog = ParametersDialog(model_config, selected_parameter)
+        dialog.show()
+
+        selected_page = dialog.pages_widget.currentWidget()
+        table_field: FormField = selected_page.findChild(FormField, "table")
+        # noinspection PyTypeChecker
+        table_widget: TableSelectorWidget = table_field.widget
+
+        assert (
+            selected_page.findChild(FormField, "name").value()
+            == selected_parameter
+        )
+        assert "Cannot parse the file" in table_field.message.text()
+
+        # common fields are visible but disabled
+        for field_name in ["index", "column"]:
+            shown_field: FormField = selected_page.findChild(
+                FormField, field_name
+            )
+            assert shown_field.isVisible() is True
+
+            if field_name != "index":
+                assert shown_field.widget.combo_box.isEnabled() is False
+            else:
+                assert all(
+                    [
+                        f.isEnabled() is False
+                        for f in shown_field.findChildren(ComboBox)
+                    ]
+                )
+
+        # 3. test validate method
+        message = "The table file is not valid"
+        output = table_widget.validate(
+            "table", "Table", table_widget.get_value()
+        )
+        assert output.validation is False
+        assert message in output.error_message
+
+        # 4. test form validation - False is returned with an error message set on the
+        # field
+        QTimer.singleShot(100, close_message_box)
+        form_data = table_widget.form.validate()
+        assert form_data is False
+        assert message in table_field.message.text()
+
+    @pytest.mark.parametrize(
+        "selected_table, empty_model, init_message, value",
+        [
+            # parsing/file errors are suppressed
+            ("non_existing_table", False, None, None),
+            ("param_file_ext_not_supported", False, None, None),
+            ("param_file_non_parsable", False, None, None),
+            # no model tables
+            (None, True, "no tables defined", None),
+            # valid table
+            (
+                "csv_table",
+                False,
+                None,
+                "csv_table",
+            ),
+        ],
+    )
+    def test_is_static(
+        self, qtbot, selected_table, empty_model, init_message, value
+    ):
+        """
+        Checks when the static argument is set to True.
+        """
+        if empty_model:
+            model_file = self.model_file_empty
+        else:
+            model_file = self.model_file
+
+        # mock widgets
+        form = ParameterForm(
+            model_config=ModelConfig(model_file),
+            parameter_obj=ParameterConfig({}),
+            available_fields={
+                "Section": [
+                    {
+                        "name": "value",
+                        "field_type": TableSelectorWidget,
+                        "field_args": {"static": True},
+                        "value": selected_table,
+                    }
+                ]
+            },
+            save_button=QPushButton("Save"),
+            parent=QWidget(),
+        )
+        form.enable_optimisation_section = False
+        form.load_fields()
+
+        form_field = form.find_field_by_name("value")
+
+        # buttons are hidden
+        assert not form_field.findChild(QPushButton) is True
+
+        # check init message
+        if init_message:
+            assert init_message in form_field.message.text()
+        else:
+            assert form_field.message.text() == ""
+
+        # check values
+        assert form_field.value() == value
+        assert form_field.widget.file is None
