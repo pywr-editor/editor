@@ -248,7 +248,7 @@ class TestDialogParameterUrlWidget:
         url_field: FormField = selected_page.findChild(FormField, "url")
         # noinspection PyTypeChecker
         url_widget: UrlWidget = url_field.widget
-        dialog.hide()
+        dialog.show()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
 
@@ -269,10 +269,10 @@ class TestDialogParameterUrlWidget:
 
         # 4. test form validation - False is returned with an error message set on the
         # field
-        # QTimer.singleShot(100, close_message_box)
-        # form_data = url_widget.form.validate()
-        # assert form_data is False
-        # assert "The file must exist" in url_field.message.text()
+        QTimer.singleShot(100, close_message_box)
+        form_data = url_widget.form.validate()
+        assert form_data is False
+        assert "The file must exist" in url_field.message.text()
 
     def test_file_changed_signal(self, qtbot, model_config):
         """
