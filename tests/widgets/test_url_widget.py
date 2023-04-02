@@ -1,27 +1,24 @@
 # from pathlib import Path
-# from typing import List, Tuple
-#
-import pandas as pd
 
-# import pytest
+import pandas as pd
+import pytest
+
+from pywr_editor.dialogs import ParametersDialog
+from pywr_editor.form import (  # IndexColWidget,; UrlWidget,
+    ColumnWidget,
+    FormField,
+    IndexWidget,
+)
+from pywr_editor.model import ModelConfig
+from pywr_editor.utils import default_index_name
+from pywr_editor.widgets import ComboBox
+from tests.utils import resolve_model_path
+
 # from PySide6.QtCore import Qt, QTimer
 # from PySide6.QtTest import QSignalSpy
 # from PySide6.QtWidgets import QLineEdit, QPushButton, QSpinBox
-#
-# from pywr_editor.dialogs import ParametersDialog
-# from pywr_editor.form import (
-#     ColumnWidget,
-#     FormField,
-#     IndexColWidget,
-#     IndexWidget,
-#     UrlWidget,
-# )
-# from pywr_editor.model import ModelConfig
-from pywr_editor.utils import default_index_name
 
-# from pywr_editor.utils import default_index_name, get_index_names
-# from pywr_editor.widgets import ComboBox
-# from tests.utils import close_message_box, model_path, resolve_model_path
+
 #
 
 
@@ -46,120 +43,122 @@ def df_from_h5(
     return df, index_names
 
 
-# class TestDialogParameterUrlWidget:
-#     """
-#     Tests the UrlWidget in the parameter dialog. This is used for anonymous tables
-#     only.
-#     """
-#
-#     model_file = resolve_model_path("model_dialog_parameters_url_widget.json")
-#     common_fields = [
-#         "index",
-#         "column",
-#         "index_col",
-#         "parse_dates",
-#     ]
-#     csv_fields = [
-#         "sep",
-#         "dayfirst",
-#         "skipinitialspace",
-#         "skipfooter",
-#         "skip_blank_lines",
-#     ]
-#     excel_fields = ["sheet_name"]
-#     h5_fields = ["key", "start"]
-#     hidden_h5_fields = [
-#         "index_col",
-#         "parse_dates",
-#     ]
-#
-#     @pytest.fixture()
-#     def model_config(self) -> ModelConfig:
-#         """
-#         Initialises the model configuration.
-#         :return: The ModelConfig instance.
-#         """
-#         return ModelConfig(self.model_file)
-#
-#     @pytest.mark.parametrize(
-#         "param_name, shown_fields, hidden_fields",
-#         [
-#             (
-#                 "param_csv_file",
-#                 csv_fields + common_fields,
-#                 excel_fields + h5_fields,
-#             ),
-#             (
-#                 "param_excel_file",
-#                 excel_fields + common_fields,
-#                 csv_fields + h5_fields,
-#             ),
-#             # parse_dates is hidden because it cannot be used
-#             (
-#                 "param_h5_file",
-#                 h5_fields + list(set(common_fields) - set(hidden_h5_fields)),
-#                 csv_fields + excel_fields + hidden_h5_fields,
-#             ),
-#             (
-#                 "param_non_existing_file",
-#                 [],
-#                 csv_fields + excel_fields + h5_fields,
-#             ),
-#         ],
-#     )
-#     def test_field_visibility(
-#         self, qtbot, model_config, param_name, shown_fields, hidden_fields
-#     ):
-#         """
-#         Tests that, when the file type changes, the fields for the appropriate file
-#         extensions are shown and the others hidden.
-#         """
-#         dialog = ParametersDialog(model_config, param_name)
-#         selected_page = dialog.pages_widget.currentWidget()
-#
-#         assert selected_page.findChild(FormField, "name").value() == param_name
-#
-#         # 1. the url field is enabled without errors or warnings
-#         url_field: FormField = selected_page.findChild(FormField, "url")
-#         assert url_field.widget.isEnabled() is True
-#
-#         # force the dialog to be visible other isVisible always returns False
-#         dialog.show()
-#
-#         # 2. the correct fields are shown or hidden
-#         for field_name in shown_fields:
-#             form_field: FormField = selected_page.findChild(
-#                 FormField, field_name
-#             )
-#             assert form_field.isVisible() is True
-#
-#         for field_name in hidden_fields:
-#             form_field: FormField = selected_page.findChild(
-#                 FormField, field_name
-#             )
-#             assert form_field.widget.isVisible() is False
-#
-#         # 3. index and column fields are always visible. They are disabled when there
-#         # is an error
-#         index_widget: IndexWidget = selected_page.findChild(
-#             FormField, "index"
-#         ).widget
-#         for combo_box in index_widget.findChildren(ComboBox):
-#             # all fields are hidden, there is an error
-#             if not shown_fields:
-#                 assert combo_box.isEnabled() is False
-#             else:
-#                 assert combo_box.isEnabled() is True
-#
-#         column_widget: ColumnWidget = selected_page.findChild(
-#             FormField, "column"
-#         ).widget
-#         if not shown_fields:
-#             assert column_widget.combo_box.isEnabled() is False
-#         else:
-#             assert column_widget.combo_box.isEnabled() is True
-#
-#     @pytest.mark.parametrize(
+class TestDialogParameterUrlWidget:
+    """
+    Tests the UrlWidget in the parameter dialog. This is used for anonymous tables
+    only.
+    """
+
+    model_file = resolve_model_path("model_dialog_parameters_url_widget.json")
+    common_fields = [
+        "index",
+        "column",
+        "index_col",
+        "parse_dates",
+    ]
+    csv_fields = [
+        "sep",
+        "dayfirst",
+        "skipinitialspace",
+        "skipfooter",
+        "skip_blank_lines",
+    ]
+    excel_fields = ["sheet_name"]
+    h5_fields = ["key", "start"]
+    hidden_h5_fields = [
+        "index_col",
+        "parse_dates",
+    ]
+
+    @pytest.fixture()
+    def model_config(self) -> ModelConfig:
+        """
+        Initialises the model configuration.
+        :return: The ModelConfig instance.
+        """
+        return ModelConfig(self.model_file)
+
+    @pytest.mark.parametrize(
+        "param_name, shown_fields, hidden_fields",
+        [
+            (
+                "param_csv_file",
+                csv_fields + common_fields,
+                excel_fields + h5_fields,
+            ),
+            (
+                "param_excel_file",
+                excel_fields + common_fields,
+                csv_fields + h5_fields,
+            ),
+            # parse_dates is hidden because it cannot be used
+            (
+                "param_h5_file",
+                h5_fields + list(set(common_fields) - set(hidden_h5_fields)),
+                csv_fields + excel_fields + hidden_h5_fields,
+            ),
+            (
+                "param_non_existing_file",
+                [],
+                csv_fields + excel_fields + h5_fields,
+            ),
+        ],
+    )
+    def test_field_visibility(
+        self, qtbot, model_config, param_name, shown_fields, hidden_fields
+    ):
+        """
+        Tests that, when the file type changes, the fields for the appropriate file
+        extensions are shown and the others hidden.
+        """
+        dialog = ParametersDialog(model_config, param_name)
+        selected_page = dialog.pages_widget.currentWidget()
+
+        assert selected_page.findChild(FormField, "name").value() == param_name
+
+        # 1. the url field is enabled without errors or warnings
+        url_field: FormField = selected_page.findChild(FormField, "url")
+        assert url_field.widget.isEnabled() is True
+
+        # force the dialog to be visible other isVisible always returns False
+        dialog.show()
+
+        # 2. the correct fields are shown or hidden
+        for field_name in shown_fields:
+            form_field: FormField = selected_page.findChild(
+                FormField, field_name
+            )
+            assert form_field.isVisible() is True
+
+        for field_name in hidden_fields:
+            form_field: FormField = selected_page.findChild(
+                FormField, field_name
+            )
+            assert form_field.widget.isVisible() is False
+
+        # 3. index and column fields are always visible. They are disabled when there
+        # is an error
+        index_widget: IndexWidget = selected_page.findChild(
+            FormField, "index"
+        ).widget
+        for combo_box in index_widget.findChildren(ComboBox):
+            # all fields are hidden, there is an error
+            if not shown_fields:
+                assert combo_box.isEnabled() is False
+            else:
+                assert combo_box.isEnabled() is True
+
+        column_widget: ColumnWidget = selected_page.findChild(
+            FormField, "column"
+        ).widget
+        if not shown_fields:
+            assert column_widget.combo_box.isEnabled() is False
+        else:
+            assert column_widget.combo_box.isEnabled() is True
+
+    # @pytest.mark.parametrize(
+
+
 #         "param_name",
 #         ["param_csv_file", "param_excel_file", "param_h5_file"],
 #     )
