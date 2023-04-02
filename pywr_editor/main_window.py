@@ -677,7 +677,7 @@ class MainWindow(QMainWindow):
         :return: None
         """
         if self.model_config.json_file:
-            title = f"{self.model_config.title} - {self.model_config.file.name}"
+            title = f"{self.model_config.title} - {self.model_config.file.file_name}"
         else:
             title = "New empty model"
         self.setWindowTitle(title)
