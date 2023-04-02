@@ -214,7 +214,7 @@ class TestDialogParameterTableSelectorWidget:
         table_field: FormField = selected_page.findChild(FormField, "table")
         # noinspection PyTypeChecker
         table_widget: TableSelectorWidget = table_field.widget
-        dialog.hide()
+        dialog.show()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
 
@@ -259,7 +259,7 @@ class TestDialogParameterTableSelectorWidget:
         table_field: FormField = selected_page.findChild(FormField, "table")
         # noinspection PyTypeChecker
         table_widget: TableSelectorWidget = table_field.widget
-        dialog.hide()
+        dialog.show()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
 
@@ -300,7 +300,7 @@ class TestDialogParameterTableSelectorWidget:
         table_field: FormField = selected_page.findChild(FormField, "table")
         # noinspection PyTypeChecker
         table_widget: TableSelectorWidget = table_field.widget
-        dialog.hide()
+        dialog.show()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
 
@@ -338,7 +338,7 @@ class TestDialogParameterTableSelectorWidget:
         # noinspection PyTypeChecker
         table_widget: TableSelectorWidget = table_field.widget
 
-        dialog.hide()
+        dialog.show()
         spy = QSignalSpy(table_widget.updated_table)
         table_widget.reset()
 
