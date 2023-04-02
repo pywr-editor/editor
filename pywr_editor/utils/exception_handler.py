@@ -49,7 +49,10 @@ class ExceptionHandler(QObject):
             # force logs to be on in case the app is started without logging
             logging.disable(logging.INFO)
 
-            log.critical(f"Uncaught exception:\n {log_msg}")
+            log.critical(
+                f"Uncaught exception:\n {log_msg}",
+                exc_info=(exc_type, exc_value, exc_traceback),
+            )
             self.exception_signal.emit(log_msg, str(log_file))
 
     @staticmethod
