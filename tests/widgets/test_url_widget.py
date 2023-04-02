@@ -7,8 +7,13 @@ from PySide6.QtTest import QSignalSpy
 from PySide6.QtWidgets import QLineEdit, QPushButton, QSpinBox
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.form import ColumnWidget, FormField, IndexWidget, UrlWidget
-from pywr_editor.form.widgets.index_col_widget import IndexColWidget
+from pywr_editor.form import (
+    ColumnWidget,
+    FormField,
+    IndexColWidget,
+    IndexWidget,
+    UrlWidget,
+)
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import default_index_name, get_index_names
 from pywr_editor.widgets import ComboBox
