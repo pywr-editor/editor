@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import List, Tuple
 
 import pandas as pd
 import pytest
@@ -23,7 +22,7 @@ from tests.utils import close_message_box, model_path, resolve_model_path
 
 def df_from_h5(
     file: str, key: str, start: int = 0
-) -> Tuple[pd.DataFrame, List[str]]:
+) -> [pd.DataFrame, list[str]]:
     """
     Reads the DataFrame and reset the index.
     :param file: The H5 file.
@@ -44,7 +43,8 @@ def df_from_h5(
 
 class TestDialogParameterUrlWidget:
     """
-    Tests the UrlWidget in the parameter dialog. This is used for anonymous tables only.
+    Tests the UrlWidget in the parameter dialog. This is used for anonymous tables
+    only.
     """
 
     model_file = resolve_model_path("model_dialog_parameters_url_widget.json")
@@ -253,7 +253,7 @@ class TestDialogParameterUrlWidget:
         url_field: FormField = selected_page.findChild(FormField, "url")
         # noinspection PyTypeChecker
         url_widget: UrlWidget = url_field.widget
-        dialog.hide()
+        dialog.show()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
 
