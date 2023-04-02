@@ -1,6 +1,6 @@
 import pandas as pd
 import pytest
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QTimer
 from PySide6.QtTest import QSignalSpy
 from PySide6.QtWidgets import QPushButton
 
@@ -8,7 +8,7 @@ from pywr_editor.dialogs import ParametersDialog
 from pywr_editor.form import FormField, TableSelectorWidget
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import default_index_name, get_index_names
-from tests.utils import model_path, resolve_model_path
+from tests.utils import close_message_box, model_path, resolve_model_path
 from tests.widgets.test_url_widget import df_from_h5
 
 
@@ -167,85 +167,85 @@ class TestDialogParameterTableSelectorWidget:
         assert table_widget.file_ext == ".csv"
         assert table_widget.table.equals(pd.read_csv(table_file))
 
-    # @pytest.mark.parametrize(
-    #     "param_name, selected_table, init_message, validation_message",
-    #     [
-    #         (
-    #             "param_non_existing_file",
-    #             "non_existing_file",
-    #             "The table file does not exist",
-    #             "The table file is not valid",
-    #         ),
-    #         (
-    #             "param_file_ext_not_supported",
-    #             "file_ext_not_supported",
-    #             "is not supported",
-    #             "The table file is not valid",
-    #         ),
-    #         (
-    #             "param_file_non_parsable",
-    #             "non_parsable_table",
-    #             "",
-    #             "The table file is not valid",
-    #         ),
-    #         (
-    #             "param_wrong_table_type",
-    #             None,
-    #             "must be a string",
-    #             "must select a valid table",
-    #         ),
-    #     ],
-    # )
-    # def test_invalid_table_file(
-    #     self,
-    #     qtbot,
-    #     model_config,
-    #     param_name,
-    #     selected_table,
-    #     init_message,
-    #     validation_message,
-    # ):
-    #     """
-    #     Test the widget when the table file does not exist or is not supported.
-    #     """
-    #     dialog = ParametersDialog(model_config, param_name)
-    #     selected_page = dialog.pages_widget.currentWidget()
-    #     table_field: FormField = selected_page.findChild(FormField, "table")
-    #     # noinspection PyTypeChecker
-    #     table_widget: TableSelectorWidget = table_field.widget
-    #     dialog.show()
-    #
-    #     assert selected_page.findChild(FormField, "name").value() == param_name
-    #
-    #     # 1. the table selector field is enabled but with errors or warnings
-    #     assert table_widget.isEnabled() is True
-    #     assert table_widget.get_value() == selected_table
-    #     assert init_message in table_field.message.text()
-    #     assert table_widget.table is None
-    #
-    #     # 2. check buttons status
-    #     assert table_widget.open_button.isEnabled() is False
-    #     # if file is not available, user can reload if it is later created
-    #     if param_name == "param_non_existing_file":
-    #         assert table_widget.reload_button.isEnabled() is True
-    #     # if extension is wrong or file is not parsable, refresh is disabled
-    #     else:
-    #         assert table_widget.reload_button.isEnabled() is False
-    #
-    #     # 3. test validate method
-    #     output = table_widget.validate(
-    #         "table", "Table", table_widget.get_value()
-    #     )
-    #     assert output.validation is False
-    #     assert validation_message in output.error_message
-    #
-    #     # 4. test form validation - False is returned with an error message set on
-    #     # the field
-    #     QTimer.singleShot(100, close_message_box)
-    #     form_data = table_widget.form.validate()
-    #     assert form_data is False
-    #     assert validation_message in table_field.message.text()
-    #
+    @pytest.mark.parametrize(
+        "param_name, selected_table, init_message, validation_message",
+        [
+            (
+                "param_non_existing_file",
+                "non_existing_file",
+                "The table file does not exist",
+                "The table file is not valid",
+            ),
+            (
+                "param_file_ext_not_supported",
+                "file_ext_not_supported",
+                "is not supported",
+                "The table file is not valid",
+            ),
+            (
+                "param_file_non_parsable",
+                "non_parsable_table",
+                "",
+                "The table file is not valid",
+            ),
+            (
+                "param_wrong_table_type",
+                None,
+                "must be a string",
+                "must select a valid table",
+            ),
+        ],
+    )
+    def test_invalid_table_file(
+        self,
+        qtbot,
+        model_config,
+        param_name,
+        selected_table,
+        init_message,
+        validation_message,
+    ):
+        """
+        Test the widget when the table file does not exist or is not supported.
+        """
+        dialog = ParametersDialog(model_config, param_name)
+        selected_page = dialog.pages_widget.currentWidget()
+        table_field: FormField = selected_page.findChild(FormField, "table")
+        # noinspection PyTypeChecker
+        table_widget: TableSelectorWidget = table_field.widget
+        dialog.show()
+
+        assert selected_page.findChild(FormField, "name").value() == param_name
+
+        # 1. the table selector field is enabled but with errors or warnings
+        assert table_widget.isEnabled() is True
+        assert table_widget.get_value() == selected_table
+        assert init_message in table_field.message.text()
+        assert table_widget.table is None
+
+        # 2. check buttons status
+        assert table_widget.open_button.isEnabled() is False
+        # if file is not available, user can reload if it is later created
+        if param_name == "param_non_existing_file":
+            assert table_widget.reload_button.isEnabled() is True
+        # if extension is wrong or file is not parsable, refresh is disabled
+        else:
+            assert table_widget.reload_button.isEnabled() is False
+
+        # 3. test validate method
+        output = table_widget.validate(
+            "table", "Table", table_widget.get_value()
+        )
+        assert output.validation is False
+        assert validation_message in output.error_message
+
+        # 4. test form validation - False is returned with an error message set on
+        # the field
+        QTimer.singleShot(100, close_message_box)
+        form_data = table_widget.form.validate()
+        assert form_data is False
+        assert validation_message in table_field.message.text()
+
     # def test_invalid_table_name(self, qtbot, model_config):
     #     """
     #     Test the widget when the provided table name does not exist in the model

@@ -290,7 +290,7 @@ class TestDialogParameterUrlWidget:
         url_field: FormField = selected_page.findChild(FormField, "url")
         # noinspection PyTypeChecker
         url_widget: UrlWidget = url_field.widget
-        dialog.hide()
+        dialog.show()
 
         # 1. Init signal spy
         # noinspection PyTypeChecker
@@ -332,7 +332,7 @@ class TestDialogParameterUrlWidget:
         url_field: FormField = selected_page.findChild(FormField, "url")
         # noinspection PyTypeChecker
         url_widget: UrlWidget = url_field.widget
-        dialog.hide()
+        dialog.show()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
 
@@ -374,7 +374,7 @@ class TestDialogParameterUrlWidget:
         # noinspection PyTypeChecker
         url_widget: UrlWidget = url_field.widget
         spy = QSignalSpy(url_widget.updated_table)
-        dialog.hide()
+        dialog.show()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
 
@@ -394,7 +394,7 @@ class TestDialogParameterUrlWidget:
         # noinspection PyTypeChecker
         url_widget: UrlWidget = url_field.widget
         spy = QSignalSpy(url_widget.index_changed)
-        dialog.hide()
+        dialog.show()
 
         # trigger index_changed Signal by selecting Column 3
         index_col_widget: IndexColWidget = selected_page.findChild(
@@ -424,7 +424,7 @@ class TestDialogParameterUrlWidget:
         # noinspection PyTypeChecker
         url_widget: UrlWidget = url_field.widget
         spy = QSignalSpy(url_widget.updated_table)
-        dialog.hide()
+        dialog.show()
 
         url_widget.reset()
 
