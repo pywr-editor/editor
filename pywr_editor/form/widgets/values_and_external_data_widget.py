@@ -38,6 +38,7 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
         variable_names: list[str] = None,
         row_number_label: str = "Row",
         min_total_values: int | None = None,
+        transpose_values: bool = False,
         upper_bound: float | None = None,
         lower_bound: float | None = None,
     ):
@@ -55,6 +56,9 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
         :param row_number_label: The column label for the row numbers. Default to Row.
         :param min_total_values: The minimum total values each variable must have in
         the table. Default to None to avoid any initial check and form validation.
+        :param transpose_values: Transpose the values. Use True, when the each nested
+        list represents a table row, False when the lists represent a table column.
+        Default to False.
         :param lower_bound: The allowed minimum number. Optional.
         :param upper_bound: The allowed maximum number. Optional.
         """
@@ -93,6 +97,7 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
             show_row_numbers=show_row_numbers,
             row_number_label=row_number_label,
             min_total_values=min_total_values,
+            transpose_values=transpose_values,
         )
         if lower_bound:
             table_args["lower_bound"] = lower_bound
