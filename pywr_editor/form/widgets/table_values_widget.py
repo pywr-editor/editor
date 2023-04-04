@@ -42,6 +42,7 @@ class TableValuesWidget(FormCustomWidget):
         upper_bound: float = pow(10, 6),
         lower_bound: float = pow(10, -6),
         precision: int = 4,
+        transpose_values: bool = False,
         use_integers_only: bool = False,
         scientific_notation: bool = False,
     ):
@@ -66,6 +67,9 @@ class TableValuesWidget(FormCustomWidget):
         :param enforce_bounds: Returns a warning if one number is outside the lower and
         upper bounds.
         :param precision: The precision. Default to 4.
+        :param transpose_values: Transpose the values. Use True, when the each nested
+        list represents a table row, False when the lists represent a table column.
+        Default to False. The widget re-transposes the final values.
         :param use_integers_only: Force the widget to use integers only. Precision is
         set to 0 and warning is shown if floats are provided. Default to False.
         :param scientific_notation: Enable scientific notation. Default to False.
@@ -79,6 +83,7 @@ class TableValuesWidget(FormCustomWidget):
         self.show_row_numbers = show_row_numbers
         self.min_total_values = min_total_values
         self.exact_total_values = exact_total_values
+        self.transpose_values = transpose_values
         self.use_integers_only = use_integers_only
 
         super().__init__(name=name, value=value, parent=parent)
@@ -332,6 +337,10 @@ class TableValuesWidget(FormCustomWidget):
                     message = new_message
             values = variable_values
 
+            # transpose
+            if self.transpose_values:
+                values = list(map(list, zip(*values)))
+
         if message is not None:
             self.logger.debug(message)
 
@@ -354,8 +363,12 @@ class TableValuesWidget(FormCustomWidget):
         values.
         """
         value_dict = {}
+        values = self.model.values
+        if self.transpose_values:
+            values = list(map(list, zip(*values)))
+
         for vi, variable_name in enumerate(self.model.labels):
-            value_dict[variable_name] = self.model.values[vi]
+            value_dict[variable_name] = values[vi]
 
         return value_dict
 
