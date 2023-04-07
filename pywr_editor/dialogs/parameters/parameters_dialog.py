@@ -29,6 +29,12 @@ class ParametersDialog(SettingsDialog):
         super().__init__(parent)
         self.app = parent
 
+        if model_config.load_error:
+            raise ValueError(
+                f"The model '{model_config.json_file}' cannot be loaded "
+                + f"because: {model_config.load_error}"
+            )
+
         # pages - init before list
         self.pages_widget = ParameterPagesWidget(
             model_config=model_config,
