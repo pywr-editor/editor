@@ -104,7 +104,12 @@ class TestDialogParameterValuesAndExternalDataWidget:
         ],
     )
     def test_valid(
-        self, qtbot, value, field_args, combo_box_key, expected_value
+        self,
+        qtbot,
+        value,
+        field_args: dict | None,
+        combo_box_key,
+        expected_value,
     ):
         """
         Tests that the field is loaded correctly.
@@ -344,6 +349,13 @@ class TestDialogParameterValuesAndExternalDataWidget:
         widget = self.widget(
             value=value,
         )
+
+        # register app to test field visibility
+        app = QMainWindow()
+        app.setCentralWidget(widget)
+        qtbot.addWidget(app)
+        app.show()
+        qtbot.waitForWindowShown(app)
 
         # 1. Open the dialog
         select_button: PushIconButton = (

@@ -65,7 +65,7 @@ class TestDialogThresholdValuesWidget:
         Tests that the warning message is shown when the values are not valid.
         """
         dialog = ParametersDialog(model_config, param_name)
-        dialog.hide()
+        dialog.show()
 
         selected_page = dialog.pages_widget.currentWidget()
         assert selected_page.findChild(FormField, "name").value() == param_name
