@@ -98,15 +98,6 @@ class TestDialogParameterColumnWidget:
         },
     }
 
-    @staticmethod
-    def get_model_config(model_file: str) -> ModelConfig:
-        """
-        Initialises the model configuration.
-        :param model_file: The JSON file to load.
-        :return: The ModelConfig instance.
-        """
-        return ModelConfig(resolve_model_path(model_file))
-
     def test_columns(
         self, qtbot, model_file, widget_name, param_name, expected, warning_msg
     ):
@@ -114,7 +105,7 @@ class TestDialogParameterColumnWidget:
         Tests that the field loads the columns and sets the selected column using the
         UlrWidget or TableSelectorWidget.
         """
-        model_config = self.get_model_config(model_file)
+        model_config = ModelConfig(resolve_model_path(model_file))
 
         all_columns = {"Column 1", "Column 2", "Column 3", "Column 4"}
         dialog = ParametersDialog(model_config, param_name)
@@ -238,7 +229,7 @@ class TestDialogParameterColumnWidget:
         """
         Tests when the column names are integers.
         """
-        model_config = self.get_model_config(model_file)
+        model_config = ModelConfig(resolve_model_path(model_file))
 
         dialog = ParametersDialog(model_config, param_name)
         selected_page = dialog.pages_widget.currentWidget()
@@ -276,7 +267,7 @@ class TestDialogParameterColumnWidget:
         Tests the widget when the table file does not exist and the table is not
         available. This also tests the updated_table Signal.
         """
-        model_config = self.get_model_config(model_file)
+        model_config = ModelConfig(resolve_model_path(model_file))
 
         dialog = ParametersDialog(model_config, param_name)
         selected_page = dialog.pages_widget.currentWidget()
@@ -380,7 +371,7 @@ class TestDialogParameterColumnWidget:
         the only way to reload a table is via the Refresh button - table parsing
         options cannot be changed.
         """
-        model_config = self.get_model_config(self.model_files["url"])
+        model_config = ModelConfig(resolve_model_path(self.model_files["url"]))
 
         param_name = "param_empty_sheet"
         dialog = ParametersDialog(model_config, param_name)
@@ -428,7 +419,7 @@ class TestDialogParameterColumnWidget:
         Checks that, when the DataFrame index is changed via IndexColWidget, the
         columns list is updated. This only applies to anonymous tables (with UrlWidget).
         """
-        model_config = self.get_model_config(self.model_files["url"])
+        model_config = ModelConfig(resolve_model_path(self.model_files["url"]))
 
         param_name = "param_with_column_str"
         dialog = ParametersDialog(model_config, param_name)
@@ -489,7 +480,7 @@ class TestDialogParameterColumnWidget:
         Checks that, when the user changes the selected column, the internal value is
         updated. This test does not depend on any table source widget.
         """
-        model_config = self.get_model_config(self.model_files["url"])
+        model_config = ModelConfig(resolve_model_path(self.model_files["url"]))
 
         dialog = ParametersDialog(model_config, param_name)
         selected_page = dialog.pages_widget.currentWidget()
@@ -524,7 +515,7 @@ class TestDialogParameterColumnWidget:
         Tests that a warning message is shown, if the table does not contain any
         column. This test does not depend on any table source widget.
         """
-        model_config = self.get_model_config(self.model_files["url"])
+        model_config = ModelConfig(resolve_model_path(self.model_files["url"]))
 
         param_name = "param_empty_sheet"
         dialog = ParametersDialog(model_config, param_name)
@@ -569,7 +560,7 @@ class TestDialogParameterColumnWidget:
         """
         Tests the widget with H5 files.
         """
-        model_config = self.get_model_config(model_file)
+        model_config = ModelConfig(resolve_model_path(model_file))
 
         dialog = ParametersDialog(model_config, param_name)
         selected_page = dialog.pages_widget.currentWidget()
@@ -637,7 +628,7 @@ class TestDialogParameterColumnWidget:
         """
         Tests field validation when the field is optional.
         """
-        model_config = self.get_model_config(self.model_files["url"])
+        model_config = ModelConfig(resolve_model_path(self.model_files["url"]))
 
         param_name = "param_with_column_str"
         dialog = ParametersDialog(model_config, param_name)
