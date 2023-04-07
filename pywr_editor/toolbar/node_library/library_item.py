@@ -39,7 +39,6 @@ class LibraryItem(QGraphicsItemGroup):
         :param item_class_type: The name of the graphical node or shape class.
         :param name: The name of the node or shape to show under the graphical item.
         :param node_type: For nodes, the pywr node type.
-        :return None
         """
         super().__init__()
         self.item_class_type = item_class_type
