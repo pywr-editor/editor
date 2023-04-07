@@ -7,20 +7,21 @@ from PySide6.QtGui import QPen
 from pywr_editor.style import Color
 
 from ..base_node import BaseNode
-from .pywr_node import PywrNode
 
 if TYPE_CHECKING:
     from pywr_editor.schematic import SchematicNode
 
 
-class AggregatedNode(BaseNode, PywrNode):
+class AggregatedNode(BaseNode):
+    is_pywr = True
+
     def __init__(self, parent: "SchematicNode"):
         """
         Initialises the class for an aggregated node.
         :param parent: The parent node.
         :return None
         """
-        super().__init__(parent=parent)
+        super().__init__(parent)
 
         self.size: list[int, int] = [25, 25]
         self.radius: float = self.size[0] / 2

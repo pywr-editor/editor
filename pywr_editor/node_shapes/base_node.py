@@ -13,7 +13,10 @@ if TYPE_CHECKING:
 
 
 class BaseNode(QGraphicsItemGroup):
+    is_pywr: bool = False
+    """ Whether the shape represents a Pywr node """
     size: list[int] = [24, 24]
+    """ The node size as 2D list of ints """
 
     def __init__(
         self,

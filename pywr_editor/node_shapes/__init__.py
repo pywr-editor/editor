@@ -20,7 +20,6 @@ from .custom.works import Works
 
 
 # Nodes - pywr
-from .pywr.pywr_node import PywrNode
 from .pywr.reservoir import Reservoir
 from .pywr.storage import Storage
 from .pywr.virtual_storage import VirtualStorage
