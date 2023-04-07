@@ -28,5 +28,8 @@ jobs:
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
       - name: Run Tests
+        # run tests separately to prevent the pipeline from failing
+        # when too many dialog instances are run
         run: |
-          pytest tests
+          pytest -s .\tests\ --ignore=.\tests\widgets_dataframe
+          pytest -s .\tests\widgets_dataframe
