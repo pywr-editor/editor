@@ -388,7 +388,7 @@ class TableSelectorWidget(FormCustomWidget):
                         and self.table is None
                     ):
                         self.logger.debug("Failed to open the table file")
-                        raise ValueError
+                        raise ValueError("Extension not supported")
                 except Exception:
                     self.logger.debug(
                         "Cannot parse the file due to Exception: "
