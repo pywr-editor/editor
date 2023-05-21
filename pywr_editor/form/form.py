@@ -18,12 +18,7 @@ from PySide6.QtWidgets import (
 )
 
 from pywr_editor.utils import Logging, get_signal_sender, humanise_label
-from pywr_editor.widgets import (
-    CheckableComboBox,
-    ComboBox,
-    SpinBox,
-    ToggleSwitchWidget,
-)
+from pywr_editor.widgets import CheckableComboBox, ComboBox, SpinBox, ToggleSwitchWidget
 
 from .field_config import FieldConfig
 from .form_field import FormField
@@ -131,9 +126,7 @@ class Form(QScrollArea):
         return None
 
     @staticmethod
-    def get_dict_value(
-        key: str, dict_values: dict
-    ) -> str | float | bool | None:
+    def get_dict_value(key: str, dict_values: dict) -> str | float | bool | None:
         """
         Gets a value from a dictionary containing the form field values.
         :param key: The key to extract the value of.
@@ -231,9 +224,7 @@ class Form(QScrollArea):
         :param section_data: A dictionary with additional data to pass to the class.
         :return: None
         """
-        section_class_instance = section_class(
-            form=self, section_data=section_data
-        )
+        section_class_instance = section_class(form=self, section_data=section_data)
         self.add_section(section_class_instance.data, section_class_instance)
 
     def _render_partial_section(
@@ -273,9 +264,7 @@ class Form(QScrollArea):
         row = 0
         for field_dict in section_data:
             name = field_dict["name"]
-            label = QLabel(
-                field_dict.get("label", self._get_field_label(field_dict))
-            )
+            label = QLabel(field_dict.get("label", self._get_field_label(field_dict)))
             base_label_style = "font-weight: bold"
             label.setStyleSheet(f"QLabel {{ {base_label_style} }}")
 
@@ -567,9 +556,7 @@ class Form(QScrollArea):
         :return: None
         """
         if not self.save_button.isEnabled():
-            self.logger.debug(
-                f"Save button enabled because {get_signal_sender(self)}"
-            )
+            self.logger.debug(f"Save button enabled because {get_signal_sender(self)}")
             self.save_button.setEnabled(True)
 
 

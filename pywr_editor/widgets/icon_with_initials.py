@@ -2,24 +2,13 @@ from typing import Literal
 
 import PySide6
 from PySide6.QtCore import QPoint, QRect
-from PySide6.QtGui import (
-    QFont,
-    QIconEngine,
-    QImage,
-    QPainter,
-    QPen,
-    QPixmap,
-    Qt,
-    qRgba,
-)
+from PySide6.QtGui import QFont, QIconEngine, QImage, QPainter, QPen, QPixmap, Qt, qRgba
 
 from pywr_editor.style import Color, ColorName
 
 
 class IconWithInitials(QIconEngine):
-    def __init__(
-        self, initials: str | None, shape: Literal["rectangle", "circle"]
-    ):
+    def __init__(self, initials: str | None, shape: Literal["rectangle", "circle"]):
         """
         Initialises the class.
         :param initials: The initials associated to the icon.
@@ -47,9 +36,7 @@ class IconWithInitials(QIconEngine):
         """
         image = QImage(size, QImage.Format_ARGB32)
         image.fill(qRgba(0, 0, 0, 0))
-        pixmap = QPixmap.fromImage(
-            image, Qt.ImageConversionFlag.NoFormatConversion
-        )
+        pixmap = QPixmap.fromImage(image, Qt.ImageConversionFlag.NoFormatConversion)
         painter = QPainter(pixmap)
         self.paint(painter, QRect(QPoint(0, 0), size), mode, state)
         return pixmap

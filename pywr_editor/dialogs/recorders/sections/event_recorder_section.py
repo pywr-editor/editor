@@ -97,6 +97,4 @@ class EventRecorderSection(AbstractRecorderSection):
         :param form_data: The form data.
         :return: None
         """
-        self.form.find_field_by_name("threshold_type").widget.store_threshold(
-            form_data
-        )
+        self.form.find_field_by_name("threshold_type").widget.store_threshold(form_data)

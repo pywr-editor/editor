@@ -50,9 +50,7 @@ class ModelComponentPickerDialog(QDialog):
         self.additional_data = additional_data
 
         if not self.is_parameter and not self.is_recorder:
-            raise ValueError(
-                "The component_type can only be 'parameter' or 'recorder'"
-            )
+            raise ValueError("The component_type can only be 'parameter' or 'recorder'")
 
         self.logger = Logging().logger(self.__class__.__name__)
         self.logger.debug(f"Loading dialog for {component_type}")
@@ -66,14 +64,10 @@ class ModelComponentPickerDialog(QDialog):
         # form must have a valid config instance
         if component_obj is None:
             if self.is_parameter:
-                component_obj = getattr(pywr_editor.model, "ParameterConfig")(
-                    props={}
-                )
+                component_obj = getattr(pywr_editor.model, "ParameterConfig")(props={})
 
             elif self.is_recorder:
-                component_obj = getattr(pywr_editor.model, "RecorderConfig")(
-                    props={}
-                )
+                component_obj = getattr(pywr_editor.model, "RecorderConfig")(props={})
 
         # get component keys to filter
         include_comp_key = None
@@ -154,9 +148,7 @@ class ModelComponentPickerDialog(QDialog):
             del form_data["comp_source"]
 
         # enable the save button in the parent dialog
-        save_button: QPushButton = self.parent().findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = self.parent().findChild(QPushButton, "save_button")
         if save_button:
             save_button.setEnabled(True)
 

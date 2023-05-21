@@ -72,9 +72,7 @@ class TestParamConfig:
         assert parameter_config.key == "constant"
         assert parameter_config.humanised_type == "Constant"
 
-    @pytest.mark.parametrize(
-        "param_name", ["custom_parameter", "custom_parameter2"]
-    )
+    @pytest.mark.parametrize("param_name", ["custom_parameter", "custom_parameter2"])
     def test_custom_parameters(self, param_name):
         """
         Tests that the correct value is returned for the is_a_model_parameter and

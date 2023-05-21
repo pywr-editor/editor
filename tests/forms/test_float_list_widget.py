@@ -129,9 +129,7 @@ class TestDialogParameterFloatListWidget:
             else:
                 assert widget.get_value() == values
                 if isinstance(values, list):
-                    assert all(
-                        [isinstance(v, value_types) for v in widget.get_value()]
-                    )
+                    assert all([isinstance(v, value_types) for v in widget.get_value()])
                 else:
                     assert isinstance(widget.get_value(), value_types)
         else:
@@ -165,9 +163,7 @@ class TestDialogParameterFloatListWidget:
                 assert widget.get_value() is widget.get_default_value()
             else:
                 assert widget.get_value() == values
-                assert all(
-                    [isinstance(v, value_types) for v in widget.get_value()]
-                )
+                assert all([isinstance(v, value_types) for v in widget.get_value()])
         else:
             assert message in warning_message
             assert widget.get_value() == widget.get_default_value()
@@ -196,9 +192,7 @@ class TestDialogParameterFloatListWidget:
                 assert widget.get_value() is widget.get_default_value()
             else:
                 assert widget.get_value() == values
-                assert all(
-                    [isinstance(v, value_types) for v in widget.get_value()]
-                )
+                assert all([isinstance(v, value_types) for v in widget.get_value()])
         else:
             assert message in warning_message
             assert widget.get_value() == widget.get_default_value()

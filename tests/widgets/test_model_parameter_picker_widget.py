@@ -71,9 +71,7 @@ class TestDialogModelParameterPickerWidget:
         )
         model_params_field = form.find_field_by_name("type")
         # noinspection PyTypeChecker
-        model_params_widget: ModelParameterPickerWidget = (
-            model_params_field.widget
-        )
+        model_params_widget: ModelParameterPickerWidget = model_params_field.widget
         assert "no parameters available" in model_params_field.message.text()
         assert len(model_params_widget.combo_box.all_items) == 1
 
@@ -93,18 +91,14 @@ class TestDialogModelParameterPickerWidget:
             ("custom_param", ["my", "aggregatedindex"], 1),
         ],
     )
-    def test_valid_param_types(
-        self, qtbot, param_name, filtered_keys, total_params
-    ):
+    def test_valid_param_types(self, qtbot, param_name, filtered_keys, total_params):
         """
         Tests the widget when a valid parameter name is used.
         """
         form = self.form(param_name, filtered_keys)
         model_params_field = form.find_field_by_name("type")
         # noinspection PyTypeChecker
-        model_params_widget: ModelParameterPickerWidget = (
-            model_params_field.widget
-        )
+        model_params_widget: ModelParameterPickerWidget = model_params_field.widget
 
         assert model_params_field.message.text() == ""
         out = model_params_widget.validate(
@@ -153,9 +147,7 @@ class TestDialogModelParameterPickerWidget:
         form = self.form(param_name, filtered_keys)
         model_params_field = form.find_field_by_name("type")
         # noinspection PyTypeChecker
-        model_params_widget: ModelParameterPickerWidget = (
-            model_params_field.widget
-        )
+        model_params_widget: ModelParameterPickerWidget = model_params_field.widget
 
         assert message in model_params_field.message.text()
         out = model_params_widget.validate(

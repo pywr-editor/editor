@@ -10,12 +10,7 @@ from pywr_editor.form import (
     TableSelectorWidget,
     UrlWidget,
 )
-from pywr_editor.utils import (
-    Logging,
-    are_columns_valid,
-    get_columns,
-    get_signal_sender,
-)
+from pywr_editor.utils import Logging, are_columns_valid, get_columns, get_signal_sender
 from pywr_editor.widgets import ComboBox
 
 
@@ -139,9 +134,7 @@ class ColumnWidget(FormCustomWidget):
                         + "the table"
                     )
                 else:
-                    self.logger.debug(
-                        f"Using final value: '{selected_col_name}'"
-                    )
+                    self.logger.debug(f"Using final value: '{selected_col_name}'")
                     selected_col_name = value
 
         return selected_col_name
@@ -232,15 +225,11 @@ class ColumnWidget(FormCustomWidget):
                 "The table does not contain any column. Keeping field disabled "
                 + "with warning"
             )
-            self.form_field.set_warning_message(
-                "The table does not contain any column"
-            )
+            self.form_field.set_warning_message("The table does not contain any column")
         # populate the field and enabled it
         else:
             items = sorted(list(columns))
-            self.logger.debug(
-                f"Filling field with: {', '.join(map(str, items))}"
-            )
+            self.logger.debug(f"Filling field with: {', '.join(map(str, items))}")
             for col in items:
                 # force to string and store type
                 self.combo_box.addItem(str(col), type(col))
@@ -273,11 +262,7 @@ class ColumnWidget(FormCustomWidget):
         :return: The column or none if the selection is invalid.
         """
         table = self.table
-        if (
-            are_columns_valid(table) is False
-            or self.value is False
-            or self.value == ""
-        ):
+        if are_columns_valid(table) is False or self.value is False or self.value == "":
             return None
         return self.value
 

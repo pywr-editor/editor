@@ -47,9 +47,7 @@ def pywr_assets():
         bold=True,
     )
     get_parameters()
-    typer.secho(
-        ">> Creating node names dictionary", fg=typer.colors.GREEN, bold=True
-    )
+    typer.secho(">> Creating node names dictionary", fg=typer.colors.GREEN, bold=True)
     get_nodes()
     typer.secho(
         ">> Creating recorder names dictionary",
@@ -58,9 +56,7 @@ def pywr_assets():
     )
     get_recorders()
 
-    qrc_file = (
-        Path(__file__).parent / "pywr_editor" / "assets" / "pywr_resources.qrc"
-    )
+    qrc_file = Path(__file__).parent / "pywr_editor" / "assets" / "pywr_resources.qrc"
     py_file = Path(__file__).parent / "pywr_editor" / "model" / "pywr_data.py"
     os.system(f'pyside6-rcc.exe "{qrc_file}" -o "{py_file}"')
 

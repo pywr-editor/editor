@@ -79,9 +79,7 @@ class RiverSplitWithGaugeSection(FormSection):
         :param form_data: The form data.
         :return: None
         """
-        widget: SlotsTableWidget = self.form.find_field_by_name(
-            "slots_field"
-        ).widget
+        widget: SlotsTableWidget = self.form.find_field_by_name("slots_field").widget
 
         # update slot names in edges
         widget.updated_slot_names_in_edge_helper()

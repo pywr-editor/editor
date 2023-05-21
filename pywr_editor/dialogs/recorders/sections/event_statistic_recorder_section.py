@@ -19,9 +19,7 @@ class EventStatisticRecorderSection(AbstractRecorderSection):
                 "field_args": {
                     "include_recorder_key": [
                         # get key for EventRecorder
-                        form.model_config.pywr_recorder_data.get_lookup_key(
-                            sub_class
-                        )
+                        form.model_config.pywr_recorder_data.get_lookup_key(sub_class)
                     ]
                     + form.model_config.includes.get_keys_with_subclass(
                         sub_class, "recorder"
@@ -36,9 +34,7 @@ class EventStatisticRecorderSection(AbstractRecorderSection):
                 "label": "Event aggregation function",
                 "field_type": EventStatisticAggFuncWidget,
                 "value": {
-                    "event_agg_func": form.get_recorder_dict_value(
-                        "event_agg_func"
-                    ),
+                    "event_agg_func": form.get_recorder_dict_value("event_agg_func"),
                     "agg_func": form.get_recorder_dict_value("agg_func"),
                 },
                 "help_text": "For each scenario and event in the Event recorder, "
@@ -74,6 +70,4 @@ class EventStatisticRecorderSection(AbstractRecorderSection):
         :param form_data: The form data.
         :return: None
         """
-        self.form.find_field_by_name("threshold_type").widget.store_threshold(
-            form_data
-        )
+        self.form.find_field_by_name("threshold_type").widget.store_threshold(form_data)

@@ -79,9 +79,7 @@ class SchematicArrow(AbstractSchematicShape, QGraphicsLineItem):
         self.prev_position = self.scenePos().toTuple()
         self.update_handle_position()
 
-    def hoverMoveEvent(
-        self, event: PySide6.QtWidgets.QGraphicsSceneHoverEvent
-    ) -> None:
+    def hoverMoveEvent(self, event: PySide6.QtWidgets.QGraphicsSceneHoverEvent) -> None:
         """
         Change the cursor when the cursor is on the resize handle.
         :param event: The event instance.
@@ -122,9 +120,7 @@ class SchematicArrow(AbstractSchematicShape, QGraphicsLineItem):
 
         super().mousePressEvent(event)
 
-    def mouseMoveEvent(
-        self, event: PySide6.QtWidgets.QGraphicsSceneMouseEvent
-    ) -> None:
+    def mouseMoveEvent(self, event: PySide6.QtWidgets.QGraphicsSceneMouseEvent) -> None:
         """
         Resizes the shape.
         :param event: The event instance.
@@ -223,9 +219,7 @@ class SchematicArrow(AbstractSchematicShape, QGraphicsLineItem):
         if scene_moved_point.y() <= 0:
             scene_moved_point.setY(self.handle_size)
         if scene_moved_point.y() >= self.view.schematic_height:
-            scene_moved_point.setY(
-                self.view.schematic_height - self.handle_size
-            )
+            scene_moved_point.setY(self.view.schematic_height - self.handle_size)
 
         return self.mapFromScene(scene_moved_point)
 
@@ -311,12 +305,8 @@ class SchematicArrow(AbstractSchematicShape, QGraphicsLineItem):
         if not self.handles:
             return QPainterPath()
 
-        source_p1, source_p2 = self.get_shape_boundary_points(
-            Handles.SOURCE_POINT
-        )
-        target_p1, target_p2 = self.get_shape_boundary_points(
-            Handles.TARGET_POINT
-        )
+        source_p1, source_p2 = self.get_shape_boundary_points(Handles.SOURCE_POINT)
+        target_p1, target_p2 = self.get_shape_boundary_points(Handles.TARGET_POINT)
         path = QPainterPath()
         path.moveTo(source_p1)
         path.lineTo(source_p2)

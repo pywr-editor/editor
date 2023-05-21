@@ -5,12 +5,7 @@ from pandas import ExcelFile
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QHBoxLayout
 
-from pywr_editor.form import (
-    FormCustomWidget,
-    FormField,
-    FormValidation,
-    UrlWidget,
-)
+from pywr_editor.form import FormCustomWidget, FormField, FormValidation, UrlWidget
 from pywr_editor.utils import Logging, get_signal_sender
 from pywr_editor.widgets import ComboBox
 
@@ -112,9 +107,7 @@ class SheetNameWidget(FormCustomWidget):
         else:
             self.setEnabled(True)
             self.combo_box.addItems(self.excel_sheets)
-            self.logger.debug(
-                f"Added items to widget: {', '.join(self.excel_sheets)}"
-            )
+            self.logger.debug(f"Added items to widget: {', '.join(self.excel_sheets)}")
 
             if self.value is False or self.is_valid_sheet is False:
                 self.logger.debug(
@@ -224,9 +217,7 @@ class SheetNameWidget(FormCustomWidget):
 
         # sheets are not available
         if self.has_excel_sheet is False:
-            self.logger.debug(
-                "Sheet names are not available. Value not changed"
-            )
+            self.logger.debug("Sheet names are not available. Value not changed")
             selected_sheet_name = value
         # handle different value types for the selected sheet (as string or int)
         elif value is None:

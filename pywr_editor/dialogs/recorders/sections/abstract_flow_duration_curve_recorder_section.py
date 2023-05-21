@@ -46,9 +46,7 @@ class AbstractFlowDurationCurveRecorderSection(AbstractNumpyRecorderSection):
                     "row_number_label": "Percentile index",
                 },
                 "validate_fun": self.check_percentiles,
-                "value": {
-                    "values": form.get_recorder_dict_value("percentiles")
-                },
+                "value": {"values": form.get_recorder_dict_value("percentiles")},
                 "help_text": "The percentiles (between 0 and 100) to use in the "
                 + "calculation of the flow duration curve"
                 + additional_fdc_help_text,

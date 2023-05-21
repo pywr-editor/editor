@@ -154,9 +154,7 @@ class RecorderForm(ModelComponentForm):
                 {
                     "name": "constraint_lower_bounds",
                     "label": "Lower bound",
-                    "value": self.get_recorder_dict_value(
-                        "constraint_lower_bounds"
-                    ),
+                    "value": self.get_recorder_dict_value("constraint_lower_bounds"),
                     "field_type": FloatWidget,
                     "help_text": "If provided, the optimisation problem will be  "
                     "bounded below. Leave it empty not to constraint the recorder "
@@ -166,9 +164,7 @@ class RecorderForm(ModelComponentForm):
                 {
                     "name": "constraint_upper_bounds",
                     "label": "Upper bound",
-                    "value": self.get_recorder_dict_value(
-                        "constraint_upper_bounds"
-                    ),
+                    "value": self.get_recorder_dict_value("constraint_upper_bounds"),
                     "field_type": FloatWidget,
                     "help_text": "If provided, the optimisation problem will be "
                     + "bounded above. Leave it empty not to constraint the recorder "

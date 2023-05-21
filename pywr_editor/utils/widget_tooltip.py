@@ -1,12 +1,7 @@
 from dataclasses import dataclass
 from typing import Any
 
-from pywr_editor.model import (
-    ModelConfig,
-    NodeConfig,
-    ParameterConfig,
-    RecorderConfig,
-)
+from pywr_editor.model import ModelConfig, NodeConfig, ParameterConfig, RecorderConfig
 
 
 @dataclass
@@ -75,9 +70,7 @@ class ModelComponentTooltip:
         :return: The HTML code representing the table row.
         """
         keys_to_skip = ["position", "type", "color"]
-        if key in keys_to_skip or (
-            isinstance(comp_obj, NodeConfig) and key == "name"
-        ):
+        if key in keys_to_skip or (isinstance(comp_obj, NodeConfig) and key == "name"):
             return ""
 
         row = ""
@@ -102,9 +95,7 @@ class ModelComponentTooltip:
                     row += "</table></td>"
 
         elif isinstance(value, dict):
-            row += (
-                f"<tr><td>{humanised_key}:</td><td style='padding-left:10px'>"
-            )
+            row += f"<tr><td>{humanised_key}:</td><td style='padding-left:10px'>"
             row += "<table style='margin:0'>"
 
             # show type

@@ -50,9 +50,7 @@ class CSVRecorderSection(FormSection):
                 {
                     "name": "scenario_index",
                     "label": "Scenario/combination index",
-                    "value": self.form.get_recorder_dict_value(
-                        "scenario_index"
-                    ),
+                    "value": self.form.get_recorder_dict_value("scenario_index"),
                     "field_type": "integer",
                     "min_value": 0,
                     "default_value": 0,
@@ -90,9 +88,7 @@ class CSVRecorderSection(FormSection):
 
         return data_dict
 
-    def check_complevel(
-        self, name: str, label: str, value: int
-    ) -> FormValidation:
+    def check_complevel(self, name: str, label: str, value: int) -> FormValidation:
         """
         Checks the compression level.
         :param name: The field name.

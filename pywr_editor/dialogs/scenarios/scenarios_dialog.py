@@ -49,9 +49,7 @@ class ScenariosDialog(SettingsDialog):
         # select a scenario
         if selected_scenario_name is not None:
             # load the page and the form fields
-            found = self.pages.set_current_widget_by_name(
-                selected_scenario_name
-            )
+            found = self.pages.set_current_widget_by_name(selected_scenario_name)
             # do not load the form is the parameter is not found
             if found is False:
                 return

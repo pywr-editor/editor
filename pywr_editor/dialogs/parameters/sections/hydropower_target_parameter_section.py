@@ -54,9 +54,7 @@ class HydropowerTargetParameterSection(FormSection):
                     "name": "turbine_elevation",
                     "field_type": FloatWidget,
                     "field_args": {"min_value": 0},
-                    "value": self.form.get_param_dict_value(
-                        "turbine_elevation"
-                    ),
+                    "value": self.form.get_param_dict_value("turbine_elevation"),
                     "default_value": 0,
                     "help_text": "Elevation of the turbine",
                 },
@@ -89,9 +87,7 @@ class HydropowerTargetParameterSection(FormSection):
                     "label": " Flow unit conversion factor",
                     "field_type": FloatWidget,
                     "field_args": {"min_value": 0},
-                    "value": self.form.get_param_dict_value(
-                        "flow_unit_conversion"
-                    ),
+                    "value": self.form.get_param_dict_value("flow_unit_conversion"),
                     "default_value": 1,
                     "help_text": "The hydropower equation needs the flow in m<sup>3"
                     + "</sup>/day. Use this conversion factor to convert the flow "
@@ -103,9 +99,7 @@ class HydropowerTargetParameterSection(FormSection):
                     "label": " Energy unit conversion factor",
                     "field_type": FloatWidget,
                     "field_args": {"min_value": 0},
-                    "value": self.form.get_param_dict_value(
-                        "energy_unit_conversion "
-                    ),
+                    "value": self.form.get_param_dict_value("energy_unit_conversion "),
                     "default_value": pow(10, -6),
                     "help_text": "Convert the power unit used in the hydropower "
                     + "equation. Default to 1e-6 to use MJ/day as input. See the "

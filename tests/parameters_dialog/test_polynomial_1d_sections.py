@@ -5,9 +5,7 @@ from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import QPushButton
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.dialogs.parameters.parameter_page_widget import (
-    ParameterPageWidget,
-)
+from pywr_editor.dialogs.parameters.parameter_page_widget import ParameterPageWidget
 from pywr_editor.form import (
     FormField,
     NodePickerWidget,
@@ -24,9 +22,7 @@ class TestDialogParameterPolynomial1DParameterSection:
     Tests the sections for the Polynomial1DParameter.
     """
 
-    model_file = resolve_model_path(
-        "model_dialog_parameter_polynomial_1d_section.json"
-    )
+    model_file = resolve_model_path("model_dialog_parameter_polynomial_1d_section.json")
 
     @pytest.fixture()
     def model_config(self) -> ModelConfig:
@@ -69,23 +65,15 @@ class TestDialogParameterPolynomial1DParameterSection:
         # noinspection PyUnresolvedReferences
         assert selected_page.findChild(FormField, "name").value() == param_name
 
-        storage: StoragePickerWidget = form.find_field_by_name(
-            "storage_node"
-        ).widget
+        storage: StoragePickerWidget = form.find_field_by_name("storage_node").widget
         node: NodePickerWidget = form.find_field_by_name("node").widget
-        parameter: ParameterLineEditWidget = form.find_field_by_name(
-            "parameter"
-        ).widget
+        parameter: ParameterLineEditWidget = form.find_field_by_name("parameter").widget
 
         # noinspection PyTypeChecker
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
 
         # 1. Save form w/o independent variable
-        self.validate(
-            qtbot, save_button, "must provide the independent variable"
-        )
+        self.validate(qtbot, save_button, "must provide the independent variable")
 
         # 2. Set storage_node
         storage.combo_box.setCurrentText("Reservoir (Storage)")
@@ -98,9 +86,7 @@ class TestDialogParameterPolynomial1DParameterSection:
         self.validate(qtbot, save_button, "can provide only one type")
 
         # 4. Set all
-        parameter.parameter_obj = ParameterConfig(
-            {"type": "constant", "value": 5}
-        )
+        parameter.parameter_obj = ParameterConfig({"type": "constant", "value": 5})
         self.validate(qtbot, save_button, "can provide only one type")
 
         # 5. Clear parameter and storage_node

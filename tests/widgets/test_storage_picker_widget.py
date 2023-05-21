@@ -11,9 +11,7 @@ class TestDialogStoragePickerWidget:
     Tests the ModelNodePickerWidget and StoragePickerWidget.
     """
 
-    model_file = resolve_model_path(
-        "model_dialog_parameter_storage_picker_widget.json"
-    )
+    model_file = resolve_model_path("model_dialog_parameter_storage_picker_widget.json")
 
     @pytest.fixture()
     def model_config(self) -> ModelConfig:
@@ -55,9 +53,7 @@ class TestDialogStoragePickerWidget:
 
         # check warning and validation
         assert storage_node_field.message.text() == ""
-        output = storage_node_widget.validate(
-            "", "", storage_node_widget.get_value()
-        )
+        output = storage_node_widget.validate("", "", storage_node_widget.get_value())
         assert output.validation is True
 
     @pytest.mark.parametrize(
@@ -92,7 +88,5 @@ class TestDialogStoragePickerWidget:
         # check warning and validation
         assert message in storage_node_field.message.text()
 
-        output = storage_node_widget.validate(
-            "", "", storage_node_widget.get_value()
-        )
+        output = storage_node_widget.validate("", "", storage_node_widget.get_value())
         assert output.validation is False

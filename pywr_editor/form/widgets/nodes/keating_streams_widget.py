@@ -15,9 +15,7 @@ from .keating_streams_model import KeatingStreamsModel
  and the transmissivity coefficients.
 """
 
-value_type = TypeVar(
-    "value_type", bound=dict[str, list[list[float]] | list[float]]
-)
+value_type = TypeVar("value_type", bound=dict[str, list[list[float]] | list[float]])
 
 
 class KeatingStreamsWidget(FormCustomWidget):
@@ -39,9 +37,7 @@ class KeatingStreamsWidget(FormCustomWidget):
 
         levels, transmissivity, warning_message = self.sanitise_value(value)
 
-        self.model = KeatingStreamsModel(
-            levels=levels, transmissivity=transmissivity
-        )
+        self.model = KeatingStreamsModel(levels=levels, transmissivity=transmissivity)
         # noinspection PyUnresolvedReferences
         self.model.dataChanged.connect(self.on_value_change)
         # noinspection PyUnresolvedReferences
@@ -59,9 +55,7 @@ class KeatingStreamsWidget(FormCustomWidget):
         self.delete_stream_button = PushIconButton(
             icon=qta.icon("msc.remove"), label="Delete stream", small=True
         )
-        self.delete_stream_button.setToolTip(
-            "Delete the selected row in the table"
-        )
+        self.delete_stream_button.setToolTip("Delete the selected row in the table")
         self.delete_stream_button.setEnabled(False)
         # noinspection PyUnresolvedReferences
         self.delete_stream_button.clicked.connect(self.on_delete_row)
@@ -76,9 +70,7 @@ class KeatingStreamsWidget(FormCustomWidget):
         self.delete_level_button = PushIconButton(
             icon=qta.icon("msc.remove"), label="Delete level", small=True
         )
-        self.delete_level_button.setToolTip(
-            "Delete the selected column in the table"
-        )
+        self.delete_level_button.setToolTip("Delete the selected column in the table")
         self.delete_level_button.setEnabled(False)
         # noinspection PyUnresolvedReferences
         self.delete_level_button.clicked.connect(self.on_delete_column)
@@ -96,9 +88,7 @@ class KeatingStreamsWidget(FormCustomWidget):
         self.table.verticalHeader().setVisible(True)
         self.table.setSelectionMode(TableView.SelectionMode.SingleSelection)
         # noinspection PyUnresolvedReferences
-        self.table.selectionModel().selectionChanged.connect(
-            self.toggle_buttons
-        )
+        self.table.selectionModel().selectionChanged.connect(self.toggle_buttons)
 
         # layout
         layout = QVBoxLayout(self)
@@ -126,9 +116,7 @@ class KeatingStreamsWidget(FormCustomWidget):
         Adds a new row to the table.
         :return: None
         """
-        self.logger.debug(
-            f"Running on_add_new_row Slot from {get_signal_sender(self)}"
-        )
+        self.logger.debug(f"Running on_add_new_row Slot from {get_signal_sender(self)}")
         # noinspection PyUnresolvedReferences
         self.model.layoutAboutToBeChanged.emit()
 
@@ -143,9 +131,7 @@ class KeatingStreamsWidget(FormCustomWidget):
         Deletes the selected row.
         :return: None
         """
-        self.logger.debug(
-            f"Running on_delete_row Slot from {get_signal_sender(self)}"
-        )
+        self.logger.debug(f"Running on_delete_row Slot from {get_signal_sender(self)}")
         indexes = self.table.selectedIndexes()
         row_index = indexes[0].row()
 
@@ -212,9 +198,7 @@ class KeatingStreamsWidget(FormCustomWidget):
         the last row (transmissivity) is selected.
         :return: None
         """
-        self.logger.debug(
-            f"Running toggle_buttons Slot from {get_signal_sender(self)}"
-        )
+        self.logger.debug(f"Running toggle_buttons Slot from {get_signal_sender(self)}")
         selection = self.table.selectionModel().selection()
 
         if selection.indexes():
@@ -260,18 +244,13 @@ class KeatingStreamsWidget(FormCustomWidget):
             for stream_levels in levels
             for stream_level in stream_levels
         ):
-            warning_message = (
-                "The levels in each stream must be a list of numbers"
-            )
+            warning_message = "The levels in each stream must be a list of numbers"
         # each stream must have the same number of levels
         elif len({len(stream_levels) for stream_levels in levels}) != 1:
             warning_message = "Each stream must hve the same number of levels"
         # number of levels per stream must equal the transmissivity size
         elif any(
-            [
-                len(stream_levels) != len(transmissivity)
-                for stream_levels in levels
-            ]
+            [len(stream_levels) != len(transmissivity) for stream_levels in levels]
         ):
             warning_message = (
                 "The number of transmissivity coefficients must match the number "
@@ -309,11 +288,7 @@ class KeatingStreamsWidget(FormCustomWidget):
                 + "level and transmissivity",
             )
         elif any(
-            [
-                v is None
-                for stream_level in self.model.levels
-                for v in stream_level
-            ]
+            [v is None for stream_level in self.model.levels for v in stream_level]
         ):
             return FormValidation(
                 validation=False,
@@ -328,9 +303,7 @@ class KeatingStreamsWidget(FormCustomWidget):
 
         return FormValidation(validation=True)
 
-    def after_validate(
-        self, form_dict: dict[str, Any], form_field_name: str
-    ) -> None:
+    def after_validate(self, form_dict: dict[str, Any], form_field_name: str) -> None:
         """
         Unpacks the form data.
         :return: None

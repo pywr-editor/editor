@@ -6,9 +6,7 @@ from PySide6.QtGui import QAction, Qt
 from pywr_editor import MainWindow
 from pywr_editor.model import Edges
 from pywr_editor.schematic import Edge, Schematic
-from pywr_editor.schematic.commands.disconnect_node_command import (
-    DisconnectNodeCommand,
-)
+from pywr_editor.schematic.commands.disconnect_node_command import DisconnectNodeCommand
 from pywr_editor.toolbar.tab_panel import TabPanel
 from tests.utils import resolve_model_path
 
@@ -45,9 +43,7 @@ class TestDeleteEdges:
 
         # 1. Disconnect the nodes
         dummy_action = QAction()
-        dummy_action.setData(
-            {"source_node": source_node, "target_node": target_node}
-        )
+        dummy_action.setData({"source_node": source_node, "target_node": target_node})
         source_node.on_disconnect_edge(dummy_action)
 
         # edge must not be in the model dict anymore

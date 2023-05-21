@@ -35,9 +35,7 @@ class ScenariosListWidget(TableView):
         self.resizeColumnsToContents()
 
         self.setShowGrid(False)
-        self.setSelectionBehavior(
-            QAbstractItemView.SelectionBehavior.SelectItems
-        )
+        self.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectItems)
         self.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
 
     def selectionChanged(
@@ -55,8 +53,6 @@ class ScenariosListWidget(TableView):
         if len(selected.indexes()) == 0:
             pages_widget.set_empty_page()
         else:
-            scenario_name = selected.indexes()[0].data(
-                Qt.ItemDataRole.DisplayRole
-            )
+            scenario_name = selected.indexes()[0].data(Qt.ItemDataRole.DisplayRole)
             pages_widget.set_current_widget_by_name(scenario_name)
         super().selectionChanged(selected, deselected)

@@ -34,9 +34,7 @@ class ToggleSwitchWidget(QCheckBox):
         :param state: The state.
         :return: None
         """
-        self.setText(
-            "Yes" if Qt.CheckState(state) == Qt.CheckState.Checked else "No"
-        )
+        self.setText("Yes" if Qt.CheckState(state) == Qt.CheckState.Checked else "No")
 
     @property
     def stylesheet(self) -> str:

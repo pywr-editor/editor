@@ -10,9 +10,7 @@ from pywr_editor.widgets import SpinBox
 
 
 class DayMonthWidget(FormCustomWidget):
-    def __init__(
-        self, name: str, value: dict[str, int | None], parent: FormField
-    ):
+    def __init__(self, name: str, value: dict[str, int | None], parent: FormField):
         """
         Initialises the widget.
         :param name: The field name.
@@ -70,9 +68,7 @@ class DayMonthWidget(FormCustomWidget):
         if self.warning_message:
             self.logger.debug(self.warning_message)
 
-    def sanitise_values(
-        self, values: dict[str, int | None]
-    ) -> [int, int, str | None]:
+    def sanitise_values(self, values: dict[str, int | None]) -> [int, int, str | None]:
         """
         Sanitises the values.
         :param values: A dictionary with the day and month.
@@ -93,13 +89,9 @@ class DayMonthWidget(FormCustomWidget):
         elif not values["day"] and values["month"]:
             warning_message = "You must provide the day"
         # check types
-        elif not isinstance(values["day"], int) or not (
-            1 <= values["day"] <= 31
-        ):
+        elif not isinstance(values["day"], int) or not (1 <= values["day"] <= 31):
             warning_message = "The day must be a number between 1 and 31"
-        elif not isinstance(values["month"], int) or not (
-            1 <= values["month"] <= 12
-        ):
+        elif not isinstance(values["month"], int) or not (1 <= values["month"] <= 12):
             warning_message = "The month must be a number between 1 and 12"
         else:
             day = values["day"]
@@ -125,9 +117,7 @@ class DayMonthWidget(FormCustomWidget):
         """
         return {"day": 0, "month": 0}
 
-    def validate(
-        self, name: str, label: str, value: dict[str | int]
-    ) -> FormValidation:
+    def validate(self, name: str, label: str, value: dict[str | int]) -> FormValidation:
         """
         :param name: The field name.
         :param label: The field label.

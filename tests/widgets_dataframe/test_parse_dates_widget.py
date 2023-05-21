@@ -14,9 +14,7 @@ class TestDialogParameterParseDatesWidget:
     the widget behaves like the IndexColWidget.
     """
 
-    model_file = resolve_model_path(
-        "model_dialog_parameters_index_col_widget.json"
-    )
+    model_file = resolve_model_path("model_dialog_parameters_index_col_widget.json")
 
     @pytest.fixture()
     def model_config(self) -> ModelConfig:
@@ -67,9 +65,7 @@ class TestDialogParameterParseDatesWidget:
         assert spy.count() == 2
         assert combo_box.checked_items() == selected
         assert parse_dates_widget.get_value() == selected
-        assert parse_dates_widget.combo_box.lineEdit().text() == ", ".join(
-            selected
-        )
+        assert parse_dates_widget.combo_box.lineEdit().text() == ", ".join(selected)
 
     def test_parse_dates_true(self, qtbot, model_config):
         """

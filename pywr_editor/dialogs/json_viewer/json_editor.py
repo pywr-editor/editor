@@ -100,14 +100,10 @@ class JsonEditor(QPlainTextEdit):
 
         cr = self.contentsRect()
         self.line_number_area.setGeometry(
-            QRect(
-                cr.left(), cr.top(), self.line_number_area_width(), cr.height()
-            )
+            QRect(cr.left(), cr.top(), self.line_number_area_width(), cr.height())
         )
 
-    def line_number_area_paint_event(
-        self, event: PySide6.QtGui.QPaintEvent
-    ) -> None:
+    def line_number_area_paint_event(self, event: PySide6.QtGui.QPaintEvent) -> None:
         """
         Paints the line number area.
         :param event: The event being triggered.
@@ -121,9 +117,7 @@ class JsonEditor(QPlainTextEdit):
         block = self.firstVisibleBlock()
         block_number = block.blockNumber()
         top = round(
-            self.blockBoundingGeometry(block)
-            .translated(self.contentOffset())
-            .top()
+            self.blockBoundingGeometry(block).translated(self.contentOffset()).top()
         )
         bottom = top + round(self.blockBoundingRect(block).height())
 

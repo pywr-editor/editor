@@ -109,12 +109,8 @@ class LibraryItem(QGraphicsItemGroup):
 
         painter = QPainter(pixmap)
         painter.scale(0.8, 0.8)
-        painter.translate(
-            -self.item.boundingRect().x(), -self.item.boundingRect().y()
-        )
-        painter.setRenderHints(
-            QPainter.Antialiasing | QPainter.SmoothPixmapTransform
-        )
+        painter.translate(-self.item.boundingRect().x(), -self.item.boundingRect().y())
+        painter.setRenderHints(QPainter.Antialiasing | QPainter.SmoothPixmapTransform)
 
         options = QStyleOptionGraphicsItem()
         self.item.paint(painter, options, None)

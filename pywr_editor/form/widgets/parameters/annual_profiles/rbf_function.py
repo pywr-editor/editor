@@ -74,9 +74,7 @@ class RbfFunction(FormCustomWidget):
 
         # value is not a string
         if isinstance(value, str) is False:
-            message = (
-                "The value set in the model configuration is not a valid type"
-            )
+            message = "The value set in the model configuration is not a valid type"
         elif value.lower() not in list(self.value_map.keys()):
             message = (
                 "The value set in the model configuration is not valid. "

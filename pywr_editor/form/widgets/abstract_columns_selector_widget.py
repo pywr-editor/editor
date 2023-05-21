@@ -116,13 +116,9 @@ class AbstractColumnsSelectorWidget(FormCustomWidget):
                 "The table does not contain any column. Keeping field disabled with "
                 + "warning"
             )
-            self.form_field.set_warning_message(
-                "The table does not contain any column"
-            )
+            self.form_field.set_warning_message("The table does not contain any column")
         else:
-            self.logger.debug(
-                f"Filling field with: {', '.join(map(str,columns))}"
-            )
+            self.logger.debug(f"Filling field with: {', '.join(map(str,columns))}")
             # noinspection PyTypeChecker
             url_form_widget: "UrlWidget" = self.form.fields["url"].widget
             # H5 files already contain DataFrame object (index is already set and
@@ -143,9 +139,7 @@ class AbstractColumnsSelectorWidget(FormCustomWidget):
 
             # log if index is an empty list
             if not indexes:
-                self.logger.debug(
-                    "No items are selected. No valid columns found"
-                )
+                self.logger.debug("No items are selected. No valid columns found")
 
             for col_index in indexes:
                 self.logger.debug(
@@ -232,9 +226,7 @@ class AbstractColumnsSelectorWidget(FormCustomWidget):
                     # When updating field, ComboBox widget returns a string with
                     # comma-separated field
                     if isinstance(value, str) and "," in value:
-                        self.logger.debug(
-                            "Converting comma-separated value to a list"
-                        )
+                        self.logger.debug("Converting comma-separated value to a list")
                         value = value.split(", ")
                     else:
                         self.logger.debug("Converting value to a list")
@@ -245,9 +237,7 @@ class AbstractColumnsSelectorWidget(FormCustomWidget):
                     (
                         selected_col_name,
                         self.wrong_columns,
-                    ) = find_existing_columns(
-                        self.table, value, include_index=True
-                    )
+                    ) = find_existing_columns(self.table, value, include_index=True)
                     self.wrong_columns = list(map(str, self.wrong_columns))
                     if len(self.wrong_columns) > 0:
                         self.logger.debug(
@@ -392,14 +382,10 @@ class AbstractColumnsSelectorWidget(FormCustomWidget):
         """
         return FormValidation(validation=True)
 
-    def after_validate(
-        self, form_dict: dict[str, Any], form_field_name: str
-    ) -> None:
+    def after_validate(self, form_dict: dict[str, Any], form_field_name: str) -> None:
         # convert names to int with Excel - Pandas does not support strings when
         # setting an index as column
         if self.is_index_selector:
             url_form_field: "UrlWidget" = self.form.fields["url"].widget
             if url_form_field.file_ext and "xls" in url_form_field.file_ext:
-                form_dict[self.name] = [
-                    self.columns.index(col) for col in self.value
-                ]
+                form_dict[self.name] = [self.columns.index(col) for col in self.value]

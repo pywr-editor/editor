@@ -88,9 +88,7 @@ class InterpFillValueWidget(AbstractFloatListWidget):
             self.combo_box.setCurrentText(self.labels_map["extrapolate"])
             # show error if value is wrong
             if self.raw_value.lower() != "extrapolate":
-                message = (
-                    "The value set in the model configuration is not valid"
-                )
+                message = "The value set in the model configuration is not valid"
                 self.logger.debug(message)
                 self.form_field.set_warning_message(message)
         # default to parent widget - fill with values

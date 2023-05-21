@@ -111,10 +111,7 @@ class TestDoubleSpinBox:
             qtbot.keyClick(line_edit, ch)
             partial_text += ch
             assert line_edit.text() == partial_text
-            assert (
-                spin_box.validate(partial_text, 0)[0]
-                == QValidator.State.Acceptable
-            )
+            assert spin_box.validate(partial_text, 0)[0] == QValidator.State.Acceptable
 
         # confirm value to show string
         qtbot.keyClick(line_edit, Qt.Key_Enter)

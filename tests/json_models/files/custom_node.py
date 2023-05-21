@@ -9,15 +9,9 @@ class LeakyPipe(Node):
 
         # Define the internal nodes. The parent of the nodes is defined to identify
         # them as sub-nodes.
-        self.inflow = Link(
-            self.model, name="{} In".format(self.name), parent=self
-        )
-        self.outflow = Link(
-            self.model, name="{} Out".format(self.name), parent=self
-        )
-        self.leak = Output(
-            self.model, name="{} Leak".format(self.name), parent=self
-        )
+        self.inflow = Link(self.model, name="{} In".format(self.name), parent=self)
+        self.outflow = Link(self.model, name="{} Out".format(self.name), parent=self)
+        self.leak = Output(self.model, name="{} Leak".format(self.name), parent=self)
 
         # Connect the internal nodes
         self.inflow.connect(self.outflow)

@@ -140,15 +140,11 @@ class SchematicText(AbstractSchematicShape, QGraphicsTextItem):
             parent=self.view.app,
         )
         # enable save button when a new colour is selected
-        color_widget: ColorPickerWidget = dialog.form.find_field_by_name(
-            "color"
-        ).widget
+        color_widget: ColorPickerWidget = dialog.form.find_field_by_name("color").widget
         color_widget.changed_color.connect(dialog.form.on_field_changed)
         dialog.show()
 
-    def check_form_text(
-        self, name: str, label: str, value: str
-    ) -> FormValidation:
+    def check_form_text(self, name: str, label: str, value: str) -> FormValidation:
         """
         Check the text length in the form.
         :param name: The field name.

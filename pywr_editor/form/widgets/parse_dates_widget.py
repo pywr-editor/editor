@@ -14,14 +14,10 @@ class ParseDatesWidget(AbstractColumnsSelectorWidget):
             raise TypeError("The value must be a dictionary")
 
         if "parse_dates" not in value.keys():
-            raise KeyError(
-                "The value dictionary must contain the 'parse_dates' key"
-            )
+            raise KeyError("The value dictionary must contain the 'parse_dates' key")
 
         if "index_col" not in value.keys():
-            raise KeyError(
-                "The value dictionary must contain the 'index_col' key"
-            )
+            raise KeyError("The value dictionary must contain the 'index_col' key")
 
         # when parse_dates is True, Pandas will parse dates the index
         if value["parse_dates"] is True:

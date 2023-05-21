@@ -19,9 +19,7 @@ class PywrParametersData:
 
         self.key_lookup: dict = parameters_data["parameters_key_lookup"]
         # sort keys alphabetically
-        self.parameters = dict(
-            sorted(parameters_data["parameters_data"].items())
-        )
+        self.parameters = dict(sorted(parameters_data["parameters_data"].items()))
 
     def get_lookup_key(self, parameter_type: str) -> str | None:
         """
@@ -50,10 +48,7 @@ class PywrParametersData:
         Returns a list of the pywr parameters' names.
         :return: The pywr parameters' names
         """
-        return [
-            parameter_info["name"]
-            for parameter_info in self.parameters.values()
-        ]
+        return [parameter_info["name"] for parameter_info in self.parameters.values()]
 
     @property
     def classes(self) -> list[str]:
@@ -61,10 +56,7 @@ class PywrParametersData:
         Returns a list of the pywr parameters' classes.
         :return: The pywr parameter classes
         """
-        return [
-            parameter_info["class"]
-            for parameter_info in self.parameters.values()
-        ]
+        return [parameter_info["class"] for parameter_info in self.parameters.values()]
 
     @property
     def keys(self) -> list[str]:
@@ -82,9 +74,7 @@ class PywrParametersData:
         """
         return list(self.key_lookup.values())
 
-    def get_info_from_type(
-        self, parameter_type: str, info_key: str
-    ) -> str | None:
+    def get_info_from_type(self, parameter_type: str, info_key: str) -> str | None:
         """
         Returns the parameter information (class, url, etc.) from the parameter type.
         :param parameter_type: The string identifying the parameter type.

@@ -29,9 +29,7 @@ class DoubleSpinBox(QDoubleSpinBox):
         self.scientific_notation = scientific_notation
 
         if (
-            lower_bound < -pow(10, 10)
-            or upper_bound > pow(10, 10)
-            or precision > 8
+            lower_bound < -pow(10, 10) or upper_bound > pow(10, 10) or precision > 8
         ) and not self.scientific_notation:
             raise ValueError(
                 "Scientific notation is not on. To represent large numbers and "

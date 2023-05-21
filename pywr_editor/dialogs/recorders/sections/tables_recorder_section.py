@@ -122,9 +122,7 @@ class TablesRecorderSection(FormSection):
                     "name": "complib",
                     "label": "Compression algorithm",
                     "field_type": H5CompressionLibWidget,
-                    "value": filter_kwd["complib"]
-                    if "complib" in filter_kwd
-                    else None,
+                    "value": filter_kwd["complib"] if "complib" in filter_kwd else None,
                 },
                 {
                     "name": "metadata",
@@ -135,9 +133,7 @@ class TablesRecorderSection(FormSection):
                 },
                 {
                     "name": "create_directories",
-                    "value": self.form.get_recorder_dict_value(
-                        "create_directories"
-                    ),
+                    "value": self.form.get_recorder_dict_value("create_directories"),
                     "field_type": "boolean",
                     "default_value": False,
                     "help_text": "If one or more directories in the 'File' path do "

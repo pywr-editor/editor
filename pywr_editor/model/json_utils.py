@@ -14,9 +14,7 @@ class JsonUtils:
     d: dict
     """ The dictionary where to find the string """
 
-    def find_str(
-        self, string: str, match_key: str | None = None
-    ) -> DictMatches:
+    def find_str(self, string: str, match_key: str | None = None) -> DictMatches:
         """
         Gets the number of occurrences a string appears as a dictionary value. For
         example given d:
@@ -68,20 +66,14 @@ class JsonUtils:
         dict_path = []
         if isinstance(d, dict):
             for k, v in d.items():
-                (
-                    sub_counter,
-                    sub_dict_path,
-                ) = self._find_str_in_dict_match_key(
+                (sub_counter, sub_dict_path,) = self._find_str_in_dict_match_key(
                     v, match_key, string, f"{parent_key}/{k}"
                 )
                 counter += sub_counter
                 dict_path = dict_path + sub_dict_path
         elif isinstance(d, list):
             for ii, item in enumerate(d):
-                (
-                    sub_counter,
-                    sub_dict_path,
-                ) = self._find_str_in_dict_match_key(
+                (sub_counter, sub_dict_path,) = self._find_str_in_dict_match_key(
                     item, match_key, string, f"{parent_key}/Item #{ii}"
                 )
                 counter += sub_counter
@@ -113,10 +105,7 @@ class JsonUtils:
             keys = list(d.keys())
             for k, v in d.items():
                 # dictionary key
-                (
-                    sub_counter,
-                    sub_dict_path,
-                ) = self._find_str_in_dict_everywhere(
+                (sub_counter, sub_dict_path,) = self._find_str_in_dict_everywhere(
                     k, string, f"{parent_key}/key/Item #{keys.index(k)}"
                 )
                 counter += sub_counter
@@ -126,17 +115,12 @@ class JsonUtils:
                 (
                     sub_counter,
                     sub_dict_path,
-                ) = self._find_str_in_dict_everywhere(
-                    v, string, f"{parent_key}/{k}"
-                )
+                ) = self._find_str_in_dict_everywhere(v, string, f"{parent_key}/{k}")
                 counter += sub_counter
                 dict_path = dict_path + sub_dict_path
         elif isinstance(d, list):
             for ii, item in enumerate(d):
-                (
-                    sub_counter,
-                    sub_dict_path,
-                ) = self._find_str_in_dict_everywhere(
+                (sub_counter, sub_dict_path,) = self._find_str_in_dict_everywhere(
                     item, string, f"{parent_key}/Item #{ii}"
                 )
                 counter += sub_counter

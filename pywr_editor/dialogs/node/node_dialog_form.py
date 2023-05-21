@@ -54,8 +54,7 @@ class NodeDialogForm(Form):
         # have been imported
         self.can_type_be_changed = (
             not model_config.pywr_node_data.does_type_exist(self.node_type)
-            and self.node_type
-            not in model_config.includes.get_custom_nodes().keys()
+            and self.node_type not in model_config.includes.get_custom_nodes().keys()
         )
         self.logger.debug(f"Loading with {self.node_dict}")
 
@@ -105,10 +104,7 @@ class NodeDialogForm(Form):
         if pywr_class is None:
             self.logger.debug(f"'{self.node_type}' is custom")
             # imported Python class
-            if (
-                self.node_type
-                in self.model_config.includes.get_custom_nodes().keys()
-            ):
+            if self.node_type in self.model_config.includes.get_custom_nodes().keys():
                 self.logger.debug(
                     f"{self.node_type.title()} is included as custom import"
                 )
@@ -139,9 +135,7 @@ class NodeDialogForm(Form):
         # noinspection PyTypeChecker
         first_section: QGroupBox = self.findChild(QGroupBox, "Node")
         first_section.setTitle("")
-        first_section.setStyleSheet(
-            "QGroupBox{padding-top:15px; margin-top:-15px}"
-        )
+        first_section.setStyleSheet("QGroupBox{padding-top:15px; margin-top:-15px}")
 
         # disable type field
         if not self.can_type_be_changed:
@@ -149,9 +143,7 @@ class NodeDialogForm(Form):
             type_widget.setDisabled(True)
             type_widget.setToolTip("The node type cannot be changed")
 
-    def check_node_class(
-        self, name: str, label: str, value: str
-    ) -> FormValidation:
+    def check_node_class(self, name: str, label: str, value: str) -> FormValidation:
         """
         Checks the node type is a valid Python class name.
         :param name: The field name.
@@ -223,9 +215,7 @@ class NodeDialogForm(Form):
 
         return form_data
 
-    def check_unique_name(
-        self, name: str, label: str, value: str
-    ) -> FormValidation:
+    def check_unique_name(self, name: str, label: str, value: str) -> FormValidation:
         """
         Checks that the node name is unique.
         :param name: The filed name.
@@ -233,10 +223,7 @@ class NodeDialogForm(Form):
         :param value: The node name.
         :return: The validation instance.
         """
-        if (
-            value != self.node_obj.name
-            and value in self.model_config.nodes.names
-        ):
+        if value != self.node_obj.name and value in self.model_config.nodes.names:
             return FormValidation(
                 validation=False, error_message="The node name already exists"
             )
@@ -274,9 +261,7 @@ class NodeDialogForm(Form):
             + "not set, it defaults to infinite.",
         }
 
-    def cost_field(
-        self, node_type: Literal["flow", "storage"]
-    ) -> dict[str, Any]:
+    def cost_field(self, node_type: Literal["flow", "storage"]) -> dict[str, Any]:
         """
         Returns the form field representing the cost of node.
         :param node_type: The type of node (flow or storage).

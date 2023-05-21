@@ -45,9 +45,7 @@ class FormSection(QWidget):
         Defines the section data dictionaries list.
         :return: The section data.
         """
-        raise NotImplementedError(
-            "The section data property is not implemented"
-        )
+        raise NotImplementedError("The section data property is not implemented")
 
     # noinspection PyMethodMayBeStatic
     def validate(self, form_data: dict) -> FormValidation:

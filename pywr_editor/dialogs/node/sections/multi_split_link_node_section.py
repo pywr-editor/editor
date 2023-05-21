@@ -3,9 +3,7 @@ from typing import Any
 from pywr_editor.form import SlotsTableWidget
 
 from ..node_dialog_form import NodeDialogForm
-from .abstract_piecewise_link_node_section import (
-    AbstractPiecewiseLinkNodeSection,
-)
+from .abstract_piecewise_link_node_section import AbstractPiecewiseLinkNodeSection
 
 
 class MultiSplitLinkSection(AbstractPiecewiseLinkNodeSection):
@@ -41,9 +39,7 @@ class MultiSplitLinkSection(AbstractPiecewiseLinkNodeSection):
         :param form_data: The form data.
         :return: None
         """
-        widget: SlotsTableWidget = self.form.find_field_by_name(
-            "slots_field"
-        ).widget
+        widget: SlotsTableWidget = self.form.find_field_by_name("slots_field").widget
 
         # update slot names in edges
         widget.updated_slot_names_in_edge_helper()

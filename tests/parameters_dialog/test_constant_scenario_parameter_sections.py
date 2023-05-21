@@ -2,9 +2,7 @@ import pytest
 from PySide6.QtCore import Qt
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.dialogs.parameters.parameter_page_widget import (
-    ParameterPageWidget,
-)
+from pywr_editor.dialogs.parameters.parameter_page_widget import ParameterPageWidget
 from pywr_editor.form import FormField, ScenarioPickerWidget, TableValuesWidget
 from pywr_editor.model import ModelConfig
 from tests.utils import resolve_model_path
@@ -63,9 +61,7 @@ class TestDialogParameterControlCurveParameterSection:
         # noinspection PyTypeChecker
         selected_page: ParameterPageWidget = dialog.pages_widget.currentWidget()
         # noinspection PyTypeChecker
-        scenario_field: FormField = selected_page.findChild(
-            FormField, "scenario"
-        )
+        scenario_field: FormField = selected_page.findChild(FormField, "scenario")
         # noinspection PyTypeChecker
         scenario_widget: ScenarioPickerWidget = scenario_field.widget
 
@@ -88,9 +84,7 @@ class TestDialogParameterControlCurveParameterSection:
             assert out.validation is False
             assert validation_message in out.error_message
 
-    def test_no_model_scenarios_scenario_picker(
-        self, qtbot, model_config_empty
-    ):
+    def test_no_model_scenarios_scenario_picker(self, qtbot, model_config_empty):
         """
         Tests the ScenarioPickerWidget when the model does not contain any scenarios.
         """
@@ -102,9 +96,7 @@ class TestDialogParameterControlCurveParameterSection:
 
         # scenario field
         # noinspection PyTypeChecker
-        scenario_field: FormField = selected_page.findChild(
-            FormField, "scenario"
-        )
+        scenario_field: FormField = selected_page.findChild(FormField, "scenario")
         # noinspection PyTypeChecker
         scenario_widget: ScenarioPickerWidget = scenario_field.widget
 
@@ -208,9 +200,7 @@ class TestDialogParameterControlCurveParameterSection:
         # 3. Change scenario and validate with new size
         if param_name == "valid_values":
             # noinspection PyTypeChecker
-            scenario_field: FormField = selected_page.findChild(
-                FormField, "scenario"
-            )
+            scenario_field: FormField = selected_page.findChild(FormField, "scenario")
             # noinspection PyTypeChecker
             scenario_widget: ScenarioPickerWidget = scenario_field.widget
 

@@ -95,8 +95,6 @@ class ToolbarBaseButton(QToolButton):
         }
 
         if self.separator:
-            style["QToolButton"][
-                "border-right"
-            ] = f'1px solid {Color("gray", 300).hex}'
+            style["QToolButton"]["border-right"] = f'1px solid {Color("gray", 300).hex}'
 
         return style

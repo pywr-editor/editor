@@ -23,9 +23,7 @@ class ControlCurveOptBoundsWidget(AbstractFloatListWidget):
             parent=parent,
         )
 
-    def validate(
-        self, name: str, label: str, value: list[float]
-    ) -> FormValidation:
+    def validate(self, name: str, label: str, value: list[float]) -> FormValidation:
         """
         Checks that the value is valid.
         :param name: The field name.

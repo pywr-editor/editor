@@ -143,9 +143,7 @@ class RbfProfileParameterSection(FormSection):
 
         return data_dict
 
-    def _check_count(
-        self, name: str, label: str, value: list
-    ) -> FormValidation:
+    def _check_count(self, name: str, label: str, value: list) -> FormValidation:
         """
         Checks that the number of items in "value" is the same as in the
         "days_of_year" field.
@@ -172,9 +170,7 @@ class RbfProfileParameterSection(FormSection):
         return FormValidation(validation=True)
 
     @staticmethod
-    def _check_day_of_year(
-        name: str, label: str, value: list
-    ) -> FormValidation:
+    def _check_day_of_year(name: str, label: str, value: list) -> FormValidation:
         """
         Checks that "days_of_year" contains valid values.
         :param name: The field name.
@@ -206,9 +202,7 @@ class RbfProfileParameterSection(FormSection):
                 )
         return FormValidation(validation=True)
 
-    def _check_day_range(
-        self, name: str, label: str, value: list
-    ) -> FormValidation:
+    def _check_day_range(self, name: str, label: str, value: list) -> FormValidation:
         """
         Checks the range for the "days_of_year" during optimisation.
         :param name: The field name.
@@ -222,10 +216,7 @@ class RbfProfileParameterSection(FormSection):
             return FormValidation(validation=True)
 
         day_spacing_valid = any(
-            [
-                j - i <= 2 * value
-                for i, j in zip(days_value[:-1], days_value[1:])
-            ]
+            [j - i <= 2 * value for i, j in zip(days_value[:-1], days_value[1:])]
         )
         if value != 0 and day_spacing_valid:
             days_label = self.form.get_field_label_from_name("days_of_year")

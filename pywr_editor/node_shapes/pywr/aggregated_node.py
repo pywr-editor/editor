@@ -46,9 +46,7 @@ class AggregatedNode(BaseNode):
         pen.setColor(Color(fill_1.name, 500).qcolor)
         painter.setPen(pen)
         painter.setBrush(fill_1.qcolor)
-        painter.drawEllipse(
-            QPointF(-5, -5), self.radius / 1.8, self.radius / 1.8
-        )
+        painter.drawEllipse(QPointF(-5, -5), self.radius / 1.8, self.radius / 1.8)
 
         pen.setColor(Color(fill_2.name, 500).qcolor)
         painter.setPen(pen)
@@ -58,6 +56,4 @@ class AggregatedNode(BaseNode):
         pen.setColor(Color(fill_3.name, 500).qcolor)
         painter.setPen(pen)
         painter.setBrush(fill_3.qcolor)
-        painter.drawEllipse(
-            QPointF(5, -5), self.radius / 2.5, self.radius / 2.5
-        )
+        painter.drawEllipse(QPointF(5, -5), self.radius / 2.5, self.radius / 2.5)

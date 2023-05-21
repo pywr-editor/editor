@@ -6,12 +6,7 @@ import qtawesome as qta
 from PySide6.QtAxContainer import QAxObject
 from PySide6.QtCore import QCoreApplication, Qt, Slot
 from PySide6.QtGui import QGuiApplication
-from PySide6.QtWidgets import (
-    QHBoxLayout,
-    QMessageBox,
-    QStyledItemDelegate,
-    QVBoxLayout,
-)
+from PySide6.QtWidgets import QHBoxLayout, QMessageBox, QStyledItemDelegate, QVBoxLayout
 
 from pywr_editor.form import FormCustomWidget, ProfilePlotDialog
 from pywr_editor.utils import Logging, is_windows
@@ -147,9 +142,7 @@ class AbstractAnnualValuesWidget(FormCustomWidget):
             )
         # wrong item types
         elif all([isinstance(val, (int, float)) for val in value]) is False:
-            message = (
-                "The values set in the model configuration must be all numbers"
-            )
+            message = "The values set in the model configuration must be all numbers"
 
         # return None if the values are incorrect
         if message is not None:
@@ -332,7 +325,6 @@ class AnnualProfileSpinBoxDelegate(QStyledItemDelegate):
         self,
         parent: PySide6.QtWidgets.QWidget,
         option: PySide6.QtWidgets.QStyleOptionViewItem,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
     ) -> PySide6.QtWidgets.QWidget:
         return DoubleSpinBox(parent=parent)

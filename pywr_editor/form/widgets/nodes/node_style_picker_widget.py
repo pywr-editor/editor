@@ -61,9 +61,7 @@ class NodeStylePickerWidget(FormCustomWidget):
         # select the icon
         if selected_style and selected_style in name_key_map:
             self.logger.debug(f"Setting icon to {selected_style}")
-            selected_index = self.combo_box.findData(
-                name_key_map[selected_style]
-            )
+            selected_index = self.combo_box.findData(name_key_map[selected_style])
         else:
             self.logger.debug("Setting default icon")
             selected_index = self.combo_box.findData(self.default_str_style)
@@ -97,9 +95,7 @@ class NodeStylePickerWidget(FormCustomWidget):
             icon_class_type = getattr(pywr_editor.node_shapes, icon_class_name)
 
         if not isinstance(self.form, NodeDialogForm):
-            raise ValueError(
-                "The widget can only be registered in NodeDialogForm"
-            )
+            raise ValueError("The widget can only be registered in NodeDialogForm")
 
         self.form: NodeDialogForm
         self.form.dialog.title.update_icon(icon_class_type)

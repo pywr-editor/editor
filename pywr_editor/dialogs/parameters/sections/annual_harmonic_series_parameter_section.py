@@ -39,9 +39,7 @@ class AnnualHarmonicSeriesParameterSection(FormSection):
                     "name": "amplitudes_phases",
                     "field_type": TableValuesWidget,
                     "value": {
-                        "amplitudes": self.form.get_param_dict_value(
-                            "amplitudes"
-                        ),
+                        "amplitudes": self.form.get_param_dict_value("amplitudes"),
                         "phases": self.form.get_param_dict_value("phases"),
                     },
                     "field_args": {
@@ -57,26 +55,20 @@ class AnnualHarmonicSeriesParameterSection(FormSection):
                 {
                     "name": "mean_lower_bounds",
                     "field_type": FloatWidget,
-                    "value": self.form.get_param_dict_value(
-                        "mean_lower_bounds"
-                    ),
+                    "value": self.form.get_param_dict_value("mean_lower_bounds"),
                     "help_text": "The lower bound for the mean during optimisation",
                 },
                 {
                     "name": "mean_upper_bounds",
                     "field_type": FloatWidget,
-                    "value": self.form.get_param_dict_value(
-                        "mean_upper_bounds"
-                    ),
+                    "value": self.form.get_param_dict_value("mean_upper_bounds"),
                     "help_text": "The upper bound for the mean during optimisation",
                 },
                 {
                     "name": "amplitude_lower_bounds",
                     "field_type": FloatWidget,
                     "field_args": {"min_value": 0},
-                    "value": self.form.get_param_dict_value(
-                        "amplitude_lower_bounds"
-                    ),
+                    "value": self.form.get_param_dict_value("amplitude_lower_bounds"),
                     "help_text": "The lower bound for the amplitude during "
                     + "optimisation. The constrain is the same for all harmonic "
                     + "cosine function",
@@ -85,9 +77,7 @@ class AnnualHarmonicSeriesParameterSection(FormSection):
                     "name": "amplitude_upper_bounds",
                     "field_type": FloatWidget,
                     "field_args": {"min_value": 0},
-                    "value": self.form.get_param_dict_value(
-                        "amplitude_upper_bounds"
-                    ),
+                    "value": self.form.get_param_dict_value("amplitude_upper_bounds"),
                     "help_text": "The upper bound for the amplitude during "
                     + "optimisation. The constrain is the same for all harmonic "
                     + "cosine function",
@@ -96,9 +86,7 @@ class AnnualHarmonicSeriesParameterSection(FormSection):
                     "name": "phase_lower_bounds",
                     "field_type": FloatWidget,
                     "field_args": {"min_value": 0},
-                    "value": self.form.get_param_dict_value(
-                        "phase_lower_bounds"
-                    ),
+                    "value": self.form.get_param_dict_value("phase_lower_bounds"),
                     "help_text": "The lower bound for the phase during optimisation. "
                     "The constrain is the same for all harmonic cosine function",
                 },
@@ -106,9 +94,7 @@ class AnnualHarmonicSeriesParameterSection(FormSection):
                     "name": "phase_upper_bounds",
                     "field_type": FloatWidget,
                     "field_args": {"max_value": 2 * pi},
-                    "value": self.form.get_param_dict_value(
-                        "phase_upper_bounds"
-                    ),
+                    "value": self.form.get_param_dict_value("phase_upper_bounds"),
                     "help_text": "The upper bound for the phase during optimisation. "
                     "The constrain is the same for all harmonic cosine function",
                 },

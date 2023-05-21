@@ -115,6 +115,4 @@ def move_row(
         f"Moved row index {current_row_index} to {new_row_index} "
         + f"(selected column index {current_column_index})"
     )
-    widget.setCurrentIndex(
-        widget.model.index(new_row_index, current_column_index)
-    )
+    widget.setCurrentIndex(widget.model.index(new_row_index, current_column_index))

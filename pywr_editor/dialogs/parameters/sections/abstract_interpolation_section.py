@@ -62,6 +62,4 @@ class AbstractInterpolationSection(FormSection):
         Defines the section data dictionaries list.
         :return: The section data.
         """
-        raise NotImplementedError(
-            "The section data property is not implemented"
-        )
+        raise NotImplementedError("The section data property is not implemented")

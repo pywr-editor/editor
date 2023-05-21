@@ -1,9 +1,7 @@
 import pytest
 
 from pywr_editor.dialogs import RecordersDialog
-from pywr_editor.dialogs.recorders.recorder_page_widget import (
-    RecorderPageWidget,
-)
+from pywr_editor.dialogs.recorders.recorder_page_widget import RecorderPageWidget
 from pywr_editor.form import FormField, TemporalAggFuncWidget
 from pywr_editor.model import ModelConfig
 from tests.utils import resolve_model_path
@@ -66,9 +64,7 @@ class TestDialogRecorderNumpyRecorderSection:
         form = selected_page.form
 
         # noinspection PyUnresolvedReferences
-        assert (
-            selected_page.findChild(FormField, "name").value() == recorder_name
-        )
+        assert selected_page.findChild(FormField, "name").value() == recorder_name
 
         # 1. Test init of widgets
         agg_func_widget: TemporalAggFuncWidget = form.find_field_by_name(

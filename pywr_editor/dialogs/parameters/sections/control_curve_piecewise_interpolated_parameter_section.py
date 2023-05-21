@@ -121,9 +121,9 @@ class ControlCurvePiecewiseInterpolatedParameterSection(FormSection):
         :return: The validation instance.
         """
         # noinspection PyTypeChecker
-        control_curves_widget: ControlCurvesWidget = (
-            self.form.find_field_by_name("control_curves").widget
-        )
+        control_curves_widget: ControlCurvesWidget = self.form.find_field_by_name(
+            "control_curves"
+        ).widget
         curves_size = len(control_curves_widget.get_value())
         expected_size = curves_size + 1
 

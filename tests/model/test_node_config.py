@@ -33,9 +33,7 @@ def test_custom_style(node_config, node_props):
     assert node_config.custom_style == "wtw"
 
 
-@pytest.mark.parametrize(
-    "node_props", [get_all_node_props()["node_wo_position"]]
-)
+@pytest.mark.parametrize("node_props", [get_all_node_props()["node_wo_position"]])
 def test_node_wo_position(node_config, node_props):
     """
     Tests that the correct value is returned for the custom_style property.
@@ -43,9 +41,7 @@ def test_node_wo_position(node_config, node_props):
     assert node_config.custom_style is None
 
 
-@pytest.mark.parametrize(
-    "node_props", [get_all_node_props()["node_wo_node_style"]]
-)
+@pytest.mark.parametrize("node_props", [get_all_node_props()["node_wo_node_style"]])
 def test_node_wo_node_style(node_config, node_props):
     """
     Tests that the correct value is returned for the custom_style property.
@@ -71,9 +67,7 @@ def test_position(node_config, node_props):
     assert node_config.position == [100, 200]
 
 
-@pytest.mark.parametrize(
-    "node_props", [get_all_node_props()["node_wrong_position"]]
-)
+@pytest.mark.parametrize("node_props", [get_all_node_props()["node_wrong_position"]])
 def test_wrong_position(node_config, node_props):
     """
     Tests that the correct value is returned for the position property.

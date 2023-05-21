@@ -1,13 +1,7 @@
 from typing import TYPE_CHECKING, Any, Literal, Type, Union
 
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import (
-    QLabel,
-    QLineEdit,
-    QSizePolicy,
-    QVBoxLayout,
-    QWidget,
-)
+from PySide6.QtWidgets import QLabel, QLineEdit, QSizePolicy, QVBoxLayout, QWidget
 
 from pywr_editor.style import Color
 from pywr_editor.utils import Logging
@@ -136,15 +130,9 @@ class FormField(QWidget):
             self.widget = ToggleSwitchWidget()
             self.widget.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Minimum)
 
-            if default_value is not None and not isinstance(
-                default_value, bool
-            ):
-                raise ValueError(
-                    f"default_value for '{name}' must be a boolean"
-                )
-            if value is None or not isinstance(
-                value, bool
-            ):  # use the default value
+            if default_value is not None and not isinstance(default_value, bool):
+                raise ValueError(f"default_value for '{name}' must be a boolean")
+            if value is None or not isinstance(value, bool):  # use the default value
                 self.widget.setChecked(True if default_value else False)
             else:
                 self.widget.setChecked(value)
@@ -225,9 +213,7 @@ class FormField(QWidget):
         self.message.setText(message)
         # noinspection PyTypeChecker
         self.message.setProperty("message_type", message_type)
-        self.message.setStyleSheet(
-            f"{self.message.styleSheet()}; color: {color.hex};"
-        )
+        self.message.setStyleSheet(f"{self.message.styleSheet()}; color: {color.hex};")
         # if a message is set before the field is assigned to a parent,
         # do not show the message otherwise a floating window will apper
         # temporarily

@@ -56,9 +56,7 @@ class RecordersDialog(SettingsDialog):
         # select a recorder
         if selected_recorder_name is not None:
             # load the page and the form fields
-            found = self.pages_widget.set_current_widget_by_name(
-                selected_recorder_name
-            )
+            found = self.pages_widget.set_current_widget_by_name(selected_recorder_name)
             # do not load the form is the recorder is not found
             if found is False:
                 return

@@ -33,17 +33,11 @@ class FlowDurationCurveDeviationRecorderSection(
         # multi dimensional array not supported when targets are lists
         if (
             lower_fdc
-            and isinstance(
-                lower_fdc, list
-            )  # target may be a dict for external data
+            and isinstance(lower_fdc, list)  # target may be a dict for external data
             and isinstance(lower_fdc[0], list)
         ):
             lower_fdc = None
-        if (
-            upper_fdc
-            and isinstance(upper_fdc, list)
-            and isinstance(upper_fdc[0], list)
-        ):
+        if upper_fdc and isinstance(upper_fdc, list) and isinstance(upper_fdc[0], list):
             lower_fdc = None
         section_fields = [
             {
@@ -100,9 +94,7 @@ class FlowDurationCurveDeviationRecorderSection(
         :param target_values:The values of the FDC target.
         :return: The validation instance.
         """
-        percentiles = self.form.find_field_by_name("percentiles").value()[
-            "values"
-        ]
+        percentiles = self.form.find_field_by_name("percentiles").value()["values"]
         target = self.form.find_field_by_name(name).widget
         if (
             percentiles

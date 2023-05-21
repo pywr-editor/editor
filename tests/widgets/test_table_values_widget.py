@@ -166,9 +166,7 @@ class TestDialogParameterTableValuesWidget:
         out = table_widget.validate("", "", table_widget.get_value())
 
         # 1. Check table and validate
-        assert table_widget.model.rowCount() == (
-            len(values["x"]) if values["x"] else 0
-        )
+        assert table_widget.model.rowCount() == (len(values["x"]) if values["x"] else 0)
         assert table_widget.model.columnCount() == len(values)
         assert table_widget.model.labels == list(values.keys())
 
@@ -368,9 +366,7 @@ class TestDialogParameterTableValuesWidget:
 
         new_values_2 = {}
         for name, value in new_values.items():
-            new_values_2[name] = [
-                v for vi, v in enumerate(value) if vi not in [0, 1]
-            ]
+            new_values_2[name] = [v for vi, v in enumerate(value) if vi not in [0, 1]]
         assert table_widget.get_value() == new_values_2
 
     def test_move_up(self, qtbot):
@@ -479,9 +475,7 @@ class TestDialogParameterTableValuesWidget:
         for routine, message in zip(routines, messages):
             xl.Application.Run(f"{vba_module}.{routine}")
             QTimer.singleShot(100, partial(check_msg, message))
-            qtbot.mouseClick(
-                table_widget.paste_button, Qt.MouseButton.LeftButton
-            )
+            qtbot.mouseClick(table_widget.paste_button, Qt.MouseButton.LeftButton)
             assert table_widget.get_value() == new_values
 
         xl.Quit()

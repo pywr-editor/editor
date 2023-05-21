@@ -23,10 +23,7 @@ class AbstractStorageSection(FormSection):
         :return: The validation instance.
         """
         # either initial_volume or initial_volume_pc must be provided
-        if (
-            "initial_volume" not in form_data
-            and "initial_volume_pc" not in form_data
-        ):
+        if "initial_volume" not in form_data and "initial_volume_pc" not in form_data:
             return FormValidation(
                 validation=False,
                 error_message="You must provide the initial absolute or relative "
@@ -72,6 +69,4 @@ class AbstractStorageSection(FormSection):
         Defines the section data dictionaries list.
         :return: The section data.
         """
-        raise NotImplementedError(
-            "The section data property is not implemented"
-        )
+        raise NotImplementedError("The section data property is not implemented")

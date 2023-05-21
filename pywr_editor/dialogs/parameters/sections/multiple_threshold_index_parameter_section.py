@@ -2,14 +2,10 @@ from pywr_editor.form import NodePickerWidget
 
 from ..parameter_dialog_form import ParameterDialogForm
 from .abstract_threshold_parameter_section import ValueDict
-from .abstract_thresholds_parameter_section import (
-    AbstractThresholdsParameterSection,
-)
+from .abstract_thresholds_parameter_section import AbstractThresholdsParameterSection
 
 
-class MultipleThresholdIndexParameterSection(
-    AbstractThresholdsParameterSection
-):
+class MultipleThresholdIndexParameterSection(AbstractThresholdsParameterSection):
     def __init__(self, form: ParameterDialogForm, section_data: dict):
         """
         Initialises the form section for a MultipleThresholdIndexParameter.

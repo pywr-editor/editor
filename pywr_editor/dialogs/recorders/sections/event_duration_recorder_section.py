@@ -19,9 +19,7 @@ class EventDurationRecorderSection(AbstractRecorderSection):
                 "field_args": {
                     "include_recorder_key": [
                         # get key for EventRecorder
-                        form.model_config.pywr_recorder_data.get_lookup_key(
-                            sub_class
-                        )
+                        form.model_config.pywr_recorder_data.get_lookup_key(sub_class)
                     ]
                     + form.model_config.includes.get_keys_with_subclass(
                         sub_class, "recorder"
@@ -57,6 +55,4 @@ class EventDurationRecorderSection(AbstractRecorderSection):
         :param form_data: The form data.
         :return: None
         """
-        self.form.find_field_by_name("threshold_type").widget.store_threshold(
-            form_data
-        )
+        self.form.find_field_by_name("threshold_type").widget.store_threshold(form_data)

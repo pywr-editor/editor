@@ -13,9 +13,7 @@ class AbstractSchematicShape(AbstractSchematicItem):
     item is a shape on the schematic and store basic shape properties.
     """
 
-    def __init__(
-        self, shape_id: str, shape: "ModelBaseShape", view: "Schematic"
-    ):
+    def __init__(self, shape_id: str, shape: "ModelBaseShape", view: "Schematic"):
         """
         Initialise the text shape.
         :param shape_id: The shape ID.

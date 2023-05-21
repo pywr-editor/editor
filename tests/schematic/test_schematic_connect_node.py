@@ -5,9 +5,7 @@ from PySide6.QtCore import QPoint, Qt
 
 from pywr_editor import MainWindow
 from pywr_editor.schematic import Edge, Schematic, SchematicNode
-from pywr_editor.schematic.commands.connect_node_command import (
-    ConnectNodeCommand,
-)
+from pywr_editor.schematic.commands.connect_node_command import ConnectNodeCommand
 from pywr_editor.toolbar.tab_panel import TabPanel
 from tests.utils import resolve_model_path
 
@@ -56,9 +54,7 @@ class TestSchematicConnectNodes:
         assert found is True
 
         # enable connect mode
-        qtbot.mouseClick(
-            node_op_panel.buttons["Connect"], Qt.MouseButton.LeftButton
-        )
+        qtbot.mouseClick(node_op_panel.buttons["Connect"], Qt.MouseButton.LeftButton)
 
         # select the target node Reservoir
         target_point = schematic.mapFromScene(QPoint(200, 500))

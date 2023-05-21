@@ -35,8 +35,6 @@ class ToolbarLargeButton(ToolbarBaseButton):
         style = self.base_stylesheet
         style["QToolButton"]["margin-left"] = "2px"
         style["QToolButton"]["margin-right"] = "2px"
-        style["QToolButton::menu-indicator"][
-            "subcontrol-position"
-        ] = "bottom center"
+        style["QToolButton::menu-indicator"]["subcontrol-position"] = "bottom center"
 
         return stylesheet_dict_to_str(style)

@@ -56,9 +56,7 @@ class FloatWidget(FormCustomWidget):
                 self.form_field.set_warning_message(message)
         # otherwise use default if provided
         elif self.get_default_value() is not None:
-            self.logger.debug(
-                f"Setting default value of {self.get_default_value()}"
-            )
+            self.logger.debug(f"Setting default value of {self.get_default_value()}")
             self.line_edit.setText(str(self.get_default_value()))
         self.line_edit.blockSignals(False)
 
@@ -102,9 +100,7 @@ class FloatWidget(FormCustomWidget):
 
         self.line_edit.setText(value)
 
-    def validate(
-        self, name: str, label: str, value: float | str
-    ) -> FormValidation:
+    def validate(self, name: str, label: str, value: float | str) -> FormValidation:
         """
         Checks that the parameter is a valid number.
         :param name: The field name.
