@@ -84,12 +84,7 @@ class WeightedAverageProfileParameterSection(FormSection):
                     "value": self.form.get_param_dict_value("profiles"),
                 },
             ],
-            "Miscellaneous": [
-                {
-                    "name": "comment",
-                    "value": self.form.get_param_dict_value("comment"),
-                },
-            ],
+            "Miscellaneous": [self.form.comment],
         }
 
         return data_dict

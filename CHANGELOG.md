@@ -4,16 +4,30 @@ All notable changes to this project will be documented in this file.
 All issue numbers are relative to https://github.com/pywr-editor/editor
 
 
+## v1.6.0 - 2023-04-02
+### Added
+- Added support to multi-line comments ([#146](https://github.com/pywr-editor/editor/issues/146)).
+- Add icons to contextual menu actions and fixed menu style on right-click menu on form inputs ([#159](https://github.com/pywr-editor/editor/issues/159)).
+- Added node icons in contextual menu. When you right-click on a node to change an edge, the contextual menu now shows the node icons to easily identify the node to connect or disconnect ([#166](https://github.com/pywr-editor/editor/issues/166)).
+
+### Changed
+- The window title now shows the model name first  ([#170](https://github.com/pywr-editor/editor/issues/170)).
+- Open the start screen when user click on the "Open model file" button in the toolbar ([#153](https://github.com/pywr-editor/editor/issues/153)).
+- The message box, after a validation tool is run, displays a different icon if the model validation is successful ([#155](https://github.com/pywr-editor/editor/issues/155)).
+- The fields to select multiple nodes and parameters are now disabled if there are no nodes or parameters in the model ([#163](https://github.com/pywr-editor/editor/issues/163)).
+
+### Fixed
+- Fixed an exception when a H5 file has columns cast as integers ([#157](https://github.com/pywr-editor/editor/issues/157)).
+- Fixed exception file logging when the exception hook creates a string instead of an Exception object ([#165](https://github.com/pywr-editor/editor/issues/165)).
+- The metadata field in the table recorder is now optional ([#160](https://github.com/pywr-editor/editor/issues/160)).
+
 ## v1.5.1 - 2023-03-29
 ### Added
-- A new reload button was added to the toolbar to reload the JSON file in case it was externally edited 
-  ([#148](https://github.com/pywr-editor/editor/issues/148)).
+- A new reload button was added to the toolbar to reload the JSON file in case it was externally edited ([#148](https://github.com/pywr-editor/editor/issues/148)).
 - Added comment field in the form of RBF parameter ([#126](https://github.com/pywr-editor/editor/issues/126)).
 
 ### Changed
-- The width of form widgets handling float numbers have been shrank. Some fields also now restrict the value to a
-  specific range (for ex `initial_volume_pc` is now constrained between 0 and 1) 
-  ([#144](https://github.com/pywr-editor/editor/issues/144)).
+- The width of form widgets handling float numbers have been shrank. Some fields also now restrict the value to a specific range (for ex `initial_volume_pc` is now constrained between 0 and 1) ([#144](https://github.com/pywr-editor/editor/issues/144)).
 - When cloning a recorder or parameter, the latest saved configuration is now used ([#138](https://github.com/pywr-editor/editor/issues/138)).
 - Integers are now allowed in the upper and lower bounds of a RBF parameter. Previously only a list of integers was allowed ([#136](https://github.com/pywr-editor/editor/issues/136)). 
 - Increased the minimum width of the parameter dialog to hide the horizontal scrollbar in the scrollable area of the form. Some forms are too large to properly fit into the child widget. ([#127](https://github.com/pywr-editor/editor/issues/127)).

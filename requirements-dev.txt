@@ -1,5 +1,5 @@
 bumpver
-pre-commit
+pre-commit==3.2.1
 pytest
 pytest-qt
 pytest-cov

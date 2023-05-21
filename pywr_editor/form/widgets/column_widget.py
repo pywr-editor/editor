@@ -101,13 +101,11 @@ class ColumnWidget(FormCustomWidget):
             return None
         return table_field.table
 
-    def sanitise_value(self, value: str | int) -> str | bool:
+    def sanitise_value(self, value: str | int) -> str | int | bool:
         """
-        Sanitises the value. If the DataFrame columns are available and the value is a
-        column number, this will be converted to a column name for consistency.
+        Sanitises the value and return the selected column.
         :param value: The value to sanitise.
-        :return: The selected column name or False if the column name or number is
-        invalid.
+        :return: The selected column name or False if the column name is invalid.
         """
         self.logger.debug(f"Sanitising value {value}")
         self.wrong_column = False
@@ -134,33 +132,17 @@ class ColumnWidget(FormCustomWidget):
                 )
                 selected_col_name = ""
             else:
-                # Handle different types
-                if isinstance(value, str):
-                    if value not in columns:
-                        self.wrong_column = True
-                        self.logger.debug(
-                            f"The provided column name '{value}' does not exist in "
-                            + "the table"
-                        )
-                    else:
-                        self.logger.debug(
-                            f"Using final value: '{selected_col_name}'"
-                        )
-                        selected_col_name = value
-                # NOTE: len(table.columns) = all columns - len(table.index)
-                elif isinstance(value, int):
-                    if not 0 <= value <= len(columns) - 1:
-                        self.wrong_column = True
-                        self.logger.debug(
-                            "The provided column index does not exist in the table"
-                        )
-                    else:
-                        # convert to string to ensure consistency
-                        selected_col_name = columns[value]
-                        self.logger.debug(
-                            f"Converted column number {value} to string "
-                            + f"'{selected_col_name}'"
-                        )
+                if value not in columns:
+                    self.wrong_column = True
+                    self.logger.debug(
+                        f"The provided column name '{value}' does not exist in "
+                        + "the table"
+                    )
+                else:
+                    self.logger.debug(
+                        f"Using final value: '{selected_col_name}'"
+                    )
+                    selected_col_name = value
 
         return selected_col_name
 
@@ -176,7 +158,13 @@ class ColumnWidget(FormCustomWidget):
             + get_signal_sender(self)
         )
         self.form_field.clear_message(message_type="warning")
+        # ComboBox always returns a string - convert selected column to
+        # original type
+        type_conv = self.combo_box.currentData()
         self.value = self.sanitise_value(selected_column)
+        if type_conv and self.value is not None:
+            self.value = type_conv(selected_column)
+
         self.logger.debug(f"Updated field value to '{self.value}'")
         self.logger.debug("Completed on_update_value Slot")
 
@@ -250,9 +238,12 @@ class ColumnWidget(FormCustomWidget):
         # populate the field and enabled it
         else:
             items = sorted(list(columns))
-            # items = ["None"] + sorted(list(table.columns))
-            self.logger.debug(f"Filling field with: {', '.join(items)}")
-            self.combo_box.addItems(items)
+            self.logger.debug(
+                f"Filling field with: {', '.join(map(str, items))}"
+            )
+            for col in items:
+                # force to string and store type
+                self.combo_box.addItem(str(col), type(col))
             self.combo_box.setEnabled(True)
 
             if self.value is False:
@@ -270,7 +261,7 @@ class ColumnWidget(FormCustomWidget):
                 )
             elif self.value is not False:
                 self.logger.debug(f"Selecting column '{self.value}'")
-                self.combo_box.setCurrentText(self.value)
+                self.combo_box.setCurrentText(str(self.value))
 
         self.combo_box.blockSignals(False)
 
@@ -286,7 +277,6 @@ class ColumnWidget(FormCustomWidget):
             are_columns_valid(table) is False
             or self.value is False
             or self.value == ""
-            or isinstance(self.value, str) is False
         ):
             return None
         return self.value

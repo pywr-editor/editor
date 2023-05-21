@@ -102,12 +102,7 @@ class Polynomial2DStorageParameterSection(FormSection):
                     "amount before applying the offset. Default to empty to ignore",
                 },
             ],
-            "Miscellaneous": [
-                {
-                    "name": "comment",
-                    "value": self.form.get_param_dict_value("comment"),
-                },
-            ],
+            "Miscellaneous": [self.form.comment],
         }
 
     def filter(self, form_data: dict) -> None:

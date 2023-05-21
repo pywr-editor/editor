@@ -22,14 +22,24 @@ class ContextualMenu(QMenu):
         :param label: The title.
         :return: None
         """
+        self.addAction(self.get_title_action(label, self))
+
+    @staticmethod
+    def get_title_action(label: str, parent: QMenu) -> QWidgetAction:
+        """
+        Generates the menu title action.
+        :param label: The title.
+        :param parent: The parent widget where to add the widget action.
+        :return: The QWidgetAction instance.
+        """
         max_size = 20
         if len(label) > max_size:
             label = f"{label[0:max_size]}..."
         title = QLabel(label)
         title.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        title_action = QWidgetAction(self)
+        title_action = QWidgetAction(parent)
         title_action.setDefaultWidget(title)
-        self.addAction(title_action)
+        return title_action
 
     @property
     def stylesheet(self) -> str:

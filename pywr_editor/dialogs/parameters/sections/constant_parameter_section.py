@@ -75,10 +75,7 @@ class ConstantParameterSection(FormSection):
                     "help_text": "Scale the constant value by the provided amount. "
                     + "Default to empty to ignore",
                 },
-                {
-                    "name": "comment",
-                    "value": self.form.get_param_dict_value("comment"),
-                },
+                self.form.comment,
             ],
             self.form.optimisation_config_group_name: [
                 self.form.is_variable_field,

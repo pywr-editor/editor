@@ -55,5 +55,8 @@ class ControlCurvesWidget(AbstractParametersListPickerWidget):
             name=name,
             value=new_value,
             parent=parent,
+            show_row_numbers=True,
+            row_number_label="Curve",
             log_name=self.__class__.__name__,
         )
+        self.list.resizeColumnsToContents()

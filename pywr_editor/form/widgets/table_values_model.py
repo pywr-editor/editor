@@ -23,12 +23,12 @@ class TableValuesModel(QAbstractTableModel):
         :param row_number_label: The column label for the row numbers.
         """
         super().__init__()
-        if len(labels) != len(values):
+        if values and len(labels) != len(values):
             raise ValueError(
                 "The number of columns must match then number of variables"
             )
         # init empty lists
-        if values is None:
+        if values is None or len(values) == 0:
             values = [[] for _ in labels]
         # force to floats
         else:

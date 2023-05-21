@@ -112,9 +112,17 @@ class IndexWidget(FormCustomWidget):
                 index_names = table_selector_widget.index_names
             else:
                 index_names = get_index_names(table_selector_widget.table)
-            self.logger.debug(
-                f"Fetched index names from TableSelectorWidget: {index_names}"
-            )
+            # "index_col" key not provided
+            if not index_names or index_names == "":
+                self.logger.debug(
+                    "Index names not provided ('index_col' key is None). "
+                    + f"Using '{default_index_name}'"
+                )
+                index_names = [default_index_name]
+            else:
+                self.logger.debug(
+                    f"Fetched index names from TableSelectorWidget: {index_names}"
+                )
         # use values in "index_col" key. This ensures sorting between index names
         # and values
         elif selected_source == value_source_widget.labels["anonymous_table"]:

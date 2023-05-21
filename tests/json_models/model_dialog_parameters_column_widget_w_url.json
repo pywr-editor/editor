@@ -81,11 +81,9 @@
     },
     "param_with_column_int": {
       "type": "constant",
-      "url": "files/table.xlsx",
-      "sheet_name": "Sheet 1",
-      "index_col": "Column 2",
-      "column": 2,
-      "index": 6
+      "url": "files/table_ints.h5",
+      "key": "/table",
+      "column": 5
     },
     "param_no_index_col": {
       "type": "constant",
@@ -144,7 +142,7 @@
         0,
         1
       ],
-      "column": 1
+      "column": " Date"
     },
     "param_empty_sheet": {
       "type": "constant",
@@ -154,13 +152,12 @@
         2,
         3
       ],
-      "column": 1
+      "column": "Column 2"
     },
     "param_with_h5_table_index_col": {
       "type": "constant",
       "url": "files/table_index.h5",
       "key": "/flow",
-      "index_col": 2,
       "column": "Column 3",
       "index": 10
     }

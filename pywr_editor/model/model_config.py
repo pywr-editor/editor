@@ -50,6 +50,11 @@ class ModelConfig:
         if not self.is_valid():
             return
 
+        # pywr data
+        self.pywr_parameter_data = PywrParametersData()
+        self.pywr_recorder_data = PywrRecordersData()
+        self.pywr_node_data = PywrNodesData()
+
         # loads the module components
         self.changes_tracker = ChangesTracker()
         self.file = ModelFileInfo(self.json_file)
@@ -61,11 +66,6 @@ class ModelConfig:
         self.scenarios = Scenarios(model=self)
         self.includes = Includes(model=self)
         self.shapes = Shapes(model=self)
-
-        # pywr data
-        self.pywr_parameter_data = PywrParametersData()
-        self.pywr_recorder_data = PywrRecordersData()
-        self.pywr_node_data = PywrNodesData()
 
         # custom components cannot use same name as built-in parameters. Pywr always
         # prioritises its own

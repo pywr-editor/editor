@@ -17,7 +17,7 @@ from pywr_editor.form import FormField, IndexColWidget
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import get_index_names
 from tests.utils import check_msg, close_message_box, resolve_model_path
-from tests.widgets.test_url_widget import df_from_h5
+from tests.widgets_dataframe.test_url_widget import df_from_h5
 
 
 # noinspection PyTypeChecker

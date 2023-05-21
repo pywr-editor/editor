@@ -12,7 +12,7 @@ from pywr_editor.form import (
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import get_index_names
 from tests.utils import close_message_box, resolve_model_path
-from tests.widgets.test_url_widget import df_from_h5
+from tests.widgets_dataframe.test_url_widget import df_from_h5
 
 
 class TestDialogParameterH5KeyWidget:
@@ -29,7 +29,6 @@ class TestDialogParameterH5KeyWidget:
         Initialises the model configuration.
         :return: The ModelConfig instance.
         """
-
         return ModelConfig(self.model_file)
 
     @pytest.mark.parametrize(
@@ -87,7 +86,7 @@ class TestDialogParameterH5KeyWidget:
         ).widget
         form = index_col_widget.form
         assert index_col_widget.isEnabled() is False
-        assert parse_dates_widget.isEnabled() is True
+        assert parse_dates_widget.isEnabled() is False
 
         # 4. test validate method
         output = key_widget.validate("key", "Key", key_widget.get_value())

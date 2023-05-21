@@ -63,7 +63,6 @@ class TestDialogParameterColumnWidget:
                 # column is a string
                 ("param_with_column_str", "Column 3", ""),
                 # column is an integer
-                ("param_with_column_int", "Column 4", ""),
                 # column does not exist
                 ("param_with_non_existing_column", None, "does not exist"),
                 # column is index and therefore not available
@@ -78,6 +77,10 @@ class TestDialogParameterColumnWidget:
                 # column has invalid type (null)
                 ("param_with_invalid_column_type2", None, ""),
             ],
+        },
+        "test_column_with_ints": {
+            "params": "param_name",
+            "scenarios": [("param_with_column_int",)],
         },
         "test_non_existing_file": {
             "params": "param_name",
@@ -95,15 +98,6 @@ class TestDialogParameterColumnWidget:
         },
     }
 
-    @staticmethod
-    def get_model_config(model_file: str) -> ModelConfig:
-        """
-        Initialises the model configuration.
-        :param model_file: The JSON file to load.
-        :return: The ModelConfig instance.
-        """
-        return ModelConfig(resolve_model_path(model_file))
-
     def test_columns(
         self, qtbot, model_file, widget_name, param_name, expected, warning_msg
     ):
@@ -111,7 +105,7 @@ class TestDialogParameterColumnWidget:
         Tests that the field loads the columns and sets the selected column using the
         UlrWidget or TableSelectorWidget.
         """
-        model_config = self.get_model_config(model_file)
+        model_config = ModelConfig(resolve_model_path(model_file))
 
         all_columns = {"Column 1", "Column 2", "Column 3", "Column 4"}
         dialog = ParametersDialog(model_config, param_name)
@@ -231,6 +225,41 @@ class TestDialogParameterColumnWidget:
                 == model_param_dict
             )
 
+    def test_column_with_ints(self, qtbot, model_file, widget_name, param_name):
+        """
+        Tests when the column names are integers.
+        """
+        model_config = ModelConfig(resolve_model_path(model_file))
+
+        dialog = ParametersDialog(model_config, param_name)
+        selected_page = dialog.pages_widget.currentWidget()
+        dialog.show()
+
+        # noinspection PyUnresolvedReferences
+        assert selected_page.findChild(FormField, "name").value() == param_name
+        # noinspection PyTypeChecker
+        column_field: FormField = selected_page.findChild(FormField, "column")
+        # noinspection PyTypeChecker
+        column_widget: ColumnWidget = column_field.widget
+
+        assert column_widget.value == 5
+        assert column_widget.combo_box.currentData() == int
+        assert column_widget.get_value() == 5
+        assert (
+            column_widget.validate("", "", column_widget.get_value()).validation
+            is True
+        )
+
+        # set None and check type and validation
+        column_widget.combo_box.setCurrentText("None")
+        assert column_widget.combo_box.currentData() is None
+        assert column_widget.get_value() is None
+
+        assert (
+            column_widget.validate("", "", column_widget.get_value()).validation
+            is False
+        )
+
     def test_non_existing_file(
         self, qtbot, model_file, widget_name, param_name
     ):
@@ -238,7 +267,7 @@ class TestDialogParameterColumnWidget:
         Tests the widget when the table file does not exist and the table is not
         available. This also tests the updated_table Signal.
         """
-        model_config = self.get_model_config(model_file)
+        model_config = ModelConfig(resolve_model_path(model_file))
 
         dialog = ParametersDialog(model_config, param_name)
         selected_page = dialog.pages_widget.currentWidget()
@@ -262,7 +291,7 @@ class TestDialogParameterColumnWidget:
         # no message is set on the field (just the url field)
         assert column_field.message.text() == ""
         # value are not changed - in case file is fixed in url field
-        assert column_widget.value == 1
+        assert column_widget.value == " Date"
         assert column_field.value() is None
         assert spy_updated_table.count() == 0
 
@@ -342,7 +371,7 @@ class TestDialogParameterColumnWidget:
         the only way to reload a table is via the Refresh button - table parsing
         options cannot be changed.
         """
-        model_config = self.get_model_config(self.model_files["url"])
+        model_config = ModelConfig(resolve_model_path(self.model_files["url"]))
 
         param_name = "param_empty_sheet"
         dialog = ParametersDialog(model_config, param_name)
@@ -390,7 +419,7 @@ class TestDialogParameterColumnWidget:
         Checks that, when the DataFrame index is changed via IndexColWidget, the
         columns list is updated. This only applies to anonymous tables (with UrlWidget).
         """
-        model_config = self.get_model_config(self.model_files["url"])
+        model_config = ModelConfig(resolve_model_path(self.model_files["url"]))
 
         param_name = "param_with_column_str"
         dialog = ParametersDialog(model_config, param_name)
@@ -451,7 +480,7 @@ class TestDialogParameterColumnWidget:
         Checks that, when the user changes the selected column, the internal value is
         updated. This test does not depend on any table source widget.
         """
-        model_config = self.get_model_config(self.model_files["url"])
+        model_config = ModelConfig(resolve_model_path(self.model_files["url"]))
 
         dialog = ParametersDialog(model_config, param_name)
         selected_page = dialog.pages_widget.currentWidget()
@@ -486,7 +515,7 @@ class TestDialogParameterColumnWidget:
         Tests that a warning message is shown, if the table does not contain any
         column. This test does not depend on any table source widget.
         """
-        model_config = self.get_model_config(self.model_files["url"])
+        model_config = ModelConfig(resolve_model_path(self.model_files["url"]))
 
         param_name = "param_empty_sheet"
         dialog = ParametersDialog(model_config, param_name)
@@ -531,7 +560,7 @@ class TestDialogParameterColumnWidget:
         """
         Tests the widget with H5 files.
         """
-        model_config = self.get_model_config(model_file)
+        model_config = ModelConfig(resolve_model_path(model_file))
 
         dialog = ParametersDialog(model_config, param_name)
         selected_page = dialog.pages_widget.currentWidget()
@@ -599,7 +628,7 @@ class TestDialogParameterColumnWidget:
         """
         Tests field validation when the field is optional.
         """
-        model_config = self.get_model_config(self.model_files["url"])
+        model_config = ModelConfig(resolve_model_path(self.model_files["url"]))
 
         param_name = "param_with_column_str"
         dialog = ParametersDialog(model_config, param_name)

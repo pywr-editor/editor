@@ -8,16 +8,16 @@ from pywr_editor.style import Color
 
 from ..base_node import BaseNode
 from ..svg_icon import IconProps, SvgIcon
-from .pywr_node import PywrNode
 
 if TYPE_CHECKING:
     from pywr_editor.schematic import SchematicNode
 
 
-class Catchment(BaseNode, PywrNode):
-    # The size in pixel. Keep same size as Circle to ensure bbox consistency
-    # with other nodes. The shape is scaled below by 20%.
+class Catchment(BaseNode):
     size: list[int] = [22, 22]
+    """ The size in pixel. Keep same size as Circle to ensure bbox consistency
+    # with other nodes. The shape is scaled below by 20%. """
+    is_pywr = True
 
     def __init__(self, parent: "SchematicNode"):
         """

@@ -78,7 +78,7 @@
       "type": "constant",
       "url": "files/table_mixed_types.csv",
       "index": 1,
-      "column": 3
+      "column": " Date"
     },
     "param_with_index_list_int": {
       "type": "constant",
@@ -91,7 +91,7 @@
         7,
         6
       ],
-      "column": 0
+      "column": "Column 1"
     },
     "param_with_index_list_str": {
       "type": "constant",
@@ -104,7 +104,7 @@
         "c",
         6
       ],
-      "column": 1
+      "column": "Column 3"
     },
     "param_with_indexes_key": {
       "type": "constant",
@@ -117,7 +117,7 @@
         "c",
         6
       ],
-      "column": 1
+      "column": "Column 3"
     },
     "param_with_index_col_as_list_int": {
       "type": "constant",
@@ -130,14 +130,14 @@
         3,
         "c"
       ],
-      "column": 1
+      "column": "Demand centre"
     },
     "param_h5_file": {
       "type": "constant",
       "url": "files/table_index.h5",
       "key": "/flow",
       "index": 22,
-      "column": 1
+      "column": "Column 4"
     },
     "param_with_h5_table_index_col": {
       "type": "constant",
@@ -145,14 +145,14 @@
       "key": "/flow",
       "index_col": 2,
       "index": 10,
-      "column": 0
+      "column": "Column 4"
     },
     "param_with_h5_table_ano_index": {
       "type": "constant",
       "url": "files/table.h5",
       "key": "/flow",
       "index": 2,
-      "column": 0
+      "column": "Column 4"
     },
     "param_with_invalid_index_one_value_only_int": {
       "type": "constant",
@@ -162,7 +162,7 @@
         "Demand centre"
       ],
       "index": 1,
-      "column": 3
+      "column": " Date"
     },
     "param_with_invalid_index_one_value_only_list": {
       "type": "constant",
@@ -174,7 +174,7 @@
       "index": [
         "c"
       ],
-      "column": 3
+      "column": " Date"
     },
     "param_with_no_index_values": {
       "type": "constant",
@@ -183,7 +183,7 @@
         "Column 1",
         "Demand centre"
       ],
-      "column": 1
+      "column": "Column 3"
     },
     "param_with_empty_list": {
       "type": "constant",
@@ -193,20 +193,20 @@
         "Demand centre"
       ],
       "index": [],
-      "column": 3
+      "column": "Demand centre"
     },
     "param_with_wrong_anonymous_index": {
       "type": "constant",
       "url": "files/table_mixed_types.csv",
       "index": 100,
-      "column": 3
+      "column": " Date"
     },
     "param_non_existing_value": {
       "type": "constant",
       "url": "files/table_mixed_types.csv",
       "index_col": "Column 1",
       "index": -9,
-      "column": 3
+      "column": " Date"
     },
     "param_non_existing_values": {
       "type": "constant",
@@ -219,7 +219,7 @@
         6,
         -9
       ],
-      "column": 3
+      "column": " Date"
     },
     "param_wrong_type": {
       "type": "constant",
@@ -232,7 +232,7 @@
         "6",
         -9
       ],
-      "column": 3
+      "column": " Date"
     },
     "param_non_existing_table": {
       "type": "constant",
@@ -245,7 +245,7 @@
         6,
         "c"
       ],
-      "column": 3
+      "column": " Date"
     },
     "param_empty_table": {
       "type": "constant",
@@ -259,19 +259,16 @@
         6,
         "c"
       ],
-      "column": 3
+      "column": " Date"
     },
     "param_empty_h5_table": {
       "type": "constant",
       "url": "files/table_index.h5",
       "key": "/empty_table",
-      "index_col": [
-        "Demand centre"
-      ],
       "index": [
-        6
+        1
       ],
-      "column": 3
+      "column": " Date"
     },
     "param_table_no_rows": {
       "type": "constant",
@@ -284,7 +281,7 @@
         6,
         "c"
       ],
-      "column": 3
+      "column": " Date"
     }
   },
   "pywr_editor": {

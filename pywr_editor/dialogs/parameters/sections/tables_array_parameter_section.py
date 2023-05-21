@@ -88,10 +88,7 @@ class TablesArrayParameterSection(FormSection):
                     "help_text": "Validate the H5 file using the provided hash "
                     "generated with the selected algorithm",
                 },
-                {
-                    "name": "comment",
-                    "value": self.form.get_param_dict_value("comment"),
-                },
+                self.form.comment,
             ],
         }
 

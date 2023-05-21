@@ -146,8 +146,8 @@ class TestDialogParameterIndexWidget:
                 # empty H5 table - same behaviour
                 (
                     "param_empty_h5_table",
-                    {"Demand centre": 6},
-                    6,
+                    {"Anonymous index": 1},
+                    1,
                     "does not contain any column",
                 ),
             ],
@@ -287,7 +287,10 @@ class TestDialogParameterIndexWidget:
                 FormField, "index_col"
             ).widget
             if index_names[0] != "Anonymous index":
-                assert index_col_widget.get_value() == index_names
+                if "h5" in param_name:
+                    assert index_col_widget.get_value() == []
+                else:
+                    assert index_col_widget.get_value() == index_names
 
         # 4. Test field reload - only for UrlWidget where index can be changed
         # dynamically
@@ -490,14 +493,16 @@ class TestDialogParameterIndexWidget:
             assert index_widget.value.index_values[ni] == expected_value
             assert index_widget.value.index_types[ni] == type(expected_value)
 
-        # new CSV table has an additional index with respect to param_empty_h5_table
-        # from model table with url, the index names are updated to use the only
-        # index stored in the file
+        # new CSV table has an additional index with respect to param_empty_h5_table.
+        # With model table with url, the index name is not set and the widget restores
+        # the anonymous index value. With the model table, the index names are already
+        # set and do not match the initial configuration
         if widget_name == "table" and param_name == "param_empty_h5_table":
-            assert index_widget.get_value_as_dict() == {
-                "Demand centre": 6,
+            dict_values = {
+                "Demand centre": None,
                 "Column 1": None,
             }
+            assert index_widget.get_value_as_dict() == dict_values
             assert index_widget.get_value() is None
         else:
             assert index_widget.get_value_as_dict() == dict_values

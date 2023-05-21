@@ -66,6 +66,10 @@ class ControlCurvePiecewiseInterpolatedParameterSection(FormSection):
                     "field_type": ValuesAndExternalDataWidget,
                     "field_args": {
                         "multiple_variables": True,
+                        "show_row_numbers": True,
+                        "row_number_label": "Above curve #",
+                        # values are provided by row
+                        "transpose_values": True,
                         "variable_names": ["Largest value", "Smallest value"],
                     },
                     "validate_fun": self._check_size,
@@ -97,12 +101,7 @@ class ControlCurvePiecewiseInterpolatedParameterSection(FormSection):
                     "interpolation. Default to 1",
                 },
             ],
-            "Miscellaneous": [
-                {
-                    "name": "comment",
-                    "value": self.form.get_param_dict_value("comment"),
-                },
-            ],
+            "Miscellaneous": [self.form.comment],
         }
 
         return data_dict

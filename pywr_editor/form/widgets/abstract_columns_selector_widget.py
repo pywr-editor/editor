@@ -120,13 +120,17 @@ class AbstractColumnsSelectorWidget(FormCustomWidget):
                 "The table does not contain any column"
             )
         else:
-            self.logger.debug(f"Filling field with: {', '.join(columns)}")
+            self.logger.debug(
+                f"Filling field with: {', '.join(map(str,columns))}"
+            )
             # noinspection PyTypeChecker
             url_form_widget: "UrlWidget" = self.form.fields["url"].widget
-            # for index field and H5 files, index cannot be changed as it is embedded
-            # in the file
-            if url_form_widget.file_ext == ".h5" and self.is_index_selector:
+            # H5 files already contain DataFrame object (index is already set and
+            # dates already parsed)
+            if url_form_widget.file_ext == ".h5":
                 self.logger.debug("File is H5; leaving field as disabled")
+                columns = []
+                self.value = []
             else:
                 self.setEnabled(True)
 
@@ -201,7 +205,7 @@ class AbstractColumnsSelectorWidget(FormCustomWidget):
             selected_col_name = value
         else:
             self.logger.debug(
-                f"Found the following columns: {', '.join(columns)}"
+                f"Found the following columns: {', '.join(map(str,columns))}"
             )
 
             # for H5 file, use the built-in index as it does not come form index_col key

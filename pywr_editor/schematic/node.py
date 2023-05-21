@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Any, Literal, TypedDict, Union
 
 import PySide6
 import qtawesome as qta
-from PySide6.QtCore import Slot
+from PySide6.QtCore import QSize, Slot
 from PySide6.QtGui import QAction, QFont, QPainterPath
 from PySide6.QtWidgets import (
     QGraphicsItem,
@@ -11,7 +11,11 @@ from PySide6.QtWidgets import (
     QMenu,
 )
 
-from pywr_editor.node_shapes import GrayCircle, get_node_icon
+from pywr_editor.node_shapes import (
+    GrayCircle,
+    get_node_icon,
+    get_pixmap_from_type,
+)
 from pywr_editor.style import Color
 from pywr_editor.utils import ModelComponentTooltip
 from pywr_editor.widgets import ContextualMenu
@@ -292,17 +296,37 @@ class SchematicNode(AbstractSchematicItem, QGraphicsItemGroup):
 
         if self.connected_nodes["count"] == 0:
             return False
+        icon_size = QSize(24, 24)
+        has_targets = len(self.connected_nodes["target_nodes"]) > 0
+        has_sources = len(self.connected_nodes["source_nodes"]) > 0
 
+        if has_targets:
+            menu.addAction(
+                ContextualMenu.get_title_action("Target nodes", menu)
+            )
         for target_node in self.connected_nodes["target_nodes"]:
             node_type = target_node.model_node.humanised_type
-            action = menu.addAction(f"{target_node.name} ({node_type})")
+            icon, _ = get_pixmap_from_type(
+                icon_size,
+                get_node_icon(model_node_obj=target_node.model_node),
+            )
+            action = menu.addAction(icon, f"{target_node.name} ({node_type})")
             action.setData({"source_node": self, "target_node": target_node})
 
-        menu.addSeparator()
+        if has_targets and has_sources:
+            menu.addSeparator()
 
+        if has_sources:
+            menu.addAction(
+                ContextualMenu.get_title_action("Source nodes", menu)
+            )
         for source_node in self.connected_nodes["source_nodes"]:
             node_type = source_node.model_node.humanised_type
-            action = menu.addAction(f"{source_node.name} ({node_type})")
+            icon, _ = get_pixmap_from_type(
+                icon_size,
+                get_node_icon(model_node_obj=source_node.model_node),
+            )
+            action = menu.addAction(icon, f"{source_node.name} ({node_type})")
             action.setData({"source_node": source_node, "target_node": self})
 
         # noinspection PyUnresolvedReferences

@@ -110,10 +110,7 @@ class Polynomial1DParameterSection(FormSection):
                     "help_text": "Scale the independent variable by the provided "
                     "amount before applying the offset. Default to empty to ignore",
                 },
-                {
-                    "name": "comment",
-                    "value": self.form.get_param_dict_value("comment"),
-                },
+                self.form.comment,
             ],
         }
 

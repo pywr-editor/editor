@@ -53,12 +53,7 @@ class ArrayIndexedScenarioParameterSection(FormSection):
             + self.form.excel_parse_fields
             + self.form.h5_parse_fields
             + [self.form.index_col_field],
-            "Miscellaneous": [
-                {
-                    "name": "comment",
-                    "value": self.form.get_param_dict_value("comment"),
-                },
-            ],
+            "Miscellaneous": [self.form.comment],
         }
 
     def filter(self, form_data):

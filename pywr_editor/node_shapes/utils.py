@@ -10,7 +10,6 @@ from pywr_editor.model import NodeConfig
 
 from .base_node import BaseNode
 from .custom_node_shape import CustomNode
-from .pywr.pywr_node import PywrNode
 
 
 def get_node_icon_classes(include_pywr_nodes: bool = True) -> list[str]:
@@ -28,15 +27,17 @@ def get_node_icon_classes(include_pywr_nodes: bool = True) -> list[str]:
         "CustomNode",
     ]
     if not include_pywr_nodes:
-        node_to_exclude += [
-            module
-            for module in dir(all_nodes)
-            if isinstance(
-                getattr(all_nodes, module),
-                shiboken6.Object.__class__,
-            )
-            and issubclass(getattr(all_nodes, module), PywrNode)
-        ]
+        for module in dir(all_nodes):
+            node = getattr(all_nodes, module)
+            if (
+                isinstance(
+                    node,
+                    shiboken6.Object.__class__,
+                )
+                and hasattr(node, "is_pywr")
+                and node.is_pywr
+            ):
+                node_to_exclude.append(module)
 
     return [
         module

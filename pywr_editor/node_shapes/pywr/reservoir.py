@@ -3,13 +3,14 @@ from typing import TYPE_CHECKING
 from pywr_editor.style import Color
 
 from ..base_reservoir import BaseReservoir
-from .pywr_node import PywrNode
 
 if TYPE_CHECKING:
     from pywr_editor.schematic import SchematicNode
 
 
-class Reservoir(BaseReservoir, PywrNode):
+class Reservoir(BaseReservoir):
+    is_pywr = True
+
     def __init__(self, parent: "SchematicNode"):
         """
         Initialises the class for a node output.

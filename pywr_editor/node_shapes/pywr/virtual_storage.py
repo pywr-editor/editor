@@ -6,13 +6,14 @@ from PySide6.QtGui import QFont, QFontMetrics, QPen, Qt, QTextOption
 from pywr_editor.style import Color
 
 from ..base_reservoir import BaseReservoir
-from .pywr_node import PywrNode
 
 if TYPE_CHECKING:
     from pywr_editor.schematic import SchematicNode
 
 
-class VirtualStorage(BaseReservoir, PywrNode):
+class VirtualStorage(BaseReservoir):
+    is_pywr = True
+
     def __init__(self, parent: "SchematicNode", inside_label: str = "V"):
         """
         Initialises the class for a virtual storage node.
