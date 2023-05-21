@@ -17,7 +17,7 @@ def app() -> None:
     Runs the application. This accepts the following arguments:
      * file: the path to the JSON file to open.
      * --create_new: force the editor to open an empty model.
-     * -- browse: open the editor with the file browser.
+     * --browse: open the editor with the file browser.
      * --log: enable logging.
      * --log_to_file: when supplied with --log, the editor activity is logged to a file
     :return: None
@@ -30,7 +30,6 @@ def app() -> None:
     argument_parser.add_argument("--create_new", action=BooleanOptionalAction)
     argument_parser.add_argument("--browse", action=BooleanOptionalAction)
     argument_parser.add_argument("--log", action=BooleanOptionalAction)
-    argument_parser.add_argument("--log_to_file", action=BooleanOptionalAction)
 
     # register taskbar icon for Windows
     try:
@@ -48,10 +47,7 @@ def app() -> None:
     editor.setWindowIcon(QIcon(":logos/small"))
 
     # handle the logger
-    Logging().configure(file_logging=options.log_to_file)
-    if not options.log and options.log_to_file is True:
-        argument_parser.error("--log_to_file requires --log")
-
+    Logging().configure(file_logging=options.log)
     if not options.log:
         Logging.disable()
 

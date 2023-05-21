@@ -40,20 +40,15 @@ class AddNodeCommand(QUndoCommand):
         # add node for the first time
         if self.node_config is None:
             self.model_config.nodes.add(self.added_node_dict)
-            self.node_config = (
-                self.model_config.nodes.get_node_config_from_name(
-                    self.added_node_dict["name"], as_dict=False
-                )
+            self.node_config = self.model_config.nodes.config(
+                self.added_node_dict["name"], as_dict=False
             )
             # add the node to the schematic and model config
             self.schematic.add_node(node_props=self.added_node_dict)
 
-            self.logger.debug(
-                f"Added node to schematic with: {self.added_node_dict}"
-            )
+            self.logger.debug(f"Added node to schematic with: {self.added_node_dict}")
             status_message = (
-                "Added new node of type "
-                + f"'{self.node_config.humanised_type}'"
+                "Added new node of type " + f"'{self.node_config.humanised_type}'"
             )
         # restore deleted node and edges
         else:
@@ -87,9 +82,7 @@ class AddNodeCommand(QUndoCommand):
         """
         node_name = self.node_config.name
         # store the latest configuration to be restored
-        self.node_config = self.model_config.nodes.get_node_config_from_name(
-            node_name, as_dict=False
-        )
+        self.node_config = self.model_config.nodes.config(node_name, as_dict=False)
 
         # delete node and edges and store them for the redo command
         self.deleted_edges = self.schematic.delete_node(node_name)

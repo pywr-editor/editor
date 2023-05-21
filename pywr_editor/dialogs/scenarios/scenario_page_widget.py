@@ -34,7 +34,7 @@ class ScenarioPageWidget(QWidget):
         self.name = name
         self.pages = parent
         self.model_config = model_config
-        self.scenario_dict = model_config.scenarios.get_config_from_name(name)
+        self.scenario_dict = model_config.scenarios.config(name)
 
         layout = QVBoxLayout(self)
         layout.setAlignment(Qt.AlignTop)
@@ -59,9 +59,7 @@ class ScenarioPageWidget(QWidget):
         # noinspection PyUnresolvedReferences
         add_button.clicked.connect(parent.on_add_new_scenario)
 
-        delete_button = PushIconButton(
-            icon=qta.icon("msc.remove"), label="Delete"
-        )
+        delete_button = PushIconButton(icon=qta.icon("msc.remove"), label="Delete")
         delete_button.setObjectName("delete_button")
         # noinspection PyUnresolvedReferences
         delete_button.clicked.connect(self.on_delete_scenario)

@@ -72,17 +72,13 @@ class TestParametersDialog:
         assert new_model_index.data() == new_name
 
         # the item is selected
-        assert (
-            parameter_list_widget.list.selectedIndexes()[0].data() == new_name
-        )
+        assert parameter_list_widget.list.selectedIndexes()[0].data() == new_name
 
         # Page widget
         selected_page = pages_widget.currentWidget()
         selected_page.findChild(ParameterDialogForm).load_fields()
         assert new_name in selected_page.findChild(QLabel).text()
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         # button is disabled
         assert save_button.isEnabled() is False
 
@@ -99,8 +95,8 @@ class TestParametersDialog:
 
         # the model is updated
         assert model_config.has_changes is True
-        assert model_config.parameters.does_parameter_exist(new_name) is True
-        assert model_config.parameters.get_config_from_name(new_name) == {
+        assert model_config.parameters.exists(new_name) is True
+        assert model_config.parameters.config(new_name) == {
             "type": "constant",
             "value": 0,
         }
@@ -121,14 +117,12 @@ class TestParametersDialog:
         assert renamed_parameter_name in selected_page.findChild(QLabel).text()
 
         # model configuration
-        assert model_config.parameters.does_parameter_exist(new_name) is False
-        assert (
-            model_config.parameters.does_parameter_exist(renamed_parameter_name)
-            is True
-        )
-        assert model_config.parameters.get_config_from_name(
-            renamed_parameter_name
-        ) == {"type": "constant", "value": new_value}
+        assert model_config.parameters.exists(new_name) is False
+        assert model_config.parameters.exists(renamed_parameter_name) is True
+        assert model_config.parameters.config(renamed_parameter_name) == {
+            "type": "constant",
+            "value": new_value,
+        }
 
     def test_clone_parameter(self, qtbot, model_config, dialog):
         """
@@ -147,9 +141,7 @@ class TestParametersDialog:
 
         # Clone the parameter
         # noinspection PyTypeChecker
-        clone_button: QPushButton = selected_page.findChild(
-            QPushButton, "clone_button"
-        )
+        clone_button: QPushButton = selected_page.findChild(QPushButton, "clone_button")
         qtbot.mouseClick(clone_button, Qt.MouseButton.LeftButton)
 
         # new name is random
@@ -163,8 +155,8 @@ class TestParametersDialog:
 
         # the model is updated
         assert model_config.has_changes is True
-        assert model_config.parameters.does_parameter_exist(new_name) is True
-        assert model_config.parameters.get_config_from_name(new_name) == {
+        assert model_config.parameters.exists(new_name) is True
+        assert model_config.parameters.config(new_name) == {
             "type": "dataframe",
             "url": "files/table.csv",
             "column": 0,
@@ -182,9 +174,7 @@ class TestParametersDialog:
         pages_widget.set_current_widget_by_name(current_name)
         selected_page = pages_widget.currentWidget()
         selected_page.form.load_fields()
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         name_field = selected_page.findChild(FormField, "name")
 
         # Change the name and save
@@ -202,11 +192,9 @@ class TestParametersDialog:
 
         # model has changes
         assert model_config.has_changes is True
-        assert (
-            model_config.parameters.does_parameter_exist(current_name) is False
-        )
-        assert model_config.parameters.does_parameter_exist(new_name) is True
-        assert model_config.parameters.get_config_from_name(new_name) == {
+        assert model_config.parameters.exists(current_name) is False
+        assert model_config.parameters.exists(new_name) is True
+        assert model_config.parameters.config(new_name) == {
             "type": "constant",
             "table": "Excel table",
             "index": 8,
@@ -236,38 +224,28 @@ class TestParametersDialog:
             model_index, QItemSelectionModel.Select
         )
 
-        delete_button: QPushButton = pages_widget.pages[
-            deleted_parameter
-        ].findChild(QPushButton, "delete_button")
+        delete_button: QPushButton = pages_widget.pages[deleted_parameter].findChild(
+            QPushButton, "delete_button"
+        )
 
         # delete button is enabled and the item is selected
         assert delete_button.isEnabled() is True
         assert (
-            parameter_list_widget.list.selectedIndexes()[0].data()
-            == deleted_parameter
+            parameter_list_widget.list.selectedIndexes()[0].data() == deleted_parameter
         )
 
         # delete
         def confirm_deletion():
             widget = QApplication.activeModalWidget()
-            qtbot.mouseClick(
-                widget.findChild(QPushButton), Qt.MouseButton.LeftButton
-            )
+            qtbot.mouseClick(widget.findChild(QPushButton), Qt.MouseButton.LeftButton)
 
         QTimer.singleShot(200, confirm_deletion)
         qtbot.mouseClick(delete_button, Qt.MouseButton.LeftButton)
 
-        assert isinstance(
-            pages_widget.currentWidget(), ParameterEmptyPageWidget
-        )
+        assert isinstance(pages_widget.currentWidget(), ParameterEmptyPageWidget)
         assert deleted_parameter not in pages_widget.pages.keys()
-        assert (
-            model_config.parameters.does_parameter_exist(deleted_parameter)
-            is False
-        )
-        assert (
-            deleted_parameter not in parameter_list_widget.model.parameter_names
-        )
+        assert model_config.parameters.exists(deleted_parameter) is False
+        assert deleted_parameter not in parameter_list_widget.model.parameter_names
 
     def test_change_param_type(self, qtbot, model_config):
         """
@@ -330,16 +308,14 @@ class TestParametersDialog:
         selected_page = dialog.pages_widget.currentWidget()
         form = selected_page.form
 
-        param_type_widget: ParameterTypeSelectorWidget = (
-            form.find_field_by_name("type").widget
-        )
+        param_type_widget: ParameterTypeSelectorWidget = form.find_field_by_name(
+            "type"
+        ).widget
         for name in param_type_widget.combo_box.all_items:
             param_type_widget.combo_box.setCurrentText(name)
 
     @pytest.mark.parametrize("imported", [False, True])
-    def test_add_new_custom_parameter(
-        self, qtbot, model_config, dialog, imported
-    ):
+    def test_add_new_custom_parameter(self, qtbot, model_config, dialog, imported):
         """
         Tests that a new custom parameter can be correctly added. This tests
         the validation and filter in the CustomParameterSection
@@ -355,15 +331,11 @@ class TestParametersDialog:
         # noinspection PyUnresolvedReferences
         selected_page.findChild(ParameterDialogForm).load_fields()
         # noinspection PyTypeChecker
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
 
         # 1. Setup parameter
         # rename parameter
-        name_widget: QLineEdit = selected_page.findChild(
-            FormField, "name"
-        ).widget
+        name_widget: QLineEdit = selected_page.findChild(FormField, "name").widget
         name_widget.setText("Custom parameter")
 
         # select not imported parameter
@@ -373,9 +345,7 @@ class TestParametersDialog:
         form = type_widget.form_field.form
 
         if not imported:
-            type_widget.combo_box.setCurrentText(
-                "Custom parameter (not imported)"
-            )
+            type_widget.combo_box.setCurrentText("Custom parameter (not imported)")
             param_type = "ACustomParameter"
 
             # change type
@@ -409,6 +379,7 @@ class TestParametersDialog:
         qtbot.wait(0.1)  # add delay so that the form updates
         assert save_button.isEnabled() is True
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
-        assert model_config.parameters.get_config_from_name(
-            "Custom parameter"
-        ) == {"type": param_type, "value": 0}
+        assert model_config.parameters.config("Custom parameter") == {
+            "type": param_type,
+            "value": 0,
+        }

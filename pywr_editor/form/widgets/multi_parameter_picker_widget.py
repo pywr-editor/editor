@@ -34,7 +34,7 @@ class MultiParameterPickerWidget(FormCustomWidget):
         self.combo_box = CheckableComboBox()
         model_parameters = self.model_config.parameters.names
         for name in model_parameters:
-            param_obj = self.model_config.parameters.get_config_from_name(
+            param_obj = self.model_config.parameters.config(
                 parameter_name=name, as_dict=False
             )
             self.combo_box.addItem(f"{name} ({param_obj.humanised_type})", name)
@@ -58,9 +58,7 @@ class MultiParameterPickerWidget(FormCustomWidget):
             for param_name in value:
                 index = self.combo_box.findData(param_name, Qt.UserRole)
                 if index != -1:
-                    self.logger.debug(
-                        f"Selecting index #{index} for '{param_name}'"
-                    )
+                    self.logger.debug(f"Selecting index #{index} for '{param_name}'")
                     selected_indexes.append(index)
                 else:
                     wrong_names.append(param_name)
@@ -81,8 +79,7 @@ class MultiParameterPickerWidget(FormCustomWidget):
             message = "There are no parameters available"
             self.logger.debug(message)
             self.form_field.set_warning_message(
-                message
-                + ". Add a new parameter first, before setting up this option"
+                message + ". Add a new parameter first, before setting up this option"
             )
 
         # layout

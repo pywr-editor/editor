@@ -36,9 +36,7 @@ class AbstractTreeWidgetComponent:
         custom_parameter_keys = list(
             model_config.includes.get_custom_parameters().keys()
         )
-        custom_recorder_keys = list(
-            model_config.includes.get_custom_recorders().keys()
-        )
+        custom_recorder_keys = list(model_config.includes.get_custom_recorders().keys())
 
         self.model_config = model_config
         self.items: list[QTreeWidgetItem] = []
@@ -52,9 +50,7 @@ class AbstractTreeWidgetComponent:
             if comp_type == "parameter" or (
                 "type" in comp_value
                 and (
-                    model_config.pywr_parameter_data.get_lookup_key(
-                        param_obj.type
-                    )
+                    model_config.pywr_parameter_data.get_lookup_key(param_obj.type)
                     or param_obj.key in custom_parameter_keys
                 )
                 and "recorders" not in comp_value.keys()
@@ -66,9 +62,7 @@ class AbstractTreeWidgetComponent:
             elif comp_type == "recorder" or (
                 "type" in comp_value
                 and (
-                    model_config.pywr_recorder_data.get_lookup_key(
-                        recorder_obj.type
-                    )
+                    model_config.pywr_recorder_data.get_lookup_key(recorder_obj.type)
                     or recorder_obj.key in custom_recorder_keys
                 )
             ):
@@ -175,9 +169,7 @@ class AbstractTreeWidgetComponent:
             item.setToolTip(column, value)
             # check if string is a model parameter. Add type to 2nd column
             if value in self.model_config.parameters.names:
-                param_obj = self.model_config.parameters.get_config_from_name(
-                    value, as_dict=False
-                )
+                param_obj = self.model_config.parameters.config(value, as_dict=False)
                 param_type = param_obj.humanised_type
 
                 # change label when the parameter is rendered outside
@@ -193,18 +185,14 @@ class AbstractTreeWidgetComponent:
                 "Recorder",
                 "Recorders",
             ]:
-                recorder_obj = self.model_config.recorders.get_config_from_name(
-                    value, as_dict=False
-                )
+                recorder_obj = self.model_config.recorders.config(value, as_dict=False)
                 recorder_type = recorder_obj.humanised_type
                 item.setText(1, value)
                 item.setToolTip(1, f"Recorder of type {recorder_type}")
                 item.setIcon(1, QIcon(RecorderIcon(recorder_obj.key)))
             # string is a model node
             elif value in self.model_config.nodes.names:
-                node_obj = self.model_config.nodes.get_node_config_from_name(
-                    value, as_dict=False
-                )
+                node_obj = self.model_config.nodes.config(value, as_dict=False)
                 node_type = node_obj.humanised_type
                 item.setText(1, f"{value} ({node_type})")
                 item.setToolTip(1, f"Node of type {node_type}")

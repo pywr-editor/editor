@@ -50,12 +50,8 @@ class TestStorageSection:
             == original_text
         )
 
-        qtbot.mouseClick(
-            table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
-        )
-        qtbot.mouseDClick(
-            table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
-        )
+        qtbot.mouseClick(table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y))
+        qtbot.mouseDClick(table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y))
         qtbot.keyClick(table.viewport().focusWidget(), Qt.Key_Backspace)
         for letter in list(new_text):
             if letter == " ":
@@ -98,9 +94,7 @@ class TestStorageSection:
         slots_field = form.find_field_by_name("slots_field")
         widget: SlotsTableWidget = slots_field.widget
         # noinspection PyTypeChecker
-        edge_message_label: QLabel = widget.findChild(
-            QLabel, "edge_warning_message"
-        )
+        edge_message_label: QLabel = widget.findChild(QLabel, "edge_warning_message")
 
         # 1. Check widget attributes
         assert widget.target_nodes == target_nodes
@@ -180,9 +174,7 @@ class TestStorageSection:
         widget: SlotsTableWidget = slots_field.widget
         table = widget.slot_table
         # noinspection PyTypeChecker
-        edge_message_label: QLabel = widget.findChild(
-            QLabel, "edge_warning_message"
-        )
+        edge_message_label: QLabel = widget.findChild(QLabel, "edge_warning_message")
 
         # 1. Check widget attributes
         unsorted_nodes = ["Output", "Output2"]
@@ -250,7 +242,7 @@ class TestStorageSection:
         # check node dictionary
         changed_node_idx = 1
         values["slot_names"][changed_node_idx] = new_slot_name
-        assert model_config.nodes.get_node_config_from_name(node_name) == {
+        assert model_config.nodes.config(node_name) == {
             **{
                 "name": node_name,
                 "type": "multisplitlink",
@@ -261,9 +253,7 @@ class TestStorageSection:
 
         # check slot in edges
         assert (
-            model_config.edges.get_slot(
-                node_name, expected_value["target_nodes"][0], 1
-            )
+            model_config.edges.get_slot(node_name, expected_value["target_nodes"][0], 1)
             == expected_value["slot_names"][0]
         )
         assert (
@@ -371,9 +361,7 @@ class TestStorageSection:
         """
         Tests row sorting when the Move up and Move down are pressed.
         """
-        dialog = NodeDialog(
-            model_config=model_config, node_name="valid_w_names"
-        )
+        dialog = NodeDialog(model_config=model_config, node_name="valid_w_names")
         dialog.hide()
 
         form = dialog.form
@@ -383,9 +371,7 @@ class TestStorageSection:
         row_id = 1
         widget.slot_table.clearSelection()
         row = widget.model.index(row_id, 0)
-        widget.slot_table.selectionModel().select(
-            row, QItemSelectionModel.Select
-        )
+        widget.slot_table.selectionModel().select(row, QItemSelectionModel.Select)
 
         qtbot.mouseClick(widget.move_down, Qt.MouseButton.LeftButton)
         assert widget.model.nodes == ["Output2", "Output3", "Output"]

@@ -61,9 +61,7 @@ class AbstractStringModelComponentPickerWidget(FormCustomWidget):
             include_method = self.model_config.includes.get_custom_recorders
             icon_class = RecorderIcon
         else:
-            raise ValueError(
-                "The component_type can only be 'parameter' or 'recorder'"
-            )
+            raise ValueError("The component_type can only be 'parameter' or 'recorder'")
 
         # check if the component type exists
         all_comp_keys = self.comp_data.keys + list(include_method().keys())
@@ -75,15 +73,13 @@ class AbstractStringModelComponentPickerWidget(FormCustomWidget):
                         + f"Available types are: {', '.join(all_comp_keys)}"
                     )
 
-            self.logger.debug(
-                f"Including only the following keys: {include_comp_key}"
-            )
+            self.logger.debug(f"Including only the following keys: {include_comp_key}")
 
         # add component names with icon
         self.combo_box = ComboBox()
         self.combo_box.addItem("None")
         for name in model_comp_names:
-            param_obj = model_prop.get_config_from_name(name, as_dict=False)
+            param_obj = model_prop.config(name, as_dict=False)
             key = param_obj.key
 
             # filter component keys
@@ -111,9 +107,7 @@ class AbstractStringModelComponentPickerWidget(FormCustomWidget):
                 self.logger.debug(message)
                 self.form_field.set_warning_message(message)
             else:
-                self.logger.debug(
-                    f"Setting '{value}' as selected {component_type}"
-                )
+                self.logger.debug(f"Setting '{value}' as selected {component_type}")
                 self.combo_box.setCurrentText(value)
         else:
             message = (

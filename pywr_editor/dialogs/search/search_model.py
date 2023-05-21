@@ -36,18 +36,14 @@ class SearchModel(QAbstractListModel):
                 {
                     "name": name,
                     "icon": QIcon(
-                        ExtensionIcon(
-                            model_config.tables.get_table_extension(name)
-                        )
+                        ExtensionIcon(model_config.tables.get_table_extension(name))
                     ),
                     "comp_type": None,
                     "type": ItemType.TABLE,
                 }
             )
         for name in model_config.parameters.names:
-            param_obj = model_config.parameters.get_config_from_name(
-                name, as_dict=False
-            )
+            param_obj = model_config.parameters.config(name, as_dict=False)
             self.model_data.append(
                 {
                     "name": name,
@@ -58,9 +54,7 @@ class SearchModel(QAbstractListModel):
             )
 
         for name in model_config.recorders.names:
-            recorder_obj = model_config.recorders.get_config_from_name(
-                name, as_dict=False
-            )
+            recorder_obj = model_config.recorders.config(name, as_dict=False)
             self.model_data.append(
                 {
                     "name": name,
@@ -72,9 +66,7 @@ class SearchModel(QAbstractListModel):
 
         icon_size = QSize(25, 24)
         for name in model_config.nodes.names:
-            node_obj = model_config.nodes.get_node_config_from_name(
-                name, as_dict=False
-            )
+            node_obj = model_config.nodes.config(name, as_dict=False)
 
             # Add the icon for the current node type
             icon, _ = get_pixmap_from_type(
@@ -91,8 +83,7 @@ class SearchModel(QAbstractListModel):
 
     def data(
         self,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
         role: int = ...,
     ) -> Any:
         """
@@ -117,8 +108,7 @@ class SearchModel(QAbstractListModel):
 
     def rowCount(
         self,
-        parent: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex = ...,
+        parent: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex = ...,
     ) -> int:
         """
         Provides the total number of rows.
@@ -129,8 +119,7 @@ class SearchModel(QAbstractListModel):
 
     def columnCount(
         self,
-        parent: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex = ...,
+        parent: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex = ...,
     ) -> int:
         """
         Provides the total number of columns.

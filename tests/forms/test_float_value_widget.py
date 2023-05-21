@@ -43,10 +43,7 @@ class TestDialogParameterConstantValue:
         assert value_field.message.text() == ""
 
         # noinspection PyUnresolvedReferences
-        assert (
-            "Last updated"
-            in selected_page.findChild(FormField, "comment").value()
-        )
+        assert "Last updated" in selected_page.findChild(FormField, "comment").value()
         # noinspection PyUnresolvedReferences
         assert selected_page.findChild(FormField, "scale").value() == 8
         # noinspection PyUnresolvedReferences
@@ -81,16 +78,14 @@ class TestDialogParameterConstantValue:
 
         # try saving the form
         # noinspection PyTypeChecker
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         assert save_button.isEnabled() is True
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         assert value_field.message.text() == ""
         assert scale_field.message.text() == ""
 
         assert model_config.has_changes is True
-        assert model_config.parameters.get_config_from_name(param_name) == {
+        assert model_config.parameters.config(param_name) == {
             "type": "constant",
             "value": 0.25,
             "scale": -100,
@@ -141,17 +136,13 @@ class TestDialogParameterConstantValue:
 
         # validation passes because field is empty at init
         assert (
-            value_widget.validate(
-                "value", "Value", value_field.value()
-            ).validation
+            value_widget.validate("value", "Value", value_field.value()).validation
             is True
         )
 
         # try saving the form
         # noinspection PyTypeChecker
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         assert save_button.isEnabled() is False
 
         # Change the value and save
@@ -161,7 +152,7 @@ class TestDialogParameterConstantValue:
         assert value_field.message.text() == ""
 
         assert model_config.has_changes is True
-        assert model_config.parameters.get_config_from_name(param_name) == {
+        assert model_config.parameters.config(param_name) == {
             "type": "constant",
             "value": 1.0,
         }
@@ -169,9 +160,7 @@ class TestDialogParameterConstantValue:
         # Set wrong type again
         value_widget.line_edit.setText("s")
         assert (
-            value_widget.validate(
-                "value", "Value", value_field.value()
-            ).validation
+            value_widget.validate("value", "Value", value_field.value()).validation
             is False
         )
 
@@ -197,9 +186,7 @@ class TestDialogParameterConstantValue:
         assert selected_page.findChild(FormField, "name").value() == param_name
 
         # noinspection PyTypeChecker
-        value_field: FormField = selected_page.findChild(
-            FormField, "efficiency"
-        )
+        value_field: FormField = selected_page.findChild(FormField, "efficiency")
         # noinspection PyTypeChecker
         value_widget: ValueWidget = value_field.widget
 
@@ -214,9 +201,7 @@ class TestDialogParameterConstantValue:
             # change to invalid float and validate again
             invalid_float = -10
             value_widget.line_edit.setText(str(invalid_float))
-            out = value_widget.validate(
-                "efficiency", "Efficiency", invalid_float
-            )
+            out = value_widget.validate("efficiency", "Efficiency", invalid_float)
             assert out.validation is False
         # invalid at init
         else:

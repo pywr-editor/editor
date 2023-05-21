@@ -20,9 +20,7 @@ from pywr_editor.widgets import ComboBox
 from tests.utils import close_message_box, model_path, resolve_model_path
 
 
-def df_from_h5(
-    file: str, key: str, start: int = 0
-) -> [pd.DataFrame, list[str]]:
+def df_from_h5(file: str, key: str, start: int = 0) -> [pd.DataFrame, list[str]]:
     """
     Reads the DataFrame and reset the index.
     :param file: The H5 file.
@@ -123,22 +121,16 @@ class TestDialogParameterUrlWidget:
 
         # 2. the correct fields are shown or hidden
         for field_name in shown_fields:
-            form_field: FormField = selected_page.findChild(
-                FormField, field_name
-            )
+            form_field: FormField = selected_page.findChild(FormField, field_name)
             assert form_field.isVisible() is True
 
         for field_name in hidden_fields:
-            form_field: FormField = selected_page.findChild(
-                FormField, field_name
-            )
+            form_field: FormField = selected_page.findChild(FormField, field_name)
             assert form_field.widget.isVisible() is False
 
         # 3. index and column fields are always visible. They are disabled when there
         # is an error
-        index_widget: IndexWidget = selected_page.findChild(
-            FormField, "index"
-        ).widget
+        index_widget: IndexWidget = selected_page.findChild(FormField, "index").widget
         for combo_box in index_widget.findChildren(ComboBox):
             # all fields are hidden, there is an error
             if not shown_fields:
@@ -176,9 +168,7 @@ class TestDialogParameterUrlWidget:
         if "csv" in url_widget.full_file:
             assert url_widget.table.equals(pd.read_csv(url_widget.full_file))
         elif "h5" in url_widget.full_file:
-            df, index_names = df_from_h5(
-                url_widget.full_file, key="/flow", start=1
-            )
+            df, index_names = df_from_h5(url_widget.full_file, key="/flow", start=1)
             assert url_widget.table.equals(df)
             assert get_index_names(url_widget.table) == index_names
         else:
@@ -203,9 +193,7 @@ class TestDialogParameterUrlWidget:
         assert form_data["url"] == url_widget.get_value()
 
         # 5. Save form to test filter
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         # enable button (disabled due to no changes)
         assert model_config.has_changes is False
         assert save_button.isEnabled() is False
@@ -232,10 +220,7 @@ class TestDialogParameterUrlWidget:
             if value:
                 model_param_dict[f] = value
 
-        assert (
-            model_config.parameters.get_config_from_name(param_name)
-            == model_param_dict
-        )
+        assert model_config.parameters.config(param_name) == model_param_dict
 
     @pytest.mark.parametrize(
         "param_name, message",
@@ -305,9 +290,7 @@ class TestDialogParameterUrlWidget:
         abs_new_file = str(model_path() / rel_new_file)
         url_widget.line_edit.setText(rel_new_file)
         assert spy.count() == 1
-        assert (
-            url_widget.get_value() == rel_new_file
-        )  # relative path to JSON file
+        assert url_widget.get_value() == rel_new_file  # relative path to JSON file
         assert url_widget.full_file == abs_new_file
         assert url_widget.file_ext == ".xlsx"
 
@@ -405,9 +388,7 @@ class TestDialogParameterUrlWidget:
         assert spy.count() == 1
 
         # check that the ColumnWidget is updated
-        index_widget: ColumnWidget = selected_page.findChild(
-            FormField, "column"
-        ).widget
+        index_widget: ColumnWidget = selected_page.findChild(FormField, "column").widget
         assert index_widget.combo_box.all_items == [
             "None",
             " Date",
@@ -452,22 +433,15 @@ class TestDialogParameterUrlWidget:
         # noinspection PyTypeChecker
         url_widget: UrlWidget = url_field.widget
 
-        assert (
-            selected_page.findChild(FormField, "name").value()
-            == selected_parameter
-        )
+        assert selected_page.findChild(FormField, "name").value() == selected_parameter
         assert "Cannot parse the file" in url_field.message.text()
-        assert (
-            key_field.message.text() == "The H5 file does not contain any key"
-        )
+        assert key_field.message.text() == "The H5 file does not contain any key"
 
         # H5 and common fields are visible
         for field_name in self.h5_fields + list(
             set(self.common_fields) - set(self.hidden_h5_fields)
         ):
-            shown_field: FormField = selected_page.findChild(
-                FormField, field_name
-            )
+            shown_field: FormField = selected_page.findChild(FormField, field_name)
             assert shown_field.isVisible() is True
 
             # table is not available. Index_col is always disabled, key is disabled

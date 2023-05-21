@@ -80,9 +80,7 @@ class MetadataFormWidget(Form):
         parent.save_button.clicked.connect(self.on_save)
 
     @staticmethod
-    def _check_version_number(
-        name: str, label: str, value: str
-    ) -> FormValidation:
+    def _check_version_number(name: str, label: str, value: str) -> FormValidation:
         """
         Checks the minimum version number field.
         :param name: The field name
@@ -128,9 +126,7 @@ class MetadataFormWidget(Form):
         # update model dictionary
         self.logger.debug(f"Updated metadata with {form_data}")
         self.model_config.json["metadata"] = form_data
-        self.model_config.changes_tracker.add(
-            f"Updated model metadata to {form_data}"
-        )
+        self.model_config.has_changed()
 
         if self.dialog.parent is not None:
             # reload the components tree

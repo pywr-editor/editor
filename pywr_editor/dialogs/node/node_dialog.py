@@ -35,9 +35,7 @@ class NodeDialog(QDialog):
         """
         super().__init__(parent)
         self.app = parent
-        node_config = model_config.nodes.get_node_config_from_name(
-            node_name=node_name, as_dict=False
-        )
+        node_config = model_config.nodes.config(node_name=node_name, as_dict=False)
         layout = QVBoxLayout(self)
         layout.setAlignment(Qt.AlignTop)
 

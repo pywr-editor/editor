@@ -63,9 +63,7 @@ class ScenarioFormWidget(ModelComponentForm):
                     "name": "options",
                     "field_type": ScenarioOptionsWidget,
                     "value": {
-                        "slice": self.get_dict_value(
-                            "slice", self.scenario_dict
-                        ),
+                        "slice": self.get_dict_value("slice", self.scenario_dict),
                         "ensemble_names": self.get_dict_value(
                             "ensemble_names", self.scenario_dict
                         ),
@@ -84,9 +82,7 @@ class ScenarioFormWidget(ModelComponentForm):
             parent=parent,
         )
 
-    def _check_scenario_name(
-        self, name: str, label: str, value: str
-    ) -> FormValidation:
+    def _check_scenario_name(self, name: str, label: str, value: str) -> FormValidation:
         """
         Checks that the new scenario name is not duplicated.
         :param name: The field name.
@@ -95,10 +91,7 @@ class ScenarioFormWidget(ModelComponentForm):
         :return: True if the name validates correctly, False otherwise.
         """
         # do not save form if the name is changed and already exists
-        if (
-            self.name != value
-            and self.model_config.scenarios.does_scenario_exist(value) is True
-        ):
+        if self.name != value and self.model_config.scenarios.exists(value) is True:
             return FormValidation(
                 validation=False,
                 error_message=f"The scenario '{value}; already exists. "

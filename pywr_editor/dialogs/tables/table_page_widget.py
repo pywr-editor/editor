@@ -34,7 +34,7 @@ class TablePageWidget(QWidget):
         self.name = name
         self.pages = parent
         self.model_config = model_config
-        self.table_dict = model_config.tables.get_table_config_from_name(name)
+        self.table_dict = model_config.tables.config(name)
         self.logger.debug(f"Initialising page for table named '{name}'")
 
         layout = QVBoxLayout(self)
@@ -51,9 +51,7 @@ class TablePageWidget(QWidget):
         close_button.clicked.connect(parent.dialog.reject)
 
         # noinspection PyTypeChecker
-        self.save_button = PushIconButton(
-            icon=qta.icon("msc.save"), label="Save"
-        )
+        self.save_button = PushIconButton(icon=qta.icon("msc.save"), label="Save")
         self.save_button.setObjectName("save_button")
         # noinspection PyUnresolvedReferences
         self.save_button.clicked.connect(self.on_save)
@@ -64,9 +62,7 @@ class TablePageWidget(QWidget):
         # noinspection PyUnresolvedReferences
         add_button.clicked.connect(parent.on_add_new_table)
 
-        delete_button = PushIconButton(
-            icon=qta.icon("msc.remove"), label="Delete"
-        )
+        delete_button = PushIconButton(icon=qta.icon("msc.remove"), label="Delete")
         delete_button.setObjectName("delete_button")
         # noinspection PyUnresolvedReferences
         delete_button.clicked.connect(self.on_delete_table)
@@ -147,18 +143,12 @@ class TablePageWidget(QWidget):
         # delete empty fields (None or empty list - for example parse_dates is
         # optional)
         keys_to_delete = []
-        [
-            keys_to_delete.append(key)
-            for key, value in form_data.items()
-            if not value
-        ]
+        [keys_to_delete.append(key) for key, value in form_data.items() if not value]
         [form_data.pop(key, None) for key in keys_to_delete]
 
         # check changes to index
         prev_index = self.form.get_table_dict_value("index_col")
-        new_index = (
-            form_data["index_col"] if "index_col" in form_data.keys() else None
-        )
+        new_index = form_data["index_col"] if "index_col" in form_data.keys() else None
         url_widget: TableUrlWidget = self.form.find_field_by_name("url").widget
         if (
             prev_index
@@ -170,9 +160,7 @@ class TablePageWidget(QWidget):
             if isinstance(prev_index[0], int):
                 # noinspection PyBroadException
                 try:
-                    column_names = get_columns(
-                        url_widget.table, include_index=True
-                    )
+                    column_names = get_columns(url_widget.table, include_index=True)
                     prev_index = [column_names[idx] for idx in prev_index]
                 except Exception:
                     pass
@@ -203,9 +191,7 @@ class TablePageWidget(QWidget):
 
             # update the table list
             # noinspection PyUnresolvedReferences
-            table_model: TablesListModel = (
-                self.pages.dialog.table_list_widget.model
-            )
+            table_model: TablesListModel = self.pages.dialog.table_list_widget.model
             idx = table_model.table_names.index(self.name)
             # noinspection PyUnresolvedReferences
             table_model.layoutAboutToBeChanged.emit()
@@ -265,9 +251,7 @@ class TablePageWidget(QWidget):
                 if hasattr(dialog.app, "components_tree"):
                     dialog.app.components_tree.reload()
                 if hasattr(dialog.app, "statusBar"):
-                    dialog.app.statusBar().showMessage(
-                        f'Deleted table "{self.name}"'
-                    )
+                    dialog.app.statusBar().showMessage(f'Deleted table "{self.name}"')
 
     def showEvent(self, event: PySide6.QtGui.QShowEvent) -> None:
         """

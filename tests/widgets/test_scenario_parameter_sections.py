@@ -92,9 +92,7 @@ class TestDialogParameterControlCurveParameterSection:
         # 3. Change scenario and validate with new size
         if param_name == "valid_values":
             # noinspection PyTypeChecker
-            scenario_field: FormField = selected_page.findChild(
-                FormField, "scenario"
-            )
+            scenario_field: FormField = selected_page.findChild(FormField, "scenario")
             # noinspection PyTypeChecker
             scenario_widget: ScenarioPickerWidget = scenario_field.widget
             assert values_widget.scenario_size == 2
@@ -106,9 +104,7 @@ class TestDialogParameterControlCurveParameterSection:
             assert values_widget.scenario_size == 20
             out = values_widget.validate("", "", [])
             assert out.validation is False
-            assert (
-                "many ensembles as the scenario size (20)" in out.error_message
-            )
+            assert "many ensembles as the scenario size (20)" in out.error_message
 
         # 4. Reset
         values_widget.reset()
@@ -219,9 +215,7 @@ class TestDialogParameterControlCurveParameterSection:
         # noinspection PyTypeChecker
         values_widget: ScenarioValuesWidget = values_field.widget
         # noinspection PyTypeChecker
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
 
         # 1. delete button is disabled
         assert values_widget.list.selectionModel().selection().count() == 0
@@ -247,7 +241,7 @@ class TestDialogParameterControlCurveParameterSection:
         qtbot.mouseClick(main_save_button, Qt.MouseButton.LeftButton)
 
         assert model_config.has_changes is True
-        assert model_config.parameters.get_config_from_name(param_name) == {
+        assert model_config.parameters.config(param_name) == {
             "type": "scenariomonthlyprofile",
             "scenario": "scenario B",
             "values": new_value,
@@ -279,24 +273,18 @@ class TestDialogParameterControlCurveParameterSection:
         if mode == "edit":
             index = 1
             self.select_row(values_widget, index)
-            qtbot.mouseClick(
-                values_widget.edit_button, Qt.MouseButton.LeftButton
-            )
+            qtbot.mouseClick(values_widget.edit_button, Qt.MouseButton.LeftButton)
         elif mode == "add":
-            qtbot.mouseClick(
-                values_widget.add_button, Qt.MouseButton.LeftButton
-            )
+            qtbot.mouseClick(values_widget.add_button, Qt.MouseButton.LeftButton)
         else:
             raise ValueError("Mode not supported")
 
         # noinspection PyTypeChecker
-        child_dialog: ScenarioValuesPickerDialogWidget = (
-            selected_page.findChild(ScenarioValuesPickerDialogWidget)
+        child_dialog: ScenarioValuesPickerDialogWidget = selected_page.findChild(
+            ScenarioValuesPickerDialogWidget
         )
         # noinspection PyTypeChecker
-        save_button: QPushButton = child_dialog.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = child_dialog.findChild(QPushButton, "save_button")
 
         # 2. Add/change values by manipulating the model
         # noinspection PyTypeChecker
@@ -340,7 +328,7 @@ class TestDialogParameterControlCurveParameterSection:
         qtbot.mouseClick(main_save_button, Qt.MouseButton.LeftButton)
 
         assert model_config.has_changes is True
-        assert model_config.parameters.get_config_from_name(param_name) == {
+        assert model_config.parameters.config(param_name) == {
             "type": "scenariomonthlyprofile",
             "scenario": "scenario B",
             "values": new_model_values,
@@ -374,15 +362,13 @@ class TestDialogParameterControlCurveParameterSection:
 
         # 3. Save the entire form
         # noinspection PyTypeChecker
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         assert "Save" in save_button.text()
         save_button.setEnabled(True)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
 
         assert model_config.has_changes is True
-        assert model_config.parameters.get_config_from_name(param_name) == {
+        assert model_config.parameters.config(param_name) == {
             "type": "scenariomonthlyprofile",
             "scenario": "scenario B",
             "table": "Table 1",
@@ -405,9 +391,7 @@ class TestDialogParameterControlCurveParameterSection:
         source_widget: SourceSelectorWidget = selected_page.findChild(
             FormField, "source"
         ).widget
-        source_widget.combo_box.setCurrentText(
-            source_widget.labels["anonymous_table"]
-        )
+        source_widget.combo_box.setCurrentText(source_widget.labels["anonymous_table"])
 
         # 2. Set the URL
         csv_file = "files/table.csv"
@@ -416,14 +400,12 @@ class TestDialogParameterControlCurveParameterSection:
 
         # 3. Save the entire form
         # noinspection PyTypeChecker
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         assert "Save" in save_button.text()
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
 
         assert model_config.has_changes is True
-        assert model_config.parameters.get_config_from_name(param_name) == {
+        assert model_config.parameters.config(param_name) == {
             "type": "scenariomonthlyprofile",
             "scenario": "scenario B",
             "url": csv_file,

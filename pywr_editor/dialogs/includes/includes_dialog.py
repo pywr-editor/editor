@@ -83,9 +83,7 @@ class IncludesDialog(QDialog):
         self.table = TableView(
             model=self.model, toggle_buttons_on_selection=self.delete_button
         )
-        self.table.setSelectionBehavior(
-            QAbstractItemView.SelectionBehavior.SelectRows
-        )
+        self.table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
         self.table.setColumnWidth(0, 300)
         self.table.setItemDelegate(IncludesDelegate())
 
@@ -100,9 +98,7 @@ class IncludesDialog(QDialog):
         # noinspection PyUnresolvedReferences
         close_button.clicked.connect(self.reject)
 
-        self.save_button = PushIconButton(
-            icon=qta.icon("msc.save"), label="Save"
-        )
+        self.save_button = PushIconButton(icon=qta.icon("msc.save"), label="Save")
         self.save_button.setEnabled(False)
         # noinspection PyUnresolvedReferences
         self.save_button.clicked.connect(self.on_save)
@@ -129,9 +125,7 @@ class IncludesDialog(QDialog):
         Deletes selected import(s).
         :return: None
         """
-        self.logger.debug(
-            f"Running on_delete_file Slot from {get_signal_sender(self)}"
-        )
+        self.logger.debug(f"Running on_delete_file Slot from {get_signal_sender(self)}")
         indexes = self.table.selectedIndexes()
         row_indexes = list({index.row() for index in indexes})
         file_names = list(self.model.files_dict.keys())
@@ -190,9 +184,7 @@ class IncludesDialog(QDialog):
         Adds a new import.
         :return: None
         """
-        self.logger.debug(
-            f"Running on_add_file Slot from {get_signal_sender(self)}"
-        )
+        self.logger.debug(f"Running on_add_file Slot from {get_signal_sender(self)}")
         file_dialog = QFileDialog()
         file_dialog.setFileMode(QFileDialog.FileMode.ExistingFiles)
 
@@ -227,9 +219,7 @@ class IncludesDialog(QDialog):
                     f"The file '{file_name}' must be a valid Python (.py) file"
                 )
             elif file in self.model.files_dict:
-                error_message = (
-                    f"The file '{file_name}' is already in the import list"
-                )
+                error_message = f"The file '{file_name}' is already in the import list"
 
             # show error
             if error_message:
@@ -242,9 +232,7 @@ class IncludesDialog(QDialog):
             # parse the file
             # noinspection PyBroadException
             try:
-                import_props = self.model_config.includes.get_classes_from_file(
-                    file
-                )
+                import_props = self.model_config.includes.get_classes_from_file(file)
                 if (
                     not import_props.parameters
                     and not import_props.recorders
@@ -286,9 +274,7 @@ class IncludesDialog(QDialog):
         Saves the import list.
         :return: None
         """
-        self.logger.debug(
-            f"Running on_add_file Slot from {get_signal_sender(self)}"
-        )
+        self.logger.debug(f"Running on_add_file Slot from {get_signal_sender(self)}")
 
         # includes non Python files
         values = self.model_config.includes.get_all_non_pyfiles()
@@ -296,7 +282,7 @@ class IncludesDialog(QDialog):
         for file in self.model.files_dict.keys():
             values.append(self.model_config.path_to_relative(file, True))
         self.logger.debug(f"Saving {values}")
-        self.model_config.includes.save_imports(values)
+        self.model_config.includes.save(values)
 
         # update the node panel
         if self.app:
@@ -320,8 +306,7 @@ class IncludesDelegate(QStyledItemDelegate):
         self,
         painter: PySide6.QtGui.QPainter,
         option: PySide6.QtWidgets.QStyleOptionViewItem,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
     ):
         """
         Paints the row red when file does not exist.

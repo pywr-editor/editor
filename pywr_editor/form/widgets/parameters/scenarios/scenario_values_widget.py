@@ -143,23 +143,17 @@ class ScenarioValuesWidget(FormCustomWidget):
 
         # update scenario size if a different scenario is selected
         # noinspection PyUnresolvedReferences
-        scenario_widget.combo_box.currentIndexChanged.connect(
-            self.on_update_scenario
-        )
+        scenario_widget.combo_box.currentIndexChanged.connect(self.on_update_scenario)
 
         # check that the list matches the size of the selected scenario
         scenario = scenario_field.value()
         if self.value and scenario is not None:
-            self.scenario_size = (
-                self.form.model_config.scenarios.get_size_from_name(scenario)
-            )
+            self.scenario_size = self.form.model_config.scenarios.get_size(scenario)
             if self.scenario_size != len(self.value):
                 new_message = "The value must contain as many ensembles as the "
                 new_message += f"scenario size ({self.scenario_size})"
                 if self.warning_message is not None:
-                    self.warning_message = (
-                        f"{new_message}. {self.warning_message}"
-                    )
+                    self.warning_message = f"{new_message}. {self.warning_message}"
                 else:
                     self.warning_message = new_message
                 self.logger.debug(new_message)
@@ -178,10 +172,8 @@ class ScenarioValuesWidget(FormCustomWidget):
         )
 
         scenario_field = self.form.find_field_by_name("scenario")
-        self.scenario_size = (
-            self.form.model_config.scenarios.get_size_from_name(
-                scenario_field.value()
-            )
+        self.scenario_size = self.form.model_config.scenarios.get_size(
+            scenario_field.value()
         )
         self.form_field.clear_message()
         self.logger.debug(f"Updated scenario size with {self.scenario_size}")
@@ -204,9 +196,7 @@ class ScenarioValuesWidget(FormCustomWidget):
             if index not in row_indexes:
                 new_values.append(sub_values)
             else:
-                self.logger.debug(
-                    f"Deleted index {index} with values {sub_values}"
-                )
+                self.logger.debug(f"Deleted index {index} with values {sub_values}")
 
         # noinspection PyUnresolvedReferences
         self.model.layoutAboutToBeChanged.emit()
@@ -221,9 +211,7 @@ class ScenarioValuesWidget(FormCustomWidget):
         Opens the dialog to edit the values of the selected ensemble from the list.
         :return: None
         """
-        current_index = (
-            self.list.selectionModel().selection().indexes()[0].row()
-        )
+        current_index = self.list.selectionModel().selection().indexes()[0].row()
 
         dialog = ScenarioValuesPickerDialogWidget(
             model_config=self.model_config,
@@ -303,9 +291,7 @@ class ScenarioValuesWidget(FormCustomWidget):
             self.logger.debug("The value is not provided. Using default")
         # value must be a list
         elif not isinstance(value, list):
-            message = (
-                "The value provided in the model configuration must be a list"
-            )
+            message = "The value provided in the model configuration must be a list"
         # the list must contain list
         elif any([not isinstance(el, list) for el in value]) is True:
             message = "The value provided in the model configuration can contain only "
@@ -313,9 +299,7 @@ class ScenarioValuesWidget(FormCustomWidget):
         # each nested list can contain only numbers
         elif any(
             [
-                not (
-                    not isinstance(val, bool) and isinstance(val, (float, int))
-                )
+                not (not isinstance(val, bool) and isinstance(val, (float, int)))
                 for sublist in value
                 for val in sublist
             ]
@@ -324,9 +308,7 @@ class ScenarioValuesWidget(FormCustomWidget):
         else:
             # timestep_series requires at least X values
             comp_op = (
-                operator.lt
-                if self.data_type == "timestep_series"
-                else operator.ne
+                operator.lt if self.data_type == "timestep_series" else operator.ne
             )
             part_message = (
                 "have at least"
@@ -335,10 +317,7 @@ class ScenarioValuesWidget(FormCustomWidget):
             )
             # check size of each nested list
             if any(
-                [
-                    comp_op(len(sublist), self.min_ensemble_values)
-                    for sublist in value
-                ]
+                [comp_op(len(sublist), self.min_ensemble_values) for sublist in value]
             ):
                 message = (
                     f"Each ensemble must {part_message} "
@@ -402,9 +381,7 @@ class ScenarioValuesWidget(FormCustomWidget):
                 error_message="Each ensemble must have at least "
                 f"{self.min_ensemble_values} numbers",
             )
-        elif self.scenario_size is not None and self.scenario_size != len(
-            value
-        ):
+        elif self.scenario_size is not None and self.scenario_size != len(value):
             return FormValidation(
                 validation=False,
                 error_message="The value must contain as many ensembles as the "

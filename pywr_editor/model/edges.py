@@ -82,10 +82,7 @@ class Edges:
         """
         # do not add edge if the nodes do not exist
         all_nodes = self.model.nodes.names
-        if (
-            source_node_name not in all_nodes
-            or target_node_name not in all_nodes
-        ):
+        if source_node_name not in all_nodes or target_node_name not in all_nodes:
             return False
 
         edge = [source_node_name, target_node_name]
@@ -96,7 +93,7 @@ class Edges:
         ):
             edge += [slot_source, slot_target]
         self.model.json["edges"].append(edge)
-        self.model.changes_tracker.add(f"Added new edge: {edge}")
+        self.model.has_changed()
         return True
 
     def delete(
@@ -136,10 +133,7 @@ class Edges:
                 if edge[0:2] != [source_node_name, target_node_name]
             ]
 
-        deleted_edges = [  # for change log only
-            item for item in self.get_all() if item not in edges_to_keep
-        ]
-        self.model.changes_tracker.add(f"Deleted edge(s) {deleted_edges}")
+        self.model.has_changed()
         self.model.json["edges"] = edges_to_keep
 
     def get_edge_color(self, source_node_name: str) -> str | None:
@@ -149,9 +143,7 @@ class Edges:
         :param source_node_name: The node name.
         :return: The color name to use if available, None otherwise.
         """
-        node_config = self.model.nodes.get_node_config_from_name(
-            source_node_name
-        )
+        node_config = self.model.nodes.config(source_node_name)
         if node_config is not None:
             return NodeConfig(node_config).edge_color
         return None
@@ -268,9 +260,5 @@ class Edges:
                 else:
                     self.model.json["edges"][ei][1 + slot_pos] = slot_name
 
-            self.model.changes_tracker.add(
-                f"Changed slot '{slot_name}' at position {slot_pos} for ["
-                + f"{source_node_name}, {target_node_name}]"
-            )
-
+            self.model.has_changed()
             return

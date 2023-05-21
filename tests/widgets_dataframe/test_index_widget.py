@@ -234,22 +234,18 @@ class TestDialogParameterIndexWidget:
         index_widget: IndexWidget = index_field.widget
         assert index_field.message.text() == ""
 
-        widget_with_table: UrlWidget | TableSelectorWidget = (
-            selected_page.findChild(FormField, widget_name).widget
-        )
+        widget_with_table: UrlWidget | TableSelectorWidget = selected_page.findChild(
+            FormField, widget_name
+        ).widget
         assert widget_with_table.table is not None
 
         # 1. Index values are loaded without warning messages
         def test_combo_boxes():
-            index_combo_boxes: List[ComboBox] = index_field.findChildren(
-                ComboBox
-            )
+            index_combo_boxes: List[ComboBox] = index_field.findChildren(ComboBox)
             for ci, combo_box in enumerate(index_combo_boxes):
                 # check values in ComboBox
                 index_name = combo_box.objectName()
-                index_values = get_index_values(
-                    widget_with_table.table, index_name
-                )
+                index_values = get_index_values(widget_with_table.table, index_name)
                 index_values = list(map(str, index_values[0]))
                 assert combo_box.all_items == ["None"] + index_values
 
@@ -259,13 +255,9 @@ class TestDialogParameterIndexWidget:
         test_combo_boxes()
 
         # 2. The internal value (in self.value) is properly stored
-        for ii, index_name in enumerate(
-            get_index_names(widget_with_table.table)
-        ):
+        for ii, index_name in enumerate(get_index_names(widget_with_table.table)):
             assert index_widget.value.index_names[ii] == index_name
-            assert (
-                index_widget.value.index_values[ii] == dict_values[index_name]
-            )
+            assert index_widget.value.index_values[ii] == dict_values[index_name]
             # check type only with supplied values
             if dict_values[index_name] is not None:
                 assert isinstance(
@@ -310,9 +302,7 @@ class TestDialogParameterIndexWidget:
         # 5. Validation
         validated = final_values is not None
         assert (
-            index_widget.validate(
-                "empty", "empty", index_widget.get_value()
-            ).validation
+            index_widget.validate("empty", "empty", index_widget.get_value()).validation
             is validated
         )
 
@@ -360,10 +350,7 @@ class TestDialogParameterIndexWidget:
                 if value:
                     model_param_dict[f] = value
 
-            assert (
-                model_config.parameters.get_config_from_name(param_name)
-                == model_param_dict
-            )
+            assert model_config.parameters.config(param_name) == model_param_dict
         else:
             assert form_data is False
 
@@ -385,9 +372,9 @@ class TestDialogParameterIndexWidget:
         index_field: FormField = selected_page.findChild(FormField, "index")
         # noinspection PyTypeChecker
         index_widget: IndexWidget = index_field.widget
-        widget_with_table: UrlWidget | TableSelectorWidget = (
-            selected_page.findChild(FormField, widget_name).widget
-        )
+        widget_with_table: UrlWidget | TableSelectorWidget = selected_page.findChild(
+            FormField, widget_name
+        ).widget
 
         # 1. Check field
         assert message in index_field.message.text()
@@ -404,9 +391,7 @@ class TestDialogParameterIndexWidget:
 
         # 3. Validation
         assert (
-            index_widget.validate(
-                "empty", "empty", index_widget.get_value()
-            ).validation
+            index_widget.validate("empty", "empty", index_widget.get_value()).validation
             is False
         )
 
@@ -444,9 +429,9 @@ class TestDialogParameterIndexWidget:
 
         # noinspection PyTypeChecker
         index_widget: IndexWidget = index_field.widget
-        widget_with_table: UrlWidget | TableSelectorWidget = (
-            selected_page.findChild(FormField, widget_name).widget
-        )
+        widget_with_table: UrlWidget | TableSelectorWidget = selected_page.findChild(
+            FormField, widget_name
+        ).widget
 
         # 1. passed names and values are still stored
         assert index_widget.value.index_names == expected_names
@@ -464,10 +449,7 @@ class TestDialogParameterIndexWidget:
         assert combo_boxes[0].isEnabled() is False
         assert combo_boxes[0].objectName() == default_index_name
         # label is set
-        assert (
-            index_widget.findChild(QLabel, f"{default_index_name}_label")
-            is not None
-        )
+        assert index_widget.findChild(QLabel, f"{default_index_name}_label") is not None
 
         # 3. Change table to one with previously stored index names and values.
         # Values are restored
@@ -515,9 +497,7 @@ class TestDialogParameterIndexWidget:
             assert combo_box is not None
             assert combo_box.currentText() == str(value)
             current_values = get_index_values(widget_with_table.table, name)[0]
-            assert combo_box.all_items == ["None"] + list(
-                map(str, current_values)
-            )
+            assert combo_box.all_items == ["None"] + list(map(str, current_values))
 
         # 4. Set now non-existing file
         if widget_name == "url":
@@ -591,9 +571,7 @@ class TestDialogParameterIndexWidget:
 
         # 2. Validation
         assert (
-            index_widget.validate(
-                "empty", "empty", index_widget.get_value()
-            ).validation
+            index_widget.validate("empty", "empty", index_widget.get_value()).validation
             is False
         )
 
@@ -670,9 +648,7 @@ class TestDialogParameterIndexWidget:
         selected_page = dialog.pages_widget.currentWidget()
         dialog.hide()
 
-        index_widget: IndexWidget = selected_page.findChild(
-            FormField, "index"
-        ).widget
+        index_widget: IndexWidget = selected_page.findChild(FormField, "index").widget
         combo_boxes: List[ComboBox] = index_widget.findChildren(ComboBox)
 
         # Change one value at the time

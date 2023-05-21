@@ -79,9 +79,7 @@ class TestTablesDialog:
         # Page widget
         selected_page = pages_widget.currentWidget()
         assert new_name in selected_page.findChild(QLabel).text()
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         # button is disabled
         assert save_button.isEnabled() is False
 
@@ -98,8 +96,8 @@ class TestTablesDialog:
 
         # the model is updated
         assert model_config.has_changes is True
-        assert model_config.tables.does_table_exist(new_name) is True
-        assert model_config.tables.get_table_config_from_name(new_name) == {}
+        assert model_config.tables.exists(new_name) is True
+        assert model_config.tables.config(new_name) == {}
 
         # save with wrong URL (show error message)
         url_widget.line_edit.setText("wrong URL")
@@ -119,9 +117,7 @@ class TestTablesDialog:
         url_widget.line_edit.setText("files/table.csv")
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         assert url_field.message.text() == ""
-        assert model_config.tables.get_table_config_from_name(new_name) == {
-            "url": "files/table.csv"
-        }
+        assert model_config.tables.config(new_name) == {"url": "files/table.csv"}
 
         # rename and save
         renamed_table_name = "A new shiny name"
@@ -134,11 +130,11 @@ class TestTablesDialog:
         assert renamed_table_name in selected_page.findChild(QLabel).text()
 
         # model configuration
-        assert model_config.tables.does_table_exist(new_name) is False
-        assert model_config.tables.does_table_exist(renamed_table_name) is True
-        assert model_config.tables.get_table_config_from_name(
-            renamed_table_name
-        ) == {"url": "files/table.csv"}
+        assert model_config.tables.exists(new_name) is False
+        assert model_config.tables.exists(renamed_table_name) is True
+        assert model_config.tables.config(renamed_table_name) == {
+            "url": "files/table.csv"
+        }
 
     def test_rename_table(self, qtbot, model_config):
         """
@@ -152,9 +148,7 @@ class TestTablesDialog:
         pages_widget = dialog.pages_widget
         selected_page = pages_widget.currentWidget()
 
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         name_field: FormField = selected_page.findChild(FormField, "name")
         url_field: FormField = selected_page.findChild(FormField, "url")
 
@@ -171,9 +165,9 @@ class TestTablesDialog:
 
         # model has changes
         assert model_config.has_changes is True
-        assert model_config.tables.does_table_exist(current_name) is False
-        assert model_config.tables.does_table_exist(new_name) is True
-        assert model_config.tables.get_table_config_from_name(new_name) == {
+        assert model_config.tables.exists(current_name) is False
+        assert model_config.tables.exists(new_name) is True
+        assert model_config.tables.config(new_name) == {
             "url": "files\\table.csv",
             "index_col": ["Column 1"],
             "parse_dates": ["Column 1"],  # True converted to list
@@ -213,27 +207,23 @@ class TestTablesDialog:
         )
 
         # delete button is enabled and the item is selected
-        delete_button: QPushButton = pages_widget.pages[
-            deleted_table
-        ].findChild(QPushButton, "delete_button")
-        assert delete_button.isEnabled() is True
-        assert (
-            table_list_widget.list.selectedIndexes()[0].data() == deleted_table
+        delete_button: QPushButton = pages_widget.pages[deleted_table].findChild(
+            QPushButton, "delete_button"
         )
+        assert delete_button.isEnabled() is True
+        assert table_list_widget.list.selectedIndexes()[0].data() == deleted_table
 
         # delete
         def confirm_deletion():
             widget = QApplication.activeModalWidget()
-            qtbot.mouseClick(
-                widget.findChild(QPushButton), Qt.MouseButton.LeftButton
-            )
+            qtbot.mouseClick(widget.findChild(QPushButton), Qt.MouseButton.LeftButton)
 
         QTimer.singleShot(100, confirm_deletion)
         qtbot.mouseClick(delete_button, Qt.MouseButton.LeftButton)
 
         assert isinstance(pages_widget.currentWidget(), TableEmptyPageWidget)
         assert deleted_table not in pages_widget.pages.keys()
-        assert model_config.tables.does_table_exist(deleted_table) is False
+        assert model_config.tables.exists(deleted_table) is False
         assert deleted_table not in table_list_widget.model.table_names
 
     @pytest.mark.parametrize(
@@ -292,9 +282,7 @@ class TestTablesDialog:
 
         # 2. the correct fields are shown or hidden
         for field_name in shown_fields:
-            form_field: FormField = selected_page.findChild(
-                FormField, field_name
-            )
+            form_field: FormField = selected_page.findChild(FormField, field_name)
             assert form_field.isVisible() is True
 
         # 3. If all fields are hidden, check visibility of QGroupBox
@@ -310,12 +298,8 @@ class TestTablesDialog:
             url_widget.line_edit.setText("a")
             assert url_field.message.text() != ""
             assert url_widget.table is None
-            for field_name in (
-                self.csv_fields + self.excel_fields + self.h5_fields
-            ):
-                form_field: FormField = selected_page.findChild(
-                    FormField, field_name
-                )
+            for field_name in self.csv_fields + self.excel_fields + self.h5_fields:
+                form_field: FormField = selected_page.findChild(FormField, field_name)
                 assert form_field.widget.isVisible() is False
 
     @pytest.mark.parametrize(
@@ -369,9 +353,7 @@ class TestTablesDialog:
         assert form_data["url"] == url_widget.get_value()
 
         # 5. Save form to test filter
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         # enable button (disabled due to no changes)
         assert model_config.has_changes is False
         assert save_button.isEnabled() is False
@@ -396,10 +378,7 @@ class TestTablesDialog:
             if value:
                 model_table_dict[f] = value
 
-        assert (
-            model_config.tables.get_table_config_from_name(table_name)
-            == model_table_dict
-        )
+        assert model_config.tables.config(table_name) == model_table_dict
 
     def test_index_col_change_warning(self, qtbot, model_config):
         """
@@ -414,17 +393,13 @@ class TestTablesDialog:
 
         selected_page = dialog.pages_widget.currentWidget()
         # noinspection PyUnresolvedReferences
-        url_widget: TableUrlWidget = selected_page.findChild(
-            FormField, "url"
-        ).widget
+        url_widget: TableUrlWidget = selected_page.findChild(FormField, "url").widget
         index_col: FormField = selected_page.findChild(FormField, "index_col")
         index_col_widget: IndexColWidget = index_col.widget
         spy_index = QSignalSpy(url_widget.index_changed)
 
         # 2. save form
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         assert save_button.isEnabled() is False
         save_button.setEnabled(True)
         # button is enable
@@ -436,9 +411,7 @@ class TestTablesDialog:
         assert spy_index.count() == 2
 
         # 2. save form
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         # button is enable
         assert save_button.isEnabled() is True
 

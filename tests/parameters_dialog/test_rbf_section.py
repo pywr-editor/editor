@@ -50,9 +50,7 @@ class TestDialogParameterRbfSection:
         values_field: FormField = selected_page.findChild(FormField, "values")
         assert selected_page.findChild(FormField, "name").value() == param_name
 
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         # button is disabled
         assert save_button.isEnabled() is False
 
@@ -76,10 +74,7 @@ class TestDialogParameterRbfSection:
                 "days_of_year": [1, 30, 50],
                 "values": new_values,
             }
-            assert (
-                model_config.parameters.get_config_from_name(param_name)
-                == model_param_dict
-            )
+            assert model_config.parameters.config(param_name) == model_param_dict
         else:
             assert message in values_field.message.text()
 
@@ -122,9 +117,7 @@ class TestDialogParameterRbfSection:
         assert form.find_field_by_name("name").value() == param_name
 
         # noinspection PyTypeChecker
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         # button is disabled
         assert save_button.isEnabled() is False
 
@@ -159,9 +152,6 @@ class TestDialogParameterRbfSection:
                     "variable_days_of_year_range": new_value,
                     "values": [3.2, 7, 4.3],
                 }
-            assert (
-                model_config.parameters.get_config_from_name(param_name)
-                == model_param_dict
-            )
+            assert model_config.parameters.config(param_name) == model_param_dict
         else:
             assert message in days_field.message.text()

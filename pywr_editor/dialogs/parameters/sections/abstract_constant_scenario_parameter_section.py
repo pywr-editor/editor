@@ -124,11 +124,9 @@ class AbstractConstantScenarioParameterSection(FormSection):
 
         scenario = scenario_field.value()
         if scenario is not None:
-            scenario_size = (
-                self.form.model_config.scenarios.get_config_from_name(
-                    scenario, as_dict=False
-                ).size
-            )
+            scenario_size = self.form.model_config.scenarios.config(
+                scenario, as_dict=False
+            ).size
 
             self.logger.debug(f"Setting exact_total_values to {scenario_size}")
             values_widget.exact_total_values = scenario_size
