@@ -7,13 +7,14 @@ from PySide6.QtGui import QPen
 from pywr_editor.style import Color
 
 from ..base_node import BaseNode
-from .pywr_node import PywrNode
 
 if TYPE_CHECKING:
     from pywr_editor.schematic import SchematicNode
 
 
-class KeatingAquifer(BaseNode, PywrNode):
+class KeatingAquifer(BaseNode):
+    is_pywr = True
+
     def __init__(self, parent: "SchematicNode"):
         """
         Initialises a KeatingAquifer node.

@@ -4,13 +4,14 @@ from pywr_editor.style import Color
 
 from ..circle import Circle
 from ..svg_icon import IconProps
-from .pywr_node import PywrNode
 
 if TYPE_CHECKING:
     from pywr_editor.schematic import SchematicNode
 
 
-class DelayNode(Circle, PywrNode):
+class DelayNode(Circle):
+    is_pywr = True
+
     def __init__(self, parent: "SchematicNode"):
         """
         Initialises a delay node.

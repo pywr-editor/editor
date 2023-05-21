@@ -1,6 +1,6 @@
-PySide6==6.4.3
+PySide6==6.5.0
 setuptools==67.6.1
-pandas
+pandas==2.0.0
 requests
 pyqtgraph
 pywin32==306
@@ -12,4 +12,4 @@ pyinstaller==5.9.0
 typer
 tables==3.8.0
 QtAwesome
-shiboken6==6.4.3
+shiboken6==6.5.0
