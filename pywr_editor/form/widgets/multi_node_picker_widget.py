@@ -47,9 +47,7 @@ class MultiNodePickerWidget(FormCustomWidget):
         super().__init__(name, value, parent)
 
         self.is_mandatory = is_mandatory
-        self.form: Union[
-            "NodeDialogForm", "ParameterDialogForm", "RecorderDialogForm"
-        ]
+        self.form: Union["NodeDialogForm", "ParameterDialogForm", "RecorderDialogForm"]
         self.model_config = self.form.model_config
 
         # Collect all pywr and custom node types
@@ -83,15 +81,10 @@ class MultiNodePickerWidget(FormCustomWidget):
         model_nodes = self.model_config.nodes.names
 
         for name in model_nodes:
-            node_obj = self.model_config.nodes.get_node_config_from_name(
-                node_name=name, as_dict=False
-            )
+            node_obj = self.model_config.nodes.config(node_name=name, as_dict=False)
 
             # filter node types
-            if (
-                include_node_keys is not None
-                and node_obj.type not in include_node_keys
-            ):
+            if include_node_keys is not None and node_obj.type not in include_node_keys:
                 continue
 
             self.combo_box.addItem(f"{name} ({node_obj.humanised_type})", name)
@@ -115,7 +108,7 @@ class MultiNodePickerWidget(FormCustomWidget):
 
             # check that names exists
             for node_name_value in value:
-                node_obj = self.model_config.nodes.get_node_config_from_name(
+                node_obj = self.model_config.nodes.config(
                     node_name=node_name_value, as_dict=False
                 )
                 # filter node types
@@ -160,8 +153,7 @@ class MultiNodePickerWidget(FormCustomWidget):
             message = "There are no nodes available"
             self.logger.debug(message)
             self.form_field.set_warning_message(
-                message
-                + ". Add a new node first, before setting up this option"
+                message + ". Add a new node first, before setting up this option"
             )
         # layout
         layout = QHBoxLayout(self)
@@ -185,9 +177,7 @@ class MultiNodePickerWidget(FormCustomWidget):
         """
         self.combo_box.uncheck_all()
 
-    def validate(
-        self, name: str, label: str, value: list[str]
-    ) -> FormValidation:
+    def validate(self, name: str, label: str, value: list[str]) -> FormValidation:
         """
         Checks that the value is valid.
         :param name: The field name.

@@ -54,7 +54,7 @@ def test_get_table_config(model):
     """
     Tests the get_table_config_from_name method.
     """
-    assert model.tables.get_table_config_from_name("Table 2") == {
+    assert model.tables.config("Table 2") == {
         "url": "file2.csv",
         "index_col": "Date",
         "parse_dates": False,
@@ -67,14 +67,14 @@ def test_update(model):
     """
     model.tables.update("Table 1", {"url": "fileXX.csv", "sep": ";"})
     assert model.has_changes is True
-    assert model.tables.get_table_config_from_name("Table 1") == {
+    assert model.tables.config("Table 1") == {
         "sep": ";",
         "url": "fileXX.csv",
     }
 
     model.tables.update("Table new", {})
     assert model.has_changes is True
-    assert model.tables.get_table_config_from_name("Table new") == {}
+    assert model.tables.config("Table new") == {}
 
 
 def test_rename(model):

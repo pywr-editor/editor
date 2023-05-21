@@ -34,9 +34,7 @@ class EdgeSlotsWidget(FormCustomWidget):
 
         # noinspection PyTypeChecker
         self.dialog: "EdgeSlotsDialog" = self.form.parent
-        self.model = EdgeSlotsModel(
-            edges_obj=value, callback=self.on_slot_change
-        )
+        self.model = EdgeSlotsModel(edges_obj=value, callback=self.on_slot_change)
 
         # Table
         self.table = TableView(self.model)
@@ -55,9 +53,7 @@ class EdgeSlotsWidget(FormCustomWidget):
         self.search_bar = QLineEdit()
         self.search_bar.setPlaceholderText("Filter nodes and slots' names")
         # noinspection PyUnresolvedReferences
-        self.search_bar.textChanged.connect(
-            self.proxy_model.setFilterFixedString
-        )
+        self.search_bar.textChanged.connect(self.proxy_model.setFilterFixedString)
 
         # Set layout
         layout = QVBoxLayout(self)
@@ -101,15 +97,8 @@ class EdgeSlotsWidget(FormCustomWidget):
 
         # rename slot for node if it is a MultiSplitNode. If the new name or old name
         # is None, the slot position cannot be mapped
-        if (
-            slot_pos == 1
-            and old_slot_name
-            and slot_name
-            and is_multi_split_link
-        ):
-            node_obj = self.dialog.model_config.nodes.get_node_config_from_name(
-                source_node, as_dict=False
-            )
+        if slot_pos == 1 and old_slot_name and slot_name and is_multi_split_link:
+            node_obj = self.dialog.model_config.nodes.config(source_node, as_dict=False)
 
             # noinspection PyBroadException
             try:
@@ -120,9 +109,7 @@ class EdgeSlotsWidget(FormCustomWidget):
                 self.dialog.model_config.nodes.update(new_node_dict)
                 self.logger.debug(f"New node config is: '{new_node_dict}")
             except Exception:
-                self.logger.debug(
-                    f"Renaming skipped because: '{traceback.print_exc()}"
-                )
+                self.logger.debug(f"Renaming skipped because: '{traceback.print_exc()}")
                 pass
 
         # update tree and status bar

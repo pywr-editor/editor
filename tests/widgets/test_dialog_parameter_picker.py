@@ -64,9 +64,7 @@ class TestDialogParameterPicker:
         """
         child_param_name = "constant_param"
         # object passed by ParameterLineEditWidget
-        param_obj = model_config.parameters.get_config_from_name(
-            child_param_name, as_dict=False
-        )
+        param_obj = model_config.parameters.config(child_param_name, as_dict=False)
         parent = QWidget()
         qtbot.addWidget(parent)
         dialog = ModelComponentPickerDialog(
@@ -89,9 +87,7 @@ class TestDialogParameterPicker:
 
         # 2. Check model parameter list widget
         # noinspection PyTypeChecker
-        model_param_field: FormField = dialog.form.find_field_by_name(
-            "comp_name"
-        )
+        model_param_field: FormField = dialog.form.find_field_by_name("comp_name")
         model_param_widget: ParameterPickerWidget = model_param_field.widget
         assert model_param_widget.combo_box.currentText() == child_param_name
         assert model_param_field.message.text() == ""
@@ -154,9 +150,7 @@ class TestDialogParameterPicker:
 
         # 2. Check model parameter list widget
         # noinspection PyTypeChecker
-        model_param_field: FormField = dialog.form.find_field_by_name(
-            "comp_name"
-        )
+        model_param_field: FormField = dialog.form.find_field_by_name("comp_name")
         model_param_widget: ParameterPickerWidget = model_param_field.widget
         # parameter selector is visible
         assert model_param_field.isHidden() is False
@@ -249,9 +243,7 @@ class TestDialogParameterPicker:
 
         # 3. ParameterPickerWidget is hidden
         # noinspection PyTypeChecker
-        model_param_field: FormField = dialog.form.find_field_by_name(
-            "comp_name"
-        )
+        model_param_field: FormField = dialog.form.find_field_by_name("comp_name")
         # noinspection PyTypeChecker
         model_param_widget: ParameterPickerWidget = model_param_field.widget
         assert model_param_field.message.text() == ""
@@ -260,20 +252,14 @@ class TestDialogParameterPicker:
 
         # 5. Check filled form fields
         # check source widget
-        source_selector: SourceSelectorWidget = section.findChild(
-            SourceSelectorWidget
-        )
-        assert (
-            source_selector.get_value() == source_selector.labels[source_type]
-        )
+        source_selector: SourceSelectorWidget = section.findChild(SourceSelectorWidget)
+        assert source_selector.get_value() == source_selector.labels[source_type]
 
         # check all others
         for key, value in param_dict.items():
             if key == "type":
                 continue
-            widget: FormCustomWidget = dialog.form.find_field_by_name(
-                key
-            ).widget
+            widget: FormCustomWidget = dialog.form.find_field_by_name(key).widget
             assert widget.get_value() == value
 
         # 6. Form validation (must return the same dictionary)
@@ -335,9 +321,7 @@ class TestDialogParameterPicker:
         assert child_save_button.isEnabled() is False
 
         # type a number
-        value_widget: FloatWidget = child_dialog.form.find_field_by_name(
-            "value"
-        ).widget
+        value_widget: FloatWidget = child_dialog.form.find_field_by_name("value").widget
         qtbot.keyPress(value_widget.line_edit, Qt.Key.Key_1)
         # the nested save button is enabled
         assert child_save_button.isEnabled() is True

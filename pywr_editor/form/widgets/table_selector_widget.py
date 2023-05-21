@@ -181,9 +181,7 @@ class TableSelectorWidget(FormCustomWidget):
         Reloads the table stored by the widget when the Reload button is clicked.
         :return: None
         """
-        self.logger.debug(
-            f"Called on_reload_click Slot from {get_signal_sender(self)}"
-        )
+        self.logger.debug(f"Called on_reload_click Slot from {get_signal_sender(self)}")
         self.load_table_data(self.value)
         self.logger.debug("Completed on_reload_click Slot")
 
@@ -224,9 +222,7 @@ class TableSelectorWidget(FormCustomWidget):
                 self.logger.debug("Table name is None")
             # wrong type
             elif table_name is not None and not isinstance(table_name, str):
-                message = (
-                    "The table in the model configuration must be a string"
-                )
+                message = "The table in the model configuration must be a string"
                 self.logger.debug(message)
                 self.form_field.set_warning_message(message)
             # valid string
@@ -315,10 +311,8 @@ class TableSelectorWidget(FormCustomWidget):
         self.index_names = None
 
         # load the table data
-        table_dict = self.tables.get_table_config_from_name(table_name)
-        self.logger.debug(
-            f"Table dictionary for '{table_name}' is: {table_dict}"
-        )
+        table_dict = self.tables.config(table_name)
+        self.logger.debug(f"Table dictionary for '{table_name}' is: {table_dict}")
         if table_dict is not None:
             self.index_names = table_dict.get("index_col")
 
@@ -347,9 +341,7 @@ class TableSelectorWidget(FormCustomWidget):
                             if name in table_dict:
                                 args[name] = table_dict[name]
                         args["low_memory"] = True
-                        self.logger.debug(
-                            f"Opening CSV file {self.file} using: {args}"
-                        )
+                        self.logger.debug(f"Opening CSV file {self.file} using: {args}")
                         self.table = read_csv(self.file, **args)
                     elif self.file_ext in [".xls", ".xlsx", ".xlsm"]:
                         args = {}
@@ -370,17 +362,13 @@ class TableSelectorWidget(FormCustomWidget):
                         ]:
                             if name in table_dict:
                                 args[name] = table_dict[name]
-                        self.logger.debug(
-                            f"Opening H5 file {self.file} using: {args}"
-                        )
+                        self.logger.debug(f"Opening H5 file {self.file} using: {args}")
                         # noinspection PyTypeChecker
                         self.table: pd.DataFrame = read_hdf(self.file, **args)
                         # remove built-in indexes and set them via attrs
                         # for H5 file, index names cannot be changed
                         index_names = reset_pandas_index_names(self.table)
-                        self.logger.debug(
-                            f"Resetting built-in indexes: {index_names}"
-                        )
+                        self.logger.debug(f"Resetting built-in indexes: {index_names}")
                         set_table_index(self.table, index_names)
 
                     if (
@@ -401,14 +389,8 @@ class TableSelectorWidget(FormCustomWidget):
         self.logger.debug(f"DataFrame is\n {self.table}")
 
         # set index for non-H5 files
-        if (
-            self.table is not None
-            and not self.table.empty
-            and self.file_ext != ".h5"
-        ):
-            self.logger.debug(
-                f"Preparing to set index ({self.index_names}) on table"
-            )
+        if self.table is not None and not self.table.empty and self.file_ext != ".h5":
+            self.logger.debug(f"Preparing to set index ({self.index_names}) on table")
             if self.index_names is not None:
                 set_table_index(self.table, self.index_names)
                 self.logger.debug(
@@ -430,16 +412,14 @@ class TableSelectorWidget(FormCustomWidget):
         # noinspection PyBroadException
         try:
             table_name = self.value
-            table_config = self.tables.get_table_config_from_name(table_name)
+            table_config = self.tables.config(table_name)
             # convert to absolute path
             file = self.model_config.normalize_file_path(table_config["url"])
             # ensure that the path is properly encoded
             file = os.path.normpath(file)
             os.startfile(file)
         except Exception:
-            self.logger.debug(
-                f"Cannot open the file because: {traceback.print_exc()}"
-            )
+            self.logger.debug(f"Cannot open the file because: {traceback.print_exc()}")
             QMessageBox().critical(
                 self,
                 "Cannot open the file",

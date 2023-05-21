@@ -65,20 +65,18 @@ class AbstractModelComponentLineEditWidget(FormCustomWidget):
             self.component_data = self.model_config.pywr_parameter_data
             self._icon_class = ParameterIcon
             self._config_prop = self.model_config.parameters
-            self._exist_method = self._config_prop.does_parameter_exist
+            self._exist_method = self._config_prop.exists
             self._config_obj = ParameterConfig
             custom_import_method = "get_custom_parameters"
         elif self.is_recorder:
             self.component_data = self.model_config.pywr_recorder_data
             self._icon_class = RecorderIcon
             self._config_prop = self.model_config.recorders
-            self._exist_method = self._config_prop.does_recorder_exist
+            self._exist_method = self._config_prop.exists
             self._config_obj = RecorderConfig
             custom_import_method = "get_custom_recorders"
         else:
-            raise ValueError(
-                "The component_data can only be 'parameter' or 'recorder'"
-            )
+            raise ValueError("The component_data can only be 'parameter' or 'recorder'")
         self.is_mandatory = is_mandatory
 
         # include only certain component types
@@ -90,9 +88,7 @@ class AbstractModelComponentLineEditWidget(FormCustomWidget):
 
             # check if the component type exists
             all_comp_keys = self.component_data.keys + list(
-                getattr(
-                    self.model_config.includes, custom_import_method
-                )().keys()
+                getattr(self.model_config.includes, custom_import_method)().keys()
             )
             for comp_type in include_comp_key:
                 if comp_type not in all_comp_keys:
@@ -131,9 +127,7 @@ class AbstractModelComponentLineEditWidget(FormCustomWidget):
         # noinspection PyUnresolvedReferences
         self.select_button.clicked.connect(self.open_picker_dialog)
 
-        self.clear_button = PushIconButton(
-            icon=qta.icon("msc.remove"), label="Clear"
-        )
+        self.clear_button = PushIconButton(icon=qta.icon("msc.remove"), label="Clear")
         self.clear_button.setToolTip("Empty the field")
         # noinspection PyUnresolvedReferences
         self.clear_button.clicked.connect(self.reset)
@@ -180,9 +174,7 @@ class AbstractModelComponentLineEditWidget(FormCustomWidget):
                 )
             else:
                 text = self.component_obj.name
-                self.logger.debug(
-                    f"Model {self.component_type}. Setting text {text}"
-                )
+                self.logger.debug(f"Model {self.component_type}. Setting text {text}")
             self.line_edit.setText(text)
 
             if self.component_obj.key is not None:
@@ -223,9 +215,7 @@ class AbstractModelComponentLineEditWidget(FormCustomWidget):
                 component_obj = self._config_obj(props={}, name=value)
                 self.logger.debug(message)
             else:
-                component_obj = self._config_prop.get_config_from_name(
-                    value, as_dict=False
-                )
+                component_obj = self._config_prop.config(value, as_dict=False)
                 self.logger.debug(
                     f"Using {self.component_type} configuration: {component_obj.props}"
                 )
@@ -234,12 +224,8 @@ class AbstractModelComponentLineEditWidget(FormCustomWidget):
             self.logger.debug(
                 "Value is a number. Converting it to constant anonymous parameter"
             )
-            component_obj = ParameterConfig(
-                props={"type": "constant", "value": value}
-            )
-            self.logger.debug(
-                f"Using parameter configuration: {component_obj.props}"
-            )
+            component_obj = ParameterConfig(props={"type": "constant", "value": value})
+            self.logger.debug(f"Using parameter configuration: {component_obj.props}")
         # component is a valid dictionary
         elif isinstance(value, dict) and "type" in value:
             self.logger.debug("Value is a dictionary")
@@ -251,9 +237,7 @@ class AbstractModelComponentLineEditWidget(FormCustomWidget):
             self.logger.debug("Value is not set because it is None")
         # wrong type value
         else:
-            message = (
-                "The value provided in the model configuration is not valid"
-            )
+            message = "The value provided in the model configuration is not valid"
             self.logger.debug(message)
 
         # check if the component type is allowed
@@ -328,9 +312,7 @@ class AbstractModelComponentLineEditWidget(FormCustomWidget):
         self.logger.debug("Validating field")
 
         if self.is_mandatory is False:
-            self.logger.debug(
-                "Skipping validation, because the field is not mandatory"
-            )
+            self.logger.debug("Skipping validation, because the field is not mandatory")
             return FormValidation(validation=True)
 
         if value is None:
@@ -394,9 +376,7 @@ class AbstractModelComponentLineEditWidget(FormCustomWidget):
         # model component
         if isinstance(form_data, str):
             self.logger.debug(f"Data is a model {self.component_type} (string)")
-            self.component_obj = self._config_prop.get_config_from_name(
-                form_data, as_dict=False
-            )
+            self.component_obj = self._config_prop.config(form_data, as_dict=False)
         # anonymous component
         else:
             self.logger.debug(

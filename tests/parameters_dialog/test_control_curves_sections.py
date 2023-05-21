@@ -103,7 +103,7 @@ class TestDialogParameterControlCurveParameterSection:
         # noinspection PyUnresolvedReferences
         assert selected_page.findChild(FormField, "name").value() == param_name
 
-        param_dict = model_config.parameters.get_config_from_name(param_name)
+        param_dict = model_config.parameters.config(param_name)
         source_field = form.find_field_by_name("values_source")
         # check for initial warnings
         for form_field in selected_page.findChildren(FormField):
@@ -142,16 +142,12 @@ class TestDialogParameterControlCurveParameterSection:
 
         # enable submit button and send form for validation to test filter
         # noinspection PyTypeChecker
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         save_button.setEnabled(True)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
 
         assert model_config.has_changes is True
-        assert (
-            model_config.parameters.get_config_from_name(param_name) == expected
-        )
+        assert model_config.parameters.config(param_name) == expected
 
     @pytest.mark.parametrize(
         "param_name, field_with_error, message",
@@ -173,9 +169,7 @@ class TestDialogParameterControlCurveParameterSection:
             ),
         ],
     )
-    def test_invalid(
-        self, qtbot, model_config, param_name, field_with_error, message
-    ):
+    def test_invalid(self, qtbot, model_config, param_name, field_with_error, message):
         """
         Tests the widget when an invalid configuration is used.
         """
@@ -189,9 +183,7 @@ class TestDialogParameterControlCurveParameterSection:
         # send form and verify message
         QTimer.singleShot(100, close_message_box)
         selected_page.form.validate()
-        form_field: FormField = selected_page.form.find_field_by_name(
-            field_with_error
-        )
+        form_field: FormField = selected_page.form.find_field_by_name(field_with_error)
         assert message in form_field.message.text()
 
     @pytest.mark.parametrize(
@@ -210,9 +202,7 @@ class TestDialogParameterControlCurveParameterSection:
             ("bounds_ok", None),
         ],
     )
-    def test_opt_bounds_validation(
-        self, qtbot, model_config, param_name, message
-    ):
+    def test_opt_bounds_validation(self, qtbot, model_config, param_name, message):
         """
         Tests the validation of ControlCurveOptBoundsWidget
         """
@@ -221,9 +211,7 @@ class TestDialogParameterControlCurveParameterSection:
 
         # noinspection PyTypeChecker
         selected_page: ParameterPageWidget = dialog.pages_widget.currentWidget()
-        bounds_field: FormField = selected_page.form.find_field_by_name(
-            "lower_bounds"
-        )
+        bounds_field: FormField = selected_page.form.find_field_by_name("lower_bounds")
 
         # noinspection PyUnresolvedReferences
         assert selected_page.findChild(FormField, "name").value() == param_name

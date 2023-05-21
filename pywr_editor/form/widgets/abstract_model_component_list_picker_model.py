@@ -48,8 +48,7 @@ class AbstractModelComponentListPickerModel(QAbstractTableModel):
 
     def data(
         self,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
         role: int = ...,
     ) -> Any:
         """
@@ -98,19 +97,17 @@ class AbstractModelComponentListPickerModel(QAbstractTableModel):
                 config_method = None
                 if self.is_parameter:
                     config_method = self.model_config.parameters
-                    exist_method = config_method.does_parameter_exist
+                    exist_method = config_method.exists
                 elif self.is_recorder:
                     config_method = self.model_config.recorders
-                    exist_method = config_method.does_recorder_exist
+                    exist_method = config_method.exists
 
                 if not exist_method(value):
                     name = value
                     exists = False
                     comp_obj = None
                 else:
-                    comp_obj = getattr(config_method, "get_config_from_name")(
-                        value, as_dict=False
-                    )
+                    comp_obj = getattr(config_method, "config")(value, as_dict=False)
                     name = f"{comp_obj.name} ({comp_obj.humanised_type})"
             else:
                 return
@@ -152,8 +149,7 @@ class AbstractModelComponentListPickerModel(QAbstractTableModel):
 
     def rowCount(
         self,
-        parent: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex = ...,
+        parent: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex = ...,
     ) -> int:
         """
         Provides the total number of rows.
@@ -164,8 +160,7 @@ class AbstractModelComponentListPickerModel(QAbstractTableModel):
 
     def columnCount(
         self,
-        parent: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex = ...,
+        parent: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex = ...,
     ) -> int:
         """
         Provides the total number of columns.

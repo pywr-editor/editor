@@ -71,9 +71,7 @@ class ScenarioWrapperParameterSection(FormSection):
         self.form: ParameterDialogForm
 
         scenario_field = self.form.find_field_by_name("scenario")
-        size = self.form.model_config.scenarios.get_size_from_name(
-            scenario_field.value()
-        )
+        size = self.form.model_config.scenarios.get_size(scenario_field.value())
 
         if size is not None and len(value) != size:
             return FormValidation(

@@ -92,21 +92,13 @@ class AbstractModelNodePickerWidget(FormCustomWidget):
         self.combo_box = ComboBox()
         valid_model_nodes = []
         for name in model_nodes:
-            node_obj = self.model_config.nodes.get_node_config_from_name(
-                node_name=name, as_dict=False
-            )
+            node_obj = self.model_config.nodes.config(node_name=name, as_dict=False)
             node_type = node_obj.type
 
             # filter nodes
-            if (
-                include_node_types is not None
-                and node_type not in include_node_types
-            ):
+            if include_node_types is not None and node_type not in include_node_types:
                 continue
-            if (
-                exclude_node_types is not None
-                and node_type in exclude_node_types
-            ):
+            if exclude_node_types is not None and node_type in exclude_node_types:
                 continue
 
             valid_model_nodes.append(name)
@@ -135,9 +127,7 @@ class AbstractModelNodePickerWidget(FormCustomWidget):
                 self.combo_box.setCurrentIndex(selected_index)
             # type is wrong if filters are set
             else:
-                message = (
-                    "The node type set in the model configuration is not valid"
-                )
+                message = "The node type set in the model configuration is not valid"
                 self.form_field.set_warning_message(message)
                 self.logger.debug(message + ". None selected")
         else:

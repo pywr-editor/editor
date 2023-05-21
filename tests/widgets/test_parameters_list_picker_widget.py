@@ -124,9 +124,7 @@ class TestDialogParameterParametersListPickerWidget:
             ),
         ],
     )
-    def test_valid_values(
-        self, qtbot, model_config, param_name, field_name, value
-    ):
+    def test_valid_values(self, qtbot, model_config, param_name, field_name, value):
         """
         Tests that the values are loaded correctly for ParametersListPickerWidget and
         IndexParametersListPickerWidget.
@@ -154,13 +152,10 @@ class TestDialogParameterParametersListPickerWidget:
             if isinstance(param_value, dict):
                 param_obj = ParameterConfig(param_value)
                 assert (
-                    widget.model.data(idx, Qt.DisplayRole)
-                    == param_obj.humanised_type
+                    widget.model.data(idx, Qt.DisplayRole) == param_obj.humanised_type
                 )
             elif isinstance(param_value, str):
-                param_obj = model_config.parameters.get_config_from_name(
-                    param_value, as_dict=False
-                )
+                param_obj = model_config.parameters.config(param_value, as_dict=False)
                 assert (
                     widget.model.data(idx, Qt.DisplayRole)
                     == f"{param_obj.name} ({param_obj.humanised_type})"
@@ -344,9 +339,7 @@ class TestDialogParameterParametersListPickerWidget:
         Tests parameter sorting (when a parameter is moved up or down and the button
         status)
         """
-        dialog = ParametersDialog(
-            model_config, self.general_anonymous_param_name
-        )
+        dialog = ParametersDialog(model_config, self.general_anonymous_param_name)
         dialog.show()
 
         selected_page = dialog.pages_widget.currentWidget()
@@ -357,15 +350,11 @@ class TestDialogParameterParametersListPickerWidget:
         )
 
         # noinspection PyTypeChecker
-        thresholds_field: FormField = selected_page.findChild(
-            FormField, "thresholds"
-        )
+        thresholds_field: FormField = selected_page.findChild(FormField, "thresholds")
         # noinspection PyTypeChecker
         thresholds_widget: ParametersListPickerWidget = thresholds_field.widget
         # noinspection PyTypeChecker
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
 
         # 1. Sorting buttons are disabled
         assert thresholds_widget.list.selectionModel().selection().count() == 0
@@ -420,9 +409,7 @@ class TestDialogParameterParametersListPickerWidget:
         qtbot.mouseClick(main_save_button, Qt.MouseButton.LeftButton)
 
         assert model_config.has_changes is True
-        assert model_config.parameters.get_config_from_name(
-            self.general_anonymous_param_name
-        ) == {
+        assert model_config.parameters.config(self.general_anonymous_param_name) == {
             "type": "multiplethresholdindex",
             "node": "Reservoir2",
             "thresholds": new_value,
@@ -432,9 +419,7 @@ class TestDialogParameterParametersListPickerWidget:
         """
         Tests parameter deletion
         """
-        dialog = ParametersDialog(
-            model_config, self.general_anonymous_param_name
-        )
+        dialog = ParametersDialog(model_config, self.general_anonymous_param_name)
         dialog.show()
 
         selected_page = dialog.pages_widget.currentWidget()
@@ -445,15 +430,11 @@ class TestDialogParameterParametersListPickerWidget:
         )
 
         # noinspection PyTypeChecker
-        thresholds_field: FormField = selected_page.findChild(
-            FormField, "thresholds"
-        )
+        thresholds_field: FormField = selected_page.findChild(FormField, "thresholds")
         # noinspection PyTypeChecker
         thresholds_widget: ParametersListPickerWidget = thresholds_field.widget
         # noinspection PyTypeChecker
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
 
         # 1. delete button is disabled
         assert thresholds_widget.list.selectionModel().selection().count() == 0
@@ -463,9 +444,7 @@ class TestDialogParameterParametersListPickerWidget:
         # 2. Delete second parameter. Button up is still disabled
         self.select_row(thresholds_widget, 1)
         assert thresholds_widget.delete_button.isEnabled() is True
-        qtbot.mouseClick(
-            thresholds_widget.delete_button, Qt.MouseButton.LeftButton
-        )
+        qtbot.mouseClick(thresholds_widget.delete_button, Qt.MouseButton.LeftButton)
         new_value = [
             self.general_anonymous_param_value[0],
             self.general_anonymous_param_value[2],
@@ -485,9 +464,7 @@ class TestDialogParameterParametersListPickerWidget:
         qtbot.mouseClick(main_save_button, Qt.MouseButton.LeftButton)
 
         assert model_config.has_changes is True
-        assert model_config.parameters.get_config_from_name(
-            self.general_anonymous_param_name
-        ) == {
+        assert model_config.parameters.config(self.general_anonymous_param_name) == {
             "type": "multiplethresholdindex",
             "node": "Reservoir2",
             "thresholds": new_value,
@@ -497,16 +474,12 @@ class TestDialogParameterParametersListPickerWidget:
         "mode",
         ["add", "edit"],
     )
-    def test_add_edit_child_anonymous_parameter(
-        self, qtbot, model_config, mode
-    ):
+    def test_add_edit_child_anonymous_parameter(self, qtbot, model_config, mode):
         """
         Tests when a constant parameter is added or edited in the parameter list of a
         MultipleThresholdIndexParameter. All the parameters are anonymous.
         """
-        dialog = ParametersDialog(
-            model_config, self.general_anonymous_param_name
-        )
+        dialog = ParametersDialog(model_config, self.general_anonymous_param_name)
         dialog.show()
 
         selected_page = dialog.pages_widget.currentWidget()
@@ -517,9 +490,7 @@ class TestDialogParameterParametersListPickerWidget:
         )
 
         # noinspection PyTypeChecker
-        thresholds_field: FormField = selected_page.findChild(
-            FormField, "thresholds"
-        )
+        thresholds_field: FormField = selected_page.findChild(FormField, "thresholds")
         # noinspection PyTypeChecker
         thresholds_widget: ParametersListPickerWidget = thresholds_field.widget
 
@@ -528,13 +499,9 @@ class TestDialogParameterParametersListPickerWidget:
         if mode == "edit":
             index = 2
             self.select_row(thresholds_widget, index)
-            qtbot.mouseClick(
-                thresholds_widget.edit_button, Qt.MouseButton.LeftButton
-            )
+            qtbot.mouseClick(thresholds_widget.edit_button, Qt.MouseButton.LeftButton)
         elif mode == "add":
-            qtbot.mouseClick(
-                thresholds_widget.add_button, Qt.MouseButton.LeftButton
-            )
+            qtbot.mouseClick(thresholds_widget.add_button, Qt.MouseButton.LeftButton)
         else:
             raise ValueError("Mode not supported")
 
@@ -543,9 +510,7 @@ class TestDialogParameterParametersListPickerWidget:
             ModelComponentPickerDialog
         )
         # noinspection PyTypeChecker
-        save_button: QPushButton = child_dialog.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = child_dialog.findChild(QPushButton, "save_button")
 
         # 2. Configure a new or already existing constant parameter and save the changes
         # noinspection PyTypeChecker
@@ -584,9 +549,7 @@ class TestDialogParameterParametersListPickerWidget:
         qtbot.mouseClick(main_save_button, Qt.MouseButton.LeftButton)
 
         assert model_config.has_changes is True
-        assert model_config.parameters.get_config_from_name(
-            self.general_anonymous_param_name
-        ) == {
+        assert model_config.parameters.config(self.general_anonymous_param_name) == {
             "type": "multiplethresholdindex",
             "node": "Reservoir2",
             "thresholds": new_value,
@@ -640,9 +603,7 @@ class TestDialogParameterParametersListPickerWidget:
             ModelComponentPickerDialog
         )
         # noinspection PyTypeChecker
-        save_button: QPushButton = child_dialog.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = child_dialog.findChild(QPushButton, "save_button")
 
         # the first (default) parameter type is selected, change it
         if mode == "add":
@@ -650,22 +611,15 @@ class TestDialogParameterParametersListPickerWidget:
             type_widget: ParameterTypeSelectorWidget = child_dialog.findChild(
                 ParameterTypeSelectorWidget
             )
-            assert (
-                type_widget.combo_box.currentText()
-                == "Aggregated index parameter"
-            )
+            assert type_widget.combo_box.currentText() == "Aggregated index parameter"
             # change default type
             type_widget.combo_box.setCurrentText("Storage threshold parameter")
 
         # 2. Configure a new or already existing storage threshold parameter and save
         # the changes
         # noinspection PyTypeChecker
-        storage_node: StoragePickerWidget = child_dialog.findChild(
-            StoragePickerWidget
-        )
-        selected_index = storage_node.combo_box.findData(
-            "Reservoir2", Qt.UserRole
-        )
+        storage_node: StoragePickerWidget = child_dialog.findChild(StoragePickerWidget)
+        selected_index = storage_node.combo_box.findData("Reservoir2", Qt.UserRole)
         storage_node.combo_box.setCurrentIndex(selected_index)
         qtbot.wait(100)
 
@@ -725,7 +679,7 @@ class TestDialogParameterParametersListPickerWidget:
         qtbot.mouseClick(main_save_button, Qt.MouseButton.LeftButton)
 
         assert model_config.has_changes is True
-        assert model_config.parameters.get_config_from_name(param_name) == {
+        assert model_config.parameters.config(param_name) == {
             "type": "aggregatedindex",
             "agg_func": "sum",
             "parameters": existing_params_list,
@@ -745,27 +699,21 @@ class TestDialogParameterParametersListPickerWidget:
         assert selected_page.findChild(FormField, "name").value() == param_name
 
         # noinspection PyTypeChecker
-        thresholds_field: FormField = selected_page.findChild(
-            FormField, "thresholds"
-        )
+        thresholds_field: FormField = selected_page.findChild(FormField, "thresholds")
         # noinspection PyTypeChecker
         thresholds_widget: ParametersListPickerWidget = thresholds_field.widget
 
         # 1. Open the dialog
         index = 0
         self.select_row(thresholds_widget, index)
-        qtbot.mouseClick(
-            thresholds_widget.edit_button, Qt.MouseButton.LeftButton
-        )
+        qtbot.mouseClick(thresholds_widget.edit_button, Qt.MouseButton.LeftButton)
 
         # noinspection PyTypeChecker
         child_dialog: ModelComponentPickerDialog = selected_page.findChild(
             ModelComponentPickerDialog
         )
         # noinspection PyTypeChecker
-        save_button: QPushButton = child_dialog.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = child_dialog.findChild(QPushButton, "save_button")
 
         # 2. Change the parameter
         new_str = "param_threshold"
@@ -806,7 +754,7 @@ class TestDialogParameterParametersListPickerWidget:
         qtbot.mouseClick(main_save_button, Qt.MouseButton.LeftButton)
 
         assert model_config.has_changes is True
-        assert model_config.parameters.get_config_from_name(param_name) == {
+        assert model_config.parameters.config(param_name) == {
             "type": "multiplethresholdindex",
             "node": "Reservoir2",
             "thresholds": new_value,
@@ -816,9 +764,7 @@ class TestDialogParameterParametersListPickerWidget:
         "mode",
         ["add", "edit"],
     )
-    def test_edit_child_model_parameter_with_filter(
-        self, qtbot, model_config, mode
-    ):
+    def test_edit_child_model_parameter_with_filter(self, qtbot, model_config, mode):
         """
         Tests when a model parameter of type AggregatedIndexParameter is selected in
         the parameter list. The parameter only allows certain parameter types by
@@ -860,15 +806,13 @@ class TestDialogParameterParametersListPickerWidget:
             ModelComponentPickerDialog
         )
         # noinspection PyTypeChecker
-        save_button: QPushButton = child_dialog.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = child_dialog.findChild(QPushButton, "save_button")
 
         # the picker dialog defaults to anonymous parameters, change source
         if mode == "add":
             # noinspection PyTypeChecker
-            source_widget: ModelComponentSourceSelectorWidget = (
-                child_dialog.findChild(ModelComponentSourceSelectorWidget)
+            source_widget: ModelComponentSourceSelectorWidget = child_dialog.findChild(
+                ModelComponentSourceSelectorWidget
             )
             # trigger Slot
             source_widget.combo_box.setCurrentText(
@@ -917,7 +861,7 @@ class TestDialogParameterParametersListPickerWidget:
         qtbot.mouseClick(main_save_button, Qt.MouseButton.LeftButton)
 
         assert model_config.has_changes is True
-        assert model_config.parameters.get_config_from_name(param_name) == {
+        assert model_config.parameters.config(param_name) == {
             "type": "aggregatedindex",
             "agg_func": "sum",
             "parameters": existing_params_list,

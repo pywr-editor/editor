@@ -22,8 +22,7 @@ class ParametersListModel(QAbstractTableModel):
 
     def data(
         self,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
         role: int = ...,
     ) -> Any:
         """
@@ -40,11 +39,7 @@ class ParametersListModel(QAbstractTableModel):
             role == Qt.ItemDataRole.ToolTipRole
             or role == Qt.ItemDataRole.DecorationRole
         ):
-            parameter_config = (
-                self.model_config.parameters.get_config_from_name(
-                    parameter_name
-                )
-            )
+            parameter_config = self.model_config.parameters.config(parameter_name)
             # new parameter
             if parameter_config is None:
                 if role == Qt.ItemDataRole.ToolTipRole:
@@ -70,8 +65,7 @@ class ParametersListModel(QAbstractTableModel):
 
     def rowCount(
         self,
-        parent: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex = ...,
+        parent: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex = ...,
     ) -> int:
         """
         Provides the total number of rows.
@@ -82,8 +76,7 @@ class ParametersListModel(QAbstractTableModel):
 
     def columnCount(
         self,
-        parent: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex = ...,
+        parent: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex = ...,
     ) -> int:
         """
         Provides the total number of columns.
@@ -94,8 +87,7 @@ class ParametersListModel(QAbstractTableModel):
 
     def flags(
         self,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
     ) -> PySide6.QtCore.Qt.ItemFlag:
         """
         Handles the item flags to make each cell editable.

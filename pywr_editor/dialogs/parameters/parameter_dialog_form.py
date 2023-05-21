@@ -85,19 +85,13 @@ class ParameterDialogForm(ParameterForm):
         :return: True if the name validates correctly, False otherwise.
         """
         # do not save form if the name is changed and already exists
-        if (
-            self.name != value
-            and self.model_config.parameters.does_parameter_exist(value) is True
-        ):
+        if self.name != value and self.model_config.parameters.exists(value) is True:
             return FormValidation(
                 validation=False,
                 error_message=f"A parameter named '{value}' already exists. "
                 + "Please provide a different name.",
             )
-        if (
-            self.name != value
-            and self.model_config.recorders.does_recorder_exist(value) is True
-        ):
+        if self.name != value and self.model_config.recorders.exists(value) is True:
             return FormValidation(
                 validation=False,
                 error_message=f"A recorder named '{value}' already exists. "

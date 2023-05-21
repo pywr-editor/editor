@@ -47,7 +47,7 @@ class ScenarioPickerWidget(FormCustomWidget):
         self.combo_box = ComboBox()
         self.combo_box.addItem("None", None)
         for name in scenario_names:
-            size = model_scenarios.get_size_from_name(name)
+            size = model_scenarios.get_size(name)
             self.combo_box.addItem(f"{name} ({size} ensembles)", name)
 
         # set selected
@@ -75,8 +75,7 @@ class ScenarioPickerWidget(FormCustomWidget):
             message = "The are no scenarios defined in the model"
             self.combo_box.setEnabled(False)
             self.form_field.set_warning_message(
-                message
-                + ". Add a new scenario first before setting up this field"
+                message + ". Add a new scenario first before setting up this field"
             )
             self.logger.debug(message + ". Field disabled")
 

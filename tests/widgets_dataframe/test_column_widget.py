@@ -120,9 +120,9 @@ class TestDialogParameterColumnWidget:
         # noinspection PyTypeChecker
         column_widget: ColumnWidget = column_field.widget
         # noinspection PyUnresolvedReferences
-        widget_with_table: UrlWidget | TableSelectorWidget = (
-            selected_page.findChild(FormField, widget_name).widget
-        )
+        widget_with_table: UrlWidget | TableSelectorWidget = selected_page.findChild(
+            FormField, widget_name
+        ).widget
         spy = QSignalSpy(widget_with_table.updated_table)
 
         # 1. Columns are loaded without warning messages and the selected column is
@@ -158,16 +158,13 @@ class TestDialogParameterColumnWidget:
 
         # 3. Validation - it fails if expected value is None
         QTimer.singleShot(100, close_message_box)
-        output = column_widget.validate(
-            "column", "Column", column_widget.get_value()
-        )
+        output = column_widget.validate("column", "Column", column_widget.get_value())
         if expected is None:
             assert output.validation is False
             form_data = column_widget.form.validate()
             assert form_data is False
             assert (
-                column_field.message.text()
-                == "You must select a column from the list"
+                column_field.message.text() == "You must select a column from the list"
             )
         else:
             assert output.validation is True
@@ -220,10 +217,7 @@ class TestDialogParameterColumnWidget:
                 if value:
                     model_param_dict[f] = value
 
-            assert (
-                model_config.parameters.get_config_from_name(param_name)
-                == model_param_dict
-            )
+            assert model_config.parameters.config(param_name) == model_param_dict
 
     def test_column_with_ints(self, qtbot, model_file, widget_name, param_name):
         """
@@ -246,8 +240,7 @@ class TestDialogParameterColumnWidget:
         assert column_widget.combo_box.currentData() == int
         assert column_widget.get_value() == 5
         assert (
-            column_widget.validate("", "", column_widget.get_value()).validation
-            is True
+            column_widget.validate("", "", column_widget.get_value()).validation is True
         )
 
         # set None and check type and validation
@@ -260,9 +253,7 @@ class TestDialogParameterColumnWidget:
             is False
         )
 
-    def test_non_existing_file(
-        self, qtbot, model_file, widget_name, param_name
-    ):
+    def test_non_existing_file(self, qtbot, model_file, widget_name, param_name):
         """
         Tests the widget when the table file does not exist and the table is not
         available. This also tests the updated_table Signal.
@@ -280,9 +271,9 @@ class TestDialogParameterColumnWidget:
         # noinspection PyTypeChecker
         column_widget: ColumnWidget = column_field.widget
         # noinspection PyUnresolvedReferences
-        widget_with_table: UrlWidget | TableSelectorWidget = (
-            selected_page.findChild(FormField, widget_name).widget
-        )
+        widget_with_table: UrlWidget | TableSelectorWidget = selected_page.findChild(
+            FormField, widget_name
+        ).widget
         spy_updated_table = QSignalSpy(widget_with_table.updated_table)
 
         # 1. Check field is disabled
@@ -307,16 +298,11 @@ class TestDialogParameterColumnWidget:
         assert column_field.value() is None
 
         QTimer.singleShot(100, close_message_box)
-        output = column_widget.validate(
-            "column", "Column", column_widget.get_value()
-        )
+        output = column_widget.validate("column", "Column", column_widget.get_value())
         assert output.validation is False
         form_data = column_widget.form.validate()
         assert form_data is False
-        assert (
-            column_field.message.text()
-            == "You must select a column from the list"
-        )
+        assert column_field.message.text() == "You must select a column from the list"
 
         # 3. Trigger emission of updated_table Signal by changing file or table
         expected_column = " Date"
@@ -443,8 +429,7 @@ class TestDialogParameterColumnWidget:
         # 1. Change the index
         # Slot is triggered every time a new item is checked
         selected_indexes = [
-            index_col_combo_box.all_items.index(col_name)
-            for col_name in new_index
+            index_col_combo_box.all_items.index(col_name) for col_name in new_index
         ]
         # de-select all
         index_col_combo_box.uncheck_all()
@@ -529,24 +514,16 @@ class TestDialogParameterColumnWidget:
         # noinspection PyTypeChecker
         column_widget: ColumnWidget = column_field.widget
 
-        assert (
-            column_field.message.text()
-            == "The table does not contain any column"
-        )
+        assert column_field.message.text() == "The table does not contain any column"
         assert column_widget.combo_box.all_items == ["None"]
         assert column_widget.get_value() is None
 
         QTimer.singleShot(100, close_message_box)
-        output = column_widget.validate(
-            "column", "Column", column_widget.get_value()
-        )
+        output = column_widget.validate("column", "Column", column_widget.get_value())
         assert output.validation is False
         form_data = column_widget.form.validate()
         assert form_data is False
-        assert (
-            column_field.message.text()
-            == "You must select a column from the list"
-        )
+        assert column_field.message.text() == "You must select a column from the list"
 
     def test_h5_file(
         self,
@@ -579,9 +556,7 @@ class TestDialogParameterColumnWidget:
         assert column_widget.get_value() == selected
 
         # 2. Validate
-        output = column_widget.validate(
-            "column", "Column", column_widget.get_value()
-        )
+        output = column_widget.validate("column", "Column", column_widget.get_value())
         assert output.validation is True
         form_data = form.validate()
 
@@ -602,9 +577,7 @@ class TestDialogParameterColumnWidget:
 
         # 3. Save form to test filter
         # noinspection PyTypeChecker
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         # enable button (disabled due to no changes)
         assert model_config.has_changes is False
         assert save_button.isEnabled() is False
@@ -619,10 +592,7 @@ class TestDialogParameterColumnWidget:
             value = form.find_field_by_name(f).widget.get_value()
             if value:
                 model_param_dict[f] = value
-        assert (
-            model_config.parameters.get_config_from_name(param_name)
-            == model_param_dict
-        )
+        assert model_config.parameters.config(param_name) == model_param_dict
 
     def test_optional_arg(self, qtbot):
         """

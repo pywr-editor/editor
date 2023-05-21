@@ -37,9 +37,7 @@ class TestDialogParameterLineEditWidget:
     Tests the ParameterLineEditWidget.
     """
 
-    model_file = resolve_model_path(
-        "model_dialog_parameter_line_edit_widget.json"
-    )
+    model_file = resolve_model_path("model_dialog_parameter_line_edit_widget.json")
 
     @pytest.fixture()
     def model_config(self) -> ModelConfig:
@@ -139,16 +137,12 @@ class TestDialogParameterLineEditWidget:
         # 2. Test get_value and validate()
         assert threshold_widget.get_value() == expected_value
         assert (
-            threshold_widget.validate(
-                "", "", threshold_widget.get_value()
-            ).validation
+            threshold_widget.validate("", "", threshold_widget.get_value()).validation
             is True
         )
 
         # 3. Test reset
-        qtbot.mouseClick(
-            threshold_widget.clear_button, Qt.MouseButton.LeftButton
-        )
+        qtbot.mouseClick(threshold_widget.clear_button, Qt.MouseButton.LeftButton)
         assert threshold_widget.line_edit.text() == "Not set"
         assert threshold_widget.component_obj is None
         assert not threshold_widget.line_edit.actions()
@@ -174,9 +168,7 @@ class TestDialogParameterLineEditWidget:
         dialog.hide()
 
         selected_page = dialog.pages_widget.currentWidget()
-        threshold_field: FormField = selected_page.findChild(
-            FormField, "threshold"
-        )
+        threshold_field: FormField = selected_page.findChild(FormField, "threshold")
         # noinspection PyTypeChecker
         threshold_widget: ParameterLineEditWidget = threshold_field.widget
         assert selected_page.findChild(FormField, "name").value() == param_name
@@ -198,9 +190,7 @@ class TestDialogParameterLineEditWidget:
 
         # 2. Test validate()
         assert threshold_widget.get_value() is None
-        validation_obj = threshold_widget.validate(
-            "", "", threshold_widget.get_value()
-        )
+        validation_obj = threshold_widget.validate("", "", threshold_widget.get_value())
         assert validation_obj.validation is False
         assert "must provide a valid parameter" in validation_obj.error_message
 
@@ -237,12 +227,10 @@ class TestDialogParameterLineEditWidget:
         form.load_fields()
 
         # 3. Check type selector and the section is loaded
-        type_selector_widget: ParameterTypeSelectorWidget = (
-            form.find_field_by_name("type").widget
-        )
-        type_selector_widget.combo_box.setCurrentText(
-            "Storage threshold parameter"
-        )
+        type_selector_widget: ParameterTypeSelectorWidget = form.find_field_by_name(
+            "type"
+        ).widget
+        type_selector_widget.combo_box.setCurrentText("Storage threshold parameter")
         # noinspection PyTypeChecker
         section: StorageThresholdParameterSection = dialog.findChild(
             StorageThresholdParameterSection
@@ -251,18 +239,14 @@ class TestDialogParameterLineEditWidget:
 
         # set other mandatory parameters
         # noinspection PyTypeChecker
-        storage_node: StoragePickerWidget = dialog.findChild(
-            StoragePickerWidget
-        )
-        selected_index = storage_node.combo_box.findData(
-            "Reservoir", Qt.UserRole
-        )
+        storage_node: StoragePickerWidget = dialog.findChild(StoragePickerWidget)
+        selected_index = storage_node.combo_box.findData("Reservoir", Qt.UserRole)
         storage_node.combo_box.setCurrentIndex(selected_index)
 
         # 4. Add the threshold value
-        param_line_edit_widget: ParameterLineEditWidget = (
-            form.find_field_by_name("threshold").widget
-        )
+        param_line_edit_widget: ParameterLineEditWidget = form.find_field_by_name(
+            "threshold"
+        ).widget
         qtbot.mouseClick(
             param_line_edit_widget.select_button, Qt.MouseButton.LeftButton
         )
@@ -287,9 +271,7 @@ class TestDialogParameterLineEditWidget:
         :param value: The new parameter dictionary to validate.
         """
         # noinspection PyTypeChecker
-        main_save_button: QPushButton = page.findChild(
-            QPushButton, "save_button"
-        )
+        main_save_button: QPushButton = page.findChild(QPushButton, "save_button")
         assert "Save" in main_save_button.text()
 
         # button in parent form is enabled as soon as the child form is saved
@@ -298,7 +280,7 @@ class TestDialogParameterLineEditWidget:
         qtbot.mouseClick(main_save_button, Qt.MouseButton.LeftButton)
 
         name = page.form.find_field_by_name("name").widget.text()
-        assert model_config.parameters.get_config_from_name(name) == value
+        assert model_config.parameters.config(name) == value
 
     # noinspection PyTypeChecker
     def test_add_new_constant_parameter(self, qtbot, model_config):
@@ -319,17 +301,13 @@ class TestDialogParameterLineEditWidget:
         source_selector: SourceSelectorWidget = child_dialog.findChild(
             SourceSelectorWidget
         )
-        source_selector.combo_box.setCurrentText(
-            source_selector.labels["value"]
-        )
+        source_selector.combo_box.setCurrentText(source_selector.labels["value"])
         value_widget: ValueWidget = child_dialog.findChild(ValueWidget)
         new_value = 1.4571
         value_widget.line_edit.setText(str(new_value))
 
         # 2. Save and close the form and then check the ParameterLineEditWidget
-        save_button: QPushButton = child_dialog.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = child_dialog.findChild(QPushButton, "save_button")
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         child_dialog.close()
 
@@ -356,12 +334,10 @@ class TestDialogParameterLineEditWidget:
         )
 
         # set model parameter
-        source_widget: ModelComponentSourceSelectorWidget = (
-            child_dialog.findChild(ModelComponentSourceSelectorWidget)
+        source_widget: ModelComponentSourceSelectorWidget = child_dialog.findChild(
+            ModelComponentSourceSelectorWidget
         )
-        source_widget.combo_box.setCurrentText(
-            source_widget.labels["model_component"]
-        )
+        source_widget.combo_box.setCurrentText(source_widget.labels["model_component"])
 
         # pick last parameter
         model_param_widget: ParameterPickerWidget = child_dialog.findChild(
@@ -371,9 +347,7 @@ class TestDialogParameterLineEditWidget:
         model_param_widget.combo_box.setCurrentText(selected_param)
 
         # save and close child dialog
-        save_button: QPushButton = child_dialog.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = child_dialog.findChild(QPushButton, "save_button")
         save_button.setEnabled(True)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         child_dialog.close()
@@ -411,25 +385,19 @@ class TestDialogParameterLineEditWidget:
         # 1. Fill in the form
         # select type
         # noinspection PyTypeChecker
-        type_selector_widget: ParameterTypeSelectorWidget = (
-            child_dialog.findChild(ParameterTypeSelectorWidget)
+        type_selector_widget: ParameterTypeSelectorWidget = child_dialog.findChild(
+            ParameterTypeSelectorWidget
         )
-        type_selector_widget.combo_box.setCurrentText(
-            "Monthly profile parameter"
-        )
+        type_selector_widget.combo_box.setCurrentText("Monthly profile parameter")
 
         # select source
         # noinspection PyTypeChecker
         source_selector: SourceSelectorWidget = child_dialog.findChild(
             SourceSelectorWidget
         )
-        source_selector.combo_box.setCurrentText(
-            source_selector.labels["value"]
-        )
+        source_selector.combo_box.setCurrentText(source_selector.labels["value"])
         # noinspection PyTypeChecker
-        values_widget: MonthlyValuesWidget = child_dialog.findChild(
-            MonthlyValuesWidget
-        )
+        values_widget: MonthlyValuesWidget = child_dialog.findChild(MonthlyValuesWidget)
         # manually update the model
         new_values = list(range(1, 24, 2))
         values_widget.model.values = new_values
@@ -437,9 +405,7 @@ class TestDialogParameterLineEditWidget:
 
         # 2. Save and close the form and then check the ParameterLineEditWidget
         # noinspection PyTypeChecker
-        save_button: QPushButton = child_dialog.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = child_dialog.findChild(QPushButton, "save_button")
         save_button.setEnabled(True)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         child_dialog.close()
@@ -493,9 +459,7 @@ class TestDialogParameterLineEditWidget:
         )
 
         # select the table
-        table_widget: TableSelectorWidget = child_dialog.findChild(
-            TableSelectorWidget
-        )
+        table_widget: TableSelectorWidget = child_dialog.findChild(TableSelectorWidget)
         assert table_widget.isHidden() is False
         table_widget.combo_box.setCurrentText(selected_table)
 
@@ -509,16 +473,12 @@ class TestDialogParameterLineEditWidget:
         index_combo_box.setCurrentText(str(selected_index))
 
         # 2. Save the form in the child dialog
-        save_button: QPushButton = child_dialog.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = child_dialog.findChild(QPushButton, "save_button")
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         child_dialog.close()
 
         # 3. Check the ParameterLineEditWidget
-        save_button: QPushButton = child_dialog.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = child_dialog.findChild(QPushButton, "save_button")
         save_button.setEnabled(True)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         child_dialog.close()
@@ -584,9 +544,7 @@ class TestDialogParameterLineEditWidget:
         column_widget.combo_box.setCurrentText(selected_column)
 
         # set the index columns
-        index_col_widget: IndexColWidget = child_dialog.findChild(
-            IndexColWidget
-        )
+        index_col_widget: IndexColWidget = child_dialog.findChild(IndexColWidget)
         selected_indexes = [
             index_col_widget.combo_box.all_items.index(col_name)
             for col_name in selected_index_cols
@@ -600,16 +558,12 @@ class TestDialogParameterLineEditWidget:
             index_combo_box.setCurrentText(str(selected_index[ii]))
 
         # 2. Save the form in the child dialog
-        save_button: QPushButton = child_dialog.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = child_dialog.findChild(QPushButton, "save_button")
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         child_dialog.close()
 
         # 3. Check the ParameterLineEditWidget
-        save_button: QPushButton = child_dialog.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = child_dialog.findChild(QPushButton, "save_button")
         save_button.setEnabled(True)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         child_dialog.close()
@@ -692,6 +646,4 @@ class TestDialogParameterLineEditWidget:
         type_widget: ParameterTypeSelectorWidget = child_dialog.findChild(
             ParameterTypeSelectorWidget
         )
-        assert (
-            type_widget.combo_box.currentText() == "Aggregated index parameter"
-        )
+        assert type_widget.combo_box.currentText() == "Aggregated index parameter"

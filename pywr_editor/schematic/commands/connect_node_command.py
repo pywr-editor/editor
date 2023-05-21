@@ -33,15 +33,11 @@ class ConnectNodeCommand(QUndoCommand):
         self.app = self.schematic.app
         self.model_config = self.schematic.model_config
 
-        self.source_node: NodeConfig = (
-            self.model_config.nodes.get_node_config_from_name(
-                source_node_name, as_dict=False
-            )
+        self.source_node: NodeConfig = self.model_config.nodes.config(
+            source_node_name, as_dict=False
         )
-        self.target_node: NodeConfig = (
-            self.model_config.nodes.get_node_config_from_name(
-                target_node_name, as_dict=False
-            )
+        self.target_node: NodeConfig = self.model_config.nodes.config(
+            target_node_name, as_dict=False
         )
         # To properly restore, if the edge is changed (for ex. a Slot is added),
         # store the edge configuration for the undo command
@@ -126,9 +122,7 @@ class ConnectNodeCommand(QUndoCommand):
 
         # remove edge from the edges list for the target node
         node_item = self.schematic.node_items[self.target_node.name]
-        node_item.delete_edge(
-            node_name=self.source_node.name, edge_type="source"
-        )
+        node_item.delete_edge(node_name=self.source_node.name, edge_type="source")
 
         # remove graphic item from the schematic
         if edge_to_delete is not None:

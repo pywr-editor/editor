@@ -1,6 +1,3 @@
-[tool.black]
-line-length = 80
-
 [tool.pytest_ini_options]
 testpaths = ["test"]
 required_plugins = ["pytest-qt"]
@@ -28,3 +25,4 @@ profile = "black"
 line_length = 80
 # some imports have different priorities (see form module)
 skip = ["__init__.py", "venv", "venv310"]
+

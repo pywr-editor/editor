@@ -173,9 +173,7 @@ class TableFormWidget(Form):
         """
         return super().get_dict_value(key, self.table_dict)
 
-    def _check_table_name(
-        self, name: str, label: str, value: str
-    ) -> FormValidation:
+    def _check_table_name(self, name: str, label: str, value: str) -> FormValidation:
         """
         Checks that the new table name is not duplicated.
         :param name: The field name.
@@ -184,10 +182,7 @@ class TableFormWidget(Form):
         :return: True if the name validates correctly, False otherwise.
         """
         # do not save form if the table name is changed and already exists
-        if (
-            self.name != value
-            and self.model_config.tables.does_table_exist(value) is True
-        ):
+        if self.name != value and self.model_config.tables.exists(value) is True:
             return FormValidation(
                 validation=False,
                 error_message=f'The table "{value}" already exists. '

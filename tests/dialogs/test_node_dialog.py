@@ -52,9 +52,7 @@ class TestNodeDialog:
             ("leaky_pipe", "leakypipe", {}, False),
         ],
     )
-    def test_init_node(
-        self, qtbot, node_name, node_type, props, is_type_enabled
-    ):
+    def test_init_node(self, qtbot, node_name, node_type, props, is_type_enabled):
         """
         Tests that the nodes are loaded correctly.
         """
@@ -165,7 +163,7 @@ class TestNodeDialog:
 
         # check nodes
         assert form.model_config.nodes.find_node_index_by_name(old_name) is None
-        assert form.model_config.nodes.get_node_config_from_name(new_name) == {
+        assert form.model_config.nodes.config(new_name) == {
             "name": new_name,
             "type": "input",
             "position": {"node_style": "works"},
@@ -207,7 +205,7 @@ class TestNodeDialog:
         qtbot.mouseClick(form.save_button, Qt.MouseButton.LeftButton)
 
         # check nodes
-        assert form.model_config.nodes.get_node_config_from_name(node_name) == {
+        assert form.model_config.nodes.config(node_name) == {
             "name": node_name,
             "type": new_type,
             "value": 5,

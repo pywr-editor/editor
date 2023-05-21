@@ -74,9 +74,7 @@ class TestDialogParameterCustomParameterSection:
         "value_dict": {
             "type": "ScenarioMonthlyProfile",
             "scenario": "scenario B",
-            "values": [
-                [12.5, 45, 12.5, 45, 12.5, 45, 12.5, 12.5, 45, 99, 12, 12]
-            ],
+            "values": [[12.5, 45, 12.5, 45, 12.5, 45, 12.5, 12.5, 45, 99, 12, 12]],
         },
         "value_2d_array": {
             "Dimension 1": [
@@ -183,9 +181,7 @@ class TestDialogParameterCustomParameterSection:
         assert selected_page.findChild(FormField, "name").value() == param_name
 
         # noinspection PyTypeChecker
-        table_widget: DictionaryWidget = selected_page.findChild(
-            DictionaryWidget
-        )
+        table_widget: DictionaryWidget = selected_page.findChild(DictionaryWidget)
 
         # 1. Check model implementation
         model = table_widget.model
@@ -199,8 +195,8 @@ class TestDialogParameterCustomParameterSection:
 
         # 2. Check external data fields that are hidden
         # noinspection PyTypeChecker
-        toggle_widget: CustomComponentExternalDataToggle = (
-            selected_page.findChild(CustomComponentExternalDataToggle)
+        toggle_widget: CustomComponentExternalDataToggle = selected_page.findChild(
+            CustomComponentExternalDataToggle
         )
         assert toggle_widget.toggle.isChecked() is False
 
@@ -228,16 +224,14 @@ class TestDialogParameterCustomParameterSection:
                 DictionaryItemDialogWidget
             )[-1]
             # noinspection PyTypeChecker
-            data_type_widget: DataTypeDictionaryItemWidget = (
-                sub_dialog.findChild(DataTypeDictionaryItemWidget)
+            data_type_widget: DataTypeDictionaryItemWidget = sub_dialog.findChild(
+                DataTypeDictionaryItemWidget
             )
             key_field = sub_dialog.form.find_field_by_name("key")
 
             # infer data type from parameter name
             data_type = key.replace("value_", "")
-            value_field = sub_dialog.form.find_field_by_name(
-                f"field_{data_type}"
-            )
+            value_field = sub_dialog.form.find_field_by_name(f"field_{data_type}")
 
             # check key
             assert key_field.value() == key
@@ -245,22 +239,17 @@ class TestDialogParameterCustomParameterSection:
             # check value
             if key == "value_lst_str":
                 assert data_type_widget.combo_box.currentText() == "Number"
-                assert (
-                    "not supported"
-                    in data_type_widget.form_field.message.text()
-                )
+                assert "not supported" in data_type_widget.form_field.message.text()
                 assert value_field is None
                 # default field is selected
                 # noinspection PyUnresolvedReferences
                 assert (
-                    sub_dialog.findChild(FormField, "field_number").isVisible()
-                    is True
+                    sub_dialog.findChild(FormField, "field_number").isVisible() is True
                 )
                 continue
             else:
                 assert (
-                    data_type_widget.combo_box.currentText()
-                    == self.data_type_map[key]
+                    data_type_widget.combo_box.currentText() == self.data_type_map[key]
                 )
                 assert data_type_widget.form_field.message.text() == ""
 
@@ -289,9 +278,7 @@ class TestDialogParameterCustomParameterSection:
 
         # 4. Validate form to test section filter
         # validation must return original parameter dict
-        param_dict = model_config.parameters.get_config_from_name(
-            param_name, as_dict=True
-        )
+        param_dict = model_config.parameters.config(param_name, as_dict=True)
         assert table_widget.form.validate() == {
             **{"name": param_name},
             **param_dict,
@@ -316,9 +303,7 @@ class TestDialogParameterCustomParameterSection:
         assert selected_page.findChild(FormField, "name").value() == param_name
 
         # noinspection PyTypeChecker
-        table_widget: DictionaryWidget = selected_page.findChild(
-            DictionaryWidget
-        )
+        table_widget: DictionaryWidget = selected_page.findChild(DictionaryWidget)
 
         model = table_widget.model
         delete_button = table_widget.delete_button
@@ -338,9 +323,7 @@ class TestDialogParameterCustomParameterSection:
         assert key_to_delete not in model.dictionary
 
         # check final dictionary
-        param_dict = model_config.parameters.get_config_from_name(
-            param_name, as_dict=True
-        )
+        param_dict = model_config.parameters.config(param_name, as_dict=True)
         del param_dict[key_to_delete]
         assert table_widget.form.validate() == {
             **{"name": param_name},
@@ -363,9 +346,7 @@ class TestDialogParameterCustomParameterSection:
         assert selected_page.findChild(FormField, "name").value() == param_name
 
         # noinspection PyTypeChecker
-        table_widget: DictionaryWidget = selected_page.findChild(
-            DictionaryWidget
-        )
+        table_widget: DictionaryWidget = selected_page.findChild(DictionaryWidget)
 
         # 1. Select an item
         model = table_widget.model
@@ -389,18 +370,13 @@ class TestDialogParameterCustomParameterSection:
         line_edit: QLineEdit = key_field.findChild(QLineEdit)
 
         # noinspection PyTypeChecker
-        save_button: QPushButton = child_dialog.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = child_dialog.findChild(QPushButton, "save_button")
         assert save_button.text() == "Save"
 
         # 3. Set a forbidden key and submit form
         line_edit.setText("url")
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
-        assert (
-            "configure external data using the 'url'"
-            in key_field.message.text()
-        )
+        assert "configure external data using the 'url'" in key_field.message.text()
 
         # 4. Set a valid key and send the child form again
         new_key_name = "My new key"
@@ -409,9 +385,7 @@ class TestDialogParameterCustomParameterSection:
         child_dialog.close()
 
         # 5. Validate main form
-        param_dict = model_config.parameters.get_config_from_name(
-            param_name, as_dict=True
-        )
+        param_dict = model_config.parameters.config(param_name, as_dict=True)
         param_dict = {
             **{"name": param_name},
             **param_dict,
@@ -436,9 +410,7 @@ class TestDialogParameterCustomParameterSection:
         assert selected_page.findChild(FormField, "name").value() == param_name
 
         # noinspection PyTypeChecker
-        table_widget: DictionaryWidget = selected_page.findChild(
-            DictionaryWidget
-        )
+        table_widget: DictionaryWidget = selected_page.findChild(DictionaryWidget)
 
         # 1. Select an item
         model = table_widget.model
@@ -465,9 +437,7 @@ class TestDialogParameterCustomParameterSection:
         data_type_widget: DataTypeDictionaryItemWidget = child_dialog.findChild(
             DataTypeDictionaryItemWidget
         )
-        data_type_widget.combo_box.setCurrentText(
-            data_type_widget.labels_map["string"]
-        )
+        data_type_widget.combo_box.setCurrentText(data_type_widget.labels_map["string"])
         # dictionary item value
         string_field = child_dialog.form.find_field_by_name("field_string")
         line_edit: QLineEdit = string_field.findChild(QLineEdit)
@@ -476,17 +446,13 @@ class TestDialogParameterCustomParameterSection:
 
         # 3. Send the child form
         # noinspection PyTypeChecker
-        save_button: QPushButton = child_dialog.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = child_dialog.findChild(QPushButton, "save_button")
         assert save_button.text() == "Save"
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         child_dialog.close()
 
         # 4. Validate main form
-        param_dict = model_config.parameters.get_config_from_name(
-            param_name, as_dict=True
-        )
+        param_dict = model_config.parameters.config(param_name, as_dict=True)
         param_dict = {
             **{"name": param_name},
             **param_dict,
@@ -509,9 +475,7 @@ class TestDialogParameterCustomParameterSection:
         assert selected_page.findChild(FormField, "name").value() == param_name
 
         # noinspection PyTypeChecker
-        table_widget: DictionaryWidget = selected_page.findChild(
-            DictionaryWidget
-        )
+        table_widget: DictionaryWidget = selected_page.findChild(DictionaryWidget)
 
         # 1. Open the dialog
         qtbot.mouseClick(table_widget.add_button, Qt.MouseButton.LeftButton)
@@ -540,17 +504,13 @@ class TestDialogParameterCustomParameterSection:
 
         # 3. Send the child form
         # noinspection PyTypeChecker
-        save_button: QPushButton = child_dialog.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = child_dialog.findChild(QPushButton, "save_button")
         assert save_button.text() == "Save"
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         child_dialog.close()
 
         # 4. Validate main form
-        param_dict = model_config.parameters.get_config_from_name(
-            param_name, as_dict=True
-        )
+        param_dict = model_config.parameters.config(param_name, as_dict=True)
         param_dict = {
             **{"name": param_name},
             **param_dict,
@@ -582,9 +542,7 @@ class TestDialogParameterCustomParameterSection:
         assert selected_page.findChild(FormField, "name").value() == param_name
 
         # noinspection PyTypeChecker
-        table_widget: DictionaryWidget = selected_page.findChild(
-            DictionaryWidget
-        )
+        table_widget: DictionaryWidget = selected_page.findChild(DictionaryWidget)
 
         # 1. Select an item
         model = table_widget.model
@@ -606,17 +564,13 @@ class TestDialogParameterCustomParameterSection:
 
         # 3. Send the child form
         # noinspection PyTypeChecker
-        save_button: QPushButton = child_dialog.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = child_dialog.findChild(QPushButton, "save_button")
         assert save_button.text() == "Save"
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         child_dialog.close()
 
         # 4. Validate main form
-        param_dict = model_config.parameters.get_config_from_name(
-            param_name, as_dict=True
-        )
+        param_dict = model_config.parameters.config(param_name, as_dict=True)
         param_dict = {
             **{"name": param_name},
             **param_dict,
@@ -638,9 +592,7 @@ class TestDialogParameterCustomParameterSection:
         assert selected_page.findChild(FormField, "name").value() == param_name
 
         # noinspection PyTypeChecker
-        table_widget: DictionaryWidget = selected_page.findChild(
-            DictionaryWidget
-        )
+        table_widget: DictionaryWidget = selected_page.findChild(DictionaryWidget)
 
         # 1. Open the dialog
         qtbot.mouseClick(table_widget.add_button, Qt.MouseButton.LeftButton)
@@ -659,9 +611,7 @@ class TestDialogParameterCustomParameterSection:
         data_type_widget: DataTypeDictionaryItemWidget = child_dialog.findChild(
             DataTypeDictionaryItemWidget
         )
-        data_type_widget.combo_box.setCurrentText(
-            data_type_widget.labels_map["dict"]
-        )
+        data_type_widget.combo_box.setCurrentText(data_type_widget.labels_map["dict"])
 
         # 2. Add nest dictionary item
         # noinspection PyTypeChecker
@@ -669,17 +619,15 @@ class TestDialogParameterCustomParameterSection:
             DictionaryWidget
         )
         # add key and number
-        qtbot.mouseClick(
-            child_dictionary_widget.add_button, Qt.MouseButton.LeftButton
-        )
+        qtbot.mouseClick(child_dictionary_widget.add_button, Qt.MouseButton.LeftButton)
 
         # noinspection PyTypeChecker
         child_child_dialog: DictionaryItemDialogWidget = child_dialog.findChild(
             DictionaryItemDialogWidget
         )
         # noinspection PyTypeChecker
-        child_child_form: DictionaryItemFormWidget = (
-            child_child_dialog.findChild(DictionaryItemFormWidget)
+        child_child_form: DictionaryItemFormWidget = child_child_dialog.findChild(
+            DictionaryItemFormWidget
         )
         key_field = child_child_form.find_field_by_name("key")
         # noinspection PyTypeChecker
@@ -687,9 +635,7 @@ class TestDialogParameterCustomParameterSection:
         new_sub_key = "A new number"
         line_edit.setText(new_sub_key)
 
-        string_field = child_child_dialog.form.find_field_by_name(
-            "field_number"
-        )
+        string_field = child_child_dialog.form.find_field_by_name("field_number")
         line_edit: QLineEdit = string_field.findChild(QLineEdit)
         new_sub_value = 0.4421
         line_edit.setText(str(new_sub_value))
@@ -703,16 +649,12 @@ class TestDialogParameterCustomParameterSection:
         child_child_dialog.close()
 
         # noinspection PyTypeChecker
-        save_button: QPushButton = child_dialog.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = child_dialog.findChild(QPushButton, "save_button")
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         child_dialog.close()
 
         # 4. Validate main form
-        param_dict = model_config.parameters.get_config_from_name(
-            param_name, as_dict=True
-        )
+        param_dict = model_config.parameters.config(param_name, as_dict=True)
         param_dict = {
             **{"name": param_name},
             **param_dict,
@@ -741,8 +683,8 @@ class TestDialogParameterCustomParameterSection:
         assert selected_page.findChild(FormField, "name").value() == param_name
 
         # noinspection PyTypeChecker
-        toggle_widget: CustomComponentExternalDataToggle = (
-            selected_page.findChild(CustomComponentExternalDataToggle)
+        toggle_widget: CustomComponentExternalDataToggle = selected_page.findChild(
+            CustomComponentExternalDataToggle
         )
 
         def check_visibility(visible):
@@ -763,11 +705,5 @@ class TestDialogParameterCustomParameterSection:
         # check external data fields
         else:
             check_visibility(True)
-            assert (
-                selected_page.form.find_field_by_name("table").value()
-                == "Table 3"
-            )
-            assert (
-                selected_page.form.find_field_by_name("column").value()
-                == "Column 3"
-            )
+            assert selected_page.form.find_field_by_name("table").value() == "Table 3"
+            assert selected_page.form.find_field_by_name("column").value() == "Column 3"

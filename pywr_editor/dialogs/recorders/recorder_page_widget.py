@@ -34,7 +34,7 @@ class RecorderPageWidget(QWidget):
         self.name = name
         self.pages = parent
         self.model_config = model_config
-        self.recorder_dict = model_config.recorders.get_config_from_name(name)
+        self.recorder_dict = model_config.recorders.config(name)
 
         layout = QVBoxLayout(self)
         layout.setAlignment(Qt.AlignTop)
@@ -68,9 +68,7 @@ class RecorderPageWidget(QWidget):
         # noinspection PyUnresolvedReferences
         clone_button.clicked.connect(self.on_clone_recorder)
 
-        delete_button = PushIconButton(
-            icon=qta.icon("msc.remove"), label="Delete"
-        )
+        delete_button = PushIconButton(icon=qta.icon("msc.remove"), label="Delete")
         delete_button.setObjectName("delete_button")
         # noinspection PyUnresolvedReferences
         delete_button.clicked.connect(self.on_delete_recorder)
@@ -162,9 +160,7 @@ class RecorderPageWidget(QWidget):
         Clones the selected recorder.
         :return: None
         """
-        self.pages.on_add_new_recorder(
-            self.model_config.recorders.get_config_from_name(self.name)
-        )
+        self.pages.on_add_new_recorder(self.model_config.recorders.config(self.name))
 
     @Slot()
     def on_delete_recorder(self) -> None:

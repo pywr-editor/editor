@@ -36,9 +36,7 @@ class TestAggregatedNodeSection:
 
         form = dialog.form
         save_button = form.save_button
-        widget: TableValuesWidget = form.find_field_by_name(
-            "flow_weights"
-        ).widget
+        widget: TableValuesWidget = form.find_field_by_name("flow_weights").widget
 
         # set one weight, validation fails
         widget.model.values[0] = [1.9]
@@ -57,19 +55,11 @@ class TestAggregatedNodeSection:
         save_button.setEnabled(True)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         assert widget.form_field.message.text() == ""
-        assert (
-            model_config.nodes.get_node_config_from_name(node_name)[
-                "flow_weights"
-            ]
-            == new_weights
-        )
+        assert model_config.nodes.config(node_name)["flow_weights"] == new_weights
 
         # set no weights, validation passes
         widget.model.values[0] = []
         save_button.setEnabled(True)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         assert widget.form_field.message.text() == ""
-        assert (
-            "flow_weights"
-            not in model_config.nodes.get_node_config_from_name(node_name)
-        )
+        assert "flow_weights" not in model_config.nodes.config(node_name)

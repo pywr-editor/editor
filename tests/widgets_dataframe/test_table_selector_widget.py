@@ -113,9 +113,7 @@ class TestDialogParameterTableSelectorWidget:
         assert spy.count() == 1
 
         # 3. test validate method
-        output = table_widget.validate(
-            "table", "Table", table_widget.get_value()
-        )
+        output = table_widget.validate("table", "Table", table_widget.get_value())
         assert output.validation is True
 
         # 4. test form validation - a valid dictionary is returned without error
@@ -130,9 +128,7 @@ class TestDialogParameterTableSelectorWidget:
         assert form_data["table"] == table_widget.get_value()
 
         # 5. Save form to test filter
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         # enable button (disabled due to no changes)
         assert model_config.has_changes is False
         assert save_button.isEnabled() is False
@@ -145,10 +141,7 @@ class TestDialogParameterTableSelectorWidget:
         for f in fields:
             model_param_dict[f] = form.find_field_by_name(f).widget.get_value()
 
-        assert (
-            model_config.parameters.get_config_from_name(param_name)
-            == model_param_dict
-        )
+        assert model_config.parameters.config(param_name) == model_param_dict
 
         # 6. Change the value
         combo_box = table_widget.combo_box
@@ -233,9 +226,7 @@ class TestDialogParameterTableSelectorWidget:
             assert table_widget.reload_button.isEnabled() is False
 
         # 3. test validate method
-        output = table_widget.validate(
-            "table", "Table", table_widget.get_value()
-        )
+        output = table_widget.validate("table", "Table", table_widget.get_value())
         assert output.validation is False
         assert validation_message in output.error_message
 

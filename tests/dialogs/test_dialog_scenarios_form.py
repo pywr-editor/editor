@@ -84,9 +84,7 @@ class TestScenariosDialog:
         )
 
         # noinspection PyUnresolvedReferences
-        assert (
-            selected_page.findChild(FormField, "name").value() == scenario_name
-        )
+        assert selected_page.findChild(FormField, "name").value() == scenario_name
 
         # 1. Check for initial warnings
         for form_field in selected_page.findChildren(FormField):
@@ -109,9 +107,7 @@ class TestScenariosDialog:
 
             # change for form submission
             options_widget.model.names = ["First", "Third"]
-            expected_scenario_dict[
-                "ensemble_names"
-            ] = options_widget.model.names
+            expected_scenario_dict["ensemble_names"] = options_widget.model.names
         # no slice is provided, validation does not fail
         elif scenario_name == "valid_names_empty":
             out = options_widget.validate("", "", {})
@@ -148,17 +144,12 @@ class TestScenariosDialog:
 
         # 3. Enable submit button and send form for validation to test on_save method
         # noinspection PyTypeChecker
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         save_button.setEnabled(True)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
 
         assert model_config.has_changes is True
-        assert (
-            model_config.scenarios.get_config_from_name(scenario_name)
-            == expected_scenario_dict
-        )
+        assert model_config.scenarios.config(scenario_name) == expected_scenario_dict
 
         # 4. Test reset
         options_widget.reset()
@@ -203,9 +194,7 @@ class TestScenariosDialog:
         selected_page = dialog.pages.currentWidget()
 
         # noinspection PyUnresolvedReferences
-        assert (
-            selected_page.findChild(FormField, "name").value() == scenario_name
-        )
+        assert selected_page.findChild(FormField, "name").value() == scenario_name
 
         # 1. Check for initial warnings
         # noinspection PyTypeChecker
@@ -221,18 +210,14 @@ class TestScenariosDialog:
 
         # 3. Enable submit button and send form for validation to test on_save method
         # noinspection PyTypeChecker
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         save_button.setEnabled(True)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
 
         assert model_config.has_changes is True
-        scenario_dict = model_config.scenarios.get_config_from_name(
-            scenario_name
-        )
+        scenario_dict = model_config.scenarios.config(scenario_name)
 
-        assert model_config.scenarios.get_config_from_name(scenario_name) == {
+        assert model_config.scenarios.config(scenario_name) == {
             "name": scenario_name,
             "size": scenario_dict["size"],
         }
@@ -248,14 +233,10 @@ class TestScenariosDialog:
         selected_page = dialog.pages.currentWidget()
 
         # noinspection PyUnresolvedReferences
-        assert (
-            selected_page.findChild(FormField, "name").value() == scenario_name
-        )
+        assert selected_page.findChild(FormField, "name").value() == scenario_name
 
         # noinspection PyTypeChecker
-        option_widget: ScenarioOptionsWidget = dialog.findChild(
-            ScenarioOptionsWidget
-        )
+        option_widget: ScenarioOptionsWidget = dialog.findChild(ScenarioOptionsWidget)
 
         # remove names
         button_tested = 0
@@ -302,16 +283,12 @@ class TestScenariosDialog:
         dialog.show()
         y = table.rowViewportPosition(0) + 10
 
-        qtbot.mouseClick(
-            table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
-        )
+        qtbot.mouseClick(table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y))
         assert model.slice == [3]
 
         # Uncheck all
         y = table.rowViewportPosition(3) + 10
-        qtbot.mouseClick(
-            table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
-        )
+        qtbot.mouseClick(table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y))
         assert model.slice == []
 
         # Check one at the time
@@ -413,9 +390,7 @@ class TestScenariosDialog:
         size_widget: SpinBox = selected_page.findChild(SpinBox)
 
         # noinspection PyUnresolvedReferences
-        assert (
-            selected_page.findChild(FormField, "name").value() == scenario_name
-        )
+        assert selected_page.findChild(FormField, "name").value() == scenario_name
 
         or_size = size_widget.value()
 
@@ -447,12 +422,8 @@ class TestScenariosDialog:
         table = options_widget.table
         x = table.columnViewportPosition(1) + 5
         y = table.rowViewportPosition(4) + 10
-        qtbot.mouseClick(
-            table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
-        )
-        qtbot.mouseDClick(
-            table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
-        )
+        qtbot.mouseClick(table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y))
+        qtbot.mouseDClick(table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y))
         qtbot.keyClick(table.viewport().focusWidget(), Qt.Key_X)
         qtbot.keyClick(table.viewport().focusWidget(), Qt.Key_Enter)
         qtbot.wait(100)
@@ -460,9 +431,7 @@ class TestScenariosDialog:
         # uncheck ensemble
         x = table.columnViewportPosition(2) + 5
         y = table.rowViewportPosition(4) + 10
-        qtbot.mouseClick(
-            table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
-        )
+        qtbot.mouseClick(table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y))
 
         # decrease it to 6
         size_widget.setValue(6)

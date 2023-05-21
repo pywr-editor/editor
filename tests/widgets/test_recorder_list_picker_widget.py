@@ -70,9 +70,7 @@ class TestDialogRecorderRecordersListPickerWidget:
 
         selected_page = dialog.pages_widget.currentWidget()
         # noinspection PyUnresolvedReferences
-        assert (
-            selected_page.findChild(FormField, "name").value() == recorder_name
-        )
+        assert selected_page.findChild(FormField, "name").value() == recorder_name
 
         # noinspection PyTypeChecker
         field: FormField = selected_page.findChild(FormField, "recorders")
@@ -92,7 +90,7 @@ class TestDialogRecorderRecordersListPickerWidget:
                     == recorder_obj.humanised_type
                 )
             elif isinstance(recorder_name, str):
-                recorder_obj = model_config.recorders.get_config_from_name(
+                recorder_obj = model_config.recorders.config(
                     recorder_name, as_dict=False
                 )
                 assert (
@@ -174,9 +172,7 @@ class TestDialogRecorderRecordersListPickerWidget:
 
         selected_page = dialog.pages_widget.currentWidget()
         # noinspection PyUnresolvedReferences
-        assert (
-            selected_page.findChild(FormField, "name").value() == recorder_name
-        )
+        assert selected_page.findChild(FormField, "name").value() == recorder_name
 
         # noinspection PyTypeChecker
         field: FormField = selected_page.findChild(FormField, "recorders")
@@ -217,9 +213,7 @@ class TestDialogRecorderRecordersListPickerWidget:
         """
         Tests when a node recorder is added or edited in the recorder list.
         """
-        dialog = RecordersDialog(
-            model_config, self.general_anonymous_recorder_name
-        )
+        dialog = RecordersDialog(model_config, self.general_anonymous_recorder_name)
         dialog.show()
 
         selected_page = dialog.pages_widget.currentWidget()
@@ -230,9 +224,7 @@ class TestDialogRecorderRecordersListPickerWidget:
         )
 
         # noinspection PyTypeChecker
-        recorders_field: FormField = selected_page.findChild(
-            FormField, "recorders"
-        )
+        recorders_field: FormField = selected_page.findChild(FormField, "recorders")
         # noinspection PyTypeChecker
         recorders_widget: RecordersListPickerWidget = recorders_field.widget
 
@@ -241,13 +233,9 @@ class TestDialogRecorderRecordersListPickerWidget:
         if mode == "edit":
             index = 1
             self.select_row(recorders_widget, index)
-            qtbot.mouseClick(
-                recorders_widget.edit_button, Qt.MouseButton.LeftButton
-            )
+            qtbot.mouseClick(recorders_widget.edit_button, Qt.MouseButton.LeftButton)
         elif mode == "add":
-            qtbot.mouseClick(
-                recorders_widget.add_button, Qt.MouseButton.LeftButton
-            )
+            qtbot.mouseClick(recorders_widget.add_button, Qt.MouseButton.LeftButton)
         else:
             raise ValueError("Mode not supported")
 
@@ -256,9 +244,7 @@ class TestDialogRecorderRecordersListPickerWidget:
             ModelComponentPickerDialog
         )
         # noinspection PyTypeChecker
-        save_button: QPushButton = child_dialog.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = child_dialog.findChild(QPushButton, "save_button")
 
         # 2. Configure a new or already existing recorde node and save the changes
         # noinspection PyTypeChecker
@@ -270,9 +256,7 @@ class TestDialogRecorderRecordersListPickerWidget:
         new_node = "Reservoir2"
         # noinspection PyTypeChecker
         node_widget: NodePickerWidget = child_dialog.findChild(NodePickerWidget)
-        node_widget.combo_box.setCurrentIndex(
-            node_widget.combo_box.findData(new_node)
-        )
+        node_widget.combo_box.setCurrentIndex(node_widget.combo_box.findData(new_node))
         save_button.setEnabled(True)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         # manually close the dialog
@@ -300,9 +284,7 @@ class TestDialogRecorderRecordersListPickerWidget:
         qtbot.mouseClick(main_save_button, Qt.MouseButton.LeftButton)
 
         assert model_config.has_changes is True
-        assert model_config.recorders.get_config_from_name(
-            self.general_anonymous_recorder_name
-        ) == {
+        assert model_config.recorders.config(self.general_anonymous_recorder_name) == {
             "type": "aggregated",
             # function is mandatory and default to mean
             "recorder_agg_func": "mean",
@@ -319,32 +301,24 @@ class TestDialogRecorderRecordersListPickerWidget:
 
         selected_page = dialog.pages_widget.currentWidget()
         # noinspection PyUnresolvedReferences
-        assert (
-            selected_page.findChild(FormField, "name").value() == recorder_name
-        )
+        assert selected_page.findChild(FormField, "name").value() == recorder_name
 
         # noinspection PyTypeChecker
-        recorders_field: FormField = selected_page.findChild(
-            FormField, "recorders"
-        )
+        recorders_field: FormField = selected_page.findChild(FormField, "recorders")
         # noinspection PyTypeChecker
         recorders_widget: RecordersListPickerWidget = recorders_field.widget
 
         # 1. Open the dialog
         index = 0
         self.select_row(recorders_widget, index)
-        qtbot.mouseClick(
-            recorders_widget.edit_button, Qt.MouseButton.LeftButton
-        )
+        qtbot.mouseClick(recorders_widget.edit_button, Qt.MouseButton.LeftButton)
 
         # noinspection PyTypeChecker
         child_dialog: ModelComponentPickerDialog = selected_page.findChild(
             ModelComponentPickerDialog
         )
         # noinspection PyTypeChecker
-        save_button: QPushButton = child_dialog.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = child_dialog.findChild(QPushButton, "save_button")
 
         # 2. Change the recorder
         new_str = "node1"
@@ -377,7 +351,7 @@ class TestDialogRecorderRecordersListPickerWidget:
         qtbot.mouseClick(main_save_button, Qt.MouseButton.LeftButton)
 
         assert model_config.has_changes is True
-        assert model_config.recorders.get_config_from_name(recorder_name) == {
+        assert model_config.recorders.config(recorder_name) == {
             "type": "aggregated",
             "recorder_agg_func": "mean",
             "recorders": new_value,
