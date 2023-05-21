@@ -39,7 +39,7 @@ class TablesListModel(QAbstractTableModel):
             role == Qt.ItemDataRole.DecorationRole
             or role == Qt.ItemDataRole.ToolTipRole
         ):
-            ext = self.model_config.tables.get_table_extension(table_name=table_name)
+            ext = self.model_config.tables.get_extension(table_name=table_name)
             if ext is None:
                 ext = "csv"
 

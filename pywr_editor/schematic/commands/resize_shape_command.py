@@ -52,7 +52,7 @@ class ResizeShapeCommand(QUndoCommand):
         if not self.updated_other_info:
             # store the previous position and size/target point
             shape_config: RectangleShape | LineArrowShape = (
-                self.model_config.shapes.find_shape(shape_id=self.resized_shape_id)
+                self.model_config.shapes.find(shape_id=self.resized_shape_id)
             )
             shape_item = self.schematic.shape_items[self.resized_shape_id]
 

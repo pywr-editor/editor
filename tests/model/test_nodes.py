@@ -78,11 +78,11 @@ class TestNodesClass:
 
         nodes.delete("Reservoir")
         assert model.nodes.find_node_index_by_name("Reservoir") is None
-        assert model.edges.get_targets("Reservoir") is None
+        assert model.edges.targets("Reservoir") is None
 
         nodes.delete("Link3")
         assert nodes.find_node_index_by_name("Link3") is None
-        assert model.edges.get_targets("Link3") is None
+        assert model.edges.targets("Link3") is None
 
     def test_delete_virtual_node(self):
         """

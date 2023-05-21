@@ -264,7 +264,7 @@ class ComponentsTree(QTreeWidget):
                 model_config=self.model_config,
             )
             item.setText(0, table_name)
-            ext = self.model_config.tables.get_table_extension(table_name)
+            ext = self.model_config.tables.get_extension(table_name)
             if ext:
                 item.setToolTip(0, f"{table_name} ({ext} table)")
                 item.setIcon(0, QIcon(ExtensionIcon(ext)))

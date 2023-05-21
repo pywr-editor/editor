@@ -19,20 +19,20 @@ class TestEdges:
         Extracts target nodes.
         """
         edges = self.edges("model_2.json")
-        assert edges.get_targets("Reservoir") == ["Link", "Link22"]
+        assert edges.targets("Reservoir") == ["Link", "Link22"]
 
         edges = self.edges("model_3.json")
 
         # target exists
-        assert edges.get_targets("Reservoir") == ["Link1"]
+        assert edges.targets("Reservoir") == ["Link1"]
         # target Link222 does not exist
-        assert edges.get_targets("Link1") is None
+        assert edges.targets("Link1") is None
         # some target does not exist
-        assert edges.get_targets("Link3") == ["Link4"]
+        assert edges.targets("Link3") == ["Link4"]
         # provided source node does not exist
-        assert edges.get_targets("ReservoirXXSSS") is None
+        assert edges.targets("ReservoirXXSSS") is None
         # source node does not exist
-        assert edges.get_targets("Link35") is None
+        assert edges.targets("Link35") is None
 
     def test_find_source_nodes(self):
         """
@@ -58,7 +58,7 @@ class TestEdges:
         nodes = ["LinkXXX", "Link35"]
         edges = self.edges("model_4.json")
         edges.add(nodes[0], nodes[1], slot_source, slot_target)
-        edge, _ = edges.find_edge(*nodes)
+        edge, _ = edges.find(*nodes)
         assert edge == nodes + expected_slots
 
     def test_delete_edge1(self):
@@ -69,7 +69,7 @@ class TestEdges:
 
         # delete 1 edge
         edges.delete("Reservoir", "Link1")
-        assert edges.get_targets("Reservoir") is None
+        assert edges.targets("Reservoir") is None
 
         # non-existing node - no error thrown
         edges.delete("ReservoirXXX", "Link1")
@@ -83,7 +83,7 @@ class TestEdges:
 
         # delete one edge
         edges.delete("Link3", "Link2")
-        assert edges.get_targets("Link3") == ["Link4"]
+        assert edges.targets("Link3") == ["Link4"]
         assert edges.model.has_changes is True
 
         # delete 2 edges
@@ -113,7 +113,7 @@ class TestEdges:
 
         # delete all edges for source node
         edges.delete(source_node_name="Reservoir")
-        assert edges.get_targets("Reservoir") is None
+        assert edges.targets("Reservoir") is None
         assert edges.model.has_changes is True
 
         assert edges.get_all() == [
@@ -127,14 +127,14 @@ class TestEdges:
         Test the find_edge_by_index method.
         """
         edges = self.edges("model_2.json")
-        assert edges.find_edge("Reservoir", "Link22") == (
+        assert edges.find("Reservoir", "Link22") == (
             [
                 "Reservoir",
                 "Link22",
             ],
             1,
         )
-        assert edges.find_edge("Reservoir", "Missing") == (None, None)
+        assert edges.find("Reservoir", "Missing") == (None, None)
 
     @pytest.mark.parametrize(
         "source, target, slot_pos, expected_slot_name",
@@ -159,7 +159,7 @@ class TestEdges:
         """
         edges = self.edges("model_2.json")
         assert (
-            edges.get_slot(
+            edges.slot(
                 source_node_name=source,
                 target_node_name=target,
                 slot_pos=slot_pos,
@@ -214,5 +214,5 @@ class TestEdges:
             slot_pos=slot_pos,
             slot_name=slot_name,
         )
-        edge, _ = edges.find_edge(source, target)
+        edge, _ = edges.find(source, target)
         assert edge == [source, target] + expected_slots

@@ -190,16 +190,14 @@ class Schematic(QGraphicsView):
         # draw the edges
         model_edges = Edges(self.model_config)
         for source_node_name, source_node_obj in self.node_items.items():
-            target_nodes = self.model_config.edges.get_targets(source_node_name)
+            target_nodes = self.model_config.edges.targets(source_node_name)
             if target_nodes is not None:
                 for target_node_name in target_nodes:
                     self.scene.addItem(
                         Edge(
                             source=source_node_obj,
                             target=self.node_items[target_node_name],
-                            edge_color_name=model_edges.get_edge_color(
-                                source_node_name
-                            ),
+                            edge_color_name=model_edges.color(source_node_name),
                             hide_arrow=self.editor_settings.are_edge_arrows_hidden,
                         )
                     )
@@ -304,7 +302,7 @@ class Schematic(QGraphicsView):
         """
         self.scene.removeItem(edge_item)
         # delete edge from model config and returned deleted model edge
-        edge, _ = self.model_config.edges.find_edge(
+        edge, _ = self.model_config.edges.find(
             edge_item.source.name, edge_item.target.name
         )
         self.model_config.edges.delete(edge)

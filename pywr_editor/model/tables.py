@@ -47,7 +47,7 @@ class Tables(ComponentsDict):
             return deepcopy(table_dict)
         return table_dict
 
-    def get_table_extension(self, table_name: str) -> str | None:
+    def get_extension(self, table_name: str) -> str | None:
         """
         Get the file extension from the table name.
         :param table_name: The table name to look for.

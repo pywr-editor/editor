@@ -46,7 +46,7 @@ class Edges:
 
         return edges
 
-    def get_targets(self, node_name: str) -> list[str] | None:
+    def targets(self, node_name: str) -> list[str] | None:
         """
         Returns the target nodes for the source node.
         :param node_name: The name of the source node.
@@ -136,7 +136,7 @@ class Edges:
         self.model.has_changed()
         self.model.json["edges"] = edges_to_keep
 
-    def get_edge_color(self, source_node_name: str) -> str | None:
+    def color(self, source_node_name: str) -> str | None:
         """
         Returns the color to use for the edge, if this is set in the edge_color
         property for a source node.
@@ -148,7 +148,7 @@ class Edges:
             return NodeConfig(node_config).edge_color
         return None
 
-    def find_edge(
+    def find(
         self, source_node_name: str, target_node_name: str
     ) -> tuple[list, int] | tuple[None, None]:
         """
@@ -162,14 +162,14 @@ class Edges:
                 return edge, ei
         return None, None
 
-    def get_slot(
+    def slot(
         self,
         source_node_name: str,
         target_node_name: str,
         slot_pos: int,
     ) -> str | int | None:
         """
-        Returns the name of the slot for the edge identified by the source and target
+        Return the name of the slot for the edge identified by the source and target
         node names.
         :param source_node_name: The name of the source node.
         :param target_node_name:  The name of the target node.
@@ -179,7 +179,7 @@ class Edges:
         """
         if slot_pos not in [1, 2]:
             raise ValueError("slot_pos can only be 1 or 2")
-        edge, _ = self.find_edge(source_node_name, target_node_name)
+        edge, _ = self.find(source_node_name, target_node_name)
 
         try:
             return edge[slot_pos + 1]
@@ -216,7 +216,7 @@ class Edges:
         if slot_name == "":
             slot_name = None
 
-        edge, ei = self.find_edge(source_node_name, target_node_name)
+        edge, ei = self.find(source_node_name, target_node_name)
         if edge:
             # no slots are set
             if len(edge) == 2:

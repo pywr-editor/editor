@@ -49,7 +49,7 @@ class DisconnectNodeCommand(QUndoCommand):
         :return: None
         """
         # store the edge so that it can be restored later
-        self.edge_config, _ = self.model_config.edges.find_edge(
+        self.edge_config, _ = self.model_config.edges.find(
             source_node_name=self.source_node.name,
             target_node_name=self.target_node.name,
         )

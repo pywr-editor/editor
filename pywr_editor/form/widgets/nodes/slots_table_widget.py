@@ -65,15 +65,14 @@ class SlotsTableWidget(FormCustomWidget):
         model_config = self.form.model_config
 
         # Get connected nodes from edges
-        self.target_nodes = model_config.edges.get_targets(value.name)
+        self.target_nodes = model_config.edges.targets(value.name)
         if self.target_nodes is None:
             self.target_nodes = []
         self.total_edges = len(self.target_nodes)
         self.logger.debug(f"Found {self.total_edges} target nodes: {self.target_nodes}")
 
         self.edge_slot_names = [
-            model_config.edges.get_slot(value.name, node, 1)
-            for node in self.target_nodes
+            model_config.edges.slot(value.name, node, 1) for node in self.target_nodes
         ]
         self.logger.debug(f"Found the following edge slots: {self.edge_slot_names}")
 

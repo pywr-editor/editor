@@ -47,7 +47,7 @@ class TestDeleteEdges:
         source_node.on_disconnect_edge(dummy_action)
 
         # edge must not be in the model dict anymore
-        assert Edges(model_config).get_targets(source_node.name) == ["Link2"]
+        assert Edges(model_config).targets(source_node.name) == ["Link2"]
 
         # source node has one edge left (to Link2)
         assert len(source_node.edges) == 1
@@ -78,7 +78,7 @@ class TestDeleteEdges:
         assert redo_button.isEnabled() is True
 
         # the edge is restore in model config
-        assert model_config.edges.find_edge("Reservoir", "Link1")[0] is not None
+        assert model_config.edges.find("Reservoir", "Link1")[0] is not None
 
         # the edge is restored on schematic
         all_schematic_edges = []
@@ -94,8 +94,8 @@ class TestDeleteEdges:
         qtbot.mouseClick(undo_button, Qt.MouseButton.LeftButton)
 
         # command becomes obsolete and edge is not restored
-        assert model_config.edges.find_edge("Lake", "Link1")[0] is None
-        assert model_config.edges.find_edge("Reservoir", "Link1")[0] is None
+        assert model_config.edges.find("Lake", "Link1")[0] is None
+        assert model_config.edges.find("Reservoir", "Link1")[0] is None
 
         # command object is deleted and not accessible anymore
         with pytest.raises(RuntimeError):

@@ -8,12 +8,7 @@ from pywr_editor import MainWindow
 from pywr_editor.dialogs.node.node_dialog import NodeDialog
 from pywr_editor.form import ParameterLineEditWidget
 from pywr_editor.model import ModelConfig, ParameterConfig
-from pywr_editor.schematic import (
-    DeleteItemCommand,
-    Edge,
-    Schematic,
-    SchematicNode,
-)
+from pywr_editor.schematic import DeleteItemCommand, Edge, Schematic, SchematicNode
 from pywr_editor.toolbar.tab_panel import TabPanel
 from tests.utils import resolve_model_path
 
@@ -128,7 +123,7 @@ class TestDeleteSchematicNodes:
         # edges are restored
         assert sorted(original_edges) == sorted(
             [[name, node_name] for name in model_config.edges.get_sources(node_name)]
-            + [[node_name, name] for name in model_config.edges.get_targets(node_name)]
+            + [[node_name, name] for name in model_config.edges.targets(node_name)]
         )
 
         # check edges in schematic
@@ -146,7 +141,7 @@ class TestDeleteSchematicNodes:
             item.name
             for item in schematic.node_items[node_name].connected_nodes["source_nodes"]
         ]
-        assert model_config.edges.get_targets(node_name) == [
+        assert model_config.edges.targets(node_name) == [
             item.name
             for item in schematic.node_items[node_name].connected_nodes["target_nodes"]
         ]
@@ -273,8 +268,8 @@ class TestDeleteSchematicNodes:
         qtbot.mouseClick(undo_button, Qt.MouseButton.LeftButton)
 
         # edge is not in model config
-        assert model_config.edges.find_edge("Link1", node_name)[0] is None
-        assert model_config.edges.find_edge("New Link1", node_name)[0] is None
+        assert model_config.edges.find("Link1", node_name)[0] is None
+        assert model_config.edges.find("New Link1", node_name)[0] is None
 
         # edge item on schematic is not restored
         node_item = schematic.node_items[node_name]
@@ -366,7 +361,7 @@ class TestDeleteSchematicNodes:
             sources = [] if sources is None else sources
             all_restored_edges += [[name, node_name] for name in sources]
 
-            targets = model_config.edges.get_targets(node_name)
+            targets = model_config.edges.targets(node_name)
             targets = [] if targets is None else targets
             all_restored_edges += [[node_name, name] for name in targets]
             assert sources == [
