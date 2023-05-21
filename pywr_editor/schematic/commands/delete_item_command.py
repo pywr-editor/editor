@@ -85,7 +85,7 @@ class DeleteItemCommand(QUndoCommand):
         # delete shapes
         self.deleted_shape_configs = []  # always empty this after redo
         for shape_id in self.deleted_shape_ids:
-            shape_config = self.model_config.shapes.find_shape(shape_id)
+            shape_config = self.model_config.shapes.find(shape_id)
             self.deleted_shape_configs.append(shape_config)
 
             self.schematic.delete_shape(shape_config.id)

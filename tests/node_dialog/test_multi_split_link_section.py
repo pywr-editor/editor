@@ -223,8 +223,8 @@ class TestStorageSection:
         for node, slot_name in zip(
             expected_value["target_nodes"], expected_value["slot_names"]
         ):
-            assert model_config.edges.get_slot(node_name, node, 1) == slot_name
-            assert model_config.edges.get_slot(node_name, node, 2) is None
+            assert model_config.edges.slot(node_name, node, 1) == slot_name
+            assert model_config.edges.slot(node_name, node, 2) is None
 
         # 5. Change slot name and resend form
         new_slot_name = "my new slot name"
@@ -253,11 +253,11 @@ class TestStorageSection:
 
         # check slot in edges
         assert (
-            model_config.edges.get_slot(node_name, expected_value["target_nodes"][0], 1)
+            model_config.edges.slot(node_name, expected_value["target_nodes"][0], 1)
             == expected_value["slot_names"][0]
         )
         assert (
-            model_config.edges.get_slot(
+            model_config.edges.slot(
                 node_name, expected_value["target_nodes"][changed_node_idx], 1
             )
             == new_slot_name

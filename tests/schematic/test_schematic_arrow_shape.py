@@ -45,7 +45,7 @@ class TestSchematicArrowShape:
         """
         window, schematic = init_window
         model_config = window.model_config
-        shape_config: LineArrowShape = model_config.shapes.find_shape(self.shape_id)
+        shape_config: LineArrowShape = model_config.shapes.find(self.shape_id)
         assert self.shape_id in schematic.shape_items
 
         # 1. Check shape properties
@@ -72,7 +72,7 @@ class TestSchematicArrowShape:
         shape_config.shape_dict["border_color"] = color_widget.value
         shape_config.shape_dict["border_size"] = border_size_field.value()
         assert (
-            model_config.shapes.find_shape(self.shape_id, as_dict=True)
+            model_config.shapes.find(self.shape_id, as_dict=True)
             == shape_config.shape_dict
         )
 
@@ -123,8 +123,8 @@ class TestSchematicArrowShape:
 
         assert model_config.has_changes is True
         # the shape is in the model configuration
-        assert model_config.shapes.find_shape_index_by_id(new_shape_id) is not None
-        shape_config = model_config.shapes.find_shape(new_shape_id)
+        assert model_config.shapes.find_index(new_shape_id) is not None
+        shape_config = model_config.shapes.find(new_shape_id)
 
         # 3. Change shape config
         schematic.shape_items[new_shape_id].on_edit_shape()
@@ -284,9 +284,7 @@ class TestSchematicArrowShape:
 
         # 3. Check the model configuration
         assert model_config.has_changes is True
-        shape_config: LineArrowShape = model_config.shapes.find_shape(
-            shape_id=self.shape_id
-        )
+        shape_config: LineArrowShape = model_config.shapes.find(shape_id=self.shape_id)
         assert shape_config.x == round(shape_item.mapToScene(shape_line.x1(), 0).x(), 5)
         assert shape_config.y == round(shape_item.mapToScene(0, shape_line.y1()).y(), 5)
         assert shape_config.angle == round(shape_line.angle(), 3)
@@ -320,17 +318,14 @@ class TestSchematicArrowShape:
         form.save()
         new_shape_dict = shape_config.shape_dict.copy()
         del new_shape_dict["border_size"]
-        assert (
-            model_config.shapes.find_shape(self.shape_id, as_dict=True)
-            == new_shape_dict
-        )
+        assert model_config.shapes.find(self.shape_id, as_dict=True) == new_shape_dict
 
         # 6. Test redo command
         qtbot.mouseClick(undo_button, Qt.MouseButton.LeftButton)
         assert undo_button.isEnabled() is False
         assert redo_button.isEnabled() is True
 
-        shape_config = model_config.shapes.find_shape(shape_id=self.shape_id)
+        shape_config = model_config.shapes.find(shape_id=self.shape_id)
         assert shape_config.x == init_source_point.x()
         assert shape_config.y == init_source_point.y()
         assert shape_config.length == init_length
@@ -357,7 +352,7 @@ class TestSchematicArrowShape:
         shape_item = schematic.shape_items[self.shape_id]
 
         # check model config
-        shape_config = model_config.shapes.find_shape(shape_id=self.shape_id)
+        shape_config = model_config.shapes.find(shape_id=self.shape_id)
         assert shape_config.x == undo_command.updated_pos[0]
         assert shape_config.y == undo_command.updated_pos[1]
         assert shape_config.length == new_length

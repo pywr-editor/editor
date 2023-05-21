@@ -408,7 +408,7 @@ class Shapes:
 
         return shapes
 
-    def find_shape_index_by_id(self, shape_id: str) -> int | None:
+    def find_index(self, shape_id: str) -> int | None:
         """
         Finds the shape index in the list by the shape ID.
         :param shape_id: The shape ID to look for.
@@ -425,7 +425,7 @@ class Shapes:
             None,
         )
 
-    def find_shape(self, shape_id: str, as_dict=False) -> dict | BaseShape | None:
+    def find(self, shape_id: str, as_dict=False) -> dict | BaseShape | None:
         """
         Find the shape by ID and get its dictionary.
         :param shape_id: The shape ID.
@@ -433,7 +433,7 @@ class Shapes:
         the shape instance. Default to False.
         :return: The shape dictionary if the ID is found, None otherwise.
         """
-        idx = self.find_shape_index_by_id(shape_id)
+        idx = self.find_index(shape_id)
         if idx is not None:
             shape_dict = self.model.editor_config[Constants.SHAPES_KEY.value][idx]
             # return dictionary
@@ -455,7 +455,7 @@ class Shapes:
         :param shape_id: The shape ID.
         :return: None.
         """
-        idx = self.find_shape_index_by_id(shape_id)
+        idx = self.find_index(shape_id)
         if idx is None:
             return
 
@@ -469,7 +469,7 @@ class Shapes:
         :param shape_dict: The shape dictionary.
         :return: None
         """
-        idx = self.find_shape_index_by_id(shape_id)
+        idx = self.find_index(shape_id)
         # add shape for the first time
         if idx is None:
             self.model.editor_config[Constants.SHAPES_KEY.value].append(shape_dict)
@@ -490,7 +490,7 @@ class Shapes:
         :param shape_id: The shape ID.
         :return None
         """
-        idx = self.find_shape_index_by_id(shape_id)
+        idx = self.find_index(shape_id)
         if idx is None:
             return
 
@@ -511,7 +511,7 @@ class Shapes:
         :param shape_id: The shape ID.
         :return None
         """
-        idx = self.find_shape_index_by_id(shape_id)
+        idx = self.find_index(shape_id)
         if idx is None:
             return
 
@@ -538,7 +538,7 @@ class Shapes:
         o'clock position. Optional,
         :return None
         """
-        idx = self.find_shape_index_by_id(shape_id)
+        idx = self.find_index(shape_id)
         if idx is None:
             return
 

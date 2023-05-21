@@ -44,7 +44,7 @@ class TestSchematicTextShape:
         """
         window, schematic = init_window
         model_config = window.model_config
-        shape_config: TextShape = model_config.shapes.find_shape(self.shape_id)
+        shape_config: TextShape = model_config.shapes.find(self.shape_id)
 
         assert self.shape_id in schematic.shape_items
 
@@ -68,7 +68,7 @@ class TestSchematicTextShape:
         # 3. Send form and check the model config and schematic item
         form.save()
         assert model_config.has_changes is True
-        assert model_config.shapes.find_shape(self.shape_id, as_dict=True) == {
+        assert model_config.shapes.find(self.shape_id, as_dict=True) == {
             **shape_config.shape_dict,
             **{
                 "text": new_text,
@@ -92,7 +92,7 @@ class TestSchematicTextShape:
         :return: None
         """
         # the shape is removed from the model configuration
-        assert model_config.shapes.find_shape(shape_id) is None
+        assert model_config.shapes.find(shape_id) is None
 
         # the shape is removed from the items list
         assert shape_id not in schematic.shape_items.keys()
@@ -116,7 +116,7 @@ class TestSchematicTextShape:
         :param shape_config: The shape configuration instance.
         :return: None
         """
-        assert model_config.shapes.find_shape(shape_config.id) == shape_config
+        assert model_config.shapes.find(shape_config.id) == shape_config
         assert shape_config.id in schematic.shape_items.keys()
         shape_ids = [
             shape.id for shape in schematic.items() if isinstance(shape, SchematicText)
@@ -130,7 +130,7 @@ class TestSchematicTextShape:
         """
         window, schematic = init_window
         model_config = window.model_config
-        shape_config = model_config.shapes.find_shape(self.shape_id)
+        shape_config = model_config.shapes.find(self.shape_id)
 
         panel = schematic.app.toolbar.tabs["Operations"].panels["Undo"]
         undo_button = panel.buttons["Undo"]
@@ -229,8 +229,8 @@ class TestSchematicTextShape:
 
         assert model_config.has_changes is True
         # the shape is in the model configuration
-        assert model_config.shapes.find_shape_index_by_id(new_shape_id) is not None
-        shape_config = model_config.shapes.find_shape(new_shape_id)
+        assert model_config.shapes.find_index(new_shape_id) is not None
+        shape_config = model_config.shapes.find(new_shape_id)
 
         # 3. Change shape config
         schematic.shape_items[new_shape_id].on_edit_shape()

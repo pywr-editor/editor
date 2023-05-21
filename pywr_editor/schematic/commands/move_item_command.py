@@ -43,9 +43,7 @@ class MoveItemCommand(QUndoCommand):
                     self.model_config.nodes.config(item.name, as_dict=False)
                 )
             elif isinstance(item, AbstractSchematicShape):
-                self.moved_item_configs.append(
-                    self.model_config.shapes.find_shape(item.id)
-                )
+                self.moved_item_configs.append(self.model_config.shapes.find(item.id))
         self.prev_positions: list[tuple[float, float]] = []
         self.updated_positions: list[tuple[float, float]] = []
 

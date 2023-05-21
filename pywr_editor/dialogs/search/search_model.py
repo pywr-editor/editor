@@ -36,7 +36,7 @@ class SearchModel(QAbstractListModel):
                 {
                     "name": name,
                     "icon": QIcon(
-                        ExtensionIcon(model_config.tables.get_table_extension(name))
+                        ExtensionIcon(model_config.tables.get_extension(name))
                     ),
                     "comp_type": None,
                     "type": ItemType.TABLE,

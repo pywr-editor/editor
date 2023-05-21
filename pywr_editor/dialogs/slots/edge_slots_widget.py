@@ -85,7 +85,7 @@ class EdgeSlotsWidget(FormCustomWidget):
         :return: None
         """
         # update edge
-        old_slot_name = self.dialog.model_config.edges.get_slot(
+        old_slot_name = self.dialog.model_config.edges.slot(
             source_node, target_node, slot_pos
         )
         self.value.set_slot(

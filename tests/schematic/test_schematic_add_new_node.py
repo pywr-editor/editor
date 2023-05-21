@@ -8,17 +8,13 @@ from PySide6.QtWidgets import QWidget
 
 from pywr_editor import MainWindow
 from pywr_editor.dialogs import NodeDialog
-from pywr_editor.form.widgets.parameter_line_edit_widget import (
-    ParameterLineEditWidget,
-)
+from pywr_editor.form.widgets.parameter_line_edit_widget import ParameterLineEditWidget
 from pywr_editor.model import ParameterConfig
 from pywr_editor.node_shapes import CustomNode
 from pywr_editor.schematic import Edge, Schematic, SchematicNode
 from pywr_editor.schematic.commands.add_node_command import AddNodeCommand
 from pywr_editor.toolbar.node_library.library_item import LibraryItem
-from pywr_editor.toolbar.node_library.schematic_items_library import (
-    LibraryPanel,
-)
+from pywr_editor.toolbar.node_library.schematic_items_library import LibraryPanel
 from pywr_editor.toolbar.tab_panel import TabPanel
 from tests.utils import resolve_model_path
 
@@ -150,7 +146,7 @@ class TestAddNodes:
         # node and edges are removed from model config
         assert model_config.nodes.find_node_index_by_name(new_node_name) is None
         assert model_config.nodes.find_node_index_by_name(new_new_node_name) is None
-        edge, _ = model_config.edges.find_edge(*new_edge[0:2])
+        edge, _ = model_config.edges.find(*new_edge[0:2])
         assert edge is None
         assert undo_command.deleted_edges[0] == new_edge
 
@@ -176,7 +172,7 @@ class TestAddNodes:
 
         # node and edges are restored in the model configuration
         assert model_config.nodes.config(new_new_node_name) == node_dict
-        edge, _ = model_config.edges.find_edge(*new_edge[0:2])
+        edge, _ = model_config.edges.find(*new_edge[0:2])
         assert edge == new_edge
         assert undo_command.deleted_edges[0] == new_edge
 

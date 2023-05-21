@@ -102,7 +102,7 @@ class TableSelectorWidget(FormCustomWidget):
         self.combo_box.setIconSize(QSize(21, 16))
         self.combo_box.addItems(["None"])
         for name in self.table_names:
-            ext = self.model_config.tables.get_table_extension(table_name=name)
+            ext = self.model_config.tables.get_extension(table_name=name)
             if ext is None:
                 ext = "N/A"
             self.combo_box.addItem(QIcon(ExtensionIcon(ext)), name)

@@ -41,7 +41,7 @@ class TestSchematicRectangleShape:
         """
         window, schematic = init_window
         model_config = window.model_config
-        shape_config: RectangleShape = model_config.shapes.find_shape(self.shape_id)
+        shape_config: RectangleShape = model_config.shapes.find(self.shape_id)
         assert self.shape_id in schematic.shape_items
 
         # 1. Check shape properties
@@ -67,7 +67,7 @@ class TestSchematicRectangleShape:
         shape_config.shape_dict["border_color"] = color_widget.value
         del shape_config.shape_dict["border_size"]
         assert (
-            model_config.shapes.find_shape(self.shape_id, as_dict=True)
+            model_config.shapes.find(self.shape_id, as_dict=True)
             == shape_config.shape_dict
         )
 
@@ -88,7 +88,7 @@ class TestSchematicRectangleShape:
         :return: None
         """
         # the shape is removed from the model configuration
-        assert model_config.shapes.find_shape(shape_id) is None
+        assert model_config.shapes.find(shape_id) is None
 
         # the shape is removed from the items list
         assert shape_id not in schematic.shape_items.keys()
@@ -118,7 +118,7 @@ class TestSchematicRectangleShape:
         SchematicRectangle.
         :return: None
         """
-        assert model_config.shapes.find_shape(shape_config.id) == shape_config
+        assert model_config.shapes.find(shape_config.id) == shape_config
         assert shape_config.id in schematic.shape_items.keys()
         shape_ids = [
             shape.id
@@ -174,8 +174,8 @@ class TestSchematicRectangleShape:
 
         assert model_config.has_changes is True
         # the shape is in the model configuration
-        assert model_config.shapes.find_shape_index_by_id(new_shape_id) is not None
-        shape_config = model_config.shapes.find_shape(new_shape_id)
+        assert model_config.shapes.find_index(new_shape_id) is not None
+        shape_config = model_config.shapes.find(new_shape_id)
 
         # 3. Change shape config
         schematic.shape_items[new_shape_id].on_edit_shape()
@@ -349,9 +349,7 @@ class TestSchematicRectangleShape:
 
         # 3. Check the model configuration
         assert model_config.has_changes is True
-        shape_config: RectangleShape = model_config.shapes.find_shape(
-            shape_id=self.shape_id
-        )
+        shape_config: RectangleShape = model_config.shapes.find(shape_id=self.shape_id)
         assert shape_config.width == round(shape_rect.width(), 5)
         assert shape_config.height == round(shape_rect.height(), 5)
         assert shape_config.x == round(shape_item.mapToScene(shape_rect.x(), 0).x(), 5)
@@ -384,17 +382,14 @@ class TestSchematicRectangleShape:
         new_shape_dict = shape_config.shape_dict.copy()
         new_shape_dict["border_color"] = tuple(new_shape_dict["border_color"])
         del new_shape_dict["border_size"]
-        assert (
-            model_config.shapes.find_shape(self.shape_id, as_dict=True)
-            == new_shape_dict
-        )
+        assert model_config.shapes.find(self.shape_id, as_dict=True) == new_shape_dict
 
         # 6. Test redo command
         qtbot.mouseClick(undo_button, Qt.MouseButton.LeftButton)
         assert undo_button.isEnabled() is False
         assert redo_button.isEnabled() is True
 
-        shape_config = model_config.shapes.find_shape(shape_id=self.shape_id)
+        shape_config = model_config.shapes.find(shape_id=self.shape_id)
         assert shape_config.x == 800
         assert shape_config.y == 800
         assert shape_config.width == 300
@@ -415,7 +410,7 @@ class TestSchematicRectangleShape:
         shape_item = schematic.shape_items[self.shape_id]
 
         # check model config
-        shape_config = model_config.shapes.find_shape(shape_id=self.shape_id)
+        shape_config = model_config.shapes.find(shape_id=self.shape_id)
         assert shape_config.x == undo_command.updated_pos[0]
         assert shape_config.y == undo_command.updated_pos[1]
         assert shape_config.width == or_width + delta_width

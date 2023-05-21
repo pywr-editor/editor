@@ -81,9 +81,7 @@ class ConnectNodeCommand(QUndoCommand):
             Edge(
                 source=self.schematic.node_items[self.source_node.name],
                 target=self.schematic.node_items[self.target_node.name],
-                edge_color_name=self.model_config.edges.get_edge_color(
-                    self.source_node.name
-                ),
+                edge_color_name=self.model_config.edges.color(self.source_node.name),
                 hide_arrow=self.app.editor_settings.are_edge_arrows_hidden,
             )
         )
@@ -102,7 +100,7 @@ class ConnectNodeCommand(QUndoCommand):
             return
 
         # store the edge so that it can be restored later
-        self.edge_config, _ = self.model_config.edges.find_edge(
+        self.edge_config, _ = self.model_config.edges.find(
             source_node_name=self.source_node.name,
             target_node_name=self.target_node.name,
         )
