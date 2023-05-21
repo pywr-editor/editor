@@ -81,9 +81,7 @@ class ThresholdValuesWidget(FormCustomWidget):
         if not value:
             self.logger.debug("The value is not provided")
         elif not isinstance(value, list):
-            message = (
-                "The value provided in the model configuration is not valid"
-            )
+            message = "The value provided in the model configuration is not valid"
             self.logger.debug(message)
         elif isinstance(value, list) and len(value) != 2:
             message = (

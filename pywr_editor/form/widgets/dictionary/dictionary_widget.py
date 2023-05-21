@@ -109,14 +109,10 @@ class DictionaryWidget(FormCustomWidget):
             model=self.model,
             toggle_buttons_on_selection=[self.delete_button, self.edit_button],
         )
-        self.table.setSelectionBehavior(
-            QAbstractItemView.SelectionBehavior.SelectRows
-        )
+        self.table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
         self.table.setColumnWidth(0, 200)
         # noinspection PyUnresolvedReferences
-        self.table.selectionModel().selectionChanged.connect(
-            self.on_selection_changed
-        )
+        self.table.selectionModel().selectionChanged.connect(self.on_selection_changed)
 
         # Set layout
         layout = QVBoxLayout(self)
@@ -190,12 +186,8 @@ class DictionaryWidget(FormCustomWidget):
         """
         from pywr_editor.form import DictionaryItemDialogWidget
 
-        self.logger.debug(
-            f"Running on_edit_item Slot from {get_signal_sender(self)}"
-        )
-        current_index = (
-            self.table.selectionModel().selection().indexes()[0].row()
-        )
+        self.logger.debug(f"Running on_edit_item Slot from {get_signal_sender(self)}")
+        current_index = self.table.selectionModel().selection().indexes()[0].row()
 
         dialog = DictionaryItemDialogWidget(
             model_config=self.model_config,
@@ -215,9 +207,7 @@ class DictionaryWidget(FormCustomWidget):
         Deletes selected dictionary items.
         :return: None
         """
-        self.logger.debug(
-            f"Running on_delete_row Slot from {get_signal_sender(self)}"
-        )
+        self.logger.debug(f"Running on_delete_row Slot from {get_signal_sender(self)}")
         indexes = self.table.selectedIndexes()
         row_indexes = [index.row() for index in indexes]
         keys = list(self.model.dictionary.keys())
@@ -237,9 +227,7 @@ class DictionaryWidget(FormCustomWidget):
         self.model.layoutChanged.emit()
         self.table.clear_selection()
 
-    def on_form_save(
-        self, form_data: dict[str, Any], data: dict[str, Any]
-    ) -> None:
+    def on_form_save(self, form_data: dict[str, Any], data: dict[str, Any]) -> None:
         """
         Updates the dictionary key/value.
         :param form_data: The form data from DictionaryItemDialogWidget.
@@ -258,9 +246,7 @@ class DictionaryWidget(FormCustomWidget):
         if data and "index" in data:
             current_key = existing_keys[data["index"]]
             if key != current_key:
-                self.logger.debug(
-                    f"Renamed key from '{current_key}' to '{key}'"
-                )
+                self.logger.debug(f"Renamed key from '{current_key}' to '{key}'")
                 del self.model.dictionary[current_key]
 
         # get the new item value from the data type

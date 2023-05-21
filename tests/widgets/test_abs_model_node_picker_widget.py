@@ -88,9 +88,7 @@ class TestDialogAbstractModelNodePickerWidget:
         )
         model_params_field = form.find_field_by_name("node_name")
         # noinspection PyTypeChecker
-        model_nodes_widget: AbstractModelNodePickerWidget = (
-            model_params_field.widget
-        )
+        model_nodes_widget: AbstractModelNodePickerWidget = model_params_field.widget
 
         assert "are no nodes available" in model_params_field.message.text()
         assert len(model_nodes_widget.combo_box.all_items) == 1
@@ -132,9 +130,7 @@ class TestDialogAbstractModelNodePickerWidget:
         )
         model_params_field = form.find_field_by_name("node_name")
         # noinspection PyTypeChecker
-        model_nodes_widget: AbstractModelNodePickerWidget = (
-            model_params_field.widget
-        )
+        model_nodes_widget: AbstractModelNodePickerWidget = model_params_field.widget
 
         # 1. Check ComboBox
         assert model_params_field.message.text() == ""
@@ -143,10 +139,7 @@ class TestDialogAbstractModelNodePickerWidget:
             assert model_nodes_widget.get_value() == node_name
             # name is in the ComboBox
             assert any(
-                [
-                    node_name in value
-                    for value in model_nodes_widget.combo_box.all_items
-                ]
+                [node_name in value for value in model_nodes_widget.combo_box.all_items]
             )
         # no node is selected
         else:
@@ -220,9 +213,7 @@ class TestDialogAbstractModelNodePickerWidget:
         )
         model_params_field = form.find_field_by_name("node_name")
         # noinspection PyTypeChecker
-        model_nodes_widget: AbstractModelNodePickerWidget = (
-            model_params_field.widget
-        )
+        model_nodes_widget: AbstractModelNodePickerWidget = model_params_field.widget
 
         # 1. Check init message
         assert init_message in model_params_field.message.text()

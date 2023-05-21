@@ -89,9 +89,7 @@ class TableValuesWidget(FormCustomWidget):
         super().__init__(name=name, value=value, parent=parent)
 
         if not isinstance(value, dict):
-            raise ValueError(
-                f"value must be a valid dictionary, but {value} was given"
-            )
+            raise ValueError(f"value must be a valid dictionary, but {value} was given")
 
         if exact_total_values and min_total_values:
             raise ValueError(
@@ -201,9 +199,7 @@ class TableValuesWidget(FormCustomWidget):
             )
         )
         # noinspection PyUnresolvedReferences
-        self.table.selectionModel().selectionChanged.connect(
-            self.on_selection_changed
-        )
+        self.table.selectionModel().selectionChanged.connect(self.on_selection_changed)
 
         # hide header with one variable
         if len(self.model.labels) == 1 and show_row_numbers is False:
@@ -257,8 +253,7 @@ class TableValuesWidget(FormCustomWidget):
         # values for all variables must be valid lists
         elif all(isinstance(v, list) for v in variable_values) is False:
             message = (
-                "The values set in the model configuration must be all "
-                + "valid lists"
+                "The values set in the model configuration must be all " + "valid lists"
             )
         # all list items must be numbers
         elif (
@@ -293,9 +288,7 @@ class TableValuesWidget(FormCustomWidget):
         else:
             # all nested lists must have the same size. Pad the list with zeros
             if self._all_equal([len(v) for v in variable_values]) is False:
-                max_length = max(
-                    [len(nested_list) for nested_list in variable_values]
-                )
+                max_length = max([len(nested_list) for nested_list in variable_values])
                 variable_values = [
                     nested_list
                     if len(nested_list) == max_length
@@ -397,9 +390,7 @@ class TableValuesWidget(FormCustomWidget):
         Adds a new row in the table.
         :return: None
         """
-        self.logger.debug(
-            f"Running on_add_new_row Slot from {get_signal_sender(self)}"
-        )
+        self.logger.debug(f"Running on_add_new_row Slot from {get_signal_sender(self)}")
         # noinspection PyUnresolvedReferences
         self.model.layoutAboutToBeChanged.emit()
 
@@ -408,9 +399,7 @@ class TableValuesWidget(FormCustomWidget):
         for variable_values in self.model.values:
             new_values.append(variable_values + [0])
         self.model.values = new_values
-        self.logger.debug(
-            f"Added a new row. New size is {self.model.rowCount()}"
-        )
+        self.logger.debug(f"Added a new row. New size is {self.model.rowCount()}")
 
         # noinspection PyUnresolvedReferences
         self.model.layoutChanged.emit()
@@ -428,9 +417,7 @@ class TableValuesWidget(FormCustomWidget):
         Deletes the selected row.
         :return: None
         """
-        self.logger.debug(
-            f"Running on_delete_row Slot from {get_signal_sender(self)}"
-        )
+        self.logger.debug(f"Running on_delete_row Slot from {get_signal_sender(self)}")
         indexes = self.table.selectedIndexes()
         row_indexes = [index.row() for index in indexes]
 
@@ -438,9 +425,7 @@ class TableValuesWidget(FormCustomWidget):
         new_values = []
         for ci, variable_values in enumerate(self.model.values):
             new_variable_values = [
-                v
-                for vi, v in enumerate(variable_values)
-                if vi not in row_indexes
+                v for vi, v in enumerate(variable_values) if vi not in row_indexes
             ]
             new_values.append(new_variable_values)
             self.logger.debug(
@@ -483,12 +468,8 @@ class TableValuesWidget(FormCustomWidget):
         Moves a parameter up in the table.
         :return: None
         """
-        self.logger.debug(
-            f"Running on_move_up Slot from {get_signal_sender(self)}"
-        )
-        move_row(
-            widget=self.table, direction="up", callback=self.move_row_in_model
-        )
+        self.logger.debug(f"Running on_move_up Slot from {get_signal_sender(self)}")
+        move_row(widget=self.table, direction="up", callback=self.move_row_in_model)
 
     @Slot()
     def on_move_down(self) -> None:
@@ -496,12 +477,8 @@ class TableValuesWidget(FormCustomWidget):
         Moves a parameter down in the table.
         :return: None
         """
-        self.logger.debug(
-            f"Running on_move_down Slot from {get_signal_sender(self)}"
-        )
-        move_row(
-            widget=self.table, direction="down", callback=self.move_row_in_model
-        )
+        self.logger.debug(f"Running on_move_down Slot from {get_signal_sender(self)}")
+        move_row(widget=self.table, direction="down", callback=self.move_row_in_model)
 
     def move_row_in_model(self, current_index: int, new_index: int) -> None:
         """
@@ -513,9 +490,7 @@ class TableValuesWidget(FormCustomWidget):
         new_values = []
         for variable_values in self.model.values:
             new_values.append(
-                variable_values.insert(
-                    new_index, variable_values.pop(current_index)
-                )
+                variable_values.insert(new_index, variable_values.pop(current_index))
             )
         self.logger.debug(f"Moved index {current_index} to {new_index}")
 
@@ -620,12 +595,8 @@ class TableValuesWidget(FormCustomWidget):
 
             # header
             for col_idx in header_col_indexes:
-                cell = first_sheet.querySubObject(
-                    "Cells(int, int)", 1, col_idx + 1
-                )
-                cell.setProperty(
-                    "Value", self.model.labels[col_idx].capitalize()
-                )
+                cell = first_sheet.querySubObject("Cells(int, int)", 1, col_idx + 1)
+                cell.setProperty("Value", self.model.labels[col_idx].capitalize())
 
             # values
             for row in range(0, self.model.rowCount()):
@@ -676,10 +647,7 @@ class TableValuesWidget(FormCustomWidget):
 
         first_key = list(value.keys())[0]
         # check minimum items requirement
-        if (
-            self.min_total_values
-            and len(value[first_key]) < self.min_total_values
-        ):
+        if self.min_total_values and len(value[first_key]) < self.min_total_values:
             name = "value" if self.min_total_values == 1 else "values"
             return FormValidation(
                 validation=False,
@@ -688,8 +656,7 @@ class TableValuesWidget(FormCustomWidget):
             )
         # check requirement for exact size of items
         elif (
-            self.exact_total_values
-            and len(value[first_key]) != self.exact_total_values
+            self.exact_total_values and len(value[first_key]) != self.exact_total_values
         ):
             return FormValidation(
                 validation=False,
@@ -727,8 +694,7 @@ class TableSpinBoxDelegate(QStyledItemDelegate):
         self,
         parent: PySide6.QtWidgets.QWidget,
         option: PySide6.QtWidgets.QStyleOptionViewItem,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
     ) -> PySide6.QtWidgets.QWidget:
         # extend range
         editor = DoubleSpinBox(

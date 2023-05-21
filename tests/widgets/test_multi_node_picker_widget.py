@@ -17,9 +17,7 @@ class TestMultiNodePickerWidget:
         Initialises the model configuration.
         :return: The ModelConfig instance.
         """
-        return ModelConfig(
-            resolve_model_path("model_multi_node_picker_widget.json")
-        )
+        return ModelConfig(resolve_model_path("model_multi_node_picker_widget.json"))
 
     @staticmethod
     def form(
@@ -73,9 +71,7 @@ class TestMultiNodePickerWidget:
             (None, False, True),
         ],
     )
-    def test_valid(
-        self, qtbot, model_config, node_names, is_mandatory, validate
-    ):
+    def test_valid(self, qtbot, model_config, node_names, is_mandatory, validate):
         """
         Tests that the nodes names are correctly set.
         """
@@ -86,9 +82,7 @@ class TestMultiNodePickerWidget:
             include_node_keys=None,
         )
 
-        widget: MultiNodePickerWidget = form.find_field_by_name(
-            "node_names"
-        ).widget
+        widget: MultiNodePickerWidget = form.find_field_by_name("node_names").widget
 
         # 1. Check values
         assert widget.combo_box.all_items == [
@@ -135,9 +129,7 @@ class TestMultiNodePickerWidget:
             ),
         )
 
-        widget: MultiNodePickerWidget = form.find_field_by_name(
-            "node_names"
-        ).widget
+        widget: MultiNodePickerWidget = form.find_field_by_name("node_names").widget
 
         # 1. Check values
         assert widget.combo_box.all_items == [
@@ -198,10 +190,8 @@ class TestMultiNodePickerWidget:
         """
         include_node_keys = None
         if class_to_include:
-            include_node_keys = (
-                model_config.pywr_node_data.get_keys_with_parent_class(
-                    class_to_include
-                )
+            include_node_keys = model_config.pywr_node_data.get_keys_with_parent_class(
+                class_to_include
             )
         form = self.form(
             model_config=model_config,
@@ -210,8 +200,6 @@ class TestMultiNodePickerWidget:
             include_node_keys=include_node_keys,
         )
 
-        widget: MultiNodePickerWidget = form.find_field_by_name(
-            "node_names"
-        ).widget
+        widget: MultiNodePickerWidget = form.find_field_by_name("node_names").widget
         assert init_message in widget.form_field.message.text()
         assert widget.get_value() == selected

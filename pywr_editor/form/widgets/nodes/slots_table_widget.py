@@ -69,17 +69,13 @@ class SlotsTableWidget(FormCustomWidget):
         if self.target_nodes is None:
             self.target_nodes = []
         self.total_edges = len(self.target_nodes)
-        self.logger.debug(
-            f"Found {self.total_edges} target nodes: {self.target_nodes}"
-        )
+        self.logger.debug(f"Found {self.total_edges} target nodes: {self.target_nodes}")
 
         self.edge_slot_names = [
             model_config.edges.get_slot(value.name, node, 1)
             for node in self.target_nodes
         ]
-        self.logger.debug(
-            f"Found the following edge slots: {self.edge_slot_names}"
-        )
+        self.logger.debug(f"Found the following edge slots: {self.edge_slot_names}")
 
         # get provided slot names or use default list
         self.node_config_slot_names = node_dict.get(
@@ -109,16 +105,12 @@ class SlotsTableWidget(FormCustomWidget):
         # PieceWiseLink, and to the extra slot created by the MultiSplitLink
         edge_counter_message = None
         if self.total_edges == 0:
-            edge_counter_message = (
-                "The node must be connected to at least 2 nodes"
-            )
+            edge_counter_message = "The node must be connected to at least 2 nodes"
         elif self.total_edges == 1:
             edge_counter_message = "The extra slot created by this node is not "
             edge_counter_message += "connected to any other node. If you are "
             edge_counter_message += "going to connect this node to just one "
-            edge_counter_message += (
-                "node, you need to use the 'Piece Wise Link'"
-            )
+            edge_counter_message += "node, you need to use the 'Piece Wise Link'"
 
         # Total edges label
         edge_layout = QVBoxLayout()
@@ -140,9 +132,7 @@ class SlotsTableWidget(FormCustomWidget):
         message = QLabel()
         message.setObjectName("edge_warning_message")
         message.setWordWrap(True)
-        message.setStyleSheet(
-            f"font-size:12px;color:{Color('amber', 600).hex};"
-        )
+        message.setStyleSheet(f"font-size:12px;color:{Color('amber', 600).hex};")
         if edge_counter_message:
             self.logger.debug(edge_counter_message)
             message.setText(edge_counter_message)
@@ -177,9 +167,7 @@ class SlotsTableWidget(FormCustomWidget):
         self.slot_table.setColumnWidth(0, 240)
         self.slot_table.setColumnWidth(1, 150)
         self.slot_table.setMaximumHeight(150)
-        self.slot_table.setSelectionMode(
-            TableView.SelectionMode.SingleSelection
-        )
+        self.slot_table.setSelectionMode(TableView.SelectionMode.SingleSelection)
 
         if warning_message:
             self.form_field.set_warning_message(warning_message)
@@ -251,9 +239,7 @@ class SlotsTableWidget(FormCustomWidget):
         Moves a parameter up in the table.
         :return: None
         """
-        self.logger.debug(
-            f"Running on_move_up Slot from {get_signal_sender(self)}"
-        )
+        self.logger.debug(f"Running on_move_up Slot from {get_signal_sender(self)}")
         move_row(
             widget=self.slot_table,
             direction="up",
@@ -266,9 +252,7 @@ class SlotsTableWidget(FormCustomWidget):
         Moves a parameter down in the table.
         :return: None
         """
-        self.logger.debug(
-            f"Running on_move_down Slot from {get_signal_sender(self)}"
-        )
+        self.logger.debug(f"Running on_move_down Slot from {get_signal_sender(self)}")
         move_row(
             widget=self.slot_table,
             direction="down",
@@ -286,9 +270,7 @@ class SlotsTableWidget(FormCustomWidget):
         self.model.slot_names.insert(
             new_index, self.model.slot_names.pop(current_index)
         )
-        self.model.factors.insert(
-            new_index, self.model.factors.pop(current_index)
-        )
+        self.model.factors.insert(new_index, self.model.factors.pop(current_index))
 
     def sanitise(
         self,
@@ -305,13 +287,9 @@ class SlotsTableWidget(FormCustomWidget):
             # missing slot names in the node dictionary
             len(self.node_config_slot_names) != self.total_edges
             # wrong type of slot names in the node dictionary
-            or not all(
-                [isinstance(s, (int, str)) for s in self.node_config_slot_names]
-            )
+            or not all([isinstance(s, (int, str)) for s in self.node_config_slot_names])
             # some slot names are not provided in the edges
-            or not all(
-                [isinstance(s, (int, str)) for s in self.edge_slot_names]
-            )
+            or not all([isinstance(s, (int, str)) for s in self.edge_slot_names])
         ):
             # fill table with empty slot names
             slot_map = {name: None for name in self.target_nodes}
@@ -346,9 +324,7 @@ class SlotsTableWidget(FormCustomWidget):
                 else:
                     # get node name
                     node_name = self.target_nodes[ei]
-                    self.logger.debug(
-                        f"Found {node_name} linked to provided slot"
-                    )
+                    self.logger.debug(f"Found {node_name} linked to provided slot")
                     slot_map[node_name] = slot_name
 
                     # get factor for node/slot pair
@@ -366,12 +342,8 @@ class SlotsTableWidget(FormCustomWidget):
 
             # get difference of targets and slot_map.keys() to append nodes
             # w/o slot name assigned
-            missing_nodes = set(self.target_nodes).difference(
-                list(slot_map.keys())
-            )
-            self.logger.debug(
-                f"Appending nodes without a valid slot: {missing_nodes}"
-            )
+            missing_nodes = set(self.target_nodes).difference(list(slot_map.keys()))
+            self.logger.debug(f"Appending nodes without a valid slot: {missing_nodes}")
             for node in missing_nodes:
                 slot_map[node] = None
                 factor_map[node] = None

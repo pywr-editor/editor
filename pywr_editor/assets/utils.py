@@ -21,9 +21,7 @@ def get_doc_url(module_path: str, name: str) -> str | None:
     :param name: The model component name.
     :return: The URL if it exists, None otherwise.
     """
-    doc_url = (
-        f"https://pywr.github.io/pywr/api/generated/{module_path}.{name}.html"
-    )
+    doc_url = f"https://pywr.github.io/pywr/api/generated/{module_path}.{name}.html"
     response = session.get(doc_url)
     if response.status_code == 404:
         warnings.warn(f"Cannot find documentation URL for {module_path}.{name}")
@@ -202,9 +200,7 @@ def get_recorders() -> str:
                 if name == "CSVRecorder":
                     humanised_name = "CSV recorder"
                 elif name == "RMSEStandardDeviationRatioNodeRecorder":
-                    humanised_name = (
-                        "RMSE Standard Deviation Ratio Node recorder"
-                    )
+                    humanised_name = "RMSE Standard Deviation Ratio Node recorder"
                 elif name == "GaussianKDEStorageRecorder":
                     humanised_name = "Gaussian KDE Storage recorder"
                 elif name == "NormalisedGaussianKDEStorageRecorder":

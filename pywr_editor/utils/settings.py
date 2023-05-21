@@ -103,9 +103,7 @@ class Settings:
         Returns the schematic lock status.
         :return: True if the schematic is locked, False otherwise.
         """
-        return self.str_to_bool(
-            self.instance.value(self.lock_key, defaultValue=False)
-        )
+        return self.str_to_bool(self.instance.value(self.lock_key, defaultValue=False))
 
     def save_schematic_lock(self, lock: bool) -> None:
         """
@@ -182,9 +180,7 @@ class Settings:
         """
         return self.instance.value(self.schematic_center_key)
 
-    def save_schematic_center(
-        self, position: list[QPointF] | list[QPointF]
-    ) -> None:
+    def save_schematic_center(self, position: list[QPointF] | list[QPointF]) -> None:
         """
         Stores the schematic zoom level.
         :param position: The schematic centre as list or tuple of QPointF.
@@ -199,9 +195,7 @@ class Settings:
         Returns the list of recent open files.
         :return: The files as dictionary or an empty list if no file has been stored.
         """
-        recent_files: list[str] = self.global_instance.value(
-            self.recent_projects_key
-        )
+        recent_files: list[str] = self.global_instance.value(self.recent_projects_key)
         valid_files = []
         file_info = []
 
@@ -217,10 +211,7 @@ class Settings:
                 try:
                     with open(json_file, "r") as file:
                         content = json.load(file)
-                        if (
-                            "metadata" in content
-                            and "title" in content["metadata"]
-                        ):
+                        if "metadata" in content and "title" in content["metadata"]:
                             file_info.append(
                                 {
                                     "file": json_file,
@@ -229,9 +220,7 @@ class Settings:
                                         json_file
                                     ).last_modified_on,
                                     "last_updated_obj": datetime.strptime(
-                                        ModelFileInfo(
-                                            json_file
-                                        ).last_modified_on,
+                                        ModelFileInfo(json_file).last_modified_on,
                                         "%d-%m-%Y %H:%M",
                                     ),
                                 }
@@ -241,13 +230,9 @@ class Settings:
                     pass
 
         # store only existing and non-duplicated files
-        self.global_instance.setValue(
-            self.recent_projects_key, list(set(valid_files))
-        )
+        self.global_instance.setValue(self.recent_projects_key, list(set(valid_files)))
 
-        return sorted(
-            file_info, key=lambda d: d["last_updated_obj"], reverse=True
-        )
+        return sorted(file_info, key=lambda d: d["last_updated_obj"], reverse=True)
 
     def save_recent_file(self, file: str) -> None:
         """
@@ -255,9 +240,7 @@ class Settings:
         :return: None.
         """
         # this is not connected to any model file
-        recent_files: list[str] = self.global_instance.value(
-            self.recent_projects_key
-        )
+        recent_files: list[str] = self.global_instance.value(self.recent_projects_key)
 
         if recent_files is None:
             recent_files = [file]
@@ -281,6 +264,4 @@ class Settings:
         :param value: The value to convert.
         :return: The string as boolean.
         """
-        return (
-            value.lower() == "true" if isinstance(value, str) else bool(value)
-        )
+        return value.lower() == "true" if isinstance(value, str) else bool(value)

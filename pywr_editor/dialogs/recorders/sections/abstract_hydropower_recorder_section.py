@@ -1,8 +1,4 @@
-from pywr_editor.form import (
-    FloatWidget,
-    NodePickerWidget,
-    ParameterLineEditWidget,
-)
+from pywr_editor.form import FloatWidget, NodePickerWidget, ParameterLineEditWidget
 
 from ..recorder_dialog_form import RecorderDialogForm
 from .abstract_recorder_section import AbstractRecorderSection
@@ -36,9 +32,7 @@ class AbstractHydropowerRecorderSection(AbstractRecorderSection):
                 "field_type": ParameterLineEditWidget,
                 # optional field
                 "field_args": {"is_mandatory": False},
-                "value": form.get_recorder_dict_value(
-                    "water_elevation_parameter"
-                ),
+                "value": form.get_recorder_dict_value("water_elevation_parameter"),
                 "help_text": "Water elevation before the turbine. The working head of "
                 + "the turbine (or potential energy) is the difference between this "
                 + "value and the turbine elevation. If omitted, the working "
@@ -79,9 +73,7 @@ class AbstractHydropowerRecorderSection(AbstractRecorderSection):
                     "label": " Flow unit conversion factor",
                     "field_type": FloatWidget,
                     "field_args": {"min_value": 0},
-                    "value": form.get_recorder_dict_value(
-                        "flow_unit_conversion"
-                    ),
+                    "value": form.get_recorder_dict_value("flow_unit_conversion"),
                     "default_value": 1,
                     "help_text": "The hydropower equation needs the flow in "
                     + "m<sup>3</sup>/day. Use this conversion  factor to convert the "
@@ -94,9 +86,7 @@ class AbstractHydropowerRecorderSection(AbstractRecorderSection):
                     "label": " Energy unit conversion factor",
                     "field_type": FloatWidget,
                     "field_args": {"min_value": 0},
-                    "value": form.get_recorder_dict_value(
-                        "energy_unit_conversion "
-                    ),
+                    "value": form.get_recorder_dict_value("energy_unit_conversion "),
                     "default_value": pow(10, -6),
                     "help_text": "Convert the power unit used in the hydropower "
                     + "equation. Default to 1e-6 to use MJ /day as input. See the "

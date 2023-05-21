@@ -71,9 +71,7 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
 
         table_dict = {}
         # in case of one variable, use field name or supplied name
-        self.one_var_name = (
-            variable_names if isinstance(variable_names, str) else name
-        )
+        self.one_var_name = variable_names if isinstance(variable_names, str) else name
 
         if multiple_variables:
             if isinstance(value, list):
@@ -124,9 +122,7 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
         # add external file pickers
         self.line_edit_widget_container = self.generate_data_picker_widget()
         # noinspection PyTypeChecker
-        self.line_edit: QLineEdit = self.line_edit_widget_container.findChild(
-            QLineEdit
-        )
+        self.line_edit: QLineEdit = self.line_edit_widget_container.findChild(QLineEdit)
 
         # add all widgets
         # noinspection PyTypeChecker
@@ -172,9 +168,7 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
                 self.logger.debug(f"Table is '{self.raw_value['table']}'")
             # field is mandatory
             elif self.is_mandatory:
-                message = (
-                    "The configuration to fetch the external data is not valid"
-                )
+                message = "The configuration to fetch the external data is not valid"
                 self.logger.debug(message)
                 self.form_field.set_warning_message(message)
         # default to parent widget - fill with values
@@ -202,9 +196,7 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
             self.reset_line_edit()
             self.form_field.clear_message()
 
-        is_values_selected = (
-            self.combo_box.currentText() == self.labels_map["values"]
-        )
+        is_values_selected = self.combo_box.currentText() == self.labels_map["values"]
         # toggle TableView and its buttons
         self.table.setVisible(is_values_selected)
         for button in self.table_buttons:

@@ -7,19 +7,9 @@ from typing import TYPE_CHECKING, Any
 
 import qtawesome as qta
 from PySide6.QtCore import Qt, Slot
-from PySide6.QtWidgets import (
-    QHBoxLayout,
-    QLabel,
-    QLineEdit,
-    QMessageBox,
-    QVBoxLayout,
-)
+from PySide6.QtWidgets import QHBoxLayout, QLabel, QLineEdit, QMessageBox, QVBoxLayout
 
-from pywr_editor.form import (
-    AbstractStringComboBoxWidget,
-    FormField,
-    FormValidation,
-)
+from pywr_editor.form import AbstractStringComboBoxWidget, FormField, FormValidation
 from pywr_editor.widgets import PushIconButton
 
 if TYPE_CHECKING:
@@ -188,9 +178,7 @@ class CheckSumWidget(AbstractStringComboBoxWidget):
         """
         self.form: "ModelComponentForm"
         # noinspection PyTypeChecker
-        button: PushIconButton = self.findChild(
-            PushIconButton, "calculate_button"
-        )
+        button: PushIconButton = self.findChild(PushIconButton, "calculate_button")
         button.setEnabled(False)
         or_text = button.text()
         button.setText("Calculating")
@@ -235,9 +223,7 @@ class CheckSumWidget(AbstractStringComboBoxWidget):
         # calculate hash
         else:
             if not os.path.isabs(file_name):
-                file_name = self.form.model_config.normalize_file_path(
-                    file_name
-                )
+                file_name = self.form.model_config.normalize_file_path(file_name)
                 self.logger.debug("Converted path to absolute")
 
             answer = QMessageBox.warning(

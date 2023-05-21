@@ -203,9 +203,7 @@ class TestEdges:
             ("Node 1 w slot", "Node 2 w slot", 1, "", [None, 1]),
         ],
     )
-    def test_set_slot(
-        self, source, target, slot_pos, slot_name, expected_slots
-    ):
+    def test_set_slot(self, source, target, slot_pos, slot_name, expected_slots):
         """
         Tests the set_slot method.
         """

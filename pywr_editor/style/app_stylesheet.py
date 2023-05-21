@@ -169,16 +169,10 @@ class AppStylesheet:
                 "right": "3px",
                 "bottom": "2px",
             },
-            "::up-arrow:disabled": {
-                "border-image": "url(:form/caret-up-disabled)"
-            },
+            "::up-arrow:disabled": {"border-image": "url(:form/caret-up-disabled)"},
             "::up-arrow:off": {"border-image": "url(:form/caret-up-disabled)"},
-            "::down-arrow:disabled": {
-                "border-image": "url(:form/caret-down-disabled)"
-            },
-            "::down-arrow:off": {
-                "border-image": "url(:form/caret-down-disabled)"
-            },
+            "::down-arrow:disabled": {"border-image": "url(:form/caret-down-disabled)"},
+            "::down-arrow:off": {"border-image": "url(:form/caret-down-disabled)"},
         }
 
         return {

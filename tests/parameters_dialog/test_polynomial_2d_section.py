@@ -11,9 +11,7 @@ class TestDialogParameterPolynomial2DCoefficientsWidgetSection:
     Tests the sections for the Polynomial2DStorageParameter.
     """
 
-    model_file = resolve_model_path(
-        "model_dialog_parameter_polynomial_2d_section.json"
-    )
+    model_file = resolve_model_path("model_dialog_parameter_polynomial_2d_section.json")
 
     @pytest.fixture()
     def model_config(self) -> ModelConfig:
@@ -81,9 +79,7 @@ class TestDialogParameterPolynomial2DCoefficientsWidgetSection:
             ),
         ],
     )
-    def test_invalid(
-        self, qtbot, model_config, param_name, init_message, expected
-    ):
+    def test_invalid(self, qtbot, model_config, param_name, init_message, expected):
         """
         Tests that the form displays a warning message when the provided value is
         invalid.

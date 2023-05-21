@@ -35,9 +35,7 @@ class TablesListWidget(TableView):
         self.verticalHeader().setDefaultSectionSize(24)
         self.setShowGrid(False)
         self.setIconSize(QSize(21, 18))
-        self.setSelectionBehavior(
-            QAbstractItemView.SelectionBehavior.SelectItems
-        )
+        self.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectItems)
         self.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
 
     def selectionChanged(

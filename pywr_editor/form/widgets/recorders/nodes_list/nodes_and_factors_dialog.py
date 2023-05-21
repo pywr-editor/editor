@@ -29,8 +29,7 @@ class NodesAndFactorsDialog(QDialog):
         node: str | None,
         factor: float | None,
         mode: Literal["add", "edit"],
-        after_form_save: Callable[[str | dict[str, Any], Any], None]
-        | None = None,
+        after_form_save: Callable[[str | dict[str, Any], Any], None] | None = None,
         additional_data: dict[str, int | list[str]] | None = None,
         parent: QWidget | None = None,
     ):
@@ -139,9 +138,7 @@ class NodesAndFactorsDialog(QDialog):
                 index = node_widget.combo_box.findData(node_name)
                 if index != -1:
                     node_widget.combo_box.removeItem(index)
-                    self.logger.debug(
-                        f"Removed '{node_name}' from the node list"
-                    )
+                    self.logger.debug(f"Removed '{node_name}' from the node list")
 
     @Slot()
     def on_save(self) -> None | bool:

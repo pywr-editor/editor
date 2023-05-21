@@ -100,15 +100,12 @@ class IndexWidget(FormCustomWidget):
         # dataframe from the table set in the table field
         if selected_source == value_source_widget.labels["table"]:
             # noinspection PyTypeChecker
-            table_selector_widget: TableSelectorWidget = (
-                self.form.find_field_by_name("table").widget
-            )
+            table_selector_widget: TableSelectorWidget = self.form.find_field_by_name(
+                "table"
+            ).widget
             # if table is not available or invalid, preserve index names from
             # table selector
-            if (
-                table_selector_widget.table is None
-                or table_selector_widget.table.empty
-            ):
+            if table_selector_widget.table is None or table_selector_widget.table.empty:
                 index_names = table_selector_widget.index_names
             else:
                 index_names = get_index_names(table_selector_widget.table)
@@ -142,9 +139,7 @@ class IndexWidget(FormCustomWidget):
             # and convert to string
             if isinstance(index_names[0], int):
                 # noinspection PyTypeChecker
-                url_widget: UrlWidget = self.form.find_field_by_name(
-                    "url"
-                ).widget
+                url_widget: UrlWidget = self.form.find_field_by_name("url").widget
                 columns = get_columns(url_widget.table, True)
                 new_index_names = []
                 for index in index_names:
@@ -198,8 +193,7 @@ class IndexWidget(FormCustomWidget):
             f"Using index names: {index_names} / index_values: {index_values}"
         )
         return {
-            index_name: index_values[ii]
-            for ii, index_name in enumerate(index_names)
+            index_name: index_values[ii] for ii, index_name in enumerate(index_names)
         }
 
     def after_form_render(self) -> None:
@@ -306,9 +300,7 @@ class IndexWidget(FormCustomWidget):
                     self.logger.debug("Index name found in passed values")
                     index_value = value[name]
                 else:
-                    self.logger.debug(
-                        "Value not available. Setting empty value"
-                    )
+                    self.logger.debug("Value not available. Setting empty value")
                     index_value = None
 
                 if index_value in ["", "None"] or index_value is None:
@@ -354,9 +346,7 @@ class IndexWidget(FormCustomWidget):
         Populates the widget with the ComboBox for each index.
         :return: None
         """
-        self.logger.debug(
-            f"Running on_populate_field Slot - {get_signal_sender(self)}"
-        )
+        self.logger.debug(f"Running on_populate_field Slot - {get_signal_sender(self)}")
 
         # empty the layout
         self.logger.debug("Resetting widget")
@@ -398,15 +388,11 @@ class IndexWidget(FormCustomWidget):
             wrong_index_values = []
             index_names = get_index_names(table)
 
-            self.logger.debug(
-                f"Found the following indexes: {', '.join(index_names)}"
-            )
+            self.logger.debug(f"Found the following indexes: {', '.join(index_names)}")
 
             # Add ComboBox and populate it
             for index_id, name in enumerate(index_names):
-                self.logger.debug(
-                    f"Rendering field #{index_id+1} for index '{name}'"
-                )
+                self.logger.debug(f"Rendering field #{index_id+1} for index '{name}'")
                 index_field_layout, combo_box = self.render_field_layout(
                     index_name=name,
                     index_number=index_id,

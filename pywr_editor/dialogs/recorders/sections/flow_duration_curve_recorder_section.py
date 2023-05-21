@@ -4,9 +4,7 @@ from .abstract_flow_duration_curve_recorder_section import (
 )
 
 
-class FlowDurationCurveRecorderSection(
-    AbstractFlowDurationCurveRecorderSection
-):
+class FlowDurationCurveRecorderSection(AbstractFlowDurationCurveRecorderSection):
     def __init__(self, form: RecorderDialogForm, section_data: dict):
         """
         Initialises the form section for a FlowDurationCurveRecorder.

@@ -11,9 +11,7 @@ class TestDialogThresholdRelationSymbolWidget:
     Tests the ParameterAggFuncWidget.
     """
 
-    model_file = resolve_model_path(
-        "model_dialog_parameter_agg_func_widget.json"
-    )
+    model_file = resolve_model_path("model_dialog_parameter_agg_func_widget.json")
 
     @pytest.fixture()
     def model_config(self) -> ModelConfig:
@@ -83,10 +81,7 @@ class TestDialogThresholdRelationSymbolWidget:
             func_widget.combo_box.currentText()
             == func_widget.get_default_selection().title()
         )
-        assert (
-            func_widget.get_value()
-            == func_widget.get_default_selection().lower()
-        )
+        assert func_widget.get_value() == func_widget.get_default_selection().lower()
 
         # check warning
         assert message in func_field.message.text()

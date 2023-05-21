@@ -105,12 +105,8 @@ def get_pixmap_from_type(
     pixmap = QPixmap(size)
     pixmap.fill(Qt.GlobalColor.transparent)
     painter = QPainter(pixmap)
-    painter.translate(
-        -icon_class.boundingRect().x(), -icon_class.boundingRect().y()
-    )
-    painter.setRenderHints(
-        QPainter.Antialiasing | QPainter.SmoothPixmapTransform
-    )
+    painter.translate(-icon_class.boundingRect().x(), -icon_class.boundingRect().y())
+    painter.setRenderHints(QPainter.Antialiasing | QPainter.SmoothPixmapTransform)
 
     options = QStyleOptionGraphicsItem()
     icon_class.paint(painter, options, None)

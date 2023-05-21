@@ -13,9 +13,7 @@ class FieldConfig(TypedDict):
     """ the field label """
     value: Any
     """ the field value. Optional """
-    field_type: Union[
-        Literal["text", "boolean", "integer"], Type[FormCustomWidget]
-    ]
+    field_type: Union[Literal["text", "boolean", "integer"], Type[FormCustomWidget]]
     """ this can be text (for QLineEdit), integer (for SpinBox), boolean (for
     QComboBox with yes/no options) or a callable for a custom FormCustomWidget """
     field_args: dict

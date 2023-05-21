@@ -12,8 +12,7 @@ class Delegate(QStyledItemDelegate):
     def sizeHint(
         self,
         option: PySide6.QtWidgets.QStyleOptionViewItem,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
     ) -> PySide6.QtCore.QSize:
         """
         Increases the item size.
@@ -198,9 +197,7 @@ class CheckableComboBox(ComboBox):
             item.setData(text)
         else:
             item.setData(userData, Qt.UserRole)
-        item.setFlags(
-            Qt.ItemFlag.ItemIsEnabled | Qt.ItemFlag.ItemIsUserCheckable
-        )
+        item.setFlags(Qt.ItemFlag.ItemIsEnabled | Qt.ItemFlag.ItemIsUserCheckable)
         item.setData(Qt.CheckState.Unchecked, Qt.CheckStateRole)
         self.model().appendRow(item)
 
@@ -252,9 +249,7 @@ class CheckableComboBox(ComboBox):
                 )
         return checked_items
 
-    def check_items(
-        self, indexes: list[int] | int, emit_signal: bool = True
-    ) -> None:
+    def check_items(self, indexes: list[int] | int, emit_signal: bool = True) -> None:
         """
         Checks the items in the ComboBox based on their index.
         :param indexes: The index or a list of indexes to check.

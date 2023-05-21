@@ -81,9 +81,7 @@ class ExternalDataPickerFormWidget(ModelComponentForm):
 
         # get source
         # noinspection PyTypeChecker
-        source_widget: SourceSelectorWidget = self.find_field_by_name(
-            "source"
-        ).widget
+        source_widget: SourceSelectorWidget = self.find_field_by_name("source").widget
         labels = source_widget.labels
 
         # delete keys
@@ -123,9 +121,7 @@ class ExternalDataPickerFormWidget(ModelComponentForm):
 
         # enable the save button in the parent dialog
         # noinspection PyTypeChecker
-        save_button: QPushButton = self.parent.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = self.parent.findChild(QPushButton, "save_button")
         if save_button:
             save_button.setEnabled(True)
 

@@ -11,10 +11,7 @@ from .push_icon_button import PushIconButton
 
 buttons_type = TypeVar(
     "buttons_type",
-    bound=PushButton
-    | PushIconButton
-    | list[PushButton | PushIconButton]
-    | None,
+    bound=PushButton | PushIconButton | list[PushButton | PushIconButton] | None,
 )
 
 

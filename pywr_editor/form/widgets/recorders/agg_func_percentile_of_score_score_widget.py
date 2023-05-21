@@ -22,11 +22,7 @@ class AggFuncPercentileOfScoreScoreWidget(FloatWidget):
         """
         _value = None
         # the method is stored in the "kwargs" key
-        if (
-            isinstance(value, dict)
-            and "kwargs" in value
-            and "score" in value["kwargs"]
-        ):
+        if isinstance(value, dict) and "kwargs" in value and "score" in value["kwargs"]:
             _value = value["kwargs"]["score"]
 
         super().__init__(

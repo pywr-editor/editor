@@ -80,9 +80,7 @@ class H5WhereWidget(AbstractStringComboBoxWidget):
         self.labels_map = attributes_dict
 
         # validate values
-        self.label, self.warning_message = self.sanitise_value(
-            selected_attribute
-        )
+        self.label, self.warning_message = self.sanitise_value(selected_attribute)
         self.logger.debug(f"Setting selection to {self.label}")
 
         # sort values alphabetically
@@ -109,9 +107,7 @@ class H5WhereWidget(AbstractStringComboBoxWidget):
             return None
         return value
 
-    def validate(
-        self, name: str, label: str, value: str | None
-    ) -> FormValidation:
+    def validate(self, name: str, label: str, value: str | None) -> FormValidation:
         """
         Checks that the attribute is selected.
         :param name: The field name.
@@ -186,9 +182,7 @@ class H5WhereWidget(AbstractStringComboBoxWidget):
             )
         else:
             self.node_keys = []
-            self.logger.debug(
-                f"Emptied node keys. Attribute is '{attribute_name}'"
-            )
+            self.logger.debug(f"Emptied node keys. Attribute is '{attribute_name}'")
 
         # emit signal
         # noinspection PyUnresolvedReferences

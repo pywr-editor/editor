@@ -2,9 +2,7 @@ import pytest
 from PySide6.QtCore import QTimer
 
 from pywr_editor.dialogs import RecordersDialog
-from pywr_editor.dialogs.recorders.recorder_page_widget import (
-    RecorderPageWidget,
-)
+from pywr_editor.dialogs.recorders.recorder_page_widget import RecorderPageWidget
 from pywr_editor.form import FormField
 from pywr_editor.model import ModelConfig
 from tests.utils import close_message_box, resolve_model_path
@@ -60,9 +58,7 @@ class TestDialogRecorderFlowDurationCurveDeviationRecorderSectionSection:
         form = selected_page.form
 
         # noinspection PyUnresolvedReferences
-        assert (
-            selected_page.findChild(FormField, "name").value() == recorder_name
-        )
+        assert selected_page.findChild(FormField, "name").value() == recorder_name
 
         # 1. Check value
         for name, expected_values in expected_targets.items():
@@ -104,9 +100,7 @@ class TestDialogRecorderFlowDurationCurveDeviationRecorderSectionSection:
         form = selected_page.form
 
         # noinspection PyUnresolvedReferences
-        assert (
-            selected_page.findChild(FormField, "name").value() == recorder_name
-        )
+        assert selected_page.findChild(FormField, "name").value() == recorder_name
 
         # Validate form
         field = form.find_field_by_name("lower_target_fdc")

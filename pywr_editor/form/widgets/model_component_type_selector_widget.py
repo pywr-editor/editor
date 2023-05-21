@@ -67,13 +67,9 @@ class ModelComponentTypeSelectorWidget(FormCustomWidget):
                 "The component type can only be: 'parameters' or 'recorders'"
             )
         if self.is_parameter_type and not isinstance(value, ParameterConfig):
-            raise ValueError(
-                "The value can only be an instance of ParameterConfig"
-            )
+            raise ValueError("The value can only be an instance of ParameterConfig")
         elif self.is_recorder_type and not isinstance(value, RecorderConfig):
-            raise ValueError(
-                "The value can only be an instance of RecorderConfig"
-            )
+            raise ValueError("The value can only be an instance of RecorderConfig")
 
         super().__init__(name, value, parent)
         self.init = True
@@ -123,13 +119,9 @@ class ModelComponentTypeSelectorWidget(FormCustomWidget):
             )
 
         # button to pywr API
-        self.doc_button = PushIconButton(
-            icon=qta.icon("msc.question"), parent=self
-        )
+        self.doc_button = PushIconButton(icon=qta.icon("msc.question"), parent=self)
         self.doc_button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
-        self.doc_button.setToolTip(
-            f"Open the pywr manual page for this {self.type}"
-        )
+        self.doc_button.setToolTip(f"Open the pywr manual page for this {self.type}")
         self.doc_button.setEnabled(False)
         self.doc_button.setMaximumWidth(25)
         # noinspection PyUnresolvedReferences
@@ -248,22 +240,15 @@ class ModelComponentTypeSelectorWidget(FormCustomWidget):
         elif pywr_class is None:  # custom component
             self.logger.debug(f"{self.type.title()} '{comp_key}' is custom")
             # imported Python class
-            if (
-                comp_key
-                in getattr(self.custom_imports, self.import_method)().keys()
-            ):
-                self.logger.debug(
-                    f"{self.type.title()} is included as custom import"
-                )
+            if comp_key in getattr(self.custom_imports, self.import_method)().keys():
+                self.logger.debug(f"{self.type.title()} is included as custom import")
                 self.form.section_form_data["imported"] = True
             # unknown class
             else:
                 self.logger.debug(
                     f"{self.type.title()} is not included as custom import"
                 )
-            self.logger.debug(
-                f"Adding section for '{self.custom_section_name}'"
-            )
+            self.logger.debug(f"Adding section for '{self.custom_section_name}'")
             # noinspection PyTypeChecker
             self.form.add_section_from_class(
                 getattr(pywr_editor.dialogs, self.custom_section_name),

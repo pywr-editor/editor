@@ -7,9 +7,7 @@ from PySide6.QtTest import QSignalSpy
 from pywr_editor import MainWindow
 from pywr_editor.toolbar.node_library.library_item import LibraryItem
 from pywr_editor.toolbar.node_library.library_item_label import LibraryItemLabel
-from pywr_editor.toolbar.node_library.schematic_items_library import (
-    LibraryPanel,
-)
+from pywr_editor.toolbar.node_library.schematic_items_library import LibraryPanel
 from tests.utils import check_msg, resolve_model_path
 
 
@@ -21,9 +19,7 @@ class TestMainWindow:
         with pytest.raises(SystemExit) as e:
             QTimer.singleShot(
                 100,
-                partial(
-                    check_msg, "Cannot open the file 'non_existing_file.json'"
-                ),
+                partial(check_msg, "Cannot open the file 'non_existing_file.json'"),
             )
             window = MainWindow("non_existing_file.json")
             window.close()

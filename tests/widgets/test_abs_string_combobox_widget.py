@@ -1,11 +1,7 @@
 import pytest
 from PySide6.QtWidgets import QPushButton, QWidget
 
-from pywr_editor.form import (
-    AbstractStringComboBoxWidget,
-    FormField,
-    ParameterForm,
-)
+from pywr_editor.form import AbstractStringComboBoxWidget, FormField, ParameterForm
 from pywr_editor.model import ModelConfig, ParameterConfig
 
 default_labels_map = {"apple": "Apple", "cider": "Cider", "pear": "Pear"}
@@ -98,9 +94,7 @@ class TestAbstractStringComboBoxWidget:
             ),
         ],
     )
-    def test_valid(
-        self, qtbot, labels_map, default_value, keep_default, selected
-    ):
+    def test_valid(self, qtbot, labels_map, default_value, keep_default, selected):
         """
         Tests that the field is loaded correctly.
         """

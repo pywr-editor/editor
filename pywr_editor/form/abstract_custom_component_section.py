@@ -54,9 +54,7 @@ class AbstractCustomComponentSection(FormSection):
             self.imported = True
 
         # show or hide "custom type" field
-        self.form.register_after_render_action(
-            self.toggle_type_field_visibility
-        )
+        self.form.register_after_render_action(self.toggle_type_field_visibility)
 
     def toggle_type_field_visibility(self) -> None:
         """
@@ -64,9 +62,7 @@ class AbstractCustomComponentSection(FormSection):
         is imported in the "includes" JSON key and its type cannot be changed.
         :return: None
         """
-        self.form.change_field_visibility(
-            name="custom_type", show=not self.imported
-        )
+        self.form.change_field_visibility(name="custom_type", show=not self.imported)
         # warn if the custom component is not imported
         if not self.imported:
             self.form.find_field_by_name("custom_type").set_warning_message(
@@ -167,9 +163,7 @@ class AbstractCustomComponentSection(FormSection):
         del form_data["component_dict"]
 
     @staticmethod
-    def _check_python_class(
-        name: str, label: str, value: str
-    ) -> FormValidation:
+    def _check_python_class(name: str, label: str, value: str) -> FormValidation:
         """
         Checks the component type is a valid Python class name.
         :param name: The field name.

@@ -56,9 +56,7 @@ class AnnualCountIndexThresholdRecorderSection(AbstractNumpyRecorderSection):
                     "field_type": DayMonthWidget,
                     "value": {
                         "day": form.get_recorder_dict_value("include_from_day"),
-                        "month": form.get_recorder_dict_value(
-                            "include_from_month"
-                        ),
+                        "month": form.get_recorder_dict_value("include_from_month"),
                     },
                     "help_text": "Optional start date to include in the count",
                 },
@@ -67,9 +65,7 @@ class AnnualCountIndexThresholdRecorderSection(AbstractNumpyRecorderSection):
                     "field_type": DayMonthWidget,
                     "value": {
                         "day": form.get_recorder_dict_value("include_to_day"),
-                        "month": form.get_recorder_dict_value(
-                            "include_to_month"
-                        ),
+                        "month": form.get_recorder_dict_value("include_to_month"),
                     },
                     "help_text": "Optional end date to include in the count",
                 },

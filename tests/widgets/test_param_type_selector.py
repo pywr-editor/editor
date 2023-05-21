@@ -125,10 +125,7 @@ class TestDialogParameterTypeSelectorWidget:
 
         # always includes Custom parameter
         if filtered_keys:
-            assert (
-                len(param_type_widget.combo_box.all_items)
-                == len(filtered_keys) + 1
-            )
+            assert len(param_type_widget.combo_box.all_items) == len(filtered_keys) + 1
 
     @pytest.mark.parametrize(
         "param_dict, selected_param_type_name, filtered_keys",
@@ -170,11 +167,6 @@ class TestDialogParameterTypeSelectorWidget:
 
         assert "is not allowed" in param_type_field.message.text()
         # select new default
-        assert (
-            param_type_widget.combo_box.currentText()
-            == selected_param_type_name
-        )
+        assert param_type_widget.combo_box.currentText() == selected_param_type_name
         # always includes Custom parameter
-        assert (
-            len(param_type_widget.combo_box.all_items) == len(filtered_keys) + 1
-        )
+        assert len(param_type_widget.combo_box.all_items) == len(filtered_keys) + 1

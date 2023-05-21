@@ -91,9 +91,7 @@ class GaussianKDEStorageRecorderSection(AbstractRecorderSection):
         )
 
     @staticmethod
-    def check_volume_pc(
-        name: str, label: str, value: float | None
-    ) -> FormValidation:
+    def check_volume_pc(name: str, label: str, value: float | None) -> FormValidation:
         """
         Checks that the storage is between 0 and 1.
         :param name: The field name.

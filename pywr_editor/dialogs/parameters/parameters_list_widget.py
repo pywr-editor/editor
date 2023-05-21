@@ -35,9 +35,7 @@ class ParametersListWidget(TableView):
         self.resizeColumnsToContents()
 
         self.setShowGrid(False)
-        self.setSelectionBehavior(
-            QAbstractItemView.SelectionBehavior.SelectItems
-        )
+        self.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectItems)
         self.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
 
     def selectionChanged(
@@ -55,8 +53,6 @@ class ParametersListWidget(TableView):
         if len(selected.indexes()) == 0:
             pages_widget.set_empty_page()
         else:
-            parameter_name = selected.indexes()[0].data(
-                Qt.ItemDataRole.DisplayRole
-            )
+            parameter_name = selected.indexes()[0].data(Qt.ItemDataRole.DisplayRole)
             pages_widget.set_current_widget_by_name(parameter_name)
         super().selectionChanged(selected, deselected)

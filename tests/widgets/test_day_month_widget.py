@@ -2,9 +2,7 @@ import pytest
 from PySide6.QtCore import QTimer
 
 from pywr_editor.dialogs import RecordersDialog
-from pywr_editor.dialogs.recorders.recorder_page_widget import (
-    RecorderPageWidget,
-)
+from pywr_editor.dialogs.recorders.recorder_page_widget import RecorderPageWidget
 from pywr_editor.form import DayMonthWidget
 from pywr_editor.model import ModelConfig
 from tests.utils import close_message_box, resolve_model_path
@@ -15,9 +13,7 @@ class TestDayMonthWidget:
     Tests the DayMonthWidget.
     """
 
-    model_file = resolve_model_path(
-        "model_dialog_recorders_day_month_widget.json"
-    )
+    model_file = resolve_model_path("model_dialog_recorders_day_month_widget.json")
 
     @pytest.fixture()
     def model_config(self) -> ModelConfig:

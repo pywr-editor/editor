@@ -4,9 +4,7 @@ from .abstract_scenario_profile_parameter_section import (
 )
 
 
-class ScenarioMonthlyProfileParameterSection(
-    AbstractScenarioProfileParameterSection
-):
+class ScenarioMonthlyProfileParameterSection(AbstractScenarioProfileParameterSection):
     def __init__(self, form: ParameterDialogForm, section_data: dict):
         """
         Initialises the form section for a ScenarioMonthlyProfileParameter.

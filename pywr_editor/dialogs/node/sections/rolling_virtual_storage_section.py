@@ -61,9 +61,7 @@ class RollingVirtualStorageSection(AbstractVirtualStorageSection):
 
         return FormValidation(validation=True)
 
-    def check_timesteps(
-        self, name: str, label: str, value: int
-    ) -> FormValidation:
+    def check_timesteps(self, name: str, label: str, value: int) -> FormValidation:
         """
         Checks that the number of time steps is larger than one when the "days" field
         is not provided.

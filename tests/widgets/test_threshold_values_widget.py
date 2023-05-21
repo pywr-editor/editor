@@ -23,9 +23,7 @@ class TestDialogThresholdValuesWidget:
         """
         return ModelConfig(self.model_file)
 
-    @pytest.mark.parametrize(
-        "param_name, values", [("valid_values", [1.432, 53.033])]
-    )
+    @pytest.mark.parametrize("param_name, values", [("valid_values", [1.432, 53.033])])
     def test_valid_values(self, qtbot, model_config, param_name, values):
         """
         Tests that the values are loaded correctly.

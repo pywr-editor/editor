@@ -64,9 +64,7 @@ class KeatingAquiferSection(FormSection):
                     "field_type": "integer",
                     "min_value": 0,
                     "default_value": 0,
-                    "value": self.form.get_node_dict_value(
-                        "num_additional_inputs"
-                    ),
+                    "value": self.form.get_node_dict_value("num_additional_inputs"),
                     "help_text": "Number of additional outflows (for example for "
                     + "direct abstraction or discharge from the aquifer)",
                 },
@@ -76,18 +74,14 @@ class KeatingAquiferSection(FormSection):
                     "name": "levels",
                     "field_type": TableValuesWidget,
                     "field_args": {"min_total_values": 1},
-                    "value": {
-                        "values": self.form.get_node_dict_value("levels")
-                    },
+                    "value": {"values": self.form.get_node_dict_value("levels")},
                     "help_text": "A list of levels for the level-volume relationship",
                 },
                 {
                     "name": "volumes",
                     "field_type": TableValuesWidget,
                     "validate_fun": self.check_volumes,
-                    "value": {
-                        "values": self.form.get_node_dict_value("volumes")
-                    },
+                    "value": {"values": self.form.get_node_dict_value("volumes")},
                     "help_text": "A list of volumes for each level. This is "
                     + "optional and the volume can be also calculated by providing "
                     + "the aquifer area and storativity parameters below",
@@ -104,9 +98,7 @@ class KeatingAquiferSection(FormSection):
                     "label": "Storativity factors",
                     "field_type": TableValuesWidget,
                     "validate_fun": self.check_storativity,
-                    "value": {
-                        "values": self.form.get_node_dict_value("storativity")
-                    },
+                    "value": {"values": self.form.get_node_dict_value("storativity")},
                     "help_text": "A list of factors whose length should be one "
                     + "less than the levels. This is optional if the volumes "
                     + "are provided above otherwise the factors are used along "

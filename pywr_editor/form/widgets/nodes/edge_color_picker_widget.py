@@ -60,9 +60,7 @@ class EdgeColorPickerWidget(FormCustomWidget):
 
         painter = QPainter()
         painter.begin(pixmap)
-        painter.setRenderHints(
-            QPainter.Antialiasing | QPainter.SmoothPixmapTransform
-        )
+        painter.setRenderHints(QPainter.Antialiasing | QPainter.SmoothPixmapTransform)
         painter.setPen(Qt.PenStyle.NoPen)
         painter.setBrush(Color(color_name, 400).qcolor)
         painter.drawEllipse(QPointF(size / 2, size / 2), 7, 7)

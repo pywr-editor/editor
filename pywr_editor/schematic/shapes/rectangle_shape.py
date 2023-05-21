@@ -106,9 +106,7 @@ class SchematicRectangle(AbstractSchematicShape, QGraphicsRectItem):
         o = self.handle_size + self.handle_space
         return self.rect().adjusted(-o, -o, o, o)
 
-    def hoverMoveEvent(
-        self, event: PySide6.QtWidgets.QGraphicsSceneHoverEvent
-    ) -> None:
+    def hoverMoveEvent(self, event: PySide6.QtWidgets.QGraphicsSceneHoverEvent) -> None:
         """
         Change the cursor when the cursor is on the resize handle.
         :param event: The event instance.
@@ -149,9 +147,7 @@ class SchematicRectangle(AbstractSchematicShape, QGraphicsRectItem):
             self.pressed_mouse_rect = self.boundingRect()
         super().mousePressEvent(event)
 
-    def mouseMoveEvent(
-        self, event: PySide6.QtWidgets.QGraphicsSceneMouseEvent
-    ) -> None:
+    def mouseMoveEvent(self, event: PySide6.QtWidgets.QGraphicsSceneMouseEvent) -> None:
         """
         Resizes the shape.
         :param event:  The event instance.
@@ -191,18 +187,14 @@ class SchematicRectangle(AbstractSchematicShape, QGraphicsRectItem):
         self.handles[Handles.TOP_MIDDLE.value] = QRectF(
             b.center().x() - s / 2, b.top(), s, s
         )
-        self.handles[Handles.TOP_RIGHT.value] = QRectF(
-            b.right() - s, b.top(), s, s
-        )
+        self.handles[Handles.TOP_RIGHT.value] = QRectF(b.right() - s, b.top(), s, s)
         self.handles[Handles.MIDDLE_LEFT.value] = QRectF(
             b.left(), b.center().y() - s / 2, s, s
         )
         self.handles[Handles.MIDDLE_RIGHT.value] = QRectF(
             b.right() - s, b.center().y() - s / 2, s, s
         )
-        self.handles[Handles.BOTTOM_LEFT.value] = QRectF(
-            b.left(), b.bottom() - s, s, s
-        )
+        self.handles[Handles.BOTTOM_LEFT.value] = QRectF(b.left(), b.bottom() - s, s, s)
         self.handles[Handles.BOTTOM_MIDDLE.value] = QRectF(
             b.center().x() - s / 2, b.bottom() - s, s, s
         )

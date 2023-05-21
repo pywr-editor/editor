@@ -25,8 +25,7 @@ class ScenarioValuesPickerDialogWidget(QDialog):
         self,
         model_config: ModelConfig,
         values: list[int | float] | None = None,
-        after_form_save: Callable[[str | dict[str, Any], Any], None]
-        | None = None,
+        after_form_save: Callable[[str | dict[str, Any], Any], None] | None = None,
         additional_data: Any | None = None,
         parent: QWidget | None = None,
     ):
@@ -52,9 +51,7 @@ class ScenarioValuesPickerDialogWidget(QDialog):
             )
 
         # Dialog title and description
-        title = FormTitle(
-            f"Values for ensemble {additional_data['ensemble_number']}"
-        )
+        title = FormTitle(f"Values for ensemble {additional_data['ensemble_number']}")
         description = QLabel("Specify the values for the scenario ensemble")
 
         # Value widget

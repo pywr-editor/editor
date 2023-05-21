@@ -55,9 +55,7 @@ class TestRecorderConfig:
         """
         param_dict = self.recorders_dict
 
-        recorder_config = self.recorder_config(
-            param_dict[recorder_name], recorder_name
-        )
+        recorder_config = self.recorder_config(param_dict[recorder_name], recorder_name)
         if recorder_name == "A global recorder":
             assert recorder_config.is_a_model_recorder is True
         else:

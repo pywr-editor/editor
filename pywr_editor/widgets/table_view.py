@@ -21,9 +21,7 @@ class TableView(QTableView):
         self,
         model: QAbstractTableModel,
         proxy_model: QSortFilterProxyModel | None = None,
-        toggle_buttons_on_selection: Union[
-            QPushButton, list[QPushButton], None
-        ] = None,
+        toggle_buttons_on_selection: Union[QPushButton, list[QPushButton], None] = None,
         parent: QWidget = None,
     ):
         """
@@ -115,9 +113,7 @@ class TableView(QTableView):
             for button in self.toggle_buttons_on_selection
         ]
 
-    def find_index_by_name(
-        self, name: str, column: int = 0
-    ) -> QModelIndex | None:
+    def find_index_by_name(self, name: str, column: int = 0) -> QModelIndex | None:
         """
         Finds the model index in the model data matching name.
         :param name: The name to look for.

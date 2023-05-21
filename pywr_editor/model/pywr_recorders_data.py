@@ -47,9 +47,7 @@ class PywrRecordersData:
         Returns a list of the pywr recorders' names.
         :return: The pywr recorders' names
         """
-        return [
-            recorder_info["name"] for recorder_info in self.recorders.values()
-        ]
+        return [recorder_info["name"] for recorder_info in self.recorders.values()]
 
     @property
     def classes(self) -> list[str]:
@@ -57,9 +55,7 @@ class PywrRecordersData:
         Returns a list of the pywr recorder' classes.
         :return: The pywr recorder classes
         """
-        return [
-            recorder_info["class"] for recorder_info in self.recorders.values()
-        ]
+        return [recorder_info["class"] for recorder_info in self.recorders.values()]
 
     @property
     def keys(self) -> list[str]:
@@ -77,9 +73,7 @@ class PywrRecordersData:
         """
         return self.get_info_from_type(recorder_type, "class")
 
-    def get_info_from_type(
-        self, recorder_type: str, info_key: str
-    ) -> str | None:
+    def get_info_from_type(self, recorder_type: str, info_key: str) -> str | None:
         """
         Returns the recorder information (class, url, etc.) from the recorder type.
         :param recorder_type: The string identifying the recorder type.

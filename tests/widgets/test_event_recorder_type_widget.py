@@ -1,9 +1,7 @@
 import pytest
 
 from pywr_editor.dialogs import RecordersDialog
-from pywr_editor.dialogs.recorders.recorder_page_widget import (
-    RecorderPageWidget,
-)
+from pywr_editor.dialogs.recorders.recorder_page_widget import RecorderPageWidget
 from pywr_editor.model import ModelConfig, ParameterConfig, RecorderConfig
 from tests.utils import resolve_model_path
 
@@ -85,15 +83,11 @@ class TestEventRecorderTypeWidget:
             assert parameter_field.widget.component_obj is None
             assert recorder_field.widget.component_obj is None
         elif selected_type == "parameter":
-            assert isinstance(
-                parameter_field.widget.component_obj, ParameterConfig
-            )
+            assert isinstance(parameter_field.widget.component_obj, ParameterConfig)
             assert recorder_field.widget.component_obj is None
         elif selected_type == "recorder":
             assert parameter_field.widget.component_obj is None
-            assert isinstance(
-                recorder_field.widget.component_obj, RecorderConfig
-            )
+            assert isinstance(recorder_field.widget.component_obj, RecorderConfig)
 
         # 4. Check warning messages
         if init_message is None:

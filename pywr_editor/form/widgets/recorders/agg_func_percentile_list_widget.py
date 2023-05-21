@@ -62,9 +62,7 @@ class AggFuncPercentileListWidget(AbstractFloatListWidget):
                 error_message="The percentile must be a number between 0 and 100",
                 validation=False,
             )
-        elif isinstance(value, list) and not all(
-            [0 <= p <= 100 for p in value]
-        ):
+        elif isinstance(value, list) and not all([0 <= p <= 100 for p in value]):
             return FormValidation(
                 error_message="The percentiles must be numbers between 0 and 100",
                 validation=False,

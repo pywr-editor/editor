@@ -103,9 +103,7 @@ class ModelComponentSourceSelectorWidget(FormCustomWidget):
                 # noinspection PyUnresolvedReferences
                 form_field.widget.reset()
         else:
-            self.logger.debug(
-                "Skipping fields reset because widget is initialising"
-            )
+            self.logger.debug("Skipping fields reset because widget is initialising")
 
         # Toggle component visibility
         if field_value == self.labels["model_component"]:

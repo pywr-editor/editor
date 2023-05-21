@@ -78,9 +78,7 @@ class FormCustomWidget(QWidget):
         """
         pass
 
-    def after_validate(
-        self, form_dict: dict[str, Any], form_field_name: str
-    ) -> None:
+    def after_validate(self, form_dict: dict[str, Any], form_field_name: str) -> None:
         """
         Event executed after the widget is validated and its value is added to the
         the form.

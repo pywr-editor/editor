@@ -39,10 +39,8 @@ class WeightedAverageProfileParameterSection(FormSection):
             self.allowed_keys += self.form.model_config.pywr_parameter_data.get_keys_with_parent_class(  # noqa: E501
                 param, include_parent=True
             )
-            self.allowed_keys += (
-                self.form.model_config.includes.get_keys_with_subclass(
-                    param, "parameter"
-                )
+            self.allowed_keys += self.form.model_config.includes.get_keys_with_subclass(
+                param, "parameter"
             )
 
     @property
@@ -106,11 +104,7 @@ class WeightedAverageProfileParameterSection(FormSection):
             "storages"
         ).widget
         selected_nodes = nodes_widget.get_value()
-        if (
-            len(selected_nodes)
-            and len(value)
-            and len(value) != len(selected_nodes)
-        ):
+        if len(selected_nodes) and len(value) and len(value) != len(selected_nodes):
             return FormValidation(
                 validation=False,
                 error_message=f"The number of profiles ({len(value)}) must equal the "

@@ -5,15 +5,8 @@ from PySide6.QtCore import Qt
 from PySide6.QtTest import QSignalSpy
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.dialogs.parameters.parameter_page_widget import (
-    ParameterPageWidget,
-)
-from pywr_editor.form import (
-    FormField,
-    H5FileWidget,
-    H5NodeWidget,
-    H5WhereWidget,
-)
+from pywr_editor.dialogs.parameters.parameter_page_widget import ParameterPageWidget
+from pywr_editor.form import FormField, H5FileWidget, H5NodeWidget, H5WhereWidget
 from pywr_editor.model import ModelConfig
 from tests.utils import resolve_model_path
 
@@ -73,9 +66,7 @@ class TestDialogParameterTablesArrayParameterSection:
             ),
         ],
     )
-    def test_valid(
-        self, qtbot, model_config, param_name, values, validation_messages
-    ):
+    def test_valid(self, qtbot, model_config, param_name, values, validation_messages):
         """
         Tests that the values are loaded correctly.
         """
@@ -132,9 +123,7 @@ class TestDialogParameterTablesArrayParameterSection:
             assert where_field.value() == where
         else:
             assert where_widget.combo_box.currentText() == "None"
-            assert where_widget.combo_box.isEnabled() is (
-                param_name != "valid_no_file"
-            )
+            assert where_widget.combo_box.isEnabled() is (param_name != "valid_no_file")
             assert where_field.value() is None
 
         if node:

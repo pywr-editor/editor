@@ -101,9 +101,7 @@ class AbstractControlCurveParameterSection(FormSection):
                     "value": self.form.get_param_dict_value("values"),
                     # value (for example cost) may be negative
                     "field_args": {"lower_bound": -pow(10, 6)},
-                    "validate_fun": partial(
-                        self._check_size, field_name="values"
-                    ),
+                    "validate_fun": partial(self._check_size, field_name="values"),
                     "help_text": "You must provide a number of values equal to the "
                     "number of control curves plus one",
                 },
@@ -116,9 +114,7 @@ class AbstractControlCurveParameterSection(FormSection):
                     # is "parameters", self._check_size will check the field is not
                     # empty
                     "field_args": {"is_mandatory": False},
-                    "validate_fun": partial(
-                        self._check_size, field_name="parameters"
-                    ),
+                    "validate_fun": partial(self._check_size, field_name="parameters"),
                     "value": self.form.get_param_dict_value("parameters"),
                     "help_text": "You must provide a number of parameters equal to the "
                     "number of control curves plus one",
@@ -147,13 +143,13 @@ class AbstractControlCurveParameterSection(FormSection):
         :return: The validation instance.
         """
         # noinspection PyTypeChecker
-        source_widget: ControlCurvesValuesSourceWidget = (
-            self.form.find_field_by_name("values_source").widget
-        )
+        source_widget: ControlCurvesValuesSourceWidget = self.form.find_field_by_name(
+            "values_source"
+        ).widget
         # noinspection PyTypeChecker
-        control_curves_widget: ControlCurvesWidget = (
-            self.form.find_field_by_name("control_curves").widget
-        )
+        control_curves_widget: ControlCurvesWidget = self.form.find_field_by_name(
+            "control_curves"
+        ).widget
         curves_size = len(control_curves_widget.get_value())
         expected_size = curves_size + self.values_size_increment
         if (

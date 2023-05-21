@@ -169,9 +169,7 @@ class AbstractAggFuncWidget(AbstractStringComboBoxWidget):
                     "func": form_data[field_name],
                     "kwargs": {
                         # mandatory field
-                        "score": form_data.pop(
-                            self.agg_func_percentileofscore_score
-                        ),
+                        "score": form_data.pop(self.agg_func_percentileofscore_score),
                     },
                 }
                 # do not add None

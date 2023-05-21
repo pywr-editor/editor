@@ -39,9 +39,7 @@ class AnnualVirtualStorageSection(AbstractVirtualStorageSection):
                     "name": "reset_to_initial_volume",
                     "field_type": "boolean",
                     "default_value": False,
-                    "value": form.get_node_dict_value(
-                        "reset_to_initial_volume"
-                    ),
+                    "value": form.get_node_dict_value("reset_to_initial_volume"),
                     "help_text": "Reset the storage to its initial volume instead "
                     + "of its maximum volume each year",
                 },

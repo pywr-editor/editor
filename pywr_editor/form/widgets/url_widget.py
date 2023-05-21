@@ -202,9 +202,7 @@ class UrlWidget(FormCustomWidget):
                 )
             elif isinstance(form_field.widget, QComboBox):
                 # noinspection PyUnresolvedReferences
-                form_field.widget.currentIndexChanged.connect(
-                    self.on_table_reload
-                )
+                form_field.widget.currentIndexChanged.connect(self.on_table_reload)
                 self.logger.debug(
                     "Registered Slot on_table_reload for QComboBox("
                     + f"{form_field.name}).currentIndexChanged Signal"
@@ -223,9 +221,7 @@ class UrlWidget(FormCustomWidget):
                         + "attribute"
                     )
                 # noinspection PyUnresolvedReferences
-                form_field.widget.field_value_changed.connect(
-                    self.on_table_reload
-                )
+                form_field.widget.field_value_changed.connect(self.on_table_reload)
                 self.logger.debug(
                     "Registered Slot on_table_reload for custom widget "
                     + f"named {form_field.name}"
@@ -270,9 +266,7 @@ class UrlWidget(FormCustomWidget):
             )
 
         # 5. on file change, update all other fields first and then update the table
-        self.logger.debug(
-            "Registered Slot on_reload_all_data for file_changed Signal"
-        )
+        self.logger.debug("Registered Slot on_reload_all_data for file_changed Signal")
         # noinspection PyUnresolvedReferences
         self.file_changed.connect(self.on_reload_all_data)
 
@@ -336,9 +330,7 @@ class UrlWidget(FormCustomWidget):
             self.logger.debug(f"Opening file {file}")
             os.startfile(file)
         except Exception:
-            self.logger.debug(
-                f"Failed to open because: {traceback.print_exc()}"
-            )
+            self.logger.debug(f"Failed to open because: {traceback.print_exc()}")
             QMessageBox().critical(
                 self,
                 "Cannot open the file",
@@ -356,9 +348,7 @@ class UrlWidget(FormCustomWidget):
         file_dialog = QFileDialog()
         file_dialog.setFileMode(QFileDialog.FileMode.ExistingFile)
 
-        files_filter = (
-            "CSV (*.csv);; Text (*.txt);; Excel (*.xls *.xlsx *.xlsm);; "
-        )
+        files_filter = "CSV (*.csv);; Text (*.txt);; Excel (*.xls *.xlsx *.xlsm);; "
         files_filter += "HDF5 (*.h5)"
         file_dialog.setNameFilter(files_filter)
 
@@ -376,9 +366,7 @@ class UrlWidget(FormCustomWidget):
         Reload button is clicked.
         :return: None
         """
-        self.logger.debug(
-            f"Called on_reload_click Slot from {get_signal_sender(self)}"
-        )
+        self.logger.debug(f"Called on_reload_click Slot from {get_signal_sender(self)}")
         self.on_reload_all_data(self.full_file)
         self.logger.debug("Completed on_reload_click Slot")
 
@@ -427,10 +415,7 @@ class UrlWidget(FormCustomWidget):
             message = "The table file does not exist"
             self.logger.debug(message)
             self.form_field.set_error_message(message)
-        elif (
-            self.file_ext != ""
-            and self.file_ext not in self.supported_extensions
-        ):
+        elif self.file_ext != "" and self.file_ext not in self.supported_extensions:
             message = f"The file extension '{self.file_ext}' is not supported"
             self.logger.debug(message)
             self.form_field.set_error_message(message)
@@ -498,22 +483,16 @@ class UrlWidget(FormCustomWidget):
                         field = self.form.find_field_by_name(name)
                         if field is not None:
                             args[name] = field.value()
-                    self.logger.debug(
-                        f"Opening H5 file {self.full_file} using: {args}"
-                    )
+                    self.logger.debug(f"Opening H5 file {self.full_file} using: {args}")
                     self.table = read_hdf(self.full_file, **args)
                     # remove built-in indexes and set them via attrs
                     # for H5 file, index names cannot be changed
                     index_names = reset_pandas_index_names(self.table)
-                    self.logger.debug(
-                        f"Resetting built-in indexes: {index_names}"
-                    )
+                    self.logger.debug(f"Resetting built-in indexes: {index_names}")
                     set_table_index(self.table, index_names)
 
                 if self.file_ext not in self.supported_extensions:
-                    self.logger.debug(
-                        f"Extension '{self.file_ext}' not supported"
-                    )
+                    self.logger.debug(f"Extension '{self.file_ext}' not supported")
                     raise ValueError
             except Exception:
                 self.logger.debug(

@@ -2,15 +2,7 @@ from math import atan2, cos, pi, sin
 from typing import TYPE_CHECKING, Union
 
 import PySide6
-from PySide6.QtCore import (
-    QLineF,
-    QPoint,
-    QPointF,
-    QRectF,
-    QSizeF,
-    Qt,
-    qFuzzyCompare,
-)
+from PySide6.QtCore import QLineF, QPoint, QPointF, QRectF, QSizeF, Qt, qFuzzyCompare
 from PySide6.QtGui import QColor, QPainter, QPen, QPolygonF
 from PySide6.QtWidgets import QGraphicsItem
 
@@ -147,9 +139,7 @@ class Edge(QGraphicsItem):
             return
 
         # draw the line
-        painter.setPen(
-            QPen(edge_color, 1, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin)
-        )
+        painter.setPen(QPen(edge_color, 1, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
         painter.drawLine(line)
 
         # draw the arrow
@@ -230,9 +220,7 @@ class TempEdge(QGraphicsItem):
         Defines the edge bounding rectangle.
         :return: The rectangle.
         """
-        return QRectF(
-            0, 0, self.view.schematic_width, self.view.schematic_height
-        )
+        return QRectF(0, 0, self.view.schematic_width, self.view.schematic_height)
 
     def paint(
         self,

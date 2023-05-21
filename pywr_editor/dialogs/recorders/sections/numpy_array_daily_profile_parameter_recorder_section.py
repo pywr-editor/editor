@@ -7,9 +7,7 @@ from .abstract_numpy_recorder_section import (
 )
 
 
-class NumpyArrayDailyProfileParameterRecorderSection(
-    AbstractNumpyRecorderSection
-):
+class NumpyArrayDailyProfileParameterRecorderSection(AbstractNumpyRecorderSection):
     def __init__(self, form: RecorderDialogForm, section_data: dict):
         """
         Initialises the form section for a NumpyArrayDailyProfileParameterRecorder.

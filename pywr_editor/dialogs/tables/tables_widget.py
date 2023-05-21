@@ -34,9 +34,7 @@ class TablesWidget(QWidget):
         # sort components by name
         self.proxy_model = QSortFilterProxyModel(self)
         self.proxy_model.setSourceModel(self.model)
-        self.proxy_model.setSortCaseSensitivity(
-            Qt.CaseSensitivity.CaseInsensitive
-        )
+        self.proxy_model.setSortCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
         self.list = TablesListWidget(
             model=self.model,
             proxy_model=self.proxy_model,

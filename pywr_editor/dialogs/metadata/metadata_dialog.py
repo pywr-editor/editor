@@ -32,9 +32,7 @@ class MetadataDialog(QDialog):
         # dialog buttons
         # Buttons
         button_box = QHBoxLayout()
-        self.save_button = PushIconButton(
-            icon=qta.icon("msc.save"), label="Save"
-        )
+        self.save_button = PushIconButton(icon=qta.icon("msc.save"), label="Save")
         self.save_button.setObjectName("save_button")
 
         close_button = PushIconButton(icon=qta.icon("msc.close"), label="Close")

@@ -155,9 +155,7 @@ class H5FileWidget(FormCustomWidget):
             return value
         return None
 
-    def validate(
-        self, name: str, label: str, value: str | None
-    ) -> FormValidation:
+    def validate(self, name: str, label: str, value: str | None) -> FormValidation:
         """
         Checks that the file url is valid and the keys are loaded.
         :param name: The field name.
@@ -192,9 +190,7 @@ class H5FileWidget(FormCustomWidget):
             with HDFStore(file) as store:
                 for group in store._handle.walk_groups():
                     group_name = group._v_pathname
-                    for array in store._handle.list_nodes(
-                        group, classname="Array"
-                    ):
+                    for array in store._handle.list_nodes(group, classname="Array"):
                         if group_name not in keys_dict:
                             keys_dict[group_name] = [array.name]
                         else:
@@ -253,9 +249,7 @@ class H5FileWidget(FormCustomWidget):
         Reloads the data stored in the table.
         :return: None
         """
-        self.logger.debug(
-            f"Called on_reload_click Slot from {get_signal_sender(self)}"
-        )
+        self.logger.debug(f"Called on_reload_click Slot from {get_signal_sender(self)}")
         # trigger Signal to update keys and notify other widgets that keys have been
         # updated
         # noinspection PyUnresolvedReferences

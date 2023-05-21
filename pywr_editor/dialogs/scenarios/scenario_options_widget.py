@@ -35,9 +35,7 @@ class ScenarioOptionsWidget(FormCustomWidget):
         self.scenario_config = ScenarioConfig(self.form.scenario_dict)
 
         # Sanitise variables
-        self.slice_value, self.slice_message = self.sanitise_slice(
-            value["slice"]
-        )
+        self.slice_value, self.slice_message = self.sanitise_slice(value["slice"])
         self.names_value, self.names_message = self.sanitise_names(
             value["ensemble_names"]
         )
@@ -109,9 +107,7 @@ class ScenarioOptionsWidget(FormCustomWidget):
         # noinspection PyUnresolvedReferences
         size_widget.valueChanged.connect(self.on_scenario_resize)
 
-    def sanitise_slice(
-        self, value: list[int] | None
-    ) -> [list[int], str | None]:
+    def sanitise_slice(self, value: list[int] | None) -> [list[int], str | None]:
         """
         Sanitises the slice value.
         :param value: The value to sanitise.
@@ -142,9 +138,7 @@ class ScenarioOptionsWidget(FormCustomWidget):
 
         return final_value, message
 
-    def sanitise_names(
-        self, value: list[str] | None
-    ) -> [list[str], str | None]:
+    def sanitise_names(self, value: list[str] | None) -> [list[str], str | None]:
         """
         Sanitises the ensemble names.
         :param value: The value to sanitise.
@@ -160,9 +154,7 @@ class ScenarioOptionsWidget(FormCustomWidget):
         elif not isinstance(value, list) or any(
             [not isinstance(v, str) for v in value]
         ):
-            message = (
-                "The list of ensemble names must be a valid list of strings"
-            )
+            message = "The list of ensemble names must be a valid list of strings"
         elif len(value) != self.scenario_config.size:
             message = f"The number of ensemble names ({len(value)}) must match "
             message += f"the scenario size ({self.scenario_config.size})"
@@ -192,9 +184,7 @@ class ScenarioOptionsWidget(FormCustomWidget):
             self.model.names = self.model.names[0:new_size]
             # remove all index > new_size
             self.model.slice = [
-                slice_idx
-                for slice_idx in self.model.slice
-                if slice_idx < new_size
+                slice_idx for slice_idx in self.model.slice if slice_idx < new_size
             ]
 
         self.model.total_rows = new_size

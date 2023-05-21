@@ -116,9 +116,9 @@ class AbstractFloatListWidget(FormCustomWidget):
             message = "The value set in the model configuration is not valid"
         elif isinstance(value, list):
             # if list check size and item types
-            if (
-                self.items_count is not None and len(value) != self.items_count
-            ) or (self.allowed_empty is False and len(value) == 0):
+            if (self.items_count is not None and len(value) != self.items_count) or (
+                self.allowed_empty is False and len(value) == 0
+            ):
                 # list is empty or too short
                 message = (
                     "The number of values set in the model configuration must "
@@ -129,17 +129,11 @@ class AbstractFloatListWidget(FormCustomWidget):
                 else:
                     message += f"{len(value)} values were given"
             elif (
-                all(
-                    [
-                        isinstance(v, self._allowed_list_item_types)
-                        for v in value
-                    ]
-                )
+                all([isinstance(v, self._allowed_list_item_types) for v in value])
                 is False
             ):
                 type_name = [
-                    cls_type.__name__
-                    for cls_type in self._allowed_list_item_types
+                    cls_type.__name__ for cls_type in self._allowed_list_item_types
                 ]
                 type_name = ", ".join(type_name)
                 message = (

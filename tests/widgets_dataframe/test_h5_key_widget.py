@@ -129,9 +129,7 @@ class TestDialogParameterH5KeyWidget:
         key_widget.combo_box.setCurrentText(new_key)
         assert key_field.value() == new_key
         assert key_field.message.text() == ""
-        new_df, new_index_names = df_from_h5(
-            url_widget.full_file, key=key_widget.value
-        )
+        new_df, new_index_names = df_from_h5(url_widget.full_file, key=key_widget.value)
         assert url_widget.table.equals(new_df)
         assert get_index_names(url_widget.table) == new_index_names
 
@@ -191,10 +189,7 @@ class TestDialogParameterH5KeyWidget:
         first_key = "/empty_table"
 
         # noinspection PyUnresolvedReferences
-        assert (
-            selected_page.findChild(FormField, "name").value()
-            == selected_parameter
-        )
+        assert selected_page.findChild(FormField, "name").value() == selected_parameter
         assert "does not exist in the H5 file" in key_field.message.text()
 
         # 1. the first key is selected
@@ -223,13 +218,8 @@ class TestDialogParameterH5KeyWidget:
         key_widget: H5KeyWidget = key_field.widget
 
         # noinspection PyUnresolvedReferences
-        assert (
-            selected_page.findChild(FormField, "name").value()
-            == selected_parameter
-        )
-        assert (
-            key_field.message.text() == "The H5 file does not contain any key"
-        )
+        assert selected_page.findChild(FormField, "name").value() == selected_parameter
+        assert key_field.message.text() == "The H5 file does not contain any key"
 
         # 1. field is disabled
         assert key_widget.isEnabled() is False

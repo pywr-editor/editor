@@ -40,9 +40,7 @@ class H5NodeWidget(AbstractStringComboBoxWidget):
 
         # connect Slot to update the nodes when the where attribute changes
         # noinspection PyTypeChecker
-        where_widget: H5WhereWidget = self.form.find_field_by_name(
-            "where"
-        ).widget
+        where_widget: H5WhereWidget = self.form.find_field_by_name("where").widget
         # noinspection PyUnresolvedReferences
         where_widget.where_attr_changed.connect(self.on_update_where)
 
@@ -98,9 +96,7 @@ class H5NodeWidget(AbstractStringComboBoxWidget):
             return None
         return value
 
-    def validate(
-        self, name: str, label: str, value: str | None
-    ) -> FormValidation:
+    def validate(self, name: str, label: str, value: str | None) -> FormValidation:
         """
         Checks that the node is selected.
         :param name: The field name.

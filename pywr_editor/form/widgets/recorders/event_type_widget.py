@@ -42,9 +42,7 @@ class EventTypeWidget(AbstractStringComboBoxWidget):
             model_config.includes.get_custom_parameters().keys()
         )
         pywr_recorders = model_config.pywr_recorder_data
-        custom_recorder_keys = list(
-            model_config.includes.get_custom_recorders().keys()
-        )
+        custom_recorder_keys = list(model_config.includes.get_custom_recorders().keys())
 
         # default to parameter
         selected_type = "parameter"
@@ -132,14 +130,10 @@ class EventTypeWidget(AbstractStringComboBoxWidget):
             selected_value = self.get_value()
             if selected_value == "parameter":
                 self.logger.debug("Resetting recorder field")
-                self.form.find_field_by_name(
-                    "threshold_recorder"
-                ).widget.reset()
+                self.form.find_field_by_name("threshold_recorder").widget.reset()
             elif selected_value == "recorder":
                 self.logger.debug("Resetting parameter field")
-                self.form.find_field_by_name(
-                    "threshold_parameter"
-                ).widget.reset()
+                self.form.find_field_by_name("threshold_parameter").widget.reset()
 
         # connect slot to change visibility
         # noinspection PyUnresolvedReferences

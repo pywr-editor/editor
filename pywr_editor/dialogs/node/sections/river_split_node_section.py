@@ -56,9 +56,7 @@ class RiverSplitSection(FormSection):
         :param form_data: The form data.
         :return: None
         """
-        widget: SlotsTableWidget = self.form.find_field_by_name(
-            "slots_field"
-        ).widget
+        widget: SlotsTableWidget = self.form.find_field_by_name("slots_field").widget
 
         # update slot names in edges
         widget.updated_slot_names_in_edge_helper()
@@ -73,9 +71,7 @@ class RiverSplitSection(FormSection):
         self.logger.debug(f"Filtered form data to {form_data}")
 
     @staticmethod
-    def check_factors(
-        name: str, label: str, value: dict[str, Any]
-    ) -> FormValidation:
+    def check_factors(name: str, label: str, value: dict[str, Any]) -> FormValidation:
         """
         Checks that all the factors are provided.
         :param name: The field name.
@@ -83,9 +79,7 @@ class RiverSplitSection(FormSection):
         :param value: The list of factors.
         :return: The form validation.
         """
-        if value["factors"] is None or any(
-            [f is None for f in value["factors"]]
-        ):
+        if value["factors"] is None or any([f is None for f in value["factors"]]):
             return FormValidation(
                 validation=False, error_message="All the factors are mandatory"
             )
