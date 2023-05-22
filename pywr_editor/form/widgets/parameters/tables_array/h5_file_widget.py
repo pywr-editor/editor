@@ -7,7 +7,7 @@ from pandas import HDFStore
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QLineEdit
 
-from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.form import FormCustomWidget, FormField, Validation
 from pywr_editor.utils import Logging, get_signal_sender
 from pywr_editor.widgets import PushIconButton
 
@@ -155,23 +155,20 @@ class H5FileWidget(FormCustomWidget):
             return value
         return None
 
-    def validate(self, name: str, label: str, value: str | None) -> FormValidation:
+    def validate(self, name: str, label: str, value: str | None) -> Validation:
         """
         Checks that the file url is valid and the keys are loaded.
         :param name: The field name.
         :param label: The field label.
         :param value: The field label.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         if self.keys:
             self.logger.debug("Validation passed")
-            return FormValidation(validation=True)
+            return Validation()
 
         self.logger.debug("Validation failed")
-        return FormValidation(
-            validation=False,
-            error_message="You must provide a valid file containing a table",
-        )
+        return Validation("You must provide a valid file containing a table")
 
     # noinspection PyProtectedMember
     @staticmethod

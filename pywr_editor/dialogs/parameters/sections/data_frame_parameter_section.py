@@ -1,10 +1,10 @@
 from pywr_editor.form import (
     CheckSumWidget,
     FormSection,
-    FormValidation,
     ScenarioPickerWidget,
     SourceSelectorWidget,
     UrlWidget,
+    Validation,
 )
 from pywr_editor.utils import Logging
 
@@ -85,27 +85,25 @@ class DataFrameParameterSection(FormSection):
             ],
         }
 
-    def validate(self, form_data: dict) -> FormValidation:
+    def validate(self, form_data: dict) -> Validation:
         """
         Validates the section/data after all the widgets are validated.
         :param form_data: The form data dictionary when the form validation is
         successful.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         base_message = "You must select a column to use as a series or a "
         base_message += "scenario, to use the entire table"
 
         # the scenario or column must be provided
         if "scenario" not in form_data and "column" not in form_data:
-            return FormValidation(validation=False, error_message=base_message)
+            return Validation(base_message)
         if "scenario" in form_data and "column" in form_data:
-            return FormValidation(
-                validation=False,
-                error_message=f"{base_message}. You cannot select both options "
-                "at the same time",
+            return Validation(
+                f"{base_message}. You cannot select both options at the same time"
             )
 
-        return FormValidation(validation=True)
+        return Validation()
 
     def filter(self, form_data: dict) -> None:
         """

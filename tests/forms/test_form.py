@@ -3,13 +3,7 @@ from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QWindow
 from PySide6.QtWidgets import QApplication, QTextEdit, QVBoxLayout
 
-from pywr_editor.form import (
-    FieldConfig,
-    Form,
-    FormCustomWidget,
-    FormField,
-    FormValidation,
-)
+from pywr_editor.form import FieldConfig, Form, FormCustomWidget, FormField, Validation
 from tests.utils import close_message_box
 
 
@@ -177,13 +171,13 @@ def test_validate_fun_option(qtbot):
     Checks that the "validate_fun" option check works.
     """
 
-    def validate_fun(name: str, label: str, value: str) -> FormValidation:
+    def validate_fun(name: str, label: str, value: str) -> Validation:
         if value != "Apple":
-            return FormValidation(
+            return Validation(
                 validation=False,
                 error_message=f"{label} must be Apple instead of {name}",
             )
-        return FormValidation(validation=True)
+        return Validation(validation=True)
 
     form_config: dict[str, list[FieldConfig]] = {
         "Section": [

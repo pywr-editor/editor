@@ -1,4 +1,4 @@
-from pywr_editor.form import AbstractFloatListWidget, FormField, FormValidation
+from pywr_editor.form import AbstractFloatListWidget, FormField, Validation
 
 
 class ControlCurveOptBoundsWidget(AbstractFloatListWidget):
@@ -23,13 +23,13 @@ class ControlCurveOptBoundsWidget(AbstractFloatListWidget):
             parent=parent,
         )
 
-    def validate(self, name: str, label: str, value: list[float]) -> FormValidation:
+    def validate(self, name: str, label: str, value: list[float]) -> Validation:
         """
         Checks that the value is valid.
         :param name: The field name.
         :param label: The field label.
         :param value: The field label. This is not used.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         validation_output = super().validate(name, label, value)
         if validation_output.validation is False:
@@ -41,28 +41,24 @@ class ControlCurveOptBoundsWidget(AbstractFloatListWidget):
             # this field is mandatory if variable_indices is set
             var_indices_field = self.form.find_field_by_name("variable_indices")
             if not var_indices_field.value():
-                return FormValidation(
-                    validation=False,
-                    error_message="You can set this field only if you have set the "
-                    + f"'{var_indices_field.label}' field",
+                return Validation(
+                    "You can set this field only if you have set the "
+                    f"'{var_indices_field.label}' field",
                 )
 
             # "values" key must be selected
             values_source_field = self.form.find_field_by_name("values_source")
             if values_source_field.value() != "values":
-                return FormValidation(
-                    validation=False,
-                    error_message="You can set this field only if you have set the "
-                    + "'Constant values' field as source",
+                return Validation(
+                    "You can set this field only if you have set the "
+                    "'Constant values' field as source",
                 )
 
             # the number of bounds must be the same as variable_indices
             if len(bounds) != len(var_indices_field.value()):
-                return FormValidation(
-                    validation=False,
-                    error_message="The number of bounds must be the same as the "
-                    + f"number of indices provided in the '{var_indices_field.label}'"
-                    + " field",
+                return Validation(
+                    "The number of bounds must be the same as the number "
+                    f"of indices provided in the '{var_indices_field.label}' field",
                 )
 
         return validation_output

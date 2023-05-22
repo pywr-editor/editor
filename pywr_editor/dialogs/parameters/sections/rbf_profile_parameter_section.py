@@ -1,11 +1,11 @@
 from pywr_editor.form import (
     FloatWidget,
     FormSection,
-    FormValidation,
     RbfDayOfYearWidget,
     RbfFunction,
     RbfOptBoundWidget,
     RbfValues,
+    Validation,
 )
 from pywr_editor.utils import Logging
 
@@ -143,7 +143,7 @@ class RbfProfileParameterSection(FormSection):
 
         return data_dict
 
-    def _check_count(self, name: str, label: str, value: list) -> FormValidation:
+    def _check_count(self, name: str, label: str, value: list) -> Validation:
         """
         Checks that the number of items in "value" is the same as in the
         "days_of_year" field.
@@ -161,16 +161,15 @@ class RbfProfileParameterSection(FormSection):
             and isinstance(days_value, list)
             and len(days_value) != len(value)
         ):
-            return FormValidation(
-                validation=False,
-                error_message="The number of items must be the same as in "
-                + f"the '{days_label}' fields",
+            return Validation(
+                "The number of items must be the same as in "
+                f"the '{days_label}' fields",
             )
 
-        return FormValidation(validation=True)
+        return Validation()
 
     @staticmethod
-    def _check_day_of_year(name: str, label: str, value: list) -> FormValidation:
+    def _check_day_of_year(name: str, label: str, value: list) -> Validation:
         """
         Checks that "days_of_year" contains valid values.
         :param name: The field name.
@@ -181,28 +180,16 @@ class RbfProfileParameterSection(FormSection):
         if isinstance(value, list):
             # this mirrors pywr check
             if value[0] != 1:
-                return FormValidation(
-                    validation=False,
-                    error_message="The first item must be 1",
-                )
+                return Validation("The first item must be 1")
             elif len(value) < 3:
-                return FormValidation(
-                    validation=False,
-                    error_message="You need to provide at least 3 items",
-                )
+                return Validation("You need to provide at least 3 items")
             elif any([j - i <= 0 for i, j in zip(value[:-1], value[1:])]):
-                return FormValidation(
-                    validation=False,
-                    error_message="The items must be strictly monotonically increasing",
-                )
+                return Validation("The items must be strictly monotonically increasing")
             elif max(value) > 365 or min(value) < 0:
-                return FormValidation(
-                    validation=False,
-                    error_message="The items must be between 1 and 365 inclusive",
-                )
-        return FormValidation(validation=True)
+                return Validation("The items must be between 1 and 365 inclusive")
+        return Validation()
 
-    def _check_day_range(self, name: str, label: str, value: list) -> FormValidation:
+    def _check_day_range(self, name: str, label: str, value: list) -> Validation:
         """
         Checks the range for the "days_of_year" during optimisation.
         :param name: The field name.
@@ -213,7 +200,7 @@ class RbfProfileParameterSection(FormSection):
         days = self.form.find_field_by_name("days_of_year")
         days_value = days.value()
         if not isinstance(days_value, list):
-            return FormValidation(validation=True)
+            return Validation()
 
         day_spacing_valid = any(
             [j - i <= 2 * value for i, j in zip(days_value[:-1], days_value[1:])]
@@ -221,12 +208,11 @@ class RbfProfileParameterSection(FormSection):
         if value != 0 and day_spacing_valid:
             days_label = self.form.get_field_label_from_name("days_of_year")
 
-            return FormValidation(
-                validation=False,
-                error_message="To ensure a proper optimisation, the distance between "
-                + f"this value and any day in the '{days_label}' field should be less "
-                + "than half the minimum spacing between the days of the year. Reduce "
-                + "this value or increase the separation between the days of the year",
+            return Validation(
+                "To ensure a proper optimisation, the distance between "
+                f"this value and any day in the '{days_label}' field should be less "
+                "than half the minimum spacing between the days of the year. Reduce "
+                "this value or increase the separation between the days of the year",
             )
 
-        return FormValidation(validation=True)
+        return Validation()

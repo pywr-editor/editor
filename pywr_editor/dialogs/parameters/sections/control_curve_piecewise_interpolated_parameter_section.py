@@ -2,8 +2,8 @@ from pywr_editor.form import (
     ControlCurvesWidget,
     FloatWidget,
     FormSection,
-    FormValidation,
     StoragePickerWidget,
+    Validation,
     ValuesAndExternalDataWidget,
 )
 from pywr_editor.utils import Logging
@@ -111,7 +111,7 @@ class ControlCurvePiecewiseInterpolatedParameterSection(FormSection):
         name: str,
         label: str,
         value: list[str | dict | float | int],
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that the number of values equals the number of control
         curves plus one.
@@ -129,13 +129,12 @@ class ControlCurvePiecewiseInterpolatedParameterSection(FormSection):
 
         # check size of nested data
         if curves_size and len(value[0]) != expected_size:
-            return FormValidation(
-                validation=False,
-                error_message=f"The number of values must be {expected_size} "
-                f"(i.e. the number of control curves plus one)",
+            return Validation(
+                f"The number of values must be {expected_size} "
+                f"(i.e. the number of control curves plus one)"
             )
 
-        return FormValidation(validation=True)
+        return Validation()
 
     def filter(self, form_data: dict) -> None:
         """

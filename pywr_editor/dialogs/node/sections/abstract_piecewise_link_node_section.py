@@ -1,10 +1,6 @@
 from typing import TYPE_CHECKING
 
-from pywr_editor.form import (
-    FormSection,
-    FormValidation,
-    ParametersListPickerWidget,
-)
+from pywr_editor.form import FormSection, ParametersListPickerWidget, Validation
 from pywr_editor.utils import Logging
 
 if TYPE_CHECKING:
@@ -85,7 +81,7 @@ class AbstractPiecewiseLinkNodeSection(FormSection):
 
     def check_size(
         self, name: str, label: str, value: list[str, dict, int, float]
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that the number of values in "max_flow" and "cost" matches "nsteps".
         :param name: The field name.
@@ -95,9 +91,8 @@ class AbstractPiecewiseLinkNodeSection(FormSection):
         """
         nsteps = self.form.find_field_by_name("nsteps").value()
         if value and len(value) != nsteps:
-            return FormValidation(
-                validation=False,
-                error_message=f"The number of values ({len(value)}) must "
+            return Validation(
+                f"The number of values ({len(value)}) must "
                 + f"match the number of sub-links ({nsteps})",
             )
-        return FormValidation(validation=True)
+        return Validation()

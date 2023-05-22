@@ -1,4 +1,4 @@
-from pywr_editor.form import FormValidation, ValuesAndExternalDataWidget
+from pywr_editor.form import Validation, ValuesAndExternalDataWidget
 
 from ..recorder_dialog_form import RecorderDialogForm
 from .abstract_flow_duration_curve_recorder_section import (
@@ -85,7 +85,7 @@ class FlowDurationCurveDeviationRecorderSection(
 
     def check_fdc_targets(
         self, name: str, label: str, target_values: dict[str, float]
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that, if the FDC target is provided as values, the number of values
         must match the number of percentiles.
@@ -102,10 +102,8 @@ class FlowDurationCurveDeviationRecorderSection(
             and target.combo_box.currentText() == target.labels_map["values"]
             and len(target_values) != len(percentiles)
         ):
-            return FormValidation(
-                validation=False,
-                error_message="The number of target values must match the number of "
-                + "percentiles",
+            return Validation(
+                "The number of target values must match the number of percentiles"
             )
 
-        return FormValidation(validation=True)
+        return Validation()

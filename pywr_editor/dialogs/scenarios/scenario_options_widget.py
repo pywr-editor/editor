@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.form import FormCustomWidget, FormField, Validation
 from pywr_editor.model import ScenarioConfig
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import PushButton, SpinBox, TableView
@@ -211,33 +211,29 @@ class ScenarioOptionsWidget(FormCustomWidget):
 
     def validate(
         self, name: str, label: str, value: dict[str, list[int | str]] | None
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Validates the field.
         :param name: The field name.
         :param label: The field name.
         :param value: The value. Not used.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         # slice in the table cannot be empty
         if not self.model.slice:
-            return FormValidation(
-                validation=False,
-                error_message="You must select at least a scenario ensemble to run",
-            )
+            return Validation("You must select at least a scenario ensemble to run")
 
         # if no name is not provided, validation passes
         if all([not name for name in self.model.names]):
-            return FormValidation(validation=True)
+            return Validation()
         # if at least one name is given, all names are mandatory
         elif any([not name for name in self.model.names]):
-            return FormValidation(
-                validation=False,
-                error_message="The ensemble names are optional, but if you provide at "
+            return Validation(
+                "The ensemble names are optional, but if you provide at "
                 "least one name, you must provide the names for all the ensembles",
             )
 
-        return FormValidation(validation=True)
+        return Validation()
 
     def reset(self) -> None:
         """

@@ -1,10 +1,6 @@
 from typing import Any
 
-from pywr_editor.form import (
-    FormSection,
-    FormValidation,
-    ValuesAndExternalDataWidget,
-)
+from pywr_editor.form import FormSection, Validation, ValuesAndExternalDataWidget
 from pywr_editor.utils import Logging
 
 from ..parameter_dialog_form import ParameterDialogForm
@@ -59,7 +55,7 @@ class ArrayIndexedParameterSection(FormSection):
         name: str,
         label: str,
         value: list[int | float] | dict[str, Any] | None,
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that the number of items in the list of numbers is the same as the
         number of time steps in the simulation. This only applies when the data
@@ -74,10 +70,9 @@ class ArrayIndexedParameterSection(FormSection):
             required_items = self.form.model_config.number_of_steps
             # do not force exact match
             if required_items is not None and len(value) < required_items:
-                return FormValidation(
-                    validation=False,
-                    error_message="You must provide at least the same number of values "
-                    + f"as the model time steps ({required_items})",
+                return Validation(
+                    "You must provide at least the same number of values "
+                    f"as the model time steps ({required_items})",
                 )
 
-        return FormValidation(validation=True)
+        return Validation()

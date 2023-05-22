@@ -8,8 +8,8 @@ from pywr_editor.form import (
     AbstractModelComponentListPickerModel,
     FormCustomWidget,
     FormField,
-    FormValidation,
     ModelComponentPickerDialog,
+    Validation,
 )
 from pywr_editor.model import ParameterConfig, RecorderConfig
 from pywr_editor.utils import Logging, get_signal_sender, move_row
@@ -486,36 +486,32 @@ class AbstractModelComponentsListPickerWidget(FormCustomWidget):
         """
         return self.model.values
 
-    def validate(self, name: str, label: str, _: list[dict | str]) -> FormValidation:
+    def validate(self, name: str, label: str, _: list[dict | str]) -> Validation:
         """
         Checks that the value is valid.
         :param name: The field name.
         :param label: The field label.
         :param _: The field value.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         value = self.get_value()
         self.logger.debug(f"Validating field with {value}")
 
         # empty list
         if not value and self.is_mandatory:
-            return FormValidation(
-                validation=False,
-                error_message="The field cannot be empty",
-            )
+            return Validation("The field cannot be empty")
         # skip validation if field is optional
         elif self.is_mandatory is False:
-            return FormValidation(validation=True)
+            return Validation()
 
         # model component does not exist
         for v in value:
             if isinstance(v, str) and self._exist_config_method(v) is False:
-                return FormValidation(
-                    validation=False,
-                    error_message=f"The {self.component_type} named '{v}' does "
-                    + "not exist in the model configuration",
+                return Validation(
+                    f"The {self.component_type} named '{v}' does "
+                    "not exist in the model configuration",
                 )
-        return FormValidation(validation=True)
+        return Validation()
 
     def reset(self) -> None:
         """

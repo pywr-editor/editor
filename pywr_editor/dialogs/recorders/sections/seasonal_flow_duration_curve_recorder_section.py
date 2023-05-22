@@ -1,4 +1,4 @@
-from pywr_editor.form import FormValidation, TableValuesWidget
+from pywr_editor.form import TableValuesWidget, Validation
 
 from ..recorder_dialog_form import RecorderDialogForm
 from .abstract_flow_duration_curve_recorder_section import (
@@ -51,11 +51,8 @@ class SeasonalFlowDurationCurveRecorderSection(
         """
         v = values["values"]
         if len(set(v)) != len(v):
-            return FormValidation(
-                validation=False,
-                error_message="The months must be unique numbers",
-            )
-        return FormValidation(validation=True)
+            return Validation("The months must be unique numbers")
+        return Validation()
 
     def filter(self, form_data: dict) -> None:
         """

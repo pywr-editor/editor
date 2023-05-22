@@ -2,9 +2,9 @@ from typing import Any
 
 from pywr_editor.form import (
     FormSection,
-    FormValidation,
     MultiNodePickerWidget,
     ParametersListPickerWidget,
+    Validation,
 )
 from pywr_editor.utils import Logging
 
@@ -92,7 +92,7 @@ class WeightedAverageProfileParameterSection(FormSection):
         name: str,
         label: str,
         value: list[str | dict | float | int],
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that the number of profiles equals the number of storage nodes.
         :param name: The field name.
@@ -105,10 +105,9 @@ class WeightedAverageProfileParameterSection(FormSection):
         ).widget
         selected_nodes = nodes_widget.get_value()
         if len(selected_nodes) and len(value) and len(value) != len(selected_nodes):
-            return FormValidation(
-                validation=False,
-                error_message=f"The number of profiles ({len(value)}) must equal the "
+            return Validation(
+                f"The number of profiles ({len(value)}) must equal the "
                 f"number of selected nodes ({len(selected_nodes)})",
             )
 
-        return FormValidation(validation=True)
+        return Validation()

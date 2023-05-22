@@ -9,7 +9,7 @@ import qtawesome as qta
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QLineEdit, QMessageBox, QVBoxLayout
 
-from pywr_editor.form import AbstractStringComboBoxWidget, FormField, FormValidation
+from pywr_editor.form import AbstractStringComboBoxWidget, FormField, Validation
 from pywr_editor.widgets import PushIconButton
 
 if TYPE_CHECKING:
@@ -127,13 +127,13 @@ class CheckSumWidget(AbstractStringComboBoxWidget):
 
         return {algorithm: hash}
 
-    def validate(self, name: str, label: str, value: Any) -> FormValidation:
+    def validate(self, name: str, label: str, value: Any) -> Validation:
         """
         Checks that the both algorithm and hash are provided.
         :param name: The field name.
         :param label: The field label.
         :param value: The field value. Not used.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         algorithm = super().get_value()
         hash = self.line_edit.text()
@@ -141,27 +141,22 @@ class CheckSumWidget(AbstractStringComboBoxWidget):
         # field is optional
         if algorithm is None and not hash:
             self.logger.debug("Field not set. Validation passed")
-            return FormValidation(validation=True)
+            return Validation()
 
         # algorithm not set, but hash is
         if algorithm is None and hash:
             self.logger.debug("Validation failed")
-            return FormValidation(
-                validation=False,
-                error_message="You must select the algorithm name you used to "
-                + "generate the hash",
+            return Validation(
+                "You must select the algorithm name you used to generate the hash",
             )
 
         # hash not set, but algorithm is
         if algorithm is not None and not hash:
             self.logger.debug("Validation failed")
-            return FormValidation(
-                validation=False,
-                error_message="You must provide the hash for the selected algorithm",
-            )
+            return Validation("You must provide the hash for the selected algorithm")
 
         self.logger.debug("Validation passed")
-        return FormValidation(validation=True)
+        return Validation()
 
     def reset(self) -> None:
         """

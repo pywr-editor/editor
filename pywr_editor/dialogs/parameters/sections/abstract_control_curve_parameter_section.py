@@ -5,9 +5,9 @@ from pywr_editor.form import (
     ControlCurvesValuesSourceWidget,
     ControlCurvesWidget,
     FormSection,
-    FormValidation,
     ParametersListPickerWidget,
     StoragePickerWidget,
+    Validation,
     ValuesAndExternalDataWidget,
 )
 from pywr_editor.utils import Logging
@@ -131,7 +131,7 @@ class AbstractControlCurveParameterSection(FormSection):
         label: str,
         value: list[str | dict | float | int],
         field_name: str,
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that the number of items in "field_name" equals the number of control
         curves plus one. Validation is ignored if the source is not set to
@@ -157,14 +157,13 @@ class AbstractControlCurveParameterSection(FormSection):
             and curves_size
             and len(value) != expected_size
         ):
-            return FormValidation(
-                validation=False,
-                error_message=f"The number of {field_name} must be {expected_size} "
-                f"(i.e. the number of control curves plus "
-                + f"{self.values_size_increment})",
+            return Validation(
+                f"The number of {field_name} must be {expected_size} "
+                "(i.e. the number of control curves plus "
+                f"{self.values_size_increment})"
             )
 
-        return FormValidation(validation=True)
+        return Validation()
 
     def filter(self, form_data):
         """

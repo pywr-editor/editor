@@ -3,9 +3,9 @@ from typing import Any
 from pywr_editor.form import (
     FloatWidget,
     FormSection,
-    FormValidation,
     KeatingStreamsWidget,
     TableValuesWidget,
+    Validation,
 )
 from pywr_editor.utils import Logging
 
@@ -109,7 +109,7 @@ class KeatingAquiferSection(FormSection):
 
     def check_volumes(
         self, name: str, label: str, value: dict[str, list[float]]
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that the size of volumes matches the number of levels.
         :param name: The field name.
@@ -120,16 +120,15 @@ class KeatingAquiferSection(FormSection):
         levels = self.form.find_field_by_name("levels").value()["values"]
         volumes = value["values"]
         if levels and volumes and len(levels) != len(volumes):
-            return FormValidation(
-                validation=False,
-                error_message=f"The number of volumes ({len(volumes)}) must match "
+            return Validation(
+                f"The number of volumes ({len(volumes)}) must match "
                 + f"the number of levels ({len(levels)})",
             )
-        return FormValidation(validation=True)
+        return Validation()
 
     def check_storativity(
         self, name: str, label: str, value: dict[str, list[float]]
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that the size of storativity matches the number of levels minus one.
         :param name: The field name.
@@ -140,12 +139,11 @@ class KeatingAquiferSection(FormSection):
         levels = self.form.find_field_by_name("levels").value()["values"]
         factors = value["values"]
         if levels and factors and len(levels) - 1 != len(factors):
-            return FormValidation(
-                validation=False,
-                error_message=f"The number of factors ({len(factors)}) must match "
+            return Validation(
+                f"The number of factors ({len(factors)}) must match "
                 + f"the number of levels ({len(levels)}) minus one",
             )
-        return FormValidation(validation=True)
+        return Validation()
 
     def filter(self, form_data: dict[str, Any]) -> None:
         """
@@ -161,7 +159,7 @@ class KeatingAquiferSection(FormSection):
                 else:
                     del form_data[key]
 
-    def validate(self, form_data: dict[str, Any]) -> FormValidation:
+    def validate(self, form_data: dict[str, Any]) -> Validation:
         """
         Checks that the volumes or the storativity factors and area are provided.
         :param form_data: The form data.
@@ -172,24 +170,20 @@ class KeatingAquiferSection(FormSection):
 
         # volumes or storativity not provided
         if not volumes and not storativity:
-            return FormValidation(
-                validation=False,
-                error_message="You must provide either the volumes or the storativity "
-                + "factors",
+            return Validation(
+                "You must provide either the volumes or the storativity " + "factors",
             )
         # only volumes or storativity is needed
         elif volumes and storativity:
-            return FormValidation(
-                validation=False,
-                error_message="You must provide the volumes or the storativity, "
+            return Validation(
+                "You must provide the volumes or the storativity, "
                 + "but not both values at the same time",
             )
         # area is mandatory with storativity
         elif storativity and "area" not in form_data:
-            return FormValidation(
-                validation=False,
-                error_message="When you provide the storativity factors, the "
+            return Validation(
+                "When you provide the storativity factors, the "
                 + "aquifer area is mandatory",
             )
 
-        return FormValidation(validation=True)
+        return Validation()

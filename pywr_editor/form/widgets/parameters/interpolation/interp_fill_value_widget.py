@@ -1,7 +1,7 @@
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QHBoxLayout
 
-from pywr_editor.form import AbstractFloatListWidget, FormField, FormValidation
+from pywr_editor.form import AbstractFloatListWidget, FormField, Validation
 from pywr_editor.utils import get_signal_sender
 from pywr_editor.widgets import ComboBox
 
@@ -124,20 +124,20 @@ class InterpFillValueWidget(AbstractFloatListWidget):
 
     def validate(
         self, name: str, label: str, value: str | list[float | int] | None
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that the value is valid.
         :param name: The field name.
         :param label: The field label.
         :param value: The field label. This is not used.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         if self.combo_box.currentText() == self.labels_map["fill"]:
             self.logger.debug(f"Validation with {self.labels_map['fill']}")
             return super().validate(name, label, value)
 
         # other options do not need validation
-        return FormValidation(validation=True)
+        return Validation()
 
     def reset(self) -> None:
         """

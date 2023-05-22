@@ -1,7 +1,7 @@
 import ast
 from typing import TYPE_CHECKING, Literal, Union
 
-from pywr_editor.form import FormSection, FormValidation
+from pywr_editor.form import FormSection, Validation
 from pywr_editor.utils import Logging
 
 from .widgets.custom_component_external_data_toggle import (
@@ -163,7 +163,7 @@ class AbstractCustomComponentSection(FormSection):
         del form_data["component_dict"]
 
     @staticmethod
-    def _check_python_class(name: str, label: str, value: str) -> FormValidation:
+    def _check_python_class(name: str, label: str, value: str) -> Validation:
         """
         Checks the component type is a valid Python class name.
         :param name: The field name.
@@ -175,9 +175,6 @@ class AbstractCustomComponentSection(FormSection):
         # noinspection PyBroadException
         try:
             ast.parse(class_definition)
-            return FormValidation(validation=True)
+            return Validation()
         except Exception:
-            return FormValidation(
-                validation=False,
-                error_message="The type must be a valid Python class",
-            )
+            return Validation("The type must be a valid Python class")

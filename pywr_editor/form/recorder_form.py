@@ -8,10 +8,10 @@ from pywr_editor.form import (
     AggFuncPercentileOfScoreKindWidget,
     AggFuncPercentileOfScoreScoreWidget,
     FloatWidget,
-    FormValidation,
     IsObjectiveWidget,
     ModelComponentForm,
     OptAggFuncWidget,
+    Validation,
     validate_percentile_field_section,
 )
 from pywr_editor.model import ModelConfig, RecorderConfig
@@ -225,7 +225,7 @@ class RecorderForm(ModelComponentForm):
 
     def _check_constraint_bounds(
         self, name: str, label: str, lower_bound: float
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that the lower bound is smaller than the upper bound.
         :param name: The field name.
@@ -235,12 +235,9 @@ class RecorderForm(ModelComponentForm):
         """
         upper_bound = self.find_field_by_name("constraint_upper_bounds").value()
         if lower_bound and upper_bound and lower_bound > upper_bound:
-            return FormValidation(
-                validation=False,
-                error_message="The lower bound must be smaller than the upper limit",
-            )
+            return Validation("The lower bound must be smaller than the upper limit")
 
-        return FormValidation(validation=True)
+        return Validation()
 
     def save(self) -> dict | bool:
         """

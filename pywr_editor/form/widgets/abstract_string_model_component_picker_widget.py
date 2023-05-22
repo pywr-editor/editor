@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Literal
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QHBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.form import FormCustomWidget, FormField, Validation
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import ComboBox, ParameterIcon, RecorderIcon
 
@@ -138,20 +138,17 @@ class AbstractStringModelComponentPickerWidget(FormCustomWidget):
         """
         return self.combo_box.currentText()
 
-    def validate(self, name: str, label: str, value: str) -> FormValidation:
+    def validate(self, name: str, label: str, value: str) -> Validation:
         """
         Validates the value.
         :param name: The field name.
         :param label: The field label.
         :param value: The field value.
-        :return: The instance of FormValidation
+        :return: The instance of Validation
         """
         if value == "None":
-            return FormValidation(
-                validation=False,
-                error_message=f"You must select a model {self.component_type}",
-            )
-        return FormValidation(validation=True)
+            return Validation(f"You must select a model {self.component_type}")
+        return Validation()
 
     def reset(self) -> None:
         """

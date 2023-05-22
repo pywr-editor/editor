@@ -3,8 +3,8 @@ from PySide6.QtCore import Signal, SignalInstance, Slot
 from pywr_editor.form import (
     AbstractStringComboBoxWidget,
     FormField,
-    FormValidation,
     H5FileWidget,
+    Validation,
 )
 from pywr_editor.utils import get_signal_sender
 
@@ -107,23 +107,20 @@ class H5WhereWidget(AbstractStringComboBoxWidget):
             return None
         return value
 
-    def validate(self, name: str, label: str, value: str | None) -> FormValidation:
+    def validate(self, name: str, label: str, value: str | None) -> Validation:
         """
         Checks that the attribute is selected.
         :param name: The field name.
         :param label: The field label.
         :param value: The field label.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         if self.get_value() is None and self.combo_box.isEnabled():
             self.logger.debug("Validation failed")
-            return FormValidation(
-                validation=False,
-                error_message="You must select a name from the list",
-            )
+            return Validation("You must select a name from the list")
 
         self.logger.debug("Validation passed")
-        return FormValidation(validation=True)
+        return Validation()
 
     def get_default_value(self) -> str:
         """

@@ -2,8 +2,8 @@ from pywr_editor.form import (
     AbstractFloatListWidget,
     DayMonthWidget,
     FloatWidget,
-    FormValidation,
     ParametersListPickerWidget,
+    Validation,
 )
 
 from ..recorder_dialog_form import RecorderDialogForm
@@ -89,7 +89,7 @@ class AnnualCountIndexThresholdRecorderSection(AbstractNumpyRecorderSection):
     @staticmethod
     def check_exclude_months(
         name: str, label: str, values: list[int] | None
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that the exclude_months list contains valid month numbers.
         :param name: The field name.
@@ -98,8 +98,5 @@ class AnnualCountIndexThresholdRecorderSection(AbstractNumpyRecorderSection):
         :return: The validation instance.
         """
         if values and not all([1 <= m <= 12 for m in values]):
-            return FormValidation(
-                validation=False,
-                error_message="The month numbers are not valid",
-            )
-        return FormValidation(validation=True)
+            return Validation("The month numbers are not valid")
+        return Validation()

@@ -7,8 +7,8 @@ from PySide6.QtWidgets import QHBoxLayout, QLineEdit, QVBoxLayout, QWidget
 from pywr_editor.form import (
     ExternalDataPickerDialogWidget,
     FormField,
-    FormValidation,
     TableValuesWidget,
+    Validation,
 )
 from pywr_editor.utils import get_signal_sender
 from pywr_editor.widgets import ComboBox, PushButton, PushIconButton
@@ -265,13 +265,13 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
         name: str,
         label: str,
         value: list[float | int] | list[list[float | int]] | dict | None,
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that the value is valid.
         :param name: The field name.
         :param label: The field label.
         :param value: The field label
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         if self.combo_box.currentText() == self.labels_map["values"]:
             self.logger.debug(f"Validation with {self.labels_map['values']}")
@@ -288,12 +288,9 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
                 "url" not in self.external_data_dict
                 and "table" not in self.external_data_dict
             ):
-                return FormValidation(
-                    validation=False,
-                    error_message="You must configure the field to fetch the data",
-                )
+                return Validation("You must configure the field to fetch the data")
 
-        return FormValidation(validation=True)
+        return Validation()
 
     def update_line_edit(self, value_dict: dict[str, Any]) -> None:
         """

@@ -2,9 +2,9 @@ from pywr_editor.form import (
     AbstractAnnualValuesModel,
     AbstractFloatListWidget,
     FormSection,
-    FormValidation,
     SourceSelectorWidget,
     UrlWidget,
+    Validation,
 )
 from pywr_editor.utils import Logging
 
@@ -112,7 +112,7 @@ class AbstractAnnualProfileParameterSection(FormSection):
         Validates the section/data after all the widgets are validated.
         :param form_data: The form data dictionary when the form validation is
         successful.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         # noinspection PyTypeChecker
         source_widget: SourceSelectorWidget = self.form.find_field_by_name(
@@ -124,20 +124,17 @@ class AbstractAnnualProfileParameterSection(FormSection):
         if form_data["source"] != labels["value"]:
             # keys with empty values have been already removed
             if "column" not in form_data and "index" not in form_data:
-                return FormValidation(
-                    validation=False,
-                    error_message="To define a profile you must select an index or "
-                    + "column name",
+                return Validation(
+                    "To define a profile you must select an index or column name"
                 )
             if "column" in form_data and "index" in form_data:
-                return FormValidation(
-                    validation=False,
-                    error_message="You must select an index value (to select a table "
-                    + "row) or a column name (to select a table column). You cannot "
-                    + "select both at the same time",
+                return Validation(
+                    "You must select an index value (to select a table "
+                    "row) or a column name (to select a table column). You cannot "
+                    "select both at the same time",
                 )
 
-        return FormValidation(validation=True)
+        return Validation()
 
     def filter(self, form_data):
         """

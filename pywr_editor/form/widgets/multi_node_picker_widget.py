@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Union
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QHBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.form import FormCustomWidget, FormField, Validation
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import CheckableComboBox
 
@@ -177,20 +177,17 @@ class MultiNodePickerWidget(FormCustomWidget):
         """
         self.combo_box.uncheck_all()
 
-    def validate(self, name: str, label: str, value: list[str]) -> FormValidation:
+    def validate(self, name: str, label: str, value: list[str]) -> Validation:
         """
         Checks that the value is valid.
         :param name: The field name.
         :param label: The field label.
         :param value: The field value.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         self.logger.debug(f"Validating field with {value}")
 
         # empty list
         if not value and self.is_mandatory:
-            return FormValidation(
-                validation=False,
-                error_message="The field cannot be empty",
-            )
-        return FormValidation(validation=True)
+            return Validation("The field cannot be empty")
+        return Validation()

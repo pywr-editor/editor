@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from PySide6.QtWidgets import QPushButton
 
-from pywr_editor.form import FormValidation, ModelComponentForm
+from pywr_editor.form import ModelComponentForm, Validation
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import Logging
 
@@ -82,7 +82,7 @@ class ScenarioFormWidget(ModelComponentForm):
             parent=parent,
         )
 
-    def _check_scenario_name(self, name: str, label: str, value: str) -> FormValidation:
+    def _check_scenario_name(self, name: str, label: str, value: str) -> Validation:
         """
         Checks that the new scenario name is not duplicated.
         :param name: The field name.
@@ -92,9 +92,8 @@ class ScenarioFormWidget(ModelComponentForm):
         """
         # do not save form if the name is changed and already exists
         if self.name != value and self.model_config.scenarios.exists(value) is True:
-            return FormValidation(
-                validation=False,
-                error_message=f"The scenario '{value}; already exists. "
+            return Validation(
+                f"The scenario '{value}; already exists. "
                 "Please provide a different name.",
             )
-        return FormValidation(validation=True)
+        return Validation()

@@ -1,4 +1,4 @@
-from pywr_editor.form import FloatWidget, FormSection, FormValidation
+from pywr_editor.form import FloatWidget, FormSection, Validation
 from pywr_editor.utils import Logging
 
 from ..parameter_dialog_form import ParameterDialogForm
@@ -52,7 +52,7 @@ class DiscountFactorParameterSection(FormSection):
         return data_dict
 
     @staticmethod
-    def _check_rate(name: str, label: str, value: int) -> FormValidation:
+    def _check_rate(name: str, label: str, value: int) -> Validation:
         """
         Checks that discount rate is between 0 and 1.
         :param name: The field name.
@@ -62,9 +62,6 @@ class DiscountFactorParameterSection(FormSection):
         """
         # ignore when value is 0
         if not 0 <= value <= 1:
-            return FormValidation(
-                validation=False,
-                error_message="The number must be between 0 and 1",
-            )
+            return Validation("The number must be between 0 and 1")
 
-        return FormValidation(validation=True)
+        return Validation()

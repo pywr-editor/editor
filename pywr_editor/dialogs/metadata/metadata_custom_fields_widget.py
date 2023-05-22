@@ -5,7 +5,7 @@ import qtawesome as qta
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QSizePolicy, QSpacerItem, QVBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.form import FormCustomWidget, FormField, Validation
 from pywr_editor.utils import Logging, get_signal_sender
 from pywr_editor.widgets import PushIconButton, TableView
 
@@ -128,25 +128,24 @@ class MetadataCustomFieldsWidget(FormCustomWidget):
         )
         self.form.save_button.setEnabled(True)
 
-    def validate(self, name: str, label: str, value: Any) -> FormValidation:
+    def validate(self, name: str, label: str, value: Any) -> Validation:
         """
         Validates the widget value.
         :param name: The name.
         :param label: The label.
         :param value: The value.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         # custom field keys must be unique
         d = Counter([field_data[0] for field_data in self.model.fields])
         duplicated = [k for k, v in d.items() if v > 1]
         if len(duplicated) > 0:
-            return FormValidation(
-                validation=False,
-                error_message="The name of each custom field must be unique, "
+            return Validation(
+                "The name of each custom field must be unique, "
                 + "but the following names are duplicated: "
                 + ", ".join(duplicated),
             )
-        return FormValidation(validation=True)
+        return Validation()
 
     def get_value(self) -> dict:
         """

@@ -3,8 +3,8 @@ from pywr_editor.form import (
     CSVDialectWidget,
     FileBrowserWidget,
     FormSection,
-    FormValidation,
     MultiNodePickerWidget,
+    Validation,
 )
 from pywr_editor.utils import Logging
 
@@ -88,7 +88,7 @@ class CSVRecorderSection(FormSection):
 
         return data_dict
 
-    def check_complevel(self, name: str, label: str, value: int) -> FormValidation:
+    def check_complevel(self, name: str, label: str, value: int) -> Validation:
         """
         Checks the compression level.
         :param name: The field name.
@@ -98,9 +98,7 @@ class CSVRecorderSection(FormSection):
         """
         complib_value = self.form.find_field_by_name("complib").value()
         if complib_value and complib_value == "bzip2" and value == 0:
-            return FormValidation(
-                validation=False,
-                error_message="The minimum compression level for the BZIP2 algorithm "
-                + "is 1",
+            return Validation(
+                "The minimum compression level for the BZIP2 algorithm is 1"
             )
-        return FormValidation(validation=True)
+        return Validation()

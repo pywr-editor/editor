@@ -1,8 +1,8 @@
 from pywr_editor.form import (
     FormSection,
-    FormValidation,
     ParametersListPickerWidget,
     ScenarioPickerWidget,
+    Validation,
 )
 from pywr_editor.utils import Logging
 
@@ -60,7 +60,7 @@ class ScenarioWrapperParameterSection(FormSection):
         name: str,
         label: str,
         value: list[str | dict | float | int],
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that the number of parameters equals the scenario size.
         :param name: The field name.
@@ -74,10 +74,9 @@ class ScenarioWrapperParameterSection(FormSection):
         size = self.form.model_config.scenarios.get_size(scenario_field.value())
 
         if size is not None and len(value) != size:
-            return FormValidation(
-                validation=False,
-                error_message=f"The number of parameters ({len(value)}) must match the "
+            return Validation(
+                f"The number of parameters ({len(value)}) must match the "
                 f"the scenario size ({size})",
             )
 
-        return FormValidation(validation=True)
+        return Validation()

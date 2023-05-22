@@ -1,8 +1,8 @@
 from pywr_editor.form import (
     FormSection,
-    FormValidation,
     MultiNodePickerWidget,
     TableValuesWidget,
+    Validation,
 )
 from pywr_editor.utils import Logging
 
@@ -61,7 +61,7 @@ class AggregatedNodeSection(FormSection):
 
     def check_weight_size(
         self, name: str, label: str, value: dict[str, list[int | float]]
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that, if at least one weight is provided, all the weights
         must be given.
@@ -72,14 +72,13 @@ class AggregatedNodeSection(FormSection):
         """
         nodes = self.form.find_field_by_name("nodes").value()
         if nodes and value["value"] and len(value["value"]) != len(nodes):
-            return FormValidation(
-                validation=False,
-                error_message="When you provide the weight for at least one node, you "
+            return Validation(
+                "When you provide the weight for at least one node, you "
                 + "must specify the weights for all the another nodes as well, or "
                 + "use 1 not to scale the flow",
             )
 
-        return FormValidation(validation=True)
+        return Validation()
 
     def filter(self, form_data: dict) -> None:
         """

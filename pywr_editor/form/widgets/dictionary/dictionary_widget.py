@@ -5,7 +5,7 @@ import qtawesome as qta
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QAbstractItemView, QHBoxLayout, QVBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.form import FormCustomWidget, FormField, Validation
 from pywr_editor.utils import Logging, get_signal_sender
 from pywr_editor.widgets import PushIconButton, TableView
 
@@ -261,20 +261,17 @@ class DictionaryWidget(FormCustomWidget):
         name: str,
         label: str,
         value: dict[str, Any],
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that valid data points are provided.
         :param name: The field name.
         :param label: The field label.
         :param value: The field value. Not used.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         self.logger.debug("Validating field")
 
         if not self.get_value() and self.is_mandatory:
-            return FormValidation(
-                validation=False,
-                error_message="You must provide the dictionary configuration",
-            )
+            return Validation("You must provide the dictionary configuration")
 
-        return FormValidation(validation=True)
+        return Validation()

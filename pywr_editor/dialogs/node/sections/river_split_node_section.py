@@ -1,6 +1,6 @@
 from typing import Any
 
-from pywr_editor.form import FormSection, FormValidation, SlotsTableWidget
+from pywr_editor.form import FormSection, SlotsTableWidget, Validation
 from pywr_editor.utils import Logging
 
 from ..node_dialog_form import NodeDialogForm
@@ -71,7 +71,7 @@ class RiverSplitSection(FormSection):
         self.logger.debug(f"Filtered form data to {form_data}")
 
     @staticmethod
-    def check_factors(name: str, label: str, value: dict[str, Any]) -> FormValidation:
+    def check_factors(name: str, label: str, value: dict[str, Any]) -> Validation:
         """
         Checks that all the factors are provided.
         :param name: The field name.
@@ -80,8 +80,6 @@ class RiverSplitSection(FormSection):
         :return: The form validation.
         """
         if value["factors"] is None or any([f is None for f in value["factors"]]):
-            return FormValidation(
-                validation=False, error_message="All the factors are mandatory"
-            )
+            return Validation("All the factors are mandatory")
 
-        return FormValidation(validation=True)
+        return Validation()

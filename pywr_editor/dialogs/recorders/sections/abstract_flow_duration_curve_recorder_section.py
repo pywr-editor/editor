@@ -1,4 +1,4 @@
-from pywr_editor.form import FormValidation, NodePickerWidget, TableValuesWidget
+from pywr_editor.form import NodePickerWidget, TableValuesWidget, Validation
 
 from ..recorder_dialog_form import RecorderDialogForm
 from .abstract_numpy_recorder_section import (
@@ -69,7 +69,7 @@ class AbstractFlowDurationCurveRecorderSection(AbstractNumpyRecorderSection):
     @staticmethod
     def check_percentiles(
         name: str, label: str, values: dict[str, list[int]]
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that the percentiles are all different.
         :param name: The field name.
@@ -79,10 +79,8 @@ class AbstractFlowDurationCurveRecorderSection(AbstractNumpyRecorderSection):
         """
         v = values["values"]
         if len(set(v)) != len(v):
-            return FormValidation(
-                validation=False, error_message="The percentiles must be unique"
-            )
-        return FormValidation(validation=True)
+            return Validation("The percentiles must be unique")
+        return Validation()
 
     def filter(self, form_data: dict) -> None:
         """

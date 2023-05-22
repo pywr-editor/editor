@@ -9,7 +9,7 @@ from PySide6.QtCore import QSize, Signal, Slot
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QHBoxLayout, QMessageBox, QSizePolicy
 
-from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.form import FormCustomWidget, FormField, Validation
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import (
     Logging,
@@ -441,31 +441,27 @@ class TableSelectorWidget(FormCustomWidget):
         name: str,
         label: str,
         value: str | None,
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that a valid table is provided.
         :param name: The field name.
         :param label: The field label.
         :param value: The field value from self.get_value().
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         self.logger.debug("Validating field")
 
         if value is None or value not in self.table_names:
             self.logger.debug("Validation failed")
-            return FormValidation(
-                validation=False,
-                error_message="You must select a valid table from the list",
-            )
+            return Validation("You must select a valid table from the list")
         elif not self.static and self.table is None:
             self.logger.debug("Validation failed")
-            return FormValidation(
-                validation=False,
-                error_message="The table file is not valid. Please select another "
+            return Validation(
+                "The table file is not valid. Please select another "
                 "table or make sure the file exists",
             )
         self.logger.debug("Validation passed")
-        return FormValidation(validation=True)
+        return Validation()
 
     def reset(self) -> None:
         """

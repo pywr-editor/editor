@@ -5,7 +5,7 @@ from PySide6.QtCore import Slot
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QGraphicsItem, QGraphicsTextItem
 
-from pywr_editor.form import ColorPickerWidget, FormValidation
+from pywr_editor.form import ColorPickerWidget, Validation
 from pywr_editor.model import TextShape
 from pywr_editor.widgets import ContextualMenu
 
@@ -144,19 +144,18 @@ class SchematicText(AbstractSchematicShape, QGraphicsTextItem):
         color_widget.changed_color.connect(dialog.form.on_field_changed)
         dialog.show()
 
-    def check_form_text(self, name: str, label: str, value: str) -> FormValidation:
+    def check_form_text(self, name: str, label: str, value: str) -> Validation:
         """
         Check the text length in the form.
         :param name: The field name.
         :param label: The field label.
         :param value: The field value.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         if len(value) < self.shape_obj.min_text_size:
-            return FormValidation(
-                validation=False,
-                error_message="The text must be at least "
-                + f"{self.shape_obj.min_text_size} characters long",
+            return Validation(
+                "The text must be at least "
+                f"{self.shape_obj.min_text_size} characters long",
             )
 
-        return FormValidation(validation=True)
+        return Validation()

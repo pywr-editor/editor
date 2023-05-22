@@ -2,7 +2,7 @@ from typing import Type, TypeVar
 
 from PySide6.QtWidgets import QHBoxLayout, QLineEdit
 
-from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.form import FormCustomWidget, FormField, Validation
 from pywr_editor.utils import Logging
 
 """
@@ -199,13 +199,13 @@ class AbstractFloatListWidget(FormCustomWidget):
         name: str,
         label: str,
         value: value_type,
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that the value is valid.
         :param name: The field name.
         :param label: The field label.
         :param value: The field label. This is not used.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         self.logger.debug("Validating field")
         field_value = self.line_edit.text()
@@ -213,16 +213,11 @@ class AbstractFloatListWidget(FormCustomWidget):
         # empty value not allowed
         if self.allowed_empty is False and field_value.strip() == "":
             self.logger.debug("Value cannot be empty")
-            return FormValidation(
-                validation=False,
-                error_message="You must provide a value",
-            )
+            return Validation("You must provide a value")
         # empty value allowed, skip validation
         if self.allowed_empty is True and field_value.strip() == "":
             self.logger.debug("Value is empty")
-            return FormValidation(
-                validation=True,
-            )
+            return Validation()
 
         # value is a number
         if "," not in field_value:
@@ -230,12 +225,9 @@ class AbstractFloatListWidget(FormCustomWidget):
             try:
                 self.final_type(field_value)
                 self.logger.debug("Validation passed")
-                return FormValidation(validation=True)
+                return Validation()
             except (ValueError, TypeError):
-                return FormValidation(
-                    validation=False,
-                    error_message="The value must be a valid number",
-                )
+                return Validation("The value must be a valid number")
         # value is a list
         else:
             # noinspection PyBroadException
@@ -245,19 +237,15 @@ class AbstractFloatListWidget(FormCustomWidget):
                     self.items_count is not None
                     and len(value_as_list) != self.items_count
                 ):
-                    return FormValidation(
-                        validation=False,
-                        error_message=f"The list must contains {self.items_count} "
-                        + f"values, but {len(value_as_list)} were given",
+                    return Validation(
+                        f"The list must contains {self.items_count} "
+                        f"values, but {len(value_as_list)} were given",
                     )
                 [self.final_type(v.strip()) for v in value_as_list]
                 self.logger.debug("Validation passed")
-                return FormValidation(validation=True)
+                return Validation()
             except Exception:
-                return FormValidation(
-                    validation=False,
-                    error_message="The list must contain valid numbers",
-                )
+                return Validation("The list must contain valid numbers")
 
     def get_default_value(self) -> None:
         """

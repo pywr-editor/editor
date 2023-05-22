@@ -1,8 +1,8 @@
 from pywr_editor.form import (
     FormSection,
-    FormValidation,
     ParameterLineEditWidget,
     TableValuesWidget,
+    Validation,
 )
 from pywr_editor.utils import Logging
 
@@ -61,7 +61,7 @@ class PiecewiseIntegralParameterSection(FormSection):
     @staticmethod
     def _check_x(
         name: str, label: str, value: dict[str, list[float | int]]
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that "x" is monotonically increasing and larger than zero
         :param name: The field name.
@@ -71,18 +71,11 @@ class PiecewiseIntegralParameterSection(FormSection):
         """
         x = value["x"]
         if any([j - i <= 0 for i, j in zip(x[:-1], x[1:])]):
-            return FormValidation(
-                validation=False,
-                error_message="The values must be strictly monotonically "
-                + "increasing",
-            )
+            return Validation("The values must be strictly monotonically increasing")
         elif x[0] < 0:
-            return FormValidation(
-                validation=False,
-                error_message="The values must start from zero",
-            )
+            return Validation("The values must start from zero")
 
-        return FormValidation(validation=True)
+        return Validation()
 
     def filter(self, form_data: dict) -> None:
         """
