@@ -23,7 +23,7 @@ from pywr_editor.widgets import CheckableComboBox, ComboBox, SpinBox, ToggleSwit
 from .field_config import FieldConfig
 from .form_field import FormField
 from .form_section import FormSection
-from .form_validation import FormValidation
+from .validation import Validation
 
 
 class Form(QScrollArea):
@@ -415,9 +415,9 @@ class Form(QScrollArea):
             form_field.set_error_message("The field cannot be empty")
             return False
 
-        # custom validation functions returning FormValidation
+        # custom validation functions returning Validation
         if "validate_fun" in field_dict or form_field.is_custom_widget:
-            output: FormValidation | None = None
+            output: Validation | None = None
             if form_field.is_custom_widget:
                 output = form_field.widget.validate(name, form_label, value)
 
@@ -431,10 +431,8 @@ class Form(QScrollArea):
                 elif form_field.is_custom_widget is False:
                     output = validate_fun(name, form_label, value)
 
-            if not isinstance(output, FormValidation):
-                raise TypeError(
-                    f"Custom validation for {name} must return FormValidation"
-                )
+            if not isinstance(output, Validation):
+                raise TypeError(f"Custom validation for {name} must return Validation")
 
             if output.validation is False:
                 form_field.set_error_message(output.error_message)

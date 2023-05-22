@@ -1,11 +1,11 @@
 from pywr_editor.form import (
     FloatWidget,
     FormSection,
-    FormValidation,
     NodePickerWidget,
     ParameterLineEditWidget,
     StoragePickerWidget,
     TableValuesWidget,
+    Validation,
 )
 from pywr_editor.utils import Logging
 
@@ -127,12 +127,12 @@ class Polynomial1DParameterSection(FormSection):
         ):
             del form_data["use_proportional_volume"]
 
-    def validate(self, form_data: dict) -> FormValidation:
+    def validate(self, form_data: dict) -> Validation:
         """
         Checks that only one field for the independent variable is provided.
         :param form_data: The form data dictionary when the form validation is
         successful.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         self.form: ParameterDialogForm
 
@@ -144,18 +144,16 @@ class Polynomial1DParameterSection(FormSection):
 
         # more than independent variable was provided
         if all(field_check):
-            return FormValidation(
-                validation=False,
-                error_message="You must provide the independent variable for the "
+            return Validation(
+                "You must provide the independent variable for the "
                 "polynomial. You can select a node, to use its storage or flow, or "
                 "a parameter to use its value",
             )
         elif field_check.count(False) > 1:
-            return FormValidation(
-                validation=False,
-                error_message="You can provide only one type of independent variable "
+            return Validation(
+                "You can provide only one type of independent variable "
                 "for the polynomial. You can only select a node, for its storage or "
                 "flow, or a parameter for its value",
             )
 
-        return FormValidation(validation=True)
+        return Validation()

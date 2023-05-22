@@ -2,11 +2,7 @@ from typing import TYPE_CHECKING
 
 from PySide6.QtWidgets import QPushButton
 
-from pywr_editor.form import (
-    FormValidation,
-    ParameterForm,
-    ParameterTypeSelectorWidget,
-)
+from pywr_editor.form import ParameterForm, ParameterTypeSelectorWidget, Validation
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import Logging
 
@@ -74,9 +70,7 @@ class ParameterDialogForm(ParameterForm):
             parent=parent,
         )
 
-    def _check_parameter_name(
-        self, name: str, label: str, value: str
-    ) -> FormValidation:
+    def _check_parameter_name(self, name: str, label: str, value: str) -> Validation:
         """
         Checks that the new parameter name is not duplicated.
         :param name: The field name.
@@ -86,16 +80,14 @@ class ParameterDialogForm(ParameterForm):
         """
         # do not save form if the name is changed and already exists
         if self.name != value and self.model_config.parameters.exists(value) is True:
-            return FormValidation(
-                validation=False,
-                error_message=f"A parameter named '{value}' already exists. "
-                + "Please provide a different name.",
+            return Validation(
+                f"A parameter named '{value}' already exists. "
+                "Please provide a different name."
             )
         if self.name != value and self.model_config.recorders.exists(value) is True:
-            return FormValidation(
-                validation=False,
-                error_message=f"A recorder named '{value}' already exists. "
-                + "The name of model components must be unique. Please provide "
-                + "a different name.",
+            return Validation(
+                f"A recorder named '{value}' already exists. "
+                "The name of model components must be unique. Please provide "
+                "a different name.",
             )
-        return FormValidation(validation=True)
+        return Validation()

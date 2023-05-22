@@ -13,7 +13,7 @@ from PySide6.QtWidgets import (
     QSpinBox,
 )
 
-from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.form import FormCustomWidget, FormField, Validation
 from pywr_editor.utils import (
     Logging,
     get_signal_sender,
@@ -604,24 +604,20 @@ class UrlWidget(FormCustomWidget):
         # noinspection PyUnresolvedReferences
         self.updated_table.emit()
 
-    def validate(self, name: str, label: str, value: str) -> FormValidation:
+    def validate(self, name: str, label: str, value: str) -> Validation:
         """
         Checks that the file url is valid.
         :param name: The field name.
         :param label: The field label.
         :param value: The field label.
-        :return: The FormValidation instance. The validation attribute is True, if the
+        :return: The Validation instance. The validation attribute is True, if the
         field contains an existing file and the table is valid.
         """
         self.logger.debug("Validating field")
         if self.table is not None:
             self.logger.debug("Validation passed")
 
-            return FormValidation(validation=True)
+            return Validation()
 
         self.logger.debug("Validation failed")
-        return FormValidation(
-            validation=False,
-            error_message="The file must exist and contain a supported and "
-            + "valid table",
-        )
+        return Validation("The file must exist and contain a supported and valid table")

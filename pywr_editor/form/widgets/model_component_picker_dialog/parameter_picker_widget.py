@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Union
 
-from pywr_editor.form import FormField, FormValidation, ModelParameterPickerWidget
+from pywr_editor.form import FormField, ModelParameterPickerWidget, Validation
 
 if TYPE_CHECKING:
     from pywr_editor.form import ParameterPickerFormWidget, RecorderPickerFormWidget
@@ -22,14 +22,14 @@ class ParameterPickerWidget(ModelParameterPickerWidget):
         """
         super().__init__(name, value, parent, **kwargs)
 
-    def validate(self, name: str, label: str, value: str) -> FormValidation:
+    def validate(self, name: str, label: str, value: str) -> Validation:
         """
         Validates the value. The name is mandatory only if the value of
         ModelComponentSelectorWidget is set to "model_component".
         :param name: The field name.
         :param label: The field label.
         :param value: The field value.
-        :return: The instance of FormValidation
+        :return: The instance of Validation
         """
         self.form: Union["ParameterPickerFormWidget", "RecorderPickerFormWidget"]
         return self.validate_model_component(value, self.form)
@@ -38,14 +38,14 @@ class ParameterPickerWidget(ModelParameterPickerWidget):
     def validate_model_component(
         component_value: str | None,
         form: Union["ParameterPickerFormWidget", "RecorderPickerFormWidget"],
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Validates the field to select a model parameter or recorder. The field is
         mandatory only if the value of ModelComponentSourceSelectorWidget is set to
         "model_component".
         :param component_value: The selected component.
         :param form: The instance of the form.
-        :return: The instance of FormValidation
+        :return: The instance of Validation
         """
         component_source_widget = form.find_field_by_name("comp_source").widget
         if (
@@ -53,8 +53,5 @@ class ParameterPickerWidget(ModelParameterPickerWidget):
             == component_source_widget.labels["model_component"]
             and component_value == "None"
         ):
-            return FormValidation(
-                validation=False,
-                error_message="You must select an item",
-            )
-        return FormValidation(validation=True)
+            return Validation("You must select an item")
+        return Validation()

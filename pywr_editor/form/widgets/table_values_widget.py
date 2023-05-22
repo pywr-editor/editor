@@ -15,7 +15,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from pywr_editor.form import FormCustomWidget, FormValidation, TableValuesModel
+from pywr_editor.form import FormCustomWidget, TableValuesModel, Validation
 from pywr_editor.utils import Logging, get_signal_sender, is_windows, move_row
 from pywr_editor.widgets import DoubleSpinBox, PushIconButton, TableView
 
@@ -635,13 +635,13 @@ class TableValuesWidget(FormCustomWidget):
         name: str,
         label: str,
         value: dict[str, list[float | int]],
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that valid data points are provided.
         :param name: The field name.
         :param label: The field label.
         :param value: The field value from self.get_value().
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         self.logger.debug("Validating field")
 
@@ -649,22 +649,18 @@ class TableValuesWidget(FormCustomWidget):
         # check minimum items requirement
         if self.min_total_values and len(value[first_key]) < self.min_total_values:
             name = "value" if self.min_total_values == 1 else "values"
-            return FormValidation(
-                validation=False,
-                error_message="You must provide at least "
-                + f"{self.min_total_values} {name}",
+            return Validation(
+                f"You must provide at least {self.min_total_values} {name}",
             )
         # check requirement for exact size of items
         elif (
             self.exact_total_values and len(value[first_key]) != self.exact_total_values
         ):
-            return FormValidation(
-                validation=False,
-                error_message="You must provide exactly "
-                + f"{self.exact_total_values} values",
+            return Validation(
+                f"You must provide exactly {self.exact_total_values} values"
             )
 
-        return FormValidation(validation=True)
+        return Validation()
 
 
 class TableSpinBoxDelegate(QStyledItemDelegate):

@@ -5,12 +5,7 @@ from pandas import HDFStore
 from PySide6.QtCore import Signal, Slot
 from PySide6.QtWidgets import QHBoxLayout
 
-from pywr_editor.form import (
-    FormCustomWidget,
-    FormField,
-    FormValidation,
-    UrlWidget,
-)
+from pywr_editor.form import FormCustomWidget, FormField, UrlWidget, Validation
 from pywr_editor.utils import Logging, get_signal_sender
 from pywr_editor.widgets import ComboBox
 
@@ -258,7 +253,7 @@ class H5KeyWidget(FormCustomWidget):
         name: str,
         label: str,
         value: str | None,
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that the set H5 key is valid. Validation fails if there are no keys
         (file does not exist or is not valid) or the value is of the wrong type.
@@ -266,15 +261,12 @@ class H5KeyWidget(FormCustomWidget):
         :param name: The field name.
         :param label: The field label.
         :param value: The field value from self.get_value().
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         self.logger.debug("Validating field")
         if self.has_keys is False or self.value is False:
             self.logger.debug("Validation failed")
-            return FormValidation(
-                validation=False,
-                error_message="You must select a valid key from the list",
-            )
+            return Validation("You must select a valid key from the list")
 
         self.logger.debug("Validation passed")
-        return FormValidation(validation=True)
+        return Validation()

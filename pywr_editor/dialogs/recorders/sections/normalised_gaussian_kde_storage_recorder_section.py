@@ -1,8 +1,8 @@
 from pywr_editor.form import (
-    FormValidation,
     ResampleAggFrequencyWidget,
     ResampleAggFunctionWidget,
     StoragePickerWidget,
+    Validation,
 )
 
 from ..recorder_dialog_form import RecorderDialogForm
@@ -80,7 +80,7 @@ class NormalisedGaussianKDEStorageRecorderSection(AbstractRecorderSection):
 
     def check_resample_freq(
         self, name: str, label: str, resample_freq: str | None
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that "resample_freq" field is set if the "resample_func" is provided.
         :param name: The field name.
@@ -91,17 +91,16 @@ class NormalisedGaussianKDEStorageRecorderSection(AbstractRecorderSection):
         """
         resample_func = self.form.find_field_by_name("resample_func").value()
         if resample_func is not None and resample_freq is None:
-            return FormValidation(
-                validation=False,
-                error_message="You must provided a value when you set the "
-                + "'Aggregating function' field below",
+            return Validation(
+                "You must provided a value when you set the "
+                "'Aggregating function' field below",
             )
 
-        return FormValidation(validation=True)
+        return Validation()
 
     def check_resample_func(
         self, name: str, label: str, resample_func: str | None
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that "resample_func" field is set if the "resample_freq" is provided.
         :param name: The field name.
@@ -112,10 +111,9 @@ class NormalisedGaussianKDEStorageRecorderSection(AbstractRecorderSection):
         """
         resample_freq = self.form.find_field_by_name("resample_freq").value()
         if resample_freq is not None and resample_func is None:
-            return FormValidation(
-                validation=False,
-                error_message="You must provided a value when you set the "
-                + "'Aggregating frequency' field above",
+            return Validation(
+                "You must provided a value when you set the "
+                "'Aggregating frequency' field above",
             )
 
-        return FormValidation(validation=True)
+        return Validation()

@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QVBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.form import FormCustomWidget, FormField, Validation
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import SpinBox
 
@@ -117,24 +117,18 @@ class DayMonthWidget(FormCustomWidget):
         """
         return {"day": 0, "month": 0}
 
-    def validate(self, name: str, label: str, value: dict[str | int]) -> FormValidation:
+    def validate(self, name: str, label: str, value: dict[str | int]) -> Validation:
         """
         :param name: The field name.
         :param label: The field label.
         :param value: The field value.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         if value["day"] == 0 and value["month"] > 0:
-            return FormValidation(
-                validation=False,
-                error_message="You must provide the day, when you set the month",
-            )
+            return Validation("You must provide the day, when you set the month")
         elif value["day"] > 0 and value["month"] == 0:
-            return FormValidation(
-                validation=False,
-                error_message="You must provide the month, when you set the day",
-            )
-        return FormValidation(validation=True)
+            return Validation("You must provide the month, when you set the day")
+        return Validation()
 
     def after_validate(self, form_dict: dict, form_field_name: str) -> None:
         """

@@ -4,12 +4,7 @@ import qtawesome as qta
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QVBoxLayout
 
-from pywr_editor.form import (
-    FormCustomWidget,
-    FormField,
-    FormValidation,
-    SlotsTableModel,
-)
+from pywr_editor.form import FormCustomWidget, FormField, SlotsTableModel, Validation
 from pywr_editor.model import NodeConfig
 from pywr_editor.style import Color
 from pywr_editor.utils import Logging, get_signal_sender, move_row
@@ -349,7 +344,7 @@ class SlotsTableWidget(FormCustomWidget):
 
         return slot_map, factor_map, warning_message
 
-    def validate(self, name: str, label: str, value: Any) -> FormValidation:
+    def validate(self, name: str, label: str, value: Any) -> Validation:
         """
         Checks that the slot names are set for all target nodes.
         :param name: The field name.
@@ -361,12 +356,9 @@ class SlotsTableWidget(FormCustomWidget):
         # noinspection PyUnresolvedReferences
         if self.slot_table.isEnabled():
             if any([name is None for name in self.model.slot_names]):
-                return FormValidation(
-                    validation=False,
-                    error_message="You must define a slot name for all the nodes",
-                )
+                return Validation("You must define a slot name for all the nodes")
 
-        return FormValidation(validation=True)
+        return Validation()
 
     def get_value(self) -> dict[str, Any] | None:
         """

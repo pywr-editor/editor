@@ -4,7 +4,7 @@ import qtawesome as qta
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.form import FormCustomWidget, FormField, Validation
 from pywr_editor.utils import Logging, get_signal_sender
 from pywr_editor.widgets import PushIconButton, TableView
 
@@ -273,7 +273,7 @@ class KeatingStreamsWidget(FormCustomWidget):
             "transmissivity": self.model.transmissivity,
         }
 
-    def validate(self, name: str, label: str, value: None) -> FormValidation:
+    def validate(self, name: str, label: str, value: None) -> Validation:
         """
         Checks that all levels and transmissivity coefficients are provided.
         :param name: The field name.
@@ -282,26 +282,21 @@ class KeatingStreamsWidget(FormCustomWidget):
         :return: The validation instance.
         """
         if not self.model.levels or not self.model.levels:
-            return FormValidation(
-                validation=False,
-                error_message="You must provide at least one stream with a valid "
-                + "level and transmissivity",
+            return Validation(
+                "You must provide at least one stream with a valid "
+                "level and transmissivity",
             )
         elif any(
             [v is None for stream_level in self.model.levels for v in stream_level]
         ):
-            return FormValidation(
-                validation=False,
-                error_message="You must provide all the levels for each stream",
-            )
+            return Validation("You must provide all the levels for each stream")
         elif any([v is None for v in self.model.transmissivity]):
-            return FormValidation(
-                validation=False,
-                error_message="You must provide all the transmissivity coefficients "
-                + "for each level",
+            return Validation(
+                "You must provide all the transmissivity coefficients "
+                "for each level",
             )
 
-        return FormValidation(validation=True)
+        return Validation()
 
     def after_validate(self, form_dict: dict[str, Any], form_field_name: str) -> None:
         """

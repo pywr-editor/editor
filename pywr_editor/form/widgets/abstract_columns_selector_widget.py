@@ -4,7 +4,7 @@ from pandas import DataFrame
 from PySide6.QtCore import QModelIndex, Slot
 from PySide6.QtWidgets import QHBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormValidation
+from pywr_editor.form import FormCustomWidget, Validation
 from pywr_editor.utils import (
     Logging,
     default_index_name,
@@ -371,16 +371,16 @@ class AbstractColumnsSelectorWidget(FormCustomWidget):
         name: str,
         label: str,
         value: list[str] | None,
-    ) -> FormValidation:
+    ) -> Validation:
         """
         The field is not mandatory. When the widget is used to set a table index, the
         value can be None to use the anonymous (numeric) index.
         :param name: The field name.
         :param label: The field label.
         :param value: The field value from self.get_value().
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
-        return FormValidation(validation=True)
+        return Validation()
 
     def after_validate(self, form_dict: dict[str, Any], form_field_name: str) -> None:
         # convert names to int with Excel - Pandas does not support strings when

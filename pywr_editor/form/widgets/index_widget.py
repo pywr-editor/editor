@@ -9,11 +9,11 @@ from PySide6.QtWidgets import QLabel, QVBoxLayout
 from pywr_editor.form import (
     FormCustomWidget,
     FormField,
-    FormValidation,
     IndexColWidget,
     SourceSelectorWidget,
     TableSelectorWidget,
     UrlWidget,
+    Validation,
 )
 from pywr_editor.utils import (
     Logging,
@@ -529,20 +529,20 @@ class IndexWidget(FormCustomWidget):
         name: str,
         label: str,
         value: list[int | float | str] | int | float | str,
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Validates the field. The field fails validation when the value is None, or for
         multi-index, when at least one value is None.
         :param name: The field name.
         :param label: The field label.
         :param value: The field value.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         self.logger.debug("Validating field")
 
         if self.optional:
             self.logger.debug("Field is optional. Validation passed")
-            return FormValidation(validation=True)
+            return Validation()
 
         if value is None or (
             isinstance(value, list)
@@ -550,13 +550,10 @@ class IndexWidget(FormCustomWidget):
             and (not value or any(v is None for v in value) is None)
         ):
             self.logger.debug("Validation failed")
-            return FormValidation(
-                validation=False,
-                error_message="You must provide a value for all the table indexes",
-            )
+            return Validation("You must provide a value for all the table indexes")
 
         self.logger.debug("Validation passed")
-        return FormValidation(validation=True)
+        return Validation()
 
     def get_value_as_dict(self) -> dict[str, int | float | str]:
         """

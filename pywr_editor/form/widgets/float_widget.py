@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QLineEdit
 
-from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.form import FormCustomWidget, FormField, Validation
 from pywr_editor.utils import Logging
 
 
@@ -100,7 +100,7 @@ class FloatWidget(FormCustomWidget):
 
         self.line_edit.setText(value)
 
-    def validate(self, name: str, label: str, value: float | str) -> FormValidation:
+    def validate(self, name: str, label: str, value: float | str) -> Validation:
         """
         Checks that the parameter is a valid number.
         :param name: The field name.
@@ -111,14 +111,14 @@ class FloatWidget(FormCustomWidget):
         # value is empty or None
         if value is None or value == "":
             self.logger.debug("Value is empty. Validation passed")
-            return FormValidation(validation=True)
+            return Validation()
 
         try:
             value = float(value)
         except (ValueError, TypeError):
             message = "The value is not a valid number"
             self.logger.debug(message)
-            return FormValidation(validation=False, error_message=message)
+            return Validation(message)
         else:
             # check bounds
             if self.max_value is not None and value > self.max_value:
@@ -127,20 +127,14 @@ class FloatWidget(FormCustomWidget):
                     + f"{round(self.max_value, 2)}"
                 )
                 self.logger.debug(message)
-                return FormValidation(
-                    validation=False,
-                    error_message=message,
-                )
+                return Validation(message)
             if self.min_value is not None and value < self.min_value:
                 message = (
                     "The value is below the allowed minimum of "
                     + f"{round(self.min_value, 2)}"
                 )
                 self.logger.debug(message)
-                return FormValidation(
-                    validation=False,
-                    error_message=message,
-                )
+                return Validation(message)
 
             self.logger.debug("Validation passed")
-            return FormValidation(validation=True)
+            return Validation()

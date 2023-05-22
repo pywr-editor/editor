@@ -1,4 +1,4 @@
-from pywr_editor.form import FormSection, FormValidation, NodePickerWidget
+from pywr_editor.form import FormSection, NodePickerWidget, Validation
 from pywr_editor.form.widgets.float_widget import FloatWidget
 from pywr_editor.utils import Logging
 
@@ -67,29 +67,27 @@ class RollingMeanFlowNodeParameterSection(FormSection):
             ]
         }
 
-    def validate(self, form_data: dict) -> FormValidation:
+    def validate(self, form_data: dict) -> Validation:
         """
         Validates the days and timesteps fields. Both fields cannot be provided at the
         same time.
         :param form_data: The form data dictionary when the form validation is
         successful.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         days_field = self.form.find_field_by_name("days")
         timesteps_field = self.form.find_field_by_name("timesteps")
 
         # both fields are set
         if days_field.value() > 0 and timesteps_field.value() > 0:
-            return FormValidation(
-                validation=False,
-                error_message="You can provide the number of time steps or days, "
+            return Validation(
+                "You can provide the number of time steps or days, "
                 "but not both values at the same time",
             )
         # none fields are set
         elif not days_field.value() and not timesteps_field.value():
-            return FormValidation(
-                validation=False,
-                error_message="You must provide the number of time steps or days "
+            return Validation(
+                "You must provide the number of time steps or days "
                 "to calculate the rolling mean",
             )
-        return FormValidation(validation=True)
+        return Validation()

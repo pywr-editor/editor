@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from PySide6.QtWidgets import QGroupBox, QVBoxLayout, QWidget
 
 from .field_config import FieldConfig
-from .form_validation import FormValidation
+from .validation import Validation
 
 if TYPE_CHECKING:
     from pywr_editor.form import Form
@@ -48,14 +48,14 @@ class FormSection(QWidget):
         raise NotImplementedError("The section data property is not implemented")
 
     # noinspection PyMethodMayBeStatic
-    def validate(self, form_data: dict) -> FormValidation:
+    def validate(self, form_data: dict) -> Validation:
         """
         Validates the section/data after all the widgets are validated.
         :param form_data: The form data dictionary when the form validation is
         successfully.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
-        return FormValidation(validation=True)
+        return Validation()
 
     def filter(self, form_data: dict) -> None:
         """

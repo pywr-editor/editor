@@ -5,11 +5,11 @@ from PySide6.QtWidgets import QPushButton
 from pywr_editor.form import (
     FieldConfig,
     Form,
-    FormValidation,
     H5KeyWidget,
     IndexColWidget,
     ParseDatesWidget,
     SheetNameWidget,
+    Validation,
 )
 from pywr_editor.model import ModelConfig
 
@@ -173,7 +173,7 @@ class TableFormWidget(Form):
         """
         return super().get_dict_value(key, self.table_dict)
 
-    def _check_table_name(self, name: str, label: str, value: str) -> FormValidation:
+    def _check_table_name(self, name: str, label: str, value: str) -> Validation:
         """
         Checks that the new table name is not duplicated.
         :param name: The field name.
@@ -183,9 +183,8 @@ class TableFormWidget(Form):
         """
         # do not save form if the table name is changed and already exists
         if self.name != value and self.model_config.tables.exists(value) is True:
-            return FormValidation(
-                validation=False,
-                error_message=f'The table "{value}" already exists. '
-                + "Please provide a different name.",
+            return Validation(
+                f'The table "{value}" already exists. '
+                "Please provide a different name."
             )
-        return FormValidation(validation=True)
+        return Validation()

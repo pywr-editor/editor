@@ -1,5 +1,5 @@
 # Basic form classes
-from .form_validation import FormValidation
+from .validation import Validation
 from .form_custom_widget import FormCustomWidget
 from .field_config import FieldConfig
 from .form_section import FormSection

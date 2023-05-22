@@ -8,10 +8,10 @@ from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout
 from pywr_editor.form import (
     FormCustomWidget,
     FormField,
-    FormValidation,
     ScenarioPickerWidget,
     ScenarioValuesModel,
     ScenarioValuesPickerDialogWidget,
+    Validation,
 )
 from pywr_editor.utils import Logging, get_signal_sender
 from pywr_editor.widgets import ListView, PushIconButton
@@ -346,13 +346,13 @@ class ScenarioValuesWidget(FormCustomWidget):
         name: str,
         label: str,
         value: list[list[int | float]] | None,
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that the value is valid.
         :param name: The field name.
         :param label: The field label.
         :param value: The field value. Not used.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         value = self.get_value()
         self.logger.debug(f"Validating field with {value}")
@@ -360,35 +360,28 @@ class ScenarioValuesWidget(FormCustomWidget):
 
         # empty list
         if not value:
-            return FormValidation(
-                validation=False,
-                error_message="You must provide the values for the scenario",
-            )
+            return Validation("You must provide the values for the scenario")
         # check size of each nested list
         elif not is_timestep_series and any(
             [len(sublist) != self.min_ensemble_values for sublist in value]
         ):
-            return FormValidation(
-                validation=False,
-                error_message="Each ensemble must exactly have "
-                f"{self.min_ensemble_values} numbers",
+            return Validation(
+                f"Each ensemble must exactly have {self.min_ensemble_values} numbers"
             )
         elif is_timestep_series and any(
             [len(sublist) < self.min_ensemble_values for sublist in value]
         ):
-            return FormValidation(
-                validation=False,
-                error_message="Each ensemble must have at least "
+            return Validation(
+                "Each ensemble must have at least "
                 f"{self.min_ensemble_values} numbers",
             )
         elif self.scenario_size is not None and self.scenario_size != len(value):
-            return FormValidation(
-                validation=False,
-                error_message="The value must contain as many ensembles as the "
+            return Validation(
+                "The value must contain as many ensembles as the "
                 f"scenario size ({self.scenario_size})",
             )
 
-        return FormValidation(validation=True)
+        return Validation()
 
     def reset(self) -> None:
         """

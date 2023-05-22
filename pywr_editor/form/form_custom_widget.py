@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Any, Callable
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QWidget
 
-from .form_validation import FormValidation
+from .validation import Validation
 
 if TYPE_CHECKING:
     from .form import Form, FormField
@@ -44,15 +44,15 @@ class FormCustomWidget(QWidget):
             f"The value() method is not implemented for {self._type()}"
         )
 
-    def validate(self, name: str, label: str, value: Any) -> FormValidation:
+    def validate(self, name: str, label: str, value: Any) -> Validation:
         """
         Validate the returned value(s) by the widget.
         :param name: The field name.
         :param label: The field label.
         :param value: The file URL.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
-        return FormValidation(validation=True)
+        return Validation()
 
     def register_after_render_action(self, action: Callable) -> None:
         """

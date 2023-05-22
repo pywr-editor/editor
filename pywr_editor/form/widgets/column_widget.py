@@ -5,10 +5,10 @@ from PySide6.QtWidgets import QHBoxLayout
 from pywr_editor.form import (
     FormCustomWidget,
     FormField,
-    FormValidation,
     SourceSelectorWidget,
     TableSelectorWidget,
     UrlWidget,
+    Validation,
 )
 from pywr_editor.utils import Logging, are_columns_valid, get_columns, get_signal_sender
 from pywr_editor.widgets import ComboBox
@@ -271,20 +271,20 @@ class ColumnWidget(FormCustomWidget):
         name: str,
         label: str,
         value: str,
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Validates the field. Validation fails if value is False or empty or the columns
         ar enot valid (the file does not exist, is invalid or has no content).
         :param name: The field name.
         :param label: The field label.
         :param value: The field value from self.get_value().
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         self.logger.debug("Validating field")
 
         if self.optional:
             self.logger.debug("Field is optional. Validation passed")
-            return FormValidation(validation=True)
+            return Validation()
 
         if (
             value is None
@@ -293,10 +293,7 @@ class ColumnWidget(FormCustomWidget):
             or are_columns_valid(self.table) is False
         ):
             self.logger.debug("Validation failed")
-            return FormValidation(
-                validation=False,
-                error_message="You must select a column from the list",
-            )
+            return Validation("You must select a column from the list")
 
         self.logger.debug("Validation passed")
-        return FormValidation(validation=True)
+        return Validation()

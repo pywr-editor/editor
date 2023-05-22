@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QHBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.form import FormCustomWidget, FormField, Validation
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import ComboBox
 
@@ -158,20 +158,17 @@ class AbstractModelNodePickerWidget(FormCustomWidget):
         """
         return self.combo_box.currentData()
 
-    def validate(self, name: str, label: str, value: str) -> FormValidation:
+    def validate(self, name: str, label: str, value: str) -> Validation:
         """
         Validates the value.
         :param name: The field name.
         :param label: The field label.
         :param value: The field value.
-        :return: The instance of FormValidation
+        :return: The instance of Validation
         """
         if self.get_value() is None and self.is_mandatory:
-            return FormValidation(
-                validation=False,
-                error_message="You must select a model node",
-            )
-        return FormValidation(validation=True)
+            return Validation("You must select a model node")
+        return Validation()
 
     def reset(self) -> None:
         """

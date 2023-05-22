@@ -7,9 +7,9 @@ from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout
 from pywr_editor.form import (
     FormCustomWidget,
     FormField,
-    FormValidation,
     NodesAndFactorsDialog,
     NodesAndFactorsModel,
+    Validation,
 )
 from pywr_editor.utils import Logging, get_signal_sender
 from pywr_editor.widgets import PushIconButton, TableView
@@ -306,7 +306,7 @@ class NodesAndFactorsTableWidget(FormCustomWidget):
         self.model.layoutChanged.emit()
         self.table.clear_selection()
 
-    def validate(self, name: str, label: str, value: value_type) -> FormValidation:
+    def validate(self, name: str, label: str, value: value_type) -> Validation:
         """
         Checks that the widget is not empty.
         :param name: The field name.
@@ -316,13 +316,12 @@ class NodesAndFactorsTableWidget(FormCustomWidget):
         """
         # nodes are mandatory, factors are not
         if not value["nodes"]:
-            return FormValidation(
-                validation=False,
-                error_message="You must provide one or more nodes to calculate the "
-                + "annual total flow",
+            return Validation(
+                "You must provide one or more nodes to calculate the "
+                "annual total flow",
             )
 
-        return FormValidation(validation=True)
+        return Validation()
 
     def after_validate(self, form_dict: dict[str, Any], form_field_name: str) -> None:
         """

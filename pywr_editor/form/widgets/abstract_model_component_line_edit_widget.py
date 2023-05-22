@@ -5,11 +5,7 @@ from PySide6.QtCore import Slot
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QHBoxLayout, QLineEdit
 
-from pywr_editor.form import (
-    FormCustomWidget,
-    FormValidation,
-    ModelComponentPickerDialog,
-)
+from pywr_editor.form import FormCustomWidget, ModelComponentPickerDialog, Validation
 from pywr_editor.model import ParameterConfig, RecorderConfig
 from pywr_editor.utils import Logging, ModelComponentTooltip, get_signal_sender
 from pywr_editor.widgets import ParameterIcon, PushIconButton, RecorderIcon
@@ -301,26 +297,23 @@ class AbstractModelComponentLineEditWidget(FormCustomWidget):
 
     def validate(
         self, name: str, label: str, value: str | dict | float | int | None
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that the value is valid.
         :param name: The field name.
         :param label: The field label.
         :param value: The field value.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         self.logger.debug("Validating field")
 
         if self.is_mandatory is False:
             self.logger.debug("Skipping validation, because the field is not mandatory")
-            return FormValidation(validation=True)
+            return Validation()
 
         if value is None:
-            return FormValidation(
-                validation=False,
-                error_message=f"You must provide a valid {self.component_type}",
-            )
-        return FormValidation(validation=True)
+            return Validation(f"You must provide a valid {self.component_type}")
+        return Validation()
 
     @Slot()
     def reset(self) -> None:
