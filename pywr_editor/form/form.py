@@ -295,12 +295,12 @@ class Form(QScrollArea):
                 label.setStyleSheet(
                     f"QLabel {{ {base_label_style}; padding-top: 10px; }}"
                 )
-                form_layout.addWidget(label, row, 1, Qt.AlignTop)
-                form_layout.addWidget(field, row, 2)
+                form_layout.addWidget(label, row, 0, Qt.AlignTop)
+                form_layout.addWidget(field, row, 1)
                 row += 1
             else:
-                form_layout.addWidget(label, row, 1, Qt.AlignBottom)
-                form_layout.addWidget(field, row + 1, 1)
+                form_layout.addWidget(label, row, 0, Qt.AlignBottom)
+                form_layout.addWidget(field, row + 1, 0)
                 row += 2
             # message is already set before field was added to the form layout
             if field.message.text():
