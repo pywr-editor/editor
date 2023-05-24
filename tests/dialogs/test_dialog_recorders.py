@@ -105,7 +105,7 @@ class TestRecordersDialog:
 
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         assert name_field.message.text() == ""
-        assert node_widget.form_field.message.text() == ""
+        assert node_widget.field.message.text() == ""
 
         # the page widget is renamed
         assert renamed_recorder_name in pages_widget.pages.keys()
@@ -173,7 +173,7 @@ class TestRecordersDialog:
         form.load_fields()
         # noinspection PyTypeChecker
         save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
-        name_field = form.find_field_by_name("name")
+        name_field = form.find_field("name")
 
         # Change the name and save
         assert name_field.value() == current_name
@@ -271,7 +271,7 @@ class TestRecordersDialog:
         selected_page = dialog.pages_widget.currentWidget()
         form = selected_page.form
 
-        recorder_type_widget: RecorderTypeSelectorWidget = form.find_field_by_name(
+        recorder_type_widget: RecorderTypeSelectorWidget = form.find_field(
             "type"
         ).widget
         for name in recorder_type_widget.combo_box.all_items:

@@ -106,7 +106,7 @@ class EventTypeWidget(AbstractStringComboBoxWidget):
         # add warning message
         if self.message:
             self.logger.debug(self.message)
-            self.form_field.set_warning_message(self.message)
+            self.field.set_warning(self.message)
 
     def register_actions(self) -> None:
         """
@@ -122,18 +122,18 @@ class EventTypeWidget(AbstractStringComboBoxWidget):
 
         # reset the parameter and recorder widgets on error
         if self.message:
-            self.form.find_field_by_name("threshold_recorder").widget.reset()
-            self.form.find_field_by_name("threshold_parameter").widget.reset()
+            self.form.find_field("threshold_recorder").widget.reset()
+            self.form.find_field("threshold_parameter").widget.reset()
         # reset only the widget whose type is not selected.
         # The form tries to load both widgets
         else:
             selected_value = self.get_value()
             if selected_value == "parameter":
                 self.logger.debug("Resetting recorder field")
-                self.form.find_field_by_name("threshold_recorder").widget.reset()
+                self.form.find_field("threshold_recorder").widget.reset()
             elif selected_value == "recorder":
                 self.logger.debug("Resetting parameter field")
-                self.form.find_field_by_name("threshold_parameter").widget.reset()
+                self.form.find_field("threshold_parameter").widget.reset()
 
         # connect slot to change visibility
         # noinspection PyUnresolvedReferences
@@ -158,7 +158,7 @@ class EventTypeWidget(AbstractStringComboBoxWidget):
             )
             # reset widget when the type is changed
             if not self.init:
-                self.form.find_field_by_name(field_name).widget.reset()
+                self.form.find_field(field_name).widget.reset()
 
     @staticmethod
     def store_threshold(form_dict: dict) -> None:
@@ -193,4 +193,4 @@ class EventTypeWidget(AbstractStringComboBoxWidget):
         """
         super().reset()
         for field_name in ["threshold_parameter", "threshold_recorder"]:
-            self.form.find_field_by_name(field_name).widget.reset()
+            self.form.find_field(field_name).widget.reset()

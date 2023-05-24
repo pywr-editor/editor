@@ -60,9 +60,7 @@ class DictionaryWidget(FormCustomWidget):
         if value is None:
             dictionary = {}
         elif not isinstance(value, dict):
-            self.form_field.set_warning_message(
-                "The configuration must be a dictionary"
-            )
+            self.field.set_warning("The configuration must be a dictionary")
             dictionary = {}
         else:
             dictionary = deepcopy(value)

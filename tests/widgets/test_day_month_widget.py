@@ -63,7 +63,7 @@ class TestDayMonthWidget:
         # noinspection PyTypeChecker
         selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
         form = selected_page.form
-        field = form.find_field_by_name("include_from")
+        field = form.find_field("include_from")
         widget: DayMonthWidget = field.widget
 
         # 1. Check message and value
@@ -123,7 +123,7 @@ class TestDayMonthWidget:
         # noinspection PyTypeChecker
         selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
         form = selected_page.form
-        field = form.find_field_by_name("include_from")
+        field = form.find_field("include_from")
         widget: DayMonthWidget = field.widget
 
         # check message and values

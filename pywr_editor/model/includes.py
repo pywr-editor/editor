@@ -4,11 +4,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Literal, TypeVar
 
 import pywr_editor.model as model
-from pywr_editor.model import (
-    PywrNodesData,
-    PywrParametersData,
-    PywrRecordersData,
-)
+from pywr_editor.model import PywrNodesData, PywrParametersData, PywrRecordersData
 
 if TYPE_CHECKING:
     from pywr_editor.model import ModelConfig

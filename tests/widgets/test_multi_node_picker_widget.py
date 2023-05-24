@@ -38,7 +38,7 @@ class TestMultiNodePickerWidget:
         """
         # mock widgets
         form = Form(
-            available_fields={
+            fields={
                 "Section": [
                     {
                         "name": "node_names",
@@ -82,7 +82,7 @@ class TestMultiNodePickerWidget:
             include_node_keys=None,
         )
 
-        widget: MultiNodePickerWidget = form.find_field_by_name("node_names").widget
+        widget: MultiNodePickerWidget = form.find_field("node_names").widget
 
         # 1. Check values
         assert widget.combo_box.all_items == [
@@ -92,7 +92,7 @@ class TestMultiNodePickerWidget:
             "Aggregated (Aggregated storage)",
         ]
 
-        assert widget.form_field.message.text() == ""
+        assert widget.field.message.text() == ""
         assert widget.get_value() == node_names
 
         # 2. Submit form for validation
@@ -129,7 +129,7 @@ class TestMultiNodePickerWidget:
             ),
         )
 
-        widget: MultiNodePickerWidget = form.find_field_by_name("node_names").widget
+        widget: MultiNodePickerWidget = form.find_field("node_names").widget
 
         # 1. Check values
         assert widget.combo_box.all_items == [
@@ -138,7 +138,7 @@ class TestMultiNodePickerWidget:
             "Virtual (Rolling virtual storage)",
         ]
 
-        assert widget.form_field.message.text() == ""
+        assert widget.field.message.text() == ""
         assert widget.get_value() == node_names
 
         # 2. Submit form for validation
@@ -200,6 +200,6 @@ class TestMultiNodePickerWidget:
             include_node_keys=include_node_keys,
         )
 
-        widget: MultiNodePickerWidget = form.find_field_by_name("node_names").widget
-        assert init_message in widget.form_field.message.text()
+        widget: MultiNodePickerWidget = form.find_field("node_names").widget
+        assert init_message in widget.field.message.text()
         assert widget.get_value() == selected

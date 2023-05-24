@@ -88,7 +88,7 @@ class TestDialogParameterSheetNameWidget:
         # hidden and disabled when file does not exist
         original_file = url_widget.full_file
         url_widget.line_edit.setText(original_file[0:-1])
-        assert "not exist" in url_widget.form_field.message.text()
+        assert "not exist" in url_widget.field.message.text()
         # File does not exist and table is invalid
         assert url_widget.full_file is None
         assert url_widget.file_ext == ".xls"
@@ -101,7 +101,7 @@ class TestDialogParameterSheetNameWidget:
 
         # Set original value
         url_widget.line_edit.setText(original_file)
-        assert url_widget.form_field.message.text() == ""
+        assert url_widget.field.message.text() == ""
         assert url_widget.full_file == original_file
         assert url_widget.file_ext == ".xlsx"
         assert url_widget.table.equals(
@@ -110,7 +110,7 @@ class TestDialogParameterSheetNameWidget:
 
         # 5. Load a new Excel file. Table must be reloaded and first sheet selected
         url_widget.line_edit.setText(r"files/table2.xlsx")
-        assert url_widget.form_field.message.text() == ""
+        assert url_widget.field.message.text() == ""
         assert url_widget.file_ext == ".xlsx"
         first_sheet = "Demand centres"
         assert url_widget.table.equals(

@@ -13,11 +13,7 @@ from pywr_editor.form import (
     UrlWidget,
 )
 from pywr_editor.model import ModelConfig
-from pywr_editor.utils import (
-    default_index_name,
-    get_index_names,
-    get_index_values,
-)
+from pywr_editor.utils import default_index_name, get_index_names, get_index_values
 from pywr_editor.widgets import ComboBox
 from tests.utils import close_message_box, resolve_model_path
 
@@ -346,7 +342,7 @@ class TestDialogParameterIndexWidget:
                 else:
                     fields += ["key"]
             for f in fields:
-                value = form.find_field_by_name(f).widget.get_value()
+                value = form.find_field(f).widget.get_value()
                 if value:
                     model_param_dict[f] = value
 

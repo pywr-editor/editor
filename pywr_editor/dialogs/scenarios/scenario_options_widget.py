@@ -98,10 +98,10 @@ class ScenarioOptionsWidget(FormCustomWidget):
         elif self.slice_message:
             warning_message = self.slice_message
 
-        self.form_field.set_warning_message(warning_message)
+        self.field.set_warning(warning_message)
 
         # register Slot if scenario size changes
-        size_field = self.form.find_field_by_name("size")
+        size_field = self.form.find_field("size")
         # noinspection PyTypeChecker
         size_widget: SpinBox = size_field.findChild(SpinBox)
         # noinspection PyUnresolvedReferences

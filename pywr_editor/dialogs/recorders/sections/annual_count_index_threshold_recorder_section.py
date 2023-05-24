@@ -1,6 +1,7 @@
 from pywr_editor.form import (
     AbstractFloatListWidget,
     DayMonthWidget,
+    FieldConfig,
     FloatWidget,
     ParametersListPickerWidget,
     Validation,
@@ -21,56 +22,57 @@ class AnnualCountIndexThresholdRecorderSection(AbstractNumpyRecorderSection):
         :param section_data: A dictionary containing data to pass to the widget.
         """
         fields = [
-            {
-                "name": "parameters",
-                "field_type": ParametersListPickerWidget,
-                "value": form.get_recorder_dict_value("parameters"),
-                "help_text": "For each scenario, store the number of years when at "
-                + "least one of the parameters exceeds the threshold provided below",
-            },
-            {
-                "name": "threshold",
-                "field_type": FloatWidget,
-                "value": form.get_recorder_dict_value("threshold"),
-                "help_text": "Threshold to compare the parameter values against",
-            },
+            FieldConfig(
+                name="parameters",
+                field_type=ParametersListPickerWidget,
+                value=form.field_value("parameters"),
+                help_text="For each scenario, store the number of years when at "
+                "least one of the parameters exceeds the threshold provided below",
+            ),
+            FieldConfig(
+                name="threshold",
+                field_type=FloatWidget,
+                value=form.field_value("threshold"),
+                help_text="Threshold to compare the parameter values against",
+            ),
         ]
         additional_sections = {
             "Filters": [
-                {
-                    "name": "exclude_months",
-                    "label": "Exclude months",
-                    "field_type": AbstractFloatListWidget,
-                    "field_args": {
+                FieldConfig(
+                    name="exclude_months",
+                    label="Exclude months",
+                    field_type=AbstractFloatListWidget,
+                    field_args={
                         "allowed_item_types": int,
                         "only_list": True,
                         "final_type": int,
                     },
-                    "validate_fun": self.check_exclude_months,
-                    "value": form.get_recorder_dict_value("exclude_months"),
-                    "help_text": "Comma-separated list of month numbers to exclude "
-                    + "from the count",
-                },
-                {
-                    "name": "include_from",
-                    "field_type": DayMonthWidget,
-                    "value": {
-                        "day": form.get_recorder_dict_value("include_from_day"),
-                        "month": form.get_recorder_dict_value("include_from_month"),
+                    validate_fun=self.check_exclude_months,
+                    value=form.field_value("exclude_months"),
+                    help_text="Comma-separated list of month numbers to exclude "
+                    "from the count",
+                ),
+                FieldConfig(
+                    name="include_from",
+                    field_type=DayMonthWidget,
+                    value={
+                        "day": form.field_value("include_from_day"),
+                        "month": form.field_value("include_from_month"),
                     },
-                    "help_text": "Optional start date to include in the count",
-                },
-                {
-                    "name": "include_to",
-                    "field_type": DayMonthWidget,
-                    "value": {
-                        "day": form.get_recorder_dict_value("include_to_day"),
-                        "month": form.get_recorder_dict_value("include_to_month"),
+                    help_text="Optional start date to include in the count",
+                ),
+                FieldConfig(
+                    name="include_to",
+                    field_type=DayMonthWidget,
+                    value={
+                        "day": form.field_value("include_to_day"),
+                        "month": form.field_value("include_to_month"),
                     },
-                    "help_text": "Optional end date to include in the count",
-                },
+                    help_text="Optional end date to include in the count",
+                ),
             ]
         }
+
         # parameter uses temporal_agg_func
         super().__init__(
             form=form,
@@ -83,7 +85,6 @@ class AnnualCountIndexThresholdRecorderSection(AbstractNumpyRecorderSection):
                 + "using the provided function",
             ),
             show_ignore_nan_field=True,
-            log_name=self.__class__.__name__,
         )
 
     @staticmethod

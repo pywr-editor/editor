@@ -55,7 +55,7 @@ class TestDialogRecorderAnnualCountIndexThresholdRecorderSection:
         assert selected_page.findChild(FormField, "name").value() == recorder_name
 
         # 1. Check value
-        field = form.find_field_by_name("exclude_months")
+        field = form.find_field("exclude_months")
         assert field.value() == expected_months
 
         # 2. Validate form

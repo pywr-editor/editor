@@ -100,7 +100,7 @@ class AbstractColumnsSelectorWidget(FormCustomWidget):
         # clear field and model
         self.setEnabled(False)
         self.combo_box.clear()
-        self.form_field.clear_message(message_type="warning")
+        self.field.clear_message(message_type="warning")
         self.value = self.sanitise_value(self.value)
         columns = self.columns
 
@@ -116,7 +116,7 @@ class AbstractColumnsSelectorWidget(FormCustomWidget):
                 "The table does not contain any column. Keeping field disabled with "
                 + "warning"
             )
-            self.form_field.set_warning_message("The table does not contain any column")
+            self.field.set_warning("The table does not contain any column")
         else:
             self.logger.debug(f"Filling field with: {', '.join(map(str,columns))}")
             # noinspection PyTypeChecker
@@ -154,7 +154,7 @@ class AbstractColumnsSelectorWidget(FormCustomWidget):
                     "The following columns do no exist in the file: "
                     + " ".join(self.wrong_columns)
                 )
-                self.form_field.set_warning_message(
+                self.field.set_warning(
                     "The following columns, currently set in the model config file, "
                     + "do not exist in the table file: "
                     + ", ".join(self.wrong_columns)
@@ -291,7 +291,7 @@ class AbstractColumnsSelectorWidget(FormCustomWidget):
             f"Running on_update_value Slot with value {selected_columns} from "
             + get_signal_sender(self)
         )
-        self.form_field.clear_message(message_type="warning")
+        self.field.clear_message(message_type="warning")
         self.value = self.sanitise_value(selected_columns)
         self.logger.debug(f"Updated field value to '{self.value}'")
         # when user check or uncheck an item, update the table index

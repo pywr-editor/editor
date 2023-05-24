@@ -58,7 +58,7 @@ class TestDialogRecorderStorageDurationCurveRecorderSection:
         assert selected_page.findChild(FormField, "name").value() == recorder_name
 
         # 1. Check value
-        field = form.find_field_by_name("percentiles")
+        field = form.find_field("percentiles")
         assert field.value()["values"] == expected_percentiles
 
         # 2. Validate form

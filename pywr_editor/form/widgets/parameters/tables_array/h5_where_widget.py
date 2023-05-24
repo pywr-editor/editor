@@ -43,7 +43,7 @@ class H5WhereWidget(AbstractStringComboBoxWidget):
 
         # connect Slot to update the widget keys when the file changes
         # noinspection PyTypeChecker
-        file_widget: H5FileWidget = self.form.find_field_by_name("url").widget
+        file_widget: H5FileWidget = self.form.find_field("url").widget
         # noinspection PyTypeChecker
         file_widget.file_changed.connect(self.on_update_file)
 
@@ -62,7 +62,7 @@ class H5WhereWidget(AbstractStringComboBoxWidget):
         self.reset()
 
         # get keys in h5 file
-        file_field = self.form.find_field_by_name("url")
+        file_field = self.form.find_field("url")
         # noinspection PyTypeChecker
         file_widget: H5FileWidget = file_field.widget
 
@@ -91,7 +91,7 @@ class H5WhereWidget(AbstractStringComboBoxWidget):
 
         if self.combo_box.isEnabled():
             self.logger.debug("Setting warning message")
-            self.form_field.set_warning_message(self.warning_message)
+            self.field.set_warning(self.warning_message)
 
             # store the where keys of the attribute
             self.on_attribute_change()

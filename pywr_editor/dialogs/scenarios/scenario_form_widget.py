@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from PySide6.QtWidgets import QPushButton
 
-from pywr_editor.form import ModelComponentForm, Validation
+from pywr_editor.form import FieldConfig, ModelComponentForm, Validation
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import Logging
 
@@ -44,40 +44,40 @@ class ScenarioFormWidget(ModelComponentForm):
 
         available_fields = {
             "General": [
-                {
-                    "name": "name",
-                    "value": name,
-                    "help_text": "A unique name identifying the parameter",
-                    "allow_empty": False,
-                    "validate_fun": self._check_scenario_name,
-                },
-                {
-                    "name": "size",
-                    "field_type": "integer",
-                    "min_value": 1,
-                    "value": self.get_dict_value("size", self.scenario_dict),
-                    "default_value": 1,
-                    "help_text": "The number of ensembles in the scenario",
-                },
-                {
-                    "name": "options",
-                    "field_type": ScenarioOptionsWidget,
-                    "value": {
+                FieldConfig(
+                    name="name",
+                    value=name,
+                    help_text="A unique name identifying the parameter",
+                    allow_empty=False,
+                    validate_fun=self._check_scenario_name,
+                ),
+                FieldConfig(
+                    name="size",
+                    field_type="integer",
+                    min_value=1,
+                    value=self.get_dict_value("size", self.scenario_dict),
+                    default_value=1,
+                    help_text="The number of ensembles in the scenario",
+                ),
+                FieldConfig(
+                    name="options",
+                    field_type=ScenarioOptionsWidget,
+                    value={
                         "slice": self.get_dict_value("slice", self.scenario_dict),
                         "ensemble_names": self.get_dict_value(
                             "ensemble_names", self.scenario_dict
                         ),
                     },
-                    "help_text": "Specify the name of each ensemble (optional) and "
+                    help_text="Specify the name of each ensemble (optional) and "
                     "which ensemble to run",
-                },
+                ),
             ]
         }
 
         super().__init__(
             form_dict=self.scenario_dict,
             model_config=model_config,
-            available_fields=available_fields,
+            fields=available_fields,
             save_button=save_button,
             parent=parent,
         )

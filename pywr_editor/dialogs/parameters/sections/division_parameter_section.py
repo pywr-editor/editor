@@ -1,4 +1,4 @@
-from pywr_editor.form import FormSection, ParameterLineEditWidget
+from pywr_editor.form import FieldConfig, FormSection, ParameterLineEditWidget
 from pywr_editor.utils import Logging
 
 from ..parameter_dialog_form import ParameterDialogForm
@@ -14,31 +14,23 @@ class DivisionParameterSection(FormSection):
         super().__init__(form, section_data)
         self.logger = Logging().logger(self.__class__.__name__)
 
-    @property
-    def data(self):
-        """
-        Defines the section data dictionary.
-        :return: The section dictionary.
-        """
         self.form: ParameterDialogForm
-        self.logger.debug("Registering form")
-
-        data_dict = {
-            "Configuration": [
-                {
-                    "name": "numerator",
-                    "field_type": ParameterLineEditWidget,
-                    "value": self.form.get_param_dict_value("numerator"),
-                    "help_text": "The parameter to use as the numerator",
-                },
-                {
-                    "name": "denominator",
-                    "field_type": ParameterLineEditWidget,
-                    "value": self.form.get_param_dict_value("parameters"),
-                    "help_text": "The parameter to use as the denominator",
-                },
-            ],
-            "Miscellaneous": [self.form.comment],
-        }
-
-        return data_dict
+        self.add_fields(
+            {
+                "Configuration": [
+                    FieldConfig(
+                        name="numerator",
+                        field_type=ParameterLineEditWidget,
+                        value=self.form.field_value("numerator"),
+                        help_text="The parameter to use as the numerator",
+                    ),
+                    FieldConfig(
+                        name="denominator",
+                        field_type=ParameterLineEditWidget,
+                        value=self.form.field_value("parameters"),
+                        help_text="The parameter to use as the denominator",
+                    ),
+                ],
+                "Miscellaneous": [self.form.comment],
+            }
+        )

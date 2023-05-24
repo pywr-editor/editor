@@ -14,7 +14,7 @@ class AnnualLicenseSection(AbstractStorageLicenseSection):
             section_data=section_data,
             log_name=self.__class__.__name__,
             amount_help_text="The amount available at each time step is calculated as: "
-            + "(<i>License amount</i> - <i>Used volume by node</i> * <i>&Delta;t</i>) "
-            + "/ (<i>Remaining days in year</i> * <i>&Delta;t</i>), where "
-            + "<i>&Delta;t</i> is the timestep length",
+            "(<i>License amount</i> - <i>Used volume by node</i> * <i>&Delta;t</i>) "
+            "/ (<i>Remaining days in year</i> * <i>&Delta;t</i>), where "
+            "<i>&Delta;t</i> is the timestep length",
         )

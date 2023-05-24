@@ -150,7 +150,7 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
             )
             # reset warning from parent widget and hide TableView
             self.combo_box.setCurrentText(self.labels_map["values"])
-            self.form_field.clear_message()
+            self.field.clear_message()
         # external file or model table
         elif isinstance(self.raw_value, dict):
             self.logger.debug(
@@ -159,7 +159,7 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
             self.combo_box.setCurrentText(self.labels_map["external"])
 
             # reset warning from parent widget and hide QLineEdit
-            self.form_field.clear_message()
+            self.field.clear_message()
             self.external_data_dict = self.raw_value
 
             if "url" in self.raw_value:
@@ -170,7 +170,7 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
             elif self.is_mandatory:
                 message = "The configuration to fetch the external data is not valid"
                 self.logger.debug(message)
-                self.form_field.set_warning_message(message)
+                self.field.set_warning(message)
         # default to parent widget - fill with values
         else:
             self.combo_box.setCurrentText(self.labels_map["values"])
@@ -194,7 +194,7 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
             # reset table and QLineEdit
             super().reset()
             self.reset_line_edit()
-            self.form_field.clear_message()
+            self.field.clear_message()
 
         is_values_selected = self.combo_box.currentText() == self.labels_map["values"]
         # toggle TableView and its buttons

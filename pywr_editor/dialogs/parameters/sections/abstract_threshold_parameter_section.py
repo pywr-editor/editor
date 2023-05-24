@@ -1,13 +1,13 @@
 from typing import Type
 
 from pywr_editor.form import (
+    FieldConfig,
     FormCustomWidget,
     FormSection,
     ParameterLineEditWidget,
     ThresholdRelationSymbolWidget,
     ThresholdValuesWidget,
 )
-from pywr_editor.utils import Logging
 
 from ..parameter_dialog_form import ParameterDialogForm
 
@@ -60,7 +60,6 @@ class AbstractThresholdParameterSection(FormSection):
         :param log_name: The name to use in the logger.
         """
         super().__init__(form, section_data)
-        self.logger = Logging().logger(log_name)
 
         if value_dict is not None:
             self.has_value_field = True
@@ -73,70 +72,62 @@ class AbstractThresholdParameterSection(FormSection):
         self.threshold_description = threshold_description
         self.value_rel_symbol_description = value_rel_symbol_description
 
-    @property
-    def data(self):
-        """
-        Defines the section data dictionary.
-        :return: The section dictionary.
-        """
-        self.logger.debug("Registering form")
         self.form: ParameterDialogForm
-
-        data_dict = {
-            "Configuration": [
-                {
-                    "name": "threshold",
-                    "field_type": ParameterLineEditWidget,
-                    "value": self.form.get_param_dict_value("threshold"),
-                    "help_text": self.threshold_description
-                    + ". The threshold can be a constant or a varying parameter "
-                    + "(such as a profile or a time series)",
-                },
-                {
-                    "name": "predicate",
-                    "label": "Relation symbol",
-                    "field_type": ThresholdRelationSymbolWidget,
-                    "value": self.form.get_param_dict_value("predicate"),
-                    "help_text": "This defines the predicate, which is the "
-                    + f"{self.value_rel_symbol_description}, followed by the relation "
-                    + "symbol, followed by the threshold. For example, if the symbol "
-                    + "is '>', Pywr  will assess the following predicate: "
-                    + f"{self.value_rel_symbol_description} > threshold",
-                },
-                {
-                    "name": "values",
-                    "field_type": ThresholdValuesWidget,
-                    "value": self.form.get_param_dict_value("values"),
-                    "help_text": "If the predicate is false, this parameter will "
-                    + "return  the left value above, otherwise the right value "
-                    + "will be used. For example, if the predicate is '<' and the "
-                    + f"{self.value_rel_symbol_description} is less than the threshold,"
-                    + " the predicate is true and the right value is returned",
-                },
-                {
-                    "name": "ratchet",
-                    "field_type": "boolean",
-                    "default_value": False,
-                    "value": self.form.get_param_dict_value("ratchet"),
-                    "help_text": "When Yes and once the predicate is true, the "
-                    + "parameter value will not change anymore",
-                },
-            ],
-            "Miscellaneous": [self.form.comment],
-        }
+        self.add_fields(
+            {
+                "Configuration": [
+                    FieldConfig(
+                        name="threshold",
+                        field_type=ParameterLineEditWidget,
+                        value=self.form.field_value("threshold"),
+                        help_text=self.threshold_description
+                        + ". The threshold can be a constant or a varying parameter "
+                        "(such as a profile or a time series)",
+                    ),
+                    FieldConfig(
+                        name="predicate",
+                        label="Relation symbol",
+                        field_type=ThresholdRelationSymbolWidget,
+                        value=self.form.field_value("predicate"),
+                        help_text="This defines the predicate, which is the "
+                        f"{self.value_rel_symbol_description}, followed by the "
+                        "relation symbol, followed by the threshold. For example, if "
+                        "the symbol is '>', Pywr  will assess the following predicate: "
+                        f"{self.value_rel_symbol_description} > threshold",
+                    ),
+                    FieldConfig(
+                        name="values",
+                        field_type=ThresholdValuesWidget,
+                        value=self.form.field_value("values"),
+                        help_text="If the predicate is false, this parameter will "
+                        "return  the left value above, otherwise the right value "
+                        "will be used. For example, if the predicate is '<' and the "
+                        f"{self.value_rel_symbol_description} is less than the "
+                        "threshold, the predicate is true and the right value is "
+                        "returned",
+                    ),
+                    FieldConfig(
+                        name="ratchet",
+                        field_type="boolean",
+                        default_value=False,
+                        value=self.form.field_value("ratchet"),
+                        help_text="When Yes and once the predicate is true, the "
+                        "parameter value will not change anymore",
+                    ),
+                ],
+                "Miscellaneous": [self.form.comment],
+            }
+        )
 
         # for some parameters, it is not needed to specify a value to compare
         # (for example for CurrentOrdinalDayThresholdParameter)
         if self.has_value_field:
-            # noinspection PyTypeChecker
-            data_dict["Configuration"].insert(
+            self.fields_["Configuration"].insert(
                 1,
-                {
-                    "name": self.value_key,
-                    "field_type": self.value_widget,
-                    "value": self.form.get_param_dict_value(self.value_key),
-                    "help_text": self.value_help_text,
-                },
+                FieldConfig(
+                    name=self.value_key,
+                    field_type=self.value_widget,
+                    value=self.form.field_value(self.value_key),
+                    help_text=self.value_help_text,
+                ),
             )
-
-        return data_dict

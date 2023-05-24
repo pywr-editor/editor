@@ -37,9 +37,9 @@ class TestStorageSection:
         form = dialog.form
         save_button = form.save_button
 
-        initial_volume = form.find_field_by_name("initial_volume")
-        initial_volume_pc = form.find_field_by_name("initial_volume_pc")
-        max_volume = form.find_field_by_name("max_volume")
+        initial_volume = form.find_field("initial_volume")
+        initial_volume_pc = form.find_field("initial_volume_pc")
+        max_volume = form.find_field("max_volume")
 
         # both initial volumes are empty
         save_button.setEnabled(True)

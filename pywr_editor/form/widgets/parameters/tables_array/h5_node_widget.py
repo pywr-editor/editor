@@ -40,7 +40,7 @@ class H5NodeWidget(AbstractStringComboBoxWidget):
 
         # connect Slot to update the nodes when the where attribute changes
         # noinspection PyTypeChecker
-        where_widget: H5WhereWidget = self.form.find_field_by_name("where").widget
+        where_widget: H5WhereWidget = self.form.find_field("where").widget
         # noinspection PyUnresolvedReferences
         where_widget.where_attr_changed.connect(self.on_update_where)
 
@@ -55,7 +55,7 @@ class H5NodeWidget(AbstractStringComboBoxWidget):
         self.reset()
 
         # get keys in h5 file
-        where_field = self.form.find_field_by_name("where")
+        where_field = self.form.find_field("where")
         # noinspection PyTypeChecker
         where_widget: H5WhereWidget = where_field.widget
 
@@ -83,7 +83,7 @@ class H5NodeWidget(AbstractStringComboBoxWidget):
         if self.combo_box.isEnabled():
             self.combo_box.setCurrentText(self.label)
             self.logger.debug("Setting warning message")
-            self.form_field.set_warning_message(self.warning_message)
+            self.field.set_warning(self.warning_message)
 
     def get_value(self) -> str | None:
         """

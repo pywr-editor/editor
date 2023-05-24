@@ -92,7 +92,7 @@ class H5KeyWidget(FormCustomWidget):
         # on_update_value is called whilst the field is still empty
         self.setEnabled(False)
         self.combo_box.clear()
-        self.form_field.clear_message(message_type="warning")
+        self.field.clear_message(message_type="warning")
 
         # Load sheets
         self.load_key_names()
@@ -106,7 +106,7 @@ class H5KeyWidget(FormCustomWidget):
         elif self.has_keys is False:
             message = "The H5 file does not contain any key"
             self.logger.debug(message)
-            self.form_field.set_warning_message(message)
+            self.field.set_warning(message)
         else:
             self.setEnabled(True)
             self.combo_box.addItems(self.keys)
@@ -117,7 +117,7 @@ class H5KeyWidget(FormCustomWidget):
                     f"{self.value} is not a valid key (using first sheet). "
                     + "Setting warning message"
                 )
-                self.form_field.set_warning_message(
+                self.field.set_warning(
                     "The key, currently set in the model config file, does not exist "
                     + "in the H5 file. The first available key was selected, otherwise "
                     + "select another name"
@@ -140,7 +140,7 @@ class H5KeyWidget(FormCustomWidget):
             f"Running on_update_value Slot with value {selected_key} from "
             + get_signal_sender(self)
         )
-        self.form_field.clear_message(message_type="warning")
+        self.field.clear_message(message_type="warning")
         self.value = self.sanitise_value(selected_key)
         self.logger.debug(f"Updated field value to {self.value}")
         self.logger.debug("Completed on_update_value Slot")

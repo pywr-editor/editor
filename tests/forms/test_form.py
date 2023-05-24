@@ -159,7 +159,7 @@ def test_allow_empty_check(qtbot):
 
     form = Form(form_config)
     form.load_fields()
-    form.find_field_by_name("Vegetable").widget.setText("")
+    form.find_field("Vegetable").widget.setText("")
     qtbot.addWidget(form)
 
     QTimer.singleShot(100, close_message_box)

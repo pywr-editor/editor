@@ -1,4 +1,4 @@
-from pywr_editor.form import TableValuesWidget, Validation
+from pywr_editor.form import FieldConfig, TableValuesWidget, Validation
 
 from ..recorder_dialog_form import RecorderDialogForm
 from .abstract_flow_duration_curve_recorder_section import (
@@ -15,33 +15,33 @@ class SeasonalFlowDurationCurveRecorderSection(
         :param form: The parent form.
         :param section_data: A dictionary containing data to pass to the widget.
         """
-        section_fields = [
-            {
-                "name": "months",
-                "value": {"values": form.get_recorder_dict_value("months")},
-                "field_type": TableValuesWidget,
-                "field_args": {
-                    "min_total_values": 1,
-                    "lower_bound": 1,
-                    "upper_bound": 12,
-                    "use_integers_only": True,
-                },
-                "validate_fun": self.check_months,
-                "help_text": "The numeric values of the months the flow duration "
-                + "curve should be calculated for",
-            },
-        ]
         super().__init__(
             form=form,
             section_data=section_data,
-            section_fields=section_fields,
-            log_name=self.__class__.__name__,
+            section_fields=[
+                FieldConfig(
+                    name="months",
+                    value={"values": form.field_value("months")},
+                    field_type=TableValuesWidget,
+                    field_args={
+                        "min_total_values": 1,
+                        "lower_bound": 1,
+                        "upper_bound": 12,
+                        "use_integers_only": True,
+                    },
+                    validate_fun=self.check_months,
+                    help_text="The numeric values of the months the flow duration "
+                    "curve should be calculated for",
+                ),
+            ],
             additional_fdc_help_text=". The FDC will be calculated only for the "
             + "months provided below",
         )
 
     @staticmethod
-    def check_months(name: set, label: str, values: dict[str, list[float]]):
+    def check_months(
+        name: str, label: str, values: dict[str, list[float]]
+    ) -> Validation:
         """
         Checks that the months are all different.
         :param name: The field name.

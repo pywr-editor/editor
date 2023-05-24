@@ -1,4 +1,9 @@
-from pywr_editor.form import FloatWidget, FormSection, ParameterLineEditWidget
+from pywr_editor.form import (
+    FieldConfig,
+    FloatWidget,
+    FormSection,
+    ParameterLineEditWidget,
+)
 from pywr_editor.utils import Logging
 
 from ..parameter_dialog_form import ParameterDialogForm
@@ -28,35 +33,28 @@ class AbstractMinMaxParameterSection(FormSection):
         self.logger = Logging().logger(log_name)
         self.parameter_help_text = parameter_help_text
 
-    @property
-    def data(self):
-        """
-        Defines the section data dictionary.
-        :return: The section dictionary.
-        """
         self.form: ParameterDialogForm
-        self.logger.debug("Registering form")
 
-        data_dict = {
-            "Configuration": [
-                {
-                    "name": "parameter",
-                    "field_type": ParameterLineEditWidget,
-                    "value": self.form.get_param_dict_value("parameter"),
-                    "help_text": self.parameter_help_text,
-                },
-                {
-                    "name": "threshold",
-                    "field_type": FloatWidget,
-                    # pywr class defaults to 0
-                    "default_value": 0,
-                    "allow_empty": False,
-                    "value": self.form.get_param_dict_value("threshold"),
-                    "help_text": "The threshold to compare to the above parameter. "
-                    + "Default to 0",
-                },
-            ],
-            "Miscellaneous": [self.form.comment],
-        }
-
-        return data_dict
+        self.add_fields(
+            {
+                "Configuration": [
+                    FieldConfig(
+                        name="parameter",
+                        field_type=ParameterLineEditWidget,
+                        value=self.form.field_value("parameter"),
+                        help_text=self.parameter_help_text,
+                    ),
+                    FieldConfig(
+                        name="threshold",
+                        field_type=FloatWidget,
+                        # pywr class defaults to 0
+                        default_value=0,
+                        allow_empty=False,
+                        value=self.form.field_value("threshold"),
+                        help_text="The threshold to compare to the above parameter. "
+                        "Default to 0",
+                    ),
+                ],
+                "Miscellaneous": [self.form.comment],
+            }
+        )

@@ -1,5 +1,4 @@
-from pywr_editor.form import FieldConfig, FormSection, Validation
-from pywr_editor.utils import Logging
+from pywr_editor.form import FormSection, Validation
 
 from ..node_dialog_form import NodeDialogForm
 
@@ -13,7 +12,6 @@ class AbstractStorageSection(FormSection):
         :param section_data: A dictionary containing data to pass to the widget.
         """
         super().__init__(form, section_data)
-        self.logger = Logging().logger(self.__class__.__name__)
 
     def validate(self, form_data: dict) -> Validation:
         """
@@ -55,15 +53,7 @@ class AbstractStorageSection(FormSection):
         ):
             return Validation(
                 "You must provide both the initial absolute and "
-                + "relative volume when the 'Maximum storage' is a parameter"
+                "relative volume when the 'Maximum storage' is a parameter"
             )
 
         return Validation()
-
-    @property
-    def data(self) -> dict[str, list[FieldConfig]]:
-        """
-        Defines the section data dictionaries list.
-        :return: The section data.
-        """
-        raise NotImplementedError("The section data property is not implemented")

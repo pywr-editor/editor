@@ -33,7 +33,7 @@ class ExternalDataPickerFormWidget(ModelComponentForm):
 
         super().__init__(
             form_dict=external_data_dict,
-            available_fields={},
+            fields={},
             model_config=model_config,
             save_button=save_button,
             parent=parent,
@@ -81,7 +81,7 @@ class ExternalDataPickerFormWidget(ModelComponentForm):
 
         # get source
         # noinspection PyTypeChecker
-        source_widget: SourceSelectorWidget = self.find_field_by_name("source").widget
+        source_widget: SourceSelectorWidget = self.find_field("source").widget
         labels = source_widget.labels
 
         # delete keys

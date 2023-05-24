@@ -35,7 +35,7 @@ class ParameterPickerFormWidget(ParameterForm):
         super().__init__(
             model_config=model_config,
             parameter_obj=component_obj,
-            available_fields=build_picker_form_fields(
+            fields=build_picker_form_fields(
                 component_obj=component_obj,
                 component_type="parameter",
                 include_comp_key=include_comp_key,

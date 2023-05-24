@@ -3,9 +3,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QPushButton, QWidget
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.dialogs.parameters.parameter_page_widget import (
-    ParameterPageWidget,
-)
+from pywr_editor.dialogs.parameters.parameter_page_widget import ParameterPageWidget
 from pywr_editor.dialogs.parameters.sections.storage_threshold_parameter_section import (  # noqa: E501
     StorageThresholdParameterSection,
 )
@@ -122,9 +120,9 @@ class TestDialogParameterLineEditWidget:
         selected_page: ParameterPageWidget = dialog.pages_widget.currentWidget()
         form = selected_page.form
 
-        threshold_field = form.find_field_by_name("threshold")
+        threshold_field = form.find_field("threshold")
         threshold_widget: ParameterLineEditWidget = threshold_field.widget
-        assert form.find_field_by_name("name").value() == param_name
+        assert form.find_field("name").value() == param_name
 
         # 1. Check field is loaded properly
         assert threshold_field.message.text() == ""
@@ -227,7 +225,7 @@ class TestDialogParameterLineEditWidget:
         form.load_fields()
 
         # 3. Check type selector and the section is loaded
-        type_selector_widget: ParameterTypeSelectorWidget = form.find_field_by_name(
+        type_selector_widget: ParameterTypeSelectorWidget = form.find_field(
             "type"
         ).widget
         type_selector_widget.combo_box.setCurrentText("Storage threshold parameter")
@@ -244,7 +242,7 @@ class TestDialogParameterLineEditWidget:
         storage_node.combo_box.setCurrentIndex(selected_index)
 
         # 4. Add the threshold value
-        param_line_edit_widget: ParameterLineEditWidget = form.find_field_by_name(
+        param_line_edit_widget: ParameterLineEditWidget = form.find_field(
             "threshold"
         ).widget
         qtbot.mouseClick(
@@ -279,7 +277,7 @@ class TestDialogParameterLineEditWidget:
         qtbot.wait(200)
         qtbot.mouseClick(main_save_button, Qt.MouseButton.LeftButton)
 
-        name = page.form.find_field_by_name("name").widget.text()
+        name = page.form.find_field("name").widget.text()
         assert model_config.parameters.config(name) == value
 
     # noinspection PyTypeChecker
@@ -607,7 +605,7 @@ class TestDialogParameterLineEditWidget:
         form = ParameterForm(
             model_config=ModelConfig(),
             parameter_obj=ParameterConfig({}),
-            available_fields={
+            fields={
                 "Section": [
                     {
                         "name": "value",
@@ -627,7 +625,7 @@ class TestDialogParameterLineEditWidget:
         form.enable_optimisation_section = False
         form.load_fields()
 
-        form_field = form.find_field_by_name("value")
+        form_field = form.find_field("value")
         # noinspection PyTypeChecker
         widget: ParameterLineEditWidget = form_field.widget
 

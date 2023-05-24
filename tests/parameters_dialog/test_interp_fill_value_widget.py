@@ -24,7 +24,7 @@ class TestDialogParameterInterpFillValueWidget:
         form = ParameterForm(
             model_config=ModelConfig(),
             parameter_obj=ParameterConfig({}),
-            available_fields={
+            fields={
                 "Section": [
                     {
                         "name": "fill_value",
@@ -39,7 +39,7 @@ class TestDialogParameterInterpFillValueWidget:
         form.enable_optimisation_section = False
         form.load_fields()
 
-        fill_value_field = form.find_field_by_name("fill_value")
+        fill_value_field = form.find_field("fill_value")
         # noinspection PyTypeChecker
         return fill_value_field.widget
 
@@ -63,7 +63,7 @@ class TestDialogParameterInterpFillValueWidget:
         fill_value_widget = self.widget(
             value=value,
         )
-        fill_value_field: FormField = fill_value_widget.form_field
+        fill_value_field: FormField = fill_value_widget.field
 
         # register app to test field visibility
         app = QMainWindow()
@@ -123,7 +123,7 @@ class TestDialogParameterInterpFillValueWidget:
         fill_value_widget = self.widget(
             value=value,
         )
-        fill_value_field: FormField = fill_value_widget.form_field
+        fill_value_field: FormField = fill_value_widget.field
 
         # register app to test field visibility
         app = QMainWindow()

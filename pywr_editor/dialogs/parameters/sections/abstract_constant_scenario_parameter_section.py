@@ -3,6 +3,7 @@ from typing import Any, Type
 from PySide6.QtCore import Slot
 
 from pywr_editor.form import (
+    FieldConfig,
     FormSection,
     ScenarioPickerWidget,
     SourceSelectorWidget,
@@ -59,39 +60,41 @@ class AbstractConstantScenarioParameterSection(FormSection):
         optional_index_field = self.form.index_field
         optional_index_field["field_args"] = {"optional": True}
 
-        self.form_dict = {
-            "Configuration": [
-                {
-                    "name": "scenario",
-                    "field_type": ScenarioPickerWidget,
-                    "value": self.form.get_param_dict_value("scenario"),
-                },
-            ],
-            "Source": [
-                self.form.source_field,
-                {
-                    "name": "values",
-                    "field_type": values_widget,
-                    "field_args": values_widget_options,
-                    "value": {
-                        "values": self.form.get_param_dict_value("values"),
-                    },
-                },
-                # table
-                self.form.table_field,
-                # anonymous table
-                self.form.url_field,
-            ]
-            + self.form.csv_parse_fields
-            + self.form.excel_parse_fields
-            + self.form.h5_parse_fields,
-            self.form.table_config_group_name: [
-                self.form.index_col_field,
-                optional_index_field,
-                optional_col_field,
-            ],
-            "Miscellaneous": [self.form.comment],
-        }
+        self.add_fields(
+            {
+                "Configuration": [
+                    FieldConfig(
+                        name="scenario",
+                        field_type=ScenarioPickerWidget,
+                        value=self.form.field_value("scenario"),
+                    ),
+                ],
+                "Source": [
+                    self.form.source_field,
+                    FieldConfig(
+                        name="values",
+                        field_type=values_widget,
+                        field_args=values_widget_options,
+                        value={
+                            "values": self.form.field_value("values"),
+                        },
+                    ),
+                    # table
+                    self.form.table_field,
+                    # anonymous table
+                    self.form.url_field,
+                ]
+                + self.form.csv_parse_fields
+                + self.form.excel_parse_fields
+                + self.form.h5_parse_fields,
+                self.form.table_config_group_name: [
+                    self.form.index_col_field,
+                    optional_index_field,
+                    optional_col_field,
+                ],
+                "Miscellaneous": [self.form.comment],
+            }
+        )
 
         self.form.register_after_render_action(self.register_scenario_change)
 
@@ -100,7 +103,7 @@ class AbstractConstantScenarioParameterSection(FormSection):
         Registers a slot to notify when the scenario name is changed.
         :return: None
         """
-        form_field = self.form.find_field_by_name("scenario")
+        form_field = self.form.find_field("scenario")
         # noinspection PyTypeChecker
         widget: ScenarioPickerWidget = form_field.widget
         # noinspection PyUnresolvedReferences
@@ -118,8 +121,8 @@ class AbstractConstantScenarioParameterSection(FormSection):
         )
         self.form: "ParameterDialogForm"
 
-        scenario_field = self.form.find_field_by_name("scenario")
-        values_field = self.form.find_field_by_name("values")
+        scenario_field = self.form.find_field("scenario")
+        values_field = self.form.find_field("values")
         values_widget: TableValuesWidget = values_field.widget
 
         scenario = scenario_field.value()
@@ -133,27 +136,9 @@ class AbstractConstantScenarioParameterSection(FormSection):
         else:
             values_widget.exact_total_values = None
 
-    @property
-    def data(self):
-        """
-        Defines the section data dictionary.
-        :return: The section dictionary.
-        """
-        self.logger.debug("Registering form")
-
-        return self.form_dict
-
     def validate(self, form_data):
-        """
-        Validates the section/data after all the widgets are validated.
-        :param form_data: The form data dictionary when the form validation is
-        successful.
-        :return: The Validation instance.
-        """
         # noinspection PyTypeChecker
-        source_widget: SourceSelectorWidget = self.form.find_field_by_name(
-            "source"
-        ).widget
+        source_widget: SourceSelectorWidget = self.form.find_field("source").widget
         labels = source_widget.labels
 
         # check external data
@@ -174,14 +159,12 @@ class AbstractConstantScenarioParameterSection(FormSection):
 
     def filter(self, form_data):
         """
-        Removes fields depending on the value set in source.
+        Remove fields depending on the value set in source.
         :param form_data: The form data dictionary.
         :return: None.
         """
         # noinspection PyTypeChecker
-        source_widget: SourceSelectorWidget = self.form.find_field_by_name(
-            "source"
-        ).widget
+        source_widget: SourceSelectorWidget = self.form.find_field("source").widget
         labels = source_widget.labels
 
         url_fields = (

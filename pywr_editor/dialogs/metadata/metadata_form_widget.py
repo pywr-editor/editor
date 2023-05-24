@@ -70,7 +70,7 @@ class MetadataFormWidget(Form):
         }
 
         super().__init__(
-            available_fields=available_fields,
+            fields=available_fields,
             save_button=parent.save_button,
             parent=parent,
         )

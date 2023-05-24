@@ -56,7 +56,7 @@ class ScenarioPickerWidget(FormCustomWidget):
         elif not isinstance(value, str):
             message = "The scenario in the model configuration must be a string"
             self.logger.debug(message)
-            self.form_field.set_warning_message(message)
+            self.field.set_warning(message)
         # name is in scenario names
         elif value in scenario_names:
             # find index by data
@@ -68,13 +68,13 @@ class ScenarioPickerWidget(FormCustomWidget):
                 + "configuration"
             )
             self.logger.debug(message)
-            self.form_field.set_warning_message(message)
+            self.field.set_warning(message)
 
         # overwrite warning if there are no scenarios in the model
         if is_mandatory and len(scenario_names) == 0:
             message = "The are no scenarios defined in the model"
             self.combo_box.setEnabled(False)
-            self.form_field.set_warning_message(
+            self.field.set_warning(
                 message + ". Add a new scenario first before setting up this field"
             )
             self.logger.debug(message + ". Field disabled")

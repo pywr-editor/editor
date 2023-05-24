@@ -70,7 +70,7 @@ class ControlCurvesValuesSourceWidget(AbstractStringComboBoxWidget):
             self.form.change_field_visibility(
                 name=field_name, show=self.get_value() == field_name
             )
-            widget = self.form.find_field_by_name(field_name).widget
+            widget = self.form.find_field(field_name).widget
             # reset only after init
             if self.init is False:
                 widget.reset()

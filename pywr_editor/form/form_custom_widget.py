@@ -25,8 +25,8 @@ class FormCustomWidget(QWidget):
         super().__init__(parent)
         self.name = name
         self.value = value
-        self.form_field = parent
-        self.form: "Form" = self.form_field.form
+        self.field = parent
+        self.form: "Form" = self.field.form
 
     def _type(self) -> str:
         """
@@ -82,9 +82,9 @@ class FormCustomWidget(QWidget):
         """
         Event executed after the widget is validated and its value is added to the
         the form.
-        :param form_dict: The dictionary containing the data of the form
-        the widget is child of.
+        :param form_dict: The dictionary containing the data of the form the widget is
+        child of.
         :param form_field_name: The name of the parent FormField.
         :return: None
         """
-        pass
+        return

@@ -88,7 +88,7 @@ class SheetNameWidget(FormCustomWidget):
         # on_update_value is called whilst the field is still empty
         self.setEnabled(False)
         self.combo_box.clear()
-        self.form_field.clear_message(message_type="warning")
+        self.field.clear_message(message_type="warning")
 
         # Load sheets
         self.load_excel_sheets()
@@ -101,9 +101,7 @@ class SheetNameWidget(FormCustomWidget):
         # the file does not contain sheets
         elif self.has_excel_sheet is False:
             self.logger.debug("The Excel file does not contain any sheet")
-            self.form_field.set_warning_message(
-                "The Excel file does not contain any sheet"
-            )
+            self.field.set_warning("The Excel file does not contain any sheet")
         else:
             self.setEnabled(True)
             self.combo_box.addItems(self.excel_sheets)
@@ -114,7 +112,7 @@ class SheetNameWidget(FormCustomWidget):
                     f"{self.value} is not a valid sheet name (using first sheet). "
                     + "Setting warning message"
                 )
-                self.form_field.set_warning_message(
+                self.field.set_warning(
                     "The sheet name, currently set in the model config file, does not "
                     + "exist in the Excel file. The first available sheet was "
                     + "selected, otherwise select another name"
@@ -137,7 +135,7 @@ class SheetNameWidget(FormCustomWidget):
             f"Running on_update_value Slot with value {selected_sheet} from "
             + get_signal_sender(self)
         )
-        self.form_field.clear_message(message_type="warning")
+        self.field.clear_message(message_type="warning")
         self.value = self.sanitise_value(selected_sheet)
         self.logger.debug(f"Updated field value to {self.value}")
         self.logger.debug("Completed on_update_value Slot")

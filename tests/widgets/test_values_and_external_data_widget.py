@@ -43,7 +43,7 @@ class TestDialogParameterValuesAndExternalDataWidget:
         form = ParameterForm(
             model_config=ModelConfig(resolve_model_path("model_tables.json")),
             parameter_obj=ParameterConfig({}),
-            available_fields={
+            fields={
                 "Section": [
                     {
                         "name": "value",
@@ -59,7 +59,7 @@ class TestDialogParameterValuesAndExternalDataWidget:
         form.enable_optimisation_section = False
         form.load_fields()
 
-        form_field = form.find_field_by_name("value")
+        form_field = form.find_field("value")
         # noinspection PyTypeChecker
         return form_field.widget
 
@@ -115,7 +115,7 @@ class TestDialogParameterValuesAndExternalDataWidget:
         Tests that the field is loaded correctly.
         """
         widget = self.widget(value=value, field_args=field_args)
-        form_field: FormField = widget.form_field
+        form_field: FormField = widget.field
 
         # register app to test field visibility
         app = QMainWindow()
@@ -287,7 +287,7 @@ class TestDialogParameterValuesAndExternalDataWidget:
         invalid.
         """
         widget = self.widget(value=value, field_args=field_args)
-        form_field: FormField = widget.form_field
+        form_field: FormField = widget.field
 
         # register app to test field visibility
         app = QMainWindow()
@@ -377,7 +377,7 @@ class TestDialogParameterValuesAndExternalDataWidget:
 
         for widget_class, value_to_check in values_dict.items():
             child_widget: FormCustomWidget = child_dialog.findChild(widget_class)
-            assert child_widget.form_field.message.text() == ""
+            assert child_widget.field.message.text() == ""
             if widget_class == SourceSelectorWidget:
                 child_widget: SourceSelectorWidget
                 assert child_widget.get_value() == child_widget.labels[value_to_check]

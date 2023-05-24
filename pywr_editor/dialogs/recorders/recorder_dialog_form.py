@@ -2,7 +2,12 @@ from typing import TYPE_CHECKING
 
 from PySide6.QtWidgets import QPushButton
 
-from pywr_editor.form import RecorderForm, RecorderTypeSelectorWidget, Validation
+from pywr_editor.form import (
+    FieldConfig,
+    RecorderForm,
+    RecorderTypeSelectorWidget,
+    Validation,
+)
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import Logging
 
@@ -48,25 +53,25 @@ class RecorderDialogForm(RecorderForm):
         )
         available_fields = {
             "General": [
-                {
-                    "name": "name",
-                    "value": name,
-                    "help_text": "A unique name identifying the recorder",
-                    "allow_empty": False,
-                    "validate_fun": self._check_recorder_name,
-                },
-                {
-                    "name": "type",
-                    "field_type": RecorderTypeSelectorWidget,
-                    "value": self.recorder_obj,
-                },
+                FieldConfig(
+                    name="name",
+                    value=name,
+                    help_text="A unique name identifying the recorder",
+                    allow_empty=False,
+                    validate_fun=self._check_recorder_name,
+                ),
+                FieldConfig(
+                    name="type",
+                    field_type=RecorderTypeSelectorWidget,
+                    value=self.recorder_obj,
+                ),
             ],
         }
 
         super().__init__(
             model_config=model_config,
             recorder_obj=self.recorder_obj,
-            available_fields=available_fields,
+            fields=available_fields,
             save_button=save_button,
             parent=parent,
         )

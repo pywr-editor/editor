@@ -28,7 +28,7 @@ class TestDialogParameterTypeSelectorWidget:
         form = ParameterForm(
             model_config=ModelConfig(resolve_model_path("model_1.json")),
             parameter_obj=ParameterConfig(value),
-            available_fields={
+            fields={
                 "Section": [
                     {
                         "name": "type",
@@ -116,7 +116,7 @@ class TestDialogParameterTypeSelectorWidget:
         Tests the widget when a valid parameter type is used.
         """
         form = self.form(param_dict, filtered_keys)
-        param_type_field = form.find_field_by_name("type")
+        param_type_field = form.find_field("type")
         # noinspection PyTypeChecker
         param_type_widget: ParameterTypeSelectorWidget = param_type_field.widget
 
@@ -159,7 +159,7 @@ class TestDialogParameterTypeSelectorWidget:
         parameter is not.
         """
         form = self.form(param_dict, filtered_keys)
-        param_type_field = form.find_field_by_name("type")
+        param_type_field = form.find_field("type")
         # noinspection PyTypeChecker
         param_type_widget: ParameterTypeSelectorWidget = param_type_field.widget
 

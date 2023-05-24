@@ -155,7 +155,7 @@ class TableSelectorWidget(FormCustomWidget):
         # register updated_table Slot When the table changes, When the table changes,
         # the fields using the table content must be updated
         for field_name in self.register_updated_table:
-            form_field = self.form.find_field_by_name(field_name)
+            form_field = self.form.find_field(field_name)
             if form_field is None:
                 self.logger.debug(
                     f"Skipping registration of Slot {field_name}.update_field because "
@@ -200,7 +200,7 @@ class TableSelectorWidget(FormCustomWidget):
         self.combo_box.blockSignals(True)
 
         # init
-        self.form_field.clear_message()
+        self.field.clear_message()
         self.combo_box.setEnabled(False)
         self.open_button.setEnabled(False)
         self.reload_button.setEnabled(False)
@@ -213,7 +213,7 @@ class TableSelectorWidget(FormCustomWidget):
         if not self.table_names:
             message = "The are no tables defined in the model configuration"
             self.logger.debug(message)
-            self.form_field.set_warning_message(message)
+            self.field.set_warning(message)
         else:
             # enable the ComboBox and set the selection
             self.combo_box.setEnabled(True)
@@ -224,7 +224,7 @@ class TableSelectorWidget(FormCustomWidget):
             elif table_name is not None and not isinstance(table_name, str):
                 message = "The table in the model configuration must be a string"
                 self.logger.debug(message)
-                self.form_field.set_warning_message(message)
+                self.field.set_warning(message)
             # valid string
             elif table_name is not None:
                 if table_name in self.table_names:
@@ -236,7 +236,7 @@ class TableSelectorWidget(FormCustomWidget):
                     if self.file is None:
                         message = "The table file does not exist"
                         self.logger.debug(message)
-                        self.form_field.set_warning_message(message)
+                        self.field.set_warning(message)
                         # let user reload file if it is later created (as long as
                         # table exists)
                         if table_name in self.table_names:
@@ -247,9 +247,9 @@ class TableSelectorWidget(FormCustomWidget):
                             + "supported"
                         )
                         self.logger.debug(message)
-                        self.form_field.set_warning_message(message)
+                        self.field.set_warning(message)
                     elif self.table_parse_error:
-                        self.form_field.set_error_message(
+                        self.field.set_error(
                             "Cannot parse the file. The provided table options are "
                             + "wrong. You can change them in the Table dialog"
                         )
@@ -264,7 +264,7 @@ class TableSelectorWidget(FormCustomWidget):
                             f"The table name '{table_name}', set in the model "
                             + "configuration, does not exist"
                         )
-                        self.form_field.set_warning_message(message)
+                        self.field.set_warning(message)
                         self.logger.debug(message)
 
         self.combo_box.blockSignals(False)

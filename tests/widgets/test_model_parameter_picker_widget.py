@@ -42,7 +42,7 @@ class TestDialogModelParameterPickerWidget:
         form = ParameterForm(
             model_config=self.model_config(config_file),
             parameter_obj=ParameterConfig({}),
-            available_fields={
+            fields={
                 "Section": [
                     {
                         "name": "type",
@@ -69,7 +69,7 @@ class TestDialogModelParameterPickerWidget:
             filtered_keys=None,
             config_file="test_coordinates.json",
         )
-        model_params_field = form.find_field_by_name("type")
+        model_params_field = form.find_field("type")
         # noinspection PyTypeChecker
         model_params_widget: ModelParameterPickerWidget = model_params_field.widget
         assert "no parameters available" in model_params_field.message.text()
@@ -96,7 +96,7 @@ class TestDialogModelParameterPickerWidget:
         Tests the widget when a valid parameter name is used.
         """
         form = self.form(param_name, filtered_keys)
-        model_params_field = form.find_field_by_name("type")
+        model_params_field = form.find_field("type")
         # noinspection PyTypeChecker
         model_params_widget: ModelParameterPickerWidget = model_params_field.widget
 
@@ -145,7 +145,7 @@ class TestDialogModelParameterPickerWidget:
         parameter types are allowed or the parameter does not exist).
         """
         form = self.form(param_name, filtered_keys)
-        model_params_field = form.find_field_by_name("type")
+        model_params_field = form.find_field("type")
         # noinspection PyTypeChecker
         model_params_widget: ModelParameterPickerWidget = model_params_field.widget
 

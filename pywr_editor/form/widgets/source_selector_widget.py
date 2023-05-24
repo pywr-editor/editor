@@ -129,7 +129,7 @@ class SourceSelectorWidget(FormCustomWidget):
         if self.init is False:
             for name in ["url", "table", "value", "values"]:
                 self.logger.debug(f"Resetting FormField '{name}'")
-                form_field = self.form.find_field_by_name(name)
+                form_field = self.form.find_field(name)
                 # ignore non-existing fields
                 if form_field is not None:
                     # noinspection PyUnresolvedReferences

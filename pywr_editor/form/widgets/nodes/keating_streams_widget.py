@@ -98,7 +98,7 @@ class KeatingStreamsWidget(FormCustomWidget):
 
         if warning_message:
             self.logger.debug(warning_message)
-            self.form_field.set_warning_message(warning_message)
+            self.field.set_warning(warning_message)
 
     @Slot()
     def on_value_change(self) -> None:

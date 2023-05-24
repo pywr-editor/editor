@@ -22,9 +22,7 @@ from pywr_editor.form import (
     SourceSelectorWidget,
 )
 from pywr_editor.form.widgets.float_widget import FloatWidget
-from pywr_editor.form.widgets.parameter_line_edit_widget import (
-    ParameterLineEditWidget,
-)
+from pywr_editor.form.widgets.parameter_line_edit_widget import ParameterLineEditWidget
 from pywr_editor.model import ModelConfig, ParameterConfig
 from tests.utils import resolve_model_path
 
@@ -78,7 +76,7 @@ class TestDialogParameterPicker:
 
         # 1. Check parameter source
         param_source_widget: ModelComponentSourceSelectorWidget = (
-            dialog.form.find_field_by_name("comp_source").widget
+            dialog.form.find_field("comp_source").widget
         )
         assert (
             param_source_widget.combo_box.currentText()
@@ -87,7 +85,7 @@ class TestDialogParameterPicker:
 
         # 2. Check model parameter list widget
         # noinspection PyTypeChecker
-        model_param_field: FormField = dialog.form.find_field_by_name("comp_name")
+        model_param_field: FormField = dialog.form.find_field("comp_name")
         model_param_widget: ParameterPickerWidget = model_param_field.widget
         assert model_param_widget.combo_box.currentText() == child_param_name
         assert model_param_field.message.text() == ""
@@ -141,7 +139,7 @@ class TestDialogParameterPicker:
 
         # 1. Check parameter source
         param_source_widget: ModelComponentSourceSelectorWidget = (
-            dialog.form.find_field_by_name("comp_source").widget
+            dialog.form.find_field("comp_source").widget
         )
         assert (
             param_source_widget.combo_box.currentText()
@@ -150,7 +148,7 @@ class TestDialogParameterPicker:
 
         # 2. Check model parameter list widget
         # noinspection PyTypeChecker
-        model_param_field: FormField = dialog.form.find_field_by_name("comp_name")
+        model_param_field: FormField = dialog.form.find_field("comp_name")
         model_param_widget: ParameterPickerWidget = model_param_field.widget
         # parameter selector is visible
         assert model_param_field.isHidden() is False
@@ -230,7 +228,7 @@ class TestDialogParameterPicker:
 
         # 1. Check parameter source
         param_source_widget: ModelComponentSourceSelectorWidget = (
-            dialog.form.find_field_by_name("comp_source").widget
+            dialog.form.find_field("comp_source").widget
         )
         assert (
             param_source_widget.combo_box.currentText()
@@ -243,7 +241,7 @@ class TestDialogParameterPicker:
 
         # 3. ParameterPickerWidget is hidden
         # noinspection PyTypeChecker
-        model_param_field: FormField = dialog.form.find_field_by_name("comp_name")
+        model_param_field: FormField = dialog.form.find_field("comp_name")
         # noinspection PyTypeChecker
         model_param_widget: ParameterPickerWidget = model_param_field.widget
         assert model_param_field.message.text() == ""
@@ -259,7 +257,7 @@ class TestDialogParameterPicker:
         for key, value in param_dict.items():
             if key == "type":
                 continue
-            widget: FormCustomWidget = dialog.form.find_field_by_name(key).widget
+            widget: FormCustomWidget = dialog.form.find_field(key).widget
             assert widget.get_value() == value
 
         # 6. Form validation (must return the same dictionary)
@@ -305,9 +303,7 @@ class TestDialogParameterPicker:
         assert save_button.isEnabled() is False
 
         # open the dialog and update the child form
-        volume_widget: ParameterLineEditWidget = form.find_field_by_name(
-            "max_volume"
-        ).widget
+        volume_widget: ParameterLineEditWidget = form.find_field("max_volume").widget
         qtbot.mouseClick(volume_widget.select_button, Qt.MouseButton.LeftButton)
 
         # noinspection PyTypeChecker
@@ -321,7 +317,7 @@ class TestDialogParameterPicker:
         assert child_save_button.isEnabled() is False
 
         # type a number
-        value_widget: FloatWidget = child_dialog.form.find_field_by_name("value").widget
+        value_widget: FloatWidget = child_dialog.form.find_field("value").widget
         qtbot.keyPress(value_widget.line_edit, Qt.Key.Key_1)
         # the nested save button is enabled
         assert child_save_button.isEnabled() is True

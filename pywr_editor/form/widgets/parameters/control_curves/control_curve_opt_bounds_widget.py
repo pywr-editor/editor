@@ -39,7 +39,7 @@ class ControlCurveOptBoundsWidget(AbstractFloatListWidget):
         # bounds are provided
         if bounds:
             # this field is mandatory if variable_indices is set
-            var_indices_field = self.form.find_field_by_name("variable_indices")
+            var_indices_field = self.form.find_field("variable_indices")
             if not var_indices_field.value():
                 return Validation(
                     "You can set this field only if you have set the "
@@ -47,7 +47,7 @@ class ControlCurveOptBoundsWidget(AbstractFloatListWidget):
                 )
 
             # "values" key must be selected
-            values_source_field = self.form.find_field_by_name("values_source")
+            values_source_field = self.form.find_field("values_source")
             if values_source_field.value() != "values":
                 return Validation(
                     "You can set this field only if you have set the "

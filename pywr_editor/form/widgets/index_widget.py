@@ -92,7 +92,7 @@ class IndexWidget(FormCustomWidget):
         value. If the index names are not provided, the dictionary is empty. If at
         least one index value is not provided, all the values are set to None.
         """
-        value_source_field = self.form.find_field_by_name("source")
+        value_source_field = self.form.find_field("source")
         selected_source = value_source_field.value()
         # noinspection PyTypeChecker
         value_source_widget: SourceSelectorWidget = value_source_field.widget
@@ -100,7 +100,7 @@ class IndexWidget(FormCustomWidget):
         # dataframe from the table set in the table field
         if selected_source == value_source_widget.labels["table"]:
             # noinspection PyTypeChecker
-            table_selector_widget: TableSelectorWidget = self.form.find_field_by_name(
+            table_selector_widget: TableSelectorWidget = self.form.find_field(
                 "table"
             ).widget
             # if table is not available or invalid, preserve index names from
@@ -139,7 +139,7 @@ class IndexWidget(FormCustomWidget):
             # and convert to string
             if isinstance(index_names[0], int):
                 # noinspection PyTypeChecker
-                url_widget: UrlWidget = self.form.find_field_by_name("url").widget
+                url_widget: UrlWidget = self.form.find_field("url").widget
                 columns = get_columns(url_widget.table, True)
                 new_index_names = []
                 for index in index_names:
@@ -230,7 +230,7 @@ class IndexWidget(FormCustomWidget):
         """
         self.logger.debug("Fetching table")
         # noinspection PyTypeChecker
-        value_source_field = self.form.find_field_by_name("source")
+        value_source_field = self.form.find_field("source")
         selected_source = value_source_field.value()
         # noinspection PyTypeChecker
         value_source_widget: SourceSelectorWidget = value_source_field.widget
@@ -238,14 +238,12 @@ class IndexWidget(FormCustomWidget):
         # dataframe from the table set in the table field
         if selected_source == value_source_widget.labels["table"]:
             # noinspection PyTypeChecker
-            table_field: TableSelectorWidget = self.form.find_field_by_name(
-                "table"
-            ).widget
+            table_field: TableSelectorWidget = self.form.find_field("table").widget
             self.logger.debug("Table loaded from TableSelectorWidget")
         # dataframe from the table set in the url field
         elif selected_source == value_source_widget.labels["anonymous_table"]:
             # noinspection PyTypeChecker
-            table_field: UrlWidget = self.form.find_field_by_name("url").widget
+            table_field: UrlWidget = self.form.find_field("url").widget
             self.logger.debug("Table loaded from UrlWidget")
         else:
             self.logger.debug("The table cannot be fetched")
@@ -351,7 +349,7 @@ class IndexWidget(FormCustomWidget):
         # empty the layout
         self.logger.debug("Resetting widget")
         clear_layout(self.layout)
-        self.form_field.clear_message(message_type="warning")
+        self.field.clear_message(message_type="warning")
 
         table, _ = self.table
         columns = get_columns(table)
@@ -368,9 +366,7 @@ class IndexWidget(FormCustomWidget):
                     "The table does not contain any column. Keeping field disabled "
                     + "with warning"
                 )
-                self.form_field.set_warning_message(
-                    "The table does not contain any column"
-                )
+                self.field.set_warning("The table does not contain any column")
             # no rows - although columns are available and index names may be set,
             # just show dummy field
             elif len(table) == 0:
@@ -378,9 +374,7 @@ class IndexWidget(FormCustomWidget):
                     "The table does not contain any rows. Keeping field disabled "
                     + "with warning"
                 )
-                self.form_field.set_warning_message(
-                    "The table does not contain any row"
-                )
+                self.field.set_warning("The table does not contain any row")
             # show dummy field
             layout, _ = self.render_field_layout(default_index_name, 0)
             self.layout.addLayout(layout)
@@ -424,7 +418,7 @@ class IndexWidget(FormCustomWidget):
                 combo_box.currentTextChanged.connect(self.on_update_value)
 
             if wrong_index_values:
-                self.form_field.set_warning_message(
+                self.field.set_warning(
                     "The value of the following indexes is not valid or does not exist "
                     + "in the table: "
                     + ", ".join(wrong_index_values)
@@ -443,7 +437,7 @@ class IndexWidget(FormCustomWidget):
             f"Running on_update_value Slot - {get_signal_sender(self)} value changed "
             + f"to {new_index_value}"
         )
-        self.form_field.clear_message(message_type="warning")
+        self.field.clear_message(message_type="warning")
 
         # Collect all the index values to sanitise
         new_values = {}
@@ -605,7 +599,7 @@ class IndexWidget(FormCustomWidget):
             return dict_value[names[0]]
 
         # multi-indexes table
-        value_source_field = self.form.find_field_by_name("source")
+        value_source_field = self.form.find_field("source")
         selected_source = value_source_field.value()
         # noinspection PyTypeChecker
         value_source_widget: SourceSelectorWidget = value_source_field.widget
@@ -617,9 +611,7 @@ class IndexWidget(FormCustomWidget):
         # With anonymous tables, convert index dict to list using sorting from index_col
         elif selected_source == value_source_widget.labels["anonymous_table"]:
             # noinspection PyTypeChecker
-            index_col_widget: IndexColWidget = self.form.find_field_by_name(
-                "index_col"
-            ).widget
+            index_col_widget: IndexColWidget = self.form.find_field("index_col").widget
             index_names = index_col_widget.get_value()
             if index_names:
                 return [dict_value[index_name] for index_name in index_names]

@@ -47,7 +47,7 @@ class ParameterPickerWidget(ModelParameterPickerWidget):
         :param form: The instance of the form.
         :return: The instance of Validation
         """
-        component_source_widget = form.find_field_by_name("comp_source").widget
+        component_source_widget = form.find_field("comp_source").widget
         if (
             component_source_widget.get_value()
             == component_source_widget.labels["model_component"]

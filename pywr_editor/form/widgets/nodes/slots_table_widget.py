@@ -164,7 +164,7 @@ class SlotsTableWidget(FormCustomWidget):
         self.slot_table.setSelectionMode(TableView.SelectionMode.SingleSelection)
 
         if warning_message:
-            self.form_field.set_warning_message(warning_message)
+            self.field.set_warning(warning_message)
 
         # disable table if node is not properly connected or slots are wrong
         if edge_counter_message or not slot_map:

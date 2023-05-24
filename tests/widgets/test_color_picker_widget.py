@@ -19,7 +19,7 @@ class TestColorPickerWidget:
         :return: An instance of ColorPickerWidget.
         """
         form = Form(
-            available_fields={
+            fields={
                 "Section": [
                     {
                         "name": "colour",
@@ -34,7 +34,7 @@ class TestColorPickerWidget:
         form.enable_optimisation_section = False
         form.load_fields()
 
-        form_field = form.find_field_by_name("colour")
+        form_field = form.find_field("colour")
         return form_field.widget
 
     @pytest.mark.parametrize(

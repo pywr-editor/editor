@@ -134,7 +134,7 @@ class ModelComponentPickerDialog(QDialog):
         :return: None
         """
         self.logger.debug("Saving form")
-        source_widget = self.form.find_field_by_name("comp_source").widget
+        source_widget = self.form.find_field("comp_source").widget
 
         form_data = self.form.save()
         if form_data is False:

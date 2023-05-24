@@ -83,7 +83,7 @@ class H5FileWidget(FormCustomWidget):
         :return: None
         """
         self.logger.debug("Registering post-render section actions")
-        self.form_field.set_warning_message(self.warning_message)
+        self.field.set_warning(self.warning_message)
 
     def sanitise_value(
         self, value: str | None
@@ -208,16 +208,16 @@ class H5FileWidget(FormCustomWidget):
             "Running on_update_file Slot because file changed from "
             + get_signal_sender(self)
         )
-        self.form_field.clear_message()
+        self.field.clear_message()
         self.value, self.warning_message, self.keys = self.sanitise_value(file)
-        self.form_field.set_warning_message(self.warning_message)
+        self.field.set_warning(self.warning_message)
 
     def reset(self) -> None:
         """
         Resets the widget and message.
         :return: None
         """
-        self.form_field.clear_message()
+        self.field.clear_message()
         self.line_edit.setText("")
 
     @Slot()

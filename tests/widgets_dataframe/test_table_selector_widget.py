@@ -139,7 +139,7 @@ class TestDialogParameterTableSelectorWidget:
         fields = ["table", "index", "column"]
         model_param_dict = {"type": "constant"}
         for f in fields:
-            model_param_dict[f] = form.find_field_by_name(f).widget.get_value()
+            model_param_dict[f] = form.find_field(f).widget.get_value()
 
         assert model_config.parameters.config(param_name) == model_param_dict
 

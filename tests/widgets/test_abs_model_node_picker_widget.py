@@ -57,7 +57,7 @@ class TestDialogAbstractModelNodePickerWidget:
         form = ParameterForm(
             model_config=self.model_config(config_file),
             parameter_obj=ParameterConfig({}),
-            available_fields={
+            fields={
                 "Section": [
                     {
                         "name": "node_name",
@@ -86,7 +86,7 @@ class TestDialogAbstractModelNodePickerWidget:
             is_mandatory=True,
             config_file="model_wo_nodes.json",
         )
-        model_params_field = form.find_field_by_name("node_name")
+        model_params_field = form.find_field("node_name")
         # noinspection PyTypeChecker
         model_nodes_widget: AbstractModelNodePickerWidget = model_params_field.widget
 
@@ -128,7 +128,7 @@ class TestDialogAbstractModelNodePickerWidget:
             exclude_node_types=exclude_node_types,
             is_mandatory=is_mandatory,
         )
-        model_params_field = form.find_field_by_name("node_name")
+        model_params_field = form.find_field("node_name")
         # noinspection PyTypeChecker
         model_nodes_widget: AbstractModelNodePickerWidget = model_params_field.widget
 
@@ -211,7 +211,7 @@ class TestDialogAbstractModelNodePickerWidget:
             exclude_node_types=exclude_node_types,
             is_mandatory=is_mandatory,
         )
-        model_params_field = form.find_field_by_name("node_name")
+        model_params_field = form.find_field("node_name")
         # noinspection PyTypeChecker
         model_nodes_widget: AbstractModelNodePickerWidget = model_params_field.widget
 

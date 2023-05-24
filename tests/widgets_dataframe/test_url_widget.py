@@ -209,9 +209,9 @@ class TestDialogParameterUrlWidget:
             fields += ["index_col", "parse_dates", "sheet_name"]
         else:
             fields += ["key"]
-            model_param_dict["start"] = form.find_field_by_name("start").value()
+            model_param_dict["start"] = form.find_field("start").value()
         for f in fields:
-            value = form.find_field_by_name(f).widget.get_value()
+            value = form.find_field(f).widget.get_value()
             # convert index_col to integer
             if f == "index_col" and param_name == "param_excel_file":
                 all_cols = list(url_widget.table.columns)

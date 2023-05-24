@@ -1,4 +1,4 @@
-from pywr_editor.form import NodesAndFactorsTableWidget
+from pywr_editor.form import FieldConfig, NodesAndFactorsTableWidget
 
 from ..recorder_dialog_form import RecorderDialogForm
 from .abstract_numpy_recorder_section import (
@@ -15,17 +15,17 @@ class AnnualTotalFlowRecorderSection(AbstractNumpyRecorderSection):
         :param section_data: A dictionary containing data to pass to the widget.
         """
         fields = [
-            {
-                "name": "nodes_and_factors",
-                "field_type": NodesAndFactorsTableWidget,
-                "value": {
-                    "nodes": form.get_recorder_dict_value("nodes"),
-                    "factors": form.get_recorder_dict_value("factors"),
+            FieldConfig(
+                name="nodes_and_factors",
+                field_type=NodesAndFactorsTableWidget,
+                value={
+                    "nodes": form.field_value("nodes"),
+                    "factors": form.field_value("factors"),
                 },
-                "help_text": "Store the total flow through the nodes provided "
-                + "above for each simulated year. The flow of each node may also "
-                + "be scaled, for example, to calculate operational costs",
-            },
+                help_text="Store the total flow through the nodes provided "
+                "above for each simulated year. The flow of each node may also "
+                "be scaled, for example, to calculate operational costs",
+            ),
         ]
         super().__init__(
             form=form,
@@ -34,8 +34,7 @@ class AnnualTotalFlowRecorderSection(AbstractNumpyRecorderSection):
             agg_func_field_labels=TemporalWidgetField(
                 label="Annual aggregation function",
                 help_text="Aggregate the total annual volumes for each scenario "
-                + "using the provided function",
+                "using the provided function",
             ),
             show_ignore_nan_field=True,
-            log_name=self.__class__.__name__,
         )

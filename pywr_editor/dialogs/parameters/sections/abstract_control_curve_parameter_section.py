@@ -4,6 +4,7 @@ from typing import Any
 from pywr_editor.form import (
     ControlCurvesValuesSourceWidget,
     ControlCurvesWidget,
+    FieldConfig,
     FormSection,
     ParametersListPickerWidget,
     StoragePickerWidget,
@@ -49,81 +50,71 @@ class AbstractControlCurveParameterSection(FormSection):
             raise ValueError("values_size_increment can only be > 0")
         self.values_size_increment = values_size_increment
 
-    @property
-    def data(self):
-        """
-        Defines the section data dictionary.
-        :return: The section dictionary.
-        """
         self.form: ParameterDialogForm
         self.logger.debug("Registering form")
 
-        data_dict = {
-            "Configuration": [
-                {
-                    "name": "storage_node",
-                    "field_type": StoragePickerWidget,
-                    "value": self.form.get_param_dict_value("storage_node"),
-                    "help_text": "Use the storage from the node specified above to "
-                    f"derive the parameter value{self.additional_help_text}",
-                },
-                # this is always mandatory
-                {
-                    # widget always returns a list of parameters
-                    "name": "control_curves",
-                    "field_type": ControlCurvesWidget,
-                    "value": {
-                        "control_curve": self.form.get_param_dict_value(
-                            "control_curve"
-                        ),
-                        "control_curves": self.form.get_param_dict_value(
-                            "control_curves"
-                        ),
-                    },
-                    "help_text": "Sort the control curves by the highest to the "
-                    "lowest. The parameter returns one of the values below "
-                    "corresponding to the first control curve that is above the "
-                    "node storage. If the storage is below all control curves, "
-                    "the latest value is used",
-                },
-                {
-                    "name": "values_source",
-                    "field_type": ControlCurvesValuesSourceWidget,
-                    "value": {
-                        "values": "values" in self.form.parameter_dict,
-                        "parameters": "parameters" in self.form.parameter_dict,
-                    },
-                },
-                {
-                    "name": "values",
-                    "label": "Constant values",
-                    "field_type": ValuesAndExternalDataWidget,
-                    "value": self.form.get_param_dict_value("values"),
-                    # value (for example cost) may be negative
-                    "field_args": {"lower_bound": -pow(10, 6)},
-                    "validate_fun": partial(self._check_size, field_name="values"),
-                    "help_text": "You must provide a number of values equal to the "
-                    "number of control curves plus one",
-                },
-                {
-                    "name": "parameters",
-                    "label": "Parametric values",
-                    "field_type": ParametersListPickerWidget,
-                    # Default widget behaviour is always mandatory - but this can be
-                    # skipped if "values" are provided. Make this optional. If source
-                    # is "parameters", self._check_size will check the field is not
-                    # empty
-                    "field_args": {"is_mandatory": False},
-                    "validate_fun": partial(self._check_size, field_name="parameters"),
-                    "value": self.form.get_param_dict_value("parameters"),
-                    "help_text": "You must provide a number of parameters equal to the "
-                    "number of control curves plus one",
-                },
-            ],
-            "Miscellaneous": [self.form.comment],
-        }
-
-        return data_dict
+        self.add_fields(
+            {
+                "Configuration": [
+                    FieldConfig(
+                        name="storage_node",
+                        field_type=StoragePickerWidget,
+                        value=self.form.field_value("storage_node"),
+                        help_text="Use the storage from the node specified above to "
+                        f"derive the parameter value{self.additional_help_text}",
+                    ),
+                    # this is always mandatory
+                    FieldConfig(
+                        # widget always returns a list of parameters
+                        name="control_curves",
+                        field_type=ControlCurvesWidget,
+                        value={
+                            "control_curve": self.form.field_value("control_curve"),
+                            "control_curves": self.form.field_value("control_curves"),
+                        },
+                        help_text="Sort the control curves by the highest to the "
+                        "lowest. The parameter returns one of the values below "
+                        "corresponding to the first control curve that is above the "
+                        "node storage. If the storage is below all control curves, "
+                        "the latest value is used",
+                    ),
+                    FieldConfig(
+                        name="values_source",
+                        field_type=ControlCurvesValuesSourceWidget,
+                        value={
+                            "values": "values" in self.form.parameter_dict,
+                            "parameters": "parameters" in self.form.parameter_dict,
+                        },
+                    ),
+                    FieldConfig(
+                        name="values",
+                        label="Constant values",
+                        field_type=ValuesAndExternalDataWidget,
+                        value=self.form.field_value("values"),
+                        # value (for example cost) may be negative
+                        field_args={"lower_bound": -pow(10, 6)},
+                        validate_fun=partial(self._check_size, field_name="values"),
+                        help_text="You must provide a number of values equal to the "
+                        "number of control curves plus one",
+                    ),
+                    FieldConfig(
+                        name="parameters",
+                        label="Parametric values",
+                        field_type=ParametersListPickerWidget,
+                        # Default widget behaviour is always mandatory - but this can be
+                        # skipped if "values" are provided. Make this optional. If
+                        # source is "parameters", self._check_size will check the field
+                        # is not empty
+                        field_args={"is_mandatory": False},
+                        validate_fun=partial(self._check_size, field_name="parameters"),
+                        value=self.form.field_value("parameters"),
+                        help_text="You must provide a number of parameters equal to the"
+                        " number of control curves plus one",
+                    ),
+                ],
+                "Miscellaneous": [self.form.comment],
+            }
+        )
 
     def _check_size(
         self,
@@ -143,11 +134,11 @@ class AbstractControlCurveParameterSection(FormSection):
         :return: The validation instance.
         """
         # noinspection PyTypeChecker
-        source_widget: ControlCurvesValuesSourceWidget = self.form.find_field_by_name(
+        source_widget: ControlCurvesValuesSourceWidget = self.form.find_field(
             "values_source"
         ).widget
         # noinspection PyTypeChecker
-        control_curves_widget: ControlCurvesWidget = self.form.find_field_by_name(
+        control_curves_widget: ControlCurvesWidget = self.form.find_field(
             "control_curves"
         ).widget
         curves_size = len(control_curves_widget.get_value())

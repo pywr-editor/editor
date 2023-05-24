@@ -1,7 +1,11 @@
 from typing import Any
 
-from pywr_editor.form import FormSection, Validation, ValuesAndExternalDataWidget
-from pywr_editor.utils import Logging
+from pywr_editor.form import (
+    FieldConfig,
+    FormSection,
+    Validation,
+    ValuesAndExternalDataWidget,
+)
 
 from ..parameter_dialog_form import ParameterDialogForm
 
@@ -14,41 +18,32 @@ class ArrayIndexedParameterSection(FormSection):
         :param section_data: A dictionary containing data to pass to the widget.
         """
         super().__init__(form, section_data)
-        self.logger = Logging().logger(self.__class__.__name__)
 
-    @property
-    def data(self):
-        """
-        Defines the section data dictionary.
-        :return: The section dictionary.
-        """
         self.form: ParameterDialogForm
-        self.logger.debug("Registering form")
-
         total_model_steps = self.form.model_config.number_of_steps
-        data_dict = {
-            "Configuration": [
-                {
-                    "name": "values",
-                    "label": "Known values",
-                    "field_type": ValuesAndExternalDataWidget,
-                    "field_args": {
-                        "show_row_numbers": True,
-                        "row_number_label": "Timestep number",
-                        "min_total_values": total_model_steps
-                        if total_model_steps is not None
-                        else None,
-                    },
-                    "validate_fun": self._check_count,
-                    "value": self.form.get_param_dict_value("values"),
-                    "help_text": "Specify the values the parameter returns at each "
-                    + "step of the simulation",
-                },
-            ],
-            "Miscellaneous": [self.form.comment],
-        }
-
-        return data_dict
+        self.add_fields(
+            {
+                "Configuration": [
+                    FieldConfig(
+                        name="values",
+                        label="Known values",
+                        field_type=ValuesAndExternalDataWidget,
+                        field_args={
+                            "show_row_numbers": True,
+                            "row_number_label": "Timestep number",
+                            "min_total_values": total_model_steps
+                            if total_model_steps is not None
+                            else None,
+                        },
+                        validate_fun=self._check_count,
+                        value=self.form.field_value("values"),
+                        help_text="Specify the values the parameter returns at each "
+                        "step of the simulation",
+                    ),
+                ],
+                "Miscellaneous": [self.form.comment],
+            }
+        )
 
     def _check_count(
         self,

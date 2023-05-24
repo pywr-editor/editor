@@ -207,7 +207,7 @@ class AbstractModelComponentsListPickerWidget(FormCustomWidget):
         :return: None
         """
         self.logger.debug("Registering post-render section actions")
-        self.form_field.set_warning_message(self.warning_message)
+        self.field.set_warning(self.warning_message)
 
     @Slot()
     def on_selection_changed(self) -> None:

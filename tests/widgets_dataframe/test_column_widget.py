@@ -208,7 +208,7 @@ class TestDialogParameterColumnWidget:
                     fields += ["key"]
             for f in fields:
                 # noinspection PyArgumentList
-                value = form.find_field_by_name(f).widget.get_value()
+                value = form.find_field(f).widget.get_value()
                 # convert index_col to integer
                 if f == "index_col" and "xlsx" in widget_with_table.file_ext:
                     all_cols = list(widget_with_table.table.columns)
@@ -589,7 +589,7 @@ class TestDialogParameterColumnWidget:
         model_param_dict = {"type": "constant"}
         for f in fields:
             # noinspection PyArgumentList
-            value = form.find_field_by_name(f).widget.get_value()
+            value = form.find_field(f).widget.get_value()
             if value:
                 model_param_dict[f] = value
         assert model_config.parameters.config(param_name) == model_param_dict

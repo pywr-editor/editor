@@ -56,12 +56,10 @@ class TestDialogRecorderKDESection:
         assert selected_page.findChild(FormField, "name").value() == recorder_name
 
         # 1. Check value
-        freq_widget: ResampleAggFrequencyWidget = form.find_field_by_name(
+        freq_widget: ResampleAggFrequencyWidget = form.find_field(
             "resample_freq"
         ).widget
-        func_widget: ResampleAggFunctionWidget = form.find_field_by_name(
-            "resample_func"
-        ).widget
+        func_widget: ResampleAggFunctionWidget = form.find_field("resample_func").widget
         assert freq_widget.get_value() == expected_freq
         assert func_widget.get_value() == expected_func
 
@@ -122,5 +120,5 @@ class TestDialogRecorderKDESection:
         # validate form
         QTimer.singleShot(100, close_message_box)
         form.validate()
-        field = form.find_field_by_name(field_to_check)
+        field = form.find_field(field_to_check)
         assert error_message in field.message.text()

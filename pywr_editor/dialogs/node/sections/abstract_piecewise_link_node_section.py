@@ -1,7 +1,11 @@
 from typing import TYPE_CHECKING
 
-from pywr_editor.form import FormSection, ParametersListPickerWidget, Validation
-from pywr_editor.utils import Logging
+from pywr_editor.form import (
+    FieldConfig,
+    FormSection,
+    ParametersListPickerWidget,
+    Validation,
+)
 
 if TYPE_CHECKING:
     from ..node_dialog_form import NodeDialogForm
@@ -24,60 +28,49 @@ class AbstractPiecewiseLinkNodeSection(FormSection):
         :param additional_fields: Additional fields to add to the abstract section.
         """
         super().__init__(form, section_data)
-        self.form = form
-        self.logger = Logging().logger(log_name)
-        if additional_fields:
-            self.additional_fields = additional_fields
-        else:
-            self.additional_fields = []
+        if not additional_fields:
+            additional_fields = []
 
-    @property
-    def data(self):
-        """
-        Defines the section data dictionary.
-        :return: The section dictionary.
-        """
-        self.logger.debug("Registering form")
-
-        data_dict = {
-            "Configuration": [
-                {
-                    "name": "nsteps",
-                    "label": "Number of sub links",
-                    "field_type": "integer",
-                    "min_value": 1,
-                    "value": self.form.get_node_dict_value("nsteps"),
-                    "help_text": "The number of sub-links to create within the node. "
-                    + "A cost and a maximum flow can be set on each link",
-                },
-                # cost and max flow values can be set to null in the list. This is
-                # not supported by the widget, but the user can set the cost and
-                # max_flow default values of the Node component
-                {
-                    "name": "max_flows",
-                    "label": "Maximum flows",
-                    "field_type": ParametersListPickerWidget,
-                    "field_args": {"is_mandatory": False},
-                    "validate_fun": self.check_size,
-                    "value": self.form.get_node_dict_value("max_flows"),
-                    "help_text": "A monotonic increasing list of maximum flows",
-                },
-                {
-                    "name": "costs",
-                    "field_type": ParametersListPickerWidget,
-                    "field_args": {"is_mandatory": False},
-                    "validate_fun": self.check_size,
-                    "value": self.form.get_node_dict_value("costs"),
-                    "help_text": "A list of costs corresponding to the 'Maximum flows'",
-                },
-            ]
-            + self.additional_fields,
-            "Miscellaneous": [
-                self.form.comment,
-            ],
-        }
-
-        return data_dict
+        self.add_fields(
+            {
+                "Configuration": [
+                    FieldConfig(
+                        name="nsteps",
+                        label="Number of sub links",
+                        field_type="integer",
+                        min_value=1,
+                        value=form.field_value("nsteps"),
+                        help_text="The number of sub-links to create within the node. "
+                        + "A cost and a maximum flow can be set on each link",
+                    ),
+                    # cost and max flow values can be set to null in the list. This is
+                    # not supported by the widget, but the user can set the cost and
+                    # max_flow default values of the Node component
+                    FieldConfig(
+                        name="max_flows",
+                        label="Maximum flows",
+                        field_type=ParametersListPickerWidget,
+                        field_args={"is_mandatory": False},
+                        validate_fun=self.check_size,
+                        value=form.field_value("max_flows"),
+                        help_text="A monotonic increasing list of maximum flows",
+                    ),
+                    FieldConfig(
+                        name="costs",
+                        field_type=ParametersListPickerWidget,
+                        field_args={"is_mandatory": False},
+                        validate_fun=self.check_size,
+                        value=form.field_value("costs"),
+                        help_text="A list of costs corresponding to the 'Maximum "
+                        "flows'",
+                    ),
+                ]
+                + additional_fields,
+                "Miscellaneous": [
+                    form.comment,
+                ],
+            }
+        )
 
     def check_size(
         self, name: str, label: str, value: list[str, dict, int, float]
@@ -89,7 +82,7 @@ class AbstractPiecewiseLinkNodeSection(FormSection):
         :param value: The field value.
         :return: The form validation instance.
         """
-        nsteps = self.form.find_field_by_name("nsteps").value()
+        nsteps = self.form.find_field("nsteps").value()
         if value and len(value) != nsteps:
             return Validation(
                 f"The number of values ({len(value)}) must "

@@ -65,9 +65,9 @@ class TestDialogParameterPolynomial1DParameterSection:
         # noinspection PyUnresolvedReferences
         assert selected_page.findChild(FormField, "name").value() == param_name
 
-        storage: StoragePickerWidget = form.find_field_by_name("storage_node").widget
-        node: NodePickerWidget = form.find_field_by_name("node").widget
-        parameter: ParameterLineEditWidget = form.find_field_by_name("parameter").widget
+        storage: StoragePickerWidget = form.find_field("storage_node").widget
+        node: NodePickerWidget = form.find_field("node").widget
+        parameter: ParameterLineEditWidget = form.find_field("parameter").widget
 
         # noinspection PyTypeChecker
         save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
@@ -95,7 +95,7 @@ class TestDialogParameterPolynomial1DParameterSection:
         self.validate(qtbot, save_button, None)
 
         # 6. Set use_proportional_volume w/o storage node
-        prop_volume: ToggleSwitchWidget = form.find_field_by_name(
+        prop_volume: ToggleSwitchWidget = form.find_field(
             "use_proportional_volume"
         ).widget
         prop_volume.setChecked(True)

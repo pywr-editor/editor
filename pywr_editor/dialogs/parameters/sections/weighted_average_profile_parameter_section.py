@@ -1,6 +1,7 @@
 from typing import Any
 
 from pywr_editor.form import (
+    FieldConfig,
     FormSection,
     MultiNodePickerWidget,
     ParametersListPickerWidget,
@@ -43,49 +44,41 @@ class WeightedAverageProfileParameterSection(FormSection):
                 param, "parameter"
             )
 
-    @property
-    def data(self):
-        """
-        Defines the section data dictionary.
-        :return: The section dictionary.
-        """
         self.form: ParameterDialogForm
-        self.logger.debug("Registering form")
-
         sub_class = "Storage"
-        data_dict = {
-            "Configuration": [
-                {
-                    "name": "storages",
-                    "label": "Storage nodes",
-                    "field_type": MultiNodePickerWidget,
-                    "field_args": {
-                        "is_mandatory": True,
-                        "include_node_keys": self.form.model_config.pywr_node_data.get_keys_with_parent_class(  # noqa: E501
-                            sub_class
-                        )
-                        + self.form.model_config.includes.get_keys_with_subclass(
-                            sub_class, "node"
-                        ),
-                    },
-                    "value": self.form.get_param_dict_value("storages"),
-                    "help_text": "This parameter calculates a daily profile by "
-                    + "weighting the profile values provided below with the "
-                    + "maximum storage of the nodes. The storage nodes and the "
-                    + "profiles are paired as they appear in the lists",
-                },
-                {
-                    "name": "profiles",
-                    "field_type": ParametersListPickerWidget,
-                    "field_args": {"include_param_key": self.allowed_keys},
-                    "validate_fun": self.check_profiles,
-                    "value": self.form.get_param_dict_value("profiles"),
-                },
-            ],
-            "Miscellaneous": [self.form.comment],
-        }
-
-        return data_dict
+        self.add_fields(
+            {
+                "Configuration": [
+                    FieldConfig(
+                        name="storages",
+                        label="Storage nodes",
+                        field_type=MultiNodePickerWidget,
+                        field_args={
+                            "is_mandatory": True,
+                            "include_node_keys": self.form.model_config.pywr_node_data.get_keys_with_parent_class(  # noqa: E501
+                                sub_class
+                            )
+                            + self.form.model_config.includes.get_keys_with_subclass(
+                                sub_class, "node"
+                            ),
+                        },
+                        value=self.form.field_value("storages"),
+                        help_text="This parameter calculates a daily profile by "
+                        "weighting the profile values provided below with the "
+                        "maximum storage of the nodes. The storage nodes and the "
+                        "profiles are paired as they appear in the lists",
+                    ),
+                    FieldConfig(
+                        name="profiles",
+                        field_type=ParametersListPickerWidget,
+                        field_args={"include_param_key": self.allowed_keys},
+                        validate_fun=self.check_profiles,
+                        value=self.form.field_value("profiles"),
+                    ),
+                ],
+                "Miscellaneous": [self.form.comment],
+            }
+        )
 
     def check_profiles(
         self,
@@ -100,9 +93,7 @@ class WeightedAverageProfileParameterSection(FormSection):
         :param value: The field value.
         :return: The validation instance.
         """
-        nodes_widget: MultiNodePickerWidget = self.form.find_field_by_name(
-            "storages"
-        ).widget
+        nodes_widget: MultiNodePickerWidget = self.form.find_field("storages").widget
         selected_nodes = nodes_widget.get_value()
         if len(selected_nodes) and len(value) and len(value) != len(selected_nodes):
             return Validation(
