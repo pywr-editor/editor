@@ -277,7 +277,7 @@ class TestDialogParameterLineEditWidget:
         qtbot.wait(200)
         qtbot.mouseClick(main_save_button, Qt.MouseButton.LeftButton)
 
-        name = page.form.find_field("name").widget.text()
+        name = page.form.find_field("name").widget.line_edit.text()
         assert model_config.parameters.config(name) == value
 
     # noinspection PyTypeChecker

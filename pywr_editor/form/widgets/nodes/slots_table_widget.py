@@ -290,9 +290,9 @@ class SlotsTableWidget(FormCustomWidget):
             factor_map = {name: None for name in self.target_nodes}
             warning_message = (
                 "The slot names are not properly configured for this node. All nodes, "
-                + "this node is  connected to, must have a slot name set. The slot "
-                + "name can be an integer or a string to let Pywr correctly connect "
-                + "this node to other nodes in the network"
+                "this node is  connected to, must have a slot name set. The slot "
+                "name can be an integer or a string to let Pywr correctly connect "
+                "this node to other nodes in the network"
             )
             self.logger.debug("Slots are not properly configured")
         else:
@@ -311,8 +311,8 @@ class SlotsTableWidget(FormCustomWidget):
 
                     warning_message = (
                         f"The slot named '{slot_name}', set in the configuration for "
-                        + "for this node, does not match any slot names the node is "
-                        + "connected to"
+                        "for this node, does not match any slot names the node is "
+                        "connected to"
                     )
                     continue
                 else:

@@ -78,7 +78,7 @@ class RecorderForm(ModelComponentForm):
         Loads the fields.
         :return: None
         """
-        if self.loaded is True:
+        if self.loaded_ is True:
             return
 
         if self.show_warning:

@@ -119,7 +119,7 @@ class TestTablesDialog:
 
         # rename and save
         renamed_table_name = "A new shiny name"
-        name_field.widget.setText(renamed_table_name)
+        name_field.widget.line_edit.setText(renamed_table_name)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         assert name_field.message.text() == ""
 
@@ -152,7 +152,7 @@ class TestTablesDialog:
 
         # Change the name and save
         assert name_field.value() == current_name
-        name_field.widget.setText(new_name)
+        name_field.widget.line_edit.setText(new_name)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         assert name_field.message.text() == ""
         assert url_field.message.text() == ""
@@ -172,7 +172,7 @@ class TestTablesDialog:
         }
 
         # set duplicated name
-        name_field.widget.setText("Table 1")
+        name_field.widget.line_edit.setText("Table 1")
         QTimer.singleShot(100, close_message_box)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         assert "already exists" in name_field.message.text()

@@ -1,6 +1,7 @@
 from typing import Any
 
 from pywr_editor.form import FieldConfig, SlotsTableWidget
+from pywr_editor.utils import Logging
 
 from ..node_dialog_form import NodeDialogForm
 from .abstract_piecewise_link_node_section import AbstractPiecewiseLinkNodeSection
@@ -13,10 +14,11 @@ class MultiSplitLinkSection(AbstractPiecewiseLinkNodeSection):
         :param form: The parent form.
         :param section_data: A dictionary containing data to pass to the widget.
         """
+        self.logger = Logging().logger(self.__class__.__name__)
+
         super().__init__(
             form,
             section_data,
-            log_name=self.__class__.__name__,
             additional_fields=[
                 FieldConfig(
                     name="slots_field",

@@ -7,13 +7,12 @@ from PySide6.QtCore import QEvent, QMimeData, QPoint, QPointF, Qt, QTimer
 from PySide6.QtGui import QDragEnterEvent
 
 from pywr_editor import MainWindow
-from pywr_editor.form import ColorPickerWidget
+from pywr_editor.form import ColorPickerWidget, IntegerWidget
 from pywr_editor.model import LineArrowShape
 from pywr_editor.schematic import ResizeShapeCommand, Schematic
 from pywr_editor.schematic.commands.add_shape_command import AddShapeCommand
 from pywr_editor.schematic.shapes.arrow_shape import Handles, SchematicArrow
 from pywr_editor.schematic.shapes.shape_dialogs import ShapeDialogForm
-from pywr_editor.widgets import SpinBox
 from tests.schematic.test_schematic_rectangle_shape import TestSchematicRectangleShape
 from tests.utils import close_message_box, resolve_model_path
 
@@ -60,8 +59,8 @@ class TestSchematicArrowShape:
         # noinspection PyTypeChecker
         form: ShapeDialogForm = window.findChild(ShapeDialogForm)
 
-        border_size_field: SpinBox = form.find_field("border_size").widget
-        border_size_field.setValue(3)
+        border_size_field: IntegerWidget = form.find_field("border_size").widget
+        border_size_field.spin_box.setValue(3)
         color_widget: ColorPickerWidget = form.find_field("border_color").widget
         color_widget.value = (80, 80, 80)
 
@@ -70,7 +69,7 @@ class TestSchematicArrowShape:
         assert model_config.has_changes is True
 
         shape_config.shape_dict["border_color"] = color_widget.value
-        shape_config.shape_dict["border_size"] = border_size_field.value()
+        shape_config.shape_dict["border_size"] = border_size_field.spin_box.value()
         assert (
             model_config.shapes.find(self.shape_id, as_dict=True)
             == shape_config.shape_dict
@@ -130,8 +129,8 @@ class TestSchematicArrowShape:
         schematic.shape_items[new_shape_id].on_edit_shape()
         # noinspection PyTypeChecker
         dialog_form: ShapeDialogForm = window.findChild(ShapeDialogForm)
-        border_size_widget: SpinBox = dialog_form.find_field("border_size").widget
-        border_size_widget.setValue(4)
+        border_size_widget: IntegerWidget = dialog_form.find_field("border_size").widget
+        border_size_widget.spin_box.setValue(4)
         qtbot.mouseClick(dialog_form.save_button, Qt.MouseButton.LeftButton)
         dialog_form.close()
 
@@ -310,8 +309,8 @@ class TestSchematicArrowShape:
         shape_item.on_edit_shape()
         # noinspection PyTypeChecker
         form: ShapeDialogForm = window.findChild(ShapeDialogForm)
-        border_size_field: SpinBox = form.find_field("border_size").widget
-        border_size_field.setValue(1)
+        border_size_field: IntegerWidget = form.find_field("border_size").widget
+        border_size_field.spin_box.setValue(1)
 
         form.save()
         new_shape_dict = shape_config.shape_dict.copy()

@@ -1,7 +1,7 @@
 import pytest
 from PySide6.QtCore import QItemSelectionModel, Qt, QTimer
 from PySide6.QtTest import QSignalSpy
-from PySide6.QtWidgets import QApplication, QLabel, QLineEdit, QPushButton
+from PySide6.QtWidgets import QApplication, QLabel, QPushButton
 
 import pywr_editor
 from pywr_editor.dialogs import (
@@ -13,7 +13,7 @@ from pywr_editor.dialogs import (
 from pywr_editor.dialogs.parameters.parameter_empty_page_widget import (
     ParameterEmptyPageWidget,
 )
-from pywr_editor.form import FormField, ParameterTypeSelectorWidget
+from pywr_editor.form import FormField, ParameterTypeSelectorWidget, TextWidget
 from pywr_editor.model import ModelConfig, PywrParametersData
 from tests.utils import close_message_box, resolve_model_path
 
@@ -104,7 +104,7 @@ class TestParametersDialog:
         # rename and save
         renamed_parameter_name = "A new shiny name"
         new_value = 1.11  # value is mandatory
-        name_field.widget.setText(renamed_parameter_name)
+        name_field.widget.line_edit.setText(renamed_parameter_name)
         value_field.widget.line_edit.setText(str(new_value))
 
         assert save_button.isEnabled() is True
@@ -179,7 +179,7 @@ class TestParametersDialog:
 
         # Change the name and save
         assert name_field.value() == current_name
-        name_field.widget.setText(new_name)
+        name_field.widget.line_edit.setText(new_name)
 
         qtbot.wait(200)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
@@ -202,7 +202,7 @@ class TestParametersDialog:
         }
 
         # set duplicated name
-        name_field.widget.setText("param1")
+        name_field.widget.line_edit.setText("param1")
         QTimer.singleShot(100, close_message_box)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         assert "already exists" in name_field.message.text()
@@ -333,8 +333,8 @@ class TestParametersDialog:
 
         # 1. Setup parameter
         # rename parameter
-        name_widget: QLineEdit = selected_page.findChild(FormField, "name").widget
-        name_widget.setText("Custom parameter")
+        name_widget: TextWidget = selected_page.findChild(FormField, "name").widget
+        name_widget.line_edit.setText("Custom parameter")
 
         # select not imported parameter
         type_widget: ParameterTypeSelectorWidget = selected_page.findChild(
@@ -355,14 +355,14 @@ class TestParametersDialog:
             # because class is not imported, the custom type is visible
             assert custom_type_field.isVisible() is True
             # set an invalid Python class
-            custom_type_field.widget.setText("A CustomParameter")
+            custom_type_field.widget.line_edit.setText("A CustomParameter")
             QTimer.singleShot(100, close_message_box)
             form_data = form.validate()
             assert form_data is False
             assert "valid Python class" in custom_type_field.message.text()
 
             # set a valid Python class
-            custom_type_field.widget.setText(param_type)
+            custom_type_field.widget.line_edit.setText(param_type)
         else:
             param_type = "MyParameter"
             type_widget.combo_box.setCurrentText(param_type)

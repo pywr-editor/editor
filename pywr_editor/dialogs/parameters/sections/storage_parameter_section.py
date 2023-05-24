@@ -1,4 +1,9 @@
-from pywr_editor.form import FieldConfig, FormSection, StoragePickerWidget
+from pywr_editor.form import (
+    BooleanWidget,
+    FieldConfig,
+    FormSection,
+    StoragePickerWidget,
+)
 
 from ..parameter_dialog_form import ParameterDialogForm
 
@@ -25,7 +30,7 @@ class StorageParameterSection(FormSection):
                     ),
                     FieldConfig(
                         name="use_proportional_volume",
-                        field_type="boolean",
+                        field_type=BooleanWidget,
                         default_value=False,
                         value=self.form.field_value("use_proportional_volume"),
                         help_text="If Yes the storage is returned as proportional "

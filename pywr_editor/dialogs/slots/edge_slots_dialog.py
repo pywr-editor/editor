@@ -56,18 +56,17 @@ class EdgeSlotsDialog(QDialog):
         button_box.findChild(QPushButton).setIcon(qta.icon("msc.close"))
 
         # Form
-        fields: dict[str, list[FieldConfig]] = {
-            "Slots": [
-                {
-                    "name": "slots",
-                    "field_type": EdgeSlotsWidget,
-                    "value": model_config.edges,
-                    "hide_label": True,
-                }
-            ]
-        }
         form = Form(
-            fields=fields,
+            fields={
+                "Slots": [
+                    FieldConfig(
+                        name="slots",
+                        field_type=EdgeSlotsWidget,
+                        value=model_config.edges,
+                        hide_label=True,
+                    )
+                ]
+            },
             parent=self,
             direction="vertical",
         )

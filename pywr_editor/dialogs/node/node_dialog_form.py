@@ -5,13 +5,13 @@ from PySide6.QtWidgets import QGroupBox, QLineEdit, QPushButton
 
 import pywr_editor.dialogs
 from pywr_editor.form import (
-    CommentWidget,
     EdgeColorPickerWidget,
     FieldConfig,
     FloatWidget,
     Form,
     NodeStylePickerWidget,
     ParameterLineEditWidget,
+    TextWidget,
     Validation,
 )
 from pywr_editor.model import Constants, ModelConfig, NodeConfig
@@ -48,7 +48,7 @@ class NodeDialogForm(Form):
         self.model_config = model_config
         self.node_dict = node_dict
         self.node_obj = NodeConfig(node_dict)
-        self.node_type = self.node_obj.type
+        self.node_type = self.node_obj.key
 
         # the node type cannot be changed for built-in nodes or custom nodes that
         # have been imported
@@ -191,11 +191,11 @@ class NodeDialogForm(Form):
             self.dialog.title.update_name(new_name)
 
         # get type from field if it can be changed
-        type_widget: QLineEdit = self.find_field("type").widget
+        type_widget: TextWidget = self.find_field("type").widget
         if type_widget.isEnabled():
-            form_data["type"] = type_widget.text()
+            form_data["type"] = type_widget.line_edit.text()
         else:
-            form_data["type"] = self.node_obj.type
+            form_data["type"] = self.node_obj.key
 
         # set type
         self.model_config.nodes.update(form_data)
@@ -295,11 +295,12 @@ class NodeDialogForm(Form):
         Returns the form configuration for the "comment" field.
         :return: The field dictionary.
         """
-        return {
-            "name": "comment",
-            "field_type": CommentWidget,
-            "value": self.field_value("comment"),
-        }
+        return FieldConfig(
+            name="comment",
+            field_type=TextWidget,
+            field_args={"multi_line": True},
+            value=self.field_value("comment"),
+        )
 
     @property
     def initial_volume_field(self) -> dict[str, Any]:

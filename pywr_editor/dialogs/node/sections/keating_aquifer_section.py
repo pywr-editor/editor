@@ -4,6 +4,7 @@ from pywr_editor.form import (
     FieldConfig,
     FloatWidget,
     FormSection,
+    IntegerWidget,
     KeatingStreamsWidget,
     TableValuesWidget,
     Validation,
@@ -50,8 +51,8 @@ class KeatingAquiferSection(FormSection):
                     FieldConfig(
                         name="num_additional_inputs",
                         label="Number of additional outflows",
-                        field_type="integer",
-                        min_value=0,
+                        field_type=IntegerWidget,
+                        field_args={"min_value": 0},
                         default_value=0,
                         value=form.field_value("num_additional_inputs"),
                         help_text="Number of additional outflows (for example for "
@@ -62,7 +63,7 @@ class KeatingAquiferSection(FormSection):
                     FieldConfig(
                         name="levels",
                         field_type=TableValuesWidget,
-                        field_args={"min_total_value": 1},
+                        field_args={"min_total_values": 1},
                         value={"values": form.field_value("levels")},
                         help_text="A list of levels for the level-volume relationship",
                     ),

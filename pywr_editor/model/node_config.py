@@ -109,7 +109,7 @@ class NodeConfig(ComponentConfig):
         Check if a node is virtual (i.e. the node is not connectable).
         :return: True if the node is virtual, False otherwise
         """
-        return self.type in [
+        return self.key in [
             "annualvirtualstorage",
             "virtualstorage",
             "aggregatednode",

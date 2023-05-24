@@ -4,14 +4,7 @@ import traceback
 import qtawesome as qta
 from pandas import read_csv, read_excel, read_hdf
 from PySide6.QtCore import Signal, SignalInstance, Slot
-from PySide6.QtWidgets import (
-    QComboBox,
-    QFileDialog,
-    QHBoxLayout,
-    QLineEdit,
-    QMessageBox,
-    QSpinBox,
-)
+from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QLineEdit, QMessageBox
 
 from pywr_editor.form import FormCustomWidget, FormField, Validation
 from pywr_editor.utils import (
@@ -193,39 +186,17 @@ class UrlWidget(FormCustomWidget):
         # self.force_table_update changes (for ex. separator)
         for field in self.force_table_update:
             form_field = self.form.fields[field]
-            if isinstance(form_field.widget, QLineEdit):
-                # noinspection PyUnresolvedReferences
-                form_field.widget.textChanged.connect(self.on_table_reload)
-                self.logger.debug(
-                    "Registered Slot on_table_reload for QLineEdit("
-                    + f"{form_field.name}).textChanged Signal"
+            if not hasattr(form_field.widget, "field_value_changed"):
+                raise NotImplementedError(
+                    f"The widget {form_field.widget} must have the field_value_changed "
+                    + "attribute"
                 )
-            elif isinstance(form_field.widget, QComboBox):
-                # noinspection PyUnresolvedReferences
-                form_field.widget.currentIndexChanged.connect(self.on_table_reload)
-                self.logger.debug(
-                    "Registered Slot on_table_reload for QComboBox("
-                    + f"{form_field.name}).currentIndexChanged Signal"
-                )
-            elif isinstance(form_field.widget, QSpinBox):
-                # noinspection PyUnresolvedReferences
-                form_field.widget.textChanged.connect(self.on_table_reload)
-                self.logger.debug(
-                    f"Registered Slot on_table_reload for QSpinBox({form_field.name})."
-                    + "textChanged Signal"
-                )
-            elif form_field.is_custom_widget:
-                if not hasattr(form_field.widget, "field_value_changed"):
-                    raise NotImplementedError(
-                        f"The widget {form_field} must have the field_value_changed "
-                        + "attribute"
-                    )
-                # noinspection PyUnresolvedReferences
-                form_field.widget.field_value_changed.connect(self.on_table_reload)
-                self.logger.debug(
-                    "Registered Slot on_table_reload for custom widget "
-                    + f"named {form_field.name}"
-                )
+            # noinspection PyUnresolvedReferences
+            form_field.widget.field_value_changed.connect(self.on_table_reload)
+            self.logger.debug(
+                "Registered Slot on_table_reload for custom widget "
+                + f"named {form_field.name}"
+            )
 
         # 3. reload the following widgets if the file name changes (for ex. sheet names)
         for field in self.force_widget_update:

@@ -101,7 +101,7 @@ class TestRecordersDialog:
         # rename and save
         node_widget.combo_box.setCurrentText("Reservoir (Storage)")
         renamed_recorder_name = "A new shiny name"
-        name_field.widget.setText(renamed_recorder_name)
+        name_field.widget.line_edit.setText(renamed_recorder_name)
 
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         assert name_field.message.text() == ""
@@ -177,7 +177,7 @@ class TestRecordersDialog:
 
         # Change the name and save
         assert name_field.value() == current_name
-        name_field.widget.setText(new_name)
+        name_field.widget.line_edit.setText(new_name)
 
         qtbot.wait(200)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
@@ -204,7 +204,7 @@ class TestRecordersDialog:
         }
 
         # set duplicated name
-        name_field.widget.setText("node_storage_rec")
+        name_field.widget.line_edit.setText("node_storage_rec")
         QTimer.singleShot(100, close_message_box)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         assert "already exists" in name_field.message.text()

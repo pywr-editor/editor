@@ -21,7 +21,6 @@ class ArrayIndexedScenarioMonthlyFactorsParameterSection(FormSection):
         """
         super().__init__(form, section_data)
         self.logger = Logging().logger(self.__class__.__name__)
-        self.data_dict = {}
 
         self.form: ParameterDialogForm
         total_model_steps = self.form.model_config.number_of_steps
@@ -113,7 +112,7 @@ class ArrayIndexedScenarioMonthlyFactorsParameterSection(FormSection):
         # otherwise use dictionary. Collect all the fields in the factor section
         else:
             form_data["factors"] = {}
-            for field_dict in self.data_dict["Factors"]:
+            for field_dict in self.fields_["Factors"]:
                 name = field_dict["name"]
                 if name not in form_data:
                     continue

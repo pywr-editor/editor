@@ -3,17 +3,19 @@ from typing import Any
 from PySide6.QtWidgets import QPushButton, QWidget
 
 from pywr_editor.form import (
+    BooleanWidget,
     ColumnWidget,
-    CommentWidget,
     FieldConfig,
     Form,
     H5KeyWidget,
     IndexColWidget,
     IndexWidget,
+    IntegerWidget,
     ParseDatesWidget,
     SheetNameWidget,
     SourceSelectorWidget,
     TableSelectorWidget,
+    TextWidget,
     UrlWidget,
 )
 from pywr_editor.model import ModelConfig
@@ -170,7 +172,7 @@ class ModelComponentForm(Form):
             ),
             FieldConfig(
                 name="dayfirst",
-                field_type="boolean",
+                field_type=BooleanWidget,
                 default_value=False,
                 value=self.field_value("dayfirst"),
                 help_text="Use international and European format for dates (DD/MM)."
@@ -181,7 +183,7 @@ class ModelComponentForm(Form):
                 label="Skip initial space",
                 value=self.field_value("skipinitialspace"),
                 default_value=False,
-                field_type="boolean",
+                field_type=BooleanWidget,
                 help_text="Skip any space after the separator, if any. For "
                 'example "   Date" is converted to "Date"',
             ),
@@ -189,15 +191,15 @@ class ModelComponentForm(Form):
                 name="skipfooter",
                 label="Skip footer",
                 value=self.field_value("skipfooter"),
-                field_type="integer",
-                min_value=0,
+                field_type=IntegerWidget,
+                field_args={"min_value": 0},
                 default_value=0,
                 help_text="Number of lines at bottom of file to skip. Default to 0",
             ),
             FieldConfig(
                 name="skip_blank_lines",
                 value=self.field_value("skip_blank_lines"),
-                field_type="boolean",
+                field_type=BooleanWidget,
                 default_value=True,
                 help_text="If Yes, skip over blank lines rather than interpreting "
                 "as NaN values. Default to Yes",
@@ -239,8 +241,8 @@ class ModelComponentForm(Form):
                 label="Starting row",
                 value=self.field_value("start"),
                 default_value=0,
-                field_type="integer",
-                min_value=0,
+                field_type=IntegerWidget,
+                field_args={"min_value": 0},
                 help_text="Line numbers to skip at the start of the table",
             ),
         ]
@@ -314,6 +316,7 @@ class ModelComponentForm(Form):
         """
         return FieldConfig(
             name="comment",
-            field_type=CommentWidget,
+            field_type=TextWidget,
+            field_args={"multi_line": True},
             value=self.field_value("comment"),
         )

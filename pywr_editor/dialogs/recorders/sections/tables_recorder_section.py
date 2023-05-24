@@ -1,10 +1,12 @@
 from pywr_editor.form import (
+    BooleanWidget,
     DictionaryWidget,
     FieldConfig,
     FileBrowserWidget,
     FileModeWidget,
     FormSection,
     H5CompressionLibWidget,
+    IntegerWidget,
     MultiNodePickerWidget,
     MultiParameterPickerWidget,
 )
@@ -100,10 +102,9 @@ class TablesRecorderSection(FormSection):
                     FieldConfig(
                         name="complevel",
                         label="Compression level",
-                        field_type="integer",
+                        field_type=IntegerWidget,
+                        field_args={"min_value": 0, "max_value": 9},
                         default_value=0,
-                        min_value=0,
-                        max_value=9,
                         value=filter_kwd["complevel"]
                         if "complevel" in filter_kwd
                         else None,
@@ -127,7 +128,7 @@ class TablesRecorderSection(FormSection):
                     FieldConfig(
                         name="create_directories",
                         value=form.field_value("create_directories"),
-                        field_type="boolean",
+                        field_type=BooleanWidget,
                         default_value=False,
                         help_text="If one or more directories in the 'File' path do "
                         "not exist, the recorder attempts to create them",

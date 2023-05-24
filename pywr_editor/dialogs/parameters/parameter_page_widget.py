@@ -208,7 +208,7 @@ class ParameterPageWidget(QWidget):
         :param event: The event being triggered.
         :return: None
         """
-        if self.form.loaded is False:
+        if self.form.loaded_ is False:
             self.form.load_fields()
 
         super().showEvent(event)

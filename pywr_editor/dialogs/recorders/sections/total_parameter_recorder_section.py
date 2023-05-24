@@ -1,4 +1,9 @@
-from pywr_editor.form import FieldConfig, FloatWidget, ParameterLineEditWidget
+from pywr_editor.form import (
+    BooleanWidget,
+    FieldConfig,
+    FloatWidget,
+    ParameterLineEditWidget,
+)
 
 from ..recorder_dialog_form import RecorderDialogForm
 from .abstract_recorder_section import AbstractRecorderSection
@@ -31,7 +36,7 @@ class TotalParameterRecorderSection(AbstractRecorderSection):
                 ),
                 FieldConfig(
                     name="integrate",
-                    field_type="boolean",
+                    field_type=BooleanWidget,
                     default_value=False,
                     value=form.field_value("integrate"),
                     help_text="Integrate the parameter values over time (i.e. this "

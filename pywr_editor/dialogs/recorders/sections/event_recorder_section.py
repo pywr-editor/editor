@@ -2,6 +2,7 @@ from pywr_editor.form import (
     EventTrackedParameterAggFuncWidget,
     EventTypeWidget,
     FieldConfig,
+    IntegerWidget,
     ParameterLineEditWidget,
     RecorderLineEditWidget,
 )
@@ -49,9 +50,11 @@ class EventRecorderSection(AbstractRecorderSection):
             ),
             FieldConfig(
                 name="minimum_event_length",
-                field_type="integer",
-                min_value=1,
-                max_value=form.model_config.number_of_steps,
+                field_type=IntegerWidget,
+                field_args={
+                    "min_value": 1,
+                    "max_value": form.model_config.number_of_steps,
+                },
                 default_value=1,
                 value=form.field_value("minimum_event_length"),
                 help_text="The minimum number of time-steps that the event must "

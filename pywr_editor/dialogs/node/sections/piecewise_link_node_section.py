@@ -9,8 +9,4 @@ class PiecewiseLinkSection(AbstractPiecewiseLinkNodeSection):
         :param form: The parent form.
         :param section_data: A dictionary containing data to pass to the widget.
         """
-        super().__init__(
-            form=form,
-            section_data=section_data,
-            log_name=self.__class__.__name__,
-        )
+        super().__init__(form=form, section_data=section_data)

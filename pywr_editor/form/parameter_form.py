@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QMessageBox, QPushButton, QWidget
 
-from pywr_editor.form import FieldConfig, ModelComponentForm
+from pywr_editor.form import BooleanWidget, FieldConfig, ModelComponentForm
 from pywr_editor.model import ModelConfig, ParameterConfig
 from pywr_editor.utils import Logging
 
@@ -66,7 +66,7 @@ class ParameterForm(ModelComponentForm):
         Loads the fields.
         :return: None
         """
-        if self.loaded is True:
+        if self.loaded_ is True:
             return
 
         if self.show_warning:
@@ -119,7 +119,7 @@ class ParameterForm(ModelComponentForm):
         return FieldConfig(
             name="is_variable",
             value=self.field_value("is_variable"),
-            field_type="boolean",
+            field_type=BooleanWidget,
             default_value=False,
             help_text="If Yes, this parameter will change between the lower and "
             "upper bound provided below during optimisation",

@@ -84,7 +84,7 @@ class MultiNodePickerWidget(FormCustomWidget):
             node_obj = self.model_config.nodes.config(node_name=name, as_dict=False)
 
             # filter node types
-            if include_node_keys is not None and node_obj.type not in include_node_keys:
+            if include_node_keys is not None and node_obj.key not in include_node_keys:
                 continue
 
             self.combo_box.addItem(f"{name} ({node_obj.humanised_type})", name)
@@ -114,7 +114,7 @@ class MultiNodePickerWidget(FormCustomWidget):
                 # filter node types
                 if (
                     include_node_keys is not None
-                    and node_obj.type not in include_node_keys
+                    and node_obj.key not in include_node_keys
                 ):
                     wrong_node_types.append(node_name_value)
                     continue

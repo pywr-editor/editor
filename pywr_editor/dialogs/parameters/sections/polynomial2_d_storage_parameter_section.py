@@ -1,4 +1,5 @@
 from pywr_editor.form import (
+    BooleanWidget,
     FieldConfig,
     FloatWidget,
     FormSection,
@@ -43,7 +44,7 @@ class Polynomial2DStorageParameterSection(FormSection):
                     ),
                     FieldConfig(
                         name="use_proportional_volume",
-                        field_type="boolean",
+                        field_type=BooleanWidget,
                         default_value=False,
                         value=self.form.field_value("use_proportional_volume"),
                         help_text="If Yes the independent variable is the proportional "

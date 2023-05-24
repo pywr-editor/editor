@@ -5,7 +5,7 @@ from PySide6.QtCore import Slot
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QGraphicsItem, QGraphicsTextItem
 
-from pywr_editor.form import ColorPickerWidget, FieldConfig, Validation
+from pywr_editor.form import ColorPickerWidget, FieldConfig, IntegerWidget, Validation
 from pywr_editor.model import TextShape
 from pywr_editor.widgets import ContextualMenu
 
@@ -125,9 +125,11 @@ class SchematicText(AbstractSchematicShape, QGraphicsTextItem):
                     label="Text size",
                     default_value=self.shape_obj.default_font_size,
                     value=self.shape_obj.font_size,
-                    field_type="integer",
-                    min_value=self.shape_obj.min_font_size,
-                    max_value=self.shape_obj.max_font_size,
+                    field_type=IntegerWidget,
+                    field_args={
+                        "min_value": self.shape_obj.min_font_size,
+                        "max_value": self.shape_obj.max_font_size,
+                    },
                 ),
                 FieldConfig(
                     name="color",

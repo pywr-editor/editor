@@ -1,4 +1,4 @@
-from pywr_editor.form import FieldConfig, StoragePickerWidget
+from pywr_editor.form import BooleanWidget, FieldConfig, StoragePickerWidget
 
 from ..recorder_dialog_form import RecorderDialogForm
 from .abstract_numpy_recorder_section import (
@@ -29,7 +29,7 @@ class NumpyArrayStorageRecorderSection(AbstractNumpyRecorderSection):
                 FieldConfig(
                     name="proportional",
                     label="Relative storage",
-                    field_type="boolean",
+                    field_type=BooleanWidget,
                     default_value=False,
                     value=form.field_value("proportional"),
                     help_text="When 'Yes' store the relative storage (between 0 and 1) "

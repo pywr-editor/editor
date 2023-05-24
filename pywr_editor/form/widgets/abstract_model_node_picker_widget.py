@@ -38,7 +38,7 @@ class AbstractModelNodePickerWidget(FormCustomWidget):
         Default to True.
         :param include_node_types: A string or list of strings representing a node key
         to only include in the widget. For example storage for the Storage node to
-        include only storage nodes, all other node types will not be shown.
+        include only storage nodes; all other node types will not be shown.
         :param exclude_node_types: A string or list of strings representing a node key
         to exclude from the widget.
         """
@@ -93,8 +93,7 @@ class AbstractModelNodePickerWidget(FormCustomWidget):
         valid_model_nodes = []
         for name in model_nodes:
             node_obj = self.model_config.nodes.config(node_name=name, as_dict=False)
-            node_type = node_obj.type
-
+            node_type = node_obj.key
             # filter nodes
             if include_node_types is not None and node_type not in include_node_types:
                 continue

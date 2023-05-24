@@ -1,4 +1,4 @@
-from typing import Any, Callable, Literal, NotRequired, Type, TypedDict, Union
+from typing import Any, Callable, NotRequired, Type, TypedDict
 
 from .form_custom_widget import FormCustomWidget
 from .validation import Validation
@@ -11,11 +11,8 @@ class FieldConfig(TypedDict):
     """ the field value """
     label: NotRequired[str]
     """ the field label """
-    field_type: NotRequired[
-        Union[Literal["text", "boolean", "integer"], Type[FormCustomWidget]]
-    ]
-    """ this can be text (for QLineEdit), integer (for SpinBox), boolean (for
-    QComboBox with yes/no options) or a callable for a custom FormCustomWidget """
+    field_type: NotRequired[Type[FormCustomWidget]]
+    """ A class of type FormCustomWidget containing the widget """
     field_args: NotRequired[dict]
     """ additional arguments to pass to custom widgets as dictionary. Optional """
     allow_empty: NotRequired[bool]

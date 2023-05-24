@@ -259,7 +259,7 @@ class TablePageWidget(QWidget):
         :param event: The event being triggered.
         :return: None
         """
-        if self.form.loaded is False:
+        if self.form.loaded_ is False:
             self.logger.debug(f"Loading fields for table named '{self.name}'")
             self.form.load_fields()
 

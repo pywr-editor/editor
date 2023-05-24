@@ -1,6 +1,5 @@
 import pytest
 from PySide6.QtCore import Qt, QTimer
-from PySide6.QtWidgets import QLineEdit
 
 import pywr_editor
 from pywr_editor.dialogs import NodeDialog
@@ -8,6 +7,7 @@ from pywr_editor.form import (
     EdgeColorPickerWidget,
     NodeStylePickerWidget,
     ParameterLineEditWidget,
+    TextWidget,
 )
 from pywr_editor.model import Constants, ModelConfig, PywrNodesData
 from tests.utils import close_message_box, resolve_model_path
@@ -100,8 +100,8 @@ class TestNodeDialog:
 
         # change value
         name_field = form.find_field("name")
-        line_edit: QLineEdit = name_field.widget
-        line_edit.setText(new_name)
+        line_edit: TextWidget = name_field.widget
+        line_edit.line_edit.setText(new_name)
 
         QTimer.singleShot(100, close_message_box)
         qtbot.mouseClick(form.save_button, Qt.MouseButton.LeftButton)
@@ -153,8 +153,8 @@ class TestNodeDialog:
         type_field = form.find_field("type")
 
         # change name
-        widget: QLineEdit = form.find_field("name").widget
-        widget.setText(new_name)
+        widget: TextWidget = form.find_field("name").widget
+        widget.line_edit.setText(new_name)
         assert form.save_button.isEnabled() is True
 
         # send form
@@ -194,11 +194,11 @@ class TestNodeDialog:
         dialog = self.node_dialog(node_name)
         form = dialog.form
         form_field = form.find_field("type")
-        widget: QLineEdit = form_field.widget
+        widget: TextWidget = form_field.widget
 
         # 1. Change type to valid string
         new_type = "CustomNodev2"
-        widget.setText(new_type)
+        widget.line_edit.setText(new_type)
         assert form.save_button.isEnabled() is True
 
         # send form
@@ -213,14 +213,14 @@ class TestNodeDialog:
         }
 
         # 2. Set a invalid Python class
-        widget.setText("Wrong className")
+        widget.line_edit.setText("Wrong className")
         QTimer.singleShot(100, close_message_box)
         qtbot.mouseClick(form.save_button, Qt.MouseButton.LeftButton)
         assert "must be a valid Python" in form_field.message.text()
 
         # 2. Set an empty type
         form_field.clear_message()
-        widget.setText("")
+        widget.line_edit.setText("")
         QTimer.singleShot(100, close_message_box)
         qtbot.mouseClick(form.save_button, Qt.MouseButton.LeftButton)
         assert "must be a valid Python" in form_field.message.text()

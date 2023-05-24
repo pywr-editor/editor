@@ -59,7 +59,7 @@ class Form(QScrollArea):
         self.save_button = save_button
         self.fields: dict[str, FormField] = {}
         self.sections: dict[str, QGroupBox | FormSection] = {}
-        self.loaded = False
+        self.loaded_ = False
 
         # actions defined in FormCustomWidget.after_field_render() when a widget needs
         # access to other fields
@@ -92,10 +92,10 @@ class Form(QScrollArea):
         Adds and renders the widget fields.
         :return: Non
         """
-        if self.loaded is True:
+        if self.loaded_ is True:
             return
 
-        self.loaded = True
+        self.loaded_ = True
 
         # field configuration dictionary
         for section_data in self.available_fields.values():
@@ -107,8 +107,8 @@ class Form(QScrollArea):
 
         # after render method for custom widgets. If a widget needs a value from
         # another form field, this must be fetched after all fields are rendered.
-        for custom_widget_action in self.after_render_actions:
-            custom_widget_action()
+        for widget_action in self.after_render_actions:
+            widget_action()
 
         # disable the save button if provided. This is re-enabled after the user
         # applies a change to the form
@@ -285,9 +285,6 @@ class Form(QScrollArea):
                 field_type=field_dict.get("field_type"),
                 field_args=field_dict.get("field_args"),
                 help_text=field_dict.get("help_text"),
-                min_value=field_dict.get("min_value"),
-                max_value=field_dict.get("max_value"),
-                suffix=field_dict.get("suffix"),
                 form=self,
             )
             self.fields[name] = field
@@ -393,8 +390,8 @@ class Form(QScrollArea):
         """
         Validates a field before saving the form. This checks if a field is empty
         (when allow_empty is False) and runs a custom validation (when the
-        "validate_fun" key is set in the form dictionary or a custom widget has the
-        validate method).
+        "validate_fun" key is set in the form dictionary or a widget implements the
+        validate() method).
         :param name: The field name to validate.
         :param value: The field set value.
         :param form_field: The FormField instance.
@@ -416,27 +413,17 @@ class Form(QScrollArea):
             return False
 
         # custom validation functions returning Validation
-        if "validate_fun" in field_dict or form_field.is_custom_widget:
-            output: Validation | None = None
-            if form_field.is_custom_widget:
-                output = form_field.widget.validate(name, form_label, value)
+        output = form_field.widget.validate(name, form_label, value)
 
-            if "validate_fun" in field_dict:
-                validate_fun = field_dict["validate_fun"]
-                # custom widget has not failed validation, otherwise preserve first
-                # message
-                if form_field.is_custom_widget and output.validation is True:
-                    output = validate_fun(name, form_label, value)
-                # any other case
-                elif form_field.is_custom_widget is False:
-                    output = validate_fun(name, form_label, value)
-
+        # widget has not failed validation (otherwise preserve first message)
+        if "validate_fun" in field_dict and output.validation is True:
+            output = field_dict["validate_fun"](name, form_label, value)
             if not isinstance(output, Validation):
                 raise TypeError(f"Custom validation for {name} must return Validation")
 
-            if output.validation is False:
-                form_field.set_error(output.error_message)
-                return False
+        if output.validation is False:
+            form_field.set_error(output.error_message)
+            return False
 
         return True
 
@@ -449,7 +436,7 @@ class Form(QScrollArea):
         form_data = {}
         is_valid = True
 
-        if self.loaded is False:
+        if self.loaded_ is False:
             raise ValueError(
                 "You must load the form first using the load_fields() method"
             )
@@ -502,9 +489,8 @@ class Form(QScrollArea):
                     form_data[name] = value
 
                 # the widget event after_validate can manipulate the form dictionary
-                if field.is_custom_widget:
-                    self.logger.debug(f"Running after_validate on '{name}'")
-                    getattr(widget, "after_validate")(form_data, name)
+                self.logger.debug(f"Running after_validate on '{name}'")
+                getattr(widget, "after_validate")(form_data, name)
 
         if is_valid is False:
             QMessageBox().critical(

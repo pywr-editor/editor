@@ -7,13 +7,13 @@ from PySide6.QtWidgets import QPushButton
 from pywr_editor.dialogs import ParametersDialog
 from pywr_editor.dialogs.parameters.parameter_page_widget import ParameterPageWidget
 from pywr_editor.form import (
+    BooleanWidget,
     FormField,
     NodePickerWidget,
     ParameterLineEditWidget,
     StoragePickerWidget,
 )
 from pywr_editor.model import ModelConfig, ParameterConfig
-from pywr_editor.widgets import ToggleSwitchWidget
 from tests.utils import check_msg, resolve_model_path
 
 
@@ -95,10 +95,8 @@ class TestDialogParameterPolynomial1DParameterSection:
         self.validate(qtbot, save_button, None)
 
         # 6. Set use_proportional_volume w/o storage node
-        prop_volume: ToggleSwitchWidget = form.find_field(
-            "use_proportional_volume"
-        ).widget
-        prop_volume.setChecked(True)
+        prop_volume: BooleanWidget = form.find_field("use_proportional_volume").widget
+        prop_volume.toggle.setChecked(True)
         assert form.validate() == {
             "name": "polynomial",
             "type": "polynomial1d",
