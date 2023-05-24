@@ -23,9 +23,9 @@ from .widgets.abstract_string_combo_box_widget import (
 from .widgets.abstract_string_model_component_picker_widget import (
     AbstractStringModelComponentPickerWidget,
 )
+from .widgets.boolean_widget import BooleanWidget
 from .widgets.check_sum_widget import CheckSumWidget
 from .widgets.color_picker_widget import ColorPickerWidget
-from .widgets.comment_widget import CommentWidget
 from .widgets.custom_component_external_data_toggle import (
     CustomComponentExternalDataToggle,
 )
@@ -34,6 +34,7 @@ from .widgets.file_mode_widget import FileModeWidget
 from .widgets.float_widget import FloatWidget
 from .widgets.h5_key_widget import H5KeyWidget
 from .widgets.index_col_widget import IndexColWidget
+from .widgets.integer_widget import IntegerWidget
 from .widgets.is_objective_widget import IsObjectiveWidget
 from .widgets.model_component_type_selector_widget import (
     ModelComponentTypeSelectorWidget,
@@ -55,6 +56,7 @@ from .widgets.table_values_widget import TableValuesWidget
 from .widgets.column_widget import ColumnWidget
 from .widgets.index_widget import IndexWidget
 from .widgets.scenario_picker_widget import ScenarioPickerWidget
+from .widgets.text_widget import TextWidget
 from .widgets.thresholds.threshold_relation_symbol_widget import (
     ThresholdRelationSymbolWidget,
 )

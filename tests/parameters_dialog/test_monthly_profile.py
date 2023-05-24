@@ -9,7 +9,6 @@ from PySide6.QtWidgets import QPushButton
 
 from pywr_editor.dialogs import ParametersDialog
 from pywr_editor.form import (
-    CommentWidget,
     FormField,
     H5KeyWidget,
     IndexColWidget,
@@ -17,6 +16,7 @@ from pywr_editor.form import (
     MonthlyValuesWidget,
     SheetNameWidget,
     TableSelectorWidget,
+    TextWidget,
     UrlWidget,
 )
 from pywr_editor.model import ModelConfig
@@ -203,10 +203,10 @@ class TestDialogParameterMonthlyValuesWidget:
         save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         # button is disabled
         assert save_button.isEnabled() is False
-        comment_widget: CommentWidget = selected_page.findChild(
+        comment_widget: TextWidget = selected_page.findChild(
             FormField, "comment"
         ).widget
-        comment_widget.field.insertPlainText("Updated by me")
+        comment_widget.line_edit.insertPlainText("Updated by me")
         assert save_button.isEnabled() is True
 
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
@@ -269,10 +269,10 @@ class TestDialogParameterMonthlyValuesWidget:
         save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         # button is disabled
         assert save_button.isEnabled() is False
-        comment_widget: CommentWidget = selected_page.findChild(
+        comment_widget: TextWidget = selected_page.findChild(
             FormField, "comment"
         ).widget
-        comment_widget.field.insertPlainText("Updated by me")
+        comment_widget.line_edit.insertPlainText("Updated by me")
         assert save_button.isEnabled() is True
 
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
@@ -320,10 +320,10 @@ class TestDialogParameterMonthlyValuesWidget:
         save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         # button is disabled
         assert save_button.isEnabled() is False
-        comment_widget: CommentWidget = selected_page.findChild(
+        comment_widget: TextWidget = selected_page.findChild(
             FormField, "comment"
         ).widget
-        comment_widget.field.insertPlainText("Updated by me")
+        comment_widget.line_edit.insertPlainText("Updated by me")
         assert save_button.isEnabled() is True
 
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)

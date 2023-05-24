@@ -7,7 +7,7 @@ from PySide6.QtCore import QLineF, QPointF, QRectF, Slot
 from PySide6.QtGui import QPainter, QPainterPath, QPen, QPolygonF, Qt
 from PySide6.QtWidgets import QGraphicsItem, QGraphicsLineItem
 
-from pywr_editor.form import ColorPickerWidget, FieldConfig
+from pywr_editor.form import ColorPickerWidget, FieldConfig, IntegerWidget
 from pywr_editor.model import LineArrowShape
 from pywr_editor.style import Color
 from pywr_editor.widgets import ContextualMenu
@@ -422,8 +422,8 @@ class SchematicArrow(AbstractSchematicShape, QGraphicsLineItem):
                     name="border_size",
                     default_value=self.shape_obj.default_border_size,
                     value=self.shape_obj.border_size,
-                    field_type="integer",
-                    min_value=1,
+                    field_type=IntegerWidget,
+                    field_args={"min_value": 1},
                     max_value=self.shape_obj.max_border_size,
                 ),
                 FieldConfig(

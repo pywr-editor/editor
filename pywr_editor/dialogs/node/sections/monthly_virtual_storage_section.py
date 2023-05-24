@@ -1,4 +1,4 @@
-from pywr_editor.form import FieldConfig
+from pywr_editor.form import BooleanWidget, FieldConfig, IntegerWidget
 
 from ..node_dialog_form import NodeDialogForm
 from .abstract_virtual_storage_section import AbstractVirtualStorageSection
@@ -18,9 +18,8 @@ class MonthlyVirtualStorageSection(AbstractVirtualStorageSection):
                 FieldConfig(
                     name="months",
                     label="Renewal month",
-                    field_type="integer",
-                    min_value=1,
-                    max_value=12,
+                    field_type=IntegerWidget,
+                    field_args={"min_value": 1, "max_value": 12},
                     default_value=1,
                     value=form.field_value("months"),
                     help_text="Month of the year when to reset the storage "
@@ -28,10 +27,10 @@ class MonthlyVirtualStorageSection(AbstractVirtualStorageSection):
                 ),
                 FieldConfig(
                     name="initial_months",
-                    field_type="integer",
+                    field_type=IntegerWidget,
+                    field_args={"min_value": 0, "max_value": 13},
                     default_value=0,
                     min_value=0,
-                    max_value=13,
                     value=form.field_value("initial_months"),
                     help_text="The number of months into the year the "
                     "storage is at when the model run starts. Default to 0. "
@@ -40,7 +39,7 @@ class MonthlyVirtualStorageSection(AbstractVirtualStorageSection):
                 ),
                 FieldConfig(
                     name="reset_to_initial_volume",
-                    field_type="boolean",
+                    field_type=BooleanWidget,
                     default_value=False,
                     value=form.field_value("reset_to_initial_volume"),
                     help_text="Reset the storage to its initial volume instead "

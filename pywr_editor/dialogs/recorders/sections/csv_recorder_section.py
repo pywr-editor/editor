@@ -4,6 +4,7 @@ from pywr_editor.form import (
     FieldConfig,
     FileBrowserWidget,
     FormSection,
+    IntegerWidget,
     MultiNodePickerWidget,
     Validation,
 )
@@ -41,8 +42,8 @@ class CSVRecorderSection(FormSection):
                         name="scenario_index",
                         label="Scenario/combination index",
                         value=form.field_value("scenario_index"),
-                        field_type="integer",
-                        min_value=0,
+                        field_type=IntegerWidget,
+                        field_args={"min_value": 0},
                         default_value=0,
                         help_text="A number starting from 0 indicating the index of "
                         "scenario or combination to export. Set it to 0, when no "
@@ -60,10 +61,9 @@ class CSVRecorderSection(FormSection):
                     FieldConfig(
                         name="complevel",
                         label="Compression level",
-                        field_type="integer",
+                        field_type=IntegerWidget,
+                        field_args={"min_value": 0, "max_value": 9},
                         default_value=9,
-                        min_value=0,
-                        max_value=9,
                         validate_fun=self.check_complevel,
                         value=form.field_value("complevel"),
                     ),

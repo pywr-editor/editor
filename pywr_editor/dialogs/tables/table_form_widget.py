@@ -3,10 +3,12 @@ from typing import TYPE_CHECKING, Any
 from PySide6.QtWidgets import QPushButton
 
 from pywr_editor.form import (
+    BooleanWidget,
     FieldConfig,
     Form,
     H5KeyWidget,
     IndexColWidget,
+    IntegerWidget,
     ParseDatesWidget,
     SheetNameWidget,
     Validation,
@@ -85,7 +87,7 @@ class TableFormWidget(Form):
                 ),
                 FieldConfig(
                     name="dayfirst",
-                    field_type="boolean",
+                    field_type=BooleanWidget,
                     default_value=False,
                     value=self.field_value("dayfirst"),
                     help_text="Use international and European format for dates "
@@ -96,7 +98,7 @@ class TableFormWidget(Form):
                     label="Skip initial space",
                     value=self.field_value("skipinitialspace"),
                     default_value=False,
-                    field_type="boolean",
+                    field_type=BooleanWidget,
                     help_text="Skip any space after the separator, if any. "
                     'For example "   Date" is converted to "Date"',
                 ),
@@ -105,16 +107,15 @@ class TableFormWidget(Form):
                     label="Skip footer",
                     value=self.field_value("skipfooter"),
                     default_value=0,
-                    field_type="integer",
-                    min_value=0,
-                    help_text="Number of lines at bottom of file to skip. Default "
-                    "to 0",
+                    field_type=IntegerWidget,
+                    field_args={"min_value": 0},
+                    help_text="Number of lines at bottom of file to skip. Default to 0",
                 ),
                 FieldConfig(
                     name="skip_blank_lines",
                     value=self.field_value("skip_blank_lines"),
                     default_value=True,
-                    field_type="boolean",
+                    field_type=BooleanWidget,
                     help_text="If Yes, skip over blank lines rather than "
                     "interpreting as NaN values. Default to Yes",
                 ),
@@ -123,8 +124,8 @@ class TableFormWidget(Form):
                     label="Starting row",
                     value=self.field_value("start"),
                     default_value=0,
-                    field_type="integer",
-                    min_value=0,
+                    field_type=IntegerWidget,
+                    field_args={"min_value": 0},
                     help_text="Line numbers to skip at the start of the table",
                 ),
             ],

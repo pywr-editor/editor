@@ -1,4 +1,4 @@
-from pywr_editor.form import FieldConfig, ParameterLineEditWidget
+from pywr_editor.form import FieldConfig, IntegerWidget, ParameterLineEditWidget
 
 from ..recorder_dialog_form import RecorderDialogForm
 from .abstract_recorder_section import AbstractRecorderSection
@@ -24,9 +24,9 @@ class RollingWindowParameterRecorderSection(AbstractRecorderSection):
                 ),
                 FieldConfig(
                     name="window",
-                    field_type="integer",
+                    field_type=IntegerWidget,
+                    field_args={"max_value": form.model_config.number_of_steps},
                     default_value=1,
-                    max_value=form.model_config.number_of_steps,
                     value=form.field_value("window"),
                     help_text="The window length as number of time-steps",
                 ),

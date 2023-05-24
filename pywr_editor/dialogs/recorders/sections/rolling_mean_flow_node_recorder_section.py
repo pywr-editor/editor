@@ -1,4 +1,4 @@
-from pywr_editor.form import FieldConfig, NodePickerWidget, Validation
+from pywr_editor.form import FieldConfig, IntegerWidget, NodePickerWidget, Validation
 
 from ..recorder_dialog_form import RecorderDialogForm
 from .abstract_recorder_section import AbstractRecorderSection
@@ -25,8 +25,8 @@ class RollingMeanFlowNodeRecorderSection(AbstractRecorderSection):
                 FieldConfig(
                     name="timesteps",
                     label="Time-steps",
-                    field_type="integer",
-                    min_value=0,
+                    field_type=IntegerWidget,
+                    field_args={"min_value": 0},
                     default_value=0,
                     max_value=form.model_config.number_of_steps,
                     value=form.field_value("timesteps"),
@@ -36,12 +36,14 @@ class RollingMeanFlowNodeRecorderSection(AbstractRecorderSection):
                 ),
                 FieldConfig(
                     name="days",
-                    field_type="integer",
+                    field_type=IntegerWidget,
+                    field_args={
+                        "min_value": 1,
+                        "max_value": form.model_config.number_of_steps
+                        * form.model_config.time_delta,
+                    },
                     value=form.field_value("days"),
-                    min_value=0,
                     default_value=0,
-                    max_value=form.model_config.number_of_steps
-                    * form.model_config.time_delta,
                     help_text="The number of days to calculate the mean flow for",
                 ),
             ],

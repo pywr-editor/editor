@@ -5,6 +5,7 @@ from pywr_editor.form import (
     H5FileWidget,
     H5NodeWidget,
     H5WhereWidget,
+    IntegerWidget,
     ScenarioPickerWidget,
 )
 
@@ -62,7 +63,7 @@ class TablesArrayParameterSection(FormSection):
                     FieldConfig(
                         name="timestep_offset",
                         label="Time offset",
-                        field_type="integer",
+                        field_type=IntegerWidget,
                         # default to 0 to remove the offset on save
                         default_value=0,
                         value=self.form.field_value("timestep_offset"),

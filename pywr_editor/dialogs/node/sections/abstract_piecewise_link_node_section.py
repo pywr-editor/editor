@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 from pywr_editor.form import (
     FieldConfig,
     FormSection,
+    IntegerWidget,
     ParametersListPickerWidget,
     Validation,
 )
@@ -16,7 +17,6 @@ class AbstractPiecewiseLinkNodeSection(FormSection):
         self,
         form: "NodeDialogForm",
         section_data: dict,
-        log_name: str,
         additional_fields: list[dict] | None = None,
     ):
         """
@@ -24,7 +24,6 @@ class AbstractPiecewiseLinkNodeSection(FormSection):
         from it.
         :param form: The parent form.
         :param section_data: A dictionary containing data to pass to the widget.
-        :param log_name: The log name.
         :param additional_fields: Additional fields to add to the abstract section.
         """
         super().__init__(form, section_data)
@@ -37,8 +36,8 @@ class AbstractPiecewiseLinkNodeSection(FormSection):
                     FieldConfig(
                         name="nsteps",
                         label="Number of sub links",
-                        field_type="integer",
-                        min_value=1,
+                        field_type=IntegerWidget,
+                        field_args={"min_value": 1},
                         value=form.field_value("nsteps"),
                         help_text="The number of sub-links to create within the node. "
                         + "A cost and a maximum flow can be set on each link",

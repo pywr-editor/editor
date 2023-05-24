@@ -1,6 +1,7 @@
 from typing import Type
 
 from pywr_editor.form import (
+    BooleanWidget,
     FieldConfig,
     FormCustomWidget,
     FormSection,
@@ -108,7 +109,7 @@ class AbstractThresholdParameterSection(FormSection):
                     ),
                     FieldConfig(
                         name="ratchet",
-                        field_type="boolean",
+                        field_type=BooleanWidget,
                         default_value=False,
                         value=self.form.field_value("ratchet"),
                         help_text="When Yes and once the predicate is true, the "

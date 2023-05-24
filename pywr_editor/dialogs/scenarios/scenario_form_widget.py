@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from PySide6.QtWidgets import QPushButton
 
-from pywr_editor.form import FieldConfig, ModelComponentForm, Validation
+from pywr_editor.form import FieldConfig, IntegerWidget, ModelComponentForm, Validation
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import Logging
 
@@ -53,8 +53,8 @@ class ScenarioFormWidget(ModelComponentForm):
                 ),
                 FieldConfig(
                     name="size",
-                    field_type="integer",
-                    min_value=1,
+                    field_type=IntegerWidget,
+                    field_args={"min_value": 1},
                     value=self.get_dict_value("size", self.scenario_dict),
                     default_value=1,
                     help_text="The number of ensembles in the scenario",

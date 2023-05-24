@@ -2,6 +2,7 @@ from pywr_editor.form import (
     FieldConfig,
     FloatWidget,
     FormSection,
+    IntegerWidget,
     RbfDayOfYearWidget,
     RbfFunction,
     RbfOptBoundWidget,
@@ -111,12 +112,14 @@ class RbfProfileParameterSection(FormSection):
                     FieldConfig(
                         name="variable_days_of_year_range",
                         label="Days of the year bounds",
-                        field_type="integer",
-                        default_value=0,
+                        field_type=IntegerWidget,
                         # limits depend on set value; use 365
-                        min_value=-365,
-                        max_value=365,
-                        suffix="days",
+                        field_args={
+                            "min_value": -365,
+                            "max_value": 365,
+                            "suffix": "days",
+                        },
+                        default_value=0,
                         value=self.form.field_value("variable_days_of_year_range"),
                         validate_fun=self._check_day_range,
                         help_text="This allows the values in the 'Days of the year' "

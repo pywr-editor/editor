@@ -1,5 +1,11 @@
-from pywr_editor.form import FieldConfig, FormSection, NodePickerWidget, Validation
-from pywr_editor.form.widgets.float_widget import FloatWidget
+from pywr_editor.form import (
+    FieldConfig,
+    FloatWidget,
+    FormSection,
+    IntegerWidget,
+    NodePickerWidget,
+    Validation,
+)
 
 from ..parameter_dialog_form import ParameterDialogForm
 
@@ -27,8 +33,8 @@ class RollingMeanFlowNodeParameterSection(FormSection):
                     FieldConfig(
                         name="timesteps",
                         label="Time-steps",
-                        field_type="integer",
-                        min_value=0,
+                        field_type=IntegerWidget,
+                        field_args={"min_value": 0},
                         default_value=0,
                         max_value=self.form.model_config.number_of_steps,
                         value=self.form.field_value("timesteps"),
@@ -38,12 +44,15 @@ class RollingMeanFlowNodeParameterSection(FormSection):
                     ),
                     FieldConfig(
                         name="days",
-                        field_type="integer",
+                        field_type=IntegerWidget,
+                        field_args={
+                            "min_value": 0,
+                            "max_value": self.form.model_config.number_of_steps
+                            * self.form.model_config.time_delta,
+                        },
                         value=self.form.field_value("days"),
                         min_value=0,
                         default_value=0,
-                        max_value=self.form.model_config.number_of_steps
-                        * self.form.model_config.time_delta,
                         help_text="The number of days to calculate the mean flow for",
                     ),
                     FieldConfig(

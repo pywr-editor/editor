@@ -1,5 +1,7 @@
 from pywr_editor.form import (
+    BooleanWidget,
     FieldConfig,
+    IntegerWidget,
     ResampleAggFrequencyWidget,
     ResampleAggFunctionWidget,
     StoragePickerWidget,
@@ -31,7 +33,7 @@ class NormalisedGaussianKDEStorageRecorderSection(AbstractRecorderSection):
             FieldConfig(
                 name="num_pdf",
                 label="Number of PDF points",
-                field_type="integer",
+                field_type=IntegerWidget,
                 default_value=101,
                 value=form.field_value("num_pdf"),
                 help_text="The number of points to use in the PDF estimate. Default "
@@ -40,7 +42,7 @@ class NormalisedGaussianKDEStorageRecorderSection(AbstractRecorderSection):
             FieldConfig(
                 name="use_reflection",
                 label="Reflection",
-                field_type="boolean",
+                field_type=BooleanWidget,
                 default_value=True,
                 value=form.field_value("use_reflection"),
                 help_text="Apply reflection at the border. This prevents the "

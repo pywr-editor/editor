@@ -1,4 +1,5 @@
 from pywr_editor.form import (
+    BooleanWidget,
     FieldConfig,
     FormSection,
     InterpFillValueWidget,
@@ -39,7 +40,7 @@ class AbstractInterpolationSection(FormSection):
             FieldConfig(
                 name="bounds_error",
                 label="Fail on extrapolation",
-                field_type="boolean",
+                field_type=BooleanWidget,
                 default_value=True,
                 value=self.form.field_value("bounds_error"),
                 help_text="Raise an error when the interpolation provides a value "
@@ -48,7 +49,7 @@ class AbstractInterpolationSection(FormSection):
             FieldConfig(
                 name="assume_sorted",
                 label="Disable sorting",
-                field_type="boolean",
+                field_type=BooleanWidget,
                 default_value=False,
                 value=self.form.field_value("assume_sorted"),
                 help_text="When No, values of x are sorted first to ensure a "

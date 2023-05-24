@@ -1,11 +1,11 @@
-from typing import TYPE_CHECKING, Any, Literal, Type, Union
+from typing import TYPE_CHECKING, Any, Type
 
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QLabel, QLineEdit, QSizePolicy, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QLabel, QVBoxLayout, QWidget
 
+from pywr_editor.form.widgets.text_widget import TextWidget
 from pywr_editor.style import Color
 from pywr_editor.utils import Logging
-from pywr_editor.widgets import SpinBox, ToggleSwitchWidget
 
 from .form_custom_widget import FormCustomWidget
 
@@ -19,31 +19,22 @@ class FormField(QWidget):
         form: "Form",
         name: str,
         label: str,
-        field_type: Type[FormCustomWidget]
-        | Literal["text", "boolean", "integer"] = "text",
+        field_type: Type[FormCustomWidget] = TextWidget,
         field_args: dict[str, Any] = None,
-        value: str | bool | int | float | None = None,
+        value: Any | None = None,
         default_value=None,
         help_text: str | None = None,
-        min_value: int | None = None,
-        max_value: int | None = None,
-        suffix: str | None = None,
     ):
         """
         Initialises a form field.
         :param form: The form instance.
         :param name: The field name.
         :param label: The field label.
-        :param value: The field value. Default to None.
+        :param value: The field value. Default to TextWidget.
         :param help_text: The help text to add below the field. Default to None.
-        :param field_type: The field type (text, integer, boolean or a widget
-        inheriting from FormCustomWidget). Default to "text".
-        :param field_args: Additional arguments to pass to custom widgets as
-        dictionary. Optional.
-        :param default_value: The default value for the field. Optional.
-        :param min_value: The minimum value to use when field_type is integer. Optional
-        :param max_value: The maximum value to use when field_type is integer. Optional
-        :param suffix: The suffix to use when field_type is integer. Optional.
+        :param field_type: A FormCustomWidget type. Default to TextWidget.
+        :param field_args: Additional arguments to pass to custom widgets as dictionary.
+        Optional.
         """
         super().__init__()
         self.name = name
@@ -51,9 +42,10 @@ class FormField(QWidget):
         self.form = form
         self.field_type = field_type
         self.default_value = default_value
-        if field_type is None:
-            self.field_type = "text"
         self.field_args = field_args
+
+        if field_type is None:
+            self.field_type = TextWidget
         if field_args is None:
             self.field_args = {}
 
@@ -77,73 +69,14 @@ class FormField(QWidget):
         self.message.hide()
 
         # field
-        self.widget: Union[
-            FormCustomWidget, QLineEdit, SpinBox, ToggleSwitchWidget, None
-        ] = None
-        warning_message = None
-        # custom widget
-        if self.is_custom_widget:
-            self.widget = self.field_type(
-                name=name, value=value, parent=self, **self.field_args
-            )
-            # store the default value in the form
-            self.form.defaults[name] = self.widget.get_default_value()
-
-        # QLine edit
-        elif self.field_type == "text":
-            self.widget = QLineEdit()
-
-            if value is not None:
-                self.widget.setText(str(value))
-            elif default_value is not None:
-                self.widget.setText(str(default_value))
-            else:
-                self.widget.setText("")
-        # QSpinBox
-        elif self.field_type == "integer":
-            self.widget = SpinBox()
-            self.widget.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Minimum)
-
-            # noinspection PyTypeChecker
-            if min_value is not None and isinstance(min_value, int):
-                self.widget.setMinimum(min_value)
-            if max_value is not None and isinstance(max_value, int):
-                self.widget.setMaximum(max_value)
-            if suffix is not None and isinstance(suffix, str):
-                self.widget.setSuffix(f" {suffix}")
-
-            if value is not None and isinstance(value, int):
-                if min_value and value < min_value:
-                    warning_message = f"The provided value ({value}) must be "
-                    warning_message += f"larger than the minimum ({min_value})"
-                elif max_value and value > max_value:
-                    warning_message = f"The provided value ({value}) must be "
-                    warning_message += f"smaller than the maximum ({max_value})"
-                self.widget.setValue(value)
-            elif default_value is not None and isinstance(default_value, int):
-                self.widget.setValue(default_value)
-            elif min_value is not None:
-                self.widget.setValue(min_value)
-
-        # ToggleSwitchWidget with boolean
-        elif self.field_type == "boolean":
-            self.widget = ToggleSwitchWidget()
-            self.widget.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Minimum)
-
-            if default_value is not None and not isinstance(default_value, bool):
-                raise ValueError(f"default_value for '{name}' must be a boolean")
-            if value is None or not isinstance(value, bool):  # use the default value
-                self.widget.setChecked(True if default_value else False)
-            else:
-                self.widget.setChecked(value)
-        else:
-            raise NameError(
-                "The field type can only be text, integer, boolean or a "
-                + f"FormCustomWidget instance. {self.field_type} given"
-            )
+        self.widget = self.field_type(
+            name=name, value=value, parent=self, **self.field_args
+        )
+        # store the default value in the form
+        self.form.defaults[name] = self.widget.get_default_value()
 
         # set properties
-        if self.is_custom_widget and default_value is None:
+        if default_value is None:
             # prioritise value in dict than custom widget
             default_value = self.widget.get_default_value()
         # noinspection PyTypeChecker
@@ -166,20 +99,6 @@ class FormField(QWidget):
 
         if self.help_text is not None:
             layout.addWidget(self.help_text)
-        # set error message for built-in field types
-        if warning_message:
-            self.set_warning(warning_message)
-
-    @property
-    def is_custom_widget(self) -> bool:
-        """
-        Checks if the field type is a custom widget.
-        :return: True if the field type is a custom widget, False otherwise.
-        """
-        # noinspection PyTypeChecker
-        return callable(self.field_type) and issubclass(
-            self.field_type, FormCustomWidget
-        )
 
     def clear_message(self, message_type: str | None = None) -> None:
         """
@@ -240,27 +159,7 @@ class FormField(QWidget):
 
     def value(self) -> Any:
         """
-        Returns the field value. Custom widgets must implement the get_value() method.
+        Returns the field value. Widgets must implement the get_value() method.
         :return: The value.
         """
-        # noinspection PyTypeChecker
-        default_value = self.widget.property("default_value")
-        if self.is_custom_widget:
-            self.widget: FormCustomWidget
-            return self.widget.get_value()
-        elif self.field_type == "text":
-            self.widget: QLineEdit
-            value = self.widget.text()
-            if value == "" and default_value is not None:
-                return default_value
-            return value
-        elif self.field_type == "integer":
-            self.widget: SpinBox
-            return self.widget.value()
-        elif self.field_type == "boolean":
-            return self.widget.isChecked()
-        else:
-            raise NameError(
-                "The field type can only be text, integer, boolean or a "
-                + f"FormCustomWidget instance. {self.field_type} given."
-            )
+        return self.widget.get_value()

@@ -48,7 +48,7 @@ class TestMetadataDialog:
         for field_name, new_value in new_values.items():
             # noinspection PyTypeChecker
             form_field: FormField = dialog.findChild(FormField, field_name)
-            form_field.widget.setText(new_value)
+            form_field.widget.line_edit.setText(new_value)
 
         # save the form
         assert dialog.save_button.isEnabled() is True
@@ -66,7 +66,7 @@ class TestMetadataDialog:
         Tests the validation when an invalid minimum version number is provided.
         """
         form_field: FormField = dialog.findChild(FormField, "minimum_version")
-        form_field.widget.setText("a")
+        form_field.widget.line_edit.setText("a")
 
         # try saving the form
         QTimer.singleShot(100, close_message_box)

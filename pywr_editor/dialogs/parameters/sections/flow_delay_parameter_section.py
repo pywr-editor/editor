@@ -4,6 +4,7 @@ from pywr_editor.form import (
     FieldConfig,
     FloatWidget,
     FormSection,
+    IntegerWidget,
     NodePickerWidget,
     Validation,
 )
@@ -19,7 +20,6 @@ class FlowDelayParameterSection(FormSection):
         :param section_data: A dictionary containing data to pass to the widget.
         """
         super().__init__(form, section_data)
-        self.form: ParameterDialogForm
 
         self.add_fields(
             {
@@ -27,29 +27,31 @@ class FlowDelayParameterSection(FormSection):
                     FieldConfig(
                         name="node",
                         field_type=NodePickerWidget,
-                        value=self.form.field_value("node"),
+                        value=form.field_value("node"),
                         allow_empty=False,
                         help_text="The parameter provides the flow at the previous "
                         "time-step for the specified node",
                     ),
                     FieldConfig(
                         name="timesteps",
-                        field_type="integer",
+                        field_type=IntegerWidget,
+                        field_args={
+                            "min_value": 0,
+                            "max_value": form.model_config.number_of_steps,
+                        },
                         default_value=0,
-                        value=self.form.field_value("timesteps"),
+                        value=form.field_value("timesteps"),
                         validate_fun=self.check_timesteps,
-                        min_value=0,
-                        max_value=self.form.model_config.number_of_steps,
                         help_text="Number of time steps to delay the flow. Default to "
                         "0",
                     ),
                     FieldConfig(
                         name="days",
-                        field_type="integer",
+                        field_type=IntegerWidget,
+                        field_args={"min_value": 0},
                         default_value=0,
-                        value=self.form.field_value("days"),
+                        value=form.field_value("days"),
                         validate_fun=self.check_days,
-                        min_value=0,
                         help_text="Instead of provide the number of time step, delay "
                         "the flow by specifying the number of days. This number must "
                         "be exactly divisible by the time-step",
@@ -59,13 +61,13 @@ class FlowDelayParameterSection(FormSection):
                         field_type=FloatWidget,
                         field_args={"min_value": 0},
                         default_value=0,
-                        value=self.form.field_value("initial_value"),
+                        value=form.field_value("initial_value"),
                         allow_empty=False,
                         help_text="The value to return on the first time step when the "
                         "node does not have any past flow. Default to 0",
                     ),
                 ],
-                "Miscellaneous": [self.form.comment],
+                "Miscellaneous": [form.comment],
             }
         )
 

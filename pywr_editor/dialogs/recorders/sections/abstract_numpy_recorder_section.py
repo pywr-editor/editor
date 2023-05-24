@@ -6,6 +6,7 @@ from pywr_editor.form import (
     AggFuncPercentileMethodWidget,
     AggFuncPercentileOfScoreKindWidget,
     AggFuncPercentileOfScoreScoreWidget,
+    BooleanWidget,
     FieldConfig,
     TemporalAggFuncWidget,
     validate_percentile_field_section,
@@ -122,7 +123,7 @@ class AbstractNumpyRecorderSection(AbstractRecorderSection):
                 FieldConfig(
                     name="ignore_nan",
                     value=form.field_value("ignore_nan"),
-                    field_type="boolean",
+                    field_type=BooleanWidget,
                     default_value=False,
                     help_text="Ignore NaNs in the recorder values when the "
                     "optimiser aggregates the values from each scenario",

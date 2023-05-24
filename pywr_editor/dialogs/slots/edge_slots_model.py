@@ -129,7 +129,7 @@ class EdgeSlotsModel(QAbstractTableModel):
                 "MultiSplitLink"
             ) + self.model.includes.get_keys_with_subclass("MultiSplitLink", "node")
 
-            if node_dict.type in types_to_check and value is None:
+            if node_dict.key in types_to_check and value is None:
                 QMessageBox().critical(
                     self.parent(),
                     "Cannot update the slot",
@@ -143,7 +143,7 @@ class EdgeSlotsModel(QAbstractTableModel):
                 edge_names[1],
                 index.column() - 1,
                 value,
-                node_dict.type in types_to_check,
+                node_dict.key in types_to_check,
             )
             # noinspection PyUnresolvedReferences
             self.dataChanged.emit(index.row(), index.column())

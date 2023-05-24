@@ -1,4 +1,4 @@
-from pywr_editor.form import FieldConfig
+from pywr_editor.form import BooleanWidget, FieldConfig, IntegerWidget
 
 from ..node_dialog_form import NodeDialogForm
 from .abstract_virtual_storage_section import AbstractVirtualStorageSection
@@ -18,9 +18,8 @@ class SeasonalVirtualStorageSection(AbstractVirtualStorageSection):
                 FieldConfig(
                     name="reset_day",
                     label="Renewal day",
-                    field_type="integer",
-                    min_value=1,
-                    max_value=31,
+                    field_type=IntegerWidget,
+                    field_args={"min_value": 1, "max_value": 31},
                     default_value=1,
                     value=form.field_value("reset_day"),
                     help_text="The day of the month when the storage starts to be "
@@ -29,9 +28,8 @@ class SeasonalVirtualStorageSection(AbstractVirtualStorageSection):
                 FieldConfig(
                     name="reset_month",
                     label="Renewal month",
-                    field_type="integer",
-                    min_value=1,
-                    max_value=12,
+                    field_type=IntegerWidget,
+                    field_args={"min_value": 1, "max_value": 12},
                     default_value=1,
                     value=form.field_value("reset_month"),
                     help_text="The month when the storage starts to be calculated "
@@ -39,9 +37,8 @@ class SeasonalVirtualStorageSection(AbstractVirtualStorageSection):
                 ),
                 FieldConfig(
                     name="end_day",
-                    field_type="integer",
-                    min_value=1,
-                    max_value=31,
+                    field_type=IntegerWidget,
+                    field_args={"min_value": 1, "max_value": 31},
                     default_value=31,
                     value=form.field_value("end_day"),
                     help_text="The day of the month when the storage stops being "
@@ -49,9 +46,8 @@ class SeasonalVirtualStorageSection(AbstractVirtualStorageSection):
                 ),
                 FieldConfig(
                     name="end_month",
-                    field_type="integer",
-                    min_value=1,
-                    max_value=12,
+                    field_type=IntegerWidget,
+                    field_args={"min_value": 1, "max_value": 12},
                     default_value=12,
                     value=form.field_value("end_month"),
                     help_text="The month when the storage stops being calculated. "
@@ -59,7 +55,7 @@ class SeasonalVirtualStorageSection(AbstractVirtualStorageSection):
                 ),
                 FieldConfig(
                     name="reset_to_initial_volume",
-                    field_type="boolean",
+                    field_type=BooleanWidget,
                     default_value=False,
                     value=form.field_value("reset_to_initial_volume"),
                     help_text="Reset the storage to its initial volume instead "

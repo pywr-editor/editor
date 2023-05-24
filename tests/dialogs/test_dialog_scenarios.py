@@ -6,9 +6,7 @@ from pywr_editor.dialogs import ScenariosDialog
 from pywr_editor.dialogs.scenarios.scenario_empty_page_widget import (
     ScenarioEmptyPageWidget,
 )
-from pywr_editor.dialogs.scenarios.scenario_form_widget import (
-    ScenarioFormWidget,
-)
+from pywr_editor.dialogs.scenarios.scenario_form_widget import ScenarioFormWidget
 from pywr_editor.form import FormField
 from pywr_editor.model import ModelConfig
 from tests.utils import close_message_box, resolve_model_path
@@ -94,7 +92,7 @@ class TestScenariosDialog:
 
         # rename and save
         renamed_scenario_name = "A new shiny name"
-        name_field.widget.setText(renamed_scenario_name)
+        name_field.widget.line_edit.setText(renamed_scenario_name)
 
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         assert name_field.message.text() == ""
@@ -128,7 +126,7 @@ class TestScenariosDialog:
 
         # 1. Change the name and save
         assert name_field.value() == current_name
-        name_field.widget.setText(new_name)
+        name_field.widget.line_edit.setText(new_name)
 
         qtbot.wait(200)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
@@ -150,7 +148,7 @@ class TestScenariosDialog:
         }
 
         # 2. Set duplicated name
-        name_field.widget.setText("scenario A")
+        name_field.widget.line_edit.setText("scenario A")
         QTimer.singleShot(100, close_message_box)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         assert "already exists" in name_field.message.text()

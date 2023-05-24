@@ -1,6 +1,6 @@
 from typing import Any
 
-from pywr_editor.form import FieldConfig, Validation
+from pywr_editor.form import FieldConfig, IntegerWidget, Validation
 
 from ..node_dialog_form import NodeDialogForm
 from .abstract_virtual_storage_section import AbstractVirtualStorageSection
@@ -19,22 +19,24 @@ class RollingVirtualStorageSection(AbstractVirtualStorageSection):
             additional_fields=[
                 FieldConfig(
                     name="timesteps",
-                    field_type="integer",
+                    field_type=IntegerWidget,
+                    field_args={
+                        "min_value": 1,
+                        "max_value": form.model_config.number_of_steps,
+                    },
                     default_value=0,
                     value=form.field_value("timesteps"),
                     validate_fun=self.check_timesteps,
-                    min_value=0,
-                    max_value=form.model_config.number_of_steps,
                     help_text="Number of time steps to apply to the rolling "
                     "storage over. Default to 0",
                 ),
                 FieldConfig(
                     name="days",
-                    field_type="integer",
+                    field_type=IntegerWidget,
+                    field_args={"min_value": 0},
                     default_value=0,
                     value=form.field_value("days"),
                     validate_fun=self.check_days,
-                    min_value=0,
                     help_text="Instead of provide the number of time step, apply "
                     "the rolling storage over a number of days. This number must be "
                     "exactly divisible by the time-step",

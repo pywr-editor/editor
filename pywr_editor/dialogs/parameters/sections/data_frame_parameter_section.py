@@ -2,6 +2,7 @@ from pywr_editor.form import (
     CheckSumWidget,
     FieldConfig,
     FormSection,
+    IntegerWidget,
     ScenarioPickerWidget,
     SourceSelectorWidget,
     UrlWidget,
@@ -57,7 +58,7 @@ class DataFrameParameterSection(FormSection):
                     FieldConfig(
                         name="timestep_offset",
                         label="Time offset",
-                        field_type="integer",
+                        field_type=IntegerWidget,
                         # default to 0 to remove the offset on save
                         default_value=0,
                         value=self.form.field_value("timestep_offset"),

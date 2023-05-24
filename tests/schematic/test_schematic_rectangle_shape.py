@@ -6,14 +6,13 @@ from PySide6.QtCore import QEvent, QMimeData, QPoint, Qt, QTimer
 from PySide6.QtGui import QDragEnterEvent
 
 from pywr_editor import MainWindow
-from pywr_editor.form import ColorPickerWidget
+from pywr_editor.form import ColorPickerWidget, IntegerWidget
 from pywr_editor.model import LineArrowShape, ModelConfig, RectangleShape
 from pywr_editor.schematic import ResizeShapeCommand, Schematic
 from pywr_editor.schematic.commands.add_shape_command import AddShapeCommand
 from pywr_editor.schematic.shapes.abstract_schematic_shape import AbstractSchematicShape
 from pywr_editor.schematic.shapes.rectangle_shape import Handles, SchematicRectangle
 from pywr_editor.schematic.shapes.shape_dialogs import ShapeDialogForm
-from pywr_editor.widgets import SpinBox
 from tests.utils import close_message_box, resolve_model_path
 
 
@@ -55,8 +54,8 @@ class TestSchematicRectangleShape:
         # noinspection PyTypeChecker
         form: ShapeDialogForm = window.findChild(ShapeDialogForm)
 
-        border_size_field: SpinBox = form.find_field("border_size").widget
-        border_size_field.setValue(1)
+        border_size_field: IntegerWidget = form.find_field("border_size").widget
+        border_size_field.spin_box.setValue(1)
         color_widget: ColorPickerWidget = form.find_field("border_color").widget
         color_widget.value = (80, 80, 80)
 
@@ -181,8 +180,8 @@ class TestSchematicRectangleShape:
         schematic.shape_items[new_shape_id].on_edit_shape()
         # noinspection PyTypeChecker
         dialog_form: ShapeDialogForm = window.findChild(ShapeDialogForm)
-        border_size_widget: SpinBox = dialog_form.find_field("border_size").widget
-        border_size_widget.setValue(4)
+        border_size_widget: IntegerWidget = dialog_form.find_field("border_size").widget
+        border_size_widget.spin_box.setValue(4)
         qtbot.mouseClick(dialog_form.save_button, Qt.MouseButton.LeftButton)
 
         # 4. Test undo
@@ -373,8 +372,8 @@ class TestSchematicRectangleShape:
         # noinspection PyTypeChecker
         form: ShapeDialogForm = window.findChild(ShapeDialogForm)
 
-        border_size_field: SpinBox = form.find_field("border_size").widget
-        border_size_field.setValue(1)
+        border_size_field: IntegerWidget = form.find_field("border_size").widget
+        border_size_field.spin_box.setValue(1)
 
         form.save()
         new_shape_dict = shape_config.shape_dict.copy()

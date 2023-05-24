@@ -200,7 +200,7 @@ class TestDeleteSchematicNodes:
         dialog_form = dialog.form
 
         new_name = "New node name"
-        dialog_form.find_field("name").widget.setText(new_name)
+        dialog_form.find_field("name").widget.line_edit.setText(new_name)
         cost_widget: ParameterLineEditWidget = dialog_form.find_field("cost").widget
         cost_widget.component_obj = ParameterConfig({"type": "constant", "value": 9000})
         qtbot.mouseClick(dialog_form.save_button, Qt.MouseButton.LeftButton)

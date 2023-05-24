@@ -1,4 +1,10 @@
-from pywr_editor.form import FieldConfig, FloatWidget, FormSection, Validation
+from pywr_editor.form import (
+    FieldConfig,
+    FloatWidget,
+    FormSection,
+    IntegerWidget,
+    Validation,
+)
 
 from ..parameter_dialog_form import ParameterDialogForm
 
@@ -29,7 +35,7 @@ class DiscountFactorParameterSection(FormSection):
                     ),
                     FieldConfig(
                         name="base_year",
-                        field_type="integer",
+                        field_type=IntegerWidget,
                         default_value=0,
                         value=self.form.field_value("base_year"),
                         allow_empty=False,
