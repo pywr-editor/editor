@@ -112,7 +112,7 @@ class DataTypeDictionaryItemWidget(AbstractStringComboBoxWidget):
             and not self.is_empty
             and self.data_type is None
         ):
-            self.form_field.set_warning_message(
+            self.field.set_warning(
                 "The type of data provided in the "
                 "model configuration is not supported"
             )

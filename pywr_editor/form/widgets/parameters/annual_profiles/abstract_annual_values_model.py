@@ -6,6 +6,8 @@ from PySide6.QtGui import Qt
 
 
 class AbstractAnnualValuesModel(QAbstractTableModel):
+    total_values: int
+
     def __init__(
         self,
         label: str,

@@ -7,13 +7,9 @@ from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
 from pywr_editor.form import FormTitle
 from pywr_editor.model import ModelConfig
-from pywr_editor.node_shapes import (
-    BaseNode,
-    get_node_icon,
-    get_pixmap_from_type,
-)
+from pywr_editor.node_shapes import BaseNode, get_node_icon, get_pixmap_from_type
+from pywr_editor.widgets import PushIconButton
 
-from ...widgets import PushIconButton
 from .node_dialog_form import NodeDialogForm
 
 if TYPE_CHECKING:

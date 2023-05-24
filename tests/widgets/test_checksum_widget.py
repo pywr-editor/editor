@@ -30,7 +30,7 @@ class TestDialogParameterCheckSumWidget:
         form = ParameterForm(
             model_config=ModelConfig(resolve_model_path("model_tables.json")),
             parameter_obj=ParameterConfig({}),
-            available_fields={
+            fields={
                 "Section": [
                     {
                         "name": "checksum",
@@ -45,7 +45,7 @@ class TestDialogParameterCheckSumWidget:
         form.enable_optimisation_section = False
         form.load_fields()
 
-        form_field = form.find_field_by_name("checksum")
+        form_field = form.find_field("checksum")
         # noinspection PyTypeChecker
         return form_field.widget
 
@@ -71,7 +71,7 @@ class TestDialogParameterCheckSumWidget:
         Tests that the field is loaded correctly.
         """
         widget = self.widget(value=value)
-        form_field: FormField = widget.form_field
+        form_field: FormField = widget.field
         line_edit = widget.line_edit
         combo_box = widget.combo_box
 
@@ -135,7 +135,7 @@ class TestDialogParameterCheckSumWidget:
         Tests the field validation.
         """
         widget = self.widget(value=value)
-        form_field: FormField = widget.form_field
+        form_field: FormField = widget.field
 
         if init_message:
             if isinstance(init_message, str):

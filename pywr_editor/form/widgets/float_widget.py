@@ -43,17 +43,13 @@ class FloatWidget(FormCustomWidget):
 
             # check bound
             if min_value is not None and value < min_value:
-                message = "The value is below the allowed minimum of " + str(
-                    round(min_value, 2)
+                self.field.set_warning(
+                    f"The value is below the allowed minimum of {round(min_value, 2)}"
                 )
-                self.logger.debug(message)
-                self.form_field.set_warning_message(message)
             if max_value is not None and value > max_value:
-                message = "The value is above the allowed maximum of " + str(
-                    round(max_value, 2)
+                self.field.set_warning(
+                    f"The value is above the allowed maximum of {round(max_value, 2)}"
                 )
-                self.logger.debug(message)
-                self.form_field.set_warning_message(message)
         # otherwise use default if provided
         elif self.get_default_value() is not None:
             self.logger.debug(f"Setting default value of {self.get_default_value()}")
@@ -73,7 +69,7 @@ class FloatWidget(FormCustomWidget):
         The field default value use by self.get_value().
         :return: The default value.
         """
-        return self.form_field.default_value
+        return self.field.default_value
 
     def get_value(self) -> str | float | None:
         """
@@ -95,8 +91,8 @@ class FloatWidget(FormCustomWidget):
         """
         value = ""
         # restore default if available
-        if self.form_field.default_value is not None:
-            value = str(self.form_field.default_value)
+        if self.field.default_value is not None:
+            value = str(self.field.default_value)
 
         self.line_edit.setText(value)
 

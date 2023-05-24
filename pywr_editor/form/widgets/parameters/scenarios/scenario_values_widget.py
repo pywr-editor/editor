@@ -137,7 +137,7 @@ class ScenarioValuesWidget(FormCustomWidget):
         self.form: ParameterDialogForm
         self.logger.debug("Registering post-render section actions")
 
-        scenario_field = self.form.find_field_by_name("scenario")
+        scenario_field = self.form.find_field("scenario")
         # noinspection PyTypeChecker
         scenario_widget: ScenarioPickerWidget = scenario_field.widget
 
@@ -158,7 +158,7 @@ class ScenarioValuesWidget(FormCustomWidget):
                     self.warning_message = new_message
                 self.logger.debug(new_message)
 
-        self.form_field.set_warning_message(self.warning_message)
+        self.field.set_warning(self.warning_message)
 
     @Slot(int)
     def on_update_scenario(self) -> None:
@@ -171,11 +171,11 @@ class ScenarioValuesWidget(FormCustomWidget):
             f"Running on_update_scenario Slot from {get_signal_sender(self)}"
         )
 
-        scenario_field = self.form.find_field_by_name("scenario")
+        scenario_field = self.form.find_field("scenario")
         self.scenario_size = self.form.model_config.scenarios.get_size(
             scenario_field.value()
         )
-        self.form_field.clear_message()
+        self.field.clear_message()
         self.logger.debug(f"Updated scenario size with {self.scenario_size}")
 
     @Slot()

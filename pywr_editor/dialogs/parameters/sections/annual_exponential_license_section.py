@@ -1,4 +1,4 @@
-from pywr_editor.form import FloatWidget
+from pywr_editor.form import FieldConfig, FloatWidget
 
 from ..parameter_dialog_form import ParameterDialogForm
 from .abstract_storage_license_section import AbstractStorageLicenseSection
@@ -23,23 +23,23 @@ class AnnualExponentialLicenseSection(AbstractStorageLicenseSection):
             + "through the node, from the beginning of the simulation to the current "
             + "the day of the year <i>d</i>, and <i>k</i> is the scale factor",
             additional_fields=[
-                {
-                    "name": "max_value",
-                    "label": "Maximum value",
-                    "field_type": FloatWidget,
-                    "allow_empty": False,
-                    "value": form.get_param_dict_value("max_value"),
-                    "help_text": "The starting value of the exponential function "
-                    + "(i.e. when <i>x</i>=0)",
-                },
-                {
-                    "name": "k",
-                    "label": "Scale factor (<i>k</i>)",
-                    "field_type": FloatWidget,
-                    "allow_empty": False,
-                    "value": form.get_param_dict_value("k"),
-                    "help_text": "The scale factor for the exponent of the "
-                    + "exponential function.",
-                },
+                FieldConfig(
+                    name="max_value",
+                    label="Maximum value",
+                    field_type=FloatWidget,
+                    allow_empty=False,
+                    value=form.field_value("max_value"),
+                    help_text="The starting value of the exponential function "
+                    "(i.e. when <i>x</i>=0)",
+                ),
+                FieldConfig(
+                    name="k",
+                    label="Scale factor (<i>k</i>)",
+                    field_type=FloatWidget,
+                    allow_empty=False,
+                    value=form.field_value("k"),
+                    help_text="The scale factor for the exponent of the "
+                    "exponential function.",
+                ),
             ],
         )

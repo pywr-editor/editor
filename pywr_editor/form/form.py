@@ -29,7 +29,7 @@ from .validation import Validation
 class Form(QScrollArea):
     def __init__(
         self,
-        available_fields: dict[str, list[FieldConfig]],
+        fields: dict[str, list[FieldConfig]],
         defaults: None | dict = None,
         save_button: QPushButton = None,
         parent: QWidget = None,
@@ -38,7 +38,7 @@ class Form(QScrollArea):
         """
         Initialises the form widget from a dictionary. To load the form, call
         self.load_fields(). Once the form is loaded. self.loaded is True.
-        :param available_fields: The dictionary containing the section name as key and
+        :param fields: The dictionary containing the section name as key and
         a list of FieldConfig dictionaries as values.
         :param defaults: Optional method to supply the default value to use for a field
         instead of "default_value".
@@ -55,7 +55,7 @@ class Form(QScrollArea):
 
         self.logger = Logging().logger(cls_name)
         self.parent = parent
-        self.available_fields = available_fields
+        self.available_fields = fields
         self.save_button = save_button
         self.fields: dict[str, FormField] = {}
         self.sections: dict[str, QGroupBox | FormSection] = {}
@@ -225,7 +225,7 @@ class Form(QScrollArea):
         :return: None
         """
         section_class_instance = section_class(form=self, section_data=section_data)
-        self.add_section(section_class_instance.data, section_class_instance)
+        self.add_section(section_class_instance.fields_, section_class_instance)
 
     def _render_partial_section(
         self,
@@ -309,7 +309,7 @@ class Form(QScrollArea):
             # add to class attribute
             self.field_config[field_dict["name"]] = field_dict
 
-    def find_field_by_name(self, name: str) -> FormField | None:
+    def find_field(self, name: str) -> FormField | None:
         """
         Find a form field by its name.
         :param name: The field name.
@@ -347,7 +347,7 @@ class Form(QScrollArea):
         :return: None.
         """
         # noinspection PyTypeChecker
-        field: FormField = self.find_field_by_name(name)
+        field: FormField = self.find_field(name)
         if field is None:
             if throw_if_missing:
                 raise ValueError(f"The field {name} does not exist")
@@ -375,16 +375,16 @@ class Form(QScrollArea):
             return field_dict["label"]
         return humanise_label(field_dict["name"])
 
-    def get_field_label_from_name(self, name: str) -> str:
+    def get_label(self, field_name: str) -> str:
         """
         Returns the field label.
-        :param name: The name of the field.
+        :param field_name: The name of the field.
         :return: The label.
         """
-        if name not in self.field_config:
-            raise ValueError(f"The form field named '{name}' does not exist")
+        if field_name not in self.field_config:
+            raise ValueError(f"The form field named '{field_name}' does not exist")
 
-        field_dict = self.field_config[name]
+        field_dict = self.field_config[field_name]
         return self._get_field_label(field_dict)
 
     def _validate_field(
@@ -402,7 +402,7 @@ class Form(QScrollArea):
         """
         self.logger.debug(f"Validating '{name}' with '{value}'")
         field_dict = self.field_config[name]
-        form_label = self.get_field_label_from_name(name)
+        form_label = self.get_label(name)
         form_field.clear_message()
 
         # check field is not empty
@@ -412,7 +412,7 @@ class Form(QScrollArea):
             and (value == "" or value is None)
         ):
             self.logger.debug("Field cannot be empty")
-            form_field.set_error_message("The field cannot be empty")
+            form_field.set_error("The field cannot be empty")
             return False
 
         # custom validation functions returning Validation
@@ -435,7 +435,7 @@ class Form(QScrollArea):
                 raise TypeError(f"Custom validation for {name} must return Validation")
 
             if output.validation is False:
-                form_field.set_error_message(output.error_message)
+                form_field.set_error(output.error_message)
                 return False
 
         return True

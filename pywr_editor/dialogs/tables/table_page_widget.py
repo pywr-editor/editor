@@ -147,9 +147,9 @@ class TablePageWidget(QWidget):
         [form_data.pop(key, None) for key in keys_to_delete]
 
         # check changes to index
-        prev_index = self.form.get_table_dict_value("index_col")
+        prev_index = self.form.field_value("index_col")
         new_index = form_data["index_col"] if "index_col" in form_data.keys() else None
-        url_widget: TableUrlWidget = self.form.find_field_by_name("url").widget
+        url_widget: TableUrlWidget = self.form.find_field("url").widget
         if (
             prev_index
             and new_index

@@ -14,7 +14,7 @@ class ConstantScenarioParameterSection(AbstractConstantScenarioParameterSection)
         :param section_data: A dictionary containing data to pass to the widget.
         """
         # get scenario size for initial requirement check
-        scenario_name = form.get_param_dict_value("scenario")
+        scenario_name = form.field_value("scenario")
         scenarios = form.model_config.scenarios
 
         exact_total_values = None

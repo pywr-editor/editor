@@ -94,7 +94,7 @@ class TestDialogParameterPolynomial2DCoefficientsWidgetSection:
         assert selected_page.findChild(FormField, "name").value() == param_name
 
         # 1. Check field
-        form_field = form.find_field_by_name("coefficients")
+        form_field = form.find_field("coefficients")
         widget = form_field.widget
         assert init_message in form_field.message.text()
         assert form_field.value() == {

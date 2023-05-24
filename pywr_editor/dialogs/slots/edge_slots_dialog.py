@@ -67,7 +67,7 @@ class EdgeSlotsDialog(QDialog):
             ]
         }
         form = Form(
-            available_fields=fields,
+            fields=fields,
             parent=self,
             direction="vertical",
         )

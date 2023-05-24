@@ -1,8 +1,6 @@
-from typing import Any
-
 from PySide6.QtWidgets import QMessageBox, QPushButton, QWidget
 
-from pywr_editor.form import ModelComponentForm
+from pywr_editor.form import FieldConfig, ModelComponentForm
 from pywr_editor.model import ModelConfig, ParameterConfig
 from pywr_editor.utils import Logging
 
@@ -23,7 +21,7 @@ class ParameterForm(ModelComponentForm):
         self,
         model_config: ModelConfig,
         parameter_obj: ParameterConfig | None,
-        available_fields: dict,
+        fields: dict,
         save_button: QPushButton,
         parent: QWidget,
         enable_optimisation_section: bool = True,
@@ -48,7 +46,7 @@ class ParameterForm(ModelComponentForm):
         super().__init__(
             form_dict=self.parameter_dict,
             model_config=model_config,
-            available_fields=available_fields,
+            fields=fields,
             save_button=save_button,
             parent=parent,
         )
@@ -87,14 +85,6 @@ class ParameterForm(ModelComponentForm):
 
         super().load_fields()
 
-    def get_param_dict_value(self, key: str) -> Any:
-        """
-        Gets a value from the parameter configuration.
-        :param key: The key to extract the value of.
-        :return: The value or empty if the key is not set.
-        """
-        return super().get_form_dict_value(key)
-
     def clean_keys(self) -> None:
         """
         Cleans up the parameter dictionary if it contains mixed configurations (for
@@ -126,11 +116,11 @@ class ParameterForm(ModelComponentForm):
         Returns the form configuration for the "is_variable" field.
         :return: The field dictionary.
         """
-        return {
-            "name": "is_variable",
-            "value": self.get_param_dict_value("is_variable"),
-            "field_type": "boolean",
-            "default_value": False,
-            "help_text": "If Yes, this parameter will change between the lower and "
-            + "upper bound provided below during optimisation",
-        }
+        return FieldConfig(
+            name="is_variable",
+            value=self.field_value("is_variable"),
+            field_type="boolean",
+            default_value=False,
+            help_text="If Yes, this parameter will change between the lower and "
+            "upper bound provided below during optimisation",
+        )

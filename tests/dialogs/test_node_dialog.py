@@ -60,16 +60,16 @@ class TestNodeDialog:
         dialog.show()
         form = dialog.form
 
-        assert form.find_field_by_name("name").value() == node_name
+        assert form.find_field("name").value() == node_name
 
         # Check type
-        node_type_field = form.find_field_by_name("type")
+        node_type_field = form.find_field("type")
         assert node_type_field.value() == node_type
         assert node_type_field.widget.isEnabled() == is_type_enabled
 
         # Check other fields
         for field_name, field_value in props.items():
-            field = form.find_field_by_name(field_name)
+            field = form.find_field(field_name)
             # check ComboBox value
             if field_name == "edge_color":
                 widget: EdgeColorPickerWidget = field.widget
@@ -99,7 +99,7 @@ class TestNodeDialog:
         form = dialog.form
 
         # change value
-        name_field = form.find_field_by_name("name")
+        name_field = form.find_field("name")
         line_edit: QLineEdit = name_field.widget
         line_edit.setText(new_name)
 
@@ -126,7 +126,7 @@ class TestNodeDialog:
         form = dialog.form
 
         # 1. Check values
-        field = form.find_field_by_name(Constants.NODE_STYLE_KEY.value)
+        field = form.find_field(Constants.NODE_STYLE_KEY.value)
         widget: NodeStylePickerWidget = field.widget
         assert widget.combo_box.currentData() == selected_data
 
@@ -150,10 +150,10 @@ class TestNodeDialog:
         new_name = "Node X"
         dialog = self.node_dialog(old_name)
         form = dialog.form
-        type_field = form.find_field_by_name("type")
+        type_field = form.find_field("type")
 
         # change name
-        widget: QLineEdit = form.find_field_by_name("name").widget
+        widget: QLineEdit = form.find_field("name").widget
         widget.setText(new_name)
         assert form.save_button.isEnabled() is True
 
@@ -183,7 +183,7 @@ class TestNodeDialog:
         """
         dialog = self.node_dialog("aggregated_node")
         form = dialog.form
-        assert form.find_field_by_name("edge_color") is None
+        assert form.find_field("edge_color") is None
 
     def test_custom_node_type(self, qtbot):
         """
@@ -193,7 +193,7 @@ class TestNodeDialog:
         node_name = "custom_node"
         dialog = self.node_dialog(node_name)
         form = dialog.form
-        form_field = form.find_field_by_name("type")
+        form_field = form.find_field("type")
         widget: QLineEdit = form_field.widget
 
         # 1. Change type to valid string

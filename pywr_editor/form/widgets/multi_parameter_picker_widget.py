@@ -45,11 +45,11 @@ class MultiParameterPickerWidget(FormCustomWidget):
         # value must be a list of strings
         elif not isinstance(value, list):
             message = "The parameter names must be a list"
-            self.form_field.set_warning_message(message)
+            self.field.set_warning(message)
             self.logger.debug(message + ". None selected")
         elif not all([isinstance(n, str) for n in value]):
             message = "The parameter names must be valid strings"
-            self.form_field.set_warning_message(message)
+            self.field.set_warning(message)
             self.logger.debug(message + ". None selected")
         else:
             wrong_names = []
@@ -71,14 +71,14 @@ class MultiParameterPickerWidget(FormCustomWidget):
                     + f"configuration: {', '.join(wrong_names)}"
                 )
                 self.logger.debug(message)
-                self.form_field.set_warning_message(message)
+                self.field.set_warning(message)
 
         # there are no parameters in the model
         if len(self.combo_box.all_items) == 0:
             self.combo_box.setEnabled(False)
             message = "There are no parameters available"
             self.logger.debug(message)
-            self.form_field.set_warning_message(
+            self.field.set_warning(
                 message + ". Add a new parameter first, before setting up this option"
             )
 

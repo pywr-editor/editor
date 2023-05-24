@@ -876,7 +876,7 @@ class TestDialogParameterParametersListPickerWidget:
         form = ParameterForm(
             model_config=ModelConfig(),
             parameter_obj=ParameterConfig({}),
-            available_fields={
+            fields={
                 "Section": [
                     {
                         "name": "parameters",
@@ -892,7 +892,7 @@ class TestDialogParameterParametersListPickerWidget:
         form.enable_optimisation_section = False
         form.load_fields()
 
-        form_field = form.find_field_by_name("parameters")
+        form_field = form.find_field("parameters")
         # noinspection PyTypeChecker
         widget: ParametersListPickerWidget = form_field.widget
 

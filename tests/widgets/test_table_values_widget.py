@@ -38,7 +38,7 @@ class TestDialogParameterTableValuesWidget:
         form = ParameterForm(
             model_config=ModelConfig(),
             parameter_obj=ParameterConfig({}),
-            available_fields={
+            fields={
                 "Section": [
                     {
                         "name": "tabular_values",
@@ -54,7 +54,7 @@ class TestDialogParameterTableValuesWidget:
         form.enable_optimisation_section = False
         form.load_fields()
 
-        table_field = form.find_field_by_name("tabular_values")
+        table_field = form.find_field("tabular_values")
         return table_field.widget
 
     @pytest.mark.parametrize(
@@ -160,7 +160,7 @@ class TestDialogParameterTableValuesWidget:
         Tests that the field is loaded correctly.
         """
         table_widget = self.widget(value=values, field_args=field_args)
-        table_field: FormField = table_widget.form_field
+        table_field: FormField = table_widget.field
 
         assert table_field.message.text() == ""
         out = table_widget.validate("", "", table_widget.get_value())
@@ -290,7 +290,7 @@ class TestDialogParameterTableValuesWidget:
         invalid.
         """
         table_widget = self.widget(value=values, field_args=field_args)
-        table_field: FormField = table_widget.form_field
+        table_field: FormField = table_widget.field
 
         if init_message is None:
             assert table_field.message.text() == ""

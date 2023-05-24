@@ -137,7 +137,7 @@ class TestDialogParameterH5KeyWidget:
         # and same key selected
         original_file = url_widget.full_file
         url_widget.line_edit.setText(original_file[0:-1])
-        assert "not exist" in url_widget.form_field.message.text()
+        assert "not exist" in url_widget.field.message.text()
         # File does not exist and table is invalid
         assert url_widget.full_file is None
         assert url_widget.file_ext == ".h"
@@ -150,7 +150,7 @@ class TestDialogParameterH5KeyWidget:
 
         # Set original value - last key is selected
         url_widget.line_edit.setText(original_file)
-        assert url_widget.form_field.message.text() == ""
+        assert url_widget.field.message.text() == ""
         assert url_widget.full_file == original_file
         assert url_widget.file_ext == ".h5"
         assert url_widget.table.equals(new_df)
@@ -158,7 +158,7 @@ class TestDialogParameterH5KeyWidget:
 
         # 3. Load a new H5 file. Table must be reloaded and first key selected
         url_widget.line_edit.setText(r"files/table2.h5")
-        assert url_widget.form_field.message.text() == ""
+        assert url_widget.field.message.text() == ""
         assert url_widget.file_ext == ".h5"
         first_key = "/new_key"
         df, index_names = df_from_h5(url_widget.full_file, key=first_key)

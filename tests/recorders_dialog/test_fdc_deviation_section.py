@@ -62,7 +62,7 @@ class TestDialogRecorderFlowDurationCurveDeviationRecorderSectionSection:
 
         # 1. Check value
         for name, expected_values in expected_targets.items():
-            field = form.find_field_by_name(name)
+            field = form.find_field(name)
             assert field.value() == expected_values
 
         # 2. Validate form
@@ -103,7 +103,7 @@ class TestDialogRecorderFlowDurationCurveDeviationRecorderSectionSection:
         assert selected_page.findChild(FormField, "name").value() == recorder_name
 
         # Validate form
-        field = form.find_field_by_name("lower_target_fdc")
+        field = form.find_field("lower_target_fdc")
         QTimer.singleShot(100, close_message_box)
         form.validate()
         assert validation_message in field.message.text()

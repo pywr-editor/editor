@@ -220,7 +220,7 @@ class TableValuesWidget(FormCustomWidget):
         :return: None
         """
         self.logger.debug("Registering post-render section actions")
-        self.form_field.set_warning_message(self.warning_message)
+        self.field.set_warning(self.warning_message)
 
     @Slot()
     def on_value_change(self) -> None:
@@ -581,7 +581,7 @@ class TableValuesWidget(FormCustomWidget):
             # rename the sheet
             work_sheets = work_book.querySubObject("Sheets")
             first_sheet = work_sheets.querySubObject("Item(int)", 1)
-            param_name = self.form.find_field_by_name("name").value()
+            param_name = self.form.find_field("name").value()
             if param_name is not None and param_name != "":
                 first_sheet.setProperty("Name", param_name)
 

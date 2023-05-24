@@ -179,7 +179,7 @@ class CheckSumWidget(AbstractStringComboBoxWidget):
         button.setText("Calculating")
 
         # get file name
-        file_field = self.form.find_field_by_name("url")
+        file_field = self.form.find_field("url")
         # noinspection PyTypeChecker
         line_edit: QLineEdit = file_field.findChild(QLineEdit)
         file_name = file_field.value()

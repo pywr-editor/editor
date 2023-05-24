@@ -158,7 +158,7 @@ class DictionaryItemFormWidget(Form):
         }
 
         super().__init__(
-            available_fields=available_fields,
+            fields=available_fields,
             save_button=save_button,
             parent=parent,
             direction="vertical",
@@ -182,7 +182,7 @@ class DictionaryItemFormWidget(Form):
 
         # the url and table keys must be set up by enabling the external data toggle
         if form_data["key"] in ["url", "table"]:
-            self.find_field_by_name("key").set_warning_message(
+            self.find_field("key").set_warning(
                 "To configure external data using the 'url' or 'table' dictionary "
                 "keys, you must use the External data toggle in the previous form"
             )

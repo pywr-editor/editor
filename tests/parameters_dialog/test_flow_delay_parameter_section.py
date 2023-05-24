@@ -50,7 +50,7 @@ class TestDialogParameterFlowDelayParameter:
 
         # send form and verify message in fields
         if field_name is not None:
-            form_field = selected_page.form.find_field_by_name(field_name)
+            form_field = selected_page.form.find_field(field_name)
             if message is not None:
                 QTimer.singleShot(100, close_message_box)
                 selected_page.form.validate()

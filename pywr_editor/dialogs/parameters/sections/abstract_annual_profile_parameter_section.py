@@ -1,6 +1,9 @@
+from typing import Type
+
 from pywr_editor.form import (
-    AbstractAnnualValuesModel,
+    AbstractAnnualValuesWidget,
     AbstractFloatListWidget,
+    FieldConfig,
     FormSection,
     SourceSelectorWidget,
     UrlWidget,
@@ -21,8 +24,8 @@ class AbstractAnnualProfileParameterSection(FormSection):
         self,
         form: ParameterDialogForm,
         section_data: dict,
-        values_widget: AbstractAnnualValuesModel,
-        opt_widget: AbstractFloatListWidget,
+        values_widget: Type[AbstractAnnualValuesWidget],
+        opt_widget: Type[AbstractFloatListWidget],
         log_name: str,
     ):
         """
@@ -47,65 +50,57 @@ class AbstractAnnualProfileParameterSection(FormSection):
         optional_index_field = self.form.index_field
         optional_index_field["field_args"] = {"optional": True}
 
-        self.form_dict = {
-            "Source": [
-                self.form.source_field,
-                {
-                    "name": "values",
-                    "field_type": values_widget,
-                    "value": self.form.get_param_dict_value("values"),
-                    "allow_empty": False,
-                },
-                # table
-                self.form.table_field,
-                # anonymous table
-                self.form.url_field,
-            ]
-            + self.form.csv_parse_fields
-            + self.form.excel_parse_fields
-            + self.form.h5_parse_fields,
-            self.form.table_config_group_name: [
-                self.form.index_col_field,
-                optional_index_field,
-                optional_col_field,
-            ],
-            "Miscellaneous": [self.form.comment],
-            self.form.optimisation_config_group_name: [
-                self.form.is_variable_field,
-                {
-                    "name": "lower_bounds",
-                    "field_type": opt_widget,
-                    "value": self.form.get_param_dict_value("lower_bounds"),
-                    "help_text": "The smallest value for the parameter during "
-                    + "optimisation. This can be a number, to use the same bound "
-                    + f"for all {self.total_values} values, or {self.total_values} "
-                    + "comma-separated values to bound each value",
-                },
-                {
-                    "name": "upper_bounds",
-                    "field_type": opt_widget,
-                    "value": self.form.get_param_dict_value("upper_bounds"),
-                    "help_text": "The largest value for the parameter during "
-                    + "optimisation. This can be a number, to use the same bound "
-                    + f"for all {self.total_values} values, or {self.total_values} "
-                    + "comma-separated values to bound each value",
-                },
-            ],
-        }
+        self.add_fields(
+            {
+                "Source": [
+                    self.form.source_field,
+                    FieldConfig(
+                        name="values",
+                        field_type=values_widget,
+                        value=self.form.field_value("values"),
+                        allow_empty=False,
+                    ),
+                    # table
+                    self.form.table_field,
+                    # anonymous table
+                    self.form.url_field,
+                ]
+                + self.form.csv_parse_fields
+                + self.form.excel_parse_fields
+                + self.form.h5_parse_fields,
+                self.form.table_config_group_name: [
+                    self.form.index_col_field,
+                    optional_index_field,
+                    optional_col_field,
+                ],
+                "Miscellaneous": [self.form.comment],
+                self.form.optimisation_config_group_name: [
+                    self.form.is_variable_field,
+                    FieldConfig(
+                        name="lower_bounds",
+                        field_type=opt_widget,
+                        value=self.form.field_value("lower_bounds"),
+                        help_text="The smallest value for the parameter during "
+                        "optimisation. This can be a number, to use the same bound "
+                        f"for all {self.total_values} values, or {self.total_values} "
+                        "comma-separated values to bound each value",
+                    ),
+                    FieldConfig(
+                        name="upper_bounds",
+                        field_type=opt_widget,
+                        value=self.form.field_value("upper_bounds"),
+                        help_text="The largest value for the parameter during "
+                        "optimisation. This can be a number, to use the same bound "
+                        f"for all {self.total_values} values, or {self.total_values} "
+                        "comma-separated values to bound each value",
+                    ),
+                ],
+            }
+        )
 
         # disable optimisation section
         if self.section_data["enable_optimisation_section"] is False:
-            del self.form_dict[self.form.optimisation_config_group_name]
-
-    @property
-    def data(self):
-        """
-        Defines the section data dictionary.
-        :return: The section dictionary.
-        """
-        self.logger.debug("Registering form")
-
-        return self.form_dict
+            del self.fields_[self.form.optimisation_config_group_name]
 
     def validate(self, form_data):
         """
@@ -115,9 +110,7 @@ class AbstractAnnualProfileParameterSection(FormSection):
         :return: The Validation instance.
         """
         # noinspection PyTypeChecker
-        source_widget: SourceSelectorWidget = self.form.find_field_by_name(
-            "source"
-        ).widget
+        source_widget: SourceSelectorWidget = self.form.find_field("source").widget
         labels = source_widget.labels
 
         # ignore fields when values are provided
@@ -143,9 +136,7 @@ class AbstractAnnualProfileParameterSection(FormSection):
         :return: None.
         """
         # noinspection PyTypeChecker
-        source_widget: SourceSelectorWidget = self.form.find_field_by_name(
-            "source"
-        ).widget
+        source_widget: SourceSelectorWidget = self.form.find_field("source").widget
         labels = source_widget.labels
 
         url_fields = (

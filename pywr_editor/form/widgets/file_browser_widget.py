@@ -72,7 +72,7 @@ class FileBrowserWidget(FormCustomWidget):
         layout.addWidget(self.line_edit)
         layout.addWidget(self.browse_button)
 
-        self.form_field.set_warning_message(message)
+        self.field.set_warning(message)
 
     @Slot()
     def on_browse(self) -> None:

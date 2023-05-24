@@ -10,7 +10,7 @@ from .abstract_threshold_parameter_section import (
 class RecorderThresholdParameterSection(AbstractThresholdParameterSection):
     def __init__(self, form: ParameterDialogForm, section_data: dict):
         """
-        Initialises the form section for a RecorderThresholdParameter.
+        Initialise the form section for a RecorderThresholdParameter.
         :param form: The parent form.
         :param section_data: A dictionary containing data to pass to the widget.
         """
@@ -23,6 +23,6 @@ class RecorderThresholdParameterSection(AbstractThresholdParameterSection):
                 widget=ModelRecorderPickerWidget,
             ),
             threshold_description="Compare the values of the recorder the node "
-            + "specified below against this threshold",
+            "specified below against this threshold",
             value_rel_symbol_description="recorder's value",
         )

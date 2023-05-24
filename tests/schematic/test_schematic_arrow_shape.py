@@ -60,9 +60,9 @@ class TestSchematicArrowShape:
         # noinspection PyTypeChecker
         form: ShapeDialogForm = window.findChild(ShapeDialogForm)
 
-        border_size_field: SpinBox = form.find_field_by_name("border_size").widget
+        border_size_field: SpinBox = form.find_field("border_size").widget
         border_size_field.setValue(3)
-        color_widget: ColorPickerWidget = form.find_field_by_name("border_color").widget
+        color_widget: ColorPickerWidget = form.find_field("border_color").widget
         color_widget.value = (80, 80, 80)
 
         # 3. Send form and check the model config and schematic item
@@ -130,9 +130,7 @@ class TestSchematicArrowShape:
         schematic.shape_items[new_shape_id].on_edit_shape()
         # noinspection PyTypeChecker
         dialog_form: ShapeDialogForm = window.findChild(ShapeDialogForm)
-        border_size_widget: SpinBox = dialog_form.find_field_by_name(
-            "border_size"
-        ).widget
+        border_size_widget: SpinBox = dialog_form.find_field("border_size").widget
         border_size_widget.setValue(4)
         qtbot.mouseClick(dialog_form.save_button, Qt.MouseButton.LeftButton)
         dialog_form.close()
@@ -312,7 +310,7 @@ class TestSchematicArrowShape:
         shape_item.on_edit_shape()
         # noinspection PyTypeChecker
         form: ShapeDialogForm = window.findChild(ShapeDialogForm)
-        border_size_field: SpinBox = form.find_field_by_name("border_size").widget
+        border_size_field: SpinBox = form.find_field("border_size").widget
         border_size_field.setValue(1)
 
         form.save()

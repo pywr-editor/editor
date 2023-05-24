@@ -3,9 +3,7 @@ from PySide6.QtCore import QItemSelectionModel, QRegularExpression, Qt
 from PySide6.QtWidgets import QGroupBox, QLineEdit, QPushButton
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.dialogs.parameters.parameter_page_widget import (
-    ParameterPageWidget,
-)
+from pywr_editor.dialogs.parameters.parameter_page_widget import ParameterPageWidget
 from pywr_editor.form import (
     CustomComponentExternalDataToggle,
     DataTypeDictionaryItemWidget,
@@ -227,11 +225,11 @@ class TestDialogParameterCustomParameterSection:
             data_type_widget: DataTypeDictionaryItemWidget = sub_dialog.findChild(
                 DataTypeDictionaryItemWidget
             )
-            key_field = sub_dialog.form.find_field_by_name("key")
+            key_field = sub_dialog.form.find_field("key")
 
             # infer data type from parameter name
             data_type = key.replace("value_", "")
-            value_field = sub_dialog.form.find_field_by_name(f"field_{data_type}")
+            value_field = sub_dialog.form.find_field(f"field_{data_type}")
 
             # check key
             assert key_field.value() == key
@@ -239,7 +237,7 @@ class TestDialogParameterCustomParameterSection:
             # check value
             if key == "value_lst_str":
                 assert data_type_widget.combo_box.currentText() == "Number"
-                assert "not supported" in data_type_widget.form_field.message.text()
+                assert "not supported" in data_type_widget.field.message.text()
                 assert value_field is None
                 # default field is selected
                 # noinspection PyUnresolvedReferences
@@ -251,7 +249,7 @@ class TestDialogParameterCustomParameterSection:
                 assert (
                     data_type_widget.combo_box.currentText() == self.data_type_map[key]
                 )
-                assert data_type_widget.form_field.message.text() == ""
+                assert data_type_widget.field.message.text() == ""
 
                 # field exists
                 assert value_field is not None
@@ -366,7 +364,7 @@ class TestDialogParameterCustomParameterSection:
         child_dialog: DictionaryItemDialogWidget = selected_page.findChild(
             DictionaryItemDialogWidget
         )
-        key_field = child_dialog.form.find_field_by_name("key")
+        key_field = child_dialog.form.find_field("key")
         line_edit: QLineEdit = key_field.findChild(QLineEdit)
 
         # noinspection PyTypeChecker
@@ -439,7 +437,7 @@ class TestDialogParameterCustomParameterSection:
         )
         data_type_widget.combo_box.setCurrentText(data_type_widget.labels_map["string"])
         # dictionary item value
-        string_field = child_dialog.form.find_field_by_name("field_string")
+        string_field = child_dialog.form.find_field("field_string")
         line_edit: QLineEdit = string_field.findChild(QLineEdit)
         new_value = "The value was changed"
         line_edit.setText(new_value)
@@ -487,13 +485,13 @@ class TestDialogParameterCustomParameterSection:
 
         # 2. Set the number
         # key
-        string_field = child_dialog.form.find_field_by_name("key")
+        string_field = child_dialog.form.find_field("key")
         line_edit: QLineEdit = string_field.findChild(QLineEdit)
         new_key = "A new number"
         line_edit.setText(new_key)
 
         # dictionary item value
-        string_field = child_dialog.form.find_field_by_name("field_number")
+        string_field = child_dialog.form.find_field("field_number")
         # field is visible with no error
         assert string_field.message.text() == ""
         assert string_field.isVisible() is True
@@ -602,7 +600,7 @@ class TestDialogParameterCustomParameterSection:
         )
 
         # 2. Set the key and data type to dictionary
-        key_field = child_dialog.form.find_field_by_name("key")
+        key_field = child_dialog.form.find_field("key")
         line_edit: QLineEdit = key_field.findChild(QLineEdit)
         new_key = "A new dictionary"
         line_edit.setText(new_key)
@@ -629,13 +627,13 @@ class TestDialogParameterCustomParameterSection:
         child_child_form: DictionaryItemFormWidget = child_child_dialog.findChild(
             DictionaryItemFormWidget
         )
-        key_field = child_child_form.find_field_by_name("key")
+        key_field = child_child_form.find_field("key")
         # noinspection PyTypeChecker
         line_edit: QLineEdit = key_field.findChild(QLineEdit)
         new_sub_key = "A new number"
         line_edit.setText(new_sub_key)
 
-        string_field = child_child_dialog.form.find_field_by_name("field_number")
+        string_field = child_child_dialog.form.find_field("field_number")
         line_edit: QLineEdit = string_field.findChild(QLineEdit)
         new_sub_value = 0.4421
         line_edit.setText(str(new_sub_value))
@@ -705,5 +703,5 @@ class TestDialogParameterCustomParameterSection:
         # check external data fields
         else:
             check_visibility(True)
-            assert selected_page.form.find_field_by_name("table").value() == "Table 3"
-            assert selected_page.form.find_field_by_name("column").value() == "Column 3"
+            assert selected_page.form.find_field("table").value() == "Table 3"
+            assert selected_page.form.find_field("column").value() == "Column 3"

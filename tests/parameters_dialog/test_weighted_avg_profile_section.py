@@ -54,7 +54,7 @@ class TestDialogWeightedAverageProfileParameter:
 
         for field_name_to_check, message in field_messages.items():
             # send form and verify message
-            form_field = selected_page.form.find_field_by_name(field_name_to_check)
+            form_field = selected_page.form.find_field(field_name_to_check)
 
             if message is not None:
                 QTimer.singleShot(100, close_message_box)

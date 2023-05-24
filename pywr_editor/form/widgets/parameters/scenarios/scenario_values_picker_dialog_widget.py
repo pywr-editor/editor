@@ -104,7 +104,7 @@ class ScenarioValuesPickerDialogWidget(QDialog):
         # Form
         self.form = ModelComponentForm(
             form_dict={},
-            available_fields=available_fields,
+            fields=available_fields,
             model_config=model_config,
             save_button=save_button,
             parent=self,

@@ -91,7 +91,7 @@ class TestStorageSection:
         dialog.hide()
 
         form = dialog.form
-        slots_field = form.find_field_by_name("slots_field")
+        slots_field = form.find_field("slots_field")
         widget: SlotsTableWidget = slots_field.widget
         # noinspection PyTypeChecker
         edge_message_label: QLabel = widget.findChild(QLabel, "edge_warning_message")
@@ -170,7 +170,7 @@ class TestStorageSection:
         dialog.hide()
 
         form = dialog.form
-        slots_field = form.find_field_by_name("slots_field")
+        slots_field = form.find_field("slots_field")
         widget: SlotsTableWidget = slots_field.widget
         table = widget.slot_table
         # noinspection PyTypeChecker
@@ -334,7 +334,7 @@ class TestStorageSection:
         dialog.hide()
 
         form = dialog.form
-        slots_field = form.find_field_by_name("slots_field")
+        slots_field = form.find_field("slots_field")
         widget: SlotsTableWidget = slots_field.widget
 
         # 1. Check message
@@ -365,7 +365,7 @@ class TestStorageSection:
         dialog.hide()
 
         form = dialog.form
-        slots_field = form.find_field_by_name("slots_field")
+        slots_field = form.find_field("slots_field")
         widget: SlotsTableWidget = slots_field.widget
 
         row_id = 1

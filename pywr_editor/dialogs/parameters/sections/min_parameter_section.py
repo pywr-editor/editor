@@ -14,5 +14,5 @@ class MinParameterSection(AbstractMinMaxParameterSection):
             section_data=section_data,
             log_name=self.__class__.__name__,
             parameter_help_text="Take the minimum between the value of the provided "
-            + "parameter and the threshold below",
+            "parameter and the threshold below",
         )

@@ -168,7 +168,7 @@ class FormField(QWidget):
             layout.addWidget(self.help_text)
         # set error message for built-in field types
         if warning_message:
-            self.set_warning_message(warning_message)
+            self.set_warning(warning_message)
 
     @property
     def is_custom_widget(self) -> bool:
@@ -220,20 +220,22 @@ class FormField(QWidget):
         if self.parent():
             self.message.show()
 
-    def set_warning_message(self, message: str) -> None:
+    def set_warning(self, message: str) -> None:
         """
         Displays a warning message underneath the field and help text.
         :param message: The message to display.
         :return: None
         """
+        self.logger.debug(f"WARNING: {message}")
         self._set_message(message, Color("amber", 600), "warning")
 
-    def set_error_message(self, message: str) -> None:
+    def set_error(self, message: str) -> None:
         """
         Displays am error message underneath the field and help text.
         :param message: The message to display.
         :return: None
         """
+        self.logger.debug(f"ERROR: {message}")
         self._set_message(message, Color("red", 700), "error")
 
     def value(self) -> Any:

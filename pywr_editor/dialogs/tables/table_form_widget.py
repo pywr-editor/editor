@@ -41,131 +41,121 @@ class TableFormWidget(Form):
         self.table_dict = table_dict
         self.page = parent
 
-        self.defaults = {  # TODO
-            # this should be None; to simplify widget use empty list which behaves like
-            # None in pandas. This will not be included in final JSON when index_col==[]
-            "index_col": [],
-            "parse_dates": [],
-            "dayfirst": False,
-            "skipinitialspace": False,
-            "skipfooter": 0,
-            "skip_blank_lines": True,
-            "sheet_name": 0,
-            "key": None,
-            "start": 0,
-        }
-
-        available_fields: dict[str, list[FieldConfig]] = {
+        available_fields = {
             "Basic information": [
-                {
-                    "name": "name",
-                    "value": name,
-                    "help_text": "A unique name identifying the table",
-                    "allow_empty": False,
-                    "validate_fun": self._check_table_name,
-                },
-                {
-                    "name": "url",
-                    "label": "URL",
-                    "field_type": TableUrlWidget,
-                    "value": self.get_table_dict_value("url"),
-                    "allow_empty": False,
-                    "help_text": "The location of the file to use for the table (CSV, "
-                    + "XLS, XLSX or H5). When possible, the path is automatically set "
-                    + "relative to the model configuration file",
-                },
-                {
-                    "name": "sheet_name",
-                    "field_type": SheetNameWidget,
-                    "value": self.get_table_dict_value("sheet_name"),
-                    "help_text": "The name of the Excel sheet where to get the table",
-                },
-                {
-                    "name": "key",
-                    "field_type": H5KeyWidget,
-                    "value": self.get_table_dict_value("key"),
-                    "help_text": "The name of the key that identifies the table",
-                },
+                FieldConfig(
+                    name="name",
+                    value=name,
+                    help_text="A unique name identifying the table",
+                    allow_empty=False,
+                    validate_fun=self._check_table_name,
+                ),
+                FieldConfig(
+                    name="url",
+                    label="URL",
+                    field_type=TableUrlWidget,
+                    value=self.field_value("url"),
+                    allow_empty=False,
+                    help_text="The location of the file to use for the table (CSV, "
+                    "XLS, XLSX or H5). When possible, the path is automatically set "
+                    "relative to the model configuration file",
+                ),
+                FieldConfig(
+                    name="sheet_name",
+                    field_type=SheetNameWidget,
+                    value=self.field_value("sheet_name"),
+                    default_value=0,
+                    help_text="The name of the Excel sheet where to get the table",
+                ),
+                FieldConfig(
+                    name="key",
+                    field_type=H5KeyWidget,
+                    value=self.field_value("key"),
+                    help_text="The name of the key that identifies the table",
+                ),
             ],
             "Parsing options": [
-                {
-                    "name": "sep",
-                    "label": "Separator",
-                    "value": self.get_table_dict_value("sep"),
-                    "default_value": ",",
-                    "help_text": "The delimiter used to separate the columns in the "
-                    + "CSV file. Default to ','",
-                },
-                {
-                    "name": "dayfirst",
-                    "field_type": "boolean",
-                    "value": self.get_table_dict_value("dayfirst"),
-                    "help_text": "Use international and European format for dates "
-                    + "(DD/MM). Default to No",
-                },
-                {
-                    "name": "skipinitialspace",
-                    "label": "Skip initial space",
-                    "value": self.get_table_dict_value("skipinitialspace"),
-                    "field_type": "boolean",
-                    "help_text": "Skip any space after the separator, if any. "
-                    + 'For example "   Date" is converted to "Date"',
-                },
-                {
-                    "name": "skipfooter",
-                    "label": "Skip footer",
-                    "value": self.get_table_dict_value("skipfooter"),
-                    "field_type": "integer",
-                    "min_value": 0,
-                    "help_text": "Number of lines at bottom of file to skip. Default "
-                    + "to 0",
-                },
-                {
-                    "name": "skip_blank_lines",
-                    "value": self.get_table_dict_value("skip_blank_lines"),
-                    "field_type": "boolean",
-                    "help_text": "If Yes, skip over blank lines rather than "
-                    + "interpreting as NaN values. Default to Yes",
-                },
-                {
-                    "name": "start",
-                    "label": "Starting row",
-                    "value": self.get_table_dict_value("start"),
-                    "default_value": 0,
-                    "field_type": "integer",
-                    "min_value": 0,
-                    "help_text": "Line numbers to skip at the start of the table",
-                },
+                FieldConfig(
+                    name="sep",
+                    label="Separator",
+                    value=self.field_value("sep"),
+                    default_value=",",
+                    help_text="The delimiter used to separate the columns in the "
+                    "CSV file. Default to ','",
+                ),
+                FieldConfig(
+                    name="dayfirst",
+                    field_type="boolean",
+                    default_value=False,
+                    value=self.field_value("dayfirst"),
+                    help_text="Use international and European format for dates "
+                    "(DD/MM). Default to No",
+                ),
+                FieldConfig(
+                    name="skipinitialspace",
+                    label="Skip initial space",
+                    value=self.field_value("skipinitialspace"),
+                    default_value=False,
+                    field_type="boolean",
+                    help_text="Skip any space after the separator, if any. "
+                    'For example "   Date" is converted to "Date"',
+                ),
+                FieldConfig(
+                    name="skipfooter",
+                    label="Skip footer",
+                    value=self.field_value("skipfooter"),
+                    default_value=0,
+                    field_type="integer",
+                    min_value=0,
+                    help_text="Number of lines at bottom of file to skip. Default "
+                    "to 0",
+                ),
+                FieldConfig(
+                    name="skip_blank_lines",
+                    value=self.field_value("skip_blank_lines"),
+                    default_value=True,
+                    field_type="boolean",
+                    help_text="If Yes, skip over blank lines rather than "
+                    "interpreting as NaN values. Default to Yes",
+                ),
+                FieldConfig(
+                    name="start",
+                    label="Starting row",
+                    value=self.field_value("start"),
+                    default_value=0,
+                    field_type="integer",
+                    min_value=0,
+                    help_text="Line numbers to skip at the start of the table",
+                ),
             ],
             "Table configuration": [
-                {
-                    "name": "index_col",
-                    "field_type": IndexColWidget,
-                    "value": self.get_table_dict_value("index_col"),
-                    "help_text": "The column name to use as the row labels of the "
-                    + "table",
-                },
-                {
-                    "name": "parse_dates",
-                    "field_type": ParseDatesWidget,
-                    "value": {
-                        "parse_dates": self.get_table_dict_value("parse_dates"),
-                        "index_col": self.get_table_dict_value("index_col"),
+                FieldConfig(
+                    name="index_col",
+                    field_type=IndexColWidget,
+                    value=self.field_value("index_col"),
+                    help_text="The column name to use as the row labels of the "
+                    "table",
+                ),
+                FieldConfig(
+                    name="parse_dates",
+                    field_type=ParseDatesWidget,
+                    value={
+                        "parse_dates": self.field_value("parse_dates"),
+                        "index_col": self.field_value("index_col"),
                     },
-                    "help_text": "The column name that contains the dates to parse",
-                },
+                    help_text="The column name that contains the dates to parse",
+                ),
             ],
         }
 
         super().__init__(
-            available_fields,
-            self.defaults,
-            save_button,
-            parent,
+            fields=available_fields,
+            save_button=save_button,
+            parent=parent,
             direction="vertical",
         )
 
-    def get_table_dict_value(self, key: str) -> Any:
+    def field_value(self, key: str) -> Any:
         """
         Gets a value from the table configuration.
         :param key: The key to extract the value of.
@@ -184,7 +174,6 @@ class TableFormWidget(Form):
         # do not save form if the table name is changed and already exists
         if self.name != value and self.model_config.tables.exists(value) is True:
             return Validation(
-                f'The table "{value}" already exists. '
-                "Please provide a different name."
+                f'The table "{value}" already exists. Please provide a different name'
             )
         return Validation()

@@ -119,7 +119,7 @@ class TestDialogParameterFloatListWidget:
         Tests the widget with the default class attributes.
         """
         form = self.form(AbstractFloatListWidget, values)
-        form_field: FormField = form.find_field_by_name(self.key)
+        form_field: FormField = form.find_field(self.key)
         widget: AbstractFloatListWidget = form_field.widget
         warning_message = form_field.message.text()
         if message is None:
@@ -154,7 +154,7 @@ class TestDialogParameterFloatListWidget:
         Tests the widget when only_list is True and allowed_item_types is (float, int).
         """
         form = self.form(OnlyListFloatIntWidget, values)
-        form_field: FormField = form.find_field_by_name(self.key)
+        form_field: FormField = form.find_field(self.key)
         widget: AbstractFloatListWidget = form_field.widget
         warning_message = form_field.message.text()
         if message is None:
@@ -183,7 +183,7 @@ class TestDialogParameterFloatListWidget:
         Tests the widget when only_list is True and allowed_item_types is int.
         """
         form = self.form(OnlyListIntWidget, values)
-        form_field: FormField = form.find_field_by_name(self.key)
+        form_field: FormField = form.find_field(self.key)
         widget: AbstractFloatListWidget = form_field.widget
         warning_message = form_field.message.text()
         if message is None:
@@ -214,7 +214,7 @@ class TestDialogParameterFloatListWidget:
         Tests the widget when only_list is True and allowed_empty is False.
         """
         form = self.form(OnlyListNotEmptyWidget, values)
-        form_field: FormField = form.find_field_by_name(self.key)
+        form_field: FormField = form.find_field(self.key)
         widget: AbstractFloatListWidget = form_field.widget
         warning_message = form_field.message.text()
 
@@ -244,7 +244,7 @@ class TestDialogParameterFloatListWidget:
         Tests the widget when only_list is True and allowed_empty is False.
         """
         form = self.form(MaxLengthWidget, values)
-        form_field: FormField = form.find_field_by_name(self.key)
+        form_field: FormField = form.find_field(self.key)
         widget: AbstractFloatListWidget = form_field.widget
         warning_message = form_field.message.text()
 
@@ -312,7 +312,7 @@ class TestDialogParameterFloatListWidget:
         Tests the widget validation.
         """
         form = self.form(widget, init_values)
-        form_field: FormField = form.find_field_by_name(self.key)
+        form_field: FormField = form.find_field(self.key)
         widget: AbstractFloatListWidget = form_field.widget
         widget.line_edit.setText(new_values)
 

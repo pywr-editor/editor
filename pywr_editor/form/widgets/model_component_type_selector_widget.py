@@ -185,7 +185,7 @@ class ModelComponentTypeSelectorWidget(FormCustomWidget):
                     message = f"The {self.type} type set in the model configuration is "
                     message += "not allowed"
                     self.logger.debug(f"{message}. Key is {comp_key}")
-                    self.form_field.set_warning_message(message)
+                    self.field.set_warning(message)
             # custom components not provided in the "includes" key
             else:
                 self.combo_box.setCurrentIndex(
@@ -221,7 +221,7 @@ class ModelComponentTypeSelectorWidget(FormCustomWidget):
         # hide field if only one component type can be selected
         if len(self.combo_box.all_items) == 1:
             self.form.change_field_visibility(
-                name=self.form_field.name, show=False, clear_message=False
+                name=self.field.name, show=False, clear_message=False
             )
 
     def add_component_section(self, comp_key: str) -> None:
@@ -301,7 +301,7 @@ class ModelComponentTypeSelectorWidget(FormCustomWidget):
         if self.init is False:
             for name in ["url", "table", "value", "values"]:
                 self.logger.debug(f"Resetting FormField '{name}'")
-                form_field = self.form.find_field_by_name(name)
+                form_field = self.form.find_field(name)
                 # ignore non-existing fields
                 if form_field is not None:
                     # noinspection PyUnresolvedReferences

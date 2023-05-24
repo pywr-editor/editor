@@ -1,6 +1,6 @@
 from typing import Any
 
-from pywr_editor.form import Validation
+from pywr_editor.form import FieldConfig, Validation
 
 from ..node_dialog_form import NodeDialogForm
 from .abstract_virtual_storage_section import AbstractVirtualStorageSection
@@ -13,34 +13,32 @@ class RollingVirtualStorageSection(AbstractVirtualStorageSection):
         :param form: The parent form.
         :param section_data: A dictionary containing data to pass to the widget.
         """
-        form: NodeDialogForm
-
         super().__init__(
             form=form,
             section_data=section_data,
             additional_fields=[
-                {
-                    "name": "timesteps",
-                    "field_type": "integer",
-                    "default_value": 0,
-                    "value": form.get_node_dict_value("timesteps"),
-                    "validate_fun": self.check_timesteps,
-                    "min_value": 0,
-                    "max_value": form.model_config.number_of_steps,
-                    "help_text": "Number of time steps to apply to the rolling "
-                    + "storage over. Default to 0",
-                },
-                {
-                    "name": "days",
-                    "field_type": "integer",
-                    "default_value": 0,
-                    "value": form.get_node_dict_value("days"),
-                    "validate_fun": self.check_days,
-                    "min_value": 0,
-                    "help_text": "Instead of provide the number of time step, apply "
+                FieldConfig(
+                    name="timesteps",
+                    field_type="integer",
+                    default_value=0,
+                    value=form.field_value("timesteps"),
+                    validate_fun=self.check_timesteps,
+                    min_value=0,
+                    max_value=form.model_config.number_of_steps,
+                    help_text="Number of time steps to apply to the rolling "
+                    "storage over. Default to 0",
+                ),
+                FieldConfig(
+                    name="days",
+                    field_type="integer",
+                    default_value=0,
+                    value=form.field_value("days"),
+                    validate_fun=self.check_days,
+                    min_value=0,
+                    help_text="Instead of provide the number of time step, apply "
                     "the rolling storage over a number of days. This number must be "
                     "exactly divisible by the time-step",
-                },
+                ),
             ],
         )
 
@@ -52,6 +50,7 @@ class RollingVirtualStorageSection(AbstractVirtualStorageSection):
         :param value: The field value.
         :return: The validation instance.
         """
+        self.form: NodeDialogForm
         if value and value % self.form.model_config.time_delta != 0:
             return Validation(
                 "The number must be exactly divisible by the "
@@ -69,7 +68,7 @@ class RollingVirtualStorageSection(AbstractVirtualStorageSection):
         :param value: The field value.
         :return: The validation instance.
         """
-        days = self.form.find_field_by_name("days").value()
+        days = self.form.find_field("days").value()
         # check == 1 not <= 1, to return the message in validate() method
         if days == 0 and value == 1:
             return Validation("The number of time-steps must be must be larger than 1")
@@ -84,8 +83,8 @@ class RollingVirtualStorageSection(AbstractVirtualStorageSection):
         successful.
         :return: The Validation instance.
         """
-        days_field = self.form.find_field_by_name("days")
-        timesteps_field = self.form.find_field_by_name("timesteps")
+        days_field = self.form.find_field("days")
+        timesteps_field = self.form.find_field("timesteps")
 
         # both fields are set
         if days_field.value() and timesteps_field.value():

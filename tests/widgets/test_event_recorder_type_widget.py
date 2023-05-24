@@ -64,11 +64,11 @@ class TestEventRecorderTypeWidget:
         # noinspection PyTypeChecker
         selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
         form = selected_page.form
-        comp_type_field = form.find_field_by_name("threshold_type")
-        parameter_field = form.find_field_by_name("threshold_parameter")
-        recorder_field = form.find_field_by_name("threshold_recorder")
+        comp_type_field = form.find_field("threshold_type")
+        parameter_field = form.find_field("threshold_parameter")
+        recorder_field = form.find_field("threshold_recorder")
 
-        assert form.find_field_by_name("name").value() == recorder_name
+        assert form.find_field("name").value() == recorder_name
 
         # 1. Check selected value in combobox
         assert comp_type_field.value() == selected_type
@@ -134,7 +134,7 @@ class TestEventRecorderTypeWidget:
         # noinspection PyTypeChecker
         selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
         form = selected_page.form
-        event_agg_func_field = form.find_field_by_name("event_agg_func")
+        event_agg_func_field = form.find_field("event_agg_func")
 
-        assert form.find_field_by_name("name").value() == recorder_name
+        assert form.find_field("name").value() == recorder_name
         assert event_agg_func_field.value() == expected_agg_func

@@ -89,7 +89,7 @@ class TestAnnualTotalFlowSection:
         # noinspection PyTypeChecker
         selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
         form = selected_page.form
-        field = form.find_field_by_name("nodes_and_factors")
+        field = form.find_field("nodes_and_factors")
         widget: NodesAndFactorsTableWidget = field.widget
 
         # 1. Check message and value
@@ -154,7 +154,7 @@ class TestAnnualTotalFlowSection:
         # noinspection PyTypeChecker
         selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
         form = selected_page.form
-        field = form.find_field_by_name("nodes_and_factors")
+        field = form.find_field("nodes_and_factors")
         widget: NodesAndFactorsTableWidget = field.widget
 
         # check message and values
@@ -174,7 +174,7 @@ class TestAnnualTotalFlowSection:
         # noinspection PyTypeChecker
         selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
 
-        field = selected_page.form.find_field_by_name("nodes_and_factors")
+        field = selected_page.form.find_field("nodes_and_factors")
         widget: NodesAndFactorsTableWidget = field.widget
         table = widget.table
 
@@ -203,7 +203,7 @@ class TestAnnualTotalFlowSection:
         # noinspection PyTypeChecker
         selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
 
-        field = selected_page.form.find_field_by_name("nodes_and_factors")
+        field = selected_page.form.find_field("nodes_and_factors")
         widget: NodesAndFactorsTableWidget = field.widget
 
         qtbot.mouseClick(widget.add_button, Qt.MouseButton.LeftButton)
@@ -239,7 +239,7 @@ class TestAnnualTotalFlowSection:
         # noinspection PyTypeChecker
         selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
 
-        field = selected_page.form.find_field_by_name("nodes_and_factors")
+        field = selected_page.form.find_field("nodes_and_factors")
         widget: NodesAndFactorsTableWidget = field.widget
         table = widget.table
 

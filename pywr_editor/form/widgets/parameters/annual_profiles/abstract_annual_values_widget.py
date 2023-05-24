@@ -114,7 +114,7 @@ class AbstractAnnualValuesWidget(FormCustomWidget):
         :return: None
         """
         self.logger.debug("Registering post-render section actions")
-        self.form_field.set_warning_message(self.warning_message)
+        self.field.set_warning(self.warning_message)
 
     def sanitise_value(
         self, value: list[int | float] | None
@@ -260,7 +260,7 @@ class AbstractAnnualValuesWidget(FormCustomWidget):
             work_sheets = work_book.querySubObject("Sheets")
             first_sheet = work_sheets.querySubObject("Item(int)", 1)
 
-            param_name = self.form.find_field_by_name("name")
+            param_name = self.form.find_field("name")
             if param_name is not None and param_name != "":
                 first_sheet.setProperty("Name", param_name.value())
 
@@ -305,7 +305,7 @@ class AbstractAnnualValuesWidget(FormCustomWidget):
         Plots the profile.
         :return: None
         """
-        param_name = self.form.find_field_by_name("name")
+        param_name = self.form.find_field("name")
         if param_name is not None and param_name.value() != "":
             title = f"Parameter: {param_name.value()}"
         else:

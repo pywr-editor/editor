@@ -123,7 +123,7 @@ class NodeDialogForm(Form):
             raise ValueError(f"Cannot find form section for '{self.node_type}'")
 
         super().__init__(
-            available_fields={"Node": main_fields},
+            fields={"Node": main_fields},
             save_button=save_button,
             parent=parent,
             direction="vertical",
@@ -139,7 +139,7 @@ class NodeDialogForm(Form):
 
         # disable type field
         if not self.can_type_be_changed:
-            type_widget = self.find_field_by_name("type").widget
+            type_widget = self.find_field("type").widget
             type_widget.setDisabled(True)
             type_widget.setToolTip("The node type cannot be changed")
 
@@ -151,7 +151,7 @@ class NodeDialogForm(Form):
         :param value: THe field value.
         :return: The validation instance.
         """
-        type_widget: QLineEdit = self.find_field_by_name("type").widget
+        type_widget: QLineEdit = self.find_field("type").widget
         if not type_widget.isEnabled():
             return Validation()
 
@@ -163,7 +163,7 @@ class NodeDialogForm(Form):
         except Exception:
             return Validation("The type must be a valid Python class")
 
-    def get_node_dict_value(self, key: str) -> Any:
+    def field_value(self, key: str) -> Any:
         """
         Gets a value from the dictionary containing the node data.
         :param key: The key to extract the value of.
@@ -191,7 +191,7 @@ class NodeDialogForm(Form):
             self.dialog.title.update_name(new_name)
 
         # get type from field if it can be changed
-        type_widget: QLineEdit = self.find_field_by_name("type").widget
+        type_widget: QLineEdit = self.find_field("type").widget
         if type_widget.isEnabled():
             form_data["type"] = type_widget.text()
         else:
@@ -235,7 +235,7 @@ class NodeDialogForm(Form):
             "label": "Minimum flow",
             "field_type": ParameterLineEditWidget,
             "field_args": {"is_mandatory": False},
-            "value": self.get_node_dict_value("min_flow"),
+            "value": self.field_value("min_flow"),
             "help_text": "The minimum flow constraint on the node. When it is "
             + "not set, it defaults to 0.",
         }
@@ -251,7 +251,7 @@ class NodeDialogForm(Form):
             label="Maximum flow",
             field_type=ParameterLineEditWidget,
             field_args={"is_mandatory": False},
-            value=self.get_node_dict_value("max_flow"),
+            value=self.field_value("max_flow"),
             help_text="The maximum flow constraint on the node. When it is "
             + "not set, it defaults to infinite.",
         )
@@ -285,7 +285,7 @@ class NodeDialogForm(Form):
             "field_type": ParameterLineEditWidget,
             "field_args": {"is_mandatory": False},
             "default_value": 0,
-            "value": self.get_node_dict_value("cost"),
+            "value": self.field_value("cost"),
             "help_text": help_text,
         }
 
@@ -298,7 +298,7 @@ class NodeDialogForm(Form):
         return {
             "name": "comment",
             "field_type": CommentWidget,
-            "value": self.get_node_dict_value("comment"),
+            "value": self.field_value("comment"),
         }
 
     @property
@@ -309,7 +309,7 @@ class NodeDialogForm(Form):
         """
         return {
             "name": "initial_volume",
-            "value": self.get_node_dict_value("initial_volume"),
+            "value": self.field_value("initial_volume"),
             "field_type": FloatWidget,
             "field_args": {"min_value": 0},
             "help_text": "The initial absolute volume for the storage",
@@ -324,7 +324,7 @@ class NodeDialogForm(Form):
         return {
             "name": "initial_volume_pc",
             "label": "Initial volume (relative)",
-            "value": self.get_node_dict_value("initial_volume_pc"),
+            "value": self.field_value("initial_volume_pc"),
             "field_type": FloatWidget,
             "field_args": {"min_value": 0, "max_value": 1},
             "validate_fun": self.validate_initial_volume_pc,

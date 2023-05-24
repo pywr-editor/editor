@@ -59,10 +59,10 @@ class TestSchematicTextShape:
         # noinspection PyTypeChecker
         form: ShapeDialogForm = window.findChild(ShapeDialogForm)
 
-        text_field: QLineEdit = form.find_field_by_name("text").widget
+        text_field: QLineEdit = form.find_field("text").widget
         new_text = "New label"
         text_field.setText(new_text)
-        color_widget: ColorPickerWidget = form.find_field_by_name("color").widget
+        color_widget: ColorPickerWidget = form.find_field("color").widget
         color_widget.value = (120, 120, 120)
 
         # 3. Send form and check the model config and schematic item
@@ -160,8 +160,8 @@ class TestSchematicTextShape:
         shape.on_edit_shape()
         # noinspection PyTypeChecker
         dialog_form: ShapeDialogForm = window.findChild(ShapeDialogForm)
-        dialog_form.find_field_by_name("text").widget.setText("I changed the label")
-        font_size_widget: SpinBox = dialog_form.find_field_by_name("font_size").widget
+        dialog_form.find_field("text").widget.setText("I changed the label")
+        font_size_widget: SpinBox = dialog_form.find_field("font_size").widget
         font_size_widget.setValue(40)
         qtbot.mouseClick(dialog_form.save_button, Qt.MouseButton.LeftButton)
 
@@ -236,8 +236,8 @@ class TestSchematicTextShape:
         schematic.shape_items[new_shape_id].on_edit_shape()
         # noinspection PyTypeChecker
         dialog_form: ShapeDialogForm = window.findChild(ShapeDialogForm)
-        dialog_form.find_field_by_name("text").widget.setText("I changed the label")
-        font_size_widget: SpinBox = dialog_form.find_field_by_name("font_size").widget
+        dialog_form.find_field("text").widget.setText("I changed the label")
+        font_size_widget: SpinBox = dialog_form.find_field("font_size").widget
         font_size_widget.setValue(40)
         qtbot.mouseClick(dialog_form.save_button, Qt.MouseButton.LeftButton)
 

@@ -1,9 +1,7 @@
 import pytest
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.dialogs.parameters.parameter_page_widget import (
-    ParameterPageWidget,
-)
+from pywr_editor.dialogs.parameters.parameter_page_widget import ParameterPageWidget
 from pywr_editor.form import FormField, ValuesAndExternalDataWidget
 from pywr_editor.model import ModelConfig
 from tests.utils import resolve_model_path
@@ -42,9 +40,7 @@ class TestDialogParameterControlCurvePiecewiseInterpolatedParameter:
         assert selected_page.findChild(FormField, "name").value() == param_name
 
         # 1. Check the values in the table widget
-        table_widget: ValuesAndExternalDataWidget = form.find_field_by_name(
-            "values"
-        ).widget
+        table_widget: ValuesAndExternalDataWidget = form.find_field("values").widget
         model = table_widget.model
         assert table_widget.multiple_variables is True
 

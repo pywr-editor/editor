@@ -40,8 +40,9 @@ class ComponentConfig:
         """
         if not component_class:
             return None
-        if component_class[-9:].lower() == self.suffix:
-            return component_class[0:-9].lower()
+        s = len(self.suffix)
+        if component_class[-s:].lower() == self.suffix:
+            return component_class[0:-s].lower()
         else:
             return component_class.lower()
 

@@ -96,7 +96,7 @@ class AbstractFloatListWidget(FormCustomWidget):
         """
         self.logger.debug("Registering post-render section actions")
         self.line_edit.setText(self.value)
-        self.form_field.set_warning_message(self.warning_message)
+        self.field.set_warning(self.warning_message)
 
     def sanitise_value(self, value: value_type) -> [str | None, str | None]:
         """

@@ -101,7 +101,7 @@ class ShapeDialogForm(Form):
         self.model_config = model_config
 
         super().__init__(
-            available_fields={"Shape": form_fields},
+            fields={"Shape": form_fields},
             save_button=save_button,
             parent=parent,
             direction="vertical",

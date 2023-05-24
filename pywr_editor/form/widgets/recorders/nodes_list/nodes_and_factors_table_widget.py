@@ -106,7 +106,7 @@ class NodesAndFactorsTableWidget(FormCustomWidget):
 
         if self.warning_message:
             self.logger.debug(self.warning_message)
-        self.form_field.set_warning_message(self.warning_message)
+        self.field.set_warning(self.warning_message)
 
     @Slot()
     def on_delete_row(self) -> None:

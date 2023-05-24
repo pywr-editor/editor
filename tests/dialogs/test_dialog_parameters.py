@@ -308,9 +308,7 @@ class TestParametersDialog:
         selected_page = dialog.pages_widget.currentWidget()
         form = selected_page.form
 
-        param_type_widget: ParameterTypeSelectorWidget = form.find_field_by_name(
-            "type"
-        ).widget
+        param_type_widget: ParameterTypeSelectorWidget = form.find_field("type").widget
         for name in param_type_widget.combo_box.all_items:
             param_type_widget.combo_box.setCurrentText(name)
 
@@ -342,7 +340,7 @@ class TestParametersDialog:
         type_widget: ParameterTypeSelectorWidget = selected_page.findChild(
             FormField, "type"
         ).widget
-        form = type_widget.form_field.form
+        form = type_widget.field.form
 
         if not imported:
             type_widget.combo_box.setCurrentText("Custom parameter (not imported)")

@@ -1,7 +1,7 @@
 import ast
 from typing import TYPE_CHECKING, Literal, Union
 
-from pywr_editor.form import FormSection, Validation
+from pywr_editor.form import FieldConfig, FormSection, Validation
 from pywr_editor.utils import Logging
 
 from .widgets.custom_component_external_data_toggle import (
@@ -35,7 +35,6 @@ class AbstractCustomComponentSection(FormSection):
         :param additional_sections: Additional sections to add to this section.
         """
         super().__init__(form, section_data)
-        self.form = form
         self.logger = Logging().logger(self.__class__.__name__)
         self.component_type = component_type
         if additional_sections is None:
@@ -44,9 +43,13 @@ class AbstractCustomComponentSection(FormSection):
             self.additional_sections = additional_sections
 
         if component_type == "parameter":
-            self.form_dict = self.form.parameter_dict
+            form_dict = form.parameter_dict
         elif component_type == "recorder":
-            self.form_dict = self.form.recorder_dict
+            form_dict = form.recorder_dict
+        else:
+            raise ValueError(
+                "The component_type parameter can only be 'parameter' or 'recorder'"
+            )
 
         # check if the component was imported using the "include" JSON key
         self.imported = False
@@ -55,6 +58,70 @@ class AbstractCustomComponentSection(FormSection):
 
         # show or hide "custom type" field
         self.form.register_after_render_action(self.toggle_type_field_visibility)
+
+        # Make table fields optional
+        optional_col_field = form.column_field
+        optional_col_field["field_args"] = {"optional": True}
+
+        optional_index_field = form.index_field
+        optional_index_field["field_args"] = {"optional": True}
+
+        # remove type for DictionaryWidget, the type is handle with the dedicated field
+        # below
+        comp_type = form_dict.pop("type", None)
+        self.add_fields(
+            {
+                "Single key/value pairs": [
+                    FieldConfig(
+                        name="custom_type",
+                        label=f"{self.component_type.title()} type",
+                        value=comp_type,
+                        allow_empty=False,
+                        validate_fun=self._check_python_class,
+                        help_text="The name of the Python class with or without the"
+                        f"'{self.component_type.title()}' suffix. For example if the "
+                        f"class is called 'Custom{self.component_type.title()}', you "
+                        f"can use 'Custom{self.component_type.title()}' or 'Custom' as "
+                        "type. The type is case-insensitive",
+                    ),
+                    FieldConfig(
+                        name="component_dict",
+                        label="Dictionary",
+                        field_type=DictionaryWidget,
+                        value=form_dict,
+                        help_text=f"Configure the {self.component_type} by providing "
+                        "its dictionary keys and values",
+                    ),
+                    FieldConfig(
+                        name="external_data",
+                        label="Add external data",
+                        value=form_dict,
+                        field_type=CustomComponentExternalDataToggle,
+                        help_text="Sets the 'url' or 'table' key and any additional "
+                        "fields to fetch external data using Pandas and Pywr built-in "
+                        "methods (for ex. load_parameter)",
+                    ),
+                ],
+                "External data": [
+                    form.source_field_wo_value,
+                    # table
+                    form.table_field,
+                    # anonymous table
+                    form.url_field,
+                ]
+                + form.csv_parse_fields
+                + form.excel_parse_fields
+                + form.h5_parse_fields,
+                form.table_config_group_name: [
+                    form.index_col_field,
+                    form.parse_dates_field,
+                    optional_index_field,
+                    optional_col_field,
+                ],
+                "Miscellaneous": [form.comment],
+                **self.additional_sections,
+            }
+        )
 
     def toggle_type_field_visibility(self) -> None:
         """
@@ -65,84 +132,11 @@ class AbstractCustomComponentSection(FormSection):
         self.form.change_field_visibility(name="custom_type", show=not self.imported)
         # warn if the custom component is not imported
         if not self.imported:
-            self.form.find_field_by_name("custom_type").set_warning_message(
+            self.form.find_field("custom_type").set_warning(
                 f"You can autoload an unknown custom {self.component_type} in Pywr "
                 "by clicking on the 'Imports' toolbar button and adding the Python "
                 "file containing the class"
             )
-
-    @property
-    def data(self) -> dict:
-        """
-        Defines the section data dictionary.
-        :return: The section dictionary.
-        """
-        self.form: ParameterDialogForm | RecorderDialogForm
-        self.logger.debug("Registering form")
-
-        # Make table fields optional
-        optional_col_field = self.form.column_field
-        optional_col_field["field_args"] = {"optional": True}
-
-        optional_index_field = self.form.index_field
-        optional_index_field["field_args"] = {"optional": True}
-
-        # remove type for DictionaryWidget, the type is handle
-        # with the dedicated field below
-        comp_type = self.form_dict.pop("type", None)
-        data_dict = {
-            "Single key/value pairs": [
-                {
-                    "name": "custom_type",
-                    "label": f"{self.component_type.title()} type",
-                    "value": comp_type,
-                    "allow_empty": False,
-                    "validate_fun": self._check_python_class,
-                    "help_text": "The name of the Python class with or without the"
-                    f"'{self.component_type.title()}' suffix. For example if the "
-                    + f"class is called 'Custom{self.component_type.title()}', you can "
-                    + f"use 'Custom{self.component_type.title()}' or 'Custom' as "
-                    "type. The type is case-insensitive",
-                },
-                {
-                    "name": "component_dict",
-                    "label": "Dictionary",
-                    "field_type": DictionaryWidget,
-                    "value": self.form_dict,
-                    "help_text": f"Configure the {self.component_type} by providing "
-                    + "its dictionary keys and values",
-                },
-                {
-                    "name": "external_data",
-                    "label": "Add external data",
-                    "value": self.form_dict,
-                    "field_type": CustomComponentExternalDataToggle,
-                    "help_text": "Sets the 'url' or 'table' key and any additional "
-                    "fields to fetch external data using Pandas and Pywr built-in "
-                    "methods (for ex. load_parameter)",
-                },
-            ],
-            "External data": [
-                self.form.source_field_wo_value,
-                # table
-                self.form.table_field,
-                # anonymous table
-                self.form.url_field,
-            ]
-            + self.form.csv_parse_fields
-            + self.form.excel_parse_fields
-            + self.form.h5_parse_fields,
-            self.form.table_config_group_name: [
-                self.form.index_col_field,
-                self.form.parse_dates_field,
-                optional_index_field,
-                optional_col_field,
-            ],
-            "Miscellaneous": [self.form.comment],
-            **self.additional_sections,
-        }
-
-        return data_dict
 
     def filter(self, form_data: dict) -> None:
         """

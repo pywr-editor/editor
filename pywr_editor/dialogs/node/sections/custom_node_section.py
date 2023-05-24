@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING, Any
 
-from pywr_editor.form import DictionaryWidget, FormSection
-from pywr_editor.utils import Logging
+from pywr_editor.form import DictionaryWidget, FieldConfig, FormSection
 
 if TYPE_CHECKING:
     from ..node_dialog_form import NodeDialogForm
@@ -20,33 +19,22 @@ class CustomNodeSection(FormSection):
         :param section_data: A dictionary containing data to pass to the widget.
         """
         super().__init__(form=form, section_data=section_data)
-        self.form = form
-        self.logger = Logging().logger(self.__class__.__name__)
 
-    @property
-    def data(self):
-        """
-        Defines the section data dictionary.
-        :return: The section dictionary.
-        """
-        self.logger.debug("Registering form")
-
-        # remove type and name for DictionaryWidget
-        data_dict = {
-            "Configuration": [
-                {
-                    "name": "component_dict",
-                    "label": "Dictionary",
-                    "field_type": DictionaryWidget,
-                    "value": self.form.node_dict.copy(),
-                    "help_text": "Configure the node by providing its dictionary "
-                    + "keys and values",
-                },
-                self.form.comment,
-            ],
-        }
-
-        return data_dict
+        self.add_fields(
+            {
+                "Configuration": [
+                    FieldConfig(
+                        name="component_dict",
+                        label="Dictionary",
+                        field_type=DictionaryWidget,
+                        value=form.node_dict.copy(),
+                        help_text="Configure the node by providing its dictionary "
+                        "keys and values",
+                    ),
+                    form.comment,
+                ],
+            }
+        )
 
     def filter(self, form_data: dict[str, Any]) -> None:
         """

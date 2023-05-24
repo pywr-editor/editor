@@ -186,7 +186,7 @@ class AbstractModelComponentLineEditWidget(FormCustomWidget):
             self.line_edit.setText("Not set")
             self.line_edit.setToolTip("")
 
-        self.form_field.set_warning_message(self.warning_message)
+        self.field.set_warning(self.warning_message)
 
     def sanitise_value(
         self, value: str | dict | int | float
@@ -321,7 +321,7 @@ class AbstractModelComponentLineEditWidget(FormCustomWidget):
         Resets the widget. This can also be used as a Slot.
         :return: None
         """
-        self.form_field.clear_message()
+        self.field.clear_message()
         self.line_edit.setText("Not set")
         self.line_edit.setToolTip("")
         self.component_obj = None
@@ -380,7 +380,7 @@ class AbstractModelComponentLineEditWidget(FormCustomWidget):
         # clear any message
         self.logger.debug("Cleaning message and updated field")
         self.warning_message = ""
-        self.form_field.clear_message()
+        self.field.clear_message()
 
         # update the field
         self.on_update_component()

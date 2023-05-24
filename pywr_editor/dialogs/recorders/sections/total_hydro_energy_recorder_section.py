@@ -1,7 +1,5 @@
 from ..recorder_dialog_form import RecorderDialogForm
-from .abstract_hydropower_recorder_section import (
-    AbstractHydropowerRecorderSection,
-)
+from .abstract_hydropower_recorder_section import AbstractHydropowerRecorderSection
 
 
 class TotalHydroEnergyRecorderSection(AbstractHydropowerRecorderSection):
@@ -15,6 +13,5 @@ class TotalHydroEnergyRecorderSection(AbstractHydropowerRecorderSection):
             form=form,
             section_data=section_data,
             node_help_text="For each scenario the recorder stores the "
-            + "total energy production at the end of the simulation",
-            log_name=self.__class__.__name__,
+            "total energy production at the end of the simulation",
         )

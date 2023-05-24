@@ -9,9 +9,7 @@ from PySide6.QtTest import QSignalSpy
 from PySide6.QtWidgets import QApplication, QGroupBox, QLabel, QPushButton
 
 from pywr_editor.dialogs import TablesDialog
-from pywr_editor.dialogs.tables.table_empty_page_widget import (
-    TableEmptyPageWidget,
-)
+from pywr_editor.dialogs.tables.table_empty_page_widget import TableEmptyPageWidget
 from pywr_editor.dialogs.tables.table_url_widget import TableUrlWidget
 from pywr_editor.form import FormField, IndexColWidget
 from pywr_editor.model import ModelConfig
@@ -321,7 +319,7 @@ class TestTablesDialog:
         form = url_widget.form
 
         dialog.show()
-        assert form.find_field_by_name("name").value() == table_name
+        assert form.find_field("name").value() == table_name
 
         # 1. the url field is without errors or warnings
         assert url_widget.isEnabled() is True
@@ -370,7 +368,7 @@ class TestTablesDialog:
         else:
             fields += ["key"]
         for f in fields:
-            value = form.find_field_by_name(f).widget.get_value()
+            value = form.find_field(f).widget.get_value()
             # convert index_col to integer
             if f == "index_col" and table_name == "excel_file":
                 all_cols = list(url_widget.table.columns)

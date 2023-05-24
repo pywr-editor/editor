@@ -14,6 +14,6 @@ class CurrentOrdinalDayThresholdParameterSection(AbstractThresholdParameterSecti
             section_data=section_data,
             log_name=self.__class__.__name__,
             threshold_description="Returns one of two values depending on the "
-            + "Gregorian ordinal of the date of the current timestep",
+            "Gregorian ordinal of the date of the current timestep",
             value_rel_symbol_description="ordinal day",
         )

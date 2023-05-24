@@ -89,7 +89,7 @@ class NodesAndFactorsDialog(QDialog):
 
         # Form
         self.form = Form(
-            available_fields={
+            fields={
                 "Configuration": [
                     {
                         "name": "node",
@@ -133,7 +133,7 @@ class NodesAndFactorsDialog(QDialog):
         :return: None
         """
         if self.mode == "add":
-            node_widget = self.form.find_field_by_name("node").widget
+            node_widget = self.form.find_field("node").widget
             for node_name in self.additional_data["existing_nodes"]:
                 index = node_widget.combo_box.findData(node_name)
                 if index != -1:

@@ -45,7 +45,7 @@ class TestKeatingAquiferSection:
 
         form = dialog.form
         save_button = form.save_button
-        field = form.find_field_by_name("stream_flows")
+        field = form.find_field("stream_flows")
         widget: KeatingStreamsWidget = field.widget
         model = widget.model
 
@@ -185,7 +185,7 @@ class TestKeatingAquiferSection:
         dialog = NodeDialog(model_config=model_config, node_name=node_name)
         dialog.hide()
 
-        field = dialog.form.find_field_by_name("stream_flows")
+        field = dialog.form.find_field("stream_flows")
         widget: KeatingStreamsWidget = field.widget
 
         # model is empty
@@ -210,7 +210,7 @@ class TestKeatingAquiferSection:
         dialog.hide()
 
         form = dialog.form
-        widget: KeatingStreamsWidget = form.find_field_by_name("stream_flows").widget
+        widget: KeatingStreamsWidget = form.find_field("stream_flows").widget
         table = widget.table
         model = widget.model
         expected_levels = [[100, 200, 600], [1, 3, 6]]
@@ -266,7 +266,7 @@ class TestKeatingAquiferSection:
         dialog.hide()
 
         form = dialog.form
-        widget: KeatingStreamsWidget = form.find_field_by_name("stream_flows").widget
+        widget: KeatingStreamsWidget = form.find_field("stream_flows").widget
         table = widget.table
         model = widget.model
 
@@ -299,8 +299,8 @@ class TestKeatingAquiferSection:
 
         form = dialog.form
         save_button = form.save_button
-        levels_widget: TableValuesWidget = form.find_field_by_name("levels").widget
-        volumes_widget: TableValuesWidget = form.find_field_by_name("volumes").widget
+        levels_widget: TableValuesWidget = form.find_field("levels").widget
+        volumes_widget: TableValuesWidget = form.find_field("volumes").widget
 
         # set the levels
         levels_widget.model.values[0] = [100, 200, 300]
@@ -310,15 +310,12 @@ class TestKeatingAquiferSection:
         volumes_widget.model.values[0] = [5, 6]
         QTimer.singleShot(100, close_message_box)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
-        assert (
-            "number of volumes (2) must match"
-            in volumes_widget.form_field.message.text()
-        )
+        assert "number of volumes (2) must match" in volumes_widget.field.message.text()
 
         # 2. Set correct number of volumes
         volumes_widget.model.values[0].append(8)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
-        assert volumes_widget.form_field.message.text() == ""
+        assert volumes_widget.field.message.text() == ""
 
     def test_storativity_validation(self, qtbot, model_config):
         """
@@ -329,12 +326,10 @@ class TestKeatingAquiferSection:
 
         form = dialog.form
         save_button = form.save_button
-        levels_widget: TableValuesWidget = form.find_field_by_name("levels").widget
-        storativity_widget: TableValuesWidget = form.find_field_by_name(
-            "storativity"
-        ).widget
-        volumes_widget: TableValuesWidget = form.find_field_by_name("volumes").widget
-        area_widget: FloatWidget = form.find_field_by_name("area").widget
+        levels_widget: TableValuesWidget = form.find_field("levels").widget
+        storativity_widget: TableValuesWidget = form.find_field("storativity").widget
+        volumes_widget: TableValuesWidget = form.find_field("volumes").widget
+        area_widget: FloatWidget = form.find_field("area").widget
 
         # set the levels
         levels_widget.model.values[0] = [100, 200, 300]
@@ -348,13 +343,13 @@ class TestKeatingAquiferSection:
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         assert (
             "number of factors (3) must match"
-            in storativity_widget.form_field.message.text()
+            in storativity_widget.field.message.text()
         )
 
         # 2. Set correct number of factors
         del storativity_widget.model.values[0][0]
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
-        assert storativity_widget.form_field.message.text() == ""
+        assert storativity_widget.field.message.text() == ""
 
     @pytest.mark.parametrize(
         "storativity, volumes, area, error_message",
@@ -383,11 +378,9 @@ class TestKeatingAquiferSection:
 
         form = dialog.form
         save_button = form.save_button
-        storativity_widget: TableValuesWidget = form.find_field_by_name(
-            "storativity"
-        ).widget
-        volumes_widget: TableValuesWidget = form.find_field_by_name("volumes").widget
-        area_widget: FloatWidget = form.find_field_by_name("area").widget
+        storativity_widget: TableValuesWidget = form.find_field("storativity").widget
+        volumes_widget: TableValuesWidget = form.find_field("volumes").widget
+        area_widget: FloatWidget = form.find_field("area").widget
 
         if area:
             area_widget.line_edit.setText(str(area))

@@ -1,4 +1,5 @@
 from pywr_editor.form import (
+    FieldConfig,
     FloatWidget,
     FormSection,
     RbfDayOfYearWidget,
@@ -7,7 +8,6 @@ from pywr_editor.form import (
     RbfValues,
     Validation,
 )
-from pywr_editor.utils import Logging
 
 from ..parameter_dialog_form import ParameterDialogForm
 
@@ -20,128 +20,117 @@ class RbfProfileParameterSection(FormSection):
         :param section_data: A dictionary containing data to pass to the widget.
         """
         super().__init__(form, section_data)
-        self.logger = Logging().logger(self.__class__.__name__)
-
-    @property
-    def data(self):
-        """
-        Defines the section data dictionary.
-        :return: The section dictionary.
-        """
         self.form: ParameterDialogForm
-        self.logger.debug("Registering form")
 
-        data_dict = {
-            "Configuration": [
-                {
-                    "name": "days_of_year",
-                    "label": "Days of the year",
-                    "field_type": RbfDayOfYearWidget,
-                    "help_text": "The days of the year at which the interpolation "
-                    + "nodes are defined. The first value must be one",
-                    "value": self.form.get_param_dict_value("days_of_year"),
-                    "validate_fun": self._check_day_of_year,
-                },
-                {
-                    "name": "values",
-                    "field_type": RbfValues,
-                    "help_text": "Nodes to use for interpolation corresponding to the "
-                    + "days of the year",
-                    "value": self.form.get_param_dict_value("values"),
-                    "validate_fun": self._check_count,
-                },
-                {
-                    "name": "max_value",
-                    "field_type": FloatWidget,
-                    "help_text": "Cap the interpolated daily profile to the provided "
-                    + "maximum value. Optional",
-                    "value": self.form.get_param_dict_value("max_value"),
-                },
-                {
-                    "name": "min_value",
-                    "field_type": FloatWidget,
-                    "help_text": "Cap the interpolated daily profile to the provided "
-                    + "minimum value. Optional",
-                    "value": self.form.get_param_dict_value("min_value"),
-                },
-            ],
-            # from https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.Rbf.html # noqa: E501
-            "Interpolation settings": [
-                {
-                    "name": "function",
-                    "label": "Radial basis function",
-                    "field_type": RbfFunction,
-                    "help_text": "Function to use for the interpolation. "
-                    + "Default is 'Multiquadric'",
-                    "value": self.form.get_param_dict_value("function"),
-                },
-                {
-                    "name": "epsilon",
-                    "field_type": FloatWidget,
-                    "help_text": "Adjustable constant for gaussian for multi-quadratic"
-                    + " functions only. Optional",
-                    "value": self.form.get_param_dict_value("epsilon"),
-                },
-                {
-                    "name": "smooth",
-                    "field_type": FloatWidget,
-                    "default_value": 0,
-                    "help_text": "Change the smoothness of the approximation. "
-                    + "Optional",
-                    "value": self.form.get_param_dict_value("smooth"),
-                },
-            ],
-            "Miscellaneous": [self.form.comment],
-            self.form.optimisation_config_group_name: [
-                self.form.is_variable_field,
-                {
-                    "name": "lower_bounds",
-                    "field_type": RbfOptBoundWidget,
-                    "label": "Value lower bounds",
-                    "value": self.form.get_param_dict_value("lower_bounds"),
-                    "validate_fun": self._check_count,
-                    "help_text": "The smallest value for the parameter during "
-                    + "optimisation. This can be a number, to use the same bound for "
-                    + "all values in the 'Values' field, or comma-separated values to "
-                    + "bound each value",
-                },
-                {
-                    "name": "upper_bounds",
-                    "field_type": RbfOptBoundWidget,
-                    "label": "Value upper bounds",
-                    "value": self.form.get_param_dict_value("upper_bounds"),
-                    "validate_fun": self._check_count,
-                    "help_text": "The largest value for the parameter during "
-                    + "optimisation. This can be a number, to use the same bound for "
-                    + "all values in the 'Values' field, or comma-separated values to "
-                    + "bound each value",
-                },
-                {
-                    "name": "variable_days_of_year_range",
-                    "label": "Days of the year bounds",
-                    "field_type": "integer",
-                    "default_value": 0,
-                    # limits depend on set value; use 365
-                    "min_value": -365,
-                    "max_value": 365,
-                    "suffix": "days",
-                    "value": self.form.get_param_dict_value(
-                        "variable_days_of_year_range"
+        self.add_fields(
+            {
+                "Configuration": [
+                    FieldConfig(
+                        name="days_of_year",
+                        label="Days of the year",
+                        field_type=RbfDayOfYearWidget,
+                        help_text="The days of the year at which the interpolation "
+                        "nodes are defined. The first value must be one",
+                        value=self.form.field_value("days_of_year"),
+                        validate_fun=self._check_day_of_year,
                     ),
-                    "validate_fun": self._check_day_range,
-                    "help_text": "This allows the values in the 'Days of the year' "
-                    + "field to vary by the specified amount. The shift can be "
-                    + "positive or negative and affects all days except the first "
-                    + "day, which is always 1",
-                },
-            ],
-        }
+                    FieldConfig(
+                        name="values",
+                        field_type=RbfValues,
+                        help_text="Nodes to use for interpolation corresponding to the "
+                        "days of the year",
+                        value=self.form.field_value("values"),
+                        validate_fun=self._check_count,
+                    ),
+                    FieldConfig(
+                        name="max_value",
+                        field_type=FloatWidget,
+                        help_text="Cap the interpolated daily profile to the provided "
+                        "maximum value. Optional",
+                        value=self.form.field_value("max_value"),
+                    ),
+                    FieldConfig(
+                        name="min_value",
+                        field_type=FloatWidget,
+                        help_text="Cap the interpolated daily profile to the provided "
+                        "minimum value. Optional",
+                        value=self.form.field_value("min_value"),
+                    ),
+                ],
+                # from https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.Rbf.html # noqa: E501
+                "Interpolation settings": [
+                    FieldConfig(
+                        name="function",
+                        label="Radial basis function",
+                        field_type=RbfFunction,
+                        help_text="Function to use for the interpolation. "
+                        "Default is 'Multiquadric'",
+                        value=self.form.field_value("function"),
+                    ),
+                    FieldConfig(
+                        name="epsilon",
+                        field_type=FloatWidget,
+                        help_text="Adjustable constant for gaussian for multi-quadratic"
+                        " functions only. Optional",
+                        value=self.form.field_value("epsilon"),
+                    ),
+                    FieldConfig(
+                        name="smooth",
+                        field_type=FloatWidget,
+                        default_value=0,
+                        help_text="Change the smoothness of the approximation. "
+                        "Optional",
+                        value=self.form.field_value("smooth"),
+                    ),
+                ],
+                "Miscellaneous": [self.form.comment],
+                self.form.optimisation_config_group_name: [
+                    self.form.is_variable_field,
+                    FieldConfig(
+                        name="lower_bounds",
+                        field_type=RbfOptBoundWidget,
+                        label="Value lower bounds",
+                        value=self.form.field_value("lower_bounds"),
+                        validate_fun=self._check_count,
+                        help_text="The smallest value for the parameter during "
+                        "optimisation. This can be a number, to use the same bound for "
+                        "all values in the 'Values' field, or comma-separated values to"
+                        " bound each value",
+                    ),
+                    FieldConfig(
+                        name="upper_bounds",
+                        field_type=RbfOptBoundWidget,
+                        label="Value upper bounds",
+                        value=self.form.field_value("upper_bounds"),
+                        validate_fun=self._check_count,
+                        help_text="The largest value for the parameter during "
+                        "optimisation. This can be a number, to use the same bound for "
+                        "all values in the 'Values' field, or comma-separated values to"
+                        " bound each value",
+                    ),
+                    FieldConfig(
+                        name="variable_days_of_year_range",
+                        label="Days of the year bounds",
+                        field_type="integer",
+                        default_value=0,
+                        # limits depend on set value; use 365
+                        min_value=-365,
+                        max_value=365,
+                        suffix="days",
+                        value=self.form.field_value("variable_days_of_year_range"),
+                        validate_fun=self._check_day_range,
+                        help_text="This allows the values in the 'Days of the year' "
+                        "field to vary by the specified amount. The shift can be "
+                        "positive or negative and affects all days except the first "
+                        "day, which is always 1",
+                    ),
+                ],
+            }
+        )
 
         # disable optimisation section
         if self.section_data["enable_optimisation_section"] is False:
-            del data_dict[self.form.optimisation_config_group_name]
-
-        return data_dict
+            del self.fields_[self.form.optimisation_config_group_name]
 
     def _check_count(self, name: str, label: str, value: list) -> Validation:
         """
@@ -152,9 +141,9 @@ class RbfProfileParameterSection(FormSection):
         :param value: The field value.
         :return: The validation instance.
         """
-        days = self.form.find_field_by_name("days_of_year")
+        days = self.form.find_field("days_of_year")
         days_value = days.value()
-        days_label = self.form.get_field_label_from_name("days_of_year")
+        days_label = self.form.get_label("days_of_year")
 
         if (
             isinstance(value, list)
@@ -197,7 +186,7 @@ class RbfProfileParameterSection(FormSection):
         :param value: THe field value.
         :return: The validation instance.
         """
-        days = self.form.find_field_by_name("days_of_year")
+        days = self.form.find_field("days_of_year")
         days_value = days.value()
         if not isinstance(days_value, list):
             return Validation()
@@ -206,7 +195,7 @@ class RbfProfileParameterSection(FormSection):
             [j - i <= 2 * value for i, j in zip(days_value[:-1], days_value[1:])]
         )
         if value != 0 and day_spacing_valid:
-            days_label = self.form.get_field_label_from_name("days_of_year")
+            days_label = self.form.get_label("days_of_year")
 
             return Validation(
                 "To ensure a proper optimisation, the distance between "

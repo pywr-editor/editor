@@ -69,7 +69,7 @@ class AbstractStringComboBoxWidget(FormCustomWidget):
         :return: None
         """
         self.logger.debug("Registering post-render section actions")
-        self.form_field.set_warning_message(self.warning_message)
+        self.field.set_warning(self.warning_message)
 
     def sanitise_value(self, value: str | None) -> [str, str | None]:
         """

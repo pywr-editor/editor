@@ -75,7 +75,7 @@ class ModelComponentSourceSelectorWidget(FormCustomWidget):
 
         # delete section if source is "model_component"
         # noinspection PyTypeChecker
-        component_type_widget = self.form.find_field_by_name("type").widget
+        component_type_widget = self.form.find_field("type").widget
         # noinspection PyUnresolvedReferences
         component_type_widget.section_added.connect(self.on_section_added)
 
@@ -99,7 +99,7 @@ class ModelComponentSourceSelectorWidget(FormCustomWidget):
         if self.init is False:
             for name in ["type", "comp_name"]:
                 self.logger.debug(f"Resetting FormField '{name}'")
-                form_field = self.form.find_field_by_name(name)
+                form_field = self.form.find_field(name)
                 # noinspection PyUnresolvedReferences
                 form_field.widget.reset()
         else:

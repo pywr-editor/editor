@@ -244,7 +244,7 @@ class UrlWidget(FormCustomWidget):
         # 4. register updated_table Slot. When the table changes, the fields using the
         # table content must be updated the fields must have the update method
         for field_name in self.register_updated_table:
-            form_field = self.form.find_field_by_name(field_name)
+            form_field = self.form.find_field(field_name)
             if form_field is None:
                 self.logger.debug(
                     f"Skipping registration of Slot {field_name}.update_field for "
@@ -273,7 +273,7 @@ class UrlWidget(FormCustomWidget):
         # 6. when index_col changes, the table indexes must be updated (for index and
         # column widgets)
         for field_name in self.register_index_changed:
-            form_field = self.form.find_field_by_name(field_name)
+            form_field = self.form.find_field(field_name)
             if form_field is None:
                 self.logger.debug(
                     f"Skipping registration of Slot {field_name}.update_field for "
@@ -397,7 +397,7 @@ class UrlWidget(FormCustomWidget):
         )
 
         # init
-        self.form_field.clear_message()
+        self.field.clear_message()
         self.open_button.setDisabled(True)
 
         # read the file and update the table
@@ -414,13 +414,13 @@ class UrlWidget(FormCustomWidget):
         if self.full_file is None and self.line_edit.text() != "":
             message = "The table file does not exist"
             self.logger.debug(message)
-            self.form_field.set_error_message(message)
+            self.field.set_error(message)
         elif self.file_ext != "" and self.file_ext not in self.supported_extensions:
             message = f"The file extension '{self.file_ext}' is not supported"
             self.logger.debug(message)
-            self.form_field.set_error_message(message)
+            self.field.set_error(message)
         elif self.table_parse_error:
-            self.form_field.set_error_message(
+            self.field.set_error(
                 "Cannot parse the file. Try changing the options below"
             )
         else:
@@ -431,7 +431,7 @@ class UrlWidget(FormCustomWidget):
                 rel_path = self.model_config.path_to_relative(file, False)
                 # file is outside the model configuration folder
                 if ".." in rel_path:
-                    self.form_field.set_warning_message(
+                    self.field.set_warning(
                         "It is always recommended to place the table file in the same "
                         + "folder as the model configuration file"
                     )
@@ -459,7 +459,7 @@ class UrlWidget(FormCustomWidget):
                 if self.file_ext == ".csv" or self.file_ext == ".txt":
                     args = {}
                     for name in self.csv_fields:
-                        field = self.form.find_field_by_name(name)
+                        field = self.form.find_field(name)
                         if field is not None:
                             args[name] = field.value()
                     args["low_memory"] = True
@@ -470,7 +470,7 @@ class UrlWidget(FormCustomWidget):
                 elif self.file_ext in [".xls", ".xlsx", ".xlsm"]:
                     args = {}
                     for name in self.excel_fields:
-                        field = self.form.find_field_by_name(name)
+                        field = self.form.find_field(name)
                         if field is not None:
                             args[name] = field.value()
                     self.logger.debug(
@@ -480,7 +480,7 @@ class UrlWidget(FormCustomWidget):
                 elif self.file_ext == ".h5":
                     args = {}
                     for name in self.hdf_fields:
-                        field = self.form.find_field_by_name(name)
+                        field = self.form.find_field(name)
                         if field is not None:
                             args[name] = field.value()
                     self.logger.debug(f"Opening H5 file {self.full_file} using: {args}")

@@ -95,11 +95,11 @@ class MultiNodePickerWidget(FormCustomWidget):
         # value must be a list of strings
         elif not isinstance(value, list):
             message = "The node names must be a list"
-            self.form_field.set_warning_message(message)
+            self.field.set_warning(message)
             self.logger.debug(message + ". None selected")
         elif not all([isinstance(n, str) for n in value]):
             message = "The node names must be valid strings"
-            self.form_field.set_warning_message(message)
+            self.field.set_warning(message)
             self.logger.debug(message + ". None selected")
         else:
             wrong_node_types = []
@@ -138,21 +138,21 @@ class MultiNodePickerWidget(FormCustomWidget):
                     f" Allowed types are: {', '.join(self.include_node_types)}"
                 )
                 self.logger.debug(message)
-                self.form_field.set_warning_message(message)
+                self.field.set_warning(message)
             elif non_existing_nodes:
                 message = (
                     "The following node names do not exist in the model "
                     + f"configuration: {', '.join(non_existing_nodes)}"
                 )
                 self.logger.debug(message)
-                self.form_field.set_warning_message(message)
+                self.field.set_warning(message)
 
         # there are no nodes in the model
         if len(self.combo_box.all_items) == 0:
             self.combo_box.setEnabled(False)
             message = "There are no nodes available"
             self.logger.debug(message)
-            self.form_field.set_warning_message(
+            self.field.set_warning(
                 message + ". Add a new node first, before setting up this option"
             )
         # layout

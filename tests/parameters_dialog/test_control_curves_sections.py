@@ -3,9 +3,7 @@ from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import QPushButton
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.dialogs.parameters.parameter_page_widget import (
-    ParameterPageWidget,
-)
+from pywr_editor.dialogs.parameters.parameter_page_widget import ParameterPageWidget
 from pywr_editor.form import FormField
 from pywr_editor.model import ModelConfig
 from tests.utils import close_message_box, resolve_model_path
@@ -104,7 +102,7 @@ class TestDialogParameterControlCurveParameterSection:
         assert selected_page.findChild(FormField, "name").value() == param_name
 
         param_dict = model_config.parameters.config(param_name)
-        source_field = form.find_field_by_name("values_source")
+        source_field = form.find_field("values_source")
         # check for initial warnings
         for form_field in selected_page.findChildren(FormField):
             form_field: FormField
@@ -116,15 +114,13 @@ class TestDialogParameterControlCurveParameterSection:
                 is_values_selected = source_field.value() == "values"
                 assert form_field.isVisible() is is_values_selected
                 assert (
-                    form.find_field_by_name("parameters").isVisible()
-                    is not is_values_selected
+                    form.find_field("parameters").isVisible() is not is_values_selected
                 )
             elif form_field.name == "parameters":
                 is_parameters_selected = source_field.value() == "parameters"
                 assert form_field.isVisible() is is_parameters_selected
                 assert (
-                    form.find_field_by_name("values").isVisible()
-                    is not is_parameters_selected
+                    form.find_field("values").isVisible() is not is_parameters_selected
                 )
 
             # test validation
@@ -183,7 +179,7 @@ class TestDialogParameterControlCurveParameterSection:
         # send form and verify message
         QTimer.singleShot(100, close_message_box)
         selected_page.form.validate()
-        form_field: FormField = selected_page.form.find_field_by_name(field_with_error)
+        form_field: FormField = selected_page.form.find_field(field_with_error)
         assert message in form_field.message.text()
 
     @pytest.mark.parametrize(
@@ -211,7 +207,7 @@ class TestDialogParameterControlCurveParameterSection:
 
         # noinspection PyTypeChecker
         selected_page: ParameterPageWidget = dialog.pages_widget.currentWidget()
-        bounds_field: FormField = selected_page.form.find_field_by_name("lower_bounds")
+        bounds_field: FormField = selected_page.form.find_field("lower_bounds")
 
         # noinspection PyUnresolvedReferences
         assert selected_page.findChild(FormField, "name").value() == param_name

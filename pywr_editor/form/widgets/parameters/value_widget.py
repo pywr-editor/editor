@@ -51,9 +51,7 @@ class ValueWidget(FloatWidget):
             return
         if fill_value == "":
             self.logger.debug("The value is not valid. Setting warn message")
-            self.form_field.set_warning_message(
-                "The value in the model configuration is not valid"
-            )
+            self.field.set_warning("The value in the model configuration is not valid")
 
         self.line_edit.setText(fill_value)
 

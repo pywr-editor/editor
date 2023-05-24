@@ -1,4 +1,5 @@
 from pywr_editor.form import (
+    FieldConfig,
     FormSection,
     ScenarioPickerWidget,
     ScenarioValuesWidget,
@@ -22,63 +23,56 @@ class ArrayIndexedScenarioMonthlyFactorsParameterSection(FormSection):
         self.logger = Logging().logger(self.__class__.__name__)
         self.data_dict = {}
 
-    @property
-    def data(self):
-        """
-        Defines the section data dictionary.
-        :return: The section dictionary.
-        """
         self.form: ParameterDialogForm
-        self.logger.debug("Registering form")
         total_model_steps = self.form.model_config.number_of_steps
 
-        self.data_dict = {
-            "Configuration": [
-                {
-                    "name": "scenario",
-                    "field_type": ScenarioPickerWidget,
-                    "value": self.form.get_param_dict_value("scenario"),
-                },
-                {
-                    # do not use "values" to avoid conflict with source field below
-                    # field is renamed to "values" in filter
-                    "name": "ts_values",
-                    "label": "Timestep values",
-                    "field_type": ValuesAndExternalDataWidget,
-                    "value": self.form.get_param_dict_value("values"),
-                    "field_args": {
-                        "show_row_numbers": True,
-                        "row_number_label": "Timestep number",
-                        "variable_names": "Value",
-                        "min_total_values": total_model_steps
-                        if total_model_steps is not None
-                        else None,
-                    },
-                    "help_text": "Provides the timeseries values to be perturbed using "
-                    "the monthly factors below in each ensemble",
-                },
-            ],
-            "Factors": [
-                self.form.source_field,
-                {
-                    "name": "values",
-                    "field_type": ScenarioValuesWidget,
-                    "field_args": {"data_type": "monthly_profile"},
-                    "value": self.form.get_param_dict_value("factors"),
-                },
-                # table
-                self.form.table_field,
-                # anonymous table
-                self.form.url_field,
-            ]
-            + self.form.csv_parse_fields
-            + self.form.excel_parse_fields
-            + self.form.h5_parse_fields
-            + [self.form.index_col_field],
-            "Miscellaneous": [self.form.comment],
-        }
-
-        return self.data_dict
+        self.add_fields(
+            {
+                "Configuration": [
+                    FieldConfig(
+                        name="scenario",
+                        field_type=ScenarioPickerWidget,
+                        value=self.form.field_value("scenario"),
+                    ),
+                    FieldConfig(
+                        # do not use "values" to avoid conflict with source field below
+                        # field is renamed to "values" in filter
+                        name="ts_values",
+                        label="Timestep values",
+                        field_type=ValuesAndExternalDataWidget,
+                        value=self.form.field_value("values"),
+                        field_args={
+                            "show_row_numbers": True,
+                            "row_number_label": "Timestep number",
+                            "variable_names": "Value",
+                            "min_total_values": total_model_steps
+                            if total_model_steps is not None
+                            else None,
+                        },
+                        help_text="Provides the timeseries values to be perturbed "
+                        "using the monthly factors below in each ensemble",
+                    ),
+                ],
+                "Factors": [
+                    self.form.source_field,
+                    FieldConfig(
+                        name="values",
+                        field_type=ScenarioValuesWidget,
+                        field_args={"data_type": "monthly_profile"},
+                        value=self.form.field_value("factors"),
+                    ),
+                    # table
+                    self.form.table_field,
+                    # anonymous table
+                    self.form.url_field,
+                ]
+                + self.form.csv_parse_fields
+                + self.form.excel_parse_fields
+                + self.form.h5_parse_fields
+                + [self.form.index_col_field],
+                "Miscellaneous": [self.form.comment],
+            }
+        )
 
     def filter(self, form_data: dict) -> None:
         """
@@ -87,9 +81,7 @@ class ArrayIndexedScenarioMonthlyFactorsParameterSection(FormSection):
         :return: None.
         """
         # noinspection PyTypeChecker
-        source_widget: SourceSelectorWidget = self.form.find_field_by_name(
-            "source"
-        ).widget
+        source_widget: SourceSelectorWidget = self.form.find_field("source").widget
         labels = source_widget.labels
 
         # remove unnecessary keys depending on source for factors
