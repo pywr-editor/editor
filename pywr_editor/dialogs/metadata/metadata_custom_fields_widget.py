@@ -5,14 +5,14 @@ import qtawesome as qta
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QSizePolicy, QSpacerItem, QVBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField, Validation
+from pywr_editor.form import FormField, FormWidget, Validation
 from pywr_editor.utils import Logging, get_signal_sender
 from pywr_editor.widgets import PushIconButton, TableView
 
 from .metadata_custom_fields_model import MetadataCustomFieldsModel
 
 
-class MetadataCustomFieldsWidget(FormCustomWidget):
+class MetadataFieldsWidget(FormWidget):
     def __init__(self, name: str, value: list[list[str, Any]], parent: FormField):
         """
         Initialises the table view to add, change or delete custom metadata fields.

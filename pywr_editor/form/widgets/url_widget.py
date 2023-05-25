@@ -6,7 +6,7 @@ from pandas import read_csv, read_excel, read_hdf
 from PySide6.QtCore import Signal, SignalInstance, Slot
 from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QLineEdit, QMessageBox
 
-from pywr_editor.form import FormCustomWidget, FormField, Validation
+from pywr_editor.form import FormField, FormWidget, Validation
 from pywr_editor.utils import (
     Logging,
     get_signal_sender,
@@ -34,7 +34,7 @@ from pywr_editor.widgets import PushIconButton
 """
 
 
-class UrlWidget(FormCustomWidget):
+class UrlWidget(FormWidget):
     # Initialise Signals - signal must be defined on the class, not the instance
     updated_table = Signal()
     index_changed = Signal()
@@ -224,7 +224,7 @@ class UrlWidget(FormCustomWidget):
                 continue
 
             # noinspection PyTypeChecker
-            form_widget: FormCustomWidget = form_field.widget
+            form_widget: FormWidget = form_field.widget
             if not hasattr(form_widget, "update_field"):
                 raise NotImplementedError(
                     f"The widget {form_widget} must have the update_field() method"

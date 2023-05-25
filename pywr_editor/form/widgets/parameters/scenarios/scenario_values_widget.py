@@ -6,8 +6,8 @@ from PySide6.QtCore import QSize, Slot
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout
 
 from pywr_editor.form import (
-    FormCustomWidget,
     FormField,
+    FormWidget,
     ScenarioPickerWidget,
     ScenarioValuesModel,
     ScenarioValuesPickerDialogWidget,
@@ -28,7 +28,7 @@ if TYPE_CHECKING:
 """
 
 
-class ScenarioValuesWidget(FormCustomWidget):
+class ScenarioValuesWidget(FormWidget):
     def __init__(
         self,
         name: str,

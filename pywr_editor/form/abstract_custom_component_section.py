@@ -4,9 +4,7 @@ from typing import TYPE_CHECKING, Literal, Union
 from pywr_editor.form import FieldConfig, FormSection, Validation
 from pywr_editor.utils import Logging
 
-from .widgets.custom_component_external_data_toggle import (
-    CustomComponentExternalDataToggle,
-)
+from .widgets.custom_component_external_data_toggle import ComponentExternalDataToggle
 from .widgets.dictionary.dictionary_widget import DictionaryWidget
 
 if TYPE_CHECKING:
@@ -96,7 +94,7 @@ class AbstractCustomComponentSection(FormSection):
                         name="external_data",
                         label="Add external data",
                         value=form_dict,
-                        field_type=CustomComponentExternalDataToggle,
+                        field_type=ComponentExternalDataToggle,
                         help_text="Sets the 'url' or 'table' key and any additional "
                         "fields to fetch external data using Pandas and Pywr built-in "
                         "methods (for ex. load_parameter)",

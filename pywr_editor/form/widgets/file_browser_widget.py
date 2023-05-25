@@ -5,7 +5,7 @@ import qtawesome as qta
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QLineEdit
 
-from pywr_editor.form import FormCustomWidget, FormField, Validation
+from pywr_editor.form import FormField, FormWidget, Validation
 from pywr_editor.utils import Logging, get_signal_sender
 from pywr_editor.widgets import PushIconButton
 
@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 """
 
 
-class FileBrowserWidget(FormCustomWidget):
+class FileBrowserWidget(FormWidget):
     def __init__(
         self,
         name: str,

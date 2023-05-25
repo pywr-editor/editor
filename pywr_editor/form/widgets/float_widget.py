@@ -1,10 +1,10 @@
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QLineEdit
 
-from pywr_editor.form import FormCustomWidget, FormField, Validation
+from pywr_editor.form import FormField, FormWidget, Validation
 from pywr_editor.utils import Logging
 
 
-class FloatWidget(FormCustomWidget):
+class FloatWidget(FormWidget):
     def __init__(
         self,
         name: str,

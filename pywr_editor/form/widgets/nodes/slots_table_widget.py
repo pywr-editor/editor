@@ -4,7 +4,7 @@ import qtawesome as qta
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QVBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField, SlotsTableModel, Validation
+from pywr_editor.form import FormField, FormWidget, SlotsTableModel, Validation
 from pywr_editor.model import NodeConfig
 from pywr_editor.style import Color
 from pywr_editor.utils import Logging, get_signal_sender, move_row
@@ -37,7 +37,7 @@ if TYPE_CHECKING:
 """
 
 
-class SlotsTableWidget(FormCustomWidget):
+class SlotsTableWidget(FormWidget):
     def __init__(
         self,
         name: str,

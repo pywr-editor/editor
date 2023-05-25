@@ -1,6 +1,6 @@
 # Basic form classes
 from .validation import Validation
-from .form_custom_widget import FormCustomWidget
+from .form_widget import FormWidget
 from .field_config import FieldConfig
 from .form_section import FormSection
 from .form_field import FormField
@@ -27,7 +27,7 @@ from .widgets.boolean_widget import BooleanWidget
 from .widgets.check_sum_widget import CheckSumWidget
 from .widgets.color_picker_widget import ColorPickerWidget
 from .widgets.custom_component_external_data_toggle import (
-    CustomComponentExternalDataToggle,
+    ComponentExternalDataToggle,
 )
 from .widgets.file_browser_widget import FileBrowserWidget
 from .widgets.file_mode_widget import FileModeWidget

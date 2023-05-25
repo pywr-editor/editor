@@ -3,8 +3,8 @@ from typing import Type
 from pywr_editor.form import (
     BooleanWidget,
     FieldConfig,
-    FormCustomWidget,
     FormSection,
+    FormWidget,
     ParameterLineEditWidget,
     ThresholdRelationSymbolWidget,
     ThresholdValuesWidget,
@@ -21,7 +21,7 @@ from ..parameter_dialog_form import ParameterDialogForm
 class ValueDict:
     def __init__(
         self,
-        widget: Type[FormCustomWidget],
+        widget: Type[FormWidget],
         key: str,
         help_text: str | None = None,
     ):

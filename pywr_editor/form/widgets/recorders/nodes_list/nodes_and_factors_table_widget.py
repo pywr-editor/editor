@@ -5,8 +5,8 @@ from PySide6.QtCore import QSize, Slot
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout
 
 from pywr_editor.form import (
-    FormCustomWidget,
     FormField,
+    FormWidget,
     NodesAndFactorsDialog,
     NodesAndFactorsModel,
     Validation,
@@ -25,7 +25,7 @@ if TYPE_CHECKING:
 value_type = TypeVar("value_type", bound=dict[str, list | None])
 
 
-class NodesAndFactorsTableWidget(FormCustomWidget):
+class NodesAndFactorsTableWidget(FormWidget):
     def __init__(self, name: str, value: value_type, parent: FormField):
         """
         Initialises the widget.

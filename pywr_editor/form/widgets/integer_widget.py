@@ -1,11 +1,11 @@
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QHBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField
+from pywr_editor.form import FormField, FormWidget
 from pywr_editor.widgets import SpinBox
 
 
-class IntegerWidget(FormCustomWidget):
+class IntegerWidget(FormWidget):
     def __init__(
         self,
         name: str,

@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from .form import Form, FormField
 
 
-class FormCustomWidget(QWidget):
+class FormWidget(QWidget):
     def __init__(
         self,
         name: str,

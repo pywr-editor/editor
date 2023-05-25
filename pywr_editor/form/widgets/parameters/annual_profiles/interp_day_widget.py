@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QHBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField
+from pywr_editor.form import FormField, FormWidget
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import ComboBox
 
@@ -10,7 +10,7 @@ from pywr_editor.widgets import ComboBox
 """
 
 
-class InterpDayWidget(FormCustomWidget):
+class InterpDayWidget(FormWidget):
     value_map: dict[str, str] = {"first": "First day", "last": "Last day"}
 
     def __init__(

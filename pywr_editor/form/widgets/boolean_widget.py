@@ -1,11 +1,11 @@
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QHBoxLayout, QSizePolicy
 
-from pywr_editor.form import FormCustomWidget, FormField
+from pywr_editor.form import FormField, FormWidget
 from pywr_editor.widgets import ToggleSwitchWidget
 
 
-class BooleanWidget(FormCustomWidget):
+class BooleanWidget(FormWidget):
     def __init__(self, name: str, value: int | None, parent: FormField):
         """
         Initialise a toggle switch.

@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QVBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField
+from pywr_editor.form import FormField, FormWidget
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import ComboBox
 
@@ -10,7 +10,7 @@ from pywr_editor.widgets import ComboBox
 """
 
 
-class AbstractStringComboBoxWidget(FormCustomWidget):
+class AbstractStringComboBoxWidget(FormWidget):
     def __init__(
         self,
         name: str,

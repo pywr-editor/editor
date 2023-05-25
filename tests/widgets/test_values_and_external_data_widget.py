@@ -8,8 +8,8 @@ from PySide6.QtWidgets import QMainWindow, QPushButton, QWidget
 from pywr_editor.form import (
     ColumnWidget,
     ExternalDataPickerDialogWidget,
-    FormCustomWidget,
     FormField,
+    FormWidget,
     IndexColWidget,
     IndexWidget,
     ParameterForm,
@@ -376,7 +376,7 @@ class TestDialogParameterValuesAndExternalDataWidget:
             }
 
         for widget_class, value_to_check in values_dict.items():
-            child_widget: FormCustomWidget = child_dialog.findChild(widget_class)
+            child_widget: FormWidget = child_dialog.findChild(widget_class)
             assert child_widget.field.message.text() == ""
             if widget_class == SourceSelectorWidget:
                 child_widget: SourceSelectorWidget

@@ -5,7 +5,7 @@ from PySide6.QtWidgets import QGroupBox, QLineEdit, QPushButton
 from pywr_editor.dialogs import ParametersDialog
 from pywr_editor.dialogs.parameters.parameter_page_widget import ParameterPageWidget
 from pywr_editor.form import (
-    CustomComponentExternalDataToggle,
+    ComponentExternalDataToggle,
     DataTypeDictionaryItemWidget,
     DictionaryItemDialogWidget,
     DictionaryItemFormWidget,
@@ -193,8 +193,8 @@ class TestDialogParameterCustomParameterSection:
 
         # 2. Check external data fields that are hidden
         # noinspection PyTypeChecker
-        toggle_widget: CustomComponentExternalDataToggle = selected_page.findChild(
-            CustomComponentExternalDataToggle
+        toggle_widget: ComponentExternalDataToggle = selected_page.findChild(
+            ComponentExternalDataToggle
         )
         assert toggle_widget.toggle.isChecked() is False
 
@@ -681,8 +681,8 @@ class TestDialogParameterCustomParameterSection:
         assert selected_page.findChild(FormField, "name").value() == param_name
 
         # noinspection PyTypeChecker
-        toggle_widget: CustomComponentExternalDataToggle = selected_page.findChild(
-            CustomComponentExternalDataToggle
+        toggle_widget: ComponentExternalDataToggle = selected_page.findChild(
+            ComponentExternalDataToggle
         )
 
         def check_visibility(visible):

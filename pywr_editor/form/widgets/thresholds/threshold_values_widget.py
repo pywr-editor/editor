@@ -2,7 +2,7 @@ from typing import Any
 
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QVBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField
+from pywr_editor.form import FormField, FormWidget
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import DoubleSpinBox
 
@@ -16,7 +16,7 @@ from pywr_editor.widgets import DoubleSpinBox
 """
 
 
-class ThresholdValuesWidget(FormCustomWidget):
+class ThresholdValuesWidget(FormWidget):
     def __init__(
         self,
         name: str,

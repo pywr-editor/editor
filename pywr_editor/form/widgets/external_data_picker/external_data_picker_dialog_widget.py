@@ -7,9 +7,9 @@ from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QVBoxLayout, QWidget
 from pywr_editor.form import (
     ExternalDataPickerFormWidget,
     Form,
-    FormCustomWidget,
     FormField,
     FormTitle,
+    FormWidget,
 )
 from pywr_editor.model import ModelConfig
 from pywr_editor.widgets import PushIconButton
@@ -46,7 +46,7 @@ class ExternalDataPickerDialogWidget(QDialog):
         super().__init__(parent)
 
         # check parent
-        if issubclass(parent.__class__, (Form, FormField, FormCustomWidget)):
+        if issubclass(parent.__class__, (Form, FormField, FormWidget)):
             raise ValueError(
                 "The parent cannot be a form component already instantiated"
             )

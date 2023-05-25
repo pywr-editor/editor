@@ -1,7 +1,7 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QHBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField
+from pywr_editor.form import FormField, FormWidget
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import CheckableComboBox
 
@@ -11,7 +11,7 @@ from pywr_editor.widgets import CheckableComboBox
 """
 
 
-class MultiParameterPickerWidget(FormCustomWidget):
+class MultiParameterPickerWidget(FormWidget):
     def __init__(
         self,
         name: str,
