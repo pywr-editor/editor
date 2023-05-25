@@ -40,7 +40,7 @@ class IndexedArrayParameterSection(FormSection):
                         name="index_parameter",
                         field_type=ParameterLineEditWidget,
                         field_args={
-                            "include_param_key": self.model_config.pywr_parameter_data.get_keys_with_parent_class(  # noqa: E501
+                            "include_param_key": self.model_config.pywr_parameter_data.keys_with_parent_class(  # noqa: E501
                                 "IndexParameter"
                             )
                             + self.model_config.includes.get_keys_with_subclass(

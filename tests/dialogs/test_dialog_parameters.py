@@ -293,7 +293,7 @@ class TestParametersDialog:
 
         missing_sections = []
         for key, info in params_data.parameters.items():
-            pywr_class = params_data.get_class_from_type(key)
+            pywr_class = params_data.class_from_type(key)
             if not hasattr(pywr_editor.dialogs, f"{pywr_class}Section"):
                 missing_sections.append(key)
 

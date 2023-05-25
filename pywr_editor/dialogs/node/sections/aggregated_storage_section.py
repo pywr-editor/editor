@@ -21,7 +21,7 @@ class AggregatedStorageSection(FormSection):
                         value=form.field_value("storage_nodes"),
                         field_type=MultiNodePickerWidget,
                         field_args={
-                            "include_node_keys": form.model_config.pywr_node_data.get_keys_with_parent_class(  # noqa: E501
+                            "include_node_keys": form.model_config.pywr_node_data.keys_with_parent_class(  # noqa: E501
                                 sub_class
                             )
                             + form.model_config.includes.get_keys_with_subclass(

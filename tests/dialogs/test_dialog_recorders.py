@@ -253,7 +253,7 @@ class TestRecordersDialog:
 
         missing_sections = []
         for key, info in recorders_data.recorders.items():
-            pywr_class = recorders_data.get_class_from_type(key)
+            pywr_class = recorders_data.class_from_type(key)
             if not hasattr(pywr_editor.dialogs, f"{pywr_class}Section"):
                 missing_sections.append(key)
 

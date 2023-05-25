@@ -20,7 +20,7 @@ class TimestepCountIndexParameterRecorderSection(AbstractRecorderSection):
                     field_type=ParameterLineEditWidget,
                     value=form.field_value("parameter"),
                     field_args={
-                        "include_param_key": form.model_config.pywr_parameter_data.get_keys_with_parent_class(  # noqa: E501
+                        "include_param_key": form.model_config.pywr_parameter_data.keys_with_parent_class(  # noqa: E501
                             "IndexParameter"
                         )
                         + form.model_config.includes.get_keys_with_subclass(

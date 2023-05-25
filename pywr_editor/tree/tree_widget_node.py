@@ -58,7 +58,7 @@ class TreeWidgetNode(QTreeWidgetItem):
 
             item = TreeWidgetNodeAttribute()
             # do not rename attributes for custom nodes
-            if self.model_config.pywr_node_data.is_custom_node(self.type):
+            if self.model_config.pywr_node_data.is_custom(self.type):
                 item.setText(0, attribute_name)
             else:
                 item.setText(0, self.node_obj.humanise_attribute_name(attribute_name))

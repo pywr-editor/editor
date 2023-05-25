@@ -95,9 +95,7 @@ class NodeDialogForm(Form):
 
         # load section based on node type - sections are node loaded dynamically like
         # for recorders or parameters, because type cannot be changed
-        pywr_class = self.model_config.pywr_node_data.get_class_from_type(
-            self.node_type
-        )
+        pywr_class = self.model_config.pywr_node_data.class_from_type(self.node_type)
         section_data = {}
 
         # custom component
