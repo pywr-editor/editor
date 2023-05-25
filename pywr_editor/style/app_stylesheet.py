@@ -179,7 +179,7 @@ class AppStylesheet:
             "QGroupBox": {
                 "border": 0,
                 "font-weight": "bold",
-                "border-bottom": f"2px solid {Color('gray', 200).hex}",
+                "border-bottom": f"1px solid {Color('gray', 300).hex}",
                 "font-size": "15px",
                 "margin-top": "15px",
                 "padding": "7px 0px",
