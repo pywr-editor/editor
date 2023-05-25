@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from PySide6.QtCore import QSortFilterProxyModel, Qt
 from PySide6.QtWidgets import QLineEdit, QVBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField
+from pywr_editor.form import FormField, FormWidget
 from pywr_editor.model.edges import Edges
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import TableView
@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from pywr_editor.dialogs import EdgeSlotsDialog
 
 
-class EdgeSlotsWidget(FormCustomWidget):
+class EdgeSlotsWidget(FormWidget):
     def __init__(
         self,
         name: str,

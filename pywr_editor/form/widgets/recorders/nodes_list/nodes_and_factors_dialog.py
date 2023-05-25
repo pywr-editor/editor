@@ -7,9 +7,9 @@ from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QVBoxLayout, QWidget
 from pywr_editor.form import (
     FloatWidget,
     Form,
-    FormCustomWidget,
     FormField,
     FormTitle,
+    FormWidget,
     NodePickerWidget,
 )
 from pywr_editor.model import ModelConfig
@@ -56,7 +56,7 @@ class NodesAndFactorsDialog(QDialog):
         self.mode = mode
 
         # check parent
-        if issubclass(parent.__class__, (Form, FormField, FormCustomWidget)):
+        if issubclass(parent.__class__, (Form, FormField, FormWidget)):
             raise ValueError(
                 "The parent cannot be a form component already instantiated"
             )

@@ -7,8 +7,8 @@ from pywr_editor.form import (
     BooleanWidget,
     FieldConfig,
     Form,
-    FormCustomWidget,
     FormField,
+    FormWidget,
     Validation,
 )
 from tests.utils import close_message_box
@@ -205,7 +205,7 @@ def test_custom_widget(qtbot):
     Checks that the "widget" option works.
     """
 
-    class CustomWidget(FormCustomWidget):
+    class Widget(FormWidget):
         def __init__(self, name, value, parent=None):
             super().__init__(name, value, parent)
             layout = QVBoxLayout(self)
@@ -218,7 +218,7 @@ def test_custom_widget(qtbot):
     form = Form(
         {
             "Section": [
-                FieldConfig(name="Custom field", value="XX", field_type=CustomWidget),
+                FieldConfig(name="Custom field", value="XX", field_type=Widget),
             ]
         }
     )

@@ -3,14 +3,14 @@ from typing import TYPE_CHECKING
 from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QLineEdit, QPlainTextEdit, QVBoxLayout
 
-from pywr_editor.form import FormCustomWidget
+from pywr_editor.form import FormWidget
 from pywr_editor.utils import Logging
 
 if TYPE_CHECKING:
     from pywr_editor.form import FormField
 
 
-class TextWidget(FormCustomWidget):
+class TextWidget(FormWidget):
     def __init__(
         self, name: str, value: str, parent: "FormField", multi_line: bool = False
     ):

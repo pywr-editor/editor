@@ -6,8 +6,8 @@ from PySide6.QtWidgets import QAbstractItemView, QHBoxLayout, QVBoxLayout
 
 from pywr_editor.form import (
     AbstractModelComponentListPickerModel,
-    FormCustomWidget,
     FormField,
+    FormWidget,
     ModelComponentPickerDialog,
     Validation,
 )
@@ -24,7 +24,7 @@ if TYPE_CHECKING:
 """
 
 
-class AbstractModelComponentsListPickerWidget(FormCustomWidget):
+class AbstractModelComponentsListPickerWidget(FormWidget):
     def __init__(
         self,
         name: str,

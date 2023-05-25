@@ -4,7 +4,7 @@ from pandas import DataFrame
 from PySide6.QtCore import QModelIndex, Slot
 from PySide6.QtWidgets import QHBoxLayout
 
-from pywr_editor.form import FormCustomWidget, Validation
+from pywr_editor.form import FormWidget, Validation
 from pywr_editor.utils import (
     Logging,
     default_index_name,
@@ -26,7 +26,7 @@ if TYPE_CHECKING:
 """
 
 
-class AbstractColumnsSelectorWidget(FormCustomWidget):
+class AbstractColumnsSelectorWidget(FormWidget):
     def __init__(
         self,
         name: str,

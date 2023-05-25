@@ -5,7 +5,7 @@ from PySide6.QtWidgets import QPushButton
 
 from pywr_editor.dialogs import MetadataDialog
 from pywr_editor.dialogs.metadata.metadata_custom_fields_widget import (
-    MetadataCustomFieldsWidget,
+    MetadataFieldsWidget,
 )
 from pywr_editor.form import FormField
 from pywr_editor.model import ModelConfig
@@ -81,7 +81,7 @@ class TestMetadataDialog:
         model configuration.
         """
         custom_fields_field: FormField = dialog.findChild(FormField, "custom_fields")
-        custom_fields_widget: MetadataCustomFieldsWidget = custom_fields_field.widget
+        custom_fields_widget: MetadataFieldsWidget = custom_fields_field.widget
         add_button: QPushButton = custom_fields_widget.findChild(QPushButton)
         assert add_button.text() == "Add"
 
@@ -111,7 +111,7 @@ class TestMetadataDialog:
         key = "maintainer"
         expected_value = "Changed value"
         custom_fields_field: FormField = dialog.findChild(FormField, "custom_fields")
-        custom_fields_widget: MetadataCustomFieldsWidget = custom_fields_field.widget
+        custom_fields_widget: MetadataFieldsWidget = custom_fields_field.widget
         model = custom_fields_widget.model
 
         row_id = 2
@@ -137,7 +137,7 @@ class TestMetadataDialog:
         row_id = 2
 
         custom_fields_field: FormField = dialog.findChild(FormField, "custom_fields")
-        custom_fields_widget: MetadataCustomFieldsWidget = custom_fields_field.widget
+        custom_fields_widget: MetadataFieldsWidget = custom_fields_field.widget
         model = custom_fields_widget.model
 
         assert model.index(row_id, 0).data(Qt.ItemDataRole.DisplayRole) == key
@@ -160,7 +160,7 @@ class TestMetadataDialog:
         row_id = 2
 
         custom_fields_field: FormField = dialog.findChild(FormField, "custom_fields")
-        custom_fields_widget: MetadataCustomFieldsWidget = custom_fields_field.widget
+        custom_fields_widget: MetadataFieldsWidget = custom_fields_field.widget
         model = custom_fields_widget.model
 
         assert model.index(row_id, 0).data(Qt.ItemDataRole.DisplayRole) == key
@@ -184,7 +184,7 @@ class TestMetadataDialog:
         """
         key_to_delete = "maintainer"
         custom_fields_field: FormField = dialog.findChild(FormField, "custom_fields")
-        custom_fields_widget: MetadataCustomFieldsWidget = custom_fields_field.widget
+        custom_fields_widget: MetadataFieldsWidget = custom_fields_field.widget
         delete_button: QPushButton = dialog.findChildren(QPushButton)[1]
         assert delete_button.text() == "Delete"
 
@@ -209,7 +209,7 @@ class TestMetadataDialog:
         """
         keys_to_delete = ["maintainer", "email"]
         custom_fields_field: FormField = dialog.findChild(FormField, "custom_fields")
-        custom_fields_widget: MetadataCustomFieldsWidget = custom_fields_field.widget
+        custom_fields_widget: MetadataFieldsWidget = custom_fields_field.widget
         model = custom_fields_widget.model
         delete_button: QPushButton = dialog.findChildren(QPushButton)[1]
         assert delete_button.text() == "Delete"

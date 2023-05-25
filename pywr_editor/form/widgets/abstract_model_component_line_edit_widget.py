@@ -5,7 +5,7 @@ from PySide6.QtCore import Slot
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QHBoxLayout, QLineEdit
 
-from pywr_editor.form import FormCustomWidget, ModelComponentPickerDialog, Validation
+from pywr_editor.form import FormWidget, ModelComponentPickerDialog, Validation
 from pywr_editor.model import ParameterConfig, RecorderConfig
 from pywr_editor.utils import Logging, ModelComponentTooltip, get_signal_sender
 from pywr_editor.widgets import ParameterIcon, PushIconButton, RecorderIcon
@@ -21,7 +21,7 @@ if TYPE_CHECKING:
 """
 
 
-class AbstractModelComponentLineEditWidget(FormCustomWidget):
+class AbstractModelComponentLineEditWidget(FormWidget):
     def __init__(
         self,
         name: str,

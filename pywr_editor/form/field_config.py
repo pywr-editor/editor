@@ -1,6 +1,6 @@
 from typing import Any, Callable, NotRequired, Type, TypedDict
 
-from .form_custom_widget import FormCustomWidget
+from .form_widget import FormWidget
 from .validation import Validation
 
 
@@ -11,7 +11,7 @@ class FieldConfig(TypedDict):
     """ the field value """
     label: NotRequired[str]
     """ the field label """
-    field_type: NotRequired[Type[FormCustomWidget]]
+    field_type: NotRequired[Type[FormWidget]]
     """ A class of type FormCustomWidget containing the widget """
     field_args: NotRequired[dict]
     """ additional arguments to pass to custom widgets as dictionary. Optional """

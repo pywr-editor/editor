@@ -12,7 +12,7 @@ from PySide6.QtWidgets import (
 )
 
 import pywr_editor
-from pywr_editor.form import Form, FormCustomWidget, FormField, FormTitle
+from pywr_editor.form import Form, FormField, FormTitle, FormWidget
 from pywr_editor.model import ModelConfig, ParameterConfig, RecorderConfig
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import PushIconButton
@@ -56,7 +56,7 @@ class ModelComponentPickerDialog(QDialog):
         self.logger.debug(f"Loading dialog for {component_type}")
 
         # check parent
-        if issubclass(parent.__class__, (Form, FormField, FormCustomWidget)):
+        if issubclass(parent.__class__, (Form, FormField, FormWidget)):
             raise ValueError(
                 "The parent cannot be a form component already instantiated"
             )

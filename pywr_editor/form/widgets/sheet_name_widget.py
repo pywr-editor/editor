@@ -5,7 +5,7 @@ from pandas import ExcelFile
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QHBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField, UrlWidget, Validation
+from pywr_editor.form import FormField, FormWidget, UrlWidget, Validation
 from pywr_editor.utils import Logging, get_signal_sender
 from pywr_editor.widgets import ComboBox
 
@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from pywr_editor.form import ModelComponentForm
 
 
-class SheetNameWidget(FormCustomWidget):
+class SheetNameWidget(FormWidget):
     def __init__(self, name: str, value: str, parent: FormField):
         """
         Initialises the widget to list the available sheet names in the Excel file.

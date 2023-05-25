@@ -4,7 +4,7 @@ import qtawesome as qta
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
-from pywr_editor.form import Form, FormCustomWidget, FormField, FormTitle
+from pywr_editor.form import Form, FormField, FormTitle, FormWidget
 from pywr_editor.model import ModelConfig
 from pywr_editor.widgets import PushIconButton
 
@@ -34,7 +34,7 @@ class DictionaryItemDialogWidget(QDialog):
         super().__init__(parent)
 
         # check parent
-        if issubclass(parent.__class__, (Form, FormField, FormCustomWidget)):
+        if issubclass(parent.__class__, (Form, FormField, FormWidget)):
             raise ValueError(
                 f"The parent '{parent}' cannot be a form component already instantiated"
             )

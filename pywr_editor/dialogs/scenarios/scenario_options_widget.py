@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField, Validation
+from pywr_editor.form import FormField, FormWidget, Validation
 from pywr_editor.model import ScenarioConfig
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import PushButton, SpinBox, TableView
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from .scenario_form_widget import ScenarioFormWidget
 
 
-class ScenarioOptionsWidget(FormCustomWidget):
+class ScenarioOptionsWidget(FormWidget):
     def __init__(
         self,
         name: str,

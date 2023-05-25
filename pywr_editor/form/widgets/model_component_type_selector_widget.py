@@ -8,7 +8,7 @@ from PySide6.QtWidgets import QHBoxLayout, QSizePolicy
 
 import pywr_editor.dialogs
 import pywr_editor.model
-from pywr_editor.form import FormCustomWidget, FormField, FormSection
+from pywr_editor.form import FormField, FormSection, FormWidget
 from pywr_editor.model import ParameterConfig, RecorderConfig
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import ComboBox, PushIconButton
@@ -29,7 +29,7 @@ if TYPE_CHECKING:
 """
 
 
-class ModelComponentTypeSelectorWidget(FormCustomWidget):
+class ModelComponentTypeSelectorWidget(FormWidget):
     section_added = Signal()
 
     def __init__(
@@ -161,10 +161,8 @@ class ModelComponentTypeSelectorWidget(FormCustomWidget):
             self.logger.debug(f"Setting combo box index {index}")
             self.combo_box.setCurrentIndex(index)
 
-            doc_url = self.pywr_comp_data.get_doc_url_from_key(comp_key)
-            self.doc_button.setProperty(
-                "url", self.pywr_comp_data.get_doc_url_from_key(comp_key)
-            )
+            doc_url = self.pywr_comp_data.doc_url(comp_key)
+            self.doc_button.setProperty("url", self.pywr_comp_data.doc_url(comp_key))
             if doc_url is not None:
                 self.doc_button.setEnabled(True)
         # index not found: unknown custom component or type not allowed (for a pywr or
@@ -230,7 +228,7 @@ class ModelComponentTypeSelectorWidget(FormCustomWidget):
         :param comp_key: The component key.
         :return: None
         """
-        pywr_class = self.pywr_comp_data.get_class_from_type(comp_key)
+        pywr_class = self.pywr_comp_data.class_from_type(comp_key)
         self.form: Union["ParameterForm", "RecorderForm"]
 
         # key not provided - section for default component is selected
@@ -286,11 +284,9 @@ class ModelComponentTypeSelectorWidget(FormCustomWidget):
         self.add_component_section(comp_key)
 
         # update the doc url if available
-        doc_url = self.pywr_comp_data.get_doc_url_from_key(comp_key)
+        doc_url = self.pywr_comp_data.doc_url(comp_key)
         # noinspection PyTypeChecker
-        self.doc_button.setProperty(
-            "url", self.pywr_comp_data.get_doc_url_from_key(comp_key)
-        )
+        self.doc_button.setProperty("url", self.pywr_comp_data.doc_url(comp_key))
         if doc_url is None:
             self.doc_button.setEnabled(False)
         else:

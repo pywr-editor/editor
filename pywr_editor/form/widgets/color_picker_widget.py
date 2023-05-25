@@ -5,11 +5,11 @@ from PySide6.QtCore import Signal, Slot
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QColorDialog, QHBoxLayout, QWidget
 
-from pywr_editor.form import FormCustomWidget, FormField
+from pywr_editor.form import FormField, FormWidget
 from pywr_editor.widgets import PushIconButton
 
 
-class ColorPickerWidget(FormCustomWidget):
+class ColorPickerWidget(FormWidget):
     """
     This form widget renders a widget showing the selected colour and allows the user to
     the select another colour using the system color picker dialog.

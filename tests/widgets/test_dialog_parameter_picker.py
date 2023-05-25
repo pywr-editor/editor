@@ -13,9 +13,9 @@ from pywr_editor.dialogs.parameters.sections.monthly_profile_parameter_section i
     MonthlyProfileParameterSection,
 )
 from pywr_editor.form import (
-    FormCustomWidget,
     FormField,
     FormSection,
+    FormWidget,
     ModelComponentPickerDialog,
     ModelComponentSourceSelectorWidget,
     ParameterPickerWidget,
@@ -257,7 +257,7 @@ class TestDialogParameterPicker:
         for key, value in param_dict.items():
             if key == "type":
                 continue
-            widget: FormCustomWidget = dialog.form.find_field(key).widget
+            widget: FormWidget = dialog.form.find_field(key).widget
             assert widget.get_value() == value
 
         # 6. Form validation (must return the same dictionary)

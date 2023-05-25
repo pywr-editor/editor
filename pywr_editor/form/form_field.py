@@ -7,7 +7,7 @@ from pywr_editor.form.widgets.text_widget import TextWidget
 from pywr_editor.style import Color
 from pywr_editor.utils import Logging
 
-from .form_custom_widget import FormCustomWidget
+from .form_widget import FormWidget
 
 if TYPE_CHECKING:
     from pywr_editor.form import Form
@@ -19,7 +19,7 @@ class FormField(QWidget):
         form: "Form",
         name: str,
         label: str,
-        field_type: Type[FormCustomWidget] = TextWidget,
+        field_type: Type[FormWidget] = TextWidget,
         field_args: dict[str, Any] = None,
         value: Any | None = None,
         default_value=None,

@@ -7,7 +7,7 @@ from pywr_editor.form import FieldConfig, Form, Validation
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import Logging
 
-from .metadata_custom_fields_widget import MetadataCustomFieldsWidget
+from .metadata_custom_fields_widget import MetadataFieldsWidget
 
 if TYPE_CHECKING:
     from .metadata_dialog import MetadataDialog
@@ -63,7 +63,7 @@ class MetadataFormWidget(Form):
                 FieldConfig(
                     name="custom_fields",
                     hide_label=True,
-                    field_type=MetadataCustomFieldsWidget,
+                    field_type=MetadataFieldsWidget,
                     value=custom_fields,
                 )
             ],

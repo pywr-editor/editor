@@ -15,7 +15,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from pywr_editor.form import FormCustomWidget, TableValuesModel, Validation
+from pywr_editor.form import FormWidget, TableValuesModel, Validation
 from pywr_editor.utils import Logging, get_signal_sender, is_windows, move_row
 from pywr_editor.widgets import DoubleSpinBox, PushIconButton, TableView
 
@@ -27,7 +27,7 @@ from pywr_editor.widgets import DoubleSpinBox, PushIconButton, TableView
 """
 
 
-class TableValuesWidget(FormCustomWidget):
+class TableValuesWidget(FormWidget):
     def __init__(
         self,
         name: str,

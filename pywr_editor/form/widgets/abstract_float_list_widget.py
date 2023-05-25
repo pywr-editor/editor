@@ -2,7 +2,7 @@ from typing import Type, TypeVar
 
 from PySide6.QtWidgets import QHBoxLayout, QLineEdit
 
-from pywr_editor.form import FormCustomWidget, FormField, Validation
+from pywr_editor.form import FormField, FormWidget, Validation
 from pywr_editor.utils import Logging
 
 """
@@ -20,7 +20,7 @@ from pywr_editor.utils import Logging
 value_type = TypeVar("value_type", bound=int | float | list[float | int] | None)
 
 
-class AbstractFloatListWidget(FormCustomWidget):
+class AbstractFloatListWidget(FormWidget):
     def __init__(
         self,
         name: str,

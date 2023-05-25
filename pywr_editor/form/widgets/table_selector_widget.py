@@ -9,7 +9,7 @@ from PySide6.QtCore import QSize, Signal, Slot
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QHBoxLayout, QMessageBox, QSizePolicy
 
-from pywr_editor.form import FormCustomWidget, FormField, Validation
+from pywr_editor.form import FormField, FormWidget, Validation
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import (
     Logging,
@@ -34,7 +34,7 @@ if TYPE_CHECKING:
 """
 
 
-class TableSelectorWidget(FormCustomWidget):
+class TableSelectorWidget(FormWidget):
     updated_table = Signal()
     register_updated_table = ["index", "column"]
 

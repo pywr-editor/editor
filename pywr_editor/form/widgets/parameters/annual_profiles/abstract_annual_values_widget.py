@@ -8,7 +8,7 @@ from PySide6.QtCore import QCoreApplication, Qt, Slot
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtWidgets import QHBoxLayout, QMessageBox, QStyledItemDelegate, QVBoxLayout
 
-from pywr_editor.form import FormCustomWidget, ProfilePlotDialog
+from pywr_editor.form import FormWidget, ProfilePlotDialog
 from pywr_editor.utils import Logging, is_windows
 from pywr_editor.widgets import DoubleSpinBox, PushIconButton, TableView
 
@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from pywr_editor.form import AbstractAnnualValuesModel
 
 
-class AbstractAnnualValuesWidget(FormCustomWidget):
+class AbstractAnnualValuesWidget(FormWidget):
     total_values = None
 
     def __init__(

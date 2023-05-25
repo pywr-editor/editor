@@ -7,8 +7,8 @@ from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QLabel, QVBoxLayout
 
 from pywr_editor.form import (
-    FormCustomWidget,
     FormField,
+    FormWidget,
     IndexColWidget,
     SourceSelectorWidget,
     TableSelectorWidget,
@@ -40,7 +40,7 @@ class StoredIndexDict:
         self.index_types = []
 
 
-class IndexWidget(FormCustomWidget):
+class IndexWidget(FormWidget):
     default_index_name = "Anonymous index"
 
     def __init__(

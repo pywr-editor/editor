@@ -3,8 +3,8 @@ from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QHBoxLayout
 
 from pywr_editor.form import (
-    FormCustomWidget,
     FormField,
+    FormWidget,
     SourceSelectorWidget,
     TableSelectorWidget,
     UrlWidget,
@@ -14,7 +14,7 @@ from pywr_editor.utils import Logging, are_columns_valid, get_columns, get_signa
 from pywr_editor.widgets import ComboBox
 
 
-class ColumnWidget(FormCustomWidget):
+class ColumnWidget(FormWidget):
     def __init__(
         self, name: str, value: str, parent: FormField, optional: bool = False
     ):
