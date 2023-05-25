@@ -90,7 +90,6 @@ class H5WhereWidget(AbstractStringComboBoxWidget):
         self.combo_box.setCurrentText(self.label)
 
         if self.combo_box.isEnabled():
-            self.logger.debug("Setting warning message")
             self.field.set_warning(self.warning_message)
 
             # store the where keys of the attribute

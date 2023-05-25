@@ -50,7 +50,6 @@ class ValueWidget(FloatWidget):
             self.logger.debug("The value is None. Field left empty")
             return
         if fill_value == "":
-            self.logger.debug("The value is not valid. Setting warn message")
             self.field.set_warning("The value in the model configuration is not valid")
 
         self.line_edit.setText(fill_value)

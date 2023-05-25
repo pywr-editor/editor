@@ -408,7 +408,6 @@ class Form(QScrollArea):
             and field_dict["allow_empty"] is False
             and (value == "" or value is None)
         ):
-            self.logger.debug("Field cannot be empty")
             form_field.set_error("The field cannot be empty")
             return False
 

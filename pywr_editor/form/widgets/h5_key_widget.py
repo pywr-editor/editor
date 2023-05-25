@@ -104,9 +104,7 @@ class H5KeyWidget(FormCustomWidget):
             self.logger.debug("The H5 file does not exist")
         # the file does not contain keys
         elif self.has_keys is False:
-            message = "The H5 file does not contain any key"
-            self.logger.debug(message)
-            self.field.set_warning(message)
+            self.field.set_warning("The H5 file does not contain any key")
         else:
             self.setEnabled(True)
             self.combo_box.addItems(self.keys)

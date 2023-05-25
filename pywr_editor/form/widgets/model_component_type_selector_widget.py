@@ -182,10 +182,10 @@ class ModelComponentTypeSelectorWidget(FormCustomWidget):
                 self.reset()
                 # do not warn if type is not provided
                 if comp_key:
-                    message = f"The {self.type} type set in the model configuration is "
-                    message += "not allowed"
-                    self.logger.debug(f"{message}. Key is {comp_key}")
-                    self.field.set_warning(message)
+                    self.field.set_warning(
+                        f"The {self.type} type set in the model configuration is "
+                        "not allowed"
+                    )
             # custom components not provided in the "includes" key
             else:
                 self.combo_box.setCurrentIndex(

@@ -145,7 +145,7 @@ class FormField(QWidget):
         :param message: The message to display.
         :return: None
         """
-        self.logger.debug(f"WARNING: {message}")
+        self.logger.debug(f"WARNING for {self.name}: {message}")
         self._set_message(message, Color("amber", 600), "warning")
 
     def set_error(self, message: str) -> None:
@@ -154,7 +154,7 @@ class FormField(QWidget):
         :param message: The message to display.
         :return: None
         """
-        self.logger.debug(f"ERROR: {message}")
+        self.logger.debug(f"ERROR for {self.name}: {message}")
         self._set_message(message, Color("red", 700), "error")
 
     def value(self) -> Any:
