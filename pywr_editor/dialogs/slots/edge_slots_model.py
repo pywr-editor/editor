@@ -125,7 +125,7 @@ class EdgeSlotsModel(QAbstractTableModel):
             # check the type of source node being changed
             edge_names = self.edges[index.row()][0:2]
             node_dict = self.model.nodes.config(edge_names[0], as_dict=False)
-            types_to_check = self.model.pywr_node_data.get_keys_with_parent_class(
+            types_to_check = self.model.pywr_node_data.keys_with_parent_class(
                 "MultiSplitLink"
             ) + self.model.includes.get_keys_with_subclass("MultiSplitLink", "node")
 

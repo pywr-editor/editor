@@ -124,7 +124,7 @@ class TestMultiNodePickerWidget:
             model_config=model_config,
             node_names=node_names,
             is_mandatory=is_mandatory,
-            include_node_keys=model_config.pywr_node_data.get_keys_with_parent_class(
+            include_node_keys=model_config.pywr_node_data.keys_with_parent_class(
                 "Storage"
             ),
         )
@@ -190,7 +190,7 @@ class TestMultiNodePickerWidget:
         """
         include_node_keys = None
         if class_to_include:
-            include_node_keys = model_config.pywr_node_data.get_keys_with_parent_class(
+            include_node_keys = model_config.pywr_node_data.keys_with_parent_class(
                 class_to_include
             )
         form = self.form(

@@ -37,7 +37,7 @@ class WeightedAverageProfileParameterSection(FormSection):
             "DailyProfileParameter",
             "MonthlyProfileParameter",
         ]:
-            self.allowed_keys += self.form.model_config.pywr_parameter_data.get_keys_with_parent_class(  # noqa: E501
+            self.allowed_keys += self.form.model_config.pywr_parameter_data.keys_with_parent_class(  # noqa: E501
                 param, include_parent=True
             )
             self.allowed_keys += self.form.model_config.includes.get_keys_with_subclass(
@@ -55,7 +55,7 @@ class WeightedAverageProfileParameterSection(FormSection):
                         field_type=MultiNodePickerWidget,
                         field_args={
                             "is_mandatory": True,
-                            "include_node_keys": self.form.model_config.pywr_node_data.get_keys_with_parent_class(  # noqa: E501
+                            "include_node_keys": self.form.model_config.pywr_node_data.keys_with_parent_class(  # noqa: E501
                                 sub_class
                             )
                             + self.form.model_config.includes.get_keys_with_subclass(

@@ -36,7 +36,7 @@ class StoragePickerWidget(AbstractModelNodePickerWidget):
             parent=parent,
             log_name=self.__class__.__name__,
             # filter node types
-            include_node_types=model_config.pywr_node_data.get_keys_with_parent_class(
+            include_node_types=model_config.pywr_node_data.keys_with_parent_class(
                 "AbstractStorage", False  # exclude abstract class
             )
             + model_config.includes.get_keys_with_subclass("AbstractStorage", "node"),

@@ -612,7 +612,7 @@ class TestDialogParameterLineEditWidget:
                         "field_type": ParameterLineEditWidget,
                         "value": param_dict,
                         "field_args": {
-                            "include_param_key": PywrParametersData().get_keys_with_parent_class(  # noqa: E501
+                            "include_param_key": PywrParametersData().keys_with_parent_class(  # noqa: E501
                                 "IndexParameter"
                             ),
                         },

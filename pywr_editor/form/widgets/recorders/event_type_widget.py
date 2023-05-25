@@ -69,12 +69,12 @@ class EventTypeWidget(AbstractStringComboBoxWidget):
             param_obj = ParameterConfig(value)
             recorder_obj = RecorderConfig(value)
             if (
-                pywr_parameters.get_lookup_key(param_obj.type)
+                pywr_parameters.lookup_key(param_obj.type)
                 or param_obj.key in custom_parameter_keys
             ):
                 selected_type = "parameter"
             elif (
-                pywr_recorders.get_lookup_key(recorder_obj.type)
+                pywr_recorders.lookup_key(recorder_obj.type)
                 or recorder_obj.key in custom_recorder_keys
             ):
                 selected_type = "recorder"

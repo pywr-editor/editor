@@ -50,7 +50,7 @@ class AbstractTreeWidgetComponent:
             if comp_type == "parameter" or (
                 "type" in comp_value
                 and (
-                    model_config.pywr_parameter_data.get_lookup_key(param_obj.type)
+                    model_config.pywr_parameter_data.lookup_key(param_obj.type)
                     or param_obj.key in custom_parameter_keys
                 )
                 and "recorders" not in comp_value.keys()
@@ -62,7 +62,7 @@ class AbstractTreeWidgetComponent:
             elif comp_type == "recorder" or (
                 "type" in comp_value
                 and (
-                    model_config.pywr_recorder_data.get_lookup_key(recorder_obj.type)
+                    model_config.pywr_recorder_data.lookup_key(recorder_obj.type)
                     or recorder_obj.key in custom_recorder_keys
                 )
             ):
