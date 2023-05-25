@@ -259,7 +259,7 @@ class Form(QScrollArea):
 
         # render fields
         form_layout = QGridLayout(container)
-        form_layout.setContentsMargins(15, 10, 15, 10)
+        form_layout.setContentsMargins(10, 10, 10, 10)
 
         row = 0
         for field_dict in section_data:
