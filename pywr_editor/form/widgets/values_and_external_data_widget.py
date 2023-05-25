@@ -168,9 +168,9 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
                 self.logger.debug(f"Table is '{self.raw_value['table']}'")
             # field is mandatory
             elif self.is_mandatory:
-                message = "The configuration to fetch the external data is not valid"
-                self.logger.debug(message)
-                self.field.set_warning(message)
+                self.field.set_warning(
+                    "The configuration to fetch the external data is not valid"
+                )
         # default to parent widget - fill with values
         else:
             self.combo_box.setCurrentText(self.labels_map["values"])

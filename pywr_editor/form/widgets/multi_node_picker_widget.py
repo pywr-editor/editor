@@ -94,13 +94,9 @@ class MultiNodePickerWidget(FormCustomWidget):
             self.logger.debug("Value is None or empty. No value set")
         # value must be a list of strings
         elif not isinstance(value, list):
-            message = "The node names must be a list"
-            self.field.set_warning(message)
-            self.logger.debug(message + ". None selected")
+            self.field.set_warning("The node names must be a list")
         elif not all([isinstance(n, str) for n in value]):
-            message = "The node names must be valid strings"
-            self.field.set_warning(message)
-            self.logger.debug(message + ". None selected")
+            self.field.set_warning("The node names must be valid strings")
         else:
             wrong_node_types = []
             non_existing_nodes = []
@@ -132,28 +128,22 @@ class MultiNodePickerWidget(FormCustomWidget):
             self.combo_box.check_items(selected_indexes, False)
 
             if wrong_node_types:
-                message = (
+                self.field.set_warning(
                     f"The following node names were removed from the list because "
                     f"their type is not allowed: {', '.join(wrong_node_types)}"
                     f" Allowed types are: {', '.join(self.include_node_types)}"
                 )
-                self.logger.debug(message)
-                self.field.set_warning(message)
             elif non_existing_nodes:
-                message = (
+                self.field.set_warning(
                     "The following node names do not exist in the model "
                     + f"configuration: {', '.join(non_existing_nodes)}"
                 )
-                self.logger.debug(message)
-                self.field.set_warning(message)
-
         # there are no nodes in the model
         if len(self.combo_box.all_items) == 0:
             self.combo_box.setEnabled(False)
-            message = "There are no nodes available"
-            self.logger.debug(message)
             self.field.set_warning(
-                message + ". Add a new node first, before setting up this option"
+                "There are no nodes available. Add a new node first, before setting "
+                "up this option"
             )
         # layout
         layout = QHBoxLayout(self)

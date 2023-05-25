@@ -113,9 +113,7 @@ class AbstractModelNodePickerWidget(FormCustomWidget):
         if value is None or value == "":
             self.logger.debug("Value is None or empty. No value set")
         elif not isinstance(value, str):
-            message = "The node name must be a string"
-            self.field.set_warning(message)
-            self.logger.debug(message + ". None selected")
+            self.field.set_warning("The node name must be a string")
         # name is in model nodes
         elif value in model_nodes:
             # valid type
@@ -126,16 +124,13 @@ class AbstractModelNodePickerWidget(FormCustomWidget):
                 self.combo_box.setCurrentIndex(selected_index)
             # type is wrong if filters are set
             else:
-                message = "The node type set in the model configuration is not valid"
-                self.field.set_warning(message)
-                self.logger.debug(message + ". None selected")
+                self.field.set_warning(
+                    "The node type set in the model configuration is not valid"
+                )
         else:
-            message = (
-                f"The node named '{value}' does not exist in the model "
-                + "configuration"
+            self.field.set_warning(
+                f"The node named '{value}' does not exist in the model configuration"
             )
-            self.logger.debug(message)
-            self.field.set_warning(message)
 
         # overwrite warning if there are no nodes in the model
         if len(self.combo_box.all_items) == 1:

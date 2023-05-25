@@ -211,9 +211,9 @@ class TableSelectorWidget(FormCustomWidget):
 
         # table names list is None or an empty list
         if not self.table_names:
-            message = "The are no tables defined in the model configuration"
-            self.logger.debug(message)
-            self.field.set_warning(message)
+            self.field.set_warning(
+                "The are no tables defined in the model configuration"
+            )
         else:
             # enable the ComboBox and set the selection
             self.combo_box.setEnabled(True)
@@ -222,9 +222,9 @@ class TableSelectorWidget(FormCustomWidget):
                 self.logger.debug("Table name is None")
             # wrong type
             elif table_name is not None and not isinstance(table_name, str):
-                message = "The table in the model configuration must be a string"
-                self.logger.debug(message)
-                self.field.set_warning(message)
+                self.field.set_warning(
+                    "The table in the model configuration must be a string"
+                )
             # valid string
             elif table_name is not None:
                 if table_name in self.table_names:
@@ -234,20 +234,15 @@ class TableSelectorWidget(FormCustomWidget):
                 # skip file check if widget is static
                 if not self.static:
                     if self.file is None:
-                        message = "The table file does not exist"
-                        self.logger.debug(message)
-                        self.field.set_warning(message)
+                        self.field.set_warning("The table file does not exist")
                         # let user reload file if it is later created (as long as
                         # table exists)
                         if table_name in self.table_names:
                             self.reload_button.setEnabled(True)
                     elif self.file_ext not in self.supported_extensions:
-                        message = (
-                            f"The file extension '{self.file_ext}' is not "
-                            + "supported"
+                        self.field.set_warning(
+                            f"The file extension '{self.file_ext}' is not supported"
                         )
-                        self.logger.debug(message)
-                        self.field.set_warning(message)
                     elif self.table_parse_error:
                         self.field.set_error(
                             "Cannot parse the file. The provided table options are "
@@ -260,12 +255,10 @@ class TableSelectorWidget(FormCustomWidget):
                         self.reload_button.setEnabled(True)
 
                     if table_name not in self.table_names:
-                        message = (
+                        self.field.set_warning(
                             f"The table name '{table_name}', set in the model "
-                            + "configuration, does not exist"
+                            "configuration, does not exist"
                         )
-                        self.field.set_warning(message)
-                        self.logger.debug(message)
 
         self.combo_box.blockSignals(False)
         self.logger.debug("Completed on_populate_field Slot")

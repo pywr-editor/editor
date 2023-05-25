@@ -82,7 +82,6 @@ class H5NodeWidget(AbstractStringComboBoxWidget):
         self.combo_box.addItems(combo_box_items)
         if self.combo_box.isEnabled():
             self.combo_box.setCurrentText(self.label)
-            self.logger.debug("Setting warning message")
             self.field.set_warning(self.warning_message)
 
     def get_value(self) -> str | None:

@@ -362,19 +362,13 @@ class IndexWidget(FormCustomWidget):
                 )
             # no columns
             elif len(columns) == 0:
-                self.logger.debug(
-                    "The table does not contain any column. Keeping field disabled "
-                    + "with warning"
-                )
                 self.field.set_warning("The table does not contain any column")
+                self.logger.debug("Keeping field disabled with warning")
             # no rows - although columns are available and index names may be set,
             # just show dummy field
             elif len(table) == 0:
-                self.logger.debug(
-                    "The table does not contain any rows. Keeping field disabled "
-                    + "with warning"
-                )
                 self.field.set_warning("The table does not contain any row")
+                self.logger.debug("Keeping field disabled with warning")
             # show dummy field
             layout, _ = self.render_field_layout(default_index_name, 0)
             self.layout.addLayout(layout)
@@ -420,8 +414,7 @@ class IndexWidget(FormCustomWidget):
             if wrong_index_values:
                 self.field.set_warning(
                     "The value of the following indexes is not valid or does not exist "
-                    + "in the table: "
-                    + ", ".join(wrong_index_values)
+                    "in the table: " + ", ".join(wrong_index_values)
                 )
 
     @Slot(str)

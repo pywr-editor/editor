@@ -105,7 +105,6 @@ class EventTypeWidget(AbstractStringComboBoxWidget):
 
         # add warning message
         if self.message:
-            self.logger.debug(self.message)
             self.field.set_warning(self.message)
 
     def register_actions(self) -> None:

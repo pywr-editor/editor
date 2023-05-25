@@ -97,7 +97,6 @@ class KeatingStreamsWidget(FormCustomWidget):
         layout.addLayout(button_layout)
 
         if warning_message:
-            self.logger.debug(warning_message)
             self.field.set_warning(warning_message)
 
     @Slot()

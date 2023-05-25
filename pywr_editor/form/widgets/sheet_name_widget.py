@@ -100,7 +100,6 @@ class SheetNameWidget(FormCustomWidget):
             self.logger.debug("The Excel file does not exist")
         # the file does not contain sheets
         elif self.has_excel_sheet is False:
-            self.logger.debug("The Excel file does not contain any sheet")
             self.field.set_warning("The Excel file does not contain any sheet")
         else:
             self.setEnabled(True)
@@ -108,14 +107,10 @@ class SheetNameWidget(FormCustomWidget):
             self.logger.debug(f"Added items to widget: {', '.join(self.excel_sheets)}")
 
             if self.value is False or self.is_valid_sheet is False:
-                self.logger.debug(
-                    f"{self.value} is not a valid sheet name (using first sheet). "
-                    + "Setting warning message"
-                )
                 self.field.set_warning(
                     "The sheet name, currently set in the model config file, does not "
-                    + "exist in the Excel file. The first available sheet was "
-                    + "selected, otherwise select another name"
+                    "exist in the Excel file. The first available sheet was "
+                    "selected, otherwise select another name"
                 )
             else:
                 self.combo_box.setCurrentText(self.value)

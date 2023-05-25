@@ -93,37 +93,29 @@ class AbstractStringModelComponentPickerWidget(FormCustomWidget):
             self.logger.debug("Value is None or empty. No value set")
         # wrong type
         elif not isinstance(value, str):
-            message = f"The {component_type} name must be a string"
-            self.logger.debug(message)
-            self.field.set_warning(message)
+            self.field.set_warning(f"The {component_type} name must be a string")
         # component name exists
         elif value in model_comp_names:
             # check if the component is allowed when the filter is provided
             if value not in self.combo_box.all_items:
-                message = (
+                self.field.set_warning(
                     f"The type of selected {component_type} set in the model "
-                    + "configuration is not allowed"
+                    "configuration is not allowed"
                 )
-                self.logger.debug(message)
-                self.field.set_warning(message)
             else:
                 self.logger.debug(f"Setting '{value}' as selected {component_type}")
                 self.combo_box.setCurrentText(value)
         else:
-            message = (
+            self.field.set_warning(
                 f"The {component_type} named '{value}' does not exist in the "
-                + "model configuration"
+                "model configuration"
             )
-            self.logger.debug(message)
-            self.field.set_warning(message)
 
         # no model components - overwrite any previous message
         if len(self.combo_box.all_items) == 1:
-            message = f"There are no {component_type}s available"
-            self.logger.debug(message)
             self.field.set_warning(
-                message
-                + f". Add a new {component_type} first before setting up this option"
+                f"There are no {component_type}s available. Add a new {component_type} "
+                "first before setting up this option"
             )
 
         # layout

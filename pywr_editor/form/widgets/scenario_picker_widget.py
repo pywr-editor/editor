@@ -54,30 +54,27 @@ class ScenarioPickerWidget(FormCustomWidget):
         if not value:
             self.logger.debug("Value is None or empty. No value set")
         elif not isinstance(value, str):
-            message = "The scenario in the model configuration must be a string"
-            self.logger.debug(message)
-            self.field.set_warning(message)
+            self.field.set_warning(
+                "The scenario in the model configuration must be a string"
+            )
         # name is in scenario names
         elif value in scenario_names:
             # find index by data
             selected_index = self.combo_box.findData(value, Qt.UserRole)
             self.combo_box.setCurrentIndex(selected_index)
         else:
-            message = (
+            self.field.set_warning(
                 f"The scenario named '{value}' does not exist in the model "
-                + "configuration"
+                "configuration"
             )
-            self.logger.debug(message)
-            self.field.set_warning(message)
 
         # overwrite warning if there are no scenarios in the model
         if is_mandatory and len(scenario_names) == 0:
-            message = "The are no scenarios defined in the model"
             self.combo_box.setEnabled(False)
             self.field.set_warning(
-                message + ". Add a new scenario first before setting up this field"
+                "The are no scenarios defined in the model. Add a new scenario first "
+                "before setting up this field"
             )
-            self.logger.debug(message + ". Field disabled")
 
         # layout
         layout = QHBoxLayout(self)

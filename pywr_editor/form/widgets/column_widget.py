@@ -219,11 +219,8 @@ class ColumnWidget(FormCustomWidget):
             )
         # Empty table (Excel spreadsheets are still parsed but may have no columns)
         elif len(columns) == 0:
-            self.logger.debug(
-                "The table does not contain any column. Keeping field disabled "
-                + "with warning"
-            )
             self.field.set_warning("The table does not contain any column")
+            self.logger.debug("Keeping field disabled with warning")
         # populate the field and enabled it
         else:
             items = sorted(list(columns))
@@ -239,12 +236,10 @@ class ColumnWidget(FormCustomWidget):
                 )
 
             if self.wrong_column:
-                self.logger.debug(
-                    f"The column '{self.value}' does not exist in the table"
-                )
                 self.field.set_warning(
-                    "The column, currently set in the model configuration file, does "
-                    + "not exist in the table. Please select another name"
+                    f"The column '{self.value}', currently set in the model "
+                    "configuration file, does not exist in the table. Please "
+                    "select another name"
                 )
             elif self.value is not False:
                 self.logger.debug(f"Selecting column '{self.value}'")

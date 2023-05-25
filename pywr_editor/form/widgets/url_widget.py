@@ -383,13 +383,11 @@ class UrlWidget(FormCustomWidget):
 
         # table file does not exist
         if self.full_file is None and self.line_edit.text() != "":
-            message = "The table file does not exist"
-            self.logger.debug(message)
-            self.field.set_error(message)
+            self.field.set_error("The table file does not exist")
         elif self.file_ext != "" and self.file_ext not in self.supported_extensions:
-            message = f"The file extension '{self.file_ext}' is not supported"
-            self.logger.debug(message)
-            self.field.set_error(message)
+            self.field.set_error(
+                f"The file extension '{self.file_ext}' is not supported"
+            )
         elif self.table_parse_error:
             self.field.set_error(
                 "Cannot parse the file. Try changing the options below"

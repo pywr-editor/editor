@@ -112,11 +112,8 @@ class AbstractColumnsSelectorWidget(FormCustomWidget):
             )
         # Empty table (Excel spreadsheets are still parsed but may have no columns)
         elif len(columns) == 0:
-            self.logger.debug(
-                "The table does not contain any column. Keeping field disabled with "
-                + "warning"
-            )
             self.field.set_warning("The table does not contain any column")
+            self.logger.debug("Keeping field disabled with warning")
         else:
             self.logger.debug(f"Filling field with: {', '.join(map(str,columns))}")
             # noinspection PyTypeChecker
@@ -150,14 +147,9 @@ class AbstractColumnsSelectorWidget(FormCustomWidget):
 
             # some provided column names or indexes may not exist
             if len(self.wrong_columns) > 0:
-                self.logger.debug(
-                    "The following columns do no exist in the file: "
-                    + " ".join(self.wrong_columns)
-                )
                 self.field.set_warning(
                     "The following columns, currently set in the model config file, "
-                    + "do not exist in the table file: "
-                    + ", ".join(self.wrong_columns)
+                    "do not exist in the table file: " + ", ".join(self.wrong_columns)
                 )
 
         self.logger.debug("Completed on_populate_field Slot")
