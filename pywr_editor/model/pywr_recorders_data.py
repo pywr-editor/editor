@@ -20,7 +20,7 @@ class PywrRecordersData:
         # sort keys alphabetically
         self.recorders = dict(sorted(all_data["recorders_data"].items()))
 
-    def lookup_key_(self, recorder_type: str) -> str | None:
+    def lookup_key(self, recorder_type: str) -> str | None:
         """
         Returns the lookup key of the data dictionary from a recorder type.
         :param recorder_type: The string identifying the recorder type.
@@ -36,7 +36,7 @@ class PywrRecordersData:
         :param recorder_type: The string identifying the recorder type.
         :return: The pywr recorder name.
         """
-        data_key = self.lookup_key_(recorder_type)
+        data_key = self.lookup_key(recorder_type)
         if data_key is None:
             return None
         return self.recorders[data_key]["name"]
@@ -83,7 +83,7 @@ class PywrRecordersData:
         if recorder_type is None:
             return None
 
-        data_key = self.lookup_key_(recorder_type)
+        data_key = self.lookup_key(recorder_type)
         if data_key is not None and info_key in self.recorders[data_key]:
             return self.recorders[data_key][info_key]
         return None
@@ -99,7 +99,7 @@ class PywrRecordersData:
         if recorder_type is None:
             return None
 
-        data_key = self.lookup_key_(recorder_type)
+        data_key = self.lookup_key(recorder_type)
         if data_key is not None:
             return self.recorders[data_key]["name"].replace(" recorder", "")
         return recorder_type
