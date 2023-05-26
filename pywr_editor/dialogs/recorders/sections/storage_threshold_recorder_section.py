@@ -1,8 +1,6 @@
 from pywr_editor.form import StoragePickerWidget
 
-from .abstract_threshold_recorder_section import (
-    AbstractThresholdRecorderSection,
-)
+from .abstract_threshold_recorder_section import AbstractThresholdRecorderSection
 
 
 class StorageThresholdRecorderSection(AbstractThresholdRecorderSection):

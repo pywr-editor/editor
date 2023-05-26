@@ -1,7 +1,5 @@
 from ..recorder_dialog_form import RecorderDialogForm
-from .abstract_hydropower_recorder_section import (
-    AbstractHydropowerRecorderSection,
-)
+from .abstract_hydropower_recorder_section import AbstractHydropowerRecorderSection
 
 
 class TotalHydroEnergyRecorderSection(AbstractHydropowerRecorderSection):

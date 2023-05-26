@@ -5,11 +5,7 @@ from PySide6.QtWidgets import QPushButton, QWidget
 from pywr_editor.dialogs.parameters.sections.interpolated_parameter_section import (
     InterpolatedParameterSection,
 )
-from pywr_editor.form import (
-    ParameterForm,
-    ParameterLineEditWidget,
-    TableValuesWidget,
-)
+from pywr_editor.form import ParameterForm, ParameterLineEditWidget, TableValuesWidget
 from pywr_editor.model import ModelConfig, ParameterConfig
 
 

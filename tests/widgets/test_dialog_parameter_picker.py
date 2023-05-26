@@ -22,9 +22,7 @@ from pywr_editor.form import (
     SourceSelectorWidget,
 )
 from pywr_editor.form.widgets.float_widget import FloatWidget
-from pywr_editor.form.widgets.parameter_line_edit_widget import (
-    ParameterLineEditWidget,
-)
+from pywr_editor.form.widgets.parameter_line_edit_widget import ParameterLineEditWidget
 from pywr_editor.model import ModelConfig, ParameterConfig
 from tests.utils import resolve_model_path
 

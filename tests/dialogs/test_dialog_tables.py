@@ -9,9 +9,7 @@ from PySide6.QtTest import QSignalSpy
 from PySide6.QtWidgets import QApplication, QGroupBox, QLabel, QPushButton
 
 from pywr_editor.dialogs import TablesDialog
-from pywr_editor.dialogs.tables.table_empty_page_widget import (
-    TableEmptyPageWidget,
-)
+from pywr_editor.dialogs.tables.table_empty_page_widget import TableEmptyPageWidget
 from pywr_editor.dialogs.tables.table_url_widget import TableUrlWidget
 from pywr_editor.form import FormField, IndexColWidget
 from pywr_editor.model import ModelConfig

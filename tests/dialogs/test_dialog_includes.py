@@ -10,9 +10,7 @@ from pywr_editor import MainWindow
 from pywr_editor.dialogs import IncludesDialog
 from pywr_editor.model import ModelConfig
 from pywr_editor.toolbar.node_library.library_item import LibraryItemLabel
-from pywr_editor.toolbar.node_library.schematic_items_library import (
-    LibraryPanel,
-)
+from pywr_editor.toolbar.node_library.schematic_items_library import LibraryPanel
 from tests.utils import check_msg, model_path, resolve_model_path
 
 

@@ -3,9 +3,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QPushButton, QWidget
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.dialogs.parameters.parameter_page_widget import (
-    ParameterPageWidget,
-)
+from pywr_editor.dialogs.parameters.parameter_page_widget import ParameterPageWidget
 from pywr_editor.dialogs.parameters.sections.storage_threshold_parameter_section import (  # noqa: E501
     StorageThresholdParameterSection,
 )

@@ -2,11 +2,7 @@ from typing import TYPE_CHECKING
 
 from PySide6.QtWidgets import QPushButton
 
-from pywr_editor.form import (
-    FormValidation,
-    RecorderForm,
-    RecorderTypeSelectorWidget,
-)
+from pywr_editor.form import FormValidation, RecorderForm, RecorderTypeSelectorWidget
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import Logging
 

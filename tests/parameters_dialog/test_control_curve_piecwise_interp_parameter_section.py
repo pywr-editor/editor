@@ -1,9 +1,7 @@
 import pytest
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.dialogs.parameters.parameter_page_widget import (
-    ParameterPageWidget,
-)
+from pywr_editor.dialogs.parameters.parameter_page_widget import ParameterPageWidget
 from pywr_editor.form import FormField, ValuesAndExternalDataWidget
 from pywr_editor.model import ModelConfig
 from tests.utils import resolve_model_path

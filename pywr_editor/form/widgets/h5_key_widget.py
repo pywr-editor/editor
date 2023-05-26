@@ -5,12 +5,7 @@ from pandas import HDFStore
 from PySide6.QtCore import Signal, Slot
 from PySide6.QtWidgets import QHBoxLayout
 
-from pywr_editor.form import (
-    FormCustomWidget,
-    FormField,
-    FormValidation,
-    UrlWidget,
-)
+from pywr_editor.form import FormCustomWidget, FormField, FormValidation, UrlWidget
 from pywr_editor.utils import Logging, get_signal_sender
 from pywr_editor.widgets import ComboBox
 

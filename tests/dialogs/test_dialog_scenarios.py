@@ -6,9 +6,7 @@ from pywr_editor.dialogs import ScenariosDialog
 from pywr_editor.dialogs.scenarios.scenario_empty_page_widget import (
     ScenarioEmptyPageWidget,
 )
-from pywr_editor.dialogs.scenarios.scenario_form_widget import (
-    ScenarioFormWidget,
-)
+from pywr_editor.dialogs.scenarios.scenario_form_widget import ScenarioFormWidget
 from pywr_editor.form import FormField
 from pywr_editor.model import ModelConfig
 from tests.utils import close_message_box, resolve_model_path

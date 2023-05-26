@@ -1,10 +1,6 @@
 from typing import TYPE_CHECKING
 
-from pywr_editor.form import (
-    FormSection,
-    FormValidation,
-    ParametersListPickerWidget,
-)
+from pywr_editor.form import FormSection, FormValidation, ParametersListPickerWidget
 from pywr_editor.utils import Logging
 
 if TYPE_CHECKING:
