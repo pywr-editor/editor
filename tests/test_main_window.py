@@ -41,12 +41,12 @@ class TestMainWindow:
         unsaved changes.
         """
         window = MainWindow(resolve_model_path("model_1.json"))
-        spy = QSignalSpy(window.model_config.changes_tracker.change_applied)
+        spy = QSignalSpy(window.model_config.model_changed)
         save_button = window.app_actions.get("save-model")
         assert save_button.isEnabled() is False
 
         # make a change, the save button is not enabled
-        window.model_config.changes_tracker.add("New change")
+        window.model_config.has_changed()
         assert spy.count() == 1
         assert save_button.isEnabled() is True
 
