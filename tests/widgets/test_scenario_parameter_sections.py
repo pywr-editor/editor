@@ -3,9 +3,7 @@ from PySide6.QtCore import QItemSelectionModel, Qt
 from PySide6.QtWidgets import QPushButton
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.dialogs.parameters.parameter_page_widget import (
-    ParameterPageWidget,
-)
+from pywr_editor.dialogs.parameters.parameter_page_widget import ParameterPageWidget
 from pywr_editor.form import (
     FormField,
     MonthlyValuesWidget,
