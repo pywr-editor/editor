@@ -1,12 +1,17 @@
 from copy import deepcopy as dp
 
 """
- Handle a scenario configuration.
+ Handle a scenario configuration
 """
 
 
 class ScenarioConfig:
     def __init__(self, props: dict, deepcopy: bool = False):
+        """
+        Init the class.
+        :param props: The scenario dictionary.
+        :param deepcopy: Whether to create a deep copy of the dictionary.
+        """
         self.props = props
         if deepcopy:
             self.props = dp(self.props)

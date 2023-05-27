@@ -3,8 +3,8 @@ from PySide6.QtCore import Slot
 from pywr_editor.form import (
     AbstractStringComboBoxWidget,
     FormField,
-    FormValidation,
     H5WhereWidget,
+    Validation,
 )
 from pywr_editor.utils import get_signal_sender
 
@@ -40,9 +40,7 @@ class H5NodeWidget(AbstractStringComboBoxWidget):
 
         # connect Slot to update the nodes when the where attribute changes
         # noinspection PyTypeChecker
-        where_widget: H5WhereWidget = self.form.find_field_by_name(
-            "where"
-        ).widget
+        where_widget: H5WhereWidget = self.form.find_field("where").widget
         # noinspection PyUnresolvedReferences
         where_widget.where_attr_changed.connect(self.on_update_where)
 
@@ -57,7 +55,7 @@ class H5NodeWidget(AbstractStringComboBoxWidget):
         self.reset()
 
         # get keys in h5 file
-        where_field = self.form.find_field_by_name("where")
+        where_field = self.form.find_field("where")
         # noinspection PyTypeChecker
         where_widget: H5WhereWidget = where_field.widget
 
@@ -84,8 +82,7 @@ class H5NodeWidget(AbstractStringComboBoxWidget):
         self.combo_box.addItems(combo_box_items)
         if self.combo_box.isEnabled():
             self.combo_box.setCurrentText(self.label)
-            self.logger.debug("Setting warning message")
-            self.form_field.set_warning_message(self.warning_message)
+            self.field.set_warning(self.warning_message)
 
     def get_value(self) -> str | None:
         """
@@ -98,25 +95,20 @@ class H5NodeWidget(AbstractStringComboBoxWidget):
             return None
         return value
 
-    def validate(
-        self, name: str, label: str, value: str | None
-    ) -> FormValidation:
+    def validate(self, name: str, label: str, value: str | None) -> Validation:
         """
         Checks that the node is selected.
         :param name: The field name.
         :param label: The field label.
         :param value: The field label.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         if self.get_value() is None and self.combo_box.isEnabled():
             self.logger.debug("Validation failed")
-            return FormValidation(
-                validation=False,
-                error_message="You must select a node from the list",
-            )
+            return Validation("You must select a node from the list")
 
         self.logger.debug("Validation passed")
-        return FormValidation(validation=True)
+        return Validation()
 
     def reset(self) -> None:
         """

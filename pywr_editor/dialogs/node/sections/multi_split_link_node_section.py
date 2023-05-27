@@ -1,11 +1,10 @@
 from typing import Any
 
-from pywr_editor.form import SlotsTableWidget
+from pywr_editor.form import FieldConfig, SlotsTableWidget
+from pywr_editor.utils import Logging
 
 from ..node_dialog_form import NodeDialogForm
-from .abstract_piecewise_link_node_section import (
-    AbstractPiecewiseLinkNodeSection,
-)
+from .abstract_piecewise_link_node_section import AbstractPiecewiseLinkNodeSection
 
 
 class MultiSplitLinkSection(AbstractPiecewiseLinkNodeSection):
@@ -15,23 +14,24 @@ class MultiSplitLinkSection(AbstractPiecewiseLinkNodeSection):
         :param form: The parent form.
         :param section_data: A dictionary containing data to pass to the widget.
         """
+        self.logger = Logging().logger(self.__class__.__name__)
+
         super().__init__(
             form,
             section_data,
-            log_name=self.__class__.__name__,
             additional_fields=[
-                {
-                    "name": "slots_field",
-                    "label": "Slot configuration",
-                    "field_type": SlotsTableWidget,
-                    "min_value": 1,
-                    "value": form.node_obj,
-                    "help_text": "Provide a name for each node's slot to properly "
-                    + "connect the extra slots of this node to the other nodes in "
-                    + "the network. You can also define optional factors to set the "
-                    + " proportion of the total flow to pass through the additional "
-                    + "sub-links",
-                },
+                FieldConfig(
+                    name="slots_field",
+                    label="Slot configuration",
+                    field_type=SlotsTableWidget,
+                    min_value=1,
+                    value=form.node_obj,
+                    help_text="Provide a name for each node's slot to properly "
+                    "connect the extra slots of this node to the other nodes in "
+                    "the network. You can also define optional factors to set the "
+                    " proportion of the total flow to pass through the additional "
+                    "sub-links",
+                ),
             ],
         )
 
@@ -41,9 +41,7 @@ class MultiSplitLinkSection(AbstractPiecewiseLinkNodeSection):
         :param form_data: The form data.
         :return: None
         """
-        widget: SlotsTableWidget = self.form.find_field_by_name(
-            "slots_field"
-        ).widget
+        widget: SlotsTableWidget = self.form.find_field("slots_field").widget
 
         # update slot names in edges
         widget.updated_slot_names_in_edge_helper()

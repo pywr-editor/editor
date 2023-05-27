@@ -56,9 +56,7 @@ class TestSchematicMoveNodes:
         assert node_item.scenePos() == new_pos
         assert node_item.position == new_pos.toTuple()
         assert (
-            model_config.nodes.get_node_config_from_name(
-                node_name, as_dict=False
-            ).position
+            model_config.nodes.config(node_name, as_dict=False).position
             == new_pos.toTuple()
         )
 
@@ -78,10 +76,7 @@ class TestSchematicMoveNodes:
         assert node_item.scenePos().toTuple() == initial_pos
         assert node_item.position == initial_pos
         assert (
-            model_config.nodes.get_node_config_from_name(
-                node_name, as_dict=False
-            ).position
-            == initial_pos
+            model_config.nodes.config(node_name, as_dict=False).position == initial_pos
         )
 
         # 3. Redo
@@ -93,8 +88,6 @@ class TestSchematicMoveNodes:
         assert node_item.scenePos() == new_pos
         assert node_item.position == new_pos.toTuple()
         assert (
-            model_config.nodes.get_node_config_from_name(
-                node_name, as_dict=False
-            ).position
+            model_config.nodes.config(node_name, as_dict=False).position
             == new_pos.toTuple()
         )

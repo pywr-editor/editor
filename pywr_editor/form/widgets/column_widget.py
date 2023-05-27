@@ -3,23 +3,18 @@ from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QHBoxLayout
 
 from pywr_editor.form import (
-    FormCustomWidget,
     FormField,
-    FormValidation,
+    FormWidget,
     SourceSelectorWidget,
     TableSelectorWidget,
     UrlWidget,
+    Validation,
 )
-from pywr_editor.utils import (
-    Logging,
-    are_columns_valid,
-    get_columns,
-    get_signal_sender,
-)
+from pywr_editor.utils import Logging, are_columns_valid, get_columns, get_signal_sender
 from pywr_editor.widgets import ComboBox
 
 
-class ColumnWidget(FormCustomWidget):
+class ColumnWidget(FormWidget):
     def __init__(
         self, name: str, value: str, parent: FormField, optional: bool = False
     ):
@@ -79,7 +74,7 @@ class ColumnWidget(FormCustomWidget):
         :return: The table, if the table is available. None otherwise.
         """
         # noinspection PyTypeChecker
-        value_source_field = self.form.find_field_by_name("source")
+        value_source_field = self.form.find_field("source")
         selected_source = value_source_field.value()
         # noinspection PyTypeChecker
         value_source_widget: SourceSelectorWidget = value_source_field.widget
@@ -87,14 +82,12 @@ class ColumnWidget(FormCustomWidget):
         # dataframe from the table set in the table field
         if selected_source == value_source_widget.labels["table"]:
             # noinspection PyTypeChecker
-            table_field: TableSelectorWidget = self.form.find_field_by_name(
-                "table"
-            ).widget
+            table_field: TableSelectorWidget = self.form.find_field("table").widget
             self.logger.debug("Table loaded from TableSelectorWidget")
         # dataframe from the table set in the url field
         elif selected_source == value_source_widget.labels["anonymous_table"]:
             # noinspection PyTypeChecker
-            table_field: UrlWidget = self.form.find_field_by_name("url").widget
+            table_field: UrlWidget = self.form.find_field("url").widget
             self.logger.debug("Table loaded from UrlWidget")
         else:
             self.logger.debug("The table cannot be fetched")
@@ -139,9 +132,7 @@ class ColumnWidget(FormCustomWidget):
                         + "the table"
                     )
                 else:
-                    self.logger.debug(
-                        f"Using final value: '{selected_col_name}'"
-                    )
+                    self.logger.debug(f"Using final value: '{selected_col_name}'")
                     selected_col_name = value
 
         return selected_col_name
@@ -157,7 +148,7 @@ class ColumnWidget(FormCustomWidget):
             f"Running on_update_value Slot with value {selected_column} from "
             + get_signal_sender(self)
         )
-        self.form_field.clear_message(message_type="warning")
+        self.field.clear_message(message_type="warning")
         # ComboBox always returns a string - convert selected column to
         # original type
         type_conv = self.combo_box.currentData()
@@ -211,7 +202,7 @@ class ColumnWidget(FormCustomWidget):
         self.combo_box.setEnabled(False)
         self.combo_box.clear()
         # self.combo_box_model.clear()
-        self.form_field.clear_message(message_type="warning")
+        self.field.clear_message(message_type="warning")
         # restore model signals for addItems call below
         self.combo_box.model().blockSignals(False)
         # do not use setCurrentText as lineEdit is not used
@@ -228,19 +219,12 @@ class ColumnWidget(FormCustomWidget):
             )
         # Empty table (Excel spreadsheets are still parsed but may have no columns)
         elif len(columns) == 0:
-            self.logger.debug(
-                "The table does not contain any column. Keeping field disabled "
-                + "with warning"
-            )
-            self.form_field.set_warning_message(
-                "The table does not contain any column"
-            )
+            self.field.set_warning("The table does not contain any column")
+            self.logger.debug("Keeping field disabled with warning")
         # populate the field and enabled it
         else:
             items = sorted(list(columns))
-            self.logger.debug(
-                f"Filling field with: {', '.join(map(str, items))}"
-            )
+            self.logger.debug(f"Filling field with: {', '.join(map(str, items))}")
             for col in items:
                 # force to string and store type
                 self.combo_box.addItem(str(col), type(col))
@@ -252,12 +236,10 @@ class ColumnWidget(FormCustomWidget):
                 )
 
             if self.wrong_column:
-                self.logger.debug(
-                    f"The column '{self.value}' does not exist in the table"
-                )
-                self.form_field.set_warning_message(
-                    "The column, currently set in the model configuration file, does "
-                    + "not exist in the table. Please select another name"
+                self.field.set_warning(
+                    f"The column '{self.value}', currently set in the model "
+                    "configuration file, does not exist in the table. Please "
+                    "select another name"
                 )
             elif self.value is not False:
                 self.logger.debug(f"Selecting column '{self.value}'")
@@ -273,11 +255,7 @@ class ColumnWidget(FormCustomWidget):
         :return: The column or none if the selection is invalid.
         """
         table = self.table
-        if (
-            are_columns_valid(table) is False
-            or self.value is False
-            or self.value == ""
-        ):
+        if are_columns_valid(table) is False or self.value is False or self.value == "":
             return None
         return self.value
 
@@ -286,20 +264,20 @@ class ColumnWidget(FormCustomWidget):
         name: str,
         label: str,
         value: str,
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Validates the field. Validation fails if value is False or empty or the columns
         ar enot valid (the file does not exist, is invalid or has no content).
         :param name: The field name.
         :param label: The field label.
         :param value: The field value from self.get_value().
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         self.logger.debug("Validating field")
 
         if self.optional:
             self.logger.debug("Field is optional. Validation passed")
-            return FormValidation(validation=True)
+            return Validation()
 
         if (
             value is None
@@ -308,10 +286,7 @@ class ColumnWidget(FormCustomWidget):
             or are_columns_valid(self.table) is False
         ):
             self.logger.debug("Validation failed")
-            return FormValidation(
-                validation=False,
-                error_message="You must select a column from the list",
-            )
+            return Validation("You must select a column from the list")
 
         self.logger.debug("Validation passed")
-        return FormValidation(validation=True)
+        return Validation()

@@ -4,12 +4,7 @@ from PySide6.QtTest import QSignalSpy
 from PySide6.QtWidgets import QPushButton
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.form import (
-    FormField,
-    IndexColWidget,
-    SheetNameWidget,
-    UrlWidget,
-)
+from pywr_editor.form import FormField, IndexColWidget, SheetNameWidget, UrlWidget
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import default_index_name, get_index_names
 from tests.utils import resolve_model_path
@@ -21,9 +16,7 @@ class TestDialogParameterIndexColWidget:
     anonymous tables
     """
 
-    model_file = resolve_model_path(
-        "model_dialog_parameters_index_col_widget.json"
-    )
+    model_file = resolve_model_path("model_dialog_parameters_index_col_widget.json")
 
     @pytest.fixture()
     def model_config(self) -> ModelConfig:
@@ -88,9 +81,7 @@ class TestDialogParameterIndexColWidget:
 
         assert selected_page.findChild(FormField, "name").value() == param_name
 
-        index_col_field: FormField = selected_page.findChild(
-            FormField, "index_col"
-        )
+        index_col_field: FormField = selected_page.findChild(FormField, "index_col")
         # noinspection PyTypeChecker
         index_col_widget: IndexColWidget = index_col_field.widget
         url_widget: UrlWidget = selected_page.findChild(FormField, "url").widget
@@ -156,9 +147,7 @@ class TestDialogParameterIndexColWidget:
         assert isinstance(form_data, dict)
 
         # 5. Save form to test filter
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         # enable button (disabled due to no changes)
         assert model_config.has_changes is False
         assert save_button.isEnabled() is False
@@ -175,17 +164,14 @@ class TestDialogParameterIndexColWidget:
         else:
             fields += ["key"]
         for f in fields:
-            value = form.find_field_by_name(f).widget.get_value()
+            value = form.find_field(f).widget.get_value()
             # convert to index
             if f == "index_col" and url_widget.file_ext == ".xlsx":
                 value = [all_columns.index(v) for v in value]
             if value or value == 0:
                 model_param_dict[f] = value
 
-        assert (
-            model_config.parameters.get_config_from_name(param_name)
-            == model_param_dict
-        )
+        assert model_config.parameters.config(param_name) == model_param_dict
 
     @pytest.mark.parametrize(
         "param_name, checked, invalid",
@@ -208,9 +194,7 @@ class TestDialogParameterIndexColWidget:
             ),
         ],
     )
-    def test_invalid_col_index(
-        self, qtbot, model_config, param_name, checked, invalid
-    ):
+    def test_invalid_col_index(self, qtbot, model_config, param_name, checked, invalid):
         """
         Tests that the field when the provided column index is invalid
         """
@@ -226,9 +210,7 @@ class TestDialogParameterIndexColWidget:
 
         assert selected_page.findChild(FormField, "name").value() == param_name
 
-        index_col_field: FormField = selected_page.findChild(
-            FormField, "index_col"
-        )
+        index_col_field: FormField = selected_page.findChild(FormField, "index_col")
         # noinspection PyTypeChecker
         index_col_widget: IndexColWidget = index_col_field.widget
         url_widget: UrlWidget = selected_page.findChild(FormField, "url").widget
@@ -236,9 +218,7 @@ class TestDialogParameterIndexColWidget:
         # 1. Columns are loaded with a warning message because of an invalid column
         # name to use as index
         assert index_col_widget.combo_box.all_items == all_columns
-        assert (
-            "The following columns, currently" in index_col_field.message.text()
-        )
+        assert "The following columns, currently" in index_col_field.message.text()
 
         # 2. Only valid columns are checked
         assert index_col_field.value() == checked
@@ -279,18 +259,13 @@ class TestDialogParameterIndexColWidget:
 
         assert selected_page.findChild(FormField, "name").value() == param_name
 
-        index_col_field: FormField = selected_page.findChild(
-            FormField, "index_col"
-        )
+        index_col_field: FormField = selected_page.findChild(FormField, "index_col")
         # noinspection PyTypeChecker
         index_col_widget: IndexColWidget = index_col_field.widget
 
         # 1. Field is disabled with warning message
         assert index_col_widget.isEnabled() is False
-        assert (
-            index_col_field.message.text()
-            == "The table does not contain any column"
-        )
+        assert index_col_field.message.text() == "The table does not contain any column"
         url_widget: UrlWidget = selected_page.findChild(FormField, "url").widget
 
         # columns are preserved internally
@@ -324,9 +299,7 @@ class TestDialogParameterIndexColWidget:
         # dialog.hide()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
-        index_col_field: FormField = selected_page.findChild(
-            FormField, "index_col"
-        )
+        index_col_field: FormField = selected_page.findChild(FormField, "index_col")
         # noinspection PyTypeChecker
         index_col_widget: IndexColWidget = index_col_field.widget
         url_widget: UrlWidget = selected_page.findChild(FormField, "url").widget
@@ -381,9 +354,7 @@ class TestDialogParameterIndexColWidget:
         dialog.hide()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
-        index_col_field: FormField = selected_page.findChild(
-            FormField, "index_col"
-        )
+        index_col_field: FormField = selected_page.findChild(FormField, "index_col")
         # noinspection PyTypeChecker
         index_col_widget: IndexColWidget = index_col_field.widget
         sheet_widget: SheetNameWidget = selected_page.findChild(
@@ -465,7 +436,5 @@ class TestDialogParameterIndexColWidget:
         # check selection
         assert combo_box.checked_items() == selected
         assert index_col_widget.get_value() == selected
-        assert index_col_widget.combo_box.lineEdit().text() == ", ".join(
-            selected
-        )
+        assert index_col_widget.combo_box.lineEdit().text() == ", ".join(selected)
         assert get_index_names(url_widget.table) == selected

@@ -5,11 +5,11 @@ from PySide6.QtCore import QSize, Slot
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout
 
 from pywr_editor.form import (
-    FormCustomWidget,
     FormField,
-    FormValidation,
+    FormWidget,
     NodesAndFactorsDialog,
     NodesAndFactorsModel,
+    Validation,
 )
 from pywr_editor.utils import Logging, get_signal_sender
 from pywr_editor.widgets import PushIconButton, TableView
@@ -25,7 +25,7 @@ if TYPE_CHECKING:
 value_type = TypeVar("value_type", bound=dict[str, list | None])
 
 
-class NodesAndFactorsTableWidget(FormCustomWidget):
+class NodesAndFactorsTableWidget(FormWidget):
     def __init__(self, name: str, value: value_type, parent: FormField):
         """
         Initialises the widget.
@@ -65,9 +65,7 @@ class NodesAndFactorsTableWidget(FormCustomWidget):
         self.edit_button.setEnabled(False)
         # noinspection PyUnresolvedReferences
         self.edit_button.clicked.connect(self.on_edit_row)
-        self.edit_button.setToolTip(
-            "Edit the node and factor of the selected row"
-        )
+        self.edit_button.setToolTip("Edit the node and factor of the selected row")
 
         self.delete_button = PushIconButton(
             icon=qta.icon("msc.remove"), label="Delete", small=True
@@ -105,10 +103,7 @@ class NodesAndFactorsTableWidget(FormCustomWidget):
         :return: None
         """
         self.logger.debug("Registering post-render section actions")
-
-        if self.warning_message:
-            self.logger.debug(self.warning_message)
-        self.form_field.set_warning_message(self.warning_message)
+        self.field.set_warning(self.warning_message)
 
     @Slot()
     def on_delete_row(self) -> None:
@@ -116,9 +111,7 @@ class NodesAndFactorsTableWidget(FormCustomWidget):
         Deletes the selected rows.
         :return: None
         """
-        self.logger.debug(
-            f"Running on_delete_row Slot from {get_signal_sender(self)}"
-        )
+        self.logger.debug(f"Running on_delete_row Slot from {get_signal_sender(self)}")
         indexes = self.table.selectedIndexes()
         row_indexes = [index.row() for index in indexes]
 
@@ -130,9 +123,7 @@ class NodesAndFactorsTableWidget(FormCustomWidget):
                 new_node_values.append(sub_values)
                 new_factor_values.append(self.model.factors[index])
             else:
-                self.logger.debug(
-                    f"Deleted index {index} with values {sub_values}"
-                )
+                self.logger.debug(f"Deleted index {index} with values {sub_values}")
 
         # noinspection PyUnresolvedReferences
         self.model.layoutAboutToBeChanged.emit()
@@ -148,9 +139,7 @@ class NodesAndFactorsTableWidget(FormCustomWidget):
         Opens the dialog to edit an existing row.
         :return: None
         """
-        current_index = (
-            self.table.selectionModel().selection().indexes()[0].row()
-        )
+        current_index = self.table.selectionModel().selection().indexes()[0].row()
         dialog = NodesAndFactorsDialog(
             model_config=self.model_config,
             node=self.model.nodes[current_index],
@@ -200,9 +189,7 @@ class NodesAndFactorsTableWidget(FormCustomWidget):
 
         # update an existing row
         factor = (
-            form_data["factor"]
-            if "factor" in form_data
-            else self.get_default_factor
+            form_data["factor"] if "factor" in form_data else self.get_default_factor
         )
         if additional_data is not None and "model_index" in additional_data:
             index = additional_data["model_index"]
@@ -233,18 +220,14 @@ class NodesAndFactorsTableWidget(FormCustomWidget):
         elif not isinstance(value["nodes"], list) or (
             value["factors"] and not isinstance(value["factors"], list)
         ):
-            message = (
-                "The nodes and factors provided in the model configuration "
-            )
+            message = "The nodes and factors provided in the model configuration "
             message += "must be valid lists"
         # both list must have the same size when factors are provided
         elif value["factors"] and len(value["nodes"]) != len(value["factors"]):
             message = "The number of nodes must match the number of factors"
         # the list of nodes must contain strings
         elif any([not isinstance(el, str) for el in value["nodes"]]) is True:
-            message = (
-                "The list of nodes provided in the model configuration must "
-            )
+            message = "The list of nodes provided in the model configuration must "
             message += "contain only strings"
         # the list of nodes must contain existing nodes
         elif (
@@ -262,12 +245,9 @@ class NodesAndFactorsTableWidget(FormCustomWidget):
             )
         # the list of factors can contain only number when provided
         elif value["factors"] and (
-            any([not isinstance(el, (int, float)) for el in value["factors"]])
-            is True
+            any([not isinstance(el, (int, float)) for el in value["factors"]]) is True
         ):
-            message = (
-                "The list of factors provided in the model configuration must "
-            )
+            message = "The list of factors provided in the model configuration must "
             message += "contain only number"
         # assign final values
         else:
@@ -278,9 +258,7 @@ class NodesAndFactorsTableWidget(FormCustomWidget):
                 # do not assign factors if nodes are not valid
                 # if empty, use and show default value
                 if not value["factors"]:
-                    _value["factors"] = [self.get_default_factor] * len(
-                        _value["nodes"]
-                    )
+                    _value["factors"] = [self.get_default_factor] * len(_value["nodes"])
                 else:
                     _value["factors"] = value["factors"]
 
@@ -325,9 +303,7 @@ class NodesAndFactorsTableWidget(FormCustomWidget):
         self.model.layoutChanged.emit()
         self.table.clear_selection()
 
-    def validate(
-        self, name: str, label: str, value: value_type
-    ) -> FormValidation:
+    def validate(self, name: str, label: str, value: value_type) -> Validation:
         """
         Checks that the widget is not empty.
         :param name: The field name.
@@ -337,17 +313,14 @@ class NodesAndFactorsTableWidget(FormCustomWidget):
         """
         # nodes are mandatory, factors are not
         if not value["nodes"]:
-            return FormValidation(
-                validation=False,
-                error_message="You must provide one or more nodes to calculate the "
-                + "annual total flow",
+            return Validation(
+                "You must provide one or more nodes to calculate the "
+                "annual total flow",
             )
 
-        return FormValidation(validation=True)
+        return Validation()
 
-    def after_validate(
-        self, form_dict: dict[str, Any], form_field_name: str
-    ) -> None:
+    def after_validate(self, form_dict: dict[str, Any], form_field_name: str) -> None:
         """
         Unpacks the widget value.
         :param form_dict: The dictionary containing the data of the form

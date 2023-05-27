@@ -60,16 +60,12 @@ class SearchDialog(QDialog):
         line_edit.setStyleSheet("#search_field { font-size: 20px }")
 
         # Description
-        description = QLabel(
-            "Start typing to find and open any model components"
-        )
+        description = QLabel("Start typing to find and open any model components")
         description.setStyleSheet("font-size: 11px; border: 0")
 
         self.setObjectName("search_dialog")
         # remove the dialog style
-        self.setStyleSheet(
-            "QDialog#search_dialog { background: none; border: none}"
-        )
+        self.setStyleSheet("QDialog#search_dialog { background: none; border: none}")
         self.setModal(True)
         self.setWindowFlags(
             Qt.FramelessWindowHint

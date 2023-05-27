@@ -8,8 +8,8 @@ from PySide6.QtWidgets import QMainWindow, QPushButton, QWidget
 from pywr_editor.form import (
     ColumnWidget,
     ExternalDataPickerDialogWidget,
-    FormCustomWidget,
     FormField,
+    FormWidget,
     IndexColWidget,
     IndexWidget,
     ParameterForm,
@@ -43,7 +43,7 @@ class TestDialogParameterValuesAndExternalDataWidget:
         form = ParameterForm(
             model_config=ModelConfig(resolve_model_path("model_tables.json")),
             parameter_obj=ParameterConfig({}),
-            available_fields={
+            fields={
                 "Section": [
                     {
                         "name": "value",
@@ -59,7 +59,7 @@ class TestDialogParameterValuesAndExternalDataWidget:
         form.enable_optimisation_section = False
         form.load_fields()
 
-        form_field = form.find_field_by_name("value")
+        form_field = form.find_field("value")
         # noinspection PyTypeChecker
         return form_field.widget
 
@@ -115,7 +115,7 @@ class TestDialogParameterValuesAndExternalDataWidget:
         Tests that the field is loaded correctly.
         """
         widget = self.widget(value=value, field_args=field_args)
-        form_field: FormField = widget.form_field
+        form_field: FormField = widget.field
 
         # register app to test field visibility
         app = QMainWindow()
@@ -126,9 +126,7 @@ class TestDialogParameterValuesAndExternalDataWidget:
 
         # 1. Check field
         assert form_field.message.text() == ""
-        assert (
-            widget.combo_box.currentText() == widget.labels_map[combo_box_key]
-        )
+        assert widget.combo_box.currentText() == widget.labels_map[combo_box_key]
         assert widget.get_value() == expected_value
 
         # 2. Check visibility of the table, buttons and line edit field
@@ -152,14 +150,9 @@ class TestDialogParameterValuesAndExternalDataWidget:
             assert widget.line_edit_widget_container.isVisible() is True
             assert isinstance(widget.external_data_dict, dict) is True
             if "url" in widget.external_data_dict:
-                assert (
-                    widget.external_data_dict["url"] in widget.line_edit.text()
-                )
+                assert widget.external_data_dict["url"] in widget.line_edit.text()
             if "table" in widget.external_data_dict:
-                assert (
-                    widget.external_data_dict["table"]
-                    in widget.line_edit.text()
-                )
+                assert widget.external_data_dict["table"] in widget.line_edit.text()
 
         # 3. Validation
         out = widget.validate("", "", widget.get_value())
@@ -294,7 +287,7 @@ class TestDialogParameterValuesAndExternalDataWidget:
         invalid.
         """
         widget = self.widget(value=value, field_args=field_args)
-        form_field: FormField = widget.form_field
+        form_field: FormField = widget.field
 
         # register app to test field visibility
         app = QMainWindow()
@@ -308,9 +301,7 @@ class TestDialogParameterValuesAndExternalDataWidget:
             assert form_field.message.text() == ""
         else:
             assert init_message in form_field.message.text()
-        assert (
-            widget.combo_box.currentText() == widget.labels_map[combo_box_key]
-        )
+        assert widget.combo_box.currentText() == widget.labels_map[combo_box_key]
 
         # 2. Check QLineEdit
         line_edit = widget.line_edit
@@ -358,12 +349,12 @@ class TestDialogParameterValuesAndExternalDataWidget:
         qtbot.waitForWindowShown(app)
 
         # 1. Open the dialog
-        select_button: PushIconButton = (
-            widget.line_edit_widget_container.findChildren(PushIconButton)[0]
-        )
+        select_button: PushIconButton = widget.line_edit_widget_container.findChildren(
+            PushIconButton
+        )[0]
         qtbot.mouseClick(select_button, Qt.MouseButton.LeftButton)
-        child_dialog: ExternalDataPickerDialogWidget = (
-            widget.form.parent.findChild(ExternalDataPickerDialogWidget)
+        child_dialog: ExternalDataPickerDialogWidget = widget.form.parent.findChild(
+            ExternalDataPickerDialogWidget
         )
 
         # 2. Check the values in the child form
@@ -385,16 +376,11 @@ class TestDialogParameterValuesAndExternalDataWidget:
             }
 
         for widget_class, value_to_check in values_dict.items():
-            child_widget: FormCustomWidget = child_dialog.findChild(
-                widget_class
-            )
-            assert child_widget.form_field.message.text() == ""
+            child_widget: FormWidget = child_dialog.findChild(widget_class)
+            assert child_widget.field.message.text() == ""
             if widget_class == SourceSelectorWidget:
                 child_widget: SourceSelectorWidget
-                assert (
-                    child_widget.get_value()
-                    == child_widget.labels[value_to_check]
-                )
+                assert child_widget.get_value() == child_widget.labels[value_to_check]
                 continue
 
             if value_to_check is None:

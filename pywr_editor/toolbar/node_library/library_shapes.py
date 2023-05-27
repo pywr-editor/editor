@@ -4,11 +4,7 @@ from typing import TYPE_CHECKING
 import PySide6
 from PySide6.QtCore import QLineF, QPointF
 from PySide6.QtGui import QFont, QPen, QPolygonF, Qt
-from PySide6.QtWidgets import (
-    QGraphicsLineItem,
-    QGraphicsRectItem,
-    QGraphicsTextItem,
-)
+from PySide6.QtWidgets import QGraphicsLineItem, QGraphicsRectItem, QGraphicsTextItem
 
 from pywr_editor.style import Color
 
@@ -56,9 +52,7 @@ class TextShape(BaseShape, QGraphicsTextItem):
         :param widget: The widget.
         :return: None
         """
-        self.setDefaultTextColor(
-            Color("gray", 500 if self.hover else 800).qcolor
-        )
+        self.setDefaultTextColor(Color("gray", 500 if self.hover else 800).qcolor)
         super().paint(painter, option, widget)
 
 

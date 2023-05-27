@@ -137,9 +137,7 @@ class ProfilePlotDialog(QDialog):
                 major=chart_options.x_tick_spacing[0],
                 minor=chart_options.x_tick_spacing[1],
             )
-        elif (
-            self.chart_options.x_major_ticks or self.chart_options.x_minor_ticks
-        ):
+        elif self.chart_options.x_major_ticks or self.chart_options.x_minor_ticks:
             ay.setTicks(
                 [
                     self.chart_options.x_major_ticks,

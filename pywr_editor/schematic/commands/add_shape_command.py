@@ -65,7 +65,7 @@ class AddShapeCommand(QUndoCommand):
         :return: None
         """
         # store the latest configuration to be restored
-        self.tracker_shape_config = self.model_config.shapes.find_shape(
+        self.tracker_shape_config = self.model_config.shapes.find(
             self.added_shape_config.id
         )
 

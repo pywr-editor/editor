@@ -23,7 +23,7 @@ class TestDialogParameterControlCurvesWidget:
         form = ParameterForm(
             model_config=ModelConfig(),
             parameter_obj=ParameterConfig({}),
-            available_fields={
+            fields={
                 "Section": [
                     {
                         "name": "control_curves",
@@ -38,7 +38,7 @@ class TestDialogParameterControlCurvesWidget:
         form.enable_optimisation_section = False
         form.load_fields()
 
-        form_field = form.find_field_by_name("control_curves")
+        form_field = form.find_field("control_curves")
         # noinspection PyTypeChecker
         return form_field.widget
 
@@ -68,7 +68,7 @@ class TestDialogParameterControlCurvesWidget:
         widget = self.widget(
             value=value_dict,
         )
-        form_field: FormField = widget.form_field
+        form_field: FormField = widget.field
 
         if value_dict["control_curve"] is not None:
             expected_value = [value_dict["control_curve"]]

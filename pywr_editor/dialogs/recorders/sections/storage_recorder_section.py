@@ -1,4 +1,4 @@
-from pywr_editor.form import StoragePickerWidget
+from pywr_editor.form import FieldConfig, StoragePickerWidget
 
 from ..recorder_dialog_form import RecorderDialogForm
 from .abstract_recorder_section import AbstractRecorderSection
@@ -11,19 +11,17 @@ class StorageRecorderSection(AbstractRecorderSection):
         :param form: The parent form.
         :param section_data: A dictionary containing data to pass to the widget.
         """
-        fields = [
-            {
-                "name": "storage",
-                "label": "Storage node",
-                "field_type": StoragePickerWidget,
-                "value": form.get_recorder_dict_value("storage"),
-                "help_text": "Store the last volume of the storage node "
-                + "provided above for each scenario",
-            },
-        ]
         super().__init__(
             form=form,
             section_data=section_data,
-            section_fields=fields,
-            log_name=self.__class__.__name__,
+            section_fields=[
+                FieldConfig(
+                    name="storage",
+                    label="Storage node",
+                    field_type=StoragePickerWidget,
+                    value=form.field_value("storage"),
+                    help_text="Store the last volume of the storage node "
+                    "provided above for each scenario",
+                ),
+            ],
         )

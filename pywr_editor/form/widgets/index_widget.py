@@ -7,13 +7,13 @@ from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QLabel, QVBoxLayout
 
 from pywr_editor.form import (
-    FormCustomWidget,
     FormField,
-    FormValidation,
+    FormWidget,
     IndexColWidget,
     SourceSelectorWidget,
     TableSelectorWidget,
     UrlWidget,
+    Validation,
 )
 from pywr_editor.utils import (
     Logging,
@@ -40,7 +40,7 @@ class StoredIndexDict:
         self.index_types = []
 
 
-class IndexWidget(FormCustomWidget):
+class IndexWidget(FormWidget):
     default_index_name = "Anonymous index"
 
     def __init__(
@@ -92,7 +92,7 @@ class IndexWidget(FormCustomWidget):
         value. If the index names are not provided, the dictionary is empty. If at
         least one index value is not provided, all the values are set to None.
         """
-        value_source_field = self.form.find_field_by_name("source")
+        value_source_field = self.form.find_field("source")
         selected_source = value_source_field.value()
         # noinspection PyTypeChecker
         value_source_widget: SourceSelectorWidget = value_source_field.widget
@@ -100,15 +100,12 @@ class IndexWidget(FormCustomWidget):
         # dataframe from the table set in the table field
         if selected_source == value_source_widget.labels["table"]:
             # noinspection PyTypeChecker
-            table_selector_widget: TableSelectorWidget = (
-                self.form.find_field_by_name("table").widget
-            )
+            table_selector_widget: TableSelectorWidget = self.form.find_field(
+                "table"
+            ).widget
             # if table is not available or invalid, preserve index names from
             # table selector
-            if (
-                table_selector_widget.table is None
-                or table_selector_widget.table.empty
-            ):
+            if table_selector_widget.table is None or table_selector_widget.table.empty:
                 index_names = table_selector_widget.index_names
             else:
                 index_names = get_index_names(table_selector_widget.table)
@@ -142,9 +139,7 @@ class IndexWidget(FormCustomWidget):
             # and convert to string
             if isinstance(index_names[0], int):
                 # noinspection PyTypeChecker
-                url_widget: UrlWidget = self.form.find_field_by_name(
-                    "url"
-                ).widget
+                url_widget: UrlWidget = self.form.find_field("url").widget
                 columns = get_columns(url_widget.table, True)
                 new_index_names = []
                 for index in index_names:
@@ -198,8 +193,7 @@ class IndexWidget(FormCustomWidget):
             f"Using index names: {index_names} / index_values: {index_values}"
         )
         return {
-            index_name: index_values[ii]
-            for ii, index_name in enumerate(index_names)
+            index_name: index_values[ii] for ii, index_name in enumerate(index_names)
         }
 
     def after_form_render(self) -> None:
@@ -236,7 +230,7 @@ class IndexWidget(FormCustomWidget):
         """
         self.logger.debug("Fetching table")
         # noinspection PyTypeChecker
-        value_source_field = self.form.find_field_by_name("source")
+        value_source_field = self.form.find_field("source")
         selected_source = value_source_field.value()
         # noinspection PyTypeChecker
         value_source_widget: SourceSelectorWidget = value_source_field.widget
@@ -244,14 +238,12 @@ class IndexWidget(FormCustomWidget):
         # dataframe from the table set in the table field
         if selected_source == value_source_widget.labels["table"]:
             # noinspection PyTypeChecker
-            table_field: TableSelectorWidget = self.form.find_field_by_name(
-                "table"
-            ).widget
+            table_field: TableSelectorWidget = self.form.find_field("table").widget
             self.logger.debug("Table loaded from TableSelectorWidget")
         # dataframe from the table set in the url field
         elif selected_source == value_source_widget.labels["anonymous_table"]:
             # noinspection PyTypeChecker
-            table_field: UrlWidget = self.form.find_field_by_name("url").widget
+            table_field: UrlWidget = self.form.find_field("url").widget
             self.logger.debug("Table loaded from UrlWidget")
         else:
             self.logger.debug("The table cannot be fetched")
@@ -306,9 +298,7 @@ class IndexWidget(FormCustomWidget):
                     self.logger.debug("Index name found in passed values")
                     index_value = value[name]
                 else:
-                    self.logger.debug(
-                        "Value not available. Setting empty value"
-                    )
+                    self.logger.debug("Value not available. Setting empty value")
                     index_value = None
 
                 if index_value in ["", "None"] or index_value is None:
@@ -354,14 +344,12 @@ class IndexWidget(FormCustomWidget):
         Populates the widget with the ComboBox for each index.
         :return: None
         """
-        self.logger.debug(
-            f"Running on_populate_field Slot - {get_signal_sender(self)}"
-        )
+        self.logger.debug(f"Running on_populate_field Slot - {get_signal_sender(self)}")
 
         # empty the layout
         self.logger.debug("Resetting widget")
         clear_layout(self.layout)
-        self.form_field.clear_message(message_type="warning")
+        self.field.clear_message(message_type="warning")
 
         table, _ = self.table
         columns = get_columns(table)
@@ -374,23 +362,13 @@ class IndexWidget(FormCustomWidget):
                 )
             # no columns
             elif len(columns) == 0:
-                self.logger.debug(
-                    "The table does not contain any column. Keeping field disabled "
-                    + "with warning"
-                )
-                self.form_field.set_warning_message(
-                    "The table does not contain any column"
-                )
+                self.field.set_warning("The table does not contain any column")
+                self.logger.debug("Keeping field disabled with warning")
             # no rows - although columns are available and index names may be set,
             # just show dummy field
             elif len(table) == 0:
-                self.logger.debug(
-                    "The table does not contain any rows. Keeping field disabled "
-                    + "with warning"
-                )
-                self.form_field.set_warning_message(
-                    "The table does not contain any row"
-                )
+                self.field.set_warning("The table does not contain any row")
+                self.logger.debug("Keeping field disabled with warning")
             # show dummy field
             layout, _ = self.render_field_layout(default_index_name, 0)
             self.layout.addLayout(layout)
@@ -398,15 +376,11 @@ class IndexWidget(FormCustomWidget):
             wrong_index_values = []
             index_names = get_index_names(table)
 
-            self.logger.debug(
-                f"Found the following indexes: {', '.join(index_names)}"
-            )
+            self.logger.debug(f"Found the following indexes: {', '.join(index_names)}")
 
             # Add ComboBox and populate it
             for index_id, name in enumerate(index_names):
-                self.logger.debug(
-                    f"Rendering field #{index_id+1} for index '{name}'"
-                )
+                self.logger.debug(f"Rendering field #{index_id+1} for index '{name}'")
                 index_field_layout, combo_box = self.render_field_layout(
                     index_name=name,
                     index_number=index_id,
@@ -438,10 +412,9 @@ class IndexWidget(FormCustomWidget):
                 combo_box.currentTextChanged.connect(self.on_update_value)
 
             if wrong_index_values:
-                self.form_field.set_warning_message(
+                self.field.set_warning(
                     "The value of the following indexes is not valid or does not exist "
-                    + "in the table: "
-                    + ", ".join(wrong_index_values)
+                    "in the table: " + ", ".join(wrong_index_values)
                 )
 
     @Slot(str)
@@ -457,7 +430,7 @@ class IndexWidget(FormCustomWidget):
             f"Running on_update_value Slot - {get_signal_sender(self)} value changed "
             + f"to {new_index_value}"
         )
-        self.form_field.clear_message(message_type="warning")
+        self.field.clear_message(message_type="warning")
 
         # Collect all the index values to sanitise
         new_values = {}
@@ -543,20 +516,20 @@ class IndexWidget(FormCustomWidget):
         name: str,
         label: str,
         value: list[int | float | str] | int | float | str,
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Validates the field. The field fails validation when the value is None, or for
         multi-index, when at least one value is None.
         :param name: The field name.
         :param label: The field label.
         :param value: The field value.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         self.logger.debug("Validating field")
 
         if self.optional:
             self.logger.debug("Field is optional. Validation passed")
-            return FormValidation(validation=True)
+            return Validation()
 
         if value is None or (
             isinstance(value, list)
@@ -564,13 +537,10 @@ class IndexWidget(FormCustomWidget):
             and (not value or any(v is None for v in value) is None)
         ):
             self.logger.debug("Validation failed")
-            return FormValidation(
-                validation=False,
-                error_message="You must provide a value for all the table indexes",
-            )
+            return Validation("You must provide a value for all the table indexes")
 
         self.logger.debug("Validation passed")
-        return FormValidation(validation=True)
+        return Validation()
 
     def get_value_as_dict(self) -> dict[str, int | float | str]:
         """
@@ -622,7 +592,7 @@ class IndexWidget(FormCustomWidget):
             return dict_value[names[0]]
 
         # multi-indexes table
-        value_source_field = self.form.find_field_by_name("source")
+        value_source_field = self.form.find_field("source")
         selected_source = value_source_field.value()
         # noinspection PyTypeChecker
         value_source_widget: SourceSelectorWidget = value_source_field.widget
@@ -634,9 +604,7 @@ class IndexWidget(FormCustomWidget):
         # With anonymous tables, convert index dict to list using sorting from index_col
         elif selected_source == value_source_widget.labels["anonymous_table"]:
             # noinspection PyTypeChecker
-            index_col_widget: IndexColWidget = self.form.find_field_by_name(
-                "index_col"
-            ).widget
+            index_col_widget: IndexColWidget = self.form.find_field("index_col").widget
             index_names = index_col_widget.get_value()
             if index_names:
                 return [dict_value[index_name] for index_name in index_names]

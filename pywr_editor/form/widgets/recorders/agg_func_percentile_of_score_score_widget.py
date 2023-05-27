@@ -1,4 +1,4 @@
-from pywr_editor.form import FloatWidget, FormField, FormValidation
+from pywr_editor.form import FloatWidget, FormField, Validation
 
 """
  This widget handles the "score" argument when the recorder "agg_func" or
@@ -22,11 +22,7 @@ class AggFuncPercentileOfScoreScoreWidget(FloatWidget):
         """
         _value = None
         # the method is stored in the "kwargs" key
-        if (
-            isinstance(value, dict)
-            and "kwargs" in value
-            and "score" in value["kwargs"]
-        ):
+        if isinstance(value, dict) and "kwargs" in value and "score" in value["kwargs"]:
             _value = value["kwargs"]["score"]
 
         super().__init__(
@@ -41,7 +37,7 @@ class AggFuncPercentileOfScoreScoreWidget(FloatWidget):
         :param name: The field name.
         :param label: The field label.
         :param value: The field label. This is not used.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         status = super().validate(name, label, value)
 
@@ -49,8 +45,5 @@ class AggFuncPercentileOfScoreScoreWidget(FloatWidget):
             return status
 
         if not value:
-            return FormValidation(
-                error_message="You must provide a value",
-                validation=False,
-            )
-        return FormValidation(validation=True)
+            return Validation("You must provide a value")
+        return Validation()

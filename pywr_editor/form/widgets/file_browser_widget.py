@@ -5,7 +5,7 @@ import qtawesome as qta
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QLineEdit
 
-from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.form import FormField, FormWidget, Validation
 from pywr_editor.utils import Logging, get_signal_sender
 from pywr_editor.widgets import PushIconButton
 
@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 """
 
 
-class FileBrowserWidget(FormCustomWidget):
+class FileBrowserWidget(FormWidget):
     def __init__(
         self,
         name: str,
@@ -72,7 +72,7 @@ class FileBrowserWidget(FormCustomWidget):
         layout.addWidget(self.line_edit)
         layout.addWidget(self.browse_button)
 
-        self.form_field.set_warning_message(message)
+        self.field.set_warning(message)
 
     @Slot()
     def on_browse(self) -> None:
@@ -143,25 +143,21 @@ class FileBrowserWidget(FormCustomWidget):
         """
         return ""
 
-    def validate(self, name: str, label: str, value: str) -> FormValidation:
+    def validate(self, name: str, label: str, value: str) -> Validation:
         """
         Checks the file extension.
         :param name: The field name.
         :param label: The field label.
         :param value: The field value.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         if not value:
-            return FormValidation(
-                validation=False, error_message="You must provide a file path"
-            )
+            return Validation("You must provide a file path")
         elif value and not value.endswith(self.file_extension):
-            return FormValidation(
-                validation=False,
-                error_message="The file extension must be "
-                + f"{self.file_extension.upper()}",
+            return Validation(
+                f"The file extension must be {self.file_extension.upper()}",
             )
-        return FormValidation(validation=True)
+        return Validation()
 
     def reset(self) -> None:
         """

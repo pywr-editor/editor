@@ -4,9 +4,7 @@ import pytest
 from PySide6.QtCore import QTimer
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.dialogs.parameters.parameter_page_widget import (
-    ParameterPageWidget,
-)
+from pywr_editor.dialogs.parameters.parameter_page_widget import ParameterPageWidget
 from pywr_editor.form import FormField
 from pywr_editor.model import ModelConfig
 from tests.utils import check_msg, close_message_box, resolve_model_path
@@ -17,9 +15,7 @@ class TestDialogParameterFlowDelayParameter:
     Tests the section for FlowDelayParameter.
     """
 
-    model_file = resolve_model_path(
-        "model_dialog_parameter_flow_delay_section.json"
-    )
+    model_file = resolve_model_path("model_dialog_parameter_flow_delay_section.json")
 
     @pytest.fixture()
     def model_config(self) -> ModelConfig:
@@ -39,9 +35,7 @@ class TestDialogParameterFlowDelayParameter:
             ("invalid_both_set", None, "not both values at the same"),
         ],
     )
-    def test_validation(
-        self, qtbot, model_config, param_name, field_name, message
-    ):
+    def test_validation(self, qtbot, model_config, param_name, field_name, message):
         """
         Tests that the values are loaded correctly.
         """
@@ -56,7 +50,7 @@ class TestDialogParameterFlowDelayParameter:
 
         # send form and verify message in fields
         if field_name is not None:
-            form_field = selected_page.form.find_field_by_name(field_name)
+            form_field = selected_page.form.find_field(field_name)
             if message is not None:
                 QTimer.singleShot(100, close_message_box)
                 selected_page.form.validate()

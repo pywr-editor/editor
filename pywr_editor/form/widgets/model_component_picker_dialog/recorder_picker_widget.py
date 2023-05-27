@@ -2,16 +2,13 @@ from typing import TYPE_CHECKING, Union
 
 from pywr_editor.form import (
     FormField,
-    FormValidation,
     ModelRecorderPickerWidget,
     ParameterPickerWidget,
+    Validation,
 )
 
 if TYPE_CHECKING:
-    from pywr_editor.form import (
-        ParameterPickerFormWidget,
-        RecorderPickerFormWidget,
-    )
+    from pywr_editor.form import ParameterPickerFormWidget, RecorderPickerFormWidget
 
 """
  This widgets inherits from ModelRecorderPickerWidget but
@@ -21,9 +18,7 @@ if TYPE_CHECKING:
 
 
 class RecorderPickerWidget(ModelRecorderPickerWidget):
-    def __init__(
-        self, name: str, value: str | None, parent: FormField, **kwargs
-    ):
+    def __init__(self, name: str, value: str | None, parent: FormField, **kwargs):
         """
         Initialises the widget.
         :param name: The field name.
@@ -32,16 +27,14 @@ class RecorderPickerWidget(ModelRecorderPickerWidget):
         """
         super().__init__(name, value, parent, **kwargs)
 
-    def validate(self, name: str, label: str, value: str) -> FormValidation:
+    def validate(self, name: str, label: str, value: str) -> Validation:
         """
         Validates the value. The name is mandatory only if the value of
         ModelComponentSelectorWidget is set to "model_component".
         :param name: The field name.
         :param label: The field label.
         :param value: The field value.
-        :return: The instance of FormValidation
+        :return: The instance of Validation
         """
-        self.form: Union[
-            "ParameterPickerFormWidget", "RecorderPickerFormWidget"
-        ]
+        self.form: Union["ParameterPickerFormWidget", "RecorderPickerFormWidget"]
         return ParameterPickerWidget.validate_model_component(value, self.form)

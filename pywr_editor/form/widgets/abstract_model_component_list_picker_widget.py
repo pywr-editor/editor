@@ -6,10 +6,10 @@ from PySide6.QtWidgets import QAbstractItemView, QHBoxLayout, QVBoxLayout
 
 from pywr_editor.form import (
     AbstractModelComponentListPickerModel,
-    FormCustomWidget,
     FormField,
-    FormValidation,
+    FormWidget,
     ModelComponentPickerDialog,
+    Validation,
 )
 from pywr_editor.model import ParameterConfig, RecorderConfig
 from pywr_editor.utils import Logging, get_signal_sender, move_row
@@ -24,7 +24,7 @@ if TYPE_CHECKING:
 """
 
 
-class AbstractModelComponentsListPickerWidget(FormCustomWidget):
+class AbstractModelComponentsListPickerWidget(FormWidget):
     def __init__(
         self,
         name: str,
@@ -53,9 +53,7 @@ class AbstractModelComponentsListPickerWidget(FormCustomWidget):
         the component types as well.
         """
         self.logger = Logging().logger(log_name)
-        self.logger.debug(
-            f"Loading widget for {component_type} with value {value}"
-        )
+        self.logger.debug(f"Loading widget for {component_type} with value {value}")
 
         super().__init__(name, value, parent)
 
@@ -71,7 +69,7 @@ class AbstractModelComponentsListPickerWidget(FormCustomWidget):
                 self.model_config.includes.get_custom_parameters().keys()
             )
             self._config_prop = self.model_config.parameters
-            self._exist_config_method = self._config_prop.does_parameter_exist
+            self._exist_config_method = self._config_prop.exists
             self._config_class = ParameterConfig
         elif self.is_recorder:
             self.components_data = self.model_config.pywr_recorder_data
@@ -79,26 +77,20 @@ class AbstractModelComponentsListPickerWidget(FormCustomWidget):
                 self.model_config.includes.get_custom_recorders().keys()
             )
             self._config_prop = self.model_config.recorders
-            self._exist_config_method = self._config_prop.does_recorder_exist
+            self._exist_config_method = self._config_prop.exists
             self._config_class = RecorderConfig
         else:
-            raise ValueError(
-                "The component_type can only be 'parameter' or 'recorder'"
-            )
+            raise ValueError("The component_type can only be 'parameter' or 'recorder'")
 
         # include only certain component types
         if include_component_key is not None:
             if isinstance(include_component_key, str):
                 include_component_key = [include_component_key]
             # convert to lowercase
-            include_component_key = [
-                key.lower() for key in include_component_key
-            ]
+            include_component_key = [key.lower() for key in include_component_key]
 
             # check if the component type exists
-            all_component_keys = self.components_data.keys + list(
-                custom_component_keys
-            )
+            all_component_keys = self.components_data.keys + list(custom_component_keys)
             for comp_key in include_component_key:
                 if comp_key not in all_component_keys:
                     raise ValueError(
@@ -198,9 +190,7 @@ class AbstractModelComponentsListPickerWidget(FormCustomWidget):
             self.list = ListView(**widget_args)
         self.list.setMaximumHeight(100)
         # noinspection PyUnresolvedReferences
-        self.list.selectionModel().selectionChanged.connect(
-            self.on_selection_changed
-        )
+        self.list.selectionModel().selectionChanged.connect(self.on_selection_changed)
 
         # Set layout
         layout = QVBoxLayout(self)
@@ -217,7 +207,7 @@ class AbstractModelComponentsListPickerWidget(FormCustomWidget):
         :return: None
         """
         self.logger.debug("Registering post-render section actions")
-        self.form_field.set_warning_message(self.warning_message)
+        self.field.set_warning(self.warning_message)
 
     @Slot()
     def on_selection_changed(self) -> None:
@@ -247,12 +237,8 @@ class AbstractModelComponentsListPickerWidget(FormCustomWidget):
         Moves a parameter up in the list.
         :return: None
         """
-        self.logger.debug(
-            f"Running on_move_up Slot from {get_signal_sender(self)}"
-        )
-        move_row(
-            widget=self.list, direction="up", callback=self.move_row_in_model
-        )
+        self.logger.debug(f"Running on_move_up Slot from {get_signal_sender(self)}")
+        move_row(widget=self.list, direction="up", callback=self.move_row_in_model)
 
     @Slot()
     def on_move_down(self) -> None:
@@ -260,12 +246,8 @@ class AbstractModelComponentsListPickerWidget(FormCustomWidget):
         Moves a parameter down in the list.
         :return: None
         """
-        self.logger.debug(
-            f"Running on_move_down Slot from {get_signal_sender(self)}"
-        )
-        move_row(
-            widget=self.list, direction="down", callback=self.move_row_in_model
-        )
+        self.logger.debug(f"Running on_move_down Slot from {get_signal_sender(self)}")
+        move_row(widget=self.list, direction="down", callback=self.move_row_in_model)
 
     def move_row_in_model(self, current_index: int, new_index: int) -> None:
         """
@@ -274,9 +256,7 @@ class AbstractModelComponentsListPickerWidget(FormCustomWidget):
         :param new_index: The row index the item is being moved to.
         :return: None
         """
-        self.model.values.insert(
-            new_index, self.model.values.pop(current_index)
-        )
+        self.model.values.insert(new_index, self.model.values.pop(current_index))
         self.logger.debug(f"Moved row index {current_index} to {new_index}")
 
     @Slot()
@@ -312,16 +292,12 @@ class AbstractModelComponentsListPickerWidget(FormCustomWidget):
         Opens the dialog to edit an existing component from the list.
         :return: None
         """
-        current_index = (
-            self.list.selectionModel().selection().indexes()[0].row()
-        )
+        current_index = self.list.selectionModel().selection().indexes()[0].row()
 
         model_value = self.model.values[current_index]
         # model component
         if isinstance(model_value, str):
-            component_config = self._config_prop.get_config_from_name(
-                model_value, as_dict=False
-            )
+            component_config = self._config_prop.config(model_value, as_dict=False)
         # component dictionary
         else:
             component_config = self._config_class(
@@ -403,9 +379,7 @@ class AbstractModelComponentsListPickerWidget(FormCustomWidget):
             self.logger.debug("The value is not provided. Using default.")
         # value must be a list
         elif not isinstance(value, list):
-            message = (
-                "The value provided in the model configuration is not valid"
-            )
+            message = "The value provided in the model configuration is not valid"
             self.logger.debug(message)
         # the list must contain strings, dictionaries (ignore bool treated as int) or
         # numbers (for parameters only)
@@ -413,9 +387,7 @@ class AbstractModelComponentsListPickerWidget(FormCustomWidget):
             any([isinstance(el, bool) for el in value]) is True
             or (
                 self.is_parameter
-                and not all(
-                    [isinstance(el, (float, dict, int, str)) for el in value]
-                )
+                and not all([isinstance(el, (float, dict, int, str)) for el in value])
             )
             or (
                 self.is_recorder
@@ -424,9 +396,7 @@ class AbstractModelComponentsListPickerWidget(FormCustomWidget):
         ):
             message = "The value provided in the model configuration can contain only "
             if self.is_parameter:
-                message += (
-                    f"numbers or valid {self.component_type} configurations"
-                )
+                message += f"numbers or valid {self.component_type} configurations"
             elif self.is_recorder:
                 message += f"valid {self.component_type} configurations"
         else:
@@ -452,14 +422,8 @@ class AbstractModelComponentsListPickerWidget(FormCustomWidget):
                     for comp in final_value:
                         comp_config = None
                         # model component
-                        if isinstance(comp, str) and self._exist_config_method(
-                            comp
-                        ):
-                            comp_config = (
-                                self._config_prop.get_config_from_name(
-                                    comp, as_dict=False
-                                )
-                            )
+                        if isinstance(comp, str) and self._exist_config_method(comp):
+                            comp_config = self._config_prop.config(comp, as_dict=False)
                         # anonymous component
                         elif isinstance(comp, dict):
                             comp_config = self._config_class(props=comp)
@@ -489,9 +453,9 @@ class AbstractModelComponentsListPickerWidget(FormCustomWidget):
                     # check that the model component exists
                     valid_values = []
                     for comp in final_value:
-                        if isinstance(
-                            comp, str
-                        ) and not self._exist_config_method(comp):
+                        if isinstance(comp, str) and not self._exist_config_method(
+                            comp
+                        ):
                             message = (
                                 f"One or more model {self.component_type}s do "
                                 + "not exist and were removed from the list"
@@ -522,38 +486,32 @@ class AbstractModelComponentsListPickerWidget(FormCustomWidget):
         """
         return self.model.values
 
-    def validate(
-        self, name: str, label: str, _: list[dict | str]
-    ) -> FormValidation:
+    def validate(self, name: str, label: str, _: list[dict | str]) -> Validation:
         """
         Checks that the value is valid.
         :param name: The field name.
         :param label: The field label.
         :param _: The field value.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         value = self.get_value()
         self.logger.debug(f"Validating field with {value}")
 
         # empty list
         if not value and self.is_mandatory:
-            return FormValidation(
-                validation=False,
-                error_message="The field cannot be empty",
-            )
+            return Validation("The field cannot be empty")
         # skip validation if field is optional
         elif self.is_mandatory is False:
-            return FormValidation(validation=True)
+            return Validation()
 
         # model component does not exist
         for v in value:
             if isinstance(v, str) and self._exist_config_method(v) is False:
-                return FormValidation(
-                    validation=False,
-                    error_message=f"The {self.component_type} named '{v}' does "
-                    + "not exist in the model configuration",
+                return Validation(
+                    f"The {self.component_type} named '{v}' does "
+                    "not exist in the model configuration",
                 )
-        return FormValidation(validation=True)
+        return Validation()
 
     def reset(self) -> None:
         """

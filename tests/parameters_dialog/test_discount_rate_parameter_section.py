@@ -2,9 +2,7 @@ import pytest
 from PySide6.QtCore import QTimer
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.dialogs.parameters.parameter_page_widget import (
-    ParameterPageWidget,
-)
+from pywr_editor.dialogs.parameters.parameter_page_widget import ParameterPageWidget
 from pywr_editor.form import FormField
 from pywr_editor.model import ModelConfig
 from tests.utils import close_message_box, resolve_model_path
@@ -54,7 +52,7 @@ class TestDialogParameterControlCurveParameterSection:
         assert selected_page.findChild(FormField, "name").value() == param_name
 
         # send form and verify message
-        form_field = selected_page.form.find_field_by_name(field_name_to_check)
+        form_field = selected_page.form.find_field(field_name_to_check)
 
         if message is not None:
             QTimer.singleShot(100, close_message_box)

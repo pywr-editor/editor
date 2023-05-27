@@ -7,7 +7,7 @@ from PySide6.QtCore import QLineF, QPointF, QRectF, Slot
 from PySide6.QtGui import QPainter, QPainterPath, QPen, QPolygonF, Qt
 from PySide6.QtWidgets import QGraphicsItem, QGraphicsLineItem
 
-from pywr_editor.form import ColorPickerWidget
+from pywr_editor.form import ColorPickerWidget, FieldConfig, IntegerWidget
 from pywr_editor.model import LineArrowShape
 from pywr_editor.style import Color
 from pywr_editor.widgets import ContextualMenu
@@ -79,9 +79,7 @@ class SchematicArrow(AbstractSchematicShape, QGraphicsLineItem):
         self.prev_position = self.scenePos().toTuple()
         self.update_handle_position()
 
-    def hoverMoveEvent(
-        self, event: PySide6.QtWidgets.QGraphicsSceneHoverEvent
-    ) -> None:
+    def hoverMoveEvent(self, event: PySide6.QtWidgets.QGraphicsSceneHoverEvent) -> None:
         """
         Change the cursor when the cursor is on the resize handle.
         :param event: The event instance.
@@ -122,9 +120,7 @@ class SchematicArrow(AbstractSchematicShape, QGraphicsLineItem):
 
         super().mousePressEvent(event)
 
-    def mouseMoveEvent(
-        self, event: PySide6.QtWidgets.QGraphicsSceneMouseEvent
-    ) -> None:
+    def mouseMoveEvent(self, event: PySide6.QtWidgets.QGraphicsSceneMouseEvent) -> None:
         """
         Resizes the shape.
         :param event: The event instance.
@@ -223,9 +219,7 @@ class SchematicArrow(AbstractSchematicShape, QGraphicsLineItem):
         if scene_moved_point.y() <= 0:
             scene_moved_point.setY(self.handle_size)
         if scene_moved_point.y() >= self.view.schematic_height:
-            scene_moved_point.setY(
-                self.view.schematic_height - self.handle_size
-            )
+            scene_moved_point.setY(self.view.schematic_height - self.handle_size)
 
         return self.mapFromScene(scene_moved_point)
 
@@ -311,12 +305,8 @@ class SchematicArrow(AbstractSchematicShape, QGraphicsLineItem):
         if not self.handles:
             return QPainterPath()
 
-        source_p1, source_p2 = self.get_shape_boundary_points(
-            Handles.SOURCE_POINT
-        )
-        target_p1, target_p2 = self.get_shape_boundary_points(
-            Handles.TARGET_POINT
-        )
+        source_p1, source_p2 = self.get_shape_boundary_points(Handles.SOURCE_POINT)
+        target_p1, target_p2 = self.get_shape_boundary_points(Handles.TARGET_POINT)
         path = QPainterPath()
         path.moveTo(source_p1)
         path.lineTo(source_p2)
@@ -428,20 +418,20 @@ class SchematicArrow(AbstractSchematicShape, QGraphicsLineItem):
         dialog = ShapeDialog(
             shape_id=self.shape_obj.id,
             form_fields=[
-                {
-                    "name": "border_size",
-                    "default_value": self.shape_obj.default_border_size,
-                    "value": self.shape_obj.border_size,
-                    "field_type": "integer",
-                    "min_value": 1,
-                    "max_value": self.shape_obj.max_border_size,
-                },
-                {
-                    "name": "border_color",
-                    "field_type": ColorPickerWidget,
-                    "default_value": self.shape_obj.default_border_color,
-                    "value": self.shape_obj.border_color.toTuple()[0:3],
-                },
+                FieldConfig(
+                    name="border_size",
+                    default_value=self.shape_obj.default_border_size,
+                    value=self.shape_obj.border_size,
+                    field_type=IntegerWidget,
+                    field_args={"min_value": 1},
+                    max_value=self.shape_obj.max_border_size,
+                ),
+                FieldConfig(
+                    name="border_color",
+                    field_type=ColorPickerWidget,
+                    default_value=self.shape_obj.default_border_color,
+                    value=self.shape_obj.border_color.toTuple()[0:3],
+                ),
             ],
             append_form_items={
                 "length": self.shape_obj.length,
@@ -452,8 +442,6 @@ class SchematicArrow(AbstractSchematicShape, QGraphicsLineItem):
         )
 
         # enable save button when a new colour is selected
-        color_widget: ColorPickerWidget = dialog.form.find_field_by_name(
-            "border_color"
-        ).widget
+        color_widget: ColorPickerWidget = dialog.form.find_field("border_color").widget
         color_widget.changed_color.connect(dialog.form.on_field_changed)
         dialog.show()

@@ -3,9 +3,10 @@ from typing import TYPE_CHECKING
 from PySide6.QtWidgets import QPushButton
 
 from pywr_editor.form import (
-    FormValidation,
+    FieldConfig,
     RecorderForm,
     RecorderTypeSelectorWidget,
+    Validation,
 )
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import Logging
@@ -52,32 +53,30 @@ class RecorderDialogForm(RecorderForm):
         )
         available_fields = {
             "General": [
-                {
-                    "name": "name",
-                    "value": name,
-                    "help_text": "A unique name identifying the recorder",
-                    "allow_empty": False,
-                    "validate_fun": self._check_recorder_name,
-                },
-                {
-                    "name": "type",
-                    "field_type": RecorderTypeSelectorWidget,
-                    "value": self.recorder_obj,
-                },
+                FieldConfig(
+                    name="name",
+                    value=name,
+                    help_text="A unique name identifying the recorder",
+                    allow_empty=False,
+                    validate_fun=self._check_recorder_name,
+                ),
+                FieldConfig(
+                    name="type",
+                    field_type=RecorderTypeSelectorWidget,
+                    value=self.recorder_obj,
+                ),
             ],
         }
 
         super().__init__(
             model_config=model_config,
             recorder_obj=self.recorder_obj,
-            available_fields=available_fields,
+            fields=available_fields,
             save_button=save_button,
             parent=parent,
         )
 
-    def _check_recorder_name(
-        self, name: str, label: str, value: str
-    ) -> FormValidation:
+    def _check_recorder_name(self, name: str, label: str, value: str) -> Validation:
         """
         Checks that the new recorder name is not duplicated.
         :param name: The field name.
@@ -86,23 +85,15 @@ class RecorderDialogForm(RecorderForm):
         :return: True if the name validates correctly, False otherwise.
         """
         # do not save form if the name is changed and already exists
-        if (
-            self.name != value
-            and self.model_config.recorders.does_recorder_exist(value) is True
-        ):
-            return FormValidation(
-                validation=False,
-                error_message=f'The recorder "{value}" already exists. '
-                + "Please provide a different name.",
+        if self.name != value and self.model_config.recorders.exists(value) is True:
+            return Validation(
+                f'The recorder "{value}" already exists. '
+                "Please provide a different name."
             )
-        if (
-            self.name != value
-            and self.model_config.parameters.does_parameter_exist(value) is True
-        ):
-            return FormValidation(
-                validation=False,
-                error_message=f'A parameter named "{value}" already exists. '
-                + "The name of model components must be unique. Please provide "
-                + "a different name.",
+        if self.name != value and self.model_config.parameters.exists(value) is True:
+            return Validation(
+                f'A parameter named "{value}" already exists. '
+                "The name of model components must be unique. Please provide "
+                "a different name.",
             )
-        return FormValidation(validation=True)
+        return Validation()

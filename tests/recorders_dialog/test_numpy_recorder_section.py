@@ -1,9 +1,7 @@
 import pytest
 
 from pywr_editor.dialogs import RecordersDialog
-from pywr_editor.dialogs.recorders.recorder_page_widget import (
-    RecorderPageWidget,
-)
+from pywr_editor.dialogs.recorders.recorder_page_widget import RecorderPageWidget
 from pywr_editor.form import FormField, TemporalAggFuncWidget
 from pywr_editor.model import ModelConfig
 from tests.utils import resolve_model_path
@@ -66,12 +64,10 @@ class TestDialogRecorderNumpyRecorderSection:
         form = selected_page.form
 
         # noinspection PyUnresolvedReferences
-        assert (
-            selected_page.findChild(FormField, "name").value() == recorder_name
-        )
+        assert selected_page.findChild(FormField, "name").value() == recorder_name
 
         # 1. Test init of widgets
-        agg_func_widget: TemporalAggFuncWidget = form.find_field_by_name(
+        agg_func_widget: TemporalAggFuncWidget = form.find_field(
             "temporal_agg_func"
         ).widget
 
@@ -88,23 +84,19 @@ class TestDialogRecorderNumpyRecorderSection:
             visible_fields = self.percentile_fields
             # check value of fields
             assert (
-                form.find_field_by_name(
-                    agg_func_widget.agg_func_percentile_list
-                ).value()
+                form.find_field(agg_func_widget.agg_func_percentile_list).value()
                 == expected_agg_func["args"]
             )
             assert (
-                form.find_field_by_name(
-                    agg_func_widget.agg_func_percentile_method
-                ).value()
+                form.find_field(agg_func_widget.agg_func_percentile_method).value()
                 == expected_agg_func["kwargs"]["method"]
             )
 
         # 2. Check field visibility
         for field in hidden_fields:
-            assert form.find_field_by_name(field).isVisible() is False
+            assert form.find_field(field).isVisible() is False
         for field in visible_fields:
-            assert form.find_field_by_name(field).isVisible() is True
+            assert form.find_field(field).isVisible() is True
 
         # 3. Send form and check resulting dictionary
         form_data = form.save()
@@ -120,16 +112,16 @@ class TestDialogRecorderNumpyRecorderSection:
             agg_func_widget.combo_box.setCurrentText("Percentile")
             # percentile fields are shown
             for field in self.percentile_fields:
-                assert form.find_field_by_name(field).isVisible() is True
+                assert form.find_field(field).isVisible() is True
             agg_func_widget.combo_box.setCurrentText("Percentile of score")
             # percentile fields are shown
             for field in self.percentile_fields:
-                assert form.find_field_by_name(field).isVisible() is False
+                assert form.find_field(field).isVisible() is False
             # percentileofscore fields are shown
             for field in self.percentileofsocre_fields:
-                assert form.find_field_by_name(field).isVisible() is True
+                assert form.find_field(field).isVisible() is True
         else:
             agg_func_widget.combo_box.setCurrentText("Sum")
             # percentile and percentileofscore fields are hidden
             for field in self.percentile_fields + self.percentileofsocre_fields:
-                assert form.find_field_by_name(field).isVisible() is False
+                assert form.find_field(field).isVisible() is False

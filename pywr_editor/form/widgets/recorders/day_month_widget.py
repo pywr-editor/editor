@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QVBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.form import FormField, FormWidget, Validation
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import SpinBox
 
@@ -9,10 +9,8 @@ from pywr_editor.widgets import SpinBox
 """
 
 
-class DayMonthWidget(FormCustomWidget):
-    def __init__(
-        self, name: str, value: dict[str, int | None], parent: FormField
-    ):
+class DayMonthWidget(FormWidget):
+    def __init__(self, name: str, value: dict[str, int | None], parent: FormField):
         """
         Initialises the widget.
         :param name: The field name.
@@ -65,14 +63,12 @@ class DayMonthWidget(FormCustomWidget):
         :return: None
         """
         self.logger.debug("Registering post-render section actions")
-        self.form_field.set_warning_message(self.warning_message)
+        self.field.set_warning(self.warning_message)
 
         if self.warning_message:
             self.logger.debug(self.warning_message)
 
-    def sanitise_values(
-        self, values: dict[str, int | None]
-    ) -> [int, int, str | None]:
+    def sanitise_values(self, values: dict[str, int | None]) -> [int, int, str | None]:
         """
         Sanitises the values.
         :param values: A dictionary with the day and month.
@@ -93,13 +89,9 @@ class DayMonthWidget(FormCustomWidget):
         elif not values["day"] and values["month"]:
             warning_message = "You must provide the day"
         # check types
-        elif not isinstance(values["day"], int) or not (
-            1 <= values["day"] <= 31
-        ):
+        elif not isinstance(values["day"], int) or not (1 <= values["day"] <= 31):
             warning_message = "The day must be a number between 1 and 31"
-        elif not isinstance(values["month"], int) or not (
-            1 <= values["month"] <= 12
-        ):
+        elif not isinstance(values["month"], int) or not (1 <= values["month"] <= 12):
             warning_message = "The month must be a number between 1 and 12"
         else:
             day = values["day"]
@@ -125,26 +117,18 @@ class DayMonthWidget(FormCustomWidget):
         """
         return {"day": 0, "month": 0}
 
-    def validate(
-        self, name: str, label: str, value: dict[str | int]
-    ) -> FormValidation:
+    def validate(self, name: str, label: str, value: dict[str | int]) -> Validation:
         """
         :param name: The field name.
         :param label: The field label.
         :param value: The field value.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         if value["day"] == 0 and value["month"] > 0:
-            return FormValidation(
-                validation=False,
-                error_message="You must provide the day, when you set the month",
-            )
+            return Validation("You must provide the day, when you set the month")
         elif value["day"] > 0 and value["month"] == 0:
-            return FormValidation(
-                validation=False,
-                error_message="You must provide the month, when you set the day",
-            )
-        return FormValidation(validation=True)
+            return Validation("You must provide the month, when you set the day")
+        return Validation()
 
     def after_validate(self, form_dict: dict, form_field_name: str) -> None:
         """

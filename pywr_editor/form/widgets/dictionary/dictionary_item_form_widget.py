@@ -4,7 +4,9 @@ from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QPushButton, QWidget
 
 from pywr_editor.form import (
+    BooleanWidget,
     DataTypeDictionaryItemWidget,
+    FieldConfig,
     FloatWidget,
     Form,
     ModelParameterPickerWidget,
@@ -66,99 +68,99 @@ class DictionaryItemFormWidget(Form):
 
         available_fields = {
             "Dictionary item": [
-                {"name": "key", "value": dict_key, "allow_empty": False},
-                {
-                    "name": "data_type",
-                    "label": "Data type",
-                    "field_type": DataTypeDictionaryItemWidget,
-                    "value": dict_value,
-                },
-                {
-                    "name": "field_bool",
-                    "label": "Boolean value",
-                    "field_type": "boolean",
-                    "value": dict_value,
-                },
-                {
-                    "name": "field_number",
-                    "label": "Value",
-                    "field_type": FloatWidget,
-                    "value": dict_value,
-                },
-                {
-                    "name": "field_node",
-                    "label": "Node name",
-                    "field_type": NodePickerWidget,
-                    "value": dict_value,
-                },
-                {
-                    "name": "field_parameter",
-                    "label": "Parameter name",
-                    "field_type": ModelParameterPickerWidget,
-                    "value": dict_value,
-                },
-                {
-                    "name": "field_recorder",
-                    "label": "Recorder name",
-                    "field_type": ModelRecorderPickerWidget,
-                    "value": dict_value,
-                },
-                {
-                    "name": "field_table",
-                    "label": "Table name",
-                    "field_type": TableSelectorWidget,
-                    "field_args": {"static": True},
-                    "value": dict_value,
-                },
-                {
-                    "name": "field_scenario",
-                    "label": "Scenario name",
-                    "field_type": ScenarioPickerWidget,
-                    "value": dict_value,
-                },
-                {
-                    "name": "field_string",
-                    "label": "String",
-                    "value": dict_value,
-                },
-                {
-                    "name": "field_1d_array",
-                    "label": "1 dimensional array",
-                    "field_type": TableValuesWidget,
-                    "field_args": {"min_total_values": 1},
-                    "value": data_values_dict
+                FieldConfig(name="key", value=dict_key, allow_empty=False),
+                FieldConfig(
+                    name="data_type",
+                    label="Data type",
+                    field_type=DataTypeDictionaryItemWidget,
+                    value=dict_value,
+                ),
+                FieldConfig(
+                    name="field_bool",
+                    label="Boolean value",
+                    field_type=BooleanWidget,
+                    value=dict_value,
+                ),
+                FieldConfig(
+                    name="field_number",
+                    label="Value",
+                    field_type=FloatWidget,
+                    value=dict_value,
+                ),
+                FieldConfig(
+                    name="field_node",
+                    label="Node name",
+                    field_type=NodePickerWidget,
+                    value=dict_value,
+                ),
+                FieldConfig(
+                    name="field_parameter",
+                    label="Parameter name",
+                    field_type=ModelParameterPickerWidget,
+                    value=dict_value,
+                ),
+                FieldConfig(
+                    name="field_recorder",
+                    label="Recorder name",
+                    field_type=ModelRecorderPickerWidget,
+                    value=dict_value,
+                ),
+                FieldConfig(
+                    name="field_table",
+                    label="Table name",
+                    field_type=TableSelectorWidget,
+                    field_args={"static": True},
+                    value=dict_value,
+                ),
+                FieldConfig(
+                    name="field_scenario",
+                    label="Scenario name",
+                    field_type=ScenarioPickerWidget,
+                    value=dict_value,
+                ),
+                FieldConfig(
+                    name="field_string",
+                    label="String",
+                    value=dict_value,
+                ),
+                FieldConfig(
+                    name="field_1d_array",
+                    label="1 dimensional array",
+                    field_type=TableValuesWidget,
+                    field_args={"min_total_values": 1},
+                    value=data_values_dict
                     if len(data_values_dict) == 1
                     else empty_data_values_dict,
-                },
-                {
-                    "name": "field_2d_array",
-                    "label": "2 dimensional array",
-                    "field_type": TableValuesWidget,
-                    "field_args": {"min_total_values": 1},
-                    "value": data_values_dict
+                ),
+                FieldConfig(
+                    name="field_2d_array",
+                    label="2 dimensional array",
+                    field_type=TableValuesWidget,
+                    field_args={"min_total_values": 1},
+                    value=data_values_dict
                     if len(data_values_dict) == 2
                     else empty_data_values_dict,
-                },
-                {
-                    "name": "field_3d_array",
-                    "label": "3 dimensional array",
-                    "field_type": TableValuesWidget,
-                    "field_args": {"min_total_values": 1},
-                    "value": data_values_dict
+                ),
+                FieldConfig(
+                    name="field_3d_array",
+                    label="3 dimensional array",
+                    field_type=TableValuesWidget,
+                    field_args={"min_total_values": 1},
+                    value=data_values_dict
                     if len(data_values_dict) == 3
                     else empty_data_values_dict,
-                },
-                {
-                    "name": "field_dict",
-                    "label": "Dictionary",
-                    "field_type": DictionaryWidget,
-                    "value": dict_value,
-                },
+                ),
+                FieldConfig(
+                    name="field_dict",
+                    label="Dictionary",
+                    field_type=DictionaryWidget,
+                    value=dict_value,
+                ),
             ],
         }
 
         super().__init__(
-            available_fields=available_fields,
+            fields=available_fields,
             save_button=save_button,
             parent=parent,
             direction="vertical",
@@ -182,7 +184,7 @@ class DictionaryItemFormWidget(Form):
 
         # the url and table keys must be set up by enabling the external data toggle
         if form_data["key"] in ["url", "table"]:
-            self.find_field_by_name("key").set_warning_message(
+            self.find_field("key").set_warning(
                 "To configure external data using the 'url' or 'table' dictionary "
                 "keys, you must use the External data toggle in the previous form"
             )

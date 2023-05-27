@@ -20,8 +20,7 @@ class MetadataCustomFieldsModel(QAbstractTableModel):
 
     def data(
         self,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
         role: int = ...,
     ) -> Any:
         """
@@ -30,10 +29,7 @@ class MetadataCustomFieldsModel(QAbstractTableModel):
         :param role: The item role.
         :return: The item key or value.
         """
-        if (
-            role == Qt.ItemDataRole.DisplayRole
-            or role == Qt.ItemDataRole.EditRole
-        ):
+        if role == Qt.ItemDataRole.DisplayRole or role == Qt.ItemDataRole.EditRole:
             return self.fields[index.row()][index.column()]
 
     def headerData(
@@ -60,8 +56,7 @@ class MetadataCustomFieldsModel(QAbstractTableModel):
 
     def rowCount(
         self,
-        parent: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex = ...,
+        parent: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex = ...,
     ) -> int:
         """
         Provides the total number of rows.
@@ -72,8 +67,7 @@ class MetadataCustomFieldsModel(QAbstractTableModel):
 
     def columnCount(
         self,
-        parent: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex = ...,
+        parent: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex = ...,
     ) -> int:
         """
         Provides the total number of columns.
@@ -84,8 +78,7 @@ class MetadataCustomFieldsModel(QAbstractTableModel):
 
     def setData(
         self,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
         value: Any,
         role: int = ...,
     ) -> bool:
@@ -113,8 +106,7 @@ class MetadataCustomFieldsModel(QAbstractTableModel):
 
     def flags(
         self,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
     ) -> PySide6.QtCore.Qt.ItemFlag:
         """
         Handles the item flags to make each cell editable.

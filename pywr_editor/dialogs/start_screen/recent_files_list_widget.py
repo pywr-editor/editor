@@ -27,8 +27,7 @@ class ListViewDelegate(QStyledItemDelegate):
     def sizeHint(
         self,
         option: PySide6.QtWidgets.QStyleOptionViewItem,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
     ) -> PySide6.QtCore.QSize:
         """
         Defines the size hint for the item.
@@ -76,8 +75,7 @@ class ListViewDelegate(QStyledItemDelegate):
         self,
         painter: PySide6.QtGui.QPainter,
         option: PySide6.QtWidgets.QStyleOptionViewItem,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
     ) -> None:
         """
         Paints the item.
@@ -272,9 +270,7 @@ class RecentFileListWidget(QListWidget):
                 "background-color": Color("blue", 200).hex,
                 "border": f'1px solid {Color("blue", 400).hex}',
             },
-            "RecentFileListWidget:item:disabled": {
-                "background-color": "transparent"
-            },
+            "RecentFileListWidget:item:disabled": {"background-color": "transparent"},
         }
 
         return stylesheet_dict_to_str(style)

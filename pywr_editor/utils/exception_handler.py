@@ -41,10 +41,7 @@ class ExceptionHandler(QObject):
                 ]
             )
             log = logging.getLogger(__name__)
-            log_file = (
-                get_app_path()
-                / f"error_{datetime.now().strftime('%Y%m%d')}.log"
-            )
+            log_file = get_app_path() / f"error_{datetime.now().strftime('%Y%m%d')}.log"
             log.addHandler(logging.FileHandler(log_file))
             # force logs to be on in case the app is started without logging
             logging.disable(logging.INFO)

@@ -5,9 +5,7 @@ from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import QApplication, QMessageBox, QPushButton, QWidget
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.dialogs.parameters.parameter_page_widget import (
-    ParameterPageWidget,
-)
+from pywr_editor.dialogs.parameters.parameter_page_widget import ParameterPageWidget
 from pywr_editor.form import CheckSumWidget, FormField, ParameterForm
 from pywr_editor.model import ModelConfig, ParameterConfig
 from pywr_editor.widgets import PushIconButton
@@ -32,7 +30,7 @@ class TestDialogParameterCheckSumWidget:
         form = ParameterForm(
             model_config=ModelConfig(resolve_model_path("model_tables.json")),
             parameter_obj=ParameterConfig({}),
-            available_fields={
+            fields={
                 "Section": [
                     {
                         "name": "checksum",
@@ -47,7 +45,7 @@ class TestDialogParameterCheckSumWidget:
         form.enable_optimisation_section = False
         form.load_fields()
 
-        form_field = form.find_field_by_name("checksum")
+        form_field = form.find_field("checksum")
         # noinspection PyTypeChecker
         return form_field.widget
 
@@ -73,17 +71,14 @@ class TestDialogParameterCheckSumWidget:
         Tests that the field is loaded correctly.
         """
         widget = self.widget(value=value)
-        form_field: FormField = widget.form_field
+        form_field: FormField = widget.field
         line_edit = widget.line_edit
         combo_box = widget.combo_box
 
         # 1. Check field
         assert form_field.message.text() == ""
         if value:
-            assert (
-                combo_box.currentText()
-                == widget.labels_map[list(value.keys())[0]]
-            )
+            assert combo_box.currentText() == widget.labels_map[list(value.keys())[0]]
             assert line_edit.text() == list(value.values())[0]
         else:
             assert combo_box.currentText() == "None"
@@ -140,7 +135,7 @@ class TestDialogParameterCheckSumWidget:
         Tests the field validation.
         """
         widget = self.widget(value=value)
-        form_field: FormField = widget.form_field
+        form_field: FormField = widget.field
 
         if init_message:
             if isinstance(init_message, str):
@@ -207,9 +202,7 @@ class TestDialogParameterCheckSumWidget:
         assert selected_page.findChild(FormField, "name").value() == param_name
 
         # noinspection PyTypeChecker
-        check_sum_field: FormField = selected_page.findChild(
-            FormField, "checksum"
-        )
+        check_sum_field: FormField = selected_page.findChild(FormField, "checksum")
         # noinspection PyTypeChecker
         check_sum_widget: CheckSumWidget = check_sum_field.widget
         # noinspection PyTypeChecker
@@ -230,9 +223,7 @@ class TestDialogParameterCheckSumWidget:
             assert check_sum_widget.line_edit.text() == expected_hash
         # error
         else:
-            QTimer.singleShot(
-                100, partial(self._check_msg, qtbot, error_message)
-            )
+            QTimer.singleShot(100, partial(self._check_msg, qtbot, error_message))
             qtbot.mouseClick(button, Qt.MouseButton.LeftButton)
 
         assert button.isEnabled() is True

@@ -7,9 +7,9 @@ from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QVBoxLayout, QWidget
 from pywr_editor.form import (
     DailyValuesWidget,
     Form,
-    FormCustomWidget,
     FormField,
     FormTitle,
+    FormWidget,
     ModelComponentForm,
     MonthlyValuesWidget,
     TableValuesWidget,
@@ -25,8 +25,7 @@ class ScenarioValuesPickerDialogWidget(QDialog):
         self,
         model_config: ModelConfig,
         values: list[int | float] | None = None,
-        after_form_save: Callable[[str | dict[str, Any], Any], None]
-        | None = None,
+        after_form_save: Callable[[str | dict[str, Any], Any], None] | None = None,
         additional_data: Any | None = None,
         parent: QWidget | None = None,
     ):
@@ -46,15 +45,13 @@ class ScenarioValuesPickerDialogWidget(QDialog):
         self.additional_data = additional_data
 
         # check parent
-        if issubclass(parent.__class__, (Form, FormField, FormCustomWidget)):
+        if issubclass(parent.__class__, (Form, FormField, FormWidget)):
             raise ValueError(
                 "The parent cannot be a form component already instantiated"
             )
 
         # Dialog title and description
-        title = FormTitle(
-            f"Values for ensemble {additional_data['ensemble_number']}"
-        )
+        title = FormTitle(f"Values for ensemble {additional_data['ensemble_number']}")
         description = QLabel("Specify the values for the scenario ensemble")
 
         # Value widget
@@ -107,7 +104,7 @@ class ScenarioValuesPickerDialogWidget(QDialog):
         # Form
         self.form = ModelComponentForm(
             form_dict={},
-            available_fields=available_fields,
+            fields=available_fields,
             model_config=model_config,
             save_button=save_button,
             parent=self,

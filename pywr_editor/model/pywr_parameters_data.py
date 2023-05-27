@@ -19,11 +19,9 @@ class PywrParametersData:
 
         self.key_lookup: dict = parameters_data["parameters_key_lookup"]
         # sort keys alphabetically
-        self.parameters = dict(
-            sorted(parameters_data["parameters_data"].items())
-        )
+        self.parameters = dict(sorted(parameters_data["parameters_data"].items()))
 
-    def get_lookup_key(self, parameter_type: str) -> str | None:
+    def lookup_key(self, parameter_type: str) -> str | None:
         """
         Returns the lookup key of the data dictionary from a parameter type.
         :param parameter_type: The string identifying the parameter type.
@@ -39,7 +37,7 @@ class PywrParametersData:
         :param parameter_type: The string identifying the parameter type..
         :return: The pywr parameter name.
         """
-        data_key = self.get_lookup_key(parameter_type)
+        data_key = self.lookup_key(parameter_type)
         if data_key is None:
             return None
         return self.parameters[data_key]["name"]
@@ -50,10 +48,7 @@ class PywrParametersData:
         Returns a list of the pywr parameters' names.
         :return: The pywr parameters' names
         """
-        return [
-            parameter_info["name"]
-            for parameter_info in self.parameters.values()
-        ]
+        return [parameter_info["name"] for parameter_info in self.parameters.values()]
 
     @property
     def classes(self) -> list[str]:
@@ -61,10 +56,7 @@ class PywrParametersData:
         Returns a list of the pywr parameters' classes.
         :return: The pywr parameter classes
         """
-        return [
-            parameter_info["class"]
-            for parameter_info in self.parameters.values()
-        ]
+        return [parameter_info["class"] for parameter_info in self.parameters.values()]
 
     @property
     def keys(self) -> list[str]:
@@ -82,9 +74,7 @@ class PywrParametersData:
         """
         return list(self.key_lookup.values())
 
-    def get_info_from_type(
-        self, parameter_type: str, info_key: str
-    ) -> str | None:
+    def info_from_type_(self, parameter_type: str, info_key: str) -> str | None:
         """
         Returns the parameter information (class, url, etc.) from the parameter type.
         :param parameter_type: The string identifying the parameter type.
@@ -94,28 +84,28 @@ class PywrParametersData:
         if parameter_type is None:
             return None
 
-        data_key = self.get_lookup_key(parameter_type)
+        data_key = self.lookup_key(parameter_type)
         if data_key is not None and info_key in self.parameters[data_key]:
             return self.parameters[data_key][info_key]
         return None
 
-    def get_class_from_type(self, parameter_type: str) -> str | None:
+    def class_from_type(self, parameter_type: str) -> str | None:
         """
         Returns the pywr class from the parameter type.
         :param parameter_type: The string identifying the parameter type.
         :return: The pywr parameter class, if found. None otherwise.
         """
-        return self.get_info_from_type(parameter_type, "class")
+        return self.info_from_type_(parameter_type, "class")
 
-    def get_doc_url_from_key(self, parameter_type: str) -> str | None:
+    def doc_url(self, parameter_type: str) -> str | None:
         """
-        Returns the URl to the pywr documentation from the parameter type.
+        Return the URl to the pywr documentation from the parameter type.
         :param parameter_type: The string identifying the parameter type.
         :return: The URL to the documentation. None otherwise.
         """
-        return self.get_info_from_type(parameter_type, "doc_url")
+        return self.info_from_type_(parameter_type, "doc_url")
 
-    def get_keys_with_parent_class(
+    def keys_with_parent_class(
         self, subclass_name: str, include_parent: bool = False
     ) -> list[str]:
         """
@@ -147,7 +137,7 @@ class PywrParametersData:
         if parameter_type is None:
             return None
 
-        data_key = self.get_lookup_key(parameter_type)
+        data_key = self.lookup_key(parameter_type)
         if data_key is not None:
             return self.parameters[data_key]["name"].replace(" parameter", "")
         return parameter_type

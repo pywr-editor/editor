@@ -2,13 +2,13 @@ from PySide6.QtCore import QPointF
 from PySide6.QtGui import QIcon, QPainter, QPixmap, Qt
 from PySide6.QtWidgets import QHBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField
+from pywr_editor.form import FormField, FormWidget
 from pywr_editor.style import Color
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import ComboBox
 
 
-class EdgeColorPickerWidget(FormCustomWidget):
+class EdgeColorPickerWidget(FormWidget):
     def __init__(
         self,
         name: str,
@@ -60,9 +60,7 @@ class EdgeColorPickerWidget(FormCustomWidget):
 
         painter = QPainter()
         painter.begin(pixmap)
-        painter.setRenderHints(
-            QPainter.Antialiasing | QPainter.SmoothPixmapTransform
-        )
+        painter.setRenderHints(QPainter.Antialiasing | QPainter.SmoothPixmapTransform)
         painter.setPen(Qt.PenStyle.NoPen)
         painter.setBrush(Color(color_name, 400).qcolor)
         painter.drawEllipse(QPointF(size / 2, size / 2), 7, 7)

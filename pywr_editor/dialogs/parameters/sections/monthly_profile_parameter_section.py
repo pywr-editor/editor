@@ -28,13 +28,13 @@ class MonthlyProfileParameterSection(AbstractAnnualProfileParameterSection):
         )
 
         # Add interp_day option
-        self.form_dict["Miscellaneous"].insert(
+        self.fields_["Miscellaneous"].insert(
             0,
             {
                 "name": "interp_day",
                 "label": "Interpolation",
                 "field_type": InterpDayWidget,
-                "value": self.form.get_param_dict_value("interp_day"),
+                "value": self.form.field_value("interp_day"),
                 "help_text": "When None, the series is a piecewise monthly profile "
                 + "otherwise the series is interpolated. With 'First day' the 12 "
                 + "values represent the first day of each month. With 'Last day' "

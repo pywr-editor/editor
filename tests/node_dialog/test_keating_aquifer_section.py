@@ -4,11 +4,7 @@ import pytest
 from PySide6.QtCore import QPoint, Qt, QTimer
 
 from pywr_editor.dialogs import NodeDialog
-from pywr_editor.form import (
-    FloatWidget,
-    KeatingStreamsWidget,
-    TableValuesWidget,
-)
+from pywr_editor.form import FloatWidget, KeatingStreamsWidget, TableValuesWidget
 from pywr_editor.model import ModelConfig
 from tests.utils import (
     change_table_view_cell,
@@ -23,9 +19,7 @@ class TestKeatingAquiferSection:
     Tests the KeatingAquiferSection and KeatingStreamsWidget.
     """
 
-    model_file = resolve_model_path(
-        "model_dialog_node_keating_aquifer_section.json"
-    )
+    model_file = resolve_model_path("model_dialog_node_keating_aquifer_section.json")
 
     @pytest.fixture()
     def model_config(self) -> ModelConfig:
@@ -51,7 +45,7 @@ class TestKeatingAquiferSection:
 
         form = dialog.form
         save_button = form.save_button
-        field = form.find_field_by_name("stream_flows")
+        field = form.find_field("stream_flows")
         widget: KeatingStreamsWidget = field.widget
         model = widget.model
 
@@ -62,22 +56,16 @@ class TestKeatingAquiferSection:
 
         for row_id in range(len(expected_levels) + 1):
             for col_id in range(len(expected_transmissivity)):
-                model_value = model.data(
-                    model.index(row_id, col_id), Qt.DisplayRole
-                )
+                model_value = model.data(model.index(row_id, col_id), Qt.DisplayRole)
                 # transmissivity row
                 if row_id == len(expected_levels):
-                    assert model_value == str(
-                        expected_transmissivity[col_id]
-                    ), (
+                    assert model_value == str(expected_transmissivity[col_id]), (
                         f"Expected transmissivity: {expected_transmissivity[col_id]}, "
                         + f"got {model_value}"
                     )
                 # level row
                 else:
-                    assert model_value == str(
-                        expected_levels[row_id][col_id]
-                    ), (
+                    assert model_value == str(expected_levels[row_id][col_id]), (
                         f"Expected level: {expected_levels[row_id][col_id]}, got "
                         + f"{model_value}"
                     )
@@ -123,10 +111,7 @@ class TestKeatingAquiferSection:
         # validate
         out = widget.validate("", "", None)
         assert out.validation is False
-        assert (
-            out.error_message
-            == "You must provide all the levels for each stream"
-        )
+        assert out.error_message == "You must provide all the levels for each stream"
 
         # 4. Add level and remove one coefficient; validation must fail
         change_table_view_cell(
@@ -167,9 +152,7 @@ class TestKeatingAquiferSection:
         model.transmissivity = []
         out = widget.validate("", "", None)
         assert out.validation is False
-        assert (
-            "must provide at least one stream with a valid" in out.error_message
-        )
+        assert "must provide at least one stream with a valid" in out.error_message
 
     @pytest.mark.parametrize(
         "node_name, init_message",
@@ -202,7 +185,7 @@ class TestKeatingAquiferSection:
         dialog = NodeDialog(model_config=model_config, node_name=node_name)
         dialog.hide()
 
-        field = dialog.form.find_field_by_name("stream_flows")
+        field = dialog.form.find_field("stream_flows")
         widget: KeatingStreamsWidget = field.widget
 
         # model is empty
@@ -227,9 +210,7 @@ class TestKeatingAquiferSection:
         dialog.hide()
 
         form = dialog.form
-        widget: KeatingStreamsWidget = form.find_field_by_name(
-            "stream_flows"
-        ).widget
+        widget: KeatingStreamsWidget = form.find_field("stream_flows").widget
         table = widget.table
         model = widget.model
         expected_levels = [[100, 200, 600], [1, 3, 6]]
@@ -243,9 +224,7 @@ class TestKeatingAquiferSection:
         assert widget.delete_stream_button.isEnabled() is False
         x = table.columnViewportPosition(1) + 5
         y = table.rowViewportPosition(model.rowCount() - 1) + 10
-        qtbot.mouseClick(
-            table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
-        )
+        qtbot.mouseClick(table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y))
         assert widget.delete_stream_button.isEnabled() is False
 
         # 3. Delete stream
@@ -253,9 +232,7 @@ class TestKeatingAquiferSection:
         # select row
         x = table.columnViewportPosition(1) + 5
         y = table.rowViewportPosition(row) + 10
-        qtbot.mouseClick(
-            table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
-        )
+        qtbot.mouseClick(table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y))
 
         # delete
         assert widget.delete_stream_button.isEnabled() is True
@@ -270,9 +247,7 @@ class TestKeatingAquiferSection:
         # select row
         x = table.columnViewportPosition(1) + 5
         y = table.rowViewportPosition(row) + 10
-        qtbot.mouseClick(
-            table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
-        )
+        qtbot.mouseClick(table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y))
 
         # delete
         assert widget.delete_stream_button.isEnabled() is True
@@ -291,9 +266,7 @@ class TestKeatingAquiferSection:
         dialog.hide()
 
         form = dialog.form
-        widget: KeatingStreamsWidget = form.find_field_by_name(
-            "stream_flows"
-        ).widget
+        widget: KeatingStreamsWidget = form.find_field("stream_flows").widget
         table = widget.table
         model = widget.model
 
@@ -307,9 +280,7 @@ class TestKeatingAquiferSection:
         # select row
         x = table.columnViewportPosition(column) + 5
         y = table.rowViewportPosition(0) + 10
-        qtbot.mouseClick(
-            table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
-        )
+        qtbot.mouseClick(table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y))
 
         # delete
         assert widget.delete_level_button.isEnabled() is True
@@ -328,12 +299,8 @@ class TestKeatingAquiferSection:
 
         form = dialog.form
         save_button = form.save_button
-        levels_widget: TableValuesWidget = form.find_field_by_name(
-            "levels"
-        ).widget
-        volumes_widget: TableValuesWidget = form.find_field_by_name(
-            "volumes"
-        ).widget
+        levels_widget: TableValuesWidget = form.find_field("levels").widget
+        volumes_widget: TableValuesWidget = form.find_field("volumes").widget
 
         # set the levels
         levels_widget.model.values[0] = [100, 200, 300]
@@ -343,15 +310,12 @@ class TestKeatingAquiferSection:
         volumes_widget.model.values[0] = [5, 6]
         QTimer.singleShot(100, close_message_box)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
-        assert (
-            "number of volumes (2) must match"
-            in volumes_widget.form_field.message.text()
-        )
+        assert "number of volumes (2) must match" in volumes_widget.field.message.text()
 
         # 2. Set correct number of volumes
         volumes_widget.model.values[0].append(8)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
-        assert volumes_widget.form_field.message.text() == ""
+        assert volumes_widget.field.message.text() == ""
 
     def test_storativity_validation(self, qtbot, model_config):
         """
@@ -362,16 +326,10 @@ class TestKeatingAquiferSection:
 
         form = dialog.form
         save_button = form.save_button
-        levels_widget: TableValuesWidget = form.find_field_by_name(
-            "levels"
-        ).widget
-        storativity_widget: TableValuesWidget = form.find_field_by_name(
-            "storativity"
-        ).widget
-        volumes_widget: TableValuesWidget = form.find_field_by_name(
-            "volumes"
-        ).widget
-        area_widget: FloatWidget = form.find_field_by_name("area").widget
+        levels_widget: TableValuesWidget = form.find_field("levels").widget
+        storativity_widget: TableValuesWidget = form.find_field("storativity").widget
+        volumes_widget: TableValuesWidget = form.find_field("volumes").widget
+        area_widget: FloatWidget = form.find_field("area").widget
 
         # set the levels
         levels_widget.model.values[0] = [100, 200, 300]
@@ -385,13 +343,13 @@ class TestKeatingAquiferSection:
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         assert (
             "number of factors (3) must match"
-            in storativity_widget.form_field.message.text()
+            in storativity_widget.field.message.text()
         )
 
         # 2. Set correct number of factors
         del storativity_widget.model.values[0][0]
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
-        assert storativity_widget.form_field.message.text() == ""
+        assert storativity_widget.field.message.text() == ""
 
     @pytest.mark.parametrize(
         "storativity, volumes, area, error_message",
@@ -420,13 +378,9 @@ class TestKeatingAquiferSection:
 
         form = dialog.form
         save_button = form.save_button
-        storativity_widget: TableValuesWidget = form.find_field_by_name(
-            "storativity"
-        ).widget
-        volumes_widget: TableValuesWidget = form.find_field_by_name(
-            "volumes"
-        ).widget
-        area_widget: FloatWidget = form.find_field_by_name("area").widget
+        storativity_widget: TableValuesWidget = form.find_field("storativity").widget
+        volumes_widget: TableValuesWidget = form.find_field("volumes").widget
+        area_widget: FloatWidget = form.find_field("area").widget
 
         if area:
             area_widget.line_edit.setText(str(area))

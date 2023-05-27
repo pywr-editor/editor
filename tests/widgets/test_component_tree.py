@@ -33,20 +33,12 @@ class TestComponentTree:
 
         def fetch_items(tree: ComponentsTree):
             return [
-                tree.findItems("Nodes", Qt.MatchExactly | Qt.MatchRecursive, 0)[
-                    0
-                ],
+                tree.findItems("Nodes", Qt.MatchExactly | Qt.MatchRecursive, 0)[0],
                 # Nodes -> Links
-                tree.findItems(
-                    "Link (", Qt.MatchContains | Qt.MatchRecursive, 0
-                )[0],
+                tree.findItems("Link (", Qt.MatchContains | Qt.MatchRecursive, 0)[0],
                 # Nodes -> Links -> Link
-                tree.findItems("Link", Qt.MatchExactly | Qt.MatchRecursive, 0)[
-                    0
-                ],
-                tree.findItems(
-                    "param2", Qt.MatchExactly | Qt.MatchRecursive, 0
-                )[0],
+                tree.findItems("Link", Qt.MatchExactly | Qt.MatchRecursive, 0)[0],
+                tree.findItems("param2", Qt.MatchExactly | Qt.MatchRecursive, 0)[0],
             ]
 
         # expands the item. This calls the appropriate slot
@@ -77,6 +69,4 @@ class TestComponentTree:
         )[0]
         tree_widget.on_item_click(tree_item)
         # node must be selected
-        assert (
-            window.schematic.node_items[tree_item.text(0)].isSelected() is True
-        )
+        assert window.schematic.node_items[tree_item.text(0)].isSelected() is True

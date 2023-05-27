@@ -6,19 +6,13 @@ from PySide6.QtCore import QEvent, QMimeData, QPoint, Qt, QTimer
 from PySide6.QtGui import QDragEnterEvent
 
 from pywr_editor import MainWindow
-from pywr_editor.form import ColorPickerWidget
+from pywr_editor.form import ColorPickerWidget, IntegerWidget
 from pywr_editor.model import LineArrowShape, ModelConfig, RectangleShape
 from pywr_editor.schematic import ResizeShapeCommand, Schematic
 from pywr_editor.schematic.commands.add_shape_command import AddShapeCommand
-from pywr_editor.schematic.shapes.abstract_schematic_shape import (
-    AbstractSchematicShape,
-)
-from pywr_editor.schematic.shapes.rectangle_shape import (
-    Handles,
-    SchematicRectangle,
-)
+from pywr_editor.schematic.shapes.abstract_schematic_shape import AbstractSchematicShape
+from pywr_editor.schematic.shapes.rectangle_shape import Handles, SchematicRectangle
 from pywr_editor.schematic.shapes.shape_dialogs import ShapeDialogForm
-from pywr_editor.widgets import SpinBox
 from tests.utils import close_message_box, resolve_model_path
 
 
@@ -46,9 +40,7 @@ class TestSchematicRectangleShape:
         """
         window, schematic = init_window
         model_config = window.model_config
-        shape_config: RectangleShape = model_config.shapes.find_shape(
-            self.shape_id
-        )
+        shape_config: RectangleShape = model_config.shapes.find(self.shape_id)
         assert self.shape_id in schematic.shape_items
 
         # 1. Check shape properties
@@ -62,13 +54,9 @@ class TestSchematicRectangleShape:
         # noinspection PyTypeChecker
         form: ShapeDialogForm = window.findChild(ShapeDialogForm)
 
-        border_size_field: SpinBox = form.find_field_by_name(
-            "border_size"
-        ).widget
-        border_size_field.setValue(1)
-        color_widget: ColorPickerWidget = form.find_field_by_name(
-            "border_color"
-        ).widget
+        border_size_field: IntegerWidget = form.find_field("border_size").widget
+        border_size_field.spin_box.setValue(1)
+        color_widget: ColorPickerWidget = form.find_field("border_color").widget
         color_widget.value = (80, 80, 80)
 
         # 3. Send form and check the model config and schematic item
@@ -78,7 +66,7 @@ class TestSchematicRectangleShape:
         shape_config.shape_dict["border_color"] = color_widget.value
         del shape_config.shape_dict["border_size"]
         assert (
-            model_config.shapes.find_shape(self.shape_id, as_dict=True)
+            model_config.shapes.find(self.shape_id, as_dict=True)
             == shape_config.shape_dict
         )
 
@@ -99,7 +87,7 @@ class TestSchematicRectangleShape:
         :return: None
         """
         # the shape is removed from the model configuration
-        assert model_config.shapes.find_shape(shape_id) is None
+        assert model_config.shapes.find(shape_id) is None
 
         # the shape is removed from the items list
         assert shape_id not in schematic.shape_items.keys()
@@ -129,7 +117,7 @@ class TestSchematicRectangleShape:
         SchematicRectangle.
         :return: None
         """
-        assert model_config.shapes.find_shape(shape_config.id) == shape_config
+        assert model_config.shapes.find(shape_config.id) == shape_config
         assert shape_config.id in schematic.shape_items.keys()
         shape_ids = [
             shape.id
@@ -185,19 +173,15 @@ class TestSchematicRectangleShape:
 
         assert model_config.has_changes is True
         # the shape is in the model configuration
-        assert (
-            model_config.shapes.find_shape_index_by_id(new_shape_id) is not None
-        )
-        shape_config = model_config.shapes.find_shape(new_shape_id)
+        assert model_config.shapes.find_index(new_shape_id) is not None
+        shape_config = model_config.shapes.find(new_shape_id)
 
         # 3. Change shape config
         schematic.shape_items[new_shape_id].on_edit_shape()
         # noinspection PyTypeChecker
         dialog_form: ShapeDialogForm = window.findChild(ShapeDialogForm)
-        border_size_widget: SpinBox = dialog_form.find_field_by_name(
-            "border_size"
-        ).widget
-        border_size_widget.setValue(4)
+        border_size_widget: IntegerWidget = dialog_form.find_field("border_size").widget
+        border_size_widget.spin_box.setValue(4)
         qtbot.mouseClick(dialog_form.save_button, Qt.MouseButton.LeftButton)
 
         # 4. Test undo
@@ -335,9 +319,7 @@ class TestSchematicRectangleShape:
         assert shape_item.selected_handle is handle
 
         # mouse position is in local coordinates
-        assert (
-            shape_item.mapToScene(shape_item.pressed_mouse_pos) == handle_point
-        )
+        assert shape_item.mapToScene(shape_item.pressed_mouse_pos) == handle_point
         qtbot.mouseMove(
             schematic.viewport(),
             schematic.mapFromScene(target_point),
@@ -364,17 +346,11 @@ class TestSchematicRectangleShape:
 
         # 3. Check the model configuration
         assert model_config.has_changes is True
-        shape_config: RectangleShape = model_config.shapes.find_shape(
-            shape_id=self.shape_id
-        )
+        shape_config: RectangleShape = model_config.shapes.find(shape_id=self.shape_id)
         assert shape_config.width == round(shape_rect.width(), 5)
         assert shape_config.height == round(shape_rect.height(), 5)
-        assert shape_config.x == round(
-            shape_item.mapToScene(shape_rect.x(), 0).x(), 5
-        )
-        assert shape_config.y == round(
-            shape_item.mapToScene(0, shape_rect.y()).y(), 5
-        )
+        assert shape_config.x == round(shape_item.mapToScene(shape_rect.x(), 0).x(), 5)
+        assert shape_config.y == round(shape_item.mapToScene(0, shape_rect.y()).y(), 5)
 
         # 4. Check undo command
         undo_command: ResizeShapeCommand = window.undo_stack.command(0)
@@ -396,26 +372,21 @@ class TestSchematicRectangleShape:
         # noinspection PyTypeChecker
         form: ShapeDialogForm = window.findChild(ShapeDialogForm)
 
-        border_size_field: SpinBox = form.find_field_by_name(
-            "border_size"
-        ).widget
-        border_size_field.setValue(1)
+        border_size_field: IntegerWidget = form.find_field("border_size").widget
+        border_size_field.spin_box.setValue(1)
 
         form.save()
         new_shape_dict = shape_config.shape_dict.copy()
         new_shape_dict["border_color"] = tuple(new_shape_dict["border_color"])
         del new_shape_dict["border_size"]
-        assert (
-            model_config.shapes.find_shape(self.shape_id, as_dict=True)
-            == new_shape_dict
-        )
+        assert model_config.shapes.find(self.shape_id, as_dict=True) == new_shape_dict
 
         # 6. Test redo command
         qtbot.mouseClick(undo_button, Qt.MouseButton.LeftButton)
         assert undo_button.isEnabled() is False
         assert redo_button.isEnabled() is True
 
-        shape_config = model_config.shapes.find_shape(shape_id=self.shape_id)
+        shape_config = model_config.shapes.find(shape_id=self.shape_id)
         assert shape_config.x == 800
         assert shape_config.y == 800
         assert shape_config.width == 300
@@ -436,7 +407,7 @@ class TestSchematicRectangleShape:
         shape_item = schematic.shape_items[self.shape_id]
 
         # check model config
-        shape_config = model_config.shapes.find_shape(shape_id=self.shape_id)
+        shape_config = model_config.shapes.find(shape_id=self.shape_id)
         assert shape_config.x == undo_command.updated_pos[0]
         assert shape_config.y == undo_command.updated_pos[1]
         assert shape_config.width == or_width + delta_width
@@ -549,9 +520,7 @@ class TestSchematicRectangleShape:
             handle_pos,
         )
         assert shape_item.selected_handle is handle
-        assert shape_item.mapToScene(shape_item.pressed_mouse_pos) == (
-            handle_point
-        )
+        assert shape_item.mapToScene(shape_item.pressed_mouse_pos) == (handle_point)
         qtbot.mouseMove(
             schematic.viewport(),
             schematic.mapFromScene(target_point),
@@ -723,9 +692,7 @@ class TestSchematicRectangleShape:
             handle_pos,
         )
         assert shape_item.selected_handle is handle
-        assert shape_item.pressed_mouse_pos == shape_item.mapFromScene(
-            handle_point
-        )
+        assert shape_item.pressed_mouse_pos == shape_item.mapFromScene(handle_point)
         qtbot.mouseMove(
             schematic.viewport(),
             schematic.mapFromScene(target_point),

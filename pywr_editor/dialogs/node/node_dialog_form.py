@@ -5,13 +5,14 @@ from PySide6.QtWidgets import QGroupBox, QLineEdit, QPushButton
 
 import pywr_editor.dialogs
 from pywr_editor.form import (
-    CommentWidget,
     EdgeColorPickerWidget,
+    FieldConfig,
     FloatWidget,
     Form,
-    FormValidation,
     NodeStylePickerWidget,
     ParameterLineEditWidget,
+    TextWidget,
+    Validation,
 )
 from pywr_editor.model import Constants, ModelConfig, NodeConfig
 from pywr_editor.utils import Logging
@@ -20,7 +21,6 @@ from .sections.custom_node_section import CustomNodeSection
 
 if TYPE_CHECKING:
     from pywr_editor.dialogs import NodeDialog
-    from pywr_editor.form import FieldConfig
 
 """
  This forms allow editing a node configuration.
@@ -48,14 +48,13 @@ class NodeDialogForm(Form):
         self.model_config = model_config
         self.node_dict = node_dict
         self.node_obj = NodeConfig(node_dict)
-        self.node_type = self.node_obj.type
+        self.node_type = self.node_obj.key
 
         # the node type cannot be changed for built-in nodes or custom nodes that
         # have been imported
         self.can_type_be_changed = (
             not model_config.pywr_node_data.does_type_exist(self.node_type)
-            and self.node_type
-            not in model_config.includes.get_custom_nodes().keys()
+            and self.node_type not in model_config.includes.get_custom_nodes().keys()
         )
         self.logger.debug(f"Loading with {self.node_dict}")
 
@@ -66,49 +65,44 @@ class NodeDialogForm(Form):
             node_type_field = self.node_type
 
         main_fields: list[FieldConfig] = [
-            {
-                "name": "name",
-                "value": self.node_obj.name,
-                "allow_empty": False,
-                "validate_fun": self.check_unique_name,
-            },
-            {
-                "name": "type",
-                "value": node_type_field,
-                "validate_fun": self.check_node_class,
-            },
-            {
-                "name": Constants.NODE_STYLE_KEY.value,
-                "value": self.node_obj,
-                "field_type": NodeStylePickerWidget,
-                "help_text": "Change the appearance of the node on the schematic",
-            },
+            FieldConfig(
+                name="name",
+                value=self.node_obj.name,
+                allow_empty=False,
+                validate_fun=self.check_unique_name,
+            ),
+            FieldConfig(
+                name="type",
+                value=node_type_field,
+                validate_fun=self.check_node_class,
+            ),
+            FieldConfig(
+                name=Constants.NODE_STYLE_KEY.value,
+                value=self.node_obj,
+                field_type=NodeStylePickerWidget,
+                help_text="Change the appearance of the node on the schematic",
+            ),
         ]
         if not self.node_obj.is_virtual:
             main_fields.append(
-                {
-                    "name": Constants.EDGE_COLOR_KEY.value,
-                    "field_type": EdgeColorPickerWidget,
-                    "value": self.node_obj.edge_color,
-                    "help_text": "The colour of the edges to the target nodes",
-                }
+                FieldConfig(
+                    name=Constants.EDGE_COLOR_KEY.value,
+                    field_type=EdgeColorPickerWidget,
+                    value=self.node_obj.edge_color,
+                    help_text="The colour of the edges to the target nodes",
+                )
             )
 
         # load section based on node type - sections are node loaded dynamically like
         # for recorders or parameters, because type cannot be changed
-        pywr_class = self.model_config.pywr_node_data.get_class_from_type(
-            self.node_type
-        )
+        pywr_class = self.model_config.pywr_node_data.class_from_type(self.node_type)
         section_data = {}
 
         # custom component
         if pywr_class is None:
             self.logger.debug(f"'{self.node_type}' is custom")
             # imported Python class
-            if (
-                self.node_type
-                in self.model_config.includes.get_custom_nodes().keys()
-            ):
+            if self.node_type in self.model_config.includes.get_custom_nodes().keys():
                 self.logger.debug(
                     f"{self.node_type.title()} is included as custom import"
                 )
@@ -127,7 +121,7 @@ class NodeDialogForm(Form):
             raise ValueError(f"Cannot find form section for '{self.node_type}'")
 
         super().__init__(
-            available_fields={"Node": main_fields},
+            fields={"Node": main_fields},
             save_button=save_button,
             parent=parent,
             direction="vertical",
@@ -139,19 +133,15 @@ class NodeDialogForm(Form):
         # noinspection PyTypeChecker
         first_section: QGroupBox = self.findChild(QGroupBox, "Node")
         first_section.setTitle("")
-        first_section.setStyleSheet(
-            "QGroupBox{padding-top:15px; margin-top:-15px}"
-        )
+        first_section.setStyleSheet("QGroupBox{padding-top:15px; margin-top:-15px}")
 
         # disable type field
         if not self.can_type_be_changed:
-            type_widget = self.find_field_by_name("type").widget
+            type_widget = self.find_field("type").widget
             type_widget.setDisabled(True)
             type_widget.setToolTip("The node type cannot be changed")
 
-    def check_node_class(
-        self, name: str, label: str, value: str
-    ) -> FormValidation:
+    def check_node_class(self, name: str, label: str, value: str) -> Validation:
         """
         Checks the node type is a valid Python class name.
         :param name: The field name.
@@ -159,22 +149,19 @@ class NodeDialogForm(Form):
         :param value: THe field value.
         :return: The validation instance.
         """
-        type_widget: QLineEdit = self.find_field_by_name("type").widget
+        type_widget: QLineEdit = self.find_field("type").widget
         if not type_widget.isEnabled():
-            return FormValidation(validation=True)
+            return Validation()
 
         class_definition = f"class {value}: pass"
         # noinspection PyBroadException
         try:
             ast.parse(class_definition)
-            return FormValidation(validation=True)
+            return Validation()
         except Exception:
-            return FormValidation(
-                validation=False,
-                error_message="The type must be a valid Python class",
-            )
+            return Validation("The type must be a valid Python class")
 
-    def get_node_dict_value(self, key: str) -> Any:
+    def field_value(self, key: str) -> Any:
         """
         Gets a value from the dictionary containing the node data.
         :param key: The key to extract the value of.
@@ -202,11 +189,11 @@ class NodeDialogForm(Form):
             self.dialog.title.update_name(new_name)
 
         # get type from field if it can be changed
-        type_widget: QLineEdit = self.find_field_by_name("type").widget
+        type_widget: TextWidget = self.find_field("type").widget
         if type_widget.isEnabled():
-            form_data["type"] = type_widget.text()
+            form_data["type"] = type_widget.line_edit.text()
         else:
-            form_data["type"] = self.node_obj.type
+            form_data["type"] = self.node_obj.key
 
         # set type
         self.model_config.nodes.update(form_data)
@@ -223,9 +210,7 @@ class NodeDialogForm(Form):
 
         return form_data
 
-    def check_unique_name(
-        self, name: str, label: str, value: str
-    ) -> FormValidation:
+    def check_unique_name(self, name: str, label: str, value: str) -> Validation:
         """
         Checks that the node name is unique.
         :param name: The filed name.
@@ -233,14 +218,9 @@ class NodeDialogForm(Form):
         :param value: The node name.
         :return: The validation instance.
         """
-        if (
-            value != self.node_obj.name
-            and value in self.model_config.nodes.names
-        ):
-            return FormValidation(
-                validation=False, error_message="The node name already exists"
-            )
-        return FormValidation(validation=True)
+        if value != self.node_obj.name and value in self.model_config.nodes.names:
+            return Validation("The node name already exists")
+        return Validation()
 
     @property
     def min_flow_field(self) -> dict[str, Any]:
@@ -253,30 +233,28 @@ class NodeDialogForm(Form):
             "label": "Minimum flow",
             "field_type": ParameterLineEditWidget,
             "field_args": {"is_mandatory": False},
-            "value": self.get_node_dict_value("min_flow"),
+            "value": self.field_value("min_flow"),
             "help_text": "The minimum flow constraint on the node. When it is "
             + "not set, it defaults to 0.",
         }
 
     @property
-    def max_flow_field(self) -> dict[str, Any]:
+    def max_flow_field(self) -> FieldConfig:
         """
         Returns the form field representing the maximum flow through the node.
         :return: A dictionary with the field configuration
         """
-        return {
-            "name": "max_flow",
-            "label": "Maximum flow",
-            "field_type": ParameterLineEditWidget,
-            "field_args": {"is_mandatory": False},
-            "value": self.get_node_dict_value("max_flow"),
-            "help_text": "The maximum flow constraint on the node. When it is "
+        return FieldConfig(
+            name="max_flow",
+            label="Maximum flow",
+            field_type=ParameterLineEditWidget,
+            field_args={"is_mandatory": False},
+            value=self.field_value("max_flow"),
+            help_text="The maximum flow constraint on the node. When it is "
             + "not set, it defaults to infinite.",
-        }
+        )
 
-    def cost_field(
-        self, node_type: Literal["flow", "storage"]
-    ) -> dict[str, Any]:
+    def cost_field(self, node_type: Literal["flow", "storage"]) -> dict[str, Any]:
         """
         Returns the form field representing the cost of node.
         :param node_type: The type of node (flow or storage).
@@ -305,7 +283,7 @@ class NodeDialogForm(Form):
             "field_type": ParameterLineEditWidget,
             "field_args": {"is_mandatory": False},
             "default_value": 0,
-            "value": self.get_node_dict_value("cost"),
+            "value": self.field_value("cost"),
             "help_text": help_text,
         }
 
@@ -315,11 +293,12 @@ class NodeDialogForm(Form):
         Returns the form configuration for the "comment" field.
         :return: The field dictionary.
         """
-        return {
-            "name": "comment",
-            "field_type": CommentWidget,
-            "value": self.get_node_dict_value("comment"),
-        }
+        return FieldConfig(
+            name="comment",
+            field_type=TextWidget,
+            field_args={"multi_line": True},
+            value=self.field_value("comment"),
+        )
 
     @property
     def initial_volume_field(self) -> dict[str, Any]:
@@ -329,7 +308,7 @@ class NodeDialogForm(Form):
         """
         return {
             "name": "initial_volume",
-            "value": self.get_node_dict_value("initial_volume"),
+            "value": self.field_value("initial_volume"),
             "field_type": FloatWidget,
             "field_args": {"min_value": 0},
             "help_text": "The initial absolute volume for the storage",
@@ -344,7 +323,7 @@ class NodeDialogForm(Form):
         return {
             "name": "initial_volume_pc",
             "label": "Initial volume (relative)",
-            "value": self.get_node_dict_value("initial_volume_pc"),
+            "value": self.field_value("initial_volume_pc"),
             "field_type": FloatWidget,
             "field_args": {"min_value": 0, "max_value": 1},
             "validate_fun": self.validate_initial_volume_pc,
@@ -355,7 +334,7 @@ class NodeDialogForm(Form):
     @staticmethod
     def validate_initial_volume_pc(
         name: str, label: str, value: float | int
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that the relative storage is a number between 0 and 1.
         :param name: The field name.
@@ -364,8 +343,5 @@ class NodeDialogForm(Form):
         :return: The validation instance.
         """
         if value and not 0 <= value <= 1:
-            return FormValidation(
-                validation=False,
-                error_message="The relative storage must be a number between 0 and 1",
-            )
-        return FormValidation(validation=True)
+            return Validation("The relative storage must be a number between 0 and 1")
+        return Validation()

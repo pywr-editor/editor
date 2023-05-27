@@ -3,25 +3,17 @@ from typing import Any
 
 import qtawesome as qta
 from PySide6.QtCore import Slot
-from PySide6.QtWidgets import (
-    QHBoxLayout,
-    QLabel,
-    QSizePolicy,
-    QSpacerItem,
-    QVBoxLayout,
-)
+from PySide6.QtWidgets import QHBoxLayout, QLabel, QSizePolicy, QSpacerItem, QVBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.form import FormField, FormWidget, Validation
 from pywr_editor.utils import Logging, get_signal_sender
 from pywr_editor.widgets import PushIconButton, TableView
 
 from .metadata_custom_fields_model import MetadataCustomFieldsModel
 
 
-class MetadataCustomFieldsWidget(FormCustomWidget):
-    def __init__(
-        self, name: str, value: list[list[str, Any]], parent: FormField
-    ):
+class MetadataFieldsWidget(FormWidget):
+    def __init__(self, name: str, value: list[list[str, Any]], parent: FormField):
         """
         Initialises the table view to add, change or delete custom metadata fields.
         :param name: The field name.
@@ -33,9 +25,7 @@ class MetadataCustomFieldsWidget(FormCustomWidget):
         self.logger.debug(f"Loading widget with {value}")
 
         # Initialise the table view
-        add_button = PushIconButton(
-            icon=qta.icon("msc.add"), label="Add", small=True
-        )
+        add_button = PushIconButton(icon=qta.icon("msc.add"), label="Add", small=True)
         delete_button = PushIconButton(
             icon=qta.icon("msc.remove"), label="Delete", small=True
         )
@@ -120,9 +110,7 @@ class MetadataCustomFieldsWidget(FormCustomWidget):
         # noinspection PyUnresolvedReferences
         self.model.layoutAboutToBeChanged.emit()
         for value in row_values:
-            self.logger.debug(
-                f"Deleted {value[0]}={value[1]} from custom fields"
-            )
+            self.logger.debug(f"Deleted {value[0]}={value[1]} from custom fields")
             self.model.fields.remove(value)
 
         # noinspection PyUnresolvedReferences
@@ -140,25 +128,24 @@ class MetadataCustomFieldsWidget(FormCustomWidget):
         )
         self.form.save_button.setEnabled(True)
 
-    def validate(self, name: str, label: str, value: Any) -> FormValidation:
+    def validate(self, name: str, label: str, value: Any) -> Validation:
         """
         Validates the widget value.
         :param name: The name.
         :param label: The label.
         :param value: The value.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         # custom field keys must be unique
         d = Counter([field_data[0] for field_data in self.model.fields])
         duplicated = [k for k, v in d.items() if v > 1]
         if len(duplicated) > 0:
-            return FormValidation(
-                validation=False,
-                error_message="The name of each custom field must be unique, "
+            return Validation(
+                "The name of each custom field must be unique, "
                 + "but the following names are duplicated: "
                 + ", ".join(duplicated),
             )
-        return FormValidation(validation=True)
+        return Validation()
 
     def get_value(self) -> dict:
         """

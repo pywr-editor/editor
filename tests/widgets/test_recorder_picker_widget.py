@@ -35,9 +35,7 @@ class TestDialogModelRecorderPickerWidget:
         selected_page = dialog.pages_widget.currentWidget()
         assert selected_page.findChild(FormField, "name").value() == param_name
 
-        recorder_field: FormField = selected_page.findChild(
-            FormField, "recorder"
-        )
+        recorder_field: FormField = selected_page.findChild(FormField, "recorder")
         # noinspection PyTypeChecker
         recorder_widget: ModelRecorderPickerWidget = recorder_field.widget
 
@@ -71,9 +69,7 @@ class TestDialogModelRecorderPickerWidget:
         selected_page = dialog.pages_widget.currentWidget()
         assert selected_page.findChild(FormField, "name").value() == param_name
 
-        recorder_field: FormField = selected_page.findChild(
-            FormField, "recorder"
-        )
+        recorder_field: FormField = selected_page.findChild(FormField, "recorder")
         # noinspection PyTypeChecker
         recorder_widget: ModelRecorderPickerWidget = recorder_field.widget
 

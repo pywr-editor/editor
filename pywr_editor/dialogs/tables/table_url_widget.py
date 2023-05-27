@@ -22,12 +22,7 @@ class TableUrlWidget(UrlWidget):
         # hide QGroupBox if all children are hidden
         for group_box in self.form.findChildren(QGroupBox):
             group_box: QGroupBox
-            if all(
-                [
-                    field.isHidden()
-                    for field in group_box.findChildren(FormField)
-                ]
-            ):
+            if all([field.isHidden() for field in group_box.findChildren(FormField)]):
                 group_box.setVisible(False)
             else:
                 group_box.setVisible(True)

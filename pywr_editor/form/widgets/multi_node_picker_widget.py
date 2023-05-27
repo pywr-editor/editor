@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Union
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QHBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.form import FormField, FormWidget, Validation
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import CheckableComboBox
 
@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 """
 
 
-class MultiNodePickerWidget(FormCustomWidget):
+class MultiNodePickerWidget(FormWidget):
     def __init__(
         self,
         name: str,
@@ -47,9 +47,7 @@ class MultiNodePickerWidget(FormCustomWidget):
         super().__init__(name, value, parent)
 
         self.is_mandatory = is_mandatory
-        self.form: Union[
-            "NodeDialogForm", "ParameterDialogForm", "RecorderDialogForm"
-        ]
+        self.form: Union["NodeDialogForm", "ParameterDialogForm", "RecorderDialogForm"]
         self.model_config = self.form.model_config
 
         # Collect all pywr and custom node types
@@ -83,15 +81,10 @@ class MultiNodePickerWidget(FormCustomWidget):
         model_nodes = self.model_config.nodes.names
 
         for name in model_nodes:
-            node_obj = self.model_config.nodes.get_node_config_from_name(
-                node_name=name, as_dict=False
-            )
+            node_obj = self.model_config.nodes.config(node_name=name, as_dict=False)
 
             # filter node types
-            if (
-                include_node_keys is not None
-                and node_obj.type not in include_node_keys
-            ):
+            if include_node_keys is not None and node_obj.key not in include_node_keys:
                 continue
 
             self.combo_box.addItem(f"{name} ({node_obj.humanised_type})", name)
@@ -101,13 +94,9 @@ class MultiNodePickerWidget(FormCustomWidget):
             self.logger.debug("Value is None or empty. No value set")
         # value must be a list of strings
         elif not isinstance(value, list):
-            message = "The node names must be a list"
-            self.form_field.set_warning_message(message)
-            self.logger.debug(message + ". None selected")
+            self.field.set_warning("The node names must be a list")
         elif not all([isinstance(n, str) for n in value]):
-            message = "The node names must be valid strings"
-            self.form_field.set_warning_message(message)
-            self.logger.debug(message + ". None selected")
+            self.field.set_warning("The node names must be valid strings")
         else:
             wrong_node_types = []
             non_existing_nodes = []
@@ -115,13 +104,13 @@ class MultiNodePickerWidget(FormCustomWidget):
 
             # check that names exists
             for node_name_value in value:
-                node_obj = self.model_config.nodes.get_node_config_from_name(
+                node_obj = self.model_config.nodes.config(
                     node_name=node_name_value, as_dict=False
                 )
                 # filter node types
                 if (
                     include_node_keys is not None
-                    and node_obj.type not in include_node_keys
+                    and node_obj.key not in include_node_keys
                 ):
                     wrong_node_types.append(node_name_value)
                     continue
@@ -139,29 +128,22 @@ class MultiNodePickerWidget(FormCustomWidget):
             self.combo_box.check_items(selected_indexes, False)
 
             if wrong_node_types:
-                message = (
+                self.field.set_warning(
                     f"The following node names were removed from the list because "
                     f"their type is not allowed: {', '.join(wrong_node_types)}"
                     f" Allowed types are: {', '.join(self.include_node_types)}"
                 )
-                self.logger.debug(message)
-                self.form_field.set_warning_message(message)
             elif non_existing_nodes:
-                message = (
+                self.field.set_warning(
                     "The following node names do not exist in the model "
                     + f"configuration: {', '.join(non_existing_nodes)}"
                 )
-                self.logger.debug(message)
-                self.form_field.set_warning_message(message)
-
         # there are no nodes in the model
         if len(self.combo_box.all_items) == 0:
             self.combo_box.setEnabled(False)
-            message = "There are no nodes available"
-            self.logger.debug(message)
-            self.form_field.set_warning_message(
-                message
-                + ". Add a new node first, before setting up this option"
+            self.field.set_warning(
+                "There are no nodes available. Add a new node first, before setting "
+                "up this option"
             )
         # layout
         layout = QHBoxLayout(self)
@@ -185,22 +167,17 @@ class MultiNodePickerWidget(FormCustomWidget):
         """
         self.combo_box.uncheck_all()
 
-    def validate(
-        self, name: str, label: str, value: list[str]
-    ) -> FormValidation:
+    def validate(self, name: str, label: str, value: list[str]) -> Validation:
         """
         Checks that the value is valid.
         :param name: The field name.
         :param label: The field label.
         :param value: The field value.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         self.logger.debug(f"Validating field with {value}")
 
         # empty list
         if not value and self.is_mandatory:
-            return FormValidation(
-                validation=False,
-                error_message="The field cannot be empty",
-            )
-        return FormValidation(validation=True)
+            return Validation("The field cannot be empty")
+        return Validation()

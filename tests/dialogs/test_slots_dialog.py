@@ -47,15 +47,11 @@ class TestSlotsDialog:
             assert model.data(model.index(ei, 1), Qt.DisplayRole) == edge[1]
             # slots
             if len(edge) >= 3 and edge[2] is not None:
-                assert model.data(model.index(ei, 2), Qt.DisplayRole) == str(
-                    edge[2]
-                )
+                assert model.data(model.index(ei, 2), Qt.DisplayRole) == str(edge[2])
             else:
                 assert model.data(model.index(ei, 2), Qt.DisplayRole) == ""
             if len(edge) == 4 and edge[3] is not None:
-                assert model.data(model.index(ei, 3), Qt.DisplayRole) == str(
-                    edge[3]
-                )
+                assert model.data(model.index(ei, 3), Qt.DisplayRole) == str(edge[3])
             else:
                 assert model.data(model.index(ei, 3), Qt.DisplayRole) == ""
 
@@ -127,9 +123,11 @@ class TestSlotsDialog:
             new_name=new_name,
         )
         assert model_config.edges.get_all()[6][2] == new_name
-        assert model_config.nodes.get_node_config_from_name("MultiSplitLink")[
-            "slot_names"
-        ] == ["slot1", "slot3", new_name]
+        assert model_config.nodes.config("MultiSplitLink")["slot_names"] == [
+            "slot1",
+            "slot3",
+            new_name,
+        ]
 
     def test_rename_slot_for_multi_split_link_no_change(
         self, qtbot, model_config, widget
@@ -148,9 +146,10 @@ class TestSlotsDialog:
             new_name=new_name,
         )
         assert model_config.edges.get_all()[8][2] == new_name
-        assert model_config.nodes.get_node_config_from_name(
-            "MultiSplitLink - no slots"
-        )["slot_names"] == ["slot1", "slot3"]
+        assert model_config.nodes.config("MultiSplitLink - no slots")["slot_names"] == [
+            "slot1",
+            "slot3",
+        ]
 
         # 2. Remove slot - error
         QTimer.singleShot(
@@ -166,6 +165,8 @@ class TestSlotsDialog:
             new_name="",
         )
         assert model_config.edges.get_all()[6][2] == "slot2"
-        assert model_config.nodes.get_node_config_from_name("MultiSplitLink")[
-            "slot_names"
-        ] == ["slot1", "slot3", "slot2"]
+        assert model_config.nodes.config("MultiSplitLink")["slot_names"] == [
+            "slot1",
+            "slot3",
+            "slot2",
+        ]

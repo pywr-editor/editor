@@ -12,7 +12,7 @@ from PySide6.QtWidgets import (
 )
 
 import pywr_editor
-from pywr_editor.form import Form, FormCustomWidget, FormField, FormTitle
+from pywr_editor.form import Form, FormField, FormTitle, FormWidget
 from pywr_editor.model import ModelConfig, ParameterConfig, RecorderConfig
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import PushIconButton
@@ -50,15 +50,13 @@ class ModelComponentPickerDialog(QDialog):
         self.additional_data = additional_data
 
         if not self.is_parameter and not self.is_recorder:
-            raise ValueError(
-                "The component_type can only be 'parameter' or 'recorder'"
-            )
+            raise ValueError("The component_type can only be 'parameter' or 'recorder'")
 
         self.logger = Logging().logger(self.__class__.__name__)
         self.logger.debug(f"Loading dialog for {component_type}")
 
         # check parent
-        if issubclass(parent.__class__, (Form, FormField, FormCustomWidget)):
+        if issubclass(parent.__class__, (Form, FormField, FormWidget)):
             raise ValueError(
                 "The parent cannot be a form component already instantiated"
             )
@@ -66,14 +64,10 @@ class ModelComponentPickerDialog(QDialog):
         # form must have a valid config instance
         if component_obj is None:
             if self.is_parameter:
-                component_obj = getattr(pywr_editor.model, "ParameterConfig")(
-                    props={}
-                )
+                component_obj = getattr(pywr_editor.model, "ParameterConfig")(props={})
 
             elif self.is_recorder:
-                component_obj = getattr(pywr_editor.model, "RecorderConfig")(
-                    props={}
-                )
+                component_obj = getattr(pywr_editor.model, "RecorderConfig")(props={})
 
         # get component keys to filter
         include_comp_key = None
@@ -140,7 +134,7 @@ class ModelComponentPickerDialog(QDialog):
         :return: None
         """
         self.logger.debug("Saving form")
-        source_widget = self.form.find_field_by_name("comp_source").widget
+        source_widget = self.form.find_field("comp_source").widget
 
         form_data = self.form.save()
         if form_data is False:
@@ -154,9 +148,7 @@ class ModelComponentPickerDialog(QDialog):
             del form_data["comp_source"]
 
         # enable the save button in the parent dialog
-        save_button: QPushButton = self.parent().findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = self.parent().findChild(QPushButton, "save_button")
         if save_button:
             save_button.setEnabled(True)
 

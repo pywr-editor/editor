@@ -7,9 +7,7 @@ from PySide6.QtTest import QSignalSpy
 from pywr_editor import MainWindow
 from pywr_editor.toolbar.node_library.library_item import LibraryItem
 from pywr_editor.toolbar.node_library.library_item_label import LibraryItemLabel
-from pywr_editor.toolbar.node_library.schematic_items_library import (
-    LibraryPanel,
-)
+from pywr_editor.toolbar.node_library.schematic_items_library import LibraryPanel
 from tests.utils import check_msg, resolve_model_path
 
 
@@ -21,9 +19,7 @@ class TestMainWindow:
         with pytest.raises(SystemExit) as e:
             QTimer.singleShot(
                 100,
-                partial(
-                    check_msg, "Cannot open the file 'non_existing_file.json'"
-                ),
+                partial(check_msg, "Cannot open the file 'non_existing_file.json'"),
             )
             window = MainWindow("non_existing_file.json")
             window.close()
@@ -45,12 +41,12 @@ class TestMainWindow:
         unsaved changes.
         """
         window = MainWindow(resolve_model_path("model_1.json"))
-        spy = QSignalSpy(window.model_config.changes_tracker.change_applied)
+        spy = QSignalSpy(window.model_config.model_changed)
         save_button = window.app_actions.get("save-model")
         assert save_button.isEnabled() is False
 
         # make a change, the save button is not enabled
-        window.model_config.changes_tracker.add("New change")
+        window.model_config.has_changed()
         assert spy.count() == 1
         assert save_button.isEnabled() is True
 

@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Any
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QHBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.form import FormField, FormWidget, Validation
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import ComboBox
 
@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 """
 
 
-class ScenarioPickerWidget(FormCustomWidget):
+class ScenarioPickerWidget(FormWidget):
     def __init__(
         self,
         name: str,
@@ -47,38 +47,34 @@ class ScenarioPickerWidget(FormCustomWidget):
         self.combo_box = ComboBox()
         self.combo_box.addItem("None", None)
         for name in scenario_names:
-            size = model_scenarios.get_size_from_name(name)
+            size = model_scenarios.get_size(name)
             self.combo_box.addItem(f"{name} ({size} ensembles)", name)
 
         # set selected
         if not value:
             self.logger.debug("Value is None or empty. No value set")
         elif not isinstance(value, str):
-            message = "The scenario in the model configuration must be a string"
-            self.logger.debug(message)
-            self.form_field.set_warning_message(message)
+            self.field.set_warning(
+                "The scenario in the model configuration must be a string"
+            )
         # name is in scenario names
         elif value in scenario_names:
             # find index by data
             selected_index = self.combo_box.findData(value, Qt.UserRole)
             self.combo_box.setCurrentIndex(selected_index)
         else:
-            message = (
+            self.field.set_warning(
                 f"The scenario named '{value}' does not exist in the model "
-                + "configuration"
+                "configuration"
             )
-            self.logger.debug(message)
-            self.form_field.set_warning_message(message)
 
         # overwrite warning if there are no scenarios in the model
         if is_mandatory and len(scenario_names) == 0:
-            message = "The are no scenarios defined in the model"
             self.combo_box.setEnabled(False)
-            self.form_field.set_warning_message(
-                message
-                + ". Add a new scenario first before setting up this field"
+            self.field.set_warning(
+                "The are no scenarios defined in the model. Add a new scenario first "
+                "before setting up this field"
             )
-            self.logger.debug(message + ". Field disabled")
 
         # layout
         layout = QHBoxLayout(self)
@@ -97,20 +93,17 @@ class ScenarioPickerWidget(FormCustomWidget):
         name: str,
         label: str,
         value: str | None,
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Validates the value.
         :param name: The field name.
         :param label: The field label.
         :param value: The field value.
-        :return: The instance of FormValidation
+        :return: The instance of Validation
         """
         if self.get_value() is None and self.is_mandatory:
-            return FormValidation(
-                validation=False,
-                error_message="You must select a scenario",
-            )
-        return FormValidation(validation=True)
+            return Validation("You must select a scenario")
+        return Validation()
 
     def reset(self) -> None:
         """

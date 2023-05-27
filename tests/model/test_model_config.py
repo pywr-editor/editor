@@ -60,10 +60,7 @@ class TestModelConfig:
         """
         model = self.model("invalid_model_duplicated_custom_class_name.json")
         assert model.is_valid() is False
-        assert (
-            "as a Pywr built-in class: MonthlyProfileParameter"
-            in model.load_error
-        )
+        assert "as a Pywr built-in class: MonthlyProfileParameter" in model.load_error
 
     def test_update_schematic_size(self):
         """
@@ -108,9 +105,7 @@ class TestModelConfig:
         """
         model = self.model("invalid_model_wrong_type.json")
         assert model.is_valid() is False
-        assert (
-            "The value for the 'nodes' key must be a list" in model.load_error
-        )
+        assert "The value for the 'nodes' key must be a list" in model.load_error
 
     def test_validation_missing_node_type(self):
         """
@@ -151,10 +146,7 @@ class TestModelConfig:
         """
         model = self.model("invalid_model_wrong_edges.json")
         assert model.is_valid() is False
-        assert (
-            "The edge at position '0' must contain valid strings"
-            in model.load_error
-        )
+        assert "The edge at position '0' must contain valid strings" in model.load_error
 
     def test_validation_missing_param_type(self):
         """
@@ -162,10 +154,7 @@ class TestModelConfig:
         """
         model = self.model("model_parameters.json")
         assert model.is_valid() is False
-        assert (
-            "The parameter 'param3' must have a valid 'type'"
-            in model.load_error
-        )
+        assert "The parameter 'param3' must have a valid 'type'" in model.load_error
 
     def test_timestepper_methods(self):
         """
@@ -210,6 +199,4 @@ class TestModelConfig:
         Tests the path_to_relative method.
         """
         model = self.model("model_2.json")
-        assert model.path_to_relative(path, ignore_outside_model_path) == str(
-            expected
-        )
+        assert model.path_to_relative(path, ignore_outside_model_path) == str(expected)

@@ -169,23 +169,17 @@ class AppStylesheet:
                 "right": "3px",
                 "bottom": "2px",
             },
-            "::up-arrow:disabled": {
-                "border-image": "url(:form/caret-up-disabled)"
-            },
+            "::up-arrow:disabled": {"border-image": "url(:form/caret-up-disabled)"},
             "::up-arrow:off": {"border-image": "url(:form/caret-up-disabled)"},
-            "::down-arrow:disabled": {
-                "border-image": "url(:form/caret-down-disabled)"
-            },
-            "::down-arrow:off": {
-                "border-image": "url(:form/caret-down-disabled)"
-            },
+            "::down-arrow:disabled": {"border-image": "url(:form/caret-down-disabled)"},
+            "::down-arrow:off": {"border-image": "url(:form/caret-down-disabled)"},
         }
 
         return {
             "QGroupBox": {
                 "border": 0,
                 "font-weight": "bold",
-                "border-bottom": f"2px solid {Color('gray', 200).hex}",
+                "border-bottom": f"1px solid {Color('gray', 300).hex}",
                 "font-size": "15px",
                 "margin-top": "15px",
                 "padding": "7px 0px",

@@ -65,9 +65,7 @@ class ComponentsTree(QTreeWidget):
         self.setColumnCount(2)
 
         self.header().resizeSection(0, 200)
-        self.header().setSectionResizeMode(
-            1, QHeaderView.ResizeMode.ResizeToContents
-        )
+        self.header().setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
         self.header().setStretchLastSection(False)
         self.setStyleSheet(self.stylesheet)
 
@@ -105,9 +103,7 @@ class ComponentsTree(QTreeWidget):
         # expand items by name whose state was stored. These are node's and
         # parameter's names that are unique
         for name in self.expanded_state.get_all():
-            targets = self.findItems(
-                name, Qt.MatchExactly | Qt.MatchRecursive, 0
-            )
+            targets = self.findItems(name, Qt.MatchExactly | Qt.MatchRecursive, 0)
             for target in targets:
                 if self.expanded_state.is_state_stored(target):
                     target.setExpanded(True)
@@ -119,10 +115,7 @@ class ComponentsTree(QTreeWidget):
         """
         # initialise the node list
         nodes = {
-            **{
-                node_name: []
-                for node_name in self.model_config.pywr_node_data.names
-            },
+            **{node_name: [] for node_name in self.model_config.pywr_node_data.names},
             **{Constants.CUSTOM_NODE_GROUP_NAME.value: []},
         }
 
@@ -220,9 +213,7 @@ class ComponentsTree(QTreeWidget):
 
         # metadata
         for key, value in self.model_config.metadata.items():
-            if (
-                isinstance(value, str) and len(value) == 0
-            ):  # do not print empty fields
+            if isinstance(value, str) and len(value) == 0:  # do not print empty fields
                 continue
 
             item = QTreeWidgetItem(model_items)
@@ -273,7 +264,7 @@ class ComponentsTree(QTreeWidget):
                 model_config=self.model_config,
             )
             item.setText(0, table_name)
-            ext = self.model_config.tables.get_table_extension(table_name)
+            ext = self.model_config.tables.get_extension(table_name)
             if ext:
                 item.setToolTip(0, f"{table_name} ({ext} table)")
                 item.setIcon(0, QIcon(ExtensionIcon(ext)))
@@ -322,12 +313,12 @@ class ComponentsTree(QTreeWidget):
         for name in scenarios.names:
             item = QTreeWidgetItem(parent_item)
             item.setText(0, name)
-            size = scenarios.get_size_from_name(name)
+            size = scenarios.get_size(name)
             if size == 1:
                 text = "ensemble"
             else:
                 text = "ensembles"
-            item.setText(1, f"{scenarios.get_size_from_name(name)} {text}")
+            item.setText(1, f"{scenarios.get_size(name)} {text}")
 
         if self.init:
             self.expanded_state.add(parent_item, True)
@@ -385,17 +376,13 @@ class ComponentsTree(QTreeWidget):
         :param node_name: The node name to locate.
         :return: None
         """
-        targets = self.findItems(
-            node_name, Qt.MatchExactly | Qt.MatchRecursive, 0
-        )
+        targets = self.findItems(node_name, Qt.MatchExactly | Qt.MatchRecursive, 0)
         for t in targets:
             if isinstance(t, TreeWidgetNode):
                 # select, expand and scroll to the target node
                 t.setSelected(True)
                 t.setExpanded(True)
-                self.scrollToItem(
-                    t, QAbstractItemView.ScrollHint.PositionAtCenter
-                )
+                self.scrollToItem(t, QAbstractItemView.ScrollHint.PositionAtCenter)
 
     @Slot(QPoint)
     def on_context_menu(self, pos: QPoint) -> None:
@@ -461,18 +448,14 @@ class ComponentsTree(QTreeWidget):
             edit_action = context_menu.addAction(edit_icon, "Edit")
             # noinspection PyUnresolvedReferences
             edit_action.triggered.connect(
-                lambda *args, name=recoder_name: self.on_edit_recorder(
-                    recoder_name
-                )
+                lambda *args, name=recoder_name: self.on_edit_recorder(recoder_name)
             )
 
             # Delete recorder
             edit_action = context_menu.addAction(delete_icon, "Delete...")
             # noinspection PyUnresolvedReferences
             edit_action.triggered.connect(
-                lambda *args, name=recoder_name: self.on_delete_recorder(
-                    recoder_name
-                )
+                lambda *args, name=recoder_name: self.on_delete_recorder(recoder_name)
             )
 
             context_menu.exec(self.mapToGlobal(pos))
@@ -539,9 +522,7 @@ class ComponentsTree(QTreeWidget):
             self.model_config.parameters.delete(parameter_name)
             # update tree and status bar
             self.reload()
-            self.parent.statusBar().showMessage(
-                f'Deleted parameter "{parameter_name}"'
-            )
+            self.parent.statusBar().showMessage(f'Deleted parameter "{parameter_name}"')
 
     @Slot(str)
     def on_edit_recorder(self, recorder_name: str) -> None:
@@ -573,9 +554,7 @@ class ComponentsTree(QTreeWidget):
             self.model_config.parameters.delete(recorder_name)
             # update tree and status bar
             self.reload()
-            self.parent.statusBar().showMessage(
-                f'Deleted recorder "{recorder_name}"'
-            )
+            self.parent.statusBar().showMessage(f'Deleted recorder "{recorder_name}"')
 
     @staticmethod
     def humanise_key(key: str) -> str:
@@ -621,8 +600,7 @@ class StyleDelegate(QStyledItemDelegate):
         self,
         painter: PySide6.QtGui.QPainter,
         option: PySide6.QtWidgets.QStyleOptionViewItem,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
     ) -> None:
         """
         Paints the tree item.

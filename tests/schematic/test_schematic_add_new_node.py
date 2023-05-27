@@ -8,17 +8,13 @@ from PySide6.QtWidgets import QWidget
 
 from pywr_editor import MainWindow
 from pywr_editor.dialogs import NodeDialog
-from pywr_editor.form.widgets.parameter_line_edit_widget import (
-    ParameterLineEditWidget,
-)
+from pywr_editor.form.widgets.parameter_line_edit_widget import ParameterLineEditWidget
 from pywr_editor.model import ParameterConfig
 from pywr_editor.node_shapes import CustomNode
 from pywr_editor.schematic import Edge, Schematic, SchematicNode
 from pywr_editor.schematic.commands.add_node_command import AddNodeCommand
 from pywr_editor.toolbar.node_library.library_item import LibraryItem
-from pywr_editor.toolbar.node_library.schematic_items_library import (
-    LibraryPanel,
-)
+from pywr_editor.toolbar.node_library.schematic_items_library import LibraryPanel
 from pywr_editor.toolbar.tab_panel import TabPanel
 from tests.utils import resolve_model_path
 
@@ -41,9 +37,7 @@ class TestAddNodes:
         window = MainWindow(self.model_file)
         window.hide()
         schematic = window.schematic
-        node_lib_panel = window.toolbar.tabs["Operations"].panels[
-            "Nodes Library"
-        ]
+        node_lib_panel = window.toolbar.tabs["Operations"].panels["Nodes Library"]
 
         return window, schematic, node_lib_panel
 
@@ -97,22 +91,15 @@ class TestAddNodes:
 
         assert model_config.has_changes is True
         # the node is in the model configuration
-        assert (
-            model_config.nodes.find_node_index_by_name(new_node_name)
-            is not None
-        )
+        assert model_config.nodes.find_node_index_by_name(new_node_name) is not None
         # the node dictionary is correct
-        node_dict = model_config.nodes.get_node_config_from_name(new_node_name)
+        node_dict = model_config.nodes.config(new_node_name)
         node_pos = schematic.mapToScene(scene_pos).toTuple()
 
         assert node_dict["name"] == new_node_name
         assert node_dict["type"] == "link"
-        assert node_dict["position"]["editor_position"][0] == round(
-            node_pos[0], 4
-        )
-        assert node_dict["position"]["editor_position"][1] == round(
-            node_pos[1], 4
-        )
+        assert node_dict["position"]["editor_position"][0] == round(node_pos[0], 4)
+        assert node_dict["position"]["editor_position"][1] == round(node_pos[1], 4)
 
         # 3. Change node config
         schematic.node_items[new_node_name].on_edit_node()
@@ -121,13 +108,9 @@ class TestAddNodes:
         dialog_form = dialog.form
 
         new_new_node_name = "New node name"
-        dialog_form.find_field_by_name("name").widget.setText(new_new_node_name)
-        cost_widget: ParameterLineEditWidget = dialog_form.find_field_by_name(
-            "cost"
-        ).widget
-        cost_widget.component_obj = ParameterConfig(
-            {"type": "constant", "value": 9000}
-        )
+        dialog_form.find_field("name").widget.line_edit.setText(new_new_node_name)
+        cost_widget: ParameterLineEditWidget = dialog_form.find_field("cost").widget
+        cost_widget.component_obj = ParameterConfig({"type": "constant", "value": 9000})
         qtbot.mouseClick(dialog_form.save_button, Qt.MouseButton.LeftButton)
         dialog.close()
 
@@ -160,11 +143,8 @@ class TestAddNodes:
 
         # node and edges are removed from model config
         assert model_config.nodes.find_node_index_by_name(new_node_name) is None
-        assert (
-            model_config.nodes.find_node_index_by_name(new_new_node_name)
-            is None
-        )
-        edge, _ = model_config.edges.find_edge(*new_edge[0:2])
+        assert model_config.nodes.find_node_index_by_name(new_new_node_name) is None
+        edge, _ = model_config.edges.find(*new_edge[0:2])
         assert edge is None
         assert undo_command.deleted_edges[0] == new_edge
 
@@ -172,9 +152,7 @@ class TestAddNodes:
         assert new_node_name not in schematic.node_items.keys()
         assert new_new_node_name not in schematic.node_items.keys()
         node_names = [
-            node.name
-            for node in schematic.items()
-            if isinstance(node, SchematicNode)
+            node.name for node in schematic.items() if isinstance(node, SchematicNode)
         ]
         assert new_node_name not in node_names
         assert new_new_node_name not in node_names
@@ -191,20 +169,15 @@ class TestAddNodes:
         assert redo_button.isEnabled() is False
 
         # node and edges are restored in the model configuration
-        assert (
-            model_config.nodes.get_node_config_from_name(new_new_node_name)
-            == node_dict
-        )
-        edge, _ = model_config.edges.find_edge(*new_edge[0:2])
+        assert model_config.nodes.config(new_new_node_name) == node_dict
+        edge, _ = model_config.edges.find(*new_edge[0:2])
         assert edge == new_edge
         assert undo_command.deleted_edges[0] == new_edge
 
         # node and edges are restored from schematic
         assert new_new_node_name in schematic.node_items.keys()
         node_names = [
-            node.name
-            for node in schematic.items()
-            if isinstance(node, SchematicNode)
+            node.name for node in schematic.items() if isinstance(node, SchematicNode)
         ]
         assert new_new_node_name in node_names
         all_schematic_edges = [

@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QGroupBox, QHBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField
+from pywr_editor.form import FormField, FormWidget
 from pywr_editor.utils import Logging, get_signal_sender
 from pywr_editor.widgets import ComboBox
 
@@ -28,7 +28,7 @@ if TYPE_CHECKING:
 """
 
 
-class SourceSelectorWidget(FormCustomWidget):
+class SourceSelectorWidget(FormWidget):
     def __init__(
         self,
         name: str,
@@ -129,7 +129,7 @@ class SourceSelectorWidget(FormCustomWidget):
         if self.init is False:
             for name in ["url", "table", "value", "values"]:
                 self.logger.debug(f"Resetting FormField '{name}'")
-                form_field = self.form.find_field_by_name(name)
+                form_field = self.form.find_field(name)
                 # ignore non-existing fields
                 if form_field is not None:
                     # noinspection PyUnresolvedReferences

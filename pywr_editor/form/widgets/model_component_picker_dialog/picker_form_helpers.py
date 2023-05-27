@@ -33,9 +33,7 @@ def build_picker_form_fields(
         elif component_type == "recorder":
             key = "include_recorder_key"
         else:
-            raise ValueError(
-                "component_type can only be 'parameter; or 'recorder'"
-            )
+            raise ValueError("component_type can only be 'parameter; or 'recorder'")
 
         field_args = {key: include_comp_key}
 
@@ -43,9 +41,9 @@ def build_picker_form_fields(
     # ParameterTypeSelectorWidget or RecorderTypeSelectorWidget
     # will not load the values stored in the object
     if component_type == "parameter" and component_obj.is_a_model_parameter:
-        component_obj.reset_props()
+        component_obj.reset()
     elif component_type == "recorder" and component_obj.is_a_model_recorder:
-        component_obj.reset_props()
+        component_obj.reset()
 
     comp_picker_widget = None
     comp_type_selector_widget = None

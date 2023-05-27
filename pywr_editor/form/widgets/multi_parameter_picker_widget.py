@@ -1,7 +1,7 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QHBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField
+from pywr_editor.form import FormField, FormWidget
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import CheckableComboBox
 
@@ -11,7 +11,7 @@ from pywr_editor.widgets import CheckableComboBox
 """
 
 
-class MultiParameterPickerWidget(FormCustomWidget):
+class MultiParameterPickerWidget(FormWidget):
     def __init__(
         self,
         name: str,
@@ -34,7 +34,7 @@ class MultiParameterPickerWidget(FormCustomWidget):
         self.combo_box = CheckableComboBox()
         model_parameters = self.model_config.parameters.names
         for name in model_parameters:
-            param_obj = self.model_config.parameters.get_config_from_name(
+            param_obj = self.model_config.parameters.config(
                 parameter_name=name, as_dict=False
             )
             self.combo_box.addItem(f"{name} ({param_obj.humanised_type})", name)
@@ -44,13 +44,9 @@ class MultiParameterPickerWidget(FormCustomWidget):
             self.logger.debug("Value is None or empty. No value set")
         # value must be a list of strings
         elif not isinstance(value, list):
-            message = "The parameter names must be a list"
-            self.form_field.set_warning_message(message)
-            self.logger.debug(message + ". None selected")
+            self.field.set_warning("The parameter names must be a list")
         elif not all([isinstance(n, str) for n in value]):
-            message = "The parameter names must be valid strings"
-            self.form_field.set_warning_message(message)
-            self.logger.debug(message + ". None selected")
+            self.field.set_warning("The parameter names must be valid strings")
         else:
             wrong_names = []
             selected_indexes = []
@@ -58,9 +54,7 @@ class MultiParameterPickerWidget(FormCustomWidget):
             for param_name in value:
                 index = self.combo_box.findData(param_name, Qt.UserRole)
                 if index != -1:
-                    self.logger.debug(
-                        f"Selecting index #{index} for '{param_name}'"
-                    )
+                    self.logger.debug(f"Selecting index #{index} for '{param_name}'")
                     selected_indexes.append(index)
                 else:
                     wrong_names.append(param_name)
@@ -68,21 +62,16 @@ class MultiParameterPickerWidget(FormCustomWidget):
             self.combo_box.check_items(selected_indexes, False)
 
             if wrong_names:
-                message = (
+                self.field.set_warning(
                     "The following parameter names do not exist in the model "
-                    + f"configuration: {', '.join(wrong_names)}"
+                    f"configuration: {', '.join(wrong_names)}"
                 )
-                self.logger.debug(message)
-                self.form_field.set_warning_message(message)
-
         # there are no parameters in the model
         if len(self.combo_box.all_items) == 0:
             self.combo_box.setEnabled(False)
-            message = "There are no parameters available"
-            self.logger.debug(message)
-            self.form_field.set_warning_message(
-                message
-                + ". Add a new parameter first, before setting up this option"
+            self.field.set_warning(
+                "There are no parameters available. Add a new parameter first, before "
+                "setting up this option"
             )
 
         # layout

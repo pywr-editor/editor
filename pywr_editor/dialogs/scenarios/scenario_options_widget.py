@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.form import FormField, FormWidget, Validation
 from pywr_editor.model import ScenarioConfig
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import PushButton, SpinBox, TableView
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from .scenario_form_widget import ScenarioFormWidget
 
 
-class ScenarioOptionsWidget(FormCustomWidget):
+class ScenarioOptionsWidget(FormWidget):
     def __init__(
         self,
         name: str,
@@ -35,9 +35,7 @@ class ScenarioOptionsWidget(FormCustomWidget):
         self.scenario_config = ScenarioConfig(self.form.scenario_dict)
 
         # Sanitise variables
-        self.slice_value, self.slice_message = self.sanitise_slice(
-            value["slice"]
-        )
+        self.slice_value, self.slice_message = self.sanitise_slice(value["slice"])
         self.names_value, self.names_message = self.sanitise_names(
             value["ensemble_names"]
         )
@@ -100,18 +98,16 @@ class ScenarioOptionsWidget(FormCustomWidget):
         elif self.slice_message:
             warning_message = self.slice_message
 
-        self.form_field.set_warning_message(warning_message)
+        self.field.set_warning(warning_message)
 
         # register Slot if scenario size changes
-        size_field = self.form.find_field_by_name("size")
+        size_field = self.form.find_field("size")
         # noinspection PyTypeChecker
         size_widget: SpinBox = size_field.findChild(SpinBox)
         # noinspection PyUnresolvedReferences
         size_widget.valueChanged.connect(self.on_scenario_resize)
 
-    def sanitise_slice(
-        self, value: list[int] | None
-    ) -> [list[int], str | None]:
+    def sanitise_slice(self, value: list[int] | None) -> [list[int], str | None]:
         """
         Sanitises the slice value.
         :param value: The value to sanitise.
@@ -142,9 +138,7 @@ class ScenarioOptionsWidget(FormCustomWidget):
 
         return final_value, message
 
-    def sanitise_names(
-        self, value: list[str] | None
-    ) -> [list[str], str | None]:
+    def sanitise_names(self, value: list[str] | None) -> [list[str], str | None]:
         """
         Sanitises the ensemble names.
         :param value: The value to sanitise.
@@ -160,9 +154,7 @@ class ScenarioOptionsWidget(FormCustomWidget):
         elif not isinstance(value, list) or any(
             [not isinstance(v, str) for v in value]
         ):
-            message = (
-                "The list of ensemble names must be a valid list of strings"
-            )
+            message = "The list of ensemble names must be a valid list of strings"
         elif len(value) != self.scenario_config.size:
             message = f"The number of ensemble names ({len(value)}) must match "
             message += f"the scenario size ({self.scenario_config.size})"
@@ -192,9 +184,7 @@ class ScenarioOptionsWidget(FormCustomWidget):
             self.model.names = self.model.names[0:new_size]
             # remove all index > new_size
             self.model.slice = [
-                slice_idx
-                for slice_idx in self.model.slice
-                if slice_idx < new_size
+                slice_idx for slice_idx in self.model.slice if slice_idx < new_size
             ]
 
         self.model.total_rows = new_size
@@ -221,33 +211,29 @@ class ScenarioOptionsWidget(FormCustomWidget):
 
     def validate(
         self, name: str, label: str, value: dict[str, list[int | str]] | None
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Validates the field.
         :param name: The field name.
         :param label: The field name.
         :param value: The value. Not used.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         # slice in the table cannot be empty
         if not self.model.slice:
-            return FormValidation(
-                validation=False,
-                error_message="You must select at least a scenario ensemble to run",
-            )
+            return Validation("You must select at least a scenario ensemble to run")
 
         # if no name is not provided, validation passes
         if all([not name for name in self.model.names]):
-            return FormValidation(validation=True)
+            return Validation()
         # if at least one name is given, all names are mandatory
         elif any([not name for name in self.model.names]):
-            return FormValidation(
-                validation=False,
-                error_message="The ensemble names are optional, but if you provide at "
+            return Validation(
+                "The ensemble names are optional, but if you provide at "
                 "least one name, you must provide the names for all the ensembles",
             )
 
-        return FormValidation(validation=True)
+        return Validation()
 
     def reset(self) -> None:
         """

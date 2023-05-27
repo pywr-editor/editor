@@ -62,19 +62,19 @@ class PywrNodesData:
         node_type = node_type.lower()
         return node_type in self.keys
 
-    def is_custom_node(self, node_type: str) -> bool:
+    def is_custom(self, node_type: str) -> bool:
         """
-        Returns True if the node is not a built-in pywr node.
+        Return True if the node is not a built-in pywr node.
         :param node_type: The string identifying the node type.
         :return: True if the node is custom, False otherwise.
         """
         return not self.does_type_exist(node_type)
 
-    def get_keys_with_parent_class(
+    def keys_with_parent_class(
         self, subclass_name: str, include_parent: bool = True
     ) -> list[str]:
         """
-        Returns the node keys whose parent class matches parent_class_name.
+        Return the node keys whose parent class matches parent_class_name.
         :param subclass_name: The name of the parent class, for example Reservoir.
         :param include_parent: Whether to return the key of the parent class too.
         Default to True.
@@ -90,7 +90,7 @@ class PywrNodesData:
                 keys.append(key)
         return keys
 
-    def get_class_from_type(self, node_type: str | None) -> str | None:
+    def class_from_type(self, node_type: str | None) -> str | None:
         """
         Returns the pywr class from the node type.
         :param node_type: The string identifying the node type.

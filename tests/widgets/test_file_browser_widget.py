@@ -24,7 +24,7 @@ class TestFileBrowserWidget:
         form = RecorderForm(
             model_config=ModelConfig(resolve_model_path("model_tables.json")),
             recorder_obj=RecorderConfig({}),
-            available_fields={
+            fields={
                 "Section": [
                     {
                         "name": "url",
@@ -39,7 +39,7 @@ class TestFileBrowserWidget:
         )
         form.load_fields()
 
-        form_field = form.find_field_by_name("url")
+        form_field = form.find_field("url")
         return form_field.widget
 
     @pytest.mark.parametrize(
@@ -73,7 +73,7 @@ class TestFileBrowserWidget:
         or during form validation are shown.
         """
         widget = self.widget(value=value)
-        form_field = widget.form_field
+        form_field = widget.field
 
         # 1. Check field
         assert widget.get_value() == expected_value

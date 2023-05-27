@@ -7,8 +7,8 @@ from PySide6.QtWidgets import QHBoxLayout, QLineEdit, QVBoxLayout, QWidget
 from pywr_editor.form import (
     ExternalDataPickerDialogWidget,
     FormField,
-    FormValidation,
     TableValuesWidget,
+    Validation,
 )
 from pywr_editor.utils import get_signal_sender
 from pywr_editor.widgets import ComboBox, PushButton, PushIconButton
@@ -71,9 +71,7 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
 
         table_dict = {}
         # in case of one variable, use field name or supplied name
-        self.one_var_name = (
-            variable_names if isinstance(variable_names, str) else name
-        )
+        self.one_var_name = variable_names if isinstance(variable_names, str) else name
 
         if multiple_variables:
             if isinstance(value, list):
@@ -124,9 +122,7 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
         # add external file pickers
         self.line_edit_widget_container = self.generate_data_picker_widget()
         # noinspection PyTypeChecker
-        self.line_edit: QLineEdit = self.line_edit_widget_container.findChild(
-            QLineEdit
-        )
+        self.line_edit: QLineEdit = self.line_edit_widget_container.findChild(QLineEdit)
 
         # add all widgets
         # noinspection PyTypeChecker
@@ -154,7 +150,7 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
             )
             # reset warning from parent widget and hide TableView
             self.combo_box.setCurrentText(self.labels_map["values"])
-            self.form_field.clear_message()
+            self.field.clear_message()
         # external file or model table
         elif isinstance(self.raw_value, dict):
             self.logger.debug(
@@ -163,7 +159,7 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
             self.combo_box.setCurrentText(self.labels_map["external"])
 
             # reset warning from parent widget and hide QLineEdit
-            self.form_field.clear_message()
+            self.field.clear_message()
             self.external_data_dict = self.raw_value
 
             if "url" in self.raw_value:
@@ -172,11 +168,9 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
                 self.logger.debug(f"Table is '{self.raw_value['table']}'")
             # field is mandatory
             elif self.is_mandatory:
-                message = (
+                self.field.set_warning(
                     "The configuration to fetch the external data is not valid"
                 )
-                self.logger.debug(message)
-                self.form_field.set_warning_message(message)
         # default to parent widget - fill with values
         else:
             self.combo_box.setCurrentText(self.labels_map["values"])
@@ -200,11 +194,9 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
             # reset table and QLineEdit
             super().reset()
             self.reset_line_edit()
-            self.form_field.clear_message()
+            self.field.clear_message()
 
-        is_values_selected = (
-            self.combo_box.currentText() == self.labels_map["values"]
-        )
+        is_values_selected = self.combo_box.currentText() == self.labels_map["values"]
         # toggle TableView and its buttons
         self.table.setVisible(is_values_selected)
         for button in self.table_buttons:
@@ -273,13 +265,13 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
         name: str,
         label: str,
         value: list[float | int] | list[list[float | int]] | dict | None,
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that the value is valid.
         :param name: The field name.
         :param label: The field label.
         :param value: The field label
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         if self.combo_box.currentText() == self.labels_map["values"]:
             self.logger.debug(f"Validation with {self.labels_map['values']}")
@@ -296,12 +288,9 @@ class ValuesAndExternalDataWidget(TableValuesWidget):
                 "url" not in self.external_data_dict
                 and "table" not in self.external_data_dict
             ):
-                return FormValidation(
-                    validation=False,
-                    error_message="You must configure the field to fetch the data",
-                )
+                return Validation("You must configure the field to fetch the data")
 
-        return FormValidation(validation=True)
+        return Validation()
 
     def update_line_edit(self, value_dict: dict[str, Any]) -> None:
         """

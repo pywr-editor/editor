@@ -4,16 +4,9 @@ import traceback
 import qtawesome as qta
 from pandas import read_csv, read_excel, read_hdf
 from PySide6.QtCore import Signal, SignalInstance, Slot
-from PySide6.QtWidgets import (
-    QComboBox,
-    QFileDialog,
-    QHBoxLayout,
-    QLineEdit,
-    QMessageBox,
-    QSpinBox,
-)
+from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QLineEdit, QMessageBox
 
-from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.form import FormField, FormWidget, Validation
 from pywr_editor.utils import (
     Logging,
     get_signal_sender,
@@ -41,7 +34,7 @@ from pywr_editor.widgets import PushIconButton
 """
 
 
-class UrlWidget(FormCustomWidget):
+class UrlWidget(FormWidget):
     # Initialise Signals - signal must be defined on the class, not the instance
     updated_table = Signal()
     index_changed = Signal()
@@ -193,43 +186,17 @@ class UrlWidget(FormCustomWidget):
         # self.force_table_update changes (for ex. separator)
         for field in self.force_table_update:
             form_field = self.form.fields[field]
-            if isinstance(form_field.widget, QLineEdit):
-                # noinspection PyUnresolvedReferences
-                form_field.widget.textChanged.connect(self.on_table_reload)
-                self.logger.debug(
-                    "Registered Slot on_table_reload for QLineEdit("
-                    + f"{form_field.name}).textChanged Signal"
+            if not hasattr(form_field.widget, "field_value_changed"):
+                raise NotImplementedError(
+                    f"The widget {form_field.widget} must have the field_value_changed "
+                    + "attribute"
                 )
-            elif isinstance(form_field.widget, QComboBox):
-                # noinspection PyUnresolvedReferences
-                form_field.widget.currentIndexChanged.connect(
-                    self.on_table_reload
-                )
-                self.logger.debug(
-                    "Registered Slot on_table_reload for QComboBox("
-                    + f"{form_field.name}).currentIndexChanged Signal"
-                )
-            elif isinstance(form_field.widget, QSpinBox):
-                # noinspection PyUnresolvedReferences
-                form_field.widget.textChanged.connect(self.on_table_reload)
-                self.logger.debug(
-                    f"Registered Slot on_table_reload for QSpinBox({form_field.name})."
-                    + "textChanged Signal"
-                )
-            elif form_field.is_custom_widget:
-                if not hasattr(form_field.widget, "field_value_changed"):
-                    raise NotImplementedError(
-                        f"The widget {form_field} must have the field_value_changed "
-                        + "attribute"
-                    )
-                # noinspection PyUnresolvedReferences
-                form_field.widget.field_value_changed.connect(
-                    self.on_table_reload
-                )
-                self.logger.debug(
-                    "Registered Slot on_table_reload for custom widget "
-                    + f"named {form_field.name}"
-                )
+            # noinspection PyUnresolvedReferences
+            form_field.widget.field_value_changed.connect(self.on_table_reload)
+            self.logger.debug(
+                "Registered Slot on_table_reload for custom widget "
+                + f"named {form_field.name}"
+            )
 
         # 3. reload the following widgets if the file name changes (for ex. sheet names)
         for field in self.force_widget_update:
@@ -248,7 +215,7 @@ class UrlWidget(FormCustomWidget):
         # 4. register updated_table Slot. When the table changes, the fields using the
         # table content must be updated the fields must have the update method
         for field_name in self.register_updated_table:
-            form_field = self.form.find_field_by_name(field_name)
+            form_field = self.form.find_field(field_name)
             if form_field is None:
                 self.logger.debug(
                     f"Skipping registration of Slot {field_name}.update_field for "
@@ -257,7 +224,7 @@ class UrlWidget(FormCustomWidget):
                 continue
 
             # noinspection PyTypeChecker
-            form_widget: FormCustomWidget = form_field.widget
+            form_widget: FormWidget = form_field.widget
             if not hasattr(form_widget, "update_field"):
                 raise NotImplementedError(
                     f"The widget {form_widget} must have the update_field() method"
@@ -270,16 +237,14 @@ class UrlWidget(FormCustomWidget):
             )
 
         # 5. on file change, update all other fields first and then update the table
-        self.logger.debug(
-            "Registered Slot on_reload_all_data for file_changed Signal"
-        )
+        self.logger.debug("Registered Slot on_reload_all_data for file_changed Signal")
         # noinspection PyUnresolvedReferences
         self.file_changed.connect(self.on_reload_all_data)
 
         # 6. when index_col changes, the table indexes must be updated (for index and
         # column widgets)
         for field_name in self.register_index_changed:
-            form_field = self.form.find_field_by_name(field_name)
+            form_field = self.form.find_field(field_name)
             if form_field is None:
                 self.logger.debug(
                     f"Skipping registration of Slot {field_name}.update_field for "
@@ -336,9 +301,7 @@ class UrlWidget(FormCustomWidget):
             self.logger.debug(f"Opening file {file}")
             os.startfile(file)
         except Exception:
-            self.logger.debug(
-                f"Failed to open because: {traceback.print_exc()}"
-            )
+            self.logger.debug(f"Failed to open because: {traceback.print_exc()}")
             QMessageBox().critical(
                 self,
                 "Cannot open the file",
@@ -356,9 +319,7 @@ class UrlWidget(FormCustomWidget):
         file_dialog = QFileDialog()
         file_dialog.setFileMode(QFileDialog.FileMode.ExistingFile)
 
-        files_filter = (
-            "CSV (*.csv);; Text (*.txt);; Excel (*.xls *.xlsx *.xlsm);; "
-        )
+        files_filter = "CSV (*.csv);; Text (*.txt);; Excel (*.xls *.xlsx *.xlsm);; "
         files_filter += "HDF5 (*.h5)"
         file_dialog.setNameFilter(files_filter)
 
@@ -376,9 +337,7 @@ class UrlWidget(FormCustomWidget):
         Reload button is clicked.
         :return: None
         """
-        self.logger.debug(
-            f"Called on_reload_click Slot from {get_signal_sender(self)}"
-        )
+        self.logger.debug(f"Called on_reload_click Slot from {get_signal_sender(self)}")
         self.on_reload_all_data(self.full_file)
         self.logger.debug("Completed on_reload_click Slot")
 
@@ -409,7 +368,7 @@ class UrlWidget(FormCustomWidget):
         )
 
         # init
-        self.form_field.clear_message()
+        self.field.clear_message()
         self.open_button.setDisabled(True)
 
         # read the file and update the table
@@ -424,18 +383,13 @@ class UrlWidget(FormCustomWidget):
 
         # table file does not exist
         if self.full_file is None and self.line_edit.text() != "":
-            message = "The table file does not exist"
-            self.logger.debug(message)
-            self.form_field.set_error_message(message)
-        elif (
-            self.file_ext != ""
-            and self.file_ext not in self.supported_extensions
-        ):
-            message = f"The file extension '{self.file_ext}' is not supported"
-            self.logger.debug(message)
-            self.form_field.set_error_message(message)
+            self.field.set_error("The table file does not exist")
+        elif self.file_ext != "" and self.file_ext not in self.supported_extensions:
+            self.field.set_error(
+                f"The file extension '{self.file_ext}' is not supported"
+            )
         elif self.table_parse_error:
-            self.form_field.set_error_message(
+            self.field.set_error(
                 "Cannot parse the file. Try changing the options below"
             )
         else:
@@ -446,7 +400,7 @@ class UrlWidget(FormCustomWidget):
                 rel_path = self.model_config.path_to_relative(file, False)
                 # file is outside the model configuration folder
                 if ".." in rel_path:
-                    self.form_field.set_warning_message(
+                    self.field.set_warning(
                         "It is always recommended to place the table file in the same "
                         + "folder as the model configuration file"
                     )
@@ -474,7 +428,7 @@ class UrlWidget(FormCustomWidget):
                 if self.file_ext == ".csv" or self.file_ext == ".txt":
                     args = {}
                     for name in self.csv_fields:
-                        field = self.form.find_field_by_name(name)
+                        field = self.form.find_field(name)
                         if field is not None:
                             args[name] = field.value()
                     args["low_memory"] = True
@@ -485,7 +439,7 @@ class UrlWidget(FormCustomWidget):
                 elif self.file_ext in [".xls", ".xlsx", ".xlsm"]:
                     args = {}
                     for name in self.excel_fields:
-                        field = self.form.find_field_by_name(name)
+                        field = self.form.find_field(name)
                         if field is not None:
                             args[name] = field.value()
                     self.logger.debug(
@@ -495,25 +449,19 @@ class UrlWidget(FormCustomWidget):
                 elif self.file_ext == ".h5":
                     args = {}
                     for name in self.hdf_fields:
-                        field = self.form.find_field_by_name(name)
+                        field = self.form.find_field(name)
                         if field is not None:
                             args[name] = field.value()
-                    self.logger.debug(
-                        f"Opening H5 file {self.full_file} using: {args}"
-                    )
+                    self.logger.debug(f"Opening H5 file {self.full_file} using: {args}")
                     self.table = read_hdf(self.full_file, **args)
                     # remove built-in indexes and set them via attrs
                     # for H5 file, index names cannot be changed
                     index_names = reset_pandas_index_names(self.table)
-                    self.logger.debug(
-                        f"Resetting built-in indexes: {index_names}"
-                    )
+                    self.logger.debug(f"Resetting built-in indexes: {index_names}")
                     set_table_index(self.table, index_names)
 
                 if self.file_ext not in self.supported_extensions:
-                    self.logger.debug(
-                        f"Extension '{self.file_ext}' not supported"
-                    )
+                    self.logger.debug(f"Extension '{self.file_ext}' not supported")
                     raise ValueError
             except Exception:
                 self.logger.debug(
@@ -625,24 +573,20 @@ class UrlWidget(FormCustomWidget):
         # noinspection PyUnresolvedReferences
         self.updated_table.emit()
 
-    def validate(self, name: str, label: str, value: str) -> FormValidation:
+    def validate(self, name: str, label: str, value: str) -> Validation:
         """
         Checks that the file url is valid.
         :param name: The field name.
         :param label: The field label.
         :param value: The field label.
-        :return: The FormValidation instance. The validation attribute is True, if the
+        :return: The Validation instance. The validation attribute is True, if the
         field contains an existing file and the table is valid.
         """
         self.logger.debug("Validating field")
         if self.table is not None:
             self.logger.debug("Validation passed")
 
-            return FormValidation(validation=True)
+            return Validation()
 
         self.logger.debug("Validation failed")
-        return FormValidation(
-            validation=False,
-            error_message="The file must exist and contain a supported and "
-            + "valid table",
-        )
+        return Validation("The file must exist and contain a supported and valid table")

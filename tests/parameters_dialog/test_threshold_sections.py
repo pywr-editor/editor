@@ -11,9 +11,7 @@ class TestDialogThresholdSection:
     Tests the sections for the threshold parameters.
     """
 
-    model_file = resolve_model_path(
-        "model_dialog_parameter_threshold_sections.json"
-    )
+    model_file = resolve_model_path("model_dialog_parameter_threshold_sections.json")
 
     @pytest.fixture()
     def model_config(self) -> ModelConfig:

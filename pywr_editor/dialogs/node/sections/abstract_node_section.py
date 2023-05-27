@@ -1,5 +1,4 @@
-from pywr_editor.form import FloatWidget, FormSection
-from pywr_editor.utils import Logging
+from pywr_editor.form import FieldConfig, FloatWidget, FormSection
 
 from ..node_dialog_form import NodeDialogForm
 
@@ -23,46 +22,32 @@ class AbstractNodeSection(FormSection):
         None.
         """
         super().__init__(form, section_data)
-        self.form = form
-        self.logger = Logging().logger(self.__class__.__name__)
         self.add_conversion_factor = add_conversion_factor
-        if additional_fields:
-            self.additional_fields = additional_fields
-        else:
-            self.additional_fields = []
+
+        if not additional_fields:
+            additional_fields = []
 
         # add conversion factor field before any additional fields
         if add_conversion_factor:
-            self.additional_fields.append(
-                {
-                    "name": "conversion_factor",
-                    "field_type": FloatWidget,
-                    "field_args": {"min_value": 0},
-                    "default_value": 1,
-                    "value": self.form.get_node_dict_value("conversion_factor"),
-                    "help_text": "The conversion between inflow and outflow for the "
+            additional_fields.append(
+                FieldConfig(
+                    name="conversion_factor",
+                    field_type=FloatWidget,
+                    field_args={"min_value": 0},
+                    default_value=1,
+                    value=form.field_value("conversion_factor"),
+                    help_text="The conversion between inflow and outflow for the "
                     + "node",
-                },
+                ),
             )
-
-    @property
-    def data(self):
-        """
-        Defines the section data dictionary.
-        :return: The section dictionary.
-        """
-        self.logger.debug("Registering form")
-
-        data_dict = {
-            "Configuration": [
-                self.form.min_flow_field,
-                self.form.max_flow_field,
-                self.form.cost_field("flow"),
-            ]
-            + self.additional_fields
-            + [
-                self.form.comment,
-            ],
-        }
-
-        return data_dict
+        self.add_fields(
+            {
+                "Configuration": [
+                    form.min_flow_field,
+                    form.max_flow_field,
+                    form.cost_field("flow"),
+                ]
+                + additional_fields
+                + [form.comment],
+            }
+        )

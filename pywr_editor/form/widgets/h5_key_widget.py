@@ -5,12 +5,7 @@ from pandas import HDFStore
 from PySide6.QtCore import Signal, Slot
 from PySide6.QtWidgets import QHBoxLayout
 
-from pywr_editor.form import (
-    FormCustomWidget,
-    FormField,
-    FormValidation,
-    UrlWidget,
-)
+from pywr_editor.form import FormField, FormWidget, UrlWidget, Validation
 from pywr_editor.utils import Logging, get_signal_sender
 from pywr_editor.widgets import ComboBox
 
@@ -18,7 +13,7 @@ if TYPE_CHECKING:
     from pywr_editor.form import ModelComponentForm
 
 
-class H5KeyWidget(FormCustomWidget):
+class H5KeyWidget(FormWidget):
     def __init__(
         self,
         name: str,
@@ -97,7 +92,7 @@ class H5KeyWidget(FormCustomWidget):
         # on_update_value is called whilst the field is still empty
         self.setEnabled(False)
         self.combo_box.clear()
-        self.form_field.clear_message(message_type="warning")
+        self.field.clear_message(message_type="warning")
 
         # Load sheets
         self.load_key_names()
@@ -109,9 +104,7 @@ class H5KeyWidget(FormCustomWidget):
             self.logger.debug("The H5 file does not exist")
         # the file does not contain keys
         elif self.has_keys is False:
-            message = "The H5 file does not contain any key"
-            self.logger.debug(message)
-            self.form_field.set_warning_message(message)
+            self.field.set_warning("The H5 file does not contain any key")
         else:
             self.setEnabled(True)
             self.combo_box.addItems(self.keys)
@@ -122,7 +115,7 @@ class H5KeyWidget(FormCustomWidget):
                     f"{self.value} is not a valid key (using first sheet). "
                     + "Setting warning message"
                 )
-                self.form_field.set_warning_message(
+                self.field.set_warning(
                     "The key, currently set in the model config file, does not exist "
                     + "in the H5 file. The first available key was selected, otherwise "
                     + "select another name"
@@ -145,7 +138,7 @@ class H5KeyWidget(FormCustomWidget):
             f"Running on_update_value Slot with value {selected_key} from "
             + get_signal_sender(self)
         )
-        self.form_field.clear_message(message_type="warning")
+        self.field.clear_message(message_type="warning")
         self.value = self.sanitise_value(selected_key)
         self.logger.debug(f"Updated field value to {self.value}")
         self.logger.debug("Completed on_update_value Slot")
@@ -258,7 +251,7 @@ class H5KeyWidget(FormCustomWidget):
         name: str,
         label: str,
         value: str | None,
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that the set H5 key is valid. Validation fails if there are no keys
         (file does not exist or is not valid) or the value is of the wrong type.
@@ -266,15 +259,12 @@ class H5KeyWidget(FormCustomWidget):
         :param name: The field name.
         :param label: The field label.
         :param value: The field value from self.get_value().
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         self.logger.debug("Validating field")
         if self.has_keys is False or self.value is False:
             self.logger.debug("Validation failed")
-            return FormValidation(
-                validation=False,
-                error_message="You must select a valid key from the list",
-            )
+            return Validation("You must select a valid key from the list")
 
         self.logger.debug("Validation passed")
-        return FormValidation(validation=True)
+        return Validation()

@@ -44,9 +44,7 @@ class TestDialogThresholdRelationSymbolWidget:
         assert selected_page.findChild(FormField, "name").value() == param_name
 
         # noinspection PyUnresolvedReferences
-        symbol_field: FormField = selected_page.findChild(
-            FormField, "predicate"
-        )
+        symbol_field: FormField = selected_page.findChild(FormField, "predicate")
         # noinspection PyUnresolvedReferences
         symbol_widget: ThresholdRelationSymbolWidget = symbol_field.widget
 
@@ -78,9 +76,7 @@ class TestDialogThresholdRelationSymbolWidget:
         assert selected_page.findChild(FormField, "name").value() == param_name
 
         # noinspection PyUnresolvedReferences
-        symbol_field: FormField = selected_page.findChild(
-            FormField, "predicate"
-        )
+        symbol_field: FormField = selected_page.findChild(FormField, "predicate")
         # noinspection PyUnresolvedReferences
         symbol_widget: ThresholdRelationSymbolWidget = symbol_field.widget
 
@@ -89,9 +85,7 @@ class TestDialogThresholdRelationSymbolWidget:
             symbol_widget.combo_box.currentText()
             == symbol_widget.labels_map[symbol_widget.get_default_selection()]
         )
-        assert (
-            symbol_widget.get_value() == symbol_widget.get_default_selection()
-        )
+        assert symbol_widget.get_value() == symbol_widget.get_default_selection()
 
         # check warning
         assert message in symbol_field.message.text()

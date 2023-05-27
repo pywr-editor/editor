@@ -1,6 +1,5 @@
 import pytest
 from PySide6.QtCore import Qt, QTimer
-from PySide6.QtWidgets import QLineEdit
 
 import pywr_editor
 from pywr_editor.dialogs import NodeDialog
@@ -8,6 +7,7 @@ from pywr_editor.form import (
     EdgeColorPickerWidget,
     NodeStylePickerWidget,
     ParameterLineEditWidget,
+    TextWidget,
 )
 from pywr_editor.model import Constants, ModelConfig, PywrNodesData
 from tests.utils import close_message_box, resolve_model_path
@@ -52,9 +52,7 @@ class TestNodeDialog:
             ("leaky_pipe", "leakypipe", {}, False),
         ],
     )
-    def test_init_node(
-        self, qtbot, node_name, node_type, props, is_type_enabled
-    ):
+    def test_init_node(self, qtbot, node_name, node_type, props, is_type_enabled):
         """
         Tests that the nodes are loaded correctly.
         """
@@ -62,16 +60,16 @@ class TestNodeDialog:
         dialog.show()
         form = dialog.form
 
-        assert form.find_field_by_name("name").value() == node_name
+        assert form.find_field("name").value() == node_name
 
         # Check type
-        node_type_field = form.find_field_by_name("type")
+        node_type_field = form.find_field("type")
         assert node_type_field.value() == node_type
         assert node_type_field.widget.isEnabled() == is_type_enabled
 
         # Check other fields
         for field_name, field_value in props.items():
-            field = form.find_field_by_name(field_name)
+            field = form.find_field(field_name)
             # check ComboBox value
             if field_name == "edge_color":
                 widget: EdgeColorPickerWidget = field.widget
@@ -101,9 +99,9 @@ class TestNodeDialog:
         form = dialog.form
 
         # change value
-        name_field = form.find_field_by_name("name")
-        line_edit: QLineEdit = name_field.widget
-        line_edit.setText(new_name)
+        name_field = form.find_field("name")
+        line_edit: TextWidget = name_field.widget
+        line_edit.line_edit.setText(new_name)
 
         QTimer.singleShot(100, close_message_box)
         qtbot.mouseClick(form.save_button, Qt.MouseButton.LeftButton)
@@ -128,7 +126,7 @@ class TestNodeDialog:
         form = dialog.form
 
         # 1. Check values
-        field = form.find_field_by_name(Constants.NODE_STYLE_KEY.value)
+        field = form.find_field(Constants.NODE_STYLE_KEY.value)
         widget: NodeStylePickerWidget = field.widget
         assert widget.combo_box.currentData() == selected_data
 
@@ -152,11 +150,11 @@ class TestNodeDialog:
         new_name = "Node X"
         dialog = self.node_dialog(old_name)
         form = dialog.form
-        type_field = form.find_field_by_name("type")
+        type_field = form.find_field("type")
 
         # change name
-        widget: QLineEdit = form.find_field_by_name("name").widget
-        widget.setText(new_name)
+        widget: TextWidget = form.find_field("name").widget
+        widget.line_edit.setText(new_name)
         assert form.save_button.isEnabled() is True
 
         # send form
@@ -165,7 +163,7 @@ class TestNodeDialog:
 
         # check nodes
         assert form.model_config.nodes.find_node_index_by_name(old_name) is None
-        assert form.model_config.nodes.get_node_config_from_name(new_name) == {
+        assert form.model_config.nodes.config(new_name) == {
             "name": new_name,
             "type": "input",
             "position": {"node_style": "works"},
@@ -185,7 +183,7 @@ class TestNodeDialog:
         """
         dialog = self.node_dialog("aggregated_node")
         form = dialog.form
-        assert form.find_field_by_name("edge_color") is None
+        assert form.find_field("edge_color") is None
 
     def test_custom_node_type(self, qtbot):
         """
@@ -195,19 +193,19 @@ class TestNodeDialog:
         node_name = "custom_node"
         dialog = self.node_dialog(node_name)
         form = dialog.form
-        form_field = form.find_field_by_name("type")
-        widget: QLineEdit = form_field.widget
+        form_field = form.find_field("type")
+        widget: TextWidget = form_field.widget
 
         # 1. Change type to valid string
         new_type = "CustomNodev2"
-        widget.setText(new_type)
+        widget.line_edit.setText(new_type)
         assert form.save_button.isEnabled() is True
 
         # send form
         qtbot.mouseClick(form.save_button, Qt.MouseButton.LeftButton)
 
         # check nodes
-        assert form.model_config.nodes.get_node_config_from_name(node_name) == {
+        assert form.model_config.nodes.config(node_name) == {
             "name": node_name,
             "type": new_type,
             "value": 5,
@@ -215,14 +213,14 @@ class TestNodeDialog:
         }
 
         # 2. Set a invalid Python class
-        widget.setText("Wrong className")
+        widget.line_edit.setText("Wrong className")
         QTimer.singleShot(100, close_message_box)
         qtbot.mouseClick(form.save_button, Qt.MouseButton.LeftButton)
         assert "must be a valid Python" in form_field.message.text()
 
         # 2. Set an empty type
         form_field.clear_message()
-        widget.setText("")
+        widget.line_edit.setText("")
         QTimer.singleShot(100, close_message_box)
         qtbot.mouseClick(form.save_button, Qt.MouseButton.LeftButton)
         assert "must be a valid Python" in form_field.message.text()
@@ -235,7 +233,7 @@ class TestNodeDialog:
 
         missing_sections = []
         for key, info in nodes_data.nodes_data.items():
-            pywr_class = nodes_data.get_class_from_type(key)
+            pywr_class = nodes_data.class_from_type(key)
             if not hasattr(pywr_editor.dialogs, f"{pywr_class}Section"):
                 missing_sections.append(key)
 

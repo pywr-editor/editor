@@ -28,7 +28,7 @@ class TestDialogParameterTypeSelectorWidget:
         form = ParameterForm(
             model_config=ModelConfig(resolve_model_path("model_1.json")),
             parameter_obj=ParameterConfig(value),
-            available_fields={
+            fields={
                 "Section": [
                     {
                         "name": "type",
@@ -116,7 +116,7 @@ class TestDialogParameterTypeSelectorWidget:
         Tests the widget when a valid parameter type is used.
         """
         form = self.form(param_dict, filtered_keys)
-        param_type_field = form.find_field_by_name("type")
+        param_type_field = form.find_field("type")
         # noinspection PyTypeChecker
         param_type_widget: ParameterTypeSelectorWidget = param_type_field.widget
 
@@ -125,10 +125,7 @@ class TestDialogParameterTypeSelectorWidget:
 
         # always includes Custom parameter
         if filtered_keys:
-            assert (
-                len(param_type_widget.combo_box.all_items)
-                == len(filtered_keys) + 1
-            )
+            assert len(param_type_widget.combo_box.all_items) == len(filtered_keys) + 1
 
     @pytest.mark.parametrize(
         "param_dict, selected_param_type_name, filtered_keys",
@@ -162,7 +159,7 @@ class TestDialogParameterTypeSelectorWidget:
         parameter is not.
         """
         form = self.form(param_dict, filtered_keys)
-        param_type_field = form.find_field_by_name("type")
+        param_type_field = form.find_field("type")
         # noinspection PyTypeChecker
         param_type_widget: ParameterTypeSelectorWidget = param_type_field.widget
 
@@ -170,11 +167,6 @@ class TestDialogParameterTypeSelectorWidget:
 
         assert "is not allowed" in param_type_field.message.text()
         # select new default
-        assert (
-            param_type_widget.combo_box.currentText()
-            == selected_param_type_name
-        )
+        assert param_type_widget.combo_box.currentText() == selected_param_type_name
         # always includes Custom parameter
-        assert (
-            len(param_type_widget.combo_box.all_items) == len(filtered_keys) + 1
-        )
+        assert len(param_type_widget.combo_box.all_items) == len(filtered_keys) + 1

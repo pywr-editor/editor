@@ -37,9 +37,9 @@ class TestStorageSection:
         form = dialog.form
         save_button = form.save_button
 
-        initial_volume = form.find_field_by_name("initial_volume")
-        initial_volume_pc = form.find_field_by_name("initial_volume_pc")
-        max_volume = form.find_field_by_name("max_volume")
+        initial_volume = form.find_field("initial_volume")
+        initial_volume_pc = form.find_field("initial_volume_pc")
+        max_volume = form.find_field("max_volume")
 
         # both initial volumes are empty
         save_button.setEnabled(True)
@@ -72,9 +72,7 @@ class TestStorageSection:
         max_volume.widget.component_obj = ParameterConfig(
             {"type": "monthlyprofile", "value": list(range(0, 11))}
         )
-        error_message = (
-            "must provide both the initial absolute and relative volume"
-        )
+        error_message = "must provide both the initial absolute and relative volume"
         QTimer.singleShot(100, partial(check_msg, error_message))
         save_button.setEnabled(True)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)

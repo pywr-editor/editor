@@ -57,7 +57,7 @@ class TestDialogAbstractModelNodePickerWidget:
         form = ParameterForm(
             model_config=self.model_config(config_file),
             parameter_obj=ParameterConfig({}),
-            available_fields={
+            fields={
                 "Section": [
                     {
                         "name": "node_name",
@@ -86,11 +86,9 @@ class TestDialogAbstractModelNodePickerWidget:
             is_mandatory=True,
             config_file="model_wo_nodes.json",
         )
-        model_params_field = form.find_field_by_name("node_name")
+        model_params_field = form.find_field("node_name")
         # noinspection PyTypeChecker
-        model_nodes_widget: AbstractModelNodePickerWidget = (
-            model_params_field.widget
-        )
+        model_nodes_widget: AbstractModelNodePickerWidget = model_params_field.widget
 
         assert "are no nodes available" in model_params_field.message.text()
         assert len(model_nodes_widget.combo_box.all_items) == 1
@@ -130,11 +128,9 @@ class TestDialogAbstractModelNodePickerWidget:
             exclude_node_types=exclude_node_types,
             is_mandatory=is_mandatory,
         )
-        model_params_field = form.find_field_by_name("node_name")
+        model_params_field = form.find_field("node_name")
         # noinspection PyTypeChecker
-        model_nodes_widget: AbstractModelNodePickerWidget = (
-            model_params_field.widget
-        )
+        model_nodes_widget: AbstractModelNodePickerWidget = model_params_field.widget
 
         # 1. Check ComboBox
         assert model_params_field.message.text() == ""
@@ -143,10 +139,7 @@ class TestDialogAbstractModelNodePickerWidget:
             assert model_nodes_widget.get_value() == node_name
             # name is in the ComboBox
             assert any(
-                [
-                    node_name in value
-                    for value in model_nodes_widget.combo_box.all_items
-                ]
+                [node_name in value for value in model_nodes_widget.combo_box.all_items]
             )
         # no node is selected
         else:
@@ -218,11 +211,9 @@ class TestDialogAbstractModelNodePickerWidget:
             exclude_node_types=exclude_node_types,
             is_mandatory=is_mandatory,
         )
-        model_params_field = form.find_field_by_name("node_name")
+        model_params_field = form.find_field("node_name")
         # noinspection PyTypeChecker
-        model_nodes_widget: AbstractModelNodePickerWidget = (
-            model_params_field.widget
-        )
+        model_nodes_widget: AbstractModelNodePickerWidget = model_params_field.widget
 
         # 1. Check init message
         assert init_message in model_params_field.message.text()

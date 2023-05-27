@@ -6,14 +6,9 @@ import qtawesome as qta
 from PySide6.QtAxContainer import QAxObject
 from PySide6.QtCore import QCoreApplication, Qt, Slot
 from PySide6.QtGui import QGuiApplication
-from PySide6.QtWidgets import (
-    QHBoxLayout,
-    QMessageBox,
-    QStyledItemDelegate,
-    QVBoxLayout,
-)
+from PySide6.QtWidgets import QHBoxLayout, QMessageBox, QStyledItemDelegate, QVBoxLayout
 
-from pywr_editor.form import FormCustomWidget, ProfilePlotDialog
+from pywr_editor.form import FormWidget, ProfilePlotDialog
 from pywr_editor.utils import Logging, is_windows
 from pywr_editor.widgets import DoubleSpinBox, PushIconButton, TableView
 
@@ -22,7 +17,7 @@ if TYPE_CHECKING:
     from pywr_editor.form import AbstractAnnualValuesModel
 
 
-class AbstractAnnualValuesWidget(FormCustomWidget):
+class AbstractAnnualValuesWidget(FormWidget):
     total_values = None
 
     def __init__(
@@ -119,7 +114,7 @@ class AbstractAnnualValuesWidget(FormCustomWidget):
         :return: None
         """
         self.logger.debug("Registering post-render section actions")
-        self.form_field.set_warning_message(self.warning_message)
+        self.field.set_warning(self.warning_message)
 
     def sanitise_value(
         self, value: list[int | float] | None
@@ -147,9 +142,7 @@ class AbstractAnnualValuesWidget(FormCustomWidget):
             )
         # wrong item types
         elif all([isinstance(val, (int, float)) for val in value]) is False:
-            message = (
-                "The values set in the model configuration must be all numbers"
-            )
+            message = "The values set in the model configuration must be all numbers"
 
         # return None if the values are incorrect
         if message is not None:
@@ -267,7 +260,7 @@ class AbstractAnnualValuesWidget(FormCustomWidget):
             work_sheets = work_book.querySubObject("Sheets")
             first_sheet = work_sheets.querySubObject("Item(int)", 1)
 
-            param_name = self.form.find_field_by_name("name")
+            param_name = self.form.find_field("name")
             if param_name is not None and param_name != "":
                 first_sheet.setProperty("Name", param_name.value())
 
@@ -312,7 +305,7 @@ class AbstractAnnualValuesWidget(FormCustomWidget):
         Plots the profile.
         :return: None
         """
-        param_name = self.form.find_field_by_name("name")
+        param_name = self.form.find_field("name")
         if param_name is not None and param_name.value() != "":
             title = f"Parameter: {param_name.value()}"
         else:
@@ -332,7 +325,6 @@ class AnnualProfileSpinBoxDelegate(QStyledItemDelegate):
         self,
         parent: PySide6.QtWidgets.QWidget,
         option: PySide6.QtWidgets.QStyleOptionViewItem,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
     ) -> PySide6.QtWidgets.QWidget:
         return DoubleSpinBox(parent=parent)

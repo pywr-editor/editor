@@ -39,9 +39,7 @@ class StartScreenRightWidget(QFrame):
         layout.addWidget(CloseButton(parent))
 
         # noinspection PyTypeChecker
-        recent_project_widget: RecentFileListWidget = parent.findChild(
-            QListWidget
-        )
+        recent_project_widget: RecentFileListWidget = parent.findChild(QListWidget)
         buttons = [
             {
                 "title": "New file",
@@ -75,9 +73,7 @@ class StartScreenRightWidget(QFrame):
             )
 
         layout.addItem(
-            QSpacerItem(
-                10, 10, QSizePolicy.Minimum, QSizePolicy.MinimumExpanding
-            )
+            QSpacerItem(10, 10, QSizePolicy.Minimum, QSizePolicy.MinimumExpanding)
         )
         self.setLayout(layout)
         self.setStyleSheet(self.stylesheet)
@@ -129,9 +125,7 @@ class CloseButton(QWidget):
         wrapper_layout.addWidget(button)
         wrapper_layout.setAlignment(Qt.AlignRight | Qt.AlignTop)
         self.setLayout(wrapper_layout)
-        self.setStyleSheet(
-            "QPushButton { background: transparent; border: 0px; }"
-        )
+        self.setStyleSheet("QPushButton { background: transparent; border: 0px; }")
 
 
 class ButtonContainer(QPushButton):
@@ -171,9 +165,7 @@ class ButtonContainer(QPushButton):
 
 
 class SvgCloseIcon(QSvgWidget):
-    def __init__(
-        self, parent: QWidget = None, icon: str = ":file-browser/close"
-    ):
+    def __init__(self, parent: QWidget = None, icon: str = ":file-browser/close"):
         """
         Initialises the close icon.
         :param parent: The parent
@@ -183,9 +175,7 @@ class SvgCloseIcon(QSvgWidget):
 
         self.icon = icon
         self.renderer().load(self.svg_bytes)
-        self.setSizePolicy(
-            QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding
-        )
+        self.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
 
     @property
     def svg_bytes(self) -> PySide6.QtCore.QByteArray:

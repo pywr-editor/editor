@@ -5,11 +5,7 @@ from PySide6.QtWidgets import QPushButton, QWidget
 from pywr_editor.dialogs.parameters.sections.interpolated_parameter_section import (
     InterpolatedParameterSection,
 )
-from pywr_editor.form import (
-    ParameterForm,
-    ParameterLineEditWidget,
-    TableValuesWidget,
-)
+from pywr_editor.form import ParameterForm, ParameterLineEditWidget, TableValuesWidget
 from pywr_editor.model import ModelConfig, ParameterConfig
 
 
@@ -27,7 +23,7 @@ class TestDialogInterpolatedParameterSection:
         form = ParameterForm(
             model_config=ModelConfig(),
             parameter_obj=ParameterConfig({}),
-            available_fields={},
+            fields={},
             save_button=QPushButton("Save"),
             parent=QWidget(),
         )
@@ -42,7 +38,7 @@ class TestDialogInterpolatedParameterSection:
         Tests that the section filter.
         """
         form = self.form()
-        xy_values_field = form.find_field_by_name("x_y_values")
+        xy_values_field = form.find_field("x_y_values")
         # noinspection PyTypeChecker
         xy_values_widget: TableValuesWidget = xy_values_field.widget
 
@@ -56,7 +52,7 @@ class TestDialogInterpolatedParameterSection:
         assert xy_values_widget.get_value() == {"x": values[0], "y": values[1]}
 
         # add the parameter
-        parameter_field = form.find_field_by_name("parameter")
+        parameter_field = form.find_field("parameter")
         parameter_widget: ParameterLineEditWidget = parameter_field.widget
         parameter_widget.component_obj = ParameterConfig(
             {"type": "constant", "value": -999}

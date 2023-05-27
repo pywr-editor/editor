@@ -67,9 +67,7 @@ class TestBboxUtils:
                 window.schematic.schematic_height,
             ],
         )
-        max_min_bbox = SchematicBBoxUtils(
-            window.schematic.items()
-        ).are_items_on_edges(
+        max_min_bbox = SchematicBBoxUtils(window.schematic.items()).are_items_on_edges(
             window.schematic.schematic_width, window.schematic.schematic_height
         )
         assert max_min_bbox[0] is False
@@ -77,18 +75,14 @@ class TestBboxUtils:
 
         # move node to the bottom edge
         node_utils_obj.move_to_bottom_edge()
-        max_min_bbox = SchematicBBoxUtils(
-            window.schematic.items()
-        ).are_items_on_edges(
+        max_min_bbox = SchematicBBoxUtils(window.schematic.items()).are_items_on_edges(
             window.schematic.schematic_width, window.schematic.schematic_height
         )
         assert max_min_bbox[1] is True
 
         # move node to the right edge
         node_utils_obj.move_to_right_edge()
-        max_min_bbox = SchematicBBoxUtils(
-            window.schematic.items()
-        ).are_items_on_edges(
+        max_min_bbox = SchematicBBoxUtils(window.schematic.items()).are_items_on_edges(
             window.schematic.schematic_width, window.schematic.schematic_height
         )
         assert max_min_bbox[0] is True

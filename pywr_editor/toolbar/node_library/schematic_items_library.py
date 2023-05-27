@@ -161,9 +161,7 @@ class LibraryPanel(QGraphicsView):
         self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.setToolTip(
-            "Add a new item by dragging and dropping it onto the schematic"
-        )
+        self.setToolTip("Add a new item by dragging and dropping it onto the schematic")
 
         # appearance
         self.setRenderHints(
@@ -252,9 +250,7 @@ class LibraryPanel(QGraphicsView):
         y += 35
         # position shapes
         for name, shape_type in self.shapes.items():
-            shape_obj = LibraryItem(
-                view=self, item_class_type=shape_type, name=name
-            )
+            shape_obj = LibraryItem(view=self, item_class_type=shape_type, name=name)
             self.scene.addItem(shape_obj)
             x += 220
             if x >= self.width() - 10:

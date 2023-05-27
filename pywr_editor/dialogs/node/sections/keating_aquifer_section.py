@@ -1,13 +1,14 @@
 from typing import Any
 
 from pywr_editor.form import (
+    FieldConfig,
     FloatWidget,
     FormSection,
-    FormValidation,
+    IntegerWidget,
     KeatingStreamsWidget,
     TableValuesWidget,
+    Validation,
 )
-from pywr_editor.utils import Logging
 
 from ..node_dialog_form import NodeDialogForm
 
@@ -20,104 +21,86 @@ class KeatingAquiferSection(FormSection):
         :param section_data: A dictionary containing data to pass to the widget.
         """
         super().__init__(form, section_data)
-        self.form = form
-        self.logger = Logging().logger(self.__class__.__name__)
 
-    @property
-    def data(self):
-        """
-        Defines the section data dictionary.
-        :return: The section dictionary.
-        """
-        self.logger.debug("Registering form")
-
-        return {
-            "Configuration": [
-                {
-                    "name": "stream_flows",
-                    "field_type": KeatingStreamsWidget,
-                    "label": "Streams",
-                    "value": {
-                        "stream_flow_levels": self.form.get_node_dict_value(
-                            "stream_flow_levels"
-                        ),
-                        "transmissivity": self.form.get_node_dict_value(
-                            "transmissivity"
-                        ),
-                    },
-                    "help_text": "Add and configure the aquifer streams. For each "
-                    + "stream you need to provide a list of levels and transmissivity "
-                    + "coefficients for each aquifer level",
-                },
-                {
-                    "name": "coefficient",
-                    "label": "Calibration coefficient",
-                    "field_type": FloatWidget,
-                    "allow_empty": False,
-                    "value": self.form.get_node_dict_value("coefficient"),
-                    "help_text": "The calibration coefficient. In Keating (1982) this "
-                    + "is the ratio between the aquifer width and length",
-                },
-                {
-                    "name": "num_additional_inputs",
-                    "label": "Number of additional outflows",
-                    "field_type": "integer",
-                    "min_value": 0,
-                    "default_value": 0,
-                    "value": self.form.get_node_dict_value(
-                        "num_additional_inputs"
+        self.add_fields(
+            {
+                "Configuration": [
+                    FieldConfig(
+                        name="stream_flows",
+                        field_type=KeatingStreamsWidget,
+                        label="Streams",
+                        value={
+                            "stream_flow_levels": form.field_value(
+                                "stream_flow_levels"
+                            ),
+                            "transmissivity": form.field_value("transmissivity"),
+                        },
+                        help_text="Add and configure the aquifer streams. For each "
+                        "stream you need to provide a list of levels and transmissivity"
+                        " coefficients for each aquifer level",
                     ),
-                    "help_text": "Number of additional outflows (for example for "
-                    + "direct abstraction or discharge from the aquifer)",
-                },
-            ],
-            "Volume-level relationship": [
-                {
-                    "name": "levels",
-                    "field_type": TableValuesWidget,
-                    "field_args": {"min_total_values": 1},
-                    "value": {
-                        "values": self.form.get_node_dict_value("levels")
-                    },
-                    "help_text": "A list of levels for the level-volume relationship",
-                },
-                {
-                    "name": "volumes",
-                    "field_type": TableValuesWidget,
-                    "validate_fun": self.check_volumes,
-                    "value": {
-                        "values": self.form.get_node_dict_value("volumes")
-                    },
-                    "help_text": "A list of volumes for each level. This is "
-                    + "optional and the volume can be also calculated by providing "
-                    + "the aquifer area and storativity parameters below",
-                },
-                {
-                    "name": "area",
-                    "field_type": FloatWidget,
-                    "field_args": {"min_value": 0, "suffix": "m<sup>2</sup>"},
-                    "value": self.form.get_node_dict_value("area"),
-                    "help_text": "The area of the aquifer",
-                },
-                {
-                    "name": "storativity",
-                    "label": "Storativity factors",
-                    "field_type": TableValuesWidget,
-                    "validate_fun": self.check_storativity,
-                    "value": {
-                        "values": self.form.get_node_dict_value("storativity")
-                    },
-                    "help_text": "A list of factors whose length should be one "
-                    + "less than the levels. This is optional if the volumes "
-                    + "are provided above otherwise the factors are used along "
-                    + "with the area to calculated the volumes",
-                },
-            ],
-        }
+                    FieldConfig(
+                        name="coefficient",
+                        label="Calibration coefficient",
+                        field_type=FloatWidget,
+                        allow_empty=False,
+                        value=form.field_value("coefficient"),
+                        help_text="The calibration coefficient. In Keating (1982) this "
+                        "is the ratio between the aquifer width and length",
+                    ),
+                    FieldConfig(
+                        name="num_additional_inputs",
+                        label="Number of additional outflows",
+                        field_type=IntegerWidget,
+                        field_args={"min_value": 0},
+                        default_value=0,
+                        value=form.field_value("num_additional_inputs"),
+                        help_text="Number of additional outflows (for example for "
+                        "direct abstraction or discharge from the aquifer)",
+                    ),
+                ],
+                "Volume-level relationship": [
+                    FieldConfig(
+                        name="levels",
+                        field_type=TableValuesWidget,
+                        field_args={"min_total_values": 1},
+                        value={"values": form.field_value("levels")},
+                        help_text="A list of levels for the level-volume relationship",
+                    ),
+                    FieldConfig(
+                        name="volumes",
+                        field_type=TableValuesWidget,
+                        validate_fun=self.check_volumes,
+                        value={"values": form.field_value("volumes")},
+                        help_text="A list of volumes for each level. This is "
+                        "optional and the volume can be also calculated by providing "
+                        "the aquifer area and storativity parameters below",
+                    ),
+                    FieldConfig(
+                        name="area",
+                        field_type=FloatWidget,
+                        field_args={"min_value": 0, "suffix": "m<sup>2</sup>"},
+                        value=form.field_value("area"),
+                        help_text="The area of the aquifer",
+                    ),
+                    FieldConfig(
+                        name="storativity",
+                        label="Storativity factors",
+                        field_type=TableValuesWidget,
+                        validate_fun=self.check_storativity,
+                        value={"values": form.field_value("storativity")},
+                        help_text="A list of factors whose length should be one "
+                        "less than the levels. This is optional if the volumes "
+                        "are provided above otherwise the factors are used along "
+                        "with the area to calculated the volumes",
+                    ),
+                ],
+            }
+        )
 
     def check_volumes(
         self, name: str, label: str, value: dict[str, list[float]]
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that the size of volumes matches the number of levels.
         :param name: The field name.
@@ -125,19 +108,18 @@ class KeatingAquiferSection(FormSection):
         :param value: The dictionary with the list of volumes.
         :return: The form validation instance.
         """
-        levels = self.form.find_field_by_name("levels").value()["values"]
+        levels = self.form.find_field("levels").value()["values"]
         volumes = value["values"]
         if levels and volumes and len(levels) != len(volumes):
-            return FormValidation(
-                validation=False,
-                error_message=f"The number of volumes ({len(volumes)}) must match "
-                + f"the number of levels ({len(levels)})",
+            return Validation(
+                f"The number of volumes ({len(volumes)}) must match "
+                f"the number of levels ({len(levels)})",
             )
-        return FormValidation(validation=True)
+        return Validation()
 
     def check_storativity(
         self, name: str, label: str, value: dict[str, list[float]]
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that the size of storativity matches the number of levels minus one.
         :param name: The field name.
@@ -145,15 +127,14 @@ class KeatingAquiferSection(FormSection):
         :param value: The dictionary with the list of factors.
         :return: The form validation instance.
         """
-        levels = self.form.find_field_by_name("levels").value()["values"]
+        levels = self.form.find_field("levels").value()["values"]
         factors = value["values"]
         if levels and factors and len(levels) - 1 != len(factors):
-            return FormValidation(
-                validation=False,
-                error_message=f"The number of factors ({len(factors)}) must match "
-                + f"the number of levels ({len(levels)}) minus one",
+            return Validation(
+                f"The number of factors ({len(factors)}) must match "
+                f"the number of levels ({len(levels)}) minus one",
             )
-        return FormValidation(validation=True)
+        return Validation()
 
     def filter(self, form_data: dict[str, Any]) -> None:
         """
@@ -169,7 +150,7 @@ class KeatingAquiferSection(FormSection):
                 else:
                     del form_data[key]
 
-    def validate(self, form_data: dict[str, Any]) -> FormValidation:
+    def validate(self, form_data: dict[str, Any]) -> Validation:
         """
         Checks that the volumes or the storativity factors and area are provided.
         :param form_data: The form data.
@@ -180,24 +161,20 @@ class KeatingAquiferSection(FormSection):
 
         # volumes or storativity not provided
         if not volumes and not storativity:
-            return FormValidation(
-                validation=False,
-                error_message="You must provide either the volumes or the storativity "
-                + "factors",
+            return Validation(
+                "You must provide either the volumes or the storativity factors",
             )
         # only volumes or storativity is needed
         elif volumes and storativity:
-            return FormValidation(
-                validation=False,
-                error_message="You must provide the volumes or the storativity, "
-                + "but not both values at the same time",
+            return Validation(
+                "You must provide the volumes or the storativity, "
+                "but not both values at the same time",
             )
         # area is mandatory with storativity
         elif storativity and "area" not in form_data:
-            return FormValidation(
-                validation=False,
-                error_message="When you provide the storativity factors, the "
-                + "aquifer area is mandatory",
+            return Validation(
+                "When you provide the storativity factors, the "
+                "aquifer area is mandatory",
             )
 
-        return FormValidation(validation=True)
+        return Validation()

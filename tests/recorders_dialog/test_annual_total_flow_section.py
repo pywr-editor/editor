@@ -3,9 +3,7 @@ from PySide6.QtCore import QItemSelectionModel, Qt, QTimer
 from PySide6.QtWidgets import QPushButton
 
 from pywr_editor.dialogs import RecordersDialog
-from pywr_editor.dialogs.recorders.recorder_page_widget import (
-    RecorderPageWidget,
-)
+from pywr_editor.dialogs.recorders.recorder_page_widget import RecorderPageWidget
 from pywr_editor.form import (
     FloatWidget,
     NodePickerWidget,
@@ -91,7 +89,7 @@ class TestAnnualTotalFlowSection:
         # noinspection PyTypeChecker
         selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
         form = selected_page.form
-        field = form.find_field_by_name("nodes_and_factors")
+        field = form.find_field("nodes_and_factors")
         widget: NodesAndFactorsTableWidget = field.widget
 
         # 1. Check message and value
@@ -156,7 +154,7 @@ class TestAnnualTotalFlowSection:
         # noinspection PyTypeChecker
         selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
         form = selected_page.form
-        field = form.find_field_by_name("nodes_and_factors")
+        field = form.find_field("nodes_and_factors")
         widget: NodesAndFactorsTableWidget = field.widget
 
         # check message and values
@@ -172,13 +170,11 @@ class TestAnnualTotalFlowSection:
         """
         Tests that a row is deleted correctly.
         """
-        dialog = RecordersDialog(
-            model_config, "valid_value_with_nodes_and_factors"
-        )
+        dialog = RecordersDialog(model_config, "valid_value_with_nodes_and_factors")
         # noinspection PyTypeChecker
         selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
 
-        field = selected_page.form.find_field_by_name("nodes_and_factors")
+        field = selected_page.form.find_field("nodes_and_factors")
         widget: NodesAndFactorsTableWidget = field.widget
         table = widget.table
 
@@ -203,13 +199,11 @@ class TestAnnualTotalFlowSection:
         """
         Tests when a new row is added.
         """
-        dialog = RecordersDialog(
-            model_config, "valid_value_with_nodes_and_factors"
-        )
+        dialog = RecordersDialog(model_config, "valid_value_with_nodes_and_factors")
         # noinspection PyTypeChecker
         selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
 
-        field = selected_page.form.find_field_by_name("nodes_and_factors")
+        field = selected_page.form.find_field("nodes_and_factors")
         widget: NodesAndFactorsTableWidget = field.widget
 
         qtbot.mouseClick(widget.add_button, Qt.MouseButton.LeftButton)
@@ -227,9 +221,7 @@ class TestAnnualTotalFlowSection:
         # 2. Add a new entry and save the form
         node_widget.combo_box.setCurrentText("Reservoir2 (Storage)")
         # noinspection PyTypeChecker
-        save_button: QPushButton = child_dialog.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = child_dialog.findChild(QPushButton, "save_button")
         save_button.setEnabled(True)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
 
@@ -243,13 +235,11 @@ class TestAnnualTotalFlowSection:
         """
         Tests when a new row is added.
         """
-        dialog = RecordersDialog(
-            model_config, "valid_value_with_nodes_and_factors"
-        )
+        dialog = RecordersDialog(model_config, "valid_value_with_nodes_and_factors")
         # noinspection PyTypeChecker
         selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
 
-        field = selected_page.form.find_field_by_name("nodes_and_factors")
+        field = selected_page.form.find_field("nodes_and_factors")
         widget: NodesAndFactorsTableWidget = field.widget
         table = widget.table
 
@@ -275,9 +265,7 @@ class TestAnnualTotalFlowSection:
         # 3. Change the value and send form
         factor_widget.line_edit.setText("500")
         # noinspection PyTypeChecker
-        save_button: QPushButton = child_dialog.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = child_dialog.findChild(QPushButton, "save_button")
         save_button.setEnabled(True)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
 

@@ -5,7 +5,7 @@ from PySide6.QtCore import Slot
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QGraphicsItem, QGraphicsTextItem
 
-from pywr_editor.form import ColorPickerWidget, FormValidation
+from pywr_editor.form import ColorPickerWidget, FieldConfig, IntegerWidget, Validation
 from pywr_editor.model import TextShape
 from pywr_editor.widgets import ContextualMenu
 
@@ -114,53 +114,50 @@ class SchematicText(AbstractSchematicShape, QGraphicsTextItem):
         dialog = ShapeDialog(
             shape_id=self.shape_obj.id,
             form_fields=[
-                {
-                    "name": "text",
-                    "value": self.shape_obj.text,
-                    "help_text": "The text to show on the schematic",
-                    "validate_fun": self.check_form_text,
-                },
-                {
-                    "name": "font_size",
-                    "label": "Text size",
-                    "default_value": self.shape_obj.default_font_size,
-                    "value": self.shape_obj.font_size,
-                    "field_type": "integer",
-                    "min_value": self.shape_obj.min_font_size,
-                    "max_value": self.shape_obj.max_font_size,
-                },
-                {
-                    "name": "color",
-                    "field_type": ColorPickerWidget,
-                    "default_value": self.shape_obj.default_font_color,
-                    "value": self.shape_obj.color.toTuple()[0:3],
-                },
+                FieldConfig(
+                    name="text",
+                    value=self.shape_obj.text,
+                    help_text="The text to show on the schematic",
+                    validate_fun=self.check_form_text,
+                ),
+                FieldConfig(
+                    name="font_size",
+                    label="Text size",
+                    default_value=self.shape_obj.default_font_size,
+                    value=self.shape_obj.font_size,
+                    field_type=IntegerWidget,
+                    field_args={
+                        "min_value": self.shape_obj.min_font_size,
+                        "max_value": self.shape_obj.max_font_size,
+                    },
+                ),
+                FieldConfig(
+                    name="color",
+                    field_type=ColorPickerWidget,
+                    default_value=self.shape_obj.default_font_color,
+                    value=self.shape_obj.color.toTuple()[0:3],
+                ),
             ],
             shape_config=self.shape_obj,
             parent=self.view.app,
         )
         # enable save button when a new colour is selected
-        color_widget: ColorPickerWidget = dialog.form.find_field_by_name(
-            "color"
-        ).widget
+        color_widget: ColorPickerWidget = dialog.form.find_field("color").widget
         color_widget.changed_color.connect(dialog.form.on_field_changed)
         dialog.show()
 
-    def check_form_text(
-        self, name: str, label: str, value: str
-    ) -> FormValidation:
+    def check_form_text(self, name: str, label: str, value: str) -> Validation:
         """
         Check the text length in the form.
         :param name: The field name.
         :param label: The field label.
         :param value: The field value.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         if len(value) < self.shape_obj.min_text_size:
-            return FormValidation(
-                validation=False,
-                error_message="The text must be at least "
-                + f"{self.shape_obj.min_text_size} characters long",
+            return Validation(
+                "The text must be at least "
+                f"{self.shape_obj.min_text_size} characters long",
             )
 
-        return FormValidation(validation=True)
+        return Validation()

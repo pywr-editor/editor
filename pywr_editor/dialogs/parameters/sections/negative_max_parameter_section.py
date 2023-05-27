@@ -14,6 +14,5 @@ class NegativeMaxParameterSection(AbstractMinMaxParameterSection):
             section_data=section_data,
             log_name=self.__class__.__name__,
             parameter_help_text="Take the maximum between the negative value of the "
-            + "provided parameter and the "
-            + "threshold below",
+            "provided parameter and the threshold below",
         )

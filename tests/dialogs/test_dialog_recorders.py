@@ -72,9 +72,7 @@ class TestRecordersDialog:
         selected_page.findChild(RecorderDialogForm).load_fields()
         assert new_name in selected_page.findChild(QLabel).text()
         # noinspection PyTypeChecker
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         # button is disabled
         assert save_button.isEnabled() is False
 
@@ -95,33 +93,31 @@ class TestRecordersDialog:
 
         # the model is updated
         assert model_config.has_changes is True
-        assert model_config.recorders.does_recorder_exist(new_name) is True
-        assert model_config.recorders.get_config_from_name(new_name) == {
+        assert model_config.recorders.exists(new_name) is True
+        assert model_config.recorders.config(new_name) == {
             "type": "node",
         }
 
         # rename and save
         node_widget.combo_box.setCurrentText("Reservoir (Storage)")
         renamed_recorder_name = "A new shiny name"
-        name_field.widget.setText(renamed_recorder_name)
+        name_field.widget.line_edit.setText(renamed_recorder_name)
 
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         assert name_field.message.text() == ""
-        assert node_widget.form_field.message.text() == ""
+        assert node_widget.field.message.text() == ""
 
         # the page widget is renamed
         assert renamed_recorder_name in pages_widget.pages.keys()
         assert renamed_recorder_name in selected_page.findChild(QLabel).text()
 
         # model configuration
-        assert model_config.recorders.does_recorder_exist(new_name) is False
-        assert (
-            model_config.recorders.does_recorder_exist(renamed_recorder_name)
-            is True
-        )
-        assert model_config.recorders.get_config_from_name(
-            renamed_recorder_name
-        ) == {"type": "node", "node": "Reservoir"}
+        assert model_config.recorders.exists(new_name) is False
+        assert model_config.recorders.exists(renamed_recorder_name) is True
+        assert model_config.recorders.config(renamed_recorder_name) == {
+            "type": "node",
+            "node": "Reservoir",
+        }
 
     def test_clone_recorder(self, qtbot, model_config, dialog):
         """
@@ -140,9 +136,7 @@ class TestRecordersDialog:
 
         # Clone the recorder
         # noinspection PyTypeChecker
-        clone_button: QPushButton = selected_page.findChild(
-            QPushButton, "clone_button"
-        )
+        clone_button: QPushButton = selected_page.findChild(QPushButton, "clone_button")
         qtbot.mouseClick(clone_button, Qt.MouseButton.LeftButton)
 
         # new name is random
@@ -156,8 +150,8 @@ class TestRecordersDialog:
 
         # the model is updated
         assert model_config.has_changes is True
-        assert model_config.recorders.does_recorder_exist(new_name) is True
-        assert model_config.recorders.get_config_from_name(new_name) == {
+        assert model_config.recorders.exists(new_name) is True
+        assert model_config.recorders.config(new_name) == {
             "type": "AggregatedRecorder",
             "recorders": ["node_numpy_rec_dict", "node_link_rec"],
         }
@@ -178,14 +172,12 @@ class TestRecordersDialog:
 
         form.load_fields()
         # noinspection PyTypeChecker
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
-        name_field = form.find_field_by_name("name")
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
+        name_field = form.find_field("name")
 
         # Change the name and save
         assert name_field.value() == current_name
-        name_field.widget.setText(new_name)
+        name_field.widget.line_edit.setText(new_name)
 
         qtbot.wait(200)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
@@ -197,24 +189,22 @@ class TestRecordersDialog:
 
         # model has changes
         assert model_config.has_changes is True
-        assert model_config.recorders.does_recorder_exist(current_name) is False
-        assert model_config.recorders.does_recorder_exist(new_name) is True
+        assert model_config.recorders.exists(current_name) is False
+        assert model_config.recorders.exists(new_name) is True
 
-        assert model_config.recorders.get_config_from_name(new_name) == {
+        assert model_config.recorders.config(new_name) == {
             "type": "node",
             "node": "Link",
         }
 
         # check recorder depending on renamed item
-        assert model_config.recorders.get_config_from_name(
-            "node_aggregated_rec"
-        ) == {
+        assert model_config.recorders.config("node_aggregated_rec") == {
             "type": "AggregatedRecorder",
             "recorders": ["node_numpy_rec_dict", new_name],
         }
 
         # set duplicated name
-        name_field.widget.setText("node_storage_rec")
+        name_field.widget.line_edit.setText("node_storage_rec")
         QTimer.singleShot(100, close_message_box)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         assert "already exists" in name_field.message.text()
@@ -236,31 +226,23 @@ class TestRecordersDialog:
         )
 
         # delete button is enabled and the item is selected
-        delete_button: QPushButton = pages_widget.pages[
-            deleted_recorder
-        ].findChild(QPushButton, "delete_button")
-        assert delete_button.isEnabled() is True
-        assert (
-            recorder_list_widget.list.selectedIndexes()[0].data()
-            == deleted_recorder
+        delete_button: QPushButton = pages_widget.pages[deleted_recorder].findChild(
+            QPushButton, "delete_button"
         )
+        assert delete_button.isEnabled() is True
+        assert recorder_list_widget.list.selectedIndexes()[0].data() == deleted_recorder
 
         # delete
         def confirm_deletion():
             widget = QApplication.activeModalWidget()
-            qtbot.mouseClick(
-                widget.findChild(QPushButton), Qt.MouseButton.LeftButton
-            )
+            qtbot.mouseClick(widget.findChild(QPushButton), Qt.MouseButton.LeftButton)
 
         QTimer.singleShot(100, confirm_deletion)
         qtbot.mouseClick(delete_button, Qt.MouseButton.LeftButton)
 
         assert isinstance(pages_widget.currentWidget(), RecorderEmptyPageWidget)
         assert deleted_recorder not in pages_widget.pages.keys()
-        assert (
-            model_config.recorders.does_recorder_exist(deleted_recorder)
-            is False
-        )
+        assert model_config.recorders.exists(deleted_recorder) is False
         assert deleted_recorder not in recorder_list_widget.model.recorder_names
 
     def test_missing_sections(self, qtbot):
@@ -271,7 +253,7 @@ class TestRecordersDialog:
 
         missing_sections = []
         for key, info in recorders_data.recorders.items():
-            pywr_class = recorders_data.get_class_from_type(key)
+            pywr_class = recorders_data.class_from_type(key)
             if not hasattr(pywr_editor.dialogs, f"{pywr_class}Section"):
                 missing_sections.append(key)
 
@@ -289,8 +271,8 @@ class TestRecordersDialog:
         selected_page = dialog.pages_widget.currentWidget()
         form = selected_page.form
 
-        recorder_type_widget: RecorderTypeSelectorWidget = (
-            form.find_field_by_name("type").widget
-        )
+        recorder_type_widget: RecorderTypeSelectorWidget = form.find_field(
+            "type"
+        ).widget
         for name in recorder_type_widget.combo_box.all_items:
             recorder_type_widget.combo_box.setCurrentText(name)

@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QVBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField
+from pywr_editor.form import FormField, FormWidget
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import ComboBox
 
@@ -10,7 +10,7 @@ from pywr_editor.widgets import ComboBox
 """
 
 
-class AbstractStringComboBoxWidget(FormCustomWidget):
+class AbstractStringComboBoxWidget(FormWidget):
     def __init__(
         self,
         name: str,
@@ -69,7 +69,7 @@ class AbstractStringComboBoxWidget(FormCustomWidget):
         :return: None
         """
         self.logger.debug("Registering post-render section actions")
-        self.form_field.set_warning_message(self.warning_message)
+        self.field.set_warning(self.warning_message)
 
     def sanitise_value(self, value: str | None) -> [str, str | None]:
         """
@@ -83,23 +83,18 @@ class AbstractStringComboBoxWidget(FormCustomWidget):
 
         label = self.labels_map[self.get_default_selection()]
         # user-provided value may have a wrong case. Ensure correct matching
-        lower_case_map = {
-            key.lower(): label for key, label in self.labels_map.items()
-        }
+        lower_case_map = {key.lower(): label for key, label in self.labels_map.items()}
 
         # check value
         if value is None:
             self.logger.debug("The value is not provided. Using default.")
         elif not isinstance(value, str) or value == "":
             message = (
-                "The value provided in the model configuration is not a "
-                + "valid type"
+                "The value provided in the model configuration is not a " + "valid type"
             )
             self.logger.debug(message)
         elif isinstance(value, str) and value.lower() not in lower_case_map:
-            message = (
-                "The value provided in the model configuration does not exist"
-            )
+            message = "The value provided in the model configuration does not exist"
             self.logger.debug(message)
         else:
             # user-provided value may have a wrong case
@@ -123,10 +118,7 @@ class AbstractStringComboBoxWidget(FormCustomWidget):
         all_values = list(self.labels_map.keys())
 
         index = all_labels.index(current_label)
-        if (
-            all_values[index] == self.default_value
-            and self.keep_default is False
-        ):
+        if all_values[index] == self.default_value and self.keep_default is False:
             return None
         return all_values[index]
 
@@ -134,6 +126,4 @@ class AbstractStringComboBoxWidget(FormCustomWidget):
         """
         Resets the widget by setting the default value.
         """
-        self.combo_box.setCurrentText(
-            self.labels_map[self.get_default_selection()]
-        )
+        self.combo_box.setCurrentText(self.labels_map[self.get_default_selection()])

@@ -37,25 +37,18 @@ class TestDialogParameterSheetNameWidget:
         dialog.hide()
 
         selected_page = dialog.pages_widget.currentWidget()
-        excel_sheet_field: FormField = selected_page.findChild(
-            FormField, "sheet_name"
-        )
+        excel_sheet_field: FormField = selected_page.findChild(FormField, "sheet_name")
         excel_sheet_widget: SheetNameWidget = excel_sheet_field.widget
         url_widget: UrlWidget = selected_page.findChild(FormField, "url").widget
 
         # 1. the table is properly loaded
         assert url_widget.table.equals(
-            pd.read_excel(
-                url_widget.full_file, sheet_name=excel_sheet_widget.value
-            )
+            pd.read_excel(url_widget.full_file, sheet_name=excel_sheet_widget.value)
         )
         assert url_widget.file_ext == ".xlsx"
 
         # 2. available sheets and selected sheet are correctly set
-        assert (
-            selected_page.findChild(FormField, "name").value()
-            == selected_parameter
-        )
+        assert selected_page.findChild(FormField, "name").value() == selected_parameter
         assert excel_sheet_field.value() == "Sheet 3"
         assert excel_sheet_field.message.text() == ""
         assert excel_sheet_widget.combo_box.all_items == [
@@ -95,7 +88,7 @@ class TestDialogParameterSheetNameWidget:
         # hidden and disabled when file does not exist
         original_file = url_widget.full_file
         url_widget.line_edit.setText(original_file[0:-1])
-        assert "not exist" in url_widget.form_field.message.text()
+        assert "not exist" in url_widget.field.message.text()
         # File does not exist and table is invalid
         assert url_widget.full_file is None
         assert url_widget.file_ext == ".xls"
@@ -108,7 +101,7 @@ class TestDialogParameterSheetNameWidget:
 
         # Set original value
         url_widget.line_edit.setText(original_file)
-        assert url_widget.form_field.message.text() == ""
+        assert url_widget.field.message.text() == ""
         assert url_widget.full_file == original_file
         assert url_widget.file_ext == ".xlsx"
         assert url_widget.table.equals(
@@ -117,7 +110,7 @@ class TestDialogParameterSheetNameWidget:
 
         # 5. Load a new Excel file. Table must be reloaded and first sheet selected
         url_widget.line_edit.setText(r"files/table2.xlsx")
-        assert url_widget.form_field.message.text() == ""
+        assert url_widget.field.message.text() == ""
         assert url_widget.file_ext == ".xlsx"
         first_sheet = "Demand centres"
         assert url_widget.table.equals(
@@ -142,22 +135,14 @@ class TestDialogParameterSheetNameWidget:
         dialog.hide()
 
         selected_page = dialog.pages_widget.currentWidget()
-        excel_sheet_field: FormField = selected_page.findChild(
-            FormField, "sheet_name"
-        )
+        excel_sheet_field: FormField = selected_page.findChild(FormField, "sheet_name")
         excel_sheet_widget: SheetNameWidget = excel_sheet_field.widget
         url_widget: UrlWidget = selected_page.findChild(FormField, "url").widget
         form = url_widget.form
         first_sheet = "Sheet 1"
 
-        assert (
-            selected_page.findChild(FormField, "name").value()
-            == selected_parameter
-        )
-        assert (
-            "does not exist in the Excel file"
-            in excel_sheet_field.message.text()
-        )
+        assert selected_page.findChild(FormField, "name").value() == selected_parameter
+        assert "does not exist in the Excel file" in excel_sheet_field.message.text()
         # 1. the first sheet is selected
         assert excel_sheet_field.value() == first_sheet
         # 2. check table in first sheet

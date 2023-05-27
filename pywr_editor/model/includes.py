@@ -4,11 +4,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Literal, TypeVar
 
 import pywr_editor.model as model
-from pywr_editor.model import (
-    PywrNodesData,
-    PywrParametersData,
-    PywrRecordersData,
-)
+from pywr_editor.model import PywrNodesData, PywrParametersData, PywrRecordersData
 
 if TYPE_CHECKING:
     from pywr_editor.model import ModelConfig
@@ -74,9 +70,7 @@ class Includes:
         :return: The list of non Pyton files as they are included in the JSON file.
         """
         return [
-            file
-            for file in self.model.json["includes"]
-            if not file.endswith(".py")
+            file for file in self.model.json["includes"] if not file.endswith(".py")
         ]
 
     def get_all_files(self, include_non_existing: bool) -> list[Path]:
@@ -93,9 +87,7 @@ class Includes:
                 if not file.endswith(".py"):
                     continue
                 # exclude missing files
-                if not include_non_existing and not self.model.does_file_exist(
-                    file
-                ):
+                if not include_non_existing and not self.model.does_file_exist(file):
                     continue
 
                 all_files.append(Path(self.model.normalize_file_path(file)))
@@ -125,9 +117,7 @@ class Includes:
                 if isinstance(n, ast.ClassDef):
                     # check that the class inherits from one of the pywr classes
                     # noinspection PyUnresolvedReferences
-                    file_base_classes = {
-                        base_class.id for base_class in n.bases
-                    }
+                    file_base_classes = {base_class.id for base_class in n.bases}
                     base_class_list = sorted(list(file_base_classes))
 
                     # class is a Parameter
@@ -206,7 +196,7 @@ class Includes:
         custom_components = {}
         for data_dict in self.get_custom_classes().values():
             for class_name in getattr(data_dict, f"{comp_type}s"):
-                key = getattr(model, config_methods[comp_type]).string_to_key(
+                key = getattr(model, config_methods[comp_type])().string_to_key(
                     class_name
                 )
                 custom_components[key] = {
@@ -272,11 +262,11 @@ class Includes:
 
         return keys
 
-    def save_imports(self, files: list[str]) -> None:
+    def save(self, files: list[str]) -> None:
         """
         Saves the list of imports.
         :param files: The file list.
         :return: None
         """
         self.model.json["includes"] = files
-        self.model.changes_tracker.add(f"Change import files to {files}")
+        self.model.has_changed()
