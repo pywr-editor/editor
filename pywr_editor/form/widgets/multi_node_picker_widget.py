@@ -52,7 +52,7 @@ class MultiNodePickerWidget(FormWidget):
 
         # Collect all pywr and custom node types
         all_nodes = {
-            **self.model_config.pywr_node_data.nodes_data,
+            **self.model_config.pywr_node_data.data,
             **self.model_config.includes.get_custom_nodes(),
         }
 

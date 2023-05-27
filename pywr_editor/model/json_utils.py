@@ -112,10 +112,9 @@ class JsonUtils:
                 dict_path = dict_path + sub_dict_path
 
                 # dictionary values
-                (
-                    sub_counter,
-                    sub_dict_path,
-                ) = self._find_str_in_dict_everywhere(v, string, f"{parent_key}/{k}")
+                (sub_counter, sub_dict_path) = self._find_str_in_dict_everywhere(
+                    v, string, f"{parent_key}/{k}"
+                )
                 counter += sub_counter
                 dict_path = dict_path + sub_dict_path
         elif isinstance(d, list):

@@ -205,7 +205,8 @@ class Schematic(QGraphicsView):
                     )
 
         # warn if some nodes do not have a position
-        self.trigger_missing_pos_warning()
+        if self.init:
+            self.trigger_missing_pos_warning()
 
         # draw the shapes
         for shape_obj in self.model_config.shapes.get_all():

@@ -232,7 +232,7 @@ class TestNodeDialog:
         nodes_data = PywrNodesData()
 
         missing_sections = []
-        for key, info in nodes_data.nodes_data.items():
+        for key, info in nodes_data.data.items():
             pywr_class = nodes_data.class_from_type(key)
             if not hasattr(pywr_editor.dialogs, f"{pywr_class}Section"):
                 missing_sections.append(key)
