@@ -47,10 +47,10 @@ class SettingsDialog(QDialog):
         )
 
         # change the menu style
-        left_widget.layout().setContentsMargins(10, 10, 5, 15)
+        left_widget.layout().setContentsMargins(15, 10, 5, 15)
         # noinspection PyTypeChecker
         menu: TableView = left_widget.findChild(TableView)
-        menu.verticalHeader().setDefaultSectionSize(30)
+        menu.verticalHeader().setDefaultSectionSize(26)
         menu.setStyleSheet(self.menu_stylesheet)
 
     @staticmethod
@@ -60,15 +60,7 @@ class SettingsDialog(QDialog):
         :param widget_name: The widget name.
         :return: The stylesheet.
         """
-        return stylesheet_dict_to_str(
-            {
-                widget_name: {
-                    "background-color": Color("gray", 200).hex,
-                    "border-top": f'1px solid {Color("gray", 300).hex}',
-                    "border-right": f'1px solid {Color("gray", 300).hex}',
-                }
-            }
-        )
+        return stylesheet_dict_to_str({widget_name: {"margin": "5px 10px"}})
 
     @property
     def menu_stylesheet(self) -> str:
@@ -77,10 +69,16 @@ class SettingsDialog(QDialog):
         :return: The stylesheet.
         """
         stylesheet: dict = TableView.stylesheet(as_string=False)
-        stylesheet["TableView"]["background"] = "transparent"
-        stylesheet["TableView"]["border"] = 0
-        stylesheet["TableView"]["border-top"] = "1px solid transparent"
-        stylesheet["TableView"]["border-bottom"] = "1px solid transparent"
+
+        # stylesheet["TableView"]["background"] = "#F3F2F1"
+        stylesheet["TableView"]["background"] = Color("gray", 100).hex
+
+        # stylesheet["TableView"]["background"] = "transparent"
+        # stylesheet["TableView"]["border"] = 0
+        # stylesheet["TableView"]["border-top"] = "1px solid transparent"
+        # stylesheet["TableView"]["border-bottom"] = "1px solid transparent"
         stylesheet["TableView"]["::item"]["border-radius"] = "5px"
+
+        # stylesheet["TableView"]["::item"]["padding"] = "5px 10px"
 
         return stylesheet_dict_to_str(stylesheet)

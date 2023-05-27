@@ -59,7 +59,7 @@ class IconWithInitials(QIconEngine):
         # background and border
         pen = QPen()
         pen.setWidthF(0.7)
-        pen.setColor(Color(self.color, 700).qcolor)
+        pen.setColor(Color(self.color, 800).qcolor)
         painter.setPen(pen)
         painter.setBrush(Color(self.color, 100).qcolor)
         painter.setRenderHints(
@@ -82,7 +82,7 @@ class IconWithInitials(QIconEngine):
         # text
         font = QFont()
         font.setPixelSize(12)
-        color = Color(self.color, 700).qcolor
+        color = Color(self.color, 800).qcolor
         painter.setPen(color)
         painter.setBrush(color)
         painter.setFont(font)
