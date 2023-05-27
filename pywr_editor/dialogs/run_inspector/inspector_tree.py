@@ -45,9 +45,7 @@ class InspectorTree(QTreeWidget):
         # noinspection PyUnresolvedReferences
         self.has_scenarios = len(pywr_model.scenarios.scenarios)
         # noinspection PyUnresolvedReferences
-        self.scenario_combinations = list(
-            pywr_model.scenarios.combination_names
-        )
+        self.scenario_combinations = list(pywr_model.scenarios.combination_names)
 
         self.setStyleSheet(self.stylesheet)
 
@@ -55,9 +53,7 @@ class InspectorTree(QTreeWidget):
         self.setHeaderLabels(("Attribute", "Value"))
         self.setColumnCount(2)
         self.header().resizeSection(0, 300)
-        self.header().setSectionResizeMode(
-            1, QHeaderView.ResizeMode.ResizeToContents
-        )
+        self.header().setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
         self.header().setStyleSheet(self.header_stylesheet)
         self.add_nodes()
         self.add_parameters()
@@ -75,18 +71,14 @@ class InspectorTree(QTreeWidget):
 
         allowed_types = (int, float, str, list)
         for node in self.pywr_model.nodes:
-            node_config = self.model_config.nodes.get_node_config_from_name(
-                node.name, as_dict=False
-            )
+            node_config = self.model_config.nodes.config(node.name, as_dict=False)
             node_item = QTreeWidgetItem(node_root)
             node_item.setText(0, f"{node.name} - {node_config.humanised_type}")
 
             # set icon
             icon, _ = get_pixmap_from_type(
                 QSize(26, 25),
-                get_node_icon(
-                    model_node_obj=node_config, ignore_custom_type=True
-                ),
+                get_node_icon(model_node_obj=node_config, ignore_custom_type=True),
             )
             node_item.setIcon(0, icon)
 
@@ -120,10 +112,7 @@ class InspectorTree(QTreeWidget):
                 if (
                     not isinstance(attr_value, allowed_types)
                     or attr_value is None
-                    or (
-                        isinstance(attr_value, (list, dict))
-                        and len(attr_value) == 0
-                    )
+                    or (isinstance(attr_value, (list, dict)) and len(attr_value) == 0)
                 ):
                     continue
 
@@ -174,18 +163,14 @@ class InspectorTree(QTreeWidget):
             if parameter.name is None:
                 continue
             total_parameters += 1
-            parameter_config = (
-                self.model_config.parameters.get_config_from_name(
-                    parameter.name, as_dict=False
-                )
+            parameter_config = self.model_config.parameters.get_config_from_name(
+                parameter.name, as_dict=False
             )
             parameter_item = QTreeWidgetItem(root)
             parameter_item.setText(
                 0, f"{parameter.name} - {parameter_config.humanised_type}"
             )
-            parameter_item.setIcon(
-                0, QIcon(ParameterIcon(parameter_config.key))
-            )
+            parameter_item.setIcon(0, QIcon(ParameterIcon(parameter_config.key)))
 
             all_attributes = inspect.getmembers(
                 parameter,
@@ -199,9 +184,7 @@ class InspectorTree(QTreeWidget):
                     root_item=parameter_item,
                 )
             # add values
-            self.render_parameter_values(
-                parameter=parameter, root_item=parameter_item
-            )
+            self.render_parameter_values(parameter=parameter, root_item=parameter_item)
 
         root.setText(0, f"Parameters ({total_parameters})")
 
@@ -242,9 +225,7 @@ class InspectorTree(QTreeWidget):
                     root_item=recorder_item,
                 )
             # add values
-            self.render_recorder_values(
-                recorder=recorder, root_item=recorder_item
-            )
+            self.render_recorder_values(recorder=recorder, root_item=recorder_item)
 
         root.setText(0, f"Recorders ({total_recorders})")
 
@@ -280,9 +261,7 @@ class InspectorTree(QTreeWidget):
             # print all nested anonymous parameters
             for nested_param in attr_value:
                 nested_param: Parameter
-                key = ParameterConfig.string_to_key(
-                    nested_param.__class__.__name__
-                )
+                key = ParameterConfig.string_to_key(nested_param.__class__.__name__)
                 all_nested_attributes = inspect.getmembers(
                     nested_param,
                     lambda a: not inspect.isroutine(a),
@@ -290,9 +269,7 @@ class InspectorTree(QTreeWidget):
 
                 # print all attribute for the nested parameter
                 nested_param_root_item = QTreeWidgetItem(attr_item)
-                nested_param_root_item.setText(
-                    0, nested_param.__class__.__name__
-                )
+                nested_param_root_item.setText(0, nested_param.__class__.__name__)
                 nested_param_root_item.setIcon(0, QIcon(ParameterIcon(key)))
                 for nested_attr in all_nested_attributes:
                     self.render_component_attribute(

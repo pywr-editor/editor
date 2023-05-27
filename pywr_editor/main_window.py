@@ -547,15 +547,15 @@ class MainWindow(QMainWindow):
         Registers the action for the Run tab.
         :return: None
         """
-        self.app_actions.add(
-            Action(
-                key="plot-data",
-                name="Plot\nresults",
-                icon=":toolbar/plot-data",
-                tooltip="Plot the results at the end of a run",
-                is_disabled=True,
-            )
-        )
+        # self.app_actions.add(
+        #     Action(
+        #         key="plot-data",
+        #         name="Plot\nresults",
+        #         icon=":toolbar/plot-data",
+        #         tooltip="Plot the results at the end of a run",
+        #         is_disabled=True,
+        #     )
+        # )
         self.app_actions.add(
             Action(
                 key="run-inspector",
@@ -614,7 +614,7 @@ class MainWindow(QMainWindow):
 
         results_panel = run.add_panel("Results")
         results_panel.add_button(self.app_actions.get("run-inspector"))
-        results_panel.add_button(self.app_actions.get("plot-data"))
+        # results_panel.add_button(self.app_actions.get("plot-data"))
 
         # Schematic tab
         operation_tab = self.toolbar.add_tab("Operations")
