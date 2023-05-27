@@ -122,10 +122,7 @@ class PywrWorker(QObject):
             if current_timestep:
                 # pause the model in Run-to and Step mode at last time step so that the
                 # time-step results are available. The run must be manually stopped.
-                if (
-                    current_timestep.index == last_index
-                    and self.mode != RunMode.RUN
-                ):
+                if current_timestep.index == last_index and self.mode != RunMode.RUN:
                     self.end_date_reached.emit()
 
                 # model is past the run-to date
@@ -179,10 +176,7 @@ class PywrWorker(QObject):
                     )
                 )
                 self.pause()
-            elif (
-                self.mode in [RunMode.RUN_TO, RunMode.RUN]
-                and self._run_end_date
-            ):
+            elif self.mode in [RunMode.RUN_TO, RunMode.RUN] and self._run_end_date:
                 if self.mode == RunMode.RUN_TO:
                     self.before_run_to.emit()
                 else:
@@ -194,9 +188,7 @@ class PywrWorker(QObject):
                         + f"{self._run_end_date}"
                     )
                 else:
-                    self.logger.debug(
-                        f"Running from start to {self._run_end_date}"
-                    )
+                    self.logger.debug(f"Running from start to {self._run_end_date}")
 
                 # run the model until the Run to or End date date
                 failed = False
@@ -204,8 +196,7 @@ class PywrWorker(QObject):
                     current_timestep
                     and (
                         (current_timestep.index >= last_index)
-                        or current_timestep.period.to_timestamp()
-                        >= self._run_end_date
+                        or current_timestep.period.to_timestamp() >= self._run_end_date
                     )
                 ):
                     # noinspection PyBroadException
@@ -248,10 +239,7 @@ class PywrWorker(QObject):
                 # pause the model when Run-to and the date is less or equal to the end
                 # date to let the user inspect the results. In Run mode the model is
                 # stopped.
-                if (
-                    self.mode == RunMode.RUN_TO
-                    and current_timestep.index <= last_index
-                ):
+                if self.mode == RunMode.RUN_TO and current_timestep.index <= last_index:
                     self.pause()
 
         del self.pywr_model

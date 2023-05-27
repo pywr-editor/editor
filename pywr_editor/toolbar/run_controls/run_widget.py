@@ -47,9 +47,7 @@ class RunWidget(QWidget):
         self.inspector_action = parent.app_actions.get("run-inspector")
         self.inspector_action.triggered.connect(self.open_inspector)
         # noinspection PyTypeChecker
-        self.run_to_widget: DateEdit = self.app.findChild(
-            DateEdit, "run_to_date"
-        )
+        self.run_to_widget: DateEdit = self.app.findChild(DateEdit, "run_to_date")
 
         # Worker
         self.worker: PywrWorker | None = None
@@ -59,9 +57,7 @@ class RunWidget(QWidget):
         self.is_end_date_reached = False
 
         # Control buttons
-        action_obj = QAction(
-            icon=QIcon(":toolbar/run"), text="Run", parent=parent
-        )
+        action_obj = QAction(icon=QIcon(":toolbar/run"), text="Run", parent=parent)
         # noinspection PyUnresolvedReferences
         action_obj.triggered.connect(self.full_run)
         action_obj.setToolTip("Run the model until the end date")
@@ -75,17 +71,13 @@ class RunWidget(QWidget):
         action_obj.setToolTip("Run the model to the 'Run to' date")
         self.run_to_button = ToolbarSmallButton(action=action_obj, parent=self)
 
-        action_obj = QAction(
-            icon=QIcon(":toolbar/step"), text="Step", parent=parent
-        )
+        action_obj = QAction(icon=QIcon(":toolbar/step"), text="Step", parent=parent)
         # noinspection PyUnresolvedReferences
         action_obj.triggered.connect(self.step)
         action_obj.setToolTip("Run the model by one timestep")
         self.step_button = ToolbarSmallButton(action=action_obj, parent=self)
 
-        action_obj = QAction(
-            icon=QIcon(":toolbar/stop"), text="Stop", parent=parent
-        )
+        action_obj = QAction(icon=QIcon(":toolbar/stop"), text="Stop", parent=parent)
         # noinspection PyUnresolvedReferences
         action_obj.triggered.connect(self.stop)
         action_obj.setToolTip("Stop the model run")
@@ -157,9 +149,7 @@ class RunWidget(QWidget):
 
         self.logger.debug("Starting a new worker")
         # noinspection PyUnresolvedReferences
-        end_date: datetime = (
-            self.app.findChild(DateEdit, "end_date").date().toPython()
-        )
+        end_date: datetime = self.app.findChild(DateEdit, "end_date").date().toPython()
         # noinspection PyUnresolvedReferences
         run_to_date: datetime = (
             self.app.findChild(DateEdit, "run_to_date").date().toPython()
@@ -389,9 +379,7 @@ class RunWidget(QWidget):
             + "The complete stack trace has been reported below. "
         )
         message.setDetailedText(exception)
-        message.setTextInteractionFlags(
-            Qt.TextInteractionFlag.TextSelectableByMouse
-        )
+        message.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
 
         # open the exception message box
         for button in message.buttons():
@@ -448,18 +436,14 @@ class RunWidget(QWidget):
             self.app.findChild(DateEdit, "start_date").date().toPython()
         )
         # noinspection PyUnresolvedReferences
-        end_date: datetime = (
-            self.app.findChild(DateEdit, "end_date").date().toPython()
-        )
+        end_date: datetime = self.app.findChild(DateEdit, "end_date").date().toPython()
         # noinspection PyUnresolvedReferences
         run_to_date: datetime = (
             self.app.findChild(DateEdit, "run_to_date").date().toPython()
         )
 
         title = "Cannot run the model"
-        suffix_msg = (
-            "Please make sure that the date fields are properly configured"
-        )
+        suffix_msg = "Please make sure that the date fields are properly configured"
         date_fmt = "%d/%m/%Y"
 
         if start_date >= end_date:

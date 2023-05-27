@@ -37,9 +37,7 @@ class CalendarWidget(QCalendarWidget):
         # noinspection PyTypeChecker
         month_menu: QMenu = self.findChild(QMenu)
         # noinspection PyUnresolvedReferences
-        month_menu.setWindowFlags(
-            month_menu.windowFlags() | Qt.NoDropShadowWindowHint
-        )
+        month_menu.setWindowFlags(month_menu.windowFlags() | Qt.NoDropShadowWindowHint)
 
     def paintCell(
         self,
@@ -64,9 +62,7 @@ class CalendarWidget(QCalendarWidget):
             painter.setBrush(Color("blue", 400).qcolor)
             painter.drawRoundedRect(rect, 5, 5)
             painter.setPen(QPen(QColor("white")))
-            painter.drawText(
-                rect, Qt.AlignmentFlag.AlignCenter, str(date.day())
-            )
+            painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, str(date.day()))
             painter.restore()
         else:
             super(CalendarWidget, self).paintCell(painter, rect, date)
@@ -95,9 +91,7 @@ class CalendarWidget(QCalendarWidget):
                         ":pressed": {"background": "none", "border": "none"},
                     },
                     "QMenu": AppStylesheet.misc()["QMenu"],
-                    "QWidget#qt_calendar_navigationbar": {
-                        "background": header_color
-                    },
+                    "QWidget#qt_calendar_navigationbar": {"background": header_color},
                     "#qt_calendar_yearbutton, #qt_calendar_monthbutton": {
                         "color": Color("gray", 100).hex
                     },

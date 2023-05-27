@@ -77,9 +77,7 @@ class TimeStepperWidget(QWidget):
         separator.setFixedWidth(1)
         separator.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         separator.setStyleSheet(f"background-color: {Color('gray', 300).hex}")
-        main_layout.addWidget(
-            separator, 0, 2, 0, 1, Qt.AlignmentFlag.AlignHCenter
-        )
+        main_layout.addWidget(separator, 0, 2, 0, 1, Qt.AlignmentFlag.AlignHCenter)
         main_layout.setColumnMinimumWidth(2, 15)
 
         self.setLayout(main_layout)

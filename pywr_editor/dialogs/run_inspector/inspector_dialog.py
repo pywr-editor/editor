@@ -59,9 +59,7 @@ class InspectorDialog(QDialog):
         )
 
         # Buttons
-        expand_all = PushIconButton(
-            icon=qta.icon("msc.expand-all"), label="Expand all"
-        )
+        expand_all = PushIconButton(icon=qta.icon("msc.expand-all"), label="Expand all")
         # noinspection PyUnresolvedReferences
         expand_all.clicked.connect(tree.expandAll)
         collapse_all = PushIconButton(
