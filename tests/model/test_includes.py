@@ -61,9 +61,7 @@ class TestIncludes:
             ("non_existing.py", None, None),
         ],
     )
-    def test_get_classes_from_file(
-        self, file_name, class_attr, expected_classes
-    ):
+    def test_get_classes_from_file(self, file_name, class_attr, expected_classes):
         """
         Tests the get_classes_from_file method.
         """
@@ -139,9 +137,7 @@ class TestIncludes:
         assert classes[file].parameters == ["My2Parameter"]
         assert classes[file].recorders == []
         assert classes[file].nodes == []
-        assert classes[file].base_classes == {
-            "My2Parameter": ["DataFrameParameter"]
-        }
+        assert classes[file].base_classes == {"My2Parameter": ["DataFrameParameter"]}
 
         # check the parameters' information dictionary
         assert model.includes.get_custom_parameters() == {
@@ -168,9 +164,7 @@ class TestIncludes:
         }
 
         # test get_keys_with_subclass
-        assert model.includes.get_keys_with_subclass(
-            "Parameter", "parameter"
-        ) == [
+        assert model.includes.get_keys_with_subclass("Parameter", "parameter") == [
             "enhancedmonthlyprofile",
             "license",
         ]
@@ -205,9 +199,9 @@ class TestIncludes:
         }
 
         # test get_keys_with_subclass
-        assert model.includes.get_keys_with_subclass(
-            "Recorder", "recorder"
-        ) == ["nodeplus"]
+        assert model.includes.get_keys_with_subclass("Recorder", "recorder") == [
+            "nodeplus"
+        ]
 
     def test_get_custom_nodes(self):
         """
@@ -239,6 +233,4 @@ class TestIncludes:
         }
 
         # test get_keys_with_subclass
-        assert model.includes.get_keys_with_subclass("Node", "node") == [
-            "leakypipe"
-        ]
+        assert model.includes.get_keys_with_subclass("Node", "node") == ["leakypipe"]

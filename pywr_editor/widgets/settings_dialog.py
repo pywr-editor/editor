@@ -34,7 +34,7 @@ class SettingsDialog(QDialog):
         """
         # modal layout
         modal_layout = QHBoxLayout()
-        modal_layout.setContentsMargins(0, 0, 20, 0)
+        modal_layout.setContentsMargins(0, 0, 5, 0)
         modal_layout.addWidget(left_widget)
         modal_layout.addWidget(right_widget)
         self.setLayout(modal_layout)
@@ -47,7 +47,7 @@ class SettingsDialog(QDialog):
         )
 
         # change the menu style
-        left_widget.layout().setContentsMargins(10, 20, 10, 20)
+        left_widget.layout().setContentsMargins(10, 10, 5, 15)
         # noinspection PyTypeChecker
         menu: TableView = left_widget.findChild(TableView)
         menu.verticalHeader().setDefaultSectionSize(30)

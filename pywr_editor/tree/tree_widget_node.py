@@ -58,12 +58,10 @@ class TreeWidgetNode(QTreeWidgetItem):
 
             item = TreeWidgetNodeAttribute()
             # do not rename attributes for custom nodes
-            if self.model_config.pywr_node_data.is_custom_node(self.type):
+            if self.model_config.pywr_node_data.is_custom(self.type):
                 item.setText(0, attribute_name)
             else:
-                item.setText(
-                    0, self.node_obj.humanise_attribute_name(attribute_name)
-                )
+                item.setText(0, self.node_obj.humanise_attribute_name(attribute_name))
             items.append(item)
 
             if isinstance(attribute_value, dict):
@@ -90,10 +88,8 @@ class TreeWidgetNode(QTreeWidgetItem):
                     item.setToolTip(1, attribute_value)
                     tooltip = attribute_value
 
-                    param_obj = (
-                        self.model_config.parameters.get_config_from_name(
-                            attribute_value, False
-                        )
+                    param_obj = self.model_config.parameters.config(
+                        attribute_value, False
                     )
                     if param_obj is not None and param_obj.is_a_model_parameter:
                         icon_key = param_obj.type

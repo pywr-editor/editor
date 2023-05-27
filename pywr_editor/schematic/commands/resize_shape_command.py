@@ -6,11 +6,7 @@ from pywr_editor.model import LineArrowShape, RectangleShape
 from pywr_editor.utils import Logging
 
 if TYPE_CHECKING:
-    from pywr_editor.schematic import (
-        Schematic,
-        SchematicArrow,
-        SchematicRectangle,
-    )
+    from pywr_editor.schematic import Schematic, SchematicArrow, SchematicRectangle
 
 
 class ResizeShapeCommand(QUndoCommand):
@@ -56,16 +52,12 @@ class ResizeShapeCommand(QUndoCommand):
         if not self.updated_other_info:
             # store the previous position and size/target point
             shape_config: RectangleShape | LineArrowShape = (
-                self.model_config.shapes.find_shape(
-                    shape_id=self.resized_shape_id
-                )
+                self.model_config.shapes.find(shape_id=self.resized_shape_id)
             )
             shape_item = self.schematic.shape_items[self.resized_shape_id]
 
             if self.is_rectangle:
-                self.prev_other_info = tuple(
-                    [shape_config.width, shape_config.height]
-                )
+                self.prev_other_info = tuple([shape_config.width, shape_config.height])
                 shape_native_obj = shape_item.rect()
                 new_pos = [shape_native_obj.x(), shape_native_obj.y()]
             elif self.is_arrow:
@@ -82,9 +74,7 @@ class ResizeShapeCommand(QUndoCommand):
 
             if self.is_rectangle:
                 self.updated_other_info = tuple(
-                    map(
-                        lambda x: round(x, 5), shape_native_obj.size().toTuple()
-                    )
+                    map(lambda x: round(x, 5), shape_native_obj.size().toTuple())
                 )
             else:
                 self.updated_other_info = dict(

@@ -6,6 +6,8 @@ from PySide6.QtGui import Qt
 
 
 class AbstractAnnualValuesModel(QAbstractTableModel):
+    total_values: int
+
     def __init__(
         self,
         label: str,
@@ -34,8 +36,7 @@ class AbstractAnnualValuesModel(QAbstractTableModel):
 
     def data(
         self,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
         role: int = ...,
     ) -> Any:
         """
@@ -44,10 +45,7 @@ class AbstractAnnualValuesModel(QAbstractTableModel):
         :param role: The item role.
         :return: The item key or value.
         """
-        if (
-            role == Qt.ItemDataRole.DisplayRole
-            or role == Qt.ItemDataRole.EditRole
-        ):
+        if role == Qt.ItemDataRole.DisplayRole or role == Qt.ItemDataRole.EditRole:
             if index.column() == 0:
                 return self.label_values[index.row()]
             else:
@@ -77,8 +75,7 @@ class AbstractAnnualValuesModel(QAbstractTableModel):
 
     def rowCount(
         self,
-        parent: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex = ...,
+        parent: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex = ...,
     ) -> int:
         """
         Provides the total number of rows.
@@ -89,8 +86,7 @@ class AbstractAnnualValuesModel(QAbstractTableModel):
 
     def columnCount(
         self,
-        parent: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex = ...,
+        parent: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex = ...,
     ) -> int:
         """
         Provides the total number of columns.
@@ -101,8 +97,7 @@ class AbstractAnnualValuesModel(QAbstractTableModel):
 
     def setData(
         self,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
         value: Any,
         role: int = ...,
     ) -> bool:
@@ -126,8 +121,7 @@ class AbstractAnnualValuesModel(QAbstractTableModel):
 
     def flags(
         self,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
     ) -> PySide6.QtCore.Qt.ItemFlag:
         """
         Handles the item flags to make each cell editable.

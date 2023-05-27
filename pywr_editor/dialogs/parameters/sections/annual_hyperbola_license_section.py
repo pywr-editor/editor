@@ -1,4 +1,4 @@
-from pywr_editor.form import FloatWidget
+from pywr_editor.form import FieldConfig, FloatWidget
 
 from ..parameter_dialog_form import ParameterDialogForm
 from .abstract_storage_license_section import AbstractStorageLicenseSection
@@ -23,13 +23,13 @@ class AnnualHyperbolaLicenseSection(AbstractStorageLicenseSection):
             + "the day of the year <i>d</i> and <i>Scale factor</i> the scale factor "
             + "in the hyperbola function",
             additional_fields=[
-                {
-                    "name": "value",
-                    "label": "Scaling factor",
-                    "field_type": FloatWidget,
-                    "allow_empty": False,
-                    "value": form.get_param_dict_value("value"),
-                    "help_text": "The scaling factor used in the hyperbola function",
-                },
+                FieldConfig(
+                    name="value",
+                    label="Scaling factor",
+                    field_type=FloatWidget,
+                    allow_empty=False,
+                    value=form.field_value("value"),
+                    help_text="The scaling factor used in the hyperbola function",
+                ),
             ],
         )

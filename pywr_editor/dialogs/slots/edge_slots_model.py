@@ -26,8 +26,7 @@ class EdgeSlotsModel(QAbstractTableModel):
 
     def data(
         self,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
         role: int = ...,
     ) -> Any:
         """
@@ -36,10 +35,7 @@ class EdgeSlotsModel(QAbstractTableModel):
         :param role: The item role.
         :return: The item key or value.
         """
-        if (
-            role == Qt.ItemDataRole.DisplayRole
-            or role == Qt.ItemDataRole.EditRole
-        ):
+        if role == Qt.ItemDataRole.DisplayRole or role == Qt.ItemDataRole.EditRole:
             if index.isValid() is False:
                 return
 
@@ -79,8 +75,7 @@ class EdgeSlotsModel(QAbstractTableModel):
 
     def rowCount(
         self,
-        parent: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex = ...,
+        parent: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex = ...,
     ) -> int:
         """
         Provides the total number of rows.
@@ -91,8 +86,7 @@ class EdgeSlotsModel(QAbstractTableModel):
 
     def columnCount(
         self,
-        parent: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex = ...,
+        parent: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex = ...,
     ) -> int:
         """
         Provides the total number of columns.
@@ -103,8 +97,7 @@ class EdgeSlotsModel(QAbstractTableModel):
 
     def setData(
         self,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
         value: Any,
         role: int = ...,
     ) -> bool:
@@ -131,19 +124,12 @@ class EdgeSlotsModel(QAbstractTableModel):
 
             # check the type of source node being changed
             edge_names = self.edges[index.row()][0:2]
-            node_dict = self.model.nodes.get_node_config_from_name(
-                edge_names[0], as_dict=False
-            )
-            types_to_check = (
-                self.model.pywr_node_data.get_keys_with_parent_class(
-                    "MultiSplitLink"
-                )
-                + self.model.includes.get_keys_with_subclass(
-                    "MultiSplitLink", "node"
-                )
-            )
+            node_dict = self.model.nodes.config(edge_names[0], as_dict=False)
+            types_to_check = self.model.pywr_node_data.keys_with_parent_class(
+                "MultiSplitLink"
+            ) + self.model.includes.get_keys_with_subclass("MultiSplitLink", "node")
 
-            if node_dict.type in types_to_check and value is None:
+            if node_dict.key in types_to_check and value is None:
                 QMessageBox().critical(
                     self.parent(),
                     "Cannot update the slot",
@@ -157,7 +143,7 @@ class EdgeSlotsModel(QAbstractTableModel):
                 edge_names[1],
                 index.column() - 1,
                 value,
-                node_dict.type in types_to_check,
+                node_dict.key in types_to_check,
             )
             # noinspection PyUnresolvedReferences
             self.dataChanged.emit(index.row(), index.column())
@@ -168,8 +154,7 @@ class EdgeSlotsModel(QAbstractTableModel):
 
     def flags(
         self,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
     ) -> PySide6.QtCore.Qt.ItemFlag:
         """
         Handles the item flags to make only the slot cells editable.

@@ -86,11 +86,7 @@ class BaseShape:
         """
         default_qcolor = QColor.fromRgb(*default_rgb)
 
-        if (
-            rgb is not None
-            and isinstance(rgb, (list, tuple))
-            and 3 <= len(rgb) <= 4
-        ):
+        if rgb is not None and isinstance(rgb, (list, tuple)) and 3 <= len(rgb) <= 4:
             qcolor = QColor.fromRgb(*rgb)
             # if RGB color is not valid use default
             if not qcolor.isValid():
@@ -193,9 +189,7 @@ class RectangleShape(BaseShape):
     """ The type of the shape """
     default_border_size: int = 1
     """ The border size to use when it is not provided """
-    default_border_color: tuple[int, int, int] = Color(
-        name="gray", shade=800
-    ).rgb
+    default_border_color: tuple[int, int, int] = Color(name="gray", shade=800).rgb
     """ The default border colour to use when it is not provided """
     max_border_size: int = 5
     """ The maximum allowed border size """
@@ -262,9 +256,7 @@ class RectangleShape(BaseShape):
         )
 
     @staticmethod
-    def create(
-        position: Sequence[float], size: Sequence[float]
-    ) -> "RectangleShape":
+    def create(position: Sequence[float], size: Sequence[float]) -> "RectangleShape":
         """
         Creates a new dictionary with the shape properties.
         :param position: The rectangle position.
@@ -295,9 +287,7 @@ class LineArrowShape(BaseShape):
     """ The type of the shape """
     default_border_size: int = 1
     """ The border size to use when it is not provided """
-    default_border_color: tuple[int, int, int] = Color(
-        name="gray", shade=800
-    ).rgb
+    default_border_color: tuple[int, int, int] = Color(name="gray", shade=800).rgb
     """ The default border colour to use when it is not provided """
     max_border_size: int = 5
     """ The maximum allowed border size """
@@ -418,7 +408,7 @@ class Shapes:
 
         return shapes
 
-    def find_shape_index_by_id(self, shape_id: str) -> int | None:
+    def find_index(self, shape_id: str) -> int | None:
         """
         Finds the shape index in the list by the shape ID.
         :param shape_id: The shape ID to look for.
@@ -435,9 +425,7 @@ class Shapes:
             None,
         )
 
-    def find_shape(
-        self, shape_id: str, as_dict=False
-    ) -> dict | BaseShape | None:
+    def find(self, shape_id: str, as_dict=False) -> dict | BaseShape | None:
         """
         Find the shape by ID and get its dictionary.
         :param shape_id: The shape ID.
@@ -445,11 +433,9 @@ class Shapes:
         the shape instance. Default to False.
         :return: The shape dictionary if the ID is found, None otherwise.
         """
-        idx = self.find_shape_index_by_id(shape_id)
+        idx = self.find_index(shape_id)
         if idx is not None:
-            shape_dict = self.model.editor_config[Constants.SHAPES_KEY.value][
-                idx
-            ]
+            shape_dict = self.model.editor_config[Constants.SHAPES_KEY.value][idx]
             # return dictionary
             if as_dict:
                 return shape_dict
@@ -469,12 +455,12 @@ class Shapes:
         :param shape_id: The shape ID.
         :return: None.
         """
-        idx = self.find_shape_index_by_id(shape_id)
+        idx = self.find_index(shape_id)
         if idx is None:
             return
 
         del self.model.editor_config[Constants.SHAPES_KEY.value][idx]
-        self.model.changes_tracker.add(f"Deleted shape {shape_id}")
+        self.model.has_changed()
 
     def update(self, shape_id: str, shape_dict: dict) -> None:
         """
@@ -483,23 +469,15 @@ class Shapes:
         :param shape_dict: The shape dictionary.
         :return: None
         """
-        idx = self.find_shape_index_by_id(shape_id)
+        idx = self.find_index(shape_id)
         # add shape for the first time
         if idx is None:
-            self.model.editor_config[Constants.SHAPES_KEY.value].append(
-                shape_dict
-            )
-            action = "Added"
+            self.model.editor_config[Constants.SHAPES_KEY.value].append(shape_dict)
         # update existing shape dictionary
         else:
-            self.model.editor_config[Constants.SHAPES_KEY.value][
-                idx
-            ] = shape_dict
-            action = "Updated"
+            self.model.editor_config[Constants.SHAPES_KEY.value][idx] = shape_dict
 
-        self.model.changes_tracker.add(
-            f"{action} shape {shape_id} with the following values: {shape_dict}"
-        )
+        self.model.has_changed()
 
     def set_position(
         self,
@@ -512,7 +490,7 @@ class Shapes:
         :param shape_id: The shape ID.
         :return None
         """
-        idx = self.find_shape_index_by_id(shape_id)
+        idx = self.find_index(shape_id)
         if idx is None:
             return
 
@@ -520,9 +498,7 @@ class Shapes:
         shape_dict["x"] = position[0]
         shape_dict["y"] = position[1]
 
-        self.model.changes_tracker.add(
-            f'Changed position for shape "{shape_id}" to {position}'
-        )
+        self.model.has_changed()
 
     def set_size(
         self,
@@ -535,7 +511,7 @@ class Shapes:
         :param shape_id: The shape ID.
         :return None
         """
-        idx = self.find_shape_index_by_id(shape_id)
+        idx = self.find_index(shape_id)
         if idx is None:
             return
 
@@ -545,9 +521,7 @@ class Shapes:
         shape_dict["width"] = size[0]
         shape_dict["height"] = size[1]
 
-        self.model.changes_tracker.add(
-            f'Changed size for shape "{shape_id}" to {size}'
-        )
+        self.model.has_changed()
 
     def set_line_data(
         self,
@@ -564,7 +538,7 @@ class Shapes:
         o'clock position. Optional,
         :return None
         """
-        idx = self.find_shape_index_by_id(shape_id)
+        idx = self.find_index(shape_id)
         if idx is None:
             return
 
@@ -573,11 +547,7 @@ class Shapes:
             return
         if length:
             shape_dict["length"] = round(length, 3)
-            self.model.changes_tracker.add(
-                f'Changed line length of "{shape_id}" to {length}'
-            )
+            self.model.has_changed()
         if angle:
             shape_dict["angle"] = round(angle, 3)
-            self.model.changes_tracker.add(
-                f'Changed line angle of "{shape_id}" to {angle}'
-            )
+            self.model.has_changed()

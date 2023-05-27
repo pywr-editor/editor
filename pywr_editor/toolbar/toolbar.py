@@ -23,6 +23,7 @@ class ToolbarWidget(QToolBar):
         self.toolbar.setMaximumHeight(125)
         self.toolbar.setMinimumHeight(110)
         self.setContextMenuPolicy(Qt.ContextMenuPolicy.PreventContextMenu)
+        # self.toolbar.setContextMenuPolicy(Qt.ContextMenuPolicy.PreventContextMenu)
         self.setMovable(False)
         self.addWidget(self.toolbar)
 

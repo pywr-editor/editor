@@ -79,9 +79,7 @@ class BaseReservoir(BaseNode):
         points_y = []
         for i in points:
             y = math.cos(number_of_cycles * 2 * math.pi * i / bbox.width())
-            next_point = QPointF(
-                start_point.x() + i, start_point.y() + y * amplitude
-            )
+            next_point = QPointF(start_point.x() + i, start_point.y() + y * amplitude)
             points_x.append(next_point.x())
             points_y.append(next_point.y())
             painter.drawLine(last_point, next_point)

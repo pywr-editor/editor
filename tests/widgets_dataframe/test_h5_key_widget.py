@@ -129,9 +129,7 @@ class TestDialogParameterH5KeyWidget:
         key_widget.combo_box.setCurrentText(new_key)
         assert key_field.value() == new_key
         assert key_field.message.text() == ""
-        new_df, new_index_names = df_from_h5(
-            url_widget.full_file, key=key_widget.value
-        )
+        new_df, new_index_names = df_from_h5(url_widget.full_file, key=key_widget.value)
         assert url_widget.table.equals(new_df)
         assert get_index_names(url_widget.table) == new_index_names
 
@@ -139,7 +137,7 @@ class TestDialogParameterH5KeyWidget:
         # and same key selected
         original_file = url_widget.full_file
         url_widget.line_edit.setText(original_file[0:-1])
-        assert "not exist" in url_widget.form_field.message.text()
+        assert "not exist" in url_widget.field.message.text()
         # File does not exist and table is invalid
         assert url_widget.full_file is None
         assert url_widget.file_ext == ".h"
@@ -152,7 +150,7 @@ class TestDialogParameterH5KeyWidget:
 
         # Set original value - last key is selected
         url_widget.line_edit.setText(original_file)
-        assert url_widget.form_field.message.text() == ""
+        assert url_widget.field.message.text() == ""
         assert url_widget.full_file == original_file
         assert url_widget.file_ext == ".h5"
         assert url_widget.table.equals(new_df)
@@ -160,7 +158,7 @@ class TestDialogParameterH5KeyWidget:
 
         # 3. Load a new H5 file. Table must be reloaded and first key selected
         url_widget.line_edit.setText(r"files/table2.h5")
-        assert url_widget.form_field.message.text() == ""
+        assert url_widget.field.message.text() == ""
         assert url_widget.file_ext == ".h5"
         first_key = "/new_key"
         df, index_names = df_from_h5(url_widget.full_file, key=first_key)
@@ -191,10 +189,7 @@ class TestDialogParameterH5KeyWidget:
         first_key = "/empty_table"
 
         # noinspection PyUnresolvedReferences
-        assert (
-            selected_page.findChild(FormField, "name").value()
-            == selected_parameter
-        )
+        assert selected_page.findChild(FormField, "name").value() == selected_parameter
         assert "does not exist in the H5 file" in key_field.message.text()
 
         # 1. the first key is selected
@@ -223,13 +218,8 @@ class TestDialogParameterH5KeyWidget:
         key_widget: H5KeyWidget = key_field.widget
 
         # noinspection PyUnresolvedReferences
-        assert (
-            selected_page.findChild(FormField, "name").value()
-            == selected_parameter
-        )
-        assert (
-            key_field.message.text() == "The H5 file does not contain any key"
-        )
+        assert selected_page.findChild(FormField, "name").value() == selected_parameter
+        assert key_field.message.text() == "The H5 file does not contain any key"
 
         # 1. field is disabled
         assert key_widget.isEnabled() is False

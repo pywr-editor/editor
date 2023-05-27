@@ -3,7 +3,7 @@ from typing import Literal
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QHBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField, FormSection
+from pywr_editor.form import FormField, FormSection, FormWidget
 from pywr_editor.model import ParameterConfig, RecorderConfig
 from pywr_editor.utils import Logging, get_signal_sender
 from pywr_editor.widgets import ComboBox
@@ -17,7 +17,7 @@ from pywr_editor.widgets import ComboBox
 """
 
 
-class ModelComponentSourceSelectorWidget(FormCustomWidget):
+class ModelComponentSourceSelectorWidget(FormWidget):
     def __init__(
         self,
         name: str,
@@ -75,7 +75,7 @@ class ModelComponentSourceSelectorWidget(FormCustomWidget):
 
         # delete section if source is "model_component"
         # noinspection PyTypeChecker
-        component_type_widget = self.form.find_field_by_name("type").widget
+        component_type_widget = self.form.find_field("type").widget
         # noinspection PyUnresolvedReferences
         component_type_widget.section_added.connect(self.on_section_added)
 
@@ -99,13 +99,11 @@ class ModelComponentSourceSelectorWidget(FormCustomWidget):
         if self.init is False:
             for name in ["type", "comp_name"]:
                 self.logger.debug(f"Resetting FormField '{name}'")
-                form_field = self.form.find_field_by_name(name)
+                form_field = self.form.find_field(name)
                 # noinspection PyUnresolvedReferences
                 form_field.widget.reset()
         else:
-            self.logger.debug(
-                "Skipping fields reset because widget is initialising"
-            )
+            self.logger.debug("Skipping fields reset because widget is initialising")
 
         # Toggle component visibility
         if field_value == self.labels["model_component"]:

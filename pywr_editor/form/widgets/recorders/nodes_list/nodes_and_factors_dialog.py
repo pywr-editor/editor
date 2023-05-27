@@ -7,9 +7,9 @@ from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QVBoxLayout, QWidget
 from pywr_editor.form import (
     FloatWidget,
     Form,
-    FormCustomWidget,
     FormField,
     FormTitle,
+    FormWidget,
     NodePickerWidget,
 )
 from pywr_editor.model import ModelConfig
@@ -29,8 +29,7 @@ class NodesAndFactorsDialog(QDialog):
         node: str | None,
         factor: float | None,
         mode: Literal["add", "edit"],
-        after_form_save: Callable[[str | dict[str, Any], Any], None]
-        | None = None,
+        after_form_save: Callable[[str | dict[str, Any], Any], None] | None = None,
         additional_data: dict[str, int | list[str]] | None = None,
         parent: QWidget | None = None,
     ):
@@ -57,7 +56,7 @@ class NodesAndFactorsDialog(QDialog):
         self.mode = mode
 
         # check parent
-        if issubclass(parent.__class__, (Form, FormField, FormCustomWidget)):
+        if issubclass(parent.__class__, (Form, FormField, FormWidget)):
             raise ValueError(
                 "The parent cannot be a form component already instantiated"
             )
@@ -90,7 +89,7 @@ class NodesAndFactorsDialog(QDialog):
 
         # Form
         self.form = Form(
-            available_fields={
+            fields={
                 "Configuration": [
                     {
                         "name": "node",
@@ -134,14 +133,12 @@ class NodesAndFactorsDialog(QDialog):
         :return: None
         """
         if self.mode == "add":
-            node_widget = self.form.find_field_by_name("node").widget
+            node_widget = self.form.find_field("node").widget
             for node_name in self.additional_data["existing_nodes"]:
                 index = node_widget.combo_box.findData(node_name)
                 if index != -1:
                     node_widget.combo_box.removeItem(index)
-                    self.logger.debug(
-                        f"Removed '{node_name}' from the node list"
-                    )
+                    self.logger.debug(f"Removed '{node_name}' from the node list")
 
     @Slot()
     def on_save(self) -> None | bool:

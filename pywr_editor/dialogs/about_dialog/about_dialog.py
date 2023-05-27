@@ -44,9 +44,7 @@ class AboutDialog(QDialog):
         # Text
         from pywr_editor import __build_date__, __version__
 
-        build_date = datetime.strptime(__build_date__, "%Y-%m-%d").strftime(
-            "%d %b %Y"
-        )
+        build_date = datetime.strptime(__build_date__, "%Y-%m-%d").strftime("%d %b %Y")
 
         # flake8: noqa
         text = f"""<div style="font-weight:bold; font-size:16px">Pywr editor {__version__}</div>

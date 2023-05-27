@@ -5,11 +5,11 @@ from PySide6.QtCore import Signal, Slot
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QColorDialog, QHBoxLayout, QWidget
 
-from pywr_editor.form import FormCustomWidget, FormField
+from pywr_editor.form import FormField, FormWidget
 from pywr_editor.widgets import PushIconButton
 
 
-class ColorPickerWidget(FormCustomWidget):
+class ColorPickerWidget(FormWidget):
     """
     This form widget renders a widget showing the selected colour and allows the user to
     the select another colour using the system color picker dialog.
@@ -46,9 +46,7 @@ class ColorPickerWidget(FormCustomWidget):
             or len(self.default_color) <= 2
             or not QColor(*self.default_color).isValid()
         ):
-            raise ValueError(
-                "The default_color must be a sequence of three integers"
-            )
+            raise ValueError("The default_color must be a sequence of three integers")
 
         # set selected color
         self.sanitise_color()
@@ -114,9 +112,7 @@ class ColorPickerWidget(FormCustomWidget):
 
         # convert to RGB
         if color.isValid():
-            self.value = (
-                color.toTuple() if self.enable_alpha else color.toTuple()[0:3]
-            )
+            self.value = color.toTuple() if self.enable_alpha else color.toTuple()[0:3]
             self.set_preview_color(self.value)
             self.changed_color.emit()
 

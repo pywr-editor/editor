@@ -5,7 +5,7 @@ import qtawesome as qta
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QAbstractItemView, QHBoxLayout, QVBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.form import FormField, FormWidget, Validation
 from pywr_editor.utils import Logging, get_signal_sender
 from pywr_editor.widgets import PushIconButton, TableView
 
@@ -33,7 +33,7 @@ if TYPE_CHECKING:
 """
 
 
-class DictionaryWidget(FormCustomWidget):
+class DictionaryWidget(FormWidget):
     def __init__(
         self,
         name: str,
@@ -60,9 +60,7 @@ class DictionaryWidget(FormCustomWidget):
         if value is None:
             dictionary = {}
         elif not isinstance(value, dict):
-            self.form_field.set_warning_message(
-                "The configuration must be a dictionary"
-            )
+            self.field.set_warning("The configuration must be a dictionary")
             dictionary = {}
         else:
             dictionary = deepcopy(value)
@@ -109,14 +107,10 @@ class DictionaryWidget(FormCustomWidget):
             model=self.model,
             toggle_buttons_on_selection=[self.delete_button, self.edit_button],
         )
-        self.table.setSelectionBehavior(
-            QAbstractItemView.SelectionBehavior.SelectRows
-        )
+        self.table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
         self.table.setColumnWidth(0, 200)
         # noinspection PyUnresolvedReferences
-        self.table.selectionModel().selectionChanged.connect(
-            self.on_selection_changed
-        )
+        self.table.selectionModel().selectionChanged.connect(self.on_selection_changed)
 
         # Set layout
         layout = QVBoxLayout(self)
@@ -190,12 +184,8 @@ class DictionaryWidget(FormCustomWidget):
         """
         from pywr_editor.form import DictionaryItemDialogWidget
 
-        self.logger.debug(
-            f"Running on_edit_item Slot from {get_signal_sender(self)}"
-        )
-        current_index = (
-            self.table.selectionModel().selection().indexes()[0].row()
-        )
+        self.logger.debug(f"Running on_edit_item Slot from {get_signal_sender(self)}")
+        current_index = self.table.selectionModel().selection().indexes()[0].row()
 
         dialog = DictionaryItemDialogWidget(
             model_config=self.model_config,
@@ -215,9 +205,7 @@ class DictionaryWidget(FormCustomWidget):
         Deletes selected dictionary items.
         :return: None
         """
-        self.logger.debug(
-            f"Running on_delete_row Slot from {get_signal_sender(self)}"
-        )
+        self.logger.debug(f"Running on_delete_row Slot from {get_signal_sender(self)}")
         indexes = self.table.selectedIndexes()
         row_indexes = [index.row() for index in indexes]
         keys = list(self.model.dictionary.keys())
@@ -237,9 +225,7 @@ class DictionaryWidget(FormCustomWidget):
         self.model.layoutChanged.emit()
         self.table.clear_selection()
 
-    def on_form_save(
-        self, form_data: dict[str, Any], data: dict[str, Any]
-    ) -> None:
+    def on_form_save(self, form_data: dict[str, Any], data: dict[str, Any]) -> None:
         """
         Updates the dictionary key/value.
         :param form_data: The form data from DictionaryItemDialogWidget.
@@ -258,9 +244,7 @@ class DictionaryWidget(FormCustomWidget):
         if data and "index" in data:
             current_key = existing_keys[data["index"]]
             if key != current_key:
-                self.logger.debug(
-                    f"Renamed key from '{current_key}' to '{key}'"
-                )
+                self.logger.debug(f"Renamed key from '{current_key}' to '{key}'")
                 del self.model.dictionary[current_key]
 
         # get the new item value from the data type
@@ -275,20 +259,17 @@ class DictionaryWidget(FormCustomWidget):
         name: str,
         label: str,
         value: dict[str, Any],
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that valid data points are provided.
         :param name: The field name.
         :param label: The field label.
         :param value: The field value. Not used.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         self.logger.debug("Validating field")
 
         if not self.get_value() and self.is_mandatory:
-            return FormValidation(
-                validation=False,
-                error_message="You must provide the dictionary configuration",
-            )
+            return Validation("You must provide the dictionary configuration")
 
-        return FormValidation(validation=True)
+        return Validation()

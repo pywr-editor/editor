@@ -24,9 +24,7 @@ class SlotsTableModel(QAbstractTableModel):
                 "The length of slot_map must match the length of factor_map"
             )
         if slot_map.keys() != factor_map.keys():
-            raise ValueError(
-                "The keys in slot_map must match the keys in factor_map"
-            )
+            raise ValueError("The keys in slot_map must match the keys in factor_map")
 
         self.header = ["Slot name", "Factors"]
         self.nodes = list(slot_map.keys())
@@ -35,8 +33,7 @@ class SlotsTableModel(QAbstractTableModel):
 
     def data(
         self,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
         role: int = ...,
     ) -> Any:
         """
@@ -89,8 +86,7 @@ class SlotsTableModel(QAbstractTableModel):
 
     def rowCount(
         self,
-        parent: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex = ...,
+        parent: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex = ...,
     ) -> int:
         """
         Provides the total number of rows.
@@ -101,8 +97,7 @@ class SlotsTableModel(QAbstractTableModel):
 
     def columnCount(
         self,
-        parent: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex = ...,
+        parent: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex = ...,
     ) -> int:
         """
         Provides the total number of columns.
@@ -113,8 +108,7 @@ class SlotsTableModel(QAbstractTableModel):
 
     def setData(
         self,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
         value: Any,
         role: int = ...,
     ) -> bool:
@@ -166,8 +160,7 @@ class SlotsTableModel(QAbstractTableModel):
 
     def flags(
         self,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
     ) -> PySide6.QtCore.Qt.ItemFlag:
         """
         Handles the item flags.

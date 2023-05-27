@@ -12,7 +12,7 @@ from pywr_editor.style import Color, stylesheet_dict_to_str
 class ToggleSwitchWidget(QCheckBox):
     def __init__(self, parent: QWidget = None):
         """
-        Initializes the widget.
+        Initialize the widget.
         :param parent: The parent. Default to None.
         """
         super().__init__(parent)
@@ -34,9 +34,7 @@ class ToggleSwitchWidget(QCheckBox):
         :param state: The state.
         :return: None
         """
-        self.setText(
-            "Yes" if Qt.CheckState(state) == Qt.CheckState.Checked else "No"
-        )
+        self.setText("Yes" if Qt.CheckState(state) == Qt.CheckState.Checked else "No")
 
     @property
     def stylesheet(self) -> str:

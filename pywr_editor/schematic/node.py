@@ -11,11 +11,7 @@ from PySide6.QtWidgets import (
     QMenu,
 )
 
-from pywr_editor.node_shapes import (
-    GrayCircle,
-    get_node_icon,
-    get_pixmap_from_type,
-)
+from pywr_editor.node_shapes import GrayCircle, get_node_icon, get_pixmap_from_type
 from pywr_editor.style import Color
 from pywr_editor.utils import ModelComponentTooltip
 from pywr_editor.widgets import ContextualMenu
@@ -301,9 +297,7 @@ class SchematicNode(AbstractSchematicItem, QGraphicsItemGroup):
         has_sources = len(self.connected_nodes["source_nodes"]) > 0
 
         if has_targets:
-            menu.addAction(
-                ContextualMenu.get_title_action("Target nodes", menu)
-            )
+            menu.addAction(ContextualMenu.get_title_action("Target nodes", menu))
         for target_node in self.connected_nodes["target_nodes"]:
             node_type = target_node.model_node.humanised_type
             icon, _ = get_pixmap_from_type(
@@ -317,9 +311,7 @@ class SchematicNode(AbstractSchematicItem, QGraphicsItemGroup):
             menu.addSeparator()
 
         if has_sources:
-            menu.addAction(
-                ContextualMenu.get_title_action("Source nodes", menu)
-            )
+            menu.addAction(ContextualMenu.get_title_action("Source nodes", menu))
         for source_node in self.connected_nodes["source_nodes"]:
             node_type = source_node.model_node.humanised_type
             icon, _ = get_pixmap_from_type(
@@ -342,10 +334,7 @@ class SchematicNode(AbstractSchematicItem, QGraphicsItemGroup):
         :param event: The event being triggered.
         :return: None
         """
-        if (
-            self.view.app.is_model_running
-            or self.view.connecting_node_props.enabled
-        ):
+        if self.view.app.is_model_running or self.view.connecting_node_props.enabled:
             return
 
         self.view.de_select_all_items()
@@ -402,9 +391,7 @@ class SchematicNode(AbstractSchematicItem, QGraphicsItemGroup):
 
             # add actions
             if self.connected_nodes["count"] > 0:
-                edge_disconnect_submenu = context_menu.addMenu(
-                    "Disconnect from"
-                )
+                edge_disconnect_submenu = context_menu.addMenu("Disconnect from")
                 self.add_delete_edge_actions(edge_disconnect_submenu)
 
         context_menu.exec(event.screenPos())

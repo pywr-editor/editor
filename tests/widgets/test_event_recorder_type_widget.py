@@ -1,9 +1,7 @@
 import pytest
 
 from pywr_editor.dialogs import RecordersDialog
-from pywr_editor.dialogs.recorders.recorder_page_widget import (
-    RecorderPageWidget,
-)
+from pywr_editor.dialogs.recorders.recorder_page_widget import RecorderPageWidget
 from pywr_editor.model import ModelConfig, ParameterConfig, RecorderConfig
 from tests.utils import resolve_model_path
 
@@ -66,11 +64,11 @@ class TestEventRecorderTypeWidget:
         # noinspection PyTypeChecker
         selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
         form = selected_page.form
-        comp_type_field = form.find_field_by_name("threshold_type")
-        parameter_field = form.find_field_by_name("threshold_parameter")
-        recorder_field = form.find_field_by_name("threshold_recorder")
+        comp_type_field = form.find_field("threshold_type")
+        parameter_field = form.find_field("threshold_parameter")
+        recorder_field = form.find_field("threshold_recorder")
 
-        assert form.find_field_by_name("name").value() == recorder_name
+        assert form.find_field("name").value() == recorder_name
 
         # 1. Check selected value in combobox
         assert comp_type_field.value() == selected_type
@@ -85,15 +83,11 @@ class TestEventRecorderTypeWidget:
             assert parameter_field.widget.component_obj is None
             assert recorder_field.widget.component_obj is None
         elif selected_type == "parameter":
-            assert isinstance(
-                parameter_field.widget.component_obj, ParameterConfig
-            )
+            assert isinstance(parameter_field.widget.component_obj, ParameterConfig)
             assert recorder_field.widget.component_obj is None
         elif selected_type == "recorder":
             assert parameter_field.widget.component_obj is None
-            assert isinstance(
-                recorder_field.widget.component_obj, RecorderConfig
-            )
+            assert isinstance(recorder_field.widget.component_obj, RecorderConfig)
 
         # 4. Check warning messages
         if init_message is None:
@@ -140,7 +134,7 @@ class TestEventRecorderTypeWidget:
         # noinspection PyTypeChecker
         selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
         form = selected_page.form
-        event_agg_func_field = form.find_field_by_name("event_agg_func")
+        event_agg_func_field = form.find_field("event_agg_func")
 
-        assert form.find_field_by_name("name").value() == recorder_name
+        assert form.find_field("name").value() == recorder_name
         assert event_agg_func_field.value() == expected_agg_func

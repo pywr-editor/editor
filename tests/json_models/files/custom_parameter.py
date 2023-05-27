@@ -63,9 +63,7 @@ class LicenseParameter(Parameter, MyClass):
     def after(self):
         # update the state
         timestep = self.model.timestepper.current  # get current timestep
-        flow_during_timestep = (
-            self._node.flow * timestep.days
-        )  # see explanation below
+        flow_during_timestep = self._node.flow * timestep.days  # see explanation below
         self._remaining -= flow_during_timestep
         self._remaining[
             self._remaining < 0
@@ -91,17 +89,13 @@ class SumParameter:
 
     def value(self, timestep, scenario_index):
         total_value = sum(
-            [
-                parameter.get_value(scenario_index)
-                for parameter in self.parameters
-            ]
+            [parameter.get_value(scenario_index) for parameter in self.parameters]
         )
         return total_value
 
     @classmethod
     def load(cls, model, data):
         parameters = [
-            load_parameter(parameter_data)
-            for parameter_data in data.pop("parameters")
+            load_parameter(parameter_data) for parameter_data in data.pop("parameters")
         ]
         return cls(model, parameters, **data)

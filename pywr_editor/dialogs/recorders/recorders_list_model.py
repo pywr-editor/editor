@@ -21,8 +21,7 @@ class RecordersListModel(QAbstractTableModel):
 
     def data(
         self,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
         role: int = ...,
     ) -> Any:
         """
@@ -39,7 +38,7 @@ class RecordersListModel(QAbstractTableModel):
             role == Qt.ItemDataRole.ToolTipRole
             or role == Qt.ItemDataRole.DecorationRole
         ):
-            recorder_config = self.model_config.recorders.get_config_from_name(
+            recorder_config = self.model_config.recorders.config(
                 recorder_name=recorder_name
             )
 
@@ -52,9 +51,7 @@ class RecordersListModel(QAbstractTableModel):
                     config=recorder_config, deepcopy=True, name=recorder_name
                 )
                 if role == Qt.ItemDataRole.ToolTipRole:
-                    pywr_recorder_name = self.recorders_data.name(
-                        recorder_obj.key
-                    )
+                    pywr_recorder_name = self.recorders_data.name(recorder_obj.key)
                     if pywr_recorder_name is not None:
                         return (
                             f"{recorder_name} ("
@@ -70,8 +67,7 @@ class RecordersListModel(QAbstractTableModel):
 
     def rowCount(
         self,
-        parent: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex = ...,
+        parent: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex = ...,
     ) -> int:
         """
         Provides the total number of rows.
@@ -82,8 +78,7 @@ class RecordersListModel(QAbstractTableModel):
 
     def columnCount(
         self,
-        parent: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex = ...,
+        parent: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex = ...,
     ) -> int:
         """
         Provides the total number of columns.
@@ -94,8 +89,7 @@ class RecordersListModel(QAbstractTableModel):
 
     def flags(
         self,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
     ) -> PySide6.QtCore.Qt.ItemFlag:
         """
         Handles the item flags to make each cell editable.

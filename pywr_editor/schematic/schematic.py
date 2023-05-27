@@ -110,9 +110,7 @@ class Schematic(QGraphicsView):
             QGraphicsView.ViewportUpdateMode.BoundingRectViewportUpdate
         )
         self.setResizeAnchor(QGraphicsView.ViewportAnchor.AnchorUnderMouse)
-        self.setTransformationAnchor(
-            QGraphicsView.ViewportAnchor.AnchorUnderMouse
-        )
+        self.setTransformationAnchor(QGraphicsView.ViewportAnchor.AnchorUnderMouse)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.setAcceptDrops(True)
@@ -167,9 +165,7 @@ class Schematic(QGraphicsView):
         :return: None
         """
         # draw the nodes
-        for node_index, node_props in enumerate(
-            self.model_config.nodes.get_all()
-        ):
+        for node_index, node_props in enumerate(self.model_config.nodes.get_all()):
             node_config = self.model_config.nodes.node(node_props)
             node_position = node_config.position
 
@@ -196,16 +192,14 @@ class Schematic(QGraphicsView):
         # draw the edges
         model_edges = Edges(self.model_config)
         for source_node_name, source_node_obj in self.node_items.items():
-            target_nodes = self.model_config.edges.get_targets(source_node_name)
+            target_nodes = self.model_config.edges.targets(source_node_name)
             if target_nodes is not None:
                 for target_node_name in target_nodes:
                     self.scene.addItem(
                         Edge(
                             source=source_node_obj,
                             target=self.node_items[target_node_name],
-                            edge_color_name=model_edges.get_edge_color(
-                                source_node_name
-                            ),
+                            edge_color_name=model_edges.color(source_node_name),
                             hide_arrow=self.editor_settings.are_edge_arrows_hidden,
                         )
                     )
@@ -258,17 +252,13 @@ class Schematic(QGraphicsView):
 
         # delete edges on the schematic when node is source node
         for c_node in node_item.connected_nodes["target_nodes"]:
-            edge_item = c_node.delete_edge(
-                node_name=node_item.name, edge_type="source"
-            )
+            edge_item = c_node.delete_edge(node_name=node_item.name, edge_type="source")
             if edge_item:
                 deleted_edges.append(self.delete_edge(edge_item))
 
         # delete edges on the schematic when node is target node
         for c_node in node_item.connected_nodes["source_nodes"]:
-            edge_item = c_node.delete_edge(
-                node_name=node_item.name, edge_type="target"
-            )
+            edge_item = c_node.delete_edge(node_name=node_item.name, edge_type="target")
             if edge_item:
                 deleted_edges.append(self.delete_edge(edge_item))
 
@@ -314,7 +304,7 @@ class Schematic(QGraphicsView):
         """
         self.scene.removeItem(edge_item)
         # delete edge from model config and returned deleted model edge
-        edge, _ = self.model_config.edges.find_edge(
+        edge, _ = self.model_config.edges.find(
             edge_item.source.name, edge_item.target.name
         )
         self.model_config.edges.delete(edge)
@@ -375,9 +365,7 @@ class Schematic(QGraphicsView):
                     + "to new locations to store their correct positions."
                 )
             # noinspection PyUnresolvedReferences
-            self.app.warning_info_message.emit(
-                "Missing positions", text, "warn"
-            )
+            self.app.warning_info_message.emit("Missing positions", text, "warn")
 
     def adjust_items_initial_pos(self) -> None:
         """
@@ -407,9 +395,7 @@ class Schematic(QGraphicsView):
                     f"{moved_items_count} items were outside the schematic "
                     + "canvas and these were\nmoved to lie within the canvas limits."
                 )
-            self.app.warning_info_message.emit(
-                "Wrong item position", message, "info"
-            )
+            self.app.warning_info_message.emit("Wrong item position", message, "info")
 
         # disable decrease size buttons if at least one item is already on the edge
         # or has been moved
@@ -431,8 +417,7 @@ class Schematic(QGraphicsView):
             x_ratio = pywr_bound_size / px_sizes[i]
             point_px.append(
                 round(
-                    -(self.pywr_bounds[0] - sign[i] * point_coordinate)
-                    / x_ratio,
+                    -(self.pywr_bounds[0] - sign[i] * point_coordinate) / x_ratio,
                     4,
                 )
             )
@@ -457,9 +442,7 @@ class Schematic(QGraphicsView):
         Decreases the schematic height.
         :return: None
         """
-        max_min_bbox = SchematicBBoxUtils(
-            self.items()
-        ).min_max_bounding_box_coordinates
+        max_min_bbox = SchematicBBoxUtils(self.items()).min_max_bounding_box_coordinates
         node_max_y = max_min_bbox.max_y.value
 
         # height always changes from bottom - make sure that all the nodes fit in
@@ -492,9 +475,7 @@ class Schematic(QGraphicsView):
         Decreases the schematic width.
         :return: None
         """
-        max_min_bbox = SchematicBBoxUtils(
-            self.items()
-        ).min_max_bounding_box_coordinates
+        max_min_bbox = SchematicBBoxUtils(self.items()).min_max_bounding_box_coordinates
         node_max_x = max_min_bbox.max_x.value
 
         # width always changes from the left - make sure that all the nodes fit in the
@@ -536,9 +517,7 @@ class Schematic(QGraphicsView):
         Minimises the schematic.
         :return: None
         """
-        max_min_bbox = SchematicBBoxUtils(
-            self.items()
-        ).min_max_bounding_box_coordinates
+        max_min_bbox = SchematicBBoxUtils(self.items()).min_max_bounding_box_coordinates
         self.schematic_width = max_min_bbox.max_x.value
         self.schematic_height = max_min_bbox.max_y.value
 
@@ -716,9 +695,7 @@ class Schematic(QGraphicsView):
             self.scene.clearSelection()
             pixmap = self.grab()
             pixmap.save(file_name)
-            self.app.statusBar().showMessage(
-                f"Exported current view as {file_name}"
-            )
+            self.app.statusBar().showMessage(f"Exported current view as {file_name}")
         else:
             self.app.statusBar().showMessage("Schematic export aborted")
 
@@ -760,14 +737,10 @@ class Schematic(QGraphicsView):
                     model = self.app.run_widget.worker.pywr_model
 
                     cell_style = "style='padding:2px 6px;"
-                    cell_style += (
-                        f"border:1px solid {Color('neutral', 400).hex}'"
-                    )
+                    cell_style += f"border:1px solid {Color('neutral', 400).hex}'"
 
                     tooltip_text = "<table>"
-                    tooltip_text += (
-                        "<tr><td colspan='2'><b style='font-size:12pt'>"
-                    )
+                    tooltip_text += "<tr><td colspan='2'><b style='font-size:12pt'>"
                     tooltip_text += f"{item.name}</td></tr>"
 
                     node = model.nodes[item.name]
@@ -792,26 +765,20 @@ class Schematic(QGraphicsView):
                             tooltip_text += f"<td colspan='2'>{attr_name} "
                             tooltip_text += "<table style='margin-left:10px;"
                             tooltip_text += "border-collapse:collapse'>"
-                            tooltip_text += (
-                                f"<tr><td {cell_style}><b>Combination</b>"
-                            )
+                            tooltip_text += f"<tr><td {cell_style}><b>Combination</b>"
                             tooltip_text += (
                                 f"</td><td {cell_style}><b>Value</b></td></tr>"
                             )
                             for sc_value in result_data["data"]:
                                 tooltip_text += f"<tr><td {cell_style}>"
                                 tooltip_text += f"{sc_value['name']}</td>"
-                                tooltip_text += (
-                                    f"<td {cell_style}>{sc_value['value']}"
-                                )
+                                tooltip_text += f"<td {cell_style}>{sc_value['value']}"
                                 tooltip_text += "</td></tr>"
                             tooltip_text += "</table></td>"
                         # single value
                         else:
                             tooltip_text += f"<td>{attr_name}:</td>"
-                            tooltip_text += (
-                                f"<td>{result_data['data']['value']}</td>"
-                            )
+                            tooltip_text += f"<td>{result_data['data']['value']}</td>"
                         tooltip_text += "</tr>"
                     tooltip_text += "</table>"
                 else:
@@ -976,14 +943,10 @@ class Schematic(QGraphicsView):
         if event.button() == Qt.LeftButton:
             # perform action on selected nodes
             if self.canvas_drag is False:
-                items: list[
-                    "AbstractSchematicItem"
-                ] = self.scene.selectedItems()
+                items: list["AbstractSchematicItem"] = self.scene.selectedItems()
                 # save position only if the nodes were moved
                 if any([n.has_position_changed() for n in items]):
-                    command = MoveItemCommand(
-                        schematic=self, selected_items=items
-                    )
+                    command = MoveItemCommand(schematic=self, selected_items=items)
                     self.app.undo_stack.push(command)
             else:
                 # export the new scene center
@@ -1045,9 +1008,7 @@ class Schematic(QGraphicsView):
         """
         if self.connecting_node_props.enabled:
             # Updated the temporary edge position
-            self.connecting_node_props.temp_edge.adjust(
-                self.mapToScene(event.pos())
-            )
+            self.connecting_node_props.temp_edge.adjust(self.mapToScene(event.pos()))
 
         super().mouseMoveEvent(event)
 
@@ -1117,9 +1078,7 @@ class Schematic(QGraphicsView):
 
                 # push command
                 if shape_obj:
-                    command = AddShapeCommand(
-                        schematic=self, added_shape_obj=shape_obj
-                    )
+                    command = AddShapeCommand(schematic=self, added_shape_obj=shape_obj)
                     self.app.undo_stack.push(command)
             else:
                 # add the new node to the model
@@ -1130,9 +1089,7 @@ class Schematic(QGraphicsView):
                 )
 
                 # register the action in the undo stack
-                command = AddNodeCommand(
-                    schematic=self, added_node_dict=node_props
-                )
+                command = AddNodeCommand(schematic=self, added_node_dict=node_props)
                 self.app.undo_stack.push(command)
         self.update()
 
@@ -1202,9 +1159,7 @@ class Schematic(QGraphicsView):
             # add and delete edge
             if not selected_items[0].model_node.is_virtual:
                 # if there are no connected nodes, keep the button disabled
-                if item.add_delete_edge_actions(
-                    delete_edge_button.dropdown_menu
-                ):
+                if item.add_delete_edge_actions(delete_edge_button.dropdown_menu):
                     delete_edge_action.setDisabled(False)
                 else:
                     delete_edge_action.setDisabled(True)

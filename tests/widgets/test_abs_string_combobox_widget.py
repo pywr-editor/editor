@@ -1,11 +1,7 @@
 import pytest
 from PySide6.QtWidgets import QPushButton, QWidget
 
-from pywr_editor.form import (
-    AbstractStringComboBoxWidget,
-    FormField,
-    ParameterForm,
-)
+from pywr_editor.form import AbstractStringComboBoxWidget, FormField, ParameterForm
 from pywr_editor.model import ModelConfig, ParameterConfig
 
 default_labels_map = {"apple": "Apple", "cider": "Cider", "pear": "Pear"}
@@ -37,7 +33,7 @@ class TestAbstractStringComboBoxWidget:
         form = ParameterForm(
             model_config=ModelConfig(),
             parameter_obj=ParameterConfig({}),
-            available_fields={
+            fields={
                 "Section": [
                     {
                         "name": "options",
@@ -59,7 +55,7 @@ class TestAbstractStringComboBoxWidget:
         form.enable_optimisation_section = False
         form.load_fields()
 
-        form_field = form.find_field_by_name("options")
+        form_field = form.find_field("options")
         return form_field.widget
 
     @pytest.mark.parametrize(
@@ -98,9 +94,7 @@ class TestAbstractStringComboBoxWidget:
             ),
         ],
     )
-    def test_valid(
-        self, qtbot, labels_map, default_value, keep_default, selected
-    ):
+    def test_valid(self, qtbot, labels_map, default_value, keep_default, selected):
         """
         Tests that the field is loaded correctly.
         """
@@ -110,7 +104,7 @@ class TestAbstractStringComboBoxWidget:
             default_value=default_value,
             keep_default=keep_default,
         )
-        form_field: FormField = widget.form_field
+        form_field: FormField = widget.field
 
         assert form_field.message.text() == ""
 
@@ -160,7 +154,7 @@ class TestAbstractStringComboBoxWidget:
         widget = self.widget(
             value=selected, labels_map=labels_map, default_value=default_value
         )
-        form_field: FormField = widget.form_field
+        form_field: FormField = widget.field
 
         assert message in form_field.message.text()
         # default value is selected

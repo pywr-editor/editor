@@ -70,9 +70,7 @@ class JumpListItemLink:
             link.SetIconLocation(str(self.icon), self.icon_index)
 
         properties = link.QueryInterface(propsys.IID_IPropertyStore)
-        properties.SetValue(
-            pscon.PKEY_Title, propsys.PROPVARIANTType(self.title)
-        )
+        properties.SetValue(pscon.PKEY_Title, propsys.PROPVARIANTType(self.title))
         properties.Commit()
         return link
 
@@ -207,9 +205,7 @@ class JumpList:
         self._jumplist.BeginList()
 
         if self.recent_files.items:
-            self._jumplist.AppendCategory(
-                "Recent projects", self.recent_files.items
-            )
+            self._jumplist.AppendCategory("Recent projects", self.recent_files.items)
         if self.tasks.items:
             self._jumplist.AddUserTasks(self.tasks.items)
 

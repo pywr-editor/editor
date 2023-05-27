@@ -1,4 +1,9 @@
-from pywr_editor.form import FormValidation, NodePickerWidget, TableValuesWidget
+from pywr_editor.form import (
+    FieldConfig,
+    NodePickerWidget,
+    TableValuesWidget,
+    Validation,
+)
 
 from ..recorder_dialog_form import RecorderDialogForm
 from .abstract_numpy_recorder_section import (
@@ -13,7 +18,6 @@ class AbstractFlowDurationCurveRecorderSection(AbstractNumpyRecorderSection):
         form: RecorderDialogForm,
         section_data: dict,
         section_fields: list[dict],
-        log_name: str,
         additional_fdc_help_text: str = "",
     ):
         """
@@ -22,22 +26,21 @@ class AbstractFlowDurationCurveRecorderSection(AbstractNumpyRecorderSection):
         :param section_data: A dictionary containing data to pass to the widget.
         :param section_fields: A list containing the fields to append to the
         section.
-        :param log_name: The name of the log.
         :param additional_fdc_help_text: Additional text to append to the description
         of the FDC calculation.
         """
         fields = [
-            {
-                "name": "node",
-                "field_type": NodePickerWidget,
-                "value": form.get_recorder_dict_value("node"),
-                "help_text": "Calculates the flow duration curve using the flow "
-                + "of the node provided above for each scenario",
-            },
-            {
-                "name": "percentiles",
-                "field_type": TableValuesWidget,
-                "field_args": {
+            FieldConfig(
+                name="node",
+                field_type=NodePickerWidget,
+                value=form.field_value("node"),
+                help_text="Calculates the flow duration curve using the flow "
+                "of the node provided above for each scenario",
+            ),
+            FieldConfig(
+                name="percentiles",
+                field_type=TableValuesWidget,
+                field_args={
                     "min_total_values": 2,
                     "lower_bound": 0,
                     "upper_bound": 100,
@@ -45,14 +48,11 @@ class AbstractFlowDurationCurveRecorderSection(AbstractNumpyRecorderSection):
                     "show_row_numbers": True,
                     "row_number_label": "Percentile index",
                 },
-                "validate_fun": self.check_percentiles,
-                "value": {
-                    "values": form.get_recorder_dict_value("percentiles")
-                },
-                "help_text": "The percentiles (between 0 and 100) to use in the "
-                + "calculation of the flow duration curve"
-                + additional_fdc_help_text,
-            },
+                validate_fun=self.check_percentiles,
+                value={"values": form.field_value("percentiles")},
+                help_text="The percentiles (between 0 and 100) to use in the "
+                "calculation of the flow duration curve" + additional_fdc_help_text,
+            ),
         ] + section_fields
 
         super().__init__(
@@ -62,16 +62,15 @@ class AbstractFlowDurationCurveRecorderSection(AbstractNumpyRecorderSection):
             agg_func_field_labels=TemporalWidgetField(
                 label="Percentile aggregation function",
                 help_text="Aggregate the flow duration values across percentiles "
-                + "for each scenario using the provided function",
+                "for each scenario using the provided function",
             ),
             show_ignore_nan_field=True,
-            log_name=log_name,
         )
 
     @staticmethod
     def check_percentiles(
         name: str, label: str, values: dict[str, list[int]]
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that the percentiles are all different.
         :param name: The field name.
@@ -81,10 +80,8 @@ class AbstractFlowDurationCurveRecorderSection(AbstractNumpyRecorderSection):
         """
         v = values["values"]
         if len(set(v)) != len(v):
-            return FormValidation(
-                validation=False, error_message="The percentiles must be unique"
-            )
-        return FormValidation(validation=True)
+            return Validation("The percentiles must be unique")
+        return Validation()
 
     def filter(self, form_data: dict) -> None:
         """

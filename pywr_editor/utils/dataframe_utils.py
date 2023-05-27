@@ -3,9 +3,7 @@ from pandas import DataFrame
 default_index_name = "Anonymous index"
 
 
-def get_columns(
-    table: DataFrame, include_index: bool = False
-) -> list[str] | None:
+def get_columns(table: DataFrame, include_index: bool = False) -> list[str] | None:
     """
     Returns the table columns except the columns used as index.
     :param table: The DataFrame.
@@ -26,9 +24,7 @@ def get_columns(
             if "index" in table.attrs.keys():
                 diff_columns = list(set(columns) - set(table.attrs["index"]))
                 # sets are unordered, preserve the same initial colum order
-                columns = [
-                    col_name for col_name in columns if col_name in diff_columns
-                ]
+                columns = [col_name for col_name in columns if col_name in diff_columns]
             else:
                 return columns
         except Exception:
@@ -45,11 +41,7 @@ def get_index_names(table: DataFrame | None) -> list[str]:
     :return: A list of table index names. The list is empty if the table is not
     available or no index is set.
     """
-    if (
-        table is not None
-        and "index" in table.attrs.keys()
-        and table.attrs["index"]
-    ):
+    if table is not None and "index" in table.attrs.keys() and table.attrs["index"]:
         index_names = table.attrs["index"]
     else:
         index_names = [default_index_name]
@@ -192,9 +184,7 @@ def find_existing_columns(
         # noinspection PyTypeChecker
         columns_to_find: list[int] = sorted(columns_to_find)
         wrong_columns = [
-            col_id
-            for col_id in columns_to_find
-            if not 0 <= col_id <= len(columns) - 1
+            col_id for col_id in columns_to_find if not 0 <= col_id <= len(columns) - 1
         ]
         existing_columns = list(set(columns_to_find) - set(wrong_columns))
         # convert to string

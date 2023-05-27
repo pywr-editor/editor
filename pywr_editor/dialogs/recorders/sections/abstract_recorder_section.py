@@ -1,5 +1,4 @@
 from pywr_editor.form import FormSection
-from pywr_editor.utils import Logging
 
 from ..recorder_dialog_form import RecorderDialogForm
 
@@ -15,7 +14,6 @@ class AbstractRecorderSection(FormSection):
         form: RecorderDialogForm,
         section_data: dict,
         section_fields: list[dict],
-        log_name: str,
         additional_sections: dict[str, list[dict]] | None = None,
     ):
         """
@@ -28,31 +26,15 @@ class AbstractRecorderSection(FormSection):
         section. This is must be a dictionary with the section title as key
         and list of fields as values. The sections will be added after the
         "Configuration" section but before the "Optimisation" section.
-        :param log_name: The name of the log.
         """
         super().__init__(form, section_data)
-        self.logger = Logging().logger(log_name)
-        self.section_fields = section_fields
-        self.additional_sections = additional_sections
-        if self.additional_sections is None:
-            self.additional_sections = {}
+        if additional_sections is None:
+            additional_sections = {}
 
-    @property
-    def data(self):
-        """
-        Defines the section data dictionary.
-        :return: The section dictionary.
-        """
-        self.form: RecorderDialogForm
-        self.logger.debug("Registering form")
-
-        data_dict = {
-            "Configuration": self.section_fields
-            + [
-                self.form.comment,
-            ],
-            **self.additional_sections,
-            **self.form.optimisation_section,
-        }
-
-        return data_dict
+        self.add_fields(
+            {
+                "Configuration": section_fields + [form.comment],
+                **additional_sections,
+                **form.optimisation_section,
+            }
+        )

@@ -85,16 +85,10 @@ def change_table_view_cell(
         table.model.index(row, column), Qt.ItemDataRole.DisplayRole
     )
 
-    assert (
-        old_model_name == old_name
-    ), f"Expected '{old_name}', got '{old_model_name}'"
+    assert old_model_name == old_name, f"Expected '{old_name}', got '{old_model_name}'"
 
-    qtbot.mouseClick(
-        table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
-    )
-    qtbot.mouseDClick(
-        table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
-    )
+    qtbot.mouseClick(table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y))
+    qtbot.mouseDClick(table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y))
     qtbot.keyClick(table.viewport().focusWidget(), Qt.Key_Backspace)
     for letter in list(str(new_name)):
         if letter == "":

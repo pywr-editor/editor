@@ -55,9 +55,7 @@ class ExpandedItemStates:
         :param item: The item.
         :return: Whether the item stores its expanded state.
         """
-        return (
-            item.data(0, Qt.UserRole) == ExpandedItemStates.expanded_role_value
-        )
+        return item.data(0, Qt.UserRole) == ExpandedItemStates.expanded_role_value
 
     @staticmethod
     def remove_store_state(item: QTreeWidgetItem) -> None:

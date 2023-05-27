@@ -1,5 +1,4 @@
-from pywr_editor.form import FieldConfig, FormSection, FormValidation
-from pywr_editor.utils import Logging
+from pywr_editor.form import FormSection, Validation
 
 from ..node_dialog_form import NodeDialogForm
 
@@ -13,9 +12,8 @@ class AbstractStorageSection(FormSection):
         :param section_data: A dictionary containing data to pass to the widget.
         """
         super().__init__(form, section_data)
-        self.logger = Logging().logger(self.__class__.__name__)
 
-    def validate(self, form_data: dict) -> FormValidation:
+    def validate(self, form_data: dict) -> Validation:
         """
         Checks the "initial_volume", "initial_volume_pc" and "max_volume" fields.
         The section must have this fields.
@@ -23,13 +21,9 @@ class AbstractStorageSection(FormSection):
         :return: The validation instance.
         """
         # either initial_volume or initial_volume_pc must be provided
-        if (
-            "initial_volume" not in form_data
-            and "initial_volume_pc" not in form_data
-        ):
-            return FormValidation(
-                validation=False,
-                error_message="You must provide the initial absolute or relative "
+        if "initial_volume" not in form_data and "initial_volume_pc" not in form_data:
+            return Validation(
+                "You must provide the initial absolute or relative "
                 + "volume for the storage",
             )
         # both volumes cannot be provided at the same time if max_volume
@@ -44,10 +38,9 @@ class AbstractStorageSection(FormSection):
                 or isinstance(form_data["max_volume"], (int, float))
             )
         ):
-            return FormValidation(
-                validation=False,
-                error_message="You can only provide on type of "
-                + "initial volume (absolute or relative)",
+            return Validation(
+                "You can only provide on type of initial volume (absolute or "
+                "relative)",
             )
         # both fields are mandatory if max_volume is a parameter
         elif (
@@ -58,20 +51,9 @@ class AbstractStorageSection(FormSection):
                 or "initial_volume_pc" not in form_data
             )
         ):
-            return FormValidation(
-                validation=False,
-                error_message="You must provide both the initial absolute and "
-                + "relative volume when the 'Maximum storage' is a parameter",
+            return Validation(
+                "You must provide both the initial absolute and "
+                "relative volume when the 'Maximum storage' is a parameter"
             )
 
-        return FormValidation(validation=True)
-
-    @property
-    def data(self) -> dict[str, list[FieldConfig]]:
-        """
-        Defines the section data dictionaries list.
-        :return: The section data.
-        """
-        raise NotImplementedError(
-            "The section data property is not implemented"
-        )
+        return Validation()

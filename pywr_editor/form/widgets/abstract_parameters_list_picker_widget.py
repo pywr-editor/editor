@@ -5,9 +5,7 @@ from pywr_editor.form import AbstractModelComponentsListPickerWidget, FormField
 """
 
 
-class AbstractParametersListPickerWidget(
-    AbstractModelComponentsListPickerWidget
-):
+class AbstractParametersListPickerWidget(AbstractModelComponentsListPickerWidget):
     def __init__(
         self,
         name: str,

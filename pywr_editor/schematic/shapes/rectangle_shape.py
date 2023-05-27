@@ -6,7 +6,7 @@ from PySide6.QtCore import QPointF, QRectF, Slot
 from PySide6.QtGui import QBrush, QPainter, QPainterPath, QPen, Qt
 from PySide6.QtWidgets import QGraphicsItem, QGraphicsRectItem
 
-from pywr_editor.form import ColorPickerWidget
+from pywr_editor.form import ColorPickerWidget, FieldConfig, IntegerWidget
 from pywr_editor.model import RectangleShape
 from pywr_editor.style import Color
 from pywr_editor.widgets import ContextualMenu
@@ -106,9 +106,7 @@ class SchematicRectangle(AbstractSchematicShape, QGraphicsRectItem):
         o = self.handle_size + self.handle_space
         return self.rect().adjusted(-o, -o, o, o)
 
-    def hoverMoveEvent(
-        self, event: PySide6.QtWidgets.QGraphicsSceneHoverEvent
-    ) -> None:
+    def hoverMoveEvent(self, event: PySide6.QtWidgets.QGraphicsSceneHoverEvent) -> None:
         """
         Change the cursor when the cursor is on the resize handle.
         :param event: The event instance.
@@ -149,9 +147,7 @@ class SchematicRectangle(AbstractSchematicShape, QGraphicsRectItem):
             self.pressed_mouse_rect = self.boundingRect()
         super().mousePressEvent(event)
 
-    def mouseMoveEvent(
-        self, event: PySide6.QtWidgets.QGraphicsSceneMouseEvent
-    ) -> None:
+    def mouseMoveEvent(self, event: PySide6.QtWidgets.QGraphicsSceneMouseEvent) -> None:
         """
         Resizes the shape.
         :param event:  The event instance.
@@ -191,18 +187,14 @@ class SchematicRectangle(AbstractSchematicShape, QGraphicsRectItem):
         self.handles[Handles.TOP_MIDDLE.value] = QRectF(
             b.center().x() - s / 2, b.top(), s, s
         )
-        self.handles[Handles.TOP_RIGHT.value] = QRectF(
-            b.right() - s, b.top(), s, s
-        )
+        self.handles[Handles.TOP_RIGHT.value] = QRectF(b.right() - s, b.top(), s, s)
         self.handles[Handles.MIDDLE_LEFT.value] = QRectF(
             b.left(), b.center().y() - s / 2, s, s
         )
         self.handles[Handles.MIDDLE_RIGHT.value] = QRectF(
             b.right() - s, b.center().y() - s / 2, s, s
         )
-        self.handles[Handles.BOTTOM_LEFT.value] = QRectF(
-            b.left(), b.bottom() - s, s, s
-        )
+        self.handles[Handles.BOTTOM_LEFT.value] = QRectF(b.left(), b.bottom() - s, s, s)
         self.handles[Handles.BOTTOM_MIDDLE.value] = QRectF(
             b.center().x() - s / 2, b.bottom() - s, s, s
         )
@@ -488,27 +480,27 @@ class SchematicRectangle(AbstractSchematicShape, QGraphicsRectItem):
         dialog = ShapeDialog(
             shape_id=self.shape_obj.id,
             form_fields=[
-                {
-                    "name": "border_size",
-                    "default_value": self.shape_obj.default_border_size,
-                    "value": self.shape_obj.border_size,
-                    "field_type": "integer",
-                    "min_value": 1,
-                    "max_value": self.shape_obj.max_border_size,
-                },
-                {
-                    "name": "border_color",
-                    "field_type": ColorPickerWidget,
-                    "default_value": self.shape_obj.default_border_color,
-                    "value": self.shape_obj.border_color.toTuple()[0:3],
-                },
-                {
-                    "name": "background_color",
-                    "field_type": ColorPickerWidget,
-                    "field_args": {"enable_alpha": True},
-                    "default_value": self.shape_obj.default_background_color,
-                    "value": self.shape_obj.background_color.toTuple(),
-                },
+                FieldConfig(
+                    name="border_size",
+                    default_value=self.shape_obj.default_border_size,
+                    value=self.shape_obj.border_size,
+                    field_type=IntegerWidget,
+                    field_args={"min_value": 1},
+                    max_value=self.shape_obj.max_border_size,
+                ),
+                FieldConfig(
+                    name="border_color",
+                    field_type=ColorPickerWidget,
+                    default_value=self.shape_obj.default_border_color,
+                    value=self.shape_obj.border_color.toTuple()[0:3],
+                ),
+                FieldConfig(
+                    name="background_color",
+                    field_type=ColorPickerWidget,
+                    field_args={"enable_alpha": True},
+                    default_value=self.shape_obj.default_background_color,
+                    value=self.shape_obj.background_color.toTuple(),
+                ),
             ],
             append_form_items={
                 "width": self.shape_obj.width,
@@ -519,8 +511,6 @@ class SchematicRectangle(AbstractSchematicShape, QGraphicsRectItem):
         )
         # enable save button when a new colour is selected
         for name in ["border_color", "background_color"]:
-            color_widget: ColorPickerWidget = dialog.form.find_field_by_name(
-                name
-            ).widget
+            color_widget: ColorPickerWidget = dialog.form.find_field(name).widget
             color_widget.changed_color.connect(dialog.form.on_field_changed)
         dialog.show()

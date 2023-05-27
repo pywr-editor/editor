@@ -5,12 +5,7 @@ from pandas import ExcelFile
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QHBoxLayout
 
-from pywr_editor.form import (
-    FormCustomWidget,
-    FormField,
-    FormValidation,
-    UrlWidget,
-)
+from pywr_editor.form import FormField, FormWidget, UrlWidget, Validation
 from pywr_editor.utils import Logging, get_signal_sender
 from pywr_editor.widgets import ComboBox
 
@@ -18,7 +13,7 @@ if TYPE_CHECKING:
     from pywr_editor.form import ModelComponentForm
 
 
-class SheetNameWidget(FormCustomWidget):
+class SheetNameWidget(FormWidget):
     def __init__(self, name: str, value: str, parent: FormField):
         """
         Initialises the widget to list the available sheet names in the Excel file.
@@ -93,7 +88,7 @@ class SheetNameWidget(FormCustomWidget):
         # on_update_value is called whilst the field is still empty
         self.setEnabled(False)
         self.combo_box.clear()
-        self.form_field.clear_message(message_type="warning")
+        self.field.clear_message(message_type="warning")
 
         # Load sheets
         self.load_excel_sheets()
@@ -105,26 +100,17 @@ class SheetNameWidget(FormCustomWidget):
             self.logger.debug("The Excel file does not exist")
         # the file does not contain sheets
         elif self.has_excel_sheet is False:
-            self.logger.debug("The Excel file does not contain any sheet")
-            self.form_field.set_warning_message(
-                "The Excel file does not contain any sheet"
-            )
+            self.field.set_warning("The Excel file does not contain any sheet")
         else:
             self.setEnabled(True)
             self.combo_box.addItems(self.excel_sheets)
-            self.logger.debug(
-                f"Added items to widget: {', '.join(self.excel_sheets)}"
-            )
+            self.logger.debug(f"Added items to widget: {', '.join(self.excel_sheets)}")
 
             if self.value is False or self.is_valid_sheet is False:
-                self.logger.debug(
-                    f"{self.value} is not a valid sheet name (using first sheet). "
-                    + "Setting warning message"
-                )
-                self.form_field.set_warning_message(
+                self.field.set_warning(
                     "The sheet name, currently set in the model config file, does not "
-                    + "exist in the Excel file. The first available sheet was "
-                    + "selected, otherwise select another name"
+                    "exist in the Excel file. The first available sheet was "
+                    "selected, otherwise select another name"
                 )
             else:
                 self.combo_box.setCurrentText(self.value)
@@ -144,7 +130,7 @@ class SheetNameWidget(FormCustomWidget):
             f"Running on_update_value Slot with value {selected_sheet} from "
             + get_signal_sender(self)
         )
-        self.form_field.clear_message(message_type="warning")
+        self.field.clear_message(message_type="warning")
         self.value = self.sanitise_value(selected_sheet)
         self.logger.debug(f"Updated field value to {self.value}")
         self.logger.debug("Completed on_update_value Slot")
@@ -224,9 +210,7 @@ class SheetNameWidget(FormCustomWidget):
 
         # sheets are not available
         if self.has_excel_sheet is False:
-            self.logger.debug(
-                "Sheet names are not available. Value not changed"
-            )
+            self.logger.debug("Sheet names are not available. Value not changed")
             selected_sheet_name = value
         # handle different value types for the selected sheet (as string or int)
         elif value is None:
@@ -286,7 +270,7 @@ class SheetNameWidget(FormCustomWidget):
         name: str,
         label: str,
         value: str | None,
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that the set Excel sheet is valid. Validation fails if there are no
         sheets (file does not exist or is not valid) or the value is of the wrong type.
@@ -294,15 +278,12 @@ class SheetNameWidget(FormCustomWidget):
         :param name: The field name.
         :param label: The field label.
         :param value: The field value from self.get_value().
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         self.logger.debug("Validating field")
         if self.has_excel_sheet is False or self.value is False:
             self.logger.debug("Validation failed")
-            return FormValidation(
-                validation=False,
-                error_message="You must select a valid sheet from the list",
-            )
+            return Validation("You must select a valid sheet from the list")
 
         self.logger.debug("Validation passed")
-        return FormValidation(validation=True)
+        return Validation()

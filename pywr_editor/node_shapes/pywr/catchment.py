@@ -71,9 +71,7 @@ class Catchment(BaseNode):
         painter.drawPie(arc_rect, start_angle, span_angle)
         painter.drawConvexPolygon(triangle)
         # cover missing pie background
-        painter.drawConvexPolygon(
-            [QPointF(-11, 2), QPointF(0, -6), QPointF(11, 2)]
-        )
+        painter.drawConvexPolygon([QPointF(-11, 2), QPointF(0, -6), QPointF(11, 2)])
 
         # outline
         pen = QPen()

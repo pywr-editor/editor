@@ -5,7 +5,7 @@ from PySide6.QtWidgets import QPushButton
 
 from pywr_editor.dialogs import MetadataDialog
 from pywr_editor.dialogs.metadata.metadata_custom_fields_widget import (
-    MetadataCustomFieldsWidget,
+    MetadataFieldsWidget,
 )
 from pywr_editor.form import FormField
 from pywr_editor.model import ModelConfig
@@ -48,7 +48,7 @@ class TestMetadataDialog:
         for field_name, new_value in new_values.items():
             # noinspection PyTypeChecker
             form_field: FormField = dialog.findChild(FormField, field_name)
-            form_field.widget.setText(new_value)
+            form_field.widget.line_edit.setText(new_value)
 
         # save the form
         assert dialog.save_button.isEnabled() is True
@@ -66,7 +66,7 @@ class TestMetadataDialog:
         Tests the validation when an invalid minimum version number is provided.
         """
         form_field: FormField = dialog.findChild(FormField, "minimum_version")
-        form_field.widget.setText("a")
+        form_field.widget.line_edit.setText("a")
 
         # try saving the form
         QTimer.singleShot(100, close_message_box)
@@ -80,12 +80,8 @@ class TestMetadataDialog:
         Opens the dialog and tests that a new custom field is added correctly to the
         model configuration.
         """
-        custom_fields_field: FormField = dialog.findChild(
-            FormField, "custom_fields"
-        )
-        custom_fields_widget: MetadataCustomFieldsWidget = (
-            custom_fields_field.widget
-        )
+        custom_fields_field: FormField = dialog.findChild(FormField, "custom_fields")
+        custom_fields_widget: MetadataFieldsWidget = custom_fields_field.widget
         add_button: QPushButton = custom_fields_widget.findChild(QPushButton)
         assert add_button.text() == "Add"
 
@@ -114,12 +110,8 @@ class TestMetadataDialog:
         """
         key = "maintainer"
         expected_value = "Changed value"
-        custom_fields_field: FormField = dialog.findChild(
-            FormField, "custom_fields"
-        )
-        custom_fields_widget: MetadataCustomFieldsWidget = (
-            custom_fields_field.widget
-        )
+        custom_fields_field: FormField = dialog.findChild(FormField, "custom_fields")
+        custom_fields_widget: MetadataFieldsWidget = custom_fields_field.widget
         model = custom_fields_widget.model
 
         row_id = 2
@@ -144,12 +136,8 @@ class TestMetadataDialog:
         expected_value = model_config.metadata["maintainer"]
         row_id = 2
 
-        custom_fields_field: FormField = dialog.findChild(
-            FormField, "custom_fields"
-        )
-        custom_fields_widget: MetadataCustomFieldsWidget = (
-            custom_fields_field.widget
-        )
+        custom_fields_field: FormField = dialog.findChild(FormField, "custom_fields")
+        custom_fields_widget: MetadataFieldsWidget = custom_fields_field.widget
         model = custom_fields_widget.model
 
         assert model.index(row_id, 0).data(Qt.ItemDataRole.DisplayRole) == key
@@ -160,10 +148,7 @@ class TestMetadataDialog:
         # noinspection PyUnresolvedReferences
         model.layoutChanged.emit()
 
-        assert (
-            model.data(row_to_change, Qt.ItemDataRole.DisplayRole)
-            == expected_value
-        )
+        assert model.data(row_to_change, Qt.ItemDataRole.DisplayRole) == expected_value
 
     def test_duplicated_in_custom_field(self, qtbot, dialog, model_config):
         """
@@ -174,12 +159,8 @@ class TestMetadataDialog:
         key = "maintainer"
         row_id = 2
 
-        custom_fields_field: FormField = dialog.findChild(
-            FormField, "custom_fields"
-        )
-        custom_fields_widget: MetadataCustomFieldsWidget = (
-            custom_fields_field.widget
-        )
+        custom_fields_field: FormField = dialog.findChild(FormField, "custom_fields")
+        custom_fields_widget: MetadataFieldsWidget = custom_fields_field.widget
         model = custom_fields_widget.model
 
         assert model.index(row_id, 0).data(Qt.ItemDataRole.DisplayRole) == key
@@ -194,10 +175,7 @@ class TestMetadataDialog:
         QTimer.singleShot(100, close_message_box)
         form_data = custom_fields_widget.form.validate()
         assert form_data is False
-        assert (
-            "following names are duplicated"
-            in custom_fields_field.message.text()
-        )
+        assert "following names are duplicated" in custom_fields_field.message.text()
 
     def test_delete_custom_fields(self, qtbot, dialog, model_config):
         """
@@ -205,21 +183,14 @@ class TestMetadataDialog:
         configuration is correctly updated.
         """
         key_to_delete = "maintainer"
-        custom_fields_field: FormField = dialog.findChild(
-            FormField, "custom_fields"
-        )
-        custom_fields_widget: MetadataCustomFieldsWidget = (
-            custom_fields_field.widget
-        )
+        custom_fields_field: FormField = dialog.findChild(FormField, "custom_fields")
+        custom_fields_widget: MetadataFieldsWidget = custom_fields_field.widget
         delete_button: QPushButton = dialog.findChildren(QPushButton)[1]
         assert delete_button.text() == "Delete"
 
         # delete one field
         custom_fields_widget.table.selectRow(2)
-        assert (
-            custom_fields_widget.table.selectedIndexes()[0].data()
-            == key_to_delete
-        )
+        assert custom_fields_widget.table.selectedIndexes()[0].data() == key_to_delete
         assert delete_button.isEnabled() is True
         qtbot.mouseClick(delete_button, Qt.MouseButton.LeftButton)
 
@@ -237,12 +208,8 @@ class TestMetadataDialog:
         configuration is correctly updated.
         """
         keys_to_delete = ["maintainer", "email"]
-        custom_fields_field: FormField = dialog.findChild(
-            FormField, "custom_fields"
-        )
-        custom_fields_widget: MetadataCustomFieldsWidget = (
-            custom_fields_field.widget
-        )
+        custom_fields_field: FormField = dialog.findChild(FormField, "custom_fields")
+        custom_fields_widget: MetadataFieldsWidget = custom_fields_field.widget
         model = custom_fields_widget.model
         delete_button: QPushButton = dialog.findChildren(QPushButton)[1]
         assert delete_button.text() == "Delete"

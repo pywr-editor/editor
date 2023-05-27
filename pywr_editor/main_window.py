@@ -89,9 +89,7 @@ class MainWindow(QMainWindow):
         if not self.model_config.is_valid():
             self.error_message.emit(self.model_config.load_error, True)
             return
-        self.model_config.changes_tracker.change_applied.connect(
-            self.on_model_change
-        )
+        self.model_config.model_changed.connect(self.on_model_change)
 
         self.editor_settings = Settings(model_file)
         # store recent files
@@ -397,9 +395,7 @@ class MainWindow(QMainWindow):
         connect_node_action = QAction("Abort connect node")
         connect_node_action.setShortcut(QKeySequence.Cancel)
         # noinspection PyUnresolvedReferences
-        connect_node_action.triggered.connect(
-            self.schematic.on_connect_node_end
-        )
+        connect_node_action.triggered.connect(self.schematic.on_connect_node_end)
         self.addAction(connect_node_action)
         self.app_actions.registry["connect-node-abort"] = connect_node_action
 
@@ -408,9 +404,7 @@ class MainWindow(QMainWindow):
         delete_item_action.setShortcut(QKeySequence.StandardKey.Delete)
         # noinspection PyUnresolvedReferences
         delete_item_action.triggered.connect(
-            lambda: self.schematic.on_delete_item(
-                self.schematic.scene.selectedItems()
-            )
+            lambda: self.schematic.on_delete_item(self.schematic.scene.selectedItems())
         )
         self.schematic.addAction(delete_item_action)
         self.app_actions.registry["delete-schematic-item"] = delete_item_action
@@ -629,12 +623,8 @@ class MainWindow(QMainWindow):
         nodes_panel.add_button(self.app_actions.get("redo"), is_large=False)
 
         nodes_panel = operation_tab.add_panel("Selection", layout="vertical")
-        nodes_panel.add_button(
-            self.app_actions.get("select-all"), is_large=False
-        )
-        nodes_panel.add_button(
-            self.app_actions.get("select-none"), is_large=False
-        )
+        nodes_panel.add_button(self.app_actions.get("select-all"), is_large=False)
+        nodes_panel.add_button(self.app_actions.get("select-none"), is_large=False)
 
         op_panel = operation_tab.add_panel("Operations")
         op_panel.add_button(self.app_actions.get("add-edge"))
@@ -653,12 +643,8 @@ class MainWindow(QMainWindow):
         zoom_panel.add_button(self.app_actions.get("zoom-100"))
 
         display_panel = schematic_tab.add_panel("Display", layout="vertical")
-        display_panel.add_button(
-            self.app_actions.get("toggle-labels"), is_large=False
-        )
-        display_panel.add_button(
-            self.app_actions.get("toggle-arrows"), is_large=False
-        )
+        display_panel.add_button(self.app_actions.get("toggle-labels"), is_large=False)
+        display_panel.add_button(self.app_actions.get("toggle-arrows"), is_large=False)
         display_panel.add_button(self.app_actions.get("center"), is_large=False)
 
         size_panel = schematic_tab.add_panel("Size")
@@ -705,9 +691,7 @@ class MainWindow(QMainWindow):
                 )
 
             # add tasks
-            system_icons = (
-                Path(os.environ["SystemRoot"]) / "System32" / "shell32.dll"
-            )
+            system_icons = Path(os.environ["SystemRoot"]) / "System32" / "shell32.dll"
             jump_list.add_task(
                 title="Create new model",
                 app_argument=["--create_new"],
@@ -837,9 +821,7 @@ class MainWindow(QMainWindow):
         Opens the JSON viewer.
         :return: None
         """
-        viewer = JsonCodeViewer(
-            parent=self, file_content=self.model_config.json
-        )
+        viewer = JsonCodeViewer(parent=self, file_content=self.model_config.json)
         viewer.setWindowTitle(self.model_config.file.file_name)
         viewer.exec()
 
@@ -1010,22 +992,20 @@ class MainWindow(QMainWindow):
         Performs actions on model save.
         :return: None
         """
-        self.logger.debug(
-            f"Running on_save Slot from {get_signal_sender(self)}"
-        )
+        self.logger.debug(f"Running on_save Slot from {get_signal_sender(self)}")
         self.statusBar().showMessage(
             f"Model last saved on {self.model_config.file.last_modified_on}"
         )
         self.components_tree.reload()
         self.app_actions.get("save-model").setDisabled(True)
-        self.model_config.changes_tracker.reset_change_flag()
+        self.model_config.reset_change_flag()
 
     def find_orphaned_parameters(self) -> None:
         """
         Shows a list of orphaned parameters.
         :return: None
         """
-        parameter_names = self.model_config.parameters.find_orphans()
+        parameter_names = self.model_config.parameters.orphans()
         if parameter_names is None:
             status = "info"
             message = "The model does not have any orphaned parameters"
@@ -1044,7 +1024,7 @@ class MainWindow(QMainWindow):
         Shows the validation check error if the model does not pass the validation.
         :return: None
         """
-        orphaned_nodes = self.model_config.nodes.find_orphans()
+        orphaned_nodes = self.model_config.nodes.orphans()
         if orphaned_nodes is None:
             status = "info"
             message = "All nodes are properly connected"
@@ -1065,9 +1045,7 @@ class MainWindow(QMainWindow):
                 )
 
         # noinspection PyUnresolvedReferences
-        self.warning_info_message.emit(
-            "Model network validation", message, status
-        )
+        self.warning_info_message.emit("Model network validation", message, status)
 
     @staticmethod
     @Slot()

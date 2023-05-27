@@ -1,5 +1,3 @@
-from typing import Any
-
 from PySide6.QtWidgets import QMessageBox, QPushButton, QWidget
 
 from pywr_editor.form import (
@@ -7,11 +5,12 @@ from pywr_editor.form import (
     AggFuncPercentileMethodWidget,
     AggFuncPercentileOfScoreKindWidget,
     AggFuncPercentileOfScoreScoreWidget,
+    FieldConfig,
     FloatWidget,
-    FormValidation,
     IsObjectiveWidget,
     ModelComponentForm,
     OptAggFuncWidget,
+    Validation,
     validate_percentile_field_section,
 )
 from pywr_editor.model import ModelConfig, RecorderConfig
@@ -34,7 +33,7 @@ class RecorderForm(ModelComponentForm):
         self,
         model_config: ModelConfig,
         recorder_obj: RecorderConfig | None,
-        available_fields: dict,
+        fields: dict,
         save_button: QPushButton,
         parent: QWidget,
         enable_optimisation_section: bool = True,
@@ -59,7 +58,7 @@ class RecorderForm(ModelComponentForm):
         super().__init__(
             form_dict=self.recorder_dict,
             model_config=model_config,
-            available_fields=available_fields,
+            fields=fields,
             save_button=save_button,
             parent=parent,
         )
@@ -79,7 +78,7 @@ class RecorderForm(ModelComponentForm):
         Loads the fields.
         :return: None
         """
-        if self.loaded is True:
+        if self.loaded_ is True:
             return
 
         if self.show_warning:
@@ -97,14 +96,6 @@ class RecorderForm(ModelComponentForm):
             )
 
         super().load_fields()
-
-    def get_recorder_dict_value(self, key: str) -> Any:
-        """
-        Gets a value from the recorder configuration.
-        :param key: The key to extract the value of.
-        :return: The value or empty if the key is not set.
-        """
-        return super().get_form_dict_value(key)
 
     def clean_keys(self) -> None:
         """
@@ -143,93 +134,89 @@ class RecorderForm(ModelComponentForm):
 
         return {
             self.optimisation_config_group_name: [
-                {
-                    "name": "is_objective",
-                    "label": "Objective type",
-                    "value": self.get_form_dict_value("is_objective"),
-                    "field_type": IsObjectiveWidget,
-                    "help_text": "If set, the recorder will be used in an optimisation"
-                    + " problem and will be minimised or maximised",
-                },
-                {
-                    "name": "constraint_lower_bounds",
-                    "label": "Lower bound",
-                    "value": self.get_recorder_dict_value(
-                        "constraint_lower_bounds"
-                    ),
-                    "field_type": FloatWidget,
-                    "help_text": "If provided, the optimisation problem will be  "
+                FieldConfig(
+                    name="is_objective",
+                    label="Objective type",
+                    value=self.field_value("is_objective"),
+                    field_type=IsObjectiveWidget,
+                    help_text="If set, the recorder will be used in an optimisation"
+                    " problem and will be minimised or maximised",
+                ),
+                FieldConfig(
+                    name="constraint_lower_bounds",
+                    label="Lower bound",
+                    value=self.field_value("constraint_lower_bounds"),
+                    field_type=FloatWidget,
+                    help_text="If provided, the optimisation problem will be  "
                     "bounded below. Leave it empty not to constraint the recorder "
                     "value",
-                    "validate_fun": self._check_constraint_bounds,
-                },
-                {
-                    "name": "constraint_upper_bounds",
-                    "label": "Upper bound",
-                    "value": self.get_recorder_dict_value(
-                        "constraint_upper_bounds"
-                    ),
-                    "field_type": FloatWidget,
-                    "help_text": "If provided, the optimisation problem will be "
-                    + "bounded above. Leave it empty not to constraint the recorder "
-                    + "value",
-                },
-                {
-                    "name": "epsilon",
-                    "value": self.get_recorder_dict_value("epsilon"),
-                    "field_type": FloatWidget,
-                    "default_value": 1,
-                    "help_text": "Epsilon distance that may be used by an optimisation "
-                    + "library",
-                },
-                {
-                    "name": "agg_func",
-                    "label": "Scenario aggregation function",
-                    "value": self.get_recorder_dict_value("agg_func"),
-                    "field_type": OptAggFuncWidget,
-                    "help_text": "Function to use to aggregate values from each "
-                    + "scenario during optimisation",
-                },
+                    validate_fun=self._check_constraint_bounds,
+                ),
+                FieldConfig(
+                    name="constraint_upper_bounds",
+                    label="Upper bound",
+                    value=self.field_value("constraint_upper_bounds"),
+                    field_type=FloatWidget,
+                    help_text="If provided, the optimisation problem will be "
+                    "bounded above. Leave it empty not to constraint the recorder "
+                    "value",
+                ),
+                FieldConfig(
+                    name="epsilon",
+                    value=self.field_value("epsilon"),
+                    field_type=FloatWidget,
+                    default_value=1,
+                    help_text="Epsilon distance that may be used by an optimisation "
+                    "library",
+                ),
+                FieldConfig(
+                    name="agg_func",
+                    label="Scenario aggregation function",
+                    value=self.field_value("agg_func"),
+                    field_type=OptAggFuncWidget,
+                    help_text="Function to use to aggregate values from each "
+                    "scenario during optimisation",
+                ),
                 # fields when agg_func is "percentile"
-                {
-                    "name": OptAggFuncWidget.agg_func_percentile_method,
-                    "label": "Percentile method",
-                    "value": self.get_recorder_dict_value("agg_func"),
-                    "field_type": AggFuncPercentileMethodWidget,
-                    "help_text": "Method to use for estimating the percentile. "
-                    + "When empty, it defaults to 'Linear'",
-                },
-                {
-                    "name": OptAggFuncWidget.agg_func_percentile_list,
-                    "label": "List of percentiles",
-                    "value": self.get_recorder_dict_value("agg_func"),
-                    "field_type": AggFuncPercentileListWidget,
-                    "validate_fun": validate_percentile_field_section,
-                    "help_text": "Percentile or comma-separated list of percentiles to"
-                    + " compute, which must be between 0 and 100 inclusive",
-                },
+                FieldConfig(
+                    name=OptAggFuncWidget.agg_func_percentile_method,
+                    label="Percentile method",
+                    value=self.field_value("agg_func"),
+                    field_type=AggFuncPercentileMethodWidget,
+                    help_text="Method to use for estimating the percentile. "
+                    "When empty, it defaults to 'Linear'",
+                ),
+                FieldConfig(
+                    name=OptAggFuncWidget.agg_func_percentile_list,
+                    label="List of percentiles",
+                    value=self.field_value("agg_func"),
+                    field_type=AggFuncPercentileListWidget,
+                    validate_fun=validate_percentile_field_section,
+                    help_text="Percentile or comma-separated list of percentiles to"
+                    " compute, which must be between 0 and 100 inclusive",
+                ),
                 # fields when agg_func is "percentileofscore"
-                {
-                    "name": OptAggFuncWidget.agg_func_percentileofscore_score,
-                    "label": "Score",
-                    "value": self.get_recorder_dict_value("agg_func"),
-                    "field_type": AggFuncPercentileOfScoreScoreWidget,
-                    "help_text": "Score to compute percentiles for",
-                },
-                {
-                    "name": OptAggFuncWidget.agg_func_percentileofscore_kind,
-                    "label": "Kind",
-                    "value": self.get_recorder_dict_value("agg_func"),
-                    "field_type": AggFuncPercentileOfScoreKindWidget,
-                    "help_text": "The method to use to compute the percentile rank. "
-                    + "When empty, it defaults to 'Rank'",
-                },
+                FieldConfig(
+                    name=OptAggFuncWidget.agg_func_percentileofscore_score,
+                    label="Score",
+                    value=self.field_value("agg_func"),
+                    field_type=AggFuncPercentileOfScoreScoreWidget,
+                    help_text="Score to compute percentiles for",
+                ),
+                FieldConfig(
+                    name=OptAggFuncWidget.agg_func_percentileofscore_kind,
+                    label="Kind",
+                    value=self.field_value("agg_func"),
+                    field_type=AggFuncPercentileOfScoreKindWidget,
+                    help_text="The method to use to compute the percentile rank. "
+                    "When empty, it defaults to 'Rank'",
+                ),
             ]
         }
 
     def _check_constraint_bounds(
         self, name: str, label: str, lower_bound: float
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that the lower bound is smaller than the upper bound.
         :param name: The field name.
@@ -237,14 +224,11 @@ class RecorderForm(ModelComponentForm):
         :param lower_bound: The field value for the lower bound.
         :return: The validation instance.
         """
-        upper_bound = self.find_field_by_name("constraint_upper_bounds").value()
+        upper_bound = self.find_field("constraint_upper_bounds").value()
         if lower_bound and upper_bound and lower_bound > upper_bound:
-            return FormValidation(
-                validation=False,
-                error_message="The lower bound must be smaller than the upper limit",
-            )
+            return Validation("The lower bound must be smaller than the upper limit")
 
-        return FormValidation(validation=True)
+        return Validation()
 
     def save(self) -> dict | bool:
         """
@@ -257,7 +241,7 @@ class RecorderForm(ModelComponentForm):
             return False
 
         if self.section_form_data["enable_optimisation_section"] is True:
-            func_field = self.find_field_by_name("agg_func")
+            func_field = self.find_field("agg_func")
             if func_field:
                 func_field.widget.merge_form_dict_fields(form_data)
 

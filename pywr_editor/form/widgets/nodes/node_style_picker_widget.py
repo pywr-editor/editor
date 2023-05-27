@@ -2,7 +2,7 @@ from PySide6.QtCore import QSize, Slot
 from PySide6.QtWidgets import QHBoxLayout
 
 import pywr_editor
-from pywr_editor.form import FormCustomWidget, FormField
+from pywr_editor.form import FormField, FormWidget
 from pywr_editor.model import NodeConfig
 from pywr_editor.node_shapes import (
     get_node_icon,
@@ -13,7 +13,7 @@ from pywr_editor.utils import Logging
 from pywr_editor.widgets import ComboBox
 
 
-class NodeStylePickerWidget(FormCustomWidget):
+class NodeStylePickerWidget(FormWidget):
     default_str_style = "None"
 
     def __init__(
@@ -61,9 +61,7 @@ class NodeStylePickerWidget(FormCustomWidget):
         # select the icon
         if selected_style and selected_style in name_key_map:
             self.logger.debug(f"Setting icon to {selected_style}")
-            selected_index = self.combo_box.findData(
-                name_key_map[selected_style]
-            )
+            selected_index = self.combo_box.findData(name_key_map[selected_style])
         else:
             self.logger.debug("Setting default icon")
             selected_index = self.combo_box.findData(self.default_str_style)
@@ -97,9 +95,7 @@ class NodeStylePickerWidget(FormCustomWidget):
             icon_class_type = getattr(pywr_editor.node_shapes, icon_class_name)
 
         if not isinstance(self.form, NodeDialogForm):
-            raise ValueError(
-                "The widget can only be registered in NodeDialogForm"
-            )
+            raise ValueError("The widget can only be registered in NodeDialogForm")
 
         self.form: NodeDialogForm
         self.form.dialog.title.update_icon(icon_class_type)

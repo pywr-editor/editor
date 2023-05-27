@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Any
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QGroupBox, QVBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField
+from pywr_editor.form import FormField, FormWidget
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import ToggleSwitchWidget
 
@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from pywr_editor.form import ModelComponentForm
 
 
-class CustomComponentExternalDataToggle(FormCustomWidget):
+class ComponentExternalDataToggle(FormWidget):
     def __init__(
         self,
         name: str,

@@ -4,9 +4,7 @@ from .abstract_control_curve_parameter_section import (
 )
 
 
-class ControlCurveInterpolatedParameterSection(
-    AbstractControlCurveParameterSection
-):
+class ControlCurveInterpolatedParameterSection(AbstractControlCurveParameterSection):
     def __init__(self, form: ParameterDialogForm, section_data: dict):
         """
         Initialises the form section for a ControlCurveInterpolatedParameter.

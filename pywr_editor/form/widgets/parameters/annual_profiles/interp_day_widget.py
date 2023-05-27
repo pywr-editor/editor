@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QHBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField
+from pywr_editor.form import FormField, FormWidget
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import ComboBox
 
@@ -10,7 +10,7 @@ from pywr_editor.widgets import ComboBox
 """
 
 
-class InterpDayWidget(FormCustomWidget):
+class InterpDayWidget(FormWidget):
     value_map: dict[str, str] = {"first": "First day", "last": "Last day"}
 
     def __init__(
@@ -56,7 +56,7 @@ class InterpDayWidget(FormCustomWidget):
         """
         self.logger.debug("Registering post-render section actions")
         self.combo_box.setCurrentText(self.value)
-        self.form_field.set_warning_message(self.warning_message)
+        self.field.set_warning(self.warning_message)
 
     def sanitise_value(self, value: str | None) -> [str | None, str | None]:
         """
@@ -74,9 +74,7 @@ class InterpDayWidget(FormCustomWidget):
 
         # value is not a string
         if isinstance(value, str) is False:
-            message = (
-                "The value set in the model configuration is not a valid type"
-            )
+            message = "The value set in the model configuration is not a valid type"
         elif value.lower() not in list(self.value_map.keys()):
             message = "The value set in the model configuration is not valid"
 

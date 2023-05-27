@@ -1,12 +1,8 @@
 from ..parameter_dialog_form import ParameterDialogForm
-from .abstract_threshold_parameter_section import (
-    AbstractThresholdParameterSection,
-)
+from .abstract_threshold_parameter_section import AbstractThresholdParameterSection
 
 
-class CurrentOrdinalDayThresholdParameterSection(
-    AbstractThresholdParameterSection
-):
+class CurrentOrdinalDayThresholdParameterSection(AbstractThresholdParameterSection):
     def __init__(self, form: ParameterDialogForm, section_data: dict):
         """
         Initialises the form section for a CurrentOrdinalDayThresholdParameter.
@@ -18,6 +14,6 @@ class CurrentOrdinalDayThresholdParameterSection(
             section_data=section_data,
             log_name=self.__class__.__name__,
             threshold_description="Returns one of two values depending on the "
-            + "Gregorian ordinal of the date of the current timestep",
+            "Gregorian ordinal of the date of the current timestep",
             value_rel_symbol_description="ordinal day",
         )

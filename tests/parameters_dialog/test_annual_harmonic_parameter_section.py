@@ -2,9 +2,7 @@ import pytest
 from PySide6.QtCore import QTimer
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.dialogs.parameters.parameter_page_widget import (
-    ParameterPageWidget,
-)
+from pywr_editor.dialogs.parameters.parameter_page_widget import ParameterPageWidget
 from pywr_editor.model import ModelConfig
 from tests.utils import close_message_box, resolve_model_path
 
@@ -77,9 +75,9 @@ class TestDialogParameterControlCurveParameterSection:
         form = selected_page.form
 
         # noinspection PyUnresolvedReferences
-        assert form.find_field_by_name("name").value() == param_name
+        assert form.find_field("name").value() == param_name
 
-        field = form.find_field_by_name(field_to_check)
+        field = form.find_field(field_to_check)
 
         if init_message:
             assert init_message in field.message.text()

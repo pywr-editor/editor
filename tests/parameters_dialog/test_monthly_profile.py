@@ -9,7 +9,6 @@ from PySide6.QtWidgets import QPushButton
 
 from pywr_editor.dialogs import ParametersDialog
 from pywr_editor.form import (
-    CommentWidget,
     FormField,
     H5KeyWidget,
     IndexColWidget,
@@ -17,6 +16,7 @@ from pywr_editor.form import (
     MonthlyValuesWidget,
     SheetNameWidget,
     TableSelectorWidget,
+    TextWidget,
     UrlWidget,
 )
 from pywr_editor.model import ModelConfig
@@ -29,9 +29,7 @@ class TestDialogParameterMonthlyValuesWidget:
     Tests the ProfileWidget used to define a profile on a parameter.
     """
 
-    model_file = resolve_model_path(
-        "model_dialog_parameters_monthly_profile.json"
-    )
+    model_file = resolve_model_path("model_dialog_parameters_monthly_profile.json")
 
     @pytest.fixture()
     def model_config(self) -> ModelConfig:
@@ -55,9 +53,7 @@ class TestDialogParameterMonthlyValuesWidget:
         # noinspection PyTypeChecker
         value_widget: MonthlyValuesWidget = value_field.widget
         # noinspection PyTypeChecker
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
 
         # 1. Test value
         assert selected_page.findChild(FormField, "name").value() == param_name
@@ -75,12 +71,8 @@ class TestDialogParameterMonthlyValuesWidget:
         current_values[0] = 5.0
         # Double-clicking the table cell to set it into editor mode does not work.
         # Click->Double Click works, however
-        qtbot.mouseClick(
-            table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
-        )
-        qtbot.mouseDClick(
-            table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
-        )
+        qtbot.mouseClick(table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y))
+        qtbot.mouseDClick(table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y))
         qtbot.keyClick(table.viewport().focusWidget(), Qt.Key_5)
         qtbot.keyClick(table.viewport().focusWidget(), Qt.Key_Enter)
 
@@ -164,9 +156,7 @@ class TestDialogParameterMonthlyValuesWidget:
 
             QTimer.singleShot(100, partial(check_msg, message))
             qtbot.mouseClick(paste_button, Qt.MouseButton.LeftButton)
-            assert all(
-                np.equal(value_widget.get_value(), table["Value"].values)
-            )
+            assert all(np.equal(value_widget.get_value(), table["Value"].values))
 
         xl.Quit()
 
@@ -193,9 +183,7 @@ class TestDialogParameterMonthlyValuesWidget:
         # parameter)
         url_widget: UrlWidget = fields["url"].widget
         assert url_widget.full_file is not None
-        table = pd.read_excel(
-            url_widget.full_file, sheet_name="Horizontal_table"
-        )
+        table = pd.read_excel(url_widget.full_file, sheet_name="Horizontal_table")
         assert table.equals(url_widget.table)
         assert url_widget.table.attrs["index"] == ["Index 1", "Index 2"]
 
@@ -212,15 +200,13 @@ class TestDialogParameterMonthlyValuesWidget:
         assert sheet_name_widget.get_value() == "Horizontal_table"
 
         # 6. Save form
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         # button is disabled
         assert save_button.isEnabled() is False
-        comment_widget: CommentWidget = selected_page.findChild(
+        comment_widget: TextWidget = selected_page.findChild(
             FormField, "comment"
         ).widget
-        comment_widget.field.insertPlainText("Updated by me")
+        comment_widget.line_edit.insertPlainText("Updated by me")
         assert save_button.isEnabled() is True
 
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
@@ -228,7 +214,7 @@ class TestDialogParameterMonthlyValuesWidget:
             assert field.message.text() == ""
 
         assert model_config.has_changes is True
-        assert model_config.parameters.get_config_from_name(param_name) == {
+        assert model_config.parameters.config(param_name) == {
             "type": "monthlyprofile",
             "url": url_widget.get_value(),
             "sheet_name": "Horizontal_table",
@@ -261,9 +247,7 @@ class TestDialogParameterMonthlyValuesWidget:
         url_widget: UrlWidget = fields["url"].widget
         assert url_widget.full_file is not None
         # noinspection PyTypeChecker
-        table: pd.DataFrame = pd.read_hdf(
-            url_widget.full_file, key="monthly_profile"
-        )
+        table: pd.DataFrame = pd.read_hdf(url_widget.full_file, key="monthly_profile")
         table.reset_index(inplace=True)
         assert table.equals(url_widget.table)
         assert url_widget.table.attrs["index"] == ["Index 1"]
@@ -282,15 +266,13 @@ class TestDialogParameterMonthlyValuesWidget:
         assert key_widget.get_value() == "/monthly_profile"
 
         # 6. Save form
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         # button is disabled
         assert save_button.isEnabled() is False
-        comment_widget: CommentWidget = selected_page.findChild(
+        comment_widget: TextWidget = selected_page.findChild(
             FormField, "comment"
         ).widget
-        comment_widget.field.insertPlainText("Updated by me")
+        comment_widget.line_edit.insertPlainText("Updated by me")
         assert save_button.isEnabled() is True
 
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
@@ -298,7 +280,7 @@ class TestDialogParameterMonthlyValuesWidget:
             assert field.message.text() == ""
 
         assert model_config.has_changes is True
-        assert model_config.parameters.get_config_from_name(param_name) == {
+        assert model_config.parameters.config(param_name) == {
             "type": "monthlyprofile",
             "url": url_widget.get_value(),
             "key": "/monthly_profile",
@@ -335,15 +317,13 @@ class TestDialogParameterMonthlyValuesWidget:
         assert index_widget.get_value() == ["A", "C"]
 
         # 3. Save form
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         # button is disabled
         assert save_button.isEnabled() is False
-        comment_widget: CommentWidget = selected_page.findChild(
+        comment_widget: TextWidget = selected_page.findChild(
             FormField, "comment"
         ).widget
-        comment_widget.field.insertPlainText("Updated by me")
+        comment_widget.line_edit.insertPlainText("Updated by me")
         assert save_button.isEnabled() is True
 
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
@@ -351,7 +331,7 @@ class TestDialogParameterMonthlyValuesWidget:
             assert field.message.text() == ""
 
         assert model_config.has_changes is True
-        assert model_config.parameters.get_config_from_name(param_name) == {
+        assert model_config.parameters.config(param_name) == {
             "type": "monthlyprofile",
             "table": "profile_table",
             "index": ["A", "C"],

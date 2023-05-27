@@ -34,7 +34,7 @@ class ParameterPageWidget(QWidget):
         self.name = name
         self.pages = parent
         self.model_config = model_config
-        self.parameter_dict = model_config.parameters.get_config_from_name(name)
+        self.parameter_dict = model_config.parameters.config(name)
 
         layout = QVBoxLayout(self)
         layout.setAlignment(Qt.AlignTop)
@@ -66,9 +66,7 @@ class ParameterPageWidget(QWidget):
         # noinspection PyUnresolvedReferences
         clone_button.clicked.connect(self.on_clone_parameter)
 
-        delete_button = PushIconButton(
-            icon=qta.icon("msc.remove"), label="Delete"
-        )
+        delete_button = PushIconButton(icon=qta.icon("msc.remove"), label="Delete")
         delete_button.setObjectName("delete_button")
         # noinspection PyUnresolvedReferences
         delete_button.clicked.connect(self.on_delete_parameter)
@@ -160,9 +158,7 @@ class ParameterPageWidget(QWidget):
         Clones the selected parameter.
         :return: None
         """
-        self.pages.on_add_new_parameter(
-            self.model_config.parameters.get_config_from_name(self.name)
-        )
+        self.pages.on_add_new_parameter(self.model_config.parameters.config(self.name))
 
     @Slot()
     def on_delete_parameter(self) -> None:
@@ -212,7 +208,7 @@ class ParameterPageWidget(QWidget):
         :param event: The event being triggered.
         :return: None
         """
-        if self.form.loaded is False:
+        if self.form.loaded_ is False:
             self.form.load_fields()
 
         super().showEvent(event)

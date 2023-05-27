@@ -35,9 +35,7 @@ class DeleteItemCommand(QUndoCommand):
         self.schematic = schematic
         self.model_config = self.schematic.model_config
         self.deleted_node_names = [
-            node.name
-            for node in selected_items
-            if isinstance(node, SchematicNode)
+            node.name for node in selected_items if isinstance(node, SchematicNode)
         ]
         self.deleted_shape_ids: list[str] = [
             shape.id
@@ -76,9 +74,7 @@ class DeleteItemCommand(QUndoCommand):
         self.deleted_edges = []  # store the deleted edges
         self.deleted_node_configs = []  # always empty this after undo
         for node_name in self.deleted_node_names:
-            node_config = self.model_config.nodes.get_node_config_from_name(
-                node_name, as_dict=False
-            )
+            node_config = self.model_config.nodes.config(node_name, as_dict=False)
             self.deleted_node_configs.append(node_config)
 
             model_edges = self.schematic.delete_node(node_name)
@@ -89,19 +85,15 @@ class DeleteItemCommand(QUndoCommand):
         # delete shapes
         self.deleted_shape_configs = []  # always empty this after redo
         for shape_id in self.deleted_shape_ids:
-            shape_config = self.model_config.shapes.find_shape(shape_id)
+            shape_config = self.model_config.shapes.find(shape_id)
             self.deleted_shape_configs.append(shape_config)
 
             self.schematic.delete_shape(shape_config.id)
-            self.logger.debug(
-                f"Deleted shape with config: {shape_config.shape_dict}"
-            )
+            self.logger.debug(f"Deleted shape with config: {shape_config.shape_dict}")
 
         # status message
         edges_count = len(self.deleted_edges)
-        item_count = len(self.deleted_node_configs) + len(
-            self.deleted_shape_configs
-        )
+        item_count = len(self.deleted_node_configs) + len(self.deleted_shape_configs)
         status_message = "Deleted "
         if item_count == 1:
             status_message += "1 schematic item"
@@ -145,9 +137,7 @@ class DeleteItemCommand(QUndoCommand):
             self.logger.debug(f"Added shape with config: {shape_config}")
 
         # emit the status message
-        item_count = len(self.deleted_node_configs) + len(
-            self.deleted_shape_configs
-        )
+        item_count = len(self.deleted_node_configs) + len(self.deleted_shape_configs)
         suffix_node = "item" if item_count == 1 else "items"
         status_message = f"Restored {item_count} schematic {suffix_node}"
         if restored_edges > 0:

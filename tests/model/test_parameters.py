@@ -29,8 +29,8 @@ class TestParameters:
         Tests the get_type_from_name method.
         """
         parameters = self.parameters()
-        assert parameters.get_type_from_name("param1") == "constant"
-        assert parameters.get_type_from_name("non_existing_param") is None
+        assert parameters.type_from_name("param1") == "constant"
+        assert parameters.type_from_name("non_existing_param") is None
 
     def test_count(self):
         """
@@ -45,7 +45,7 @@ class TestParameters:
         """
         parameters = self.parameters()
         assert (
-            parameters.get_config_from_name("param2", True)
+            parameters.config("param2", True)
             == parameters.model.json["parameters"]["param2"]
         )
 
@@ -54,14 +54,14 @@ class TestParameters:
         Tests the find_orphans method with a model with orphaned parameters.
         """
         parameters = self.parameters("model_with_orphans.json")
-        assert parameters.find_orphans() == ["param2"]
+        assert parameters.orphans() == ["param2"]
 
     def test_model_without_orphans(self):
         """
         Tests the find_orphans method with a model without orphaned parameters.
         """
         parameters = self.parameters("model_wo_orphans.json")
-        assert parameters.find_orphans() is None
+        assert parameters.orphans() is None
 
     def test_update(self):
         """
@@ -71,13 +71,13 @@ class TestParameters:
         model = parameters.model
         model.parameters.update("param1", {"type": "constant", "value": 3})
         assert model.has_changes is True
-        assert model.parameters.get_config_from_name("param1") == {
+        assert model.parameters.config("param1") == {
             "type": "constant",
             "value": 3,
         }
 
         model.parameters.update("Parameter new", {})
-        assert model.parameters.get_config_from_name("Parameter new") == {}
+        assert model.parameters.config("Parameter new") == {}
 
     def test_is_used(self):
         """
@@ -114,16 +114,11 @@ class TestParameters:
 
         assert "param1" not in model.parameters.names
         assert "paramX" in model.parameters.names
-        node_dict = model.nodes.get_node_config_from_name("Custom node")[
-            "max_flow"
-        ]
+        node_dict = model.nodes.config("Custom node")["max_flow"]
         assert node_dict["params"][0] == "paramX"
         assert node_dict["params"][2]["param_data"] == "paramX"
 
-        assert (
-            model.nodes.get_node_config_from_name("Link4")["max_flow"]
-            == "paramX"
-        )
+        assert model.nodes.config("Link4")["max_flow"] == "paramX"
 
     def test_rename_with_same_node_name(self):
         """

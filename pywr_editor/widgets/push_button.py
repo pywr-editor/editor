@@ -2,9 +2,7 @@ from PySide6.QtWidgets import QPushButton, QWidget
 
 
 class PushButton(QPushButton):
-    def __init__(
-        self, label: str = "", small: bool = False, parent: QWidget = None
-    ):
+    def __init__(self, label: str = "", small: bool = False, parent: QWidget = None):
         """
         Initialises the button widget.
         :param label: The button label. Default to empty.

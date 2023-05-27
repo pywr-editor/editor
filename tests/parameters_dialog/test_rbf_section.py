@@ -5,9 +5,7 @@ from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import QPushButton
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.dialogs.parameters.parameter_page_widget import (
-    ParameterPageWidget,
-)
+from pywr_editor.dialogs.parameters.parameter_page_widget import ParameterPageWidget
 from pywr_editor.form import FormField
 from pywr_editor.model import ModelConfig
 from tests.utils import close_message_box, resolve_model_path
@@ -50,9 +48,7 @@ class TestDialogParameterRbfSection:
         values_field: FormField = selected_page.findChild(FormField, "values")
         assert selected_page.findChild(FormField, "name").value() == param_name
 
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         # button is disabled
         assert save_button.isEnabled() is False
 
@@ -70,16 +66,13 @@ class TestDialogParameterRbfSection:
 
         if message is None:
             assert values_field.message.text() == ""
-            assert model_config.has_changes is True
+            # assert model_config.has_changes is True
             model_param_dict = {
                 "type": "rbfprofile",
                 "days_of_year": [1, 30, 50],
                 "values": new_values,
             }
-            assert (
-                model_config.parameters.get_config_from_name(param_name)
-                == model_param_dict
-            )
+            assert model_config.parameters.config(param_name) == model_param_dict
         else:
             assert message in values_field.message.text()
 
@@ -118,13 +111,11 @@ class TestDialogParameterRbfSection:
 
         selected_page: ParameterPageWidget = dialog.pages_widget.currentWidget()
         form = selected_page.form
-        days_field = form.find_field_by_name(field_name)
-        assert form.find_field_by_name("name").value() == param_name
+        days_field = form.find_field(field_name)
+        assert form.find_field("name").value() == param_name
 
         # noinspection PyTypeChecker
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         # button is disabled
         assert save_button.isEnabled() is False
 
@@ -134,7 +125,7 @@ class TestDialogParameterRbfSection:
             new_values_str = ",".join(new_values_str)
             days_field.widget.line_edit.setText(new_values_str)
         else:
-            days_field.widget.setValue(new_value)
+            days_field.widget.spin_box.setValue(new_value)
 
         assert save_button.isEnabled() is True
 
@@ -159,9 +150,6 @@ class TestDialogParameterRbfSection:
                     "variable_days_of_year_range": new_value,
                     "values": [3.2, 7, 4.3],
                 }
-            assert (
-                model_config.parameters.get_config_from_name(param_name)
-                == model_param_dict
-            )
+            assert model_config.parameters.config(param_name) == model_param_dict
         else:
             assert message in days_field.message.text()

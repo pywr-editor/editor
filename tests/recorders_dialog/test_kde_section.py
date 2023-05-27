@@ -2,9 +2,7 @@ import pytest
 from PySide6.QtCore import QTimer
 
 from pywr_editor.dialogs import RecordersDialog
-from pywr_editor.dialogs.recorders.recorder_page_widget import (
-    RecorderPageWidget,
-)
+from pywr_editor.dialogs.recorders.recorder_page_widget import RecorderPageWidget
 from pywr_editor.form import (
     FormField,
     ResampleAggFrequencyWidget,
@@ -55,17 +53,13 @@ class TestDialogRecorderKDESection:
         form = selected_page.form
 
         # noinspection PyUnresolvedReferences
-        assert (
-            selected_page.findChild(FormField, "name").value() == recorder_name
-        )
+        assert selected_page.findChild(FormField, "name").value() == recorder_name
 
         # 1. Check value
-        freq_widget: ResampleAggFrequencyWidget = form.find_field_by_name(
+        freq_widget: ResampleAggFrequencyWidget = form.find_field(
             "resample_freq"
         ).widget
-        func_widget: ResampleAggFunctionWidget = form.find_field_by_name(
-            "resample_func"
-        ).widget
+        func_widget: ResampleAggFunctionWidget = form.find_field("resample_func").widget
         assert freq_widget.get_value() == expected_freq
         assert func_widget.get_value() == expected_func
 
@@ -121,12 +115,10 @@ class TestDialogRecorderKDESection:
         form = selected_page.form
 
         # noinspection PyUnresolvedReferences
-        assert (
-            selected_page.findChild(FormField, "name").value() == recorder_name
-        )
+        assert selected_page.findChild(FormField, "name").value() == recorder_name
 
         # validate form
         QTimer.singleShot(100, close_message_box)
         form.validate()
-        field = form.find_field_by_name(field_to_check)
+        field = form.find_field(field_to_check)
         assert error_message in field.message.text()

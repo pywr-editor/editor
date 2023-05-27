@@ -9,7 +9,7 @@ from PySide6.QtCore import QSize, Signal, Slot
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QHBoxLayout, QMessageBox, QSizePolicy
 
-from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.form import FormField, FormWidget, Validation
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import (
     Logging,
@@ -34,7 +34,7 @@ if TYPE_CHECKING:
 """
 
 
-class TableSelectorWidget(FormCustomWidget):
+class TableSelectorWidget(FormWidget):
     updated_table = Signal()
     register_updated_table = ["index", "column"]
 
@@ -102,7 +102,7 @@ class TableSelectorWidget(FormCustomWidget):
         self.combo_box.setIconSize(QSize(21, 16))
         self.combo_box.addItems(["None"])
         for name in self.table_names:
-            ext = self.model_config.tables.get_table_extension(table_name=name)
+            ext = self.model_config.tables.get_extension(table_name=name)
             if ext is None:
                 ext = "N/A"
             self.combo_box.addItem(QIcon(ExtensionIcon(ext)), name)
@@ -155,7 +155,7 @@ class TableSelectorWidget(FormCustomWidget):
         # register updated_table Slot When the table changes, When the table changes,
         # the fields using the table content must be updated
         for field_name in self.register_updated_table:
-            form_field = self.form.find_field_by_name(field_name)
+            form_field = self.form.find_field(field_name)
             if form_field is None:
                 self.logger.debug(
                     f"Skipping registration of Slot {field_name}.update_field because "
@@ -181,9 +181,7 @@ class TableSelectorWidget(FormCustomWidget):
         Reloads the table stored by the widget when the Reload button is clicked.
         :return: None
         """
-        self.logger.debug(
-            f"Called on_reload_click Slot from {get_signal_sender(self)}"
-        )
+        self.logger.debug(f"Called on_reload_click Slot from {get_signal_sender(self)}")
         self.load_table_data(self.value)
         self.logger.debug("Completed on_reload_click Slot")
 
@@ -202,7 +200,7 @@ class TableSelectorWidget(FormCustomWidget):
         self.combo_box.blockSignals(True)
 
         # init
-        self.form_field.clear_message()
+        self.field.clear_message()
         self.combo_box.setEnabled(False)
         self.open_button.setEnabled(False)
         self.reload_button.setEnabled(False)
@@ -213,9 +211,9 @@ class TableSelectorWidget(FormCustomWidget):
 
         # table names list is None or an empty list
         if not self.table_names:
-            message = "The are no tables defined in the model configuration"
-            self.logger.debug(message)
-            self.form_field.set_warning_message(message)
+            self.field.set_warning(
+                "The are no tables defined in the model configuration"
+            )
         else:
             # enable the ComboBox and set the selection
             self.combo_box.setEnabled(True)
@@ -224,11 +222,9 @@ class TableSelectorWidget(FormCustomWidget):
                 self.logger.debug("Table name is None")
             # wrong type
             elif table_name is not None and not isinstance(table_name, str):
-                message = (
+                self.field.set_warning(
                     "The table in the model configuration must be a string"
                 )
-                self.logger.debug(message)
-                self.form_field.set_warning_message(message)
             # valid string
             elif table_name is not None:
                 if table_name in self.table_names:
@@ -238,22 +234,17 @@ class TableSelectorWidget(FormCustomWidget):
                 # skip file check if widget is static
                 if not self.static:
                     if self.file is None:
-                        message = "The table file does not exist"
-                        self.logger.debug(message)
-                        self.form_field.set_warning_message(message)
+                        self.field.set_warning("The table file does not exist")
                         # let user reload file if it is later created (as long as
                         # table exists)
                         if table_name in self.table_names:
                             self.reload_button.setEnabled(True)
                     elif self.file_ext not in self.supported_extensions:
-                        message = (
-                            f"The file extension '{self.file_ext}' is not "
-                            + "supported"
+                        self.field.set_warning(
+                            f"The file extension '{self.file_ext}' is not supported"
                         )
-                        self.logger.debug(message)
-                        self.form_field.set_warning_message(message)
                     elif self.table_parse_error:
-                        self.form_field.set_error_message(
+                        self.field.set_error(
                             "Cannot parse the file. The provided table options are "
                             + "wrong. You can change them in the Table dialog"
                         )
@@ -264,12 +255,10 @@ class TableSelectorWidget(FormCustomWidget):
                         self.reload_button.setEnabled(True)
 
                     if table_name not in self.table_names:
-                        message = (
+                        self.field.set_warning(
                             f"The table name '{table_name}', set in the model "
-                            + "configuration, does not exist"
+                            "configuration, does not exist"
                         )
-                        self.form_field.set_warning_message(message)
-                        self.logger.debug(message)
 
         self.combo_box.blockSignals(False)
         self.logger.debug("Completed on_populate_field Slot")
@@ -315,10 +304,8 @@ class TableSelectorWidget(FormCustomWidget):
         self.index_names = None
 
         # load the table data
-        table_dict = self.tables.get_table_config_from_name(table_name)
-        self.logger.debug(
-            f"Table dictionary for '{table_name}' is: {table_dict}"
-        )
+        table_dict = self.tables.config(table_name)
+        self.logger.debug(f"Table dictionary for '{table_name}' is: {table_dict}")
         if table_dict is not None:
             self.index_names = table_dict.get("index_col")
 
@@ -347,9 +334,7 @@ class TableSelectorWidget(FormCustomWidget):
                             if name in table_dict:
                                 args[name] = table_dict[name]
                         args["low_memory"] = True
-                        self.logger.debug(
-                            f"Opening CSV file {self.file} using: {args}"
-                        )
+                        self.logger.debug(f"Opening CSV file {self.file} using: {args}")
                         self.table = read_csv(self.file, **args)
                     elif self.file_ext in [".xls", ".xlsx", ".xlsm"]:
                         args = {}
@@ -370,17 +355,13 @@ class TableSelectorWidget(FormCustomWidget):
                         ]:
                             if name in table_dict:
                                 args[name] = table_dict[name]
-                        self.logger.debug(
-                            f"Opening H5 file {self.file} using: {args}"
-                        )
+                        self.logger.debug(f"Opening H5 file {self.file} using: {args}")
                         # noinspection PyTypeChecker
                         self.table: pd.DataFrame = read_hdf(self.file, **args)
                         # remove built-in indexes and set them via attrs
                         # for H5 file, index names cannot be changed
                         index_names = reset_pandas_index_names(self.table)
-                        self.logger.debug(
-                            f"Resetting built-in indexes: {index_names}"
-                        )
+                        self.logger.debug(f"Resetting built-in indexes: {index_names}")
                         set_table_index(self.table, index_names)
 
                     if (
@@ -401,14 +382,8 @@ class TableSelectorWidget(FormCustomWidget):
         self.logger.debug(f"DataFrame is\n {self.table}")
 
         # set index for non-H5 files
-        if (
-            self.table is not None
-            and not self.table.empty
-            and self.file_ext != ".h5"
-        ):
-            self.logger.debug(
-                f"Preparing to set index ({self.index_names}) on table"
-            )
+        if self.table is not None and not self.table.empty and self.file_ext != ".h5":
+            self.logger.debug(f"Preparing to set index ({self.index_names}) on table")
             if self.index_names is not None:
                 set_table_index(self.table, self.index_names)
                 self.logger.debug(
@@ -430,16 +405,14 @@ class TableSelectorWidget(FormCustomWidget):
         # noinspection PyBroadException
         try:
             table_name = self.value
-            table_config = self.tables.get_table_config_from_name(table_name)
+            table_config = self.tables.config(table_name)
             # convert to absolute path
             file = self.model_config.normalize_file_path(table_config["url"])
             # ensure that the path is properly encoded
             file = os.path.normpath(file)
             os.startfile(file)
         except Exception:
-            self.logger.debug(
-                f"Cannot open the file because: {traceback.print_exc()}"
-            )
+            self.logger.debug(f"Cannot open the file because: {traceback.print_exc()}")
             QMessageBox().critical(
                 self,
                 "Cannot open the file",
@@ -461,31 +434,27 @@ class TableSelectorWidget(FormCustomWidget):
         name: str,
         label: str,
         value: str | None,
-    ) -> FormValidation:
+    ) -> Validation:
         """
         Checks that a valid table is provided.
         :param name: The field name.
         :param label: The field label.
         :param value: The field value from self.get_value().
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         self.logger.debug("Validating field")
 
         if value is None or value not in self.table_names:
             self.logger.debug("Validation failed")
-            return FormValidation(
-                validation=False,
-                error_message="You must select a valid table from the list",
-            )
+            return Validation("You must select a valid table from the list")
         elif not self.static and self.table is None:
             self.logger.debug("Validation failed")
-            return FormValidation(
-                validation=False,
-                error_message="The table file is not valid. Please select another "
+            return Validation(
+                "The table file is not valid. Please select another "
                 "table or make sure the file exists",
             )
         self.logger.debug("Validation passed")
-        return FormValidation(validation=True)
+        return Validation()
 
     def reset(self) -> None:
         """

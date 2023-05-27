@@ -15,9 +15,7 @@ class TestDialogParameterProfileWidget:
     Tests the ProfileWidget used to define a profile on a parameter.
     """
 
-    model_file = resolve_model_path(
-        "model_dialog_parameters_monthly_profile.json"
-    )
+    model_file = resolve_model_path("model_dialog_parameters_monthly_profile.json")
 
     @pytest.fixture()
     def model_config(self) -> ModelConfig:
@@ -38,9 +36,7 @@ class TestDialogParameterProfileWidget:
         selected_page = dialog.pages_widget.currentWidget()
         value_field: FormField = selected_page.findChild(FormField, "values")
         value_widget: MonthlyValuesWidget = value_field.widget
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
 
         # 1. Test value
         assert selected_page.findChild(FormField, "name").value() == param_name
@@ -58,12 +54,8 @@ class TestDialogParameterProfileWidget:
         current_values[0] = 5.0
         # Double-clicking the table cell to set it into editor mode does not work.
         # Click->Double Click works, however
-        qtbot.mouseClick(
-            table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
-        )
-        qtbot.mouseDClick(
-            table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y)
-        )
+        qtbot.mouseClick(table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y))
+        qtbot.mouseDClick(table.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(x, y))
         qtbot.keyClick(table.viewport().focusWidget(), Qt.Key_5)
         qtbot.keyClick(table.viewport().focusWidget(), Qt.Key_Enter)
 

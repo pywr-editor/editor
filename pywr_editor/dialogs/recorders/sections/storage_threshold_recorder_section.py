@@ -1,24 +1,15 @@
 from pywr_editor.form import StoragePickerWidget
 
-from .abstract_threshold_recorder_section import (
-    AbstractThresholdRecorderSection,
-)
+from .abstract_threshold_recorder_section import AbstractThresholdRecorderSection
 
 
 class StorageThresholdRecorderSection(AbstractThresholdRecorderSection):
-    def __init__(
-        self,
-        form,
-        section_data,
-    ):
+    def __init__(self, form, section_data):
         """
         Initialises the form section for StorageThresholdRecorder.
         :param form: The parent form.
         :param section_data: A dictionary containing data to pass to the widget.
         """
         super().__init__(
-            form=form,
-            section_data=section_data,
-            log_name=self.__class__.__name__,
-            node_widget=StoragePickerWidget,
+            form=form, section_data=section_data, node_widget=StoragePickerWidget
         )

@@ -65,14 +65,12 @@ class ControlCurvesValuesSourceWidget(AbstractStringComboBoxWidget):
         Shows/hides the values and parameters fields and resets the widgets.
         :return: None
         """
-        self.logger.debug(
-            f"Running on_populate_field Slot - {get_signal_sender(self)}"
-        )
+        self.logger.debug(f"Running on_populate_field Slot - {get_signal_sender(self)}")
         for field_name in self.labels_map.keys():
             self.form.change_field_visibility(
                 name=field_name, show=self.get_value() == field_name
             )
-            widget = self.form.find_field_by_name(field_name).widget
+            widget = self.form.find_field(field_name).widget
             # reset only after init
             if self.init is False:
                 widget.reset()

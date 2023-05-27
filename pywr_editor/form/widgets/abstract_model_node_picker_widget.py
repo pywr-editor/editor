@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QHBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.form import FormField, FormWidget, Validation
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import ComboBox
 
@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 """
 
 
-class AbstractModelNodePickerWidget(FormCustomWidget):
+class AbstractModelNodePickerWidget(FormWidget):
     def __init__(
         self,
         name: str,
@@ -38,7 +38,7 @@ class AbstractModelNodePickerWidget(FormCustomWidget):
         Default to True.
         :param include_node_types: A string or list of strings representing a node key
         to only include in the widget. For example storage for the Storage node to
-        include only storage nodes, all other node types will not be shown.
+        include only storage nodes; all other node types will not be shown.
         :param exclude_node_types: A string or list of strings representing a node key
         to exclude from the widget.
         """
@@ -92,21 +92,12 @@ class AbstractModelNodePickerWidget(FormCustomWidget):
         self.combo_box = ComboBox()
         valid_model_nodes = []
         for name in model_nodes:
-            node_obj = self.model_config.nodes.get_node_config_from_name(
-                node_name=name, as_dict=False
-            )
-            node_type = node_obj.type
-
+            node_obj = self.model_config.nodes.config(node_name=name, as_dict=False)
+            node_type = node_obj.key
             # filter nodes
-            if (
-                include_node_types is not None
-                and node_type not in include_node_types
-            ):
+            if include_node_types is not None and node_type not in include_node_types:
                 continue
-            if (
-                exclude_node_types is not None
-                and node_type in exclude_node_types
-            ):
+            if exclude_node_types is not None and node_type in exclude_node_types:
                 continue
 
             valid_model_nodes.append(name)
@@ -122,9 +113,7 @@ class AbstractModelNodePickerWidget(FormCustomWidget):
         if value is None or value == "":
             self.logger.debug("Value is None or empty. No value set")
         elif not isinstance(value, str):
-            message = "The node name must be a string"
-            self.form_field.set_warning_message(message)
-            self.logger.debug(message + ". None selected")
+            self.field.set_warning("The node name must be a string")
         # name is in model nodes
         elif value in model_nodes:
             # valid type
@@ -135,24 +124,19 @@ class AbstractModelNodePickerWidget(FormCustomWidget):
                 self.combo_box.setCurrentIndex(selected_index)
             # type is wrong if filters are set
             else:
-                message = (
+                self.field.set_warning(
                     "The node type set in the model configuration is not valid"
                 )
-                self.form_field.set_warning_message(message)
-                self.logger.debug(message + ". None selected")
         else:
-            message = (
-                f"The node named '{value}' does not exist in the model "
-                + "configuration"
+            self.field.set_warning(
+                f"The node named '{value}' does not exist in the model configuration"
             )
-            self.logger.debug(message)
-            self.form_field.set_warning_message(message)
 
         # overwrite warning if there are no nodes in the model
         if len(self.combo_box.all_items) == 1:
             message = "There are no nodes available"
             self.logger.debug(message)
-            self.form_field.set_warning_message(
+            self.field.set_warning(
                 message + ". Add a new node first before setting up this option"
             )
 
@@ -168,20 +152,17 @@ class AbstractModelNodePickerWidget(FormCustomWidget):
         """
         return self.combo_box.currentData()
 
-    def validate(self, name: str, label: str, value: str) -> FormValidation:
+    def validate(self, name: str, label: str, value: str) -> Validation:
         """
         Validates the value.
         :param name: The field name.
         :param label: The field label.
         :param value: The field value.
-        :return: The instance of FormValidation
+        :return: The instance of Validation
         """
         if self.get_value() is None and self.is_mandatory:
-            return FormValidation(
-                validation=False,
-                error_message="You must select a model node",
-            )
-        return FormValidation(validation=True)
+            return Validation("You must select a model node")
+        return Validation()
 
     def reset(self) -> None:
         """

@@ -6,9 +6,7 @@ from .abstract_constant_scenario_parameter_section import (
 )
 
 
-class ConstantScenarioParameterSection(
-    AbstractConstantScenarioParameterSection
-):
+class ConstantScenarioParameterSection(AbstractConstantScenarioParameterSection):
     def __init__(self, form: ParameterDialogForm, section_data: dict):
         """
         Initialises the form section for a ConstantScenarioParameter.
@@ -16,16 +14,12 @@ class ConstantScenarioParameterSection(
         :param section_data: A dictionary containing data to pass to the widget.
         """
         # get scenario size for initial requirement check
-        scenario_name = form.get_param_dict_value("scenario")
+        scenario_name = form.field_value("scenario")
         scenarios = form.model_config.scenarios
 
         exact_total_values = None
-        if isinstance(scenario_name, str) and scenarios.does_scenario_exist(
-            scenario_name
-        ):
-            exact_total_values = scenarios.get_config_from_name(
-                scenario_name, as_dict=False
-            ).size
+        if isinstance(scenario_name, str) and scenarios.exists(scenario_name):
+            exact_total_values = scenarios.config(scenario_name, as_dict=False).size
 
         super().__init__(
             form=form,

@@ -52,8 +52,7 @@ class ShapeDialog(QDialog):
 
         # Buttons
         button_box = QDialogButtonBox(
-            QDialogButtonBox.StandardButton.Save
-            | QDialogButtonBox.StandardButton.Close
+            QDialogButtonBox.StandardButton.Save | QDialogButtonBox.StandardButton.Close
         )
         # noinspection PyTypeChecker
         self.save_button: QPushButton = button_box.findChild(QPushButton)
@@ -102,7 +101,7 @@ class ShapeDialogForm(Form):
         self.model_config = model_config
 
         super().__init__(
-            available_fields={"Shape": form_fields},
+            fields={"Shape": form_fields},
             save_button=save_button,
             parent=parent,
             direction="vertical",

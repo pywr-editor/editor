@@ -47,10 +47,7 @@ class SchematicBBoxUtils:
         item_min_y = item_max_y = None
         for item in self.items:
             # ignore children and work on groups only
-            if (
-                isinstance(item, (SchematicNode, AbstractSchematicItem))
-                is False
-            ):
+            if isinstance(item, (SchematicNode, AbstractSchematicItem)) is False:
                 continue
 
             bounding_rect = item.sceneBoundingRect()
@@ -90,10 +87,7 @@ class SchematicBBoxUtils:
         is_on_right_edge = False
         for item in self.items:
             # ignore children and work on groups only
-            if (
-                isinstance(item, (SchematicNode, AbstractSchematicItem))
-                is False
-            ):
+            if isinstance(item, (SchematicNode, AbstractSchematicItem)) is False:
                 continue
             item_rect = item.sceneBoundingRect()
             if item_rect.right() == rectangle_width:

@@ -2,9 +2,7 @@ import pytest
 from PySide6.QtCore import QTimer
 
 from pywr_editor.dialogs import RecordersDialog
-from pywr_editor.dialogs.recorders.recorder_page_widget import (
-    RecorderPageWidget,
-)
+from pywr_editor.dialogs.recorders.recorder_page_widget import RecorderPageWidget
 from pywr_editor.form import (
     AggFuncPercentileListWidget,
     AggFuncPercentileOfScoreScoreWidget,
@@ -53,14 +51,12 @@ class TestDialogRecorderOptimisationSection:
         form = selected_page.form
 
         # noinspection PyUnresolvedReferences
-        assert (
-            selected_page.findChild(FormField, "name").value() == recorder_name
-        )
+        assert selected_page.findChild(FormField, "name").value() == recorder_name
 
         # set the lower and upper bound
-        l_bound = form.find_field_by_name("constraint_lower_bounds")
+        l_bound = form.find_field("constraint_lower_bounds")
         l_bound.widget.line_edit.setText("10")
-        u_bound: FormField = form.find_field_by_name("constraint_upper_bounds")
+        u_bound: FormField = form.find_field("constraint_upper_bounds")
         u_bound.widget.line_edit.setText("1")
 
         # validate form and error is returned
@@ -89,11 +85,9 @@ class TestDialogRecorderOptimisationSection:
         form = selected_page.form
 
         # noinspection PyUnresolvedReferences
-        assert (
-            selected_page.findChild(FormField, "name").value() == recorder_name
-        )
+        assert selected_page.findChild(FormField, "name").value() == recorder_name
         # check constrain field
-        objective_field = form.find_field_by_name("is_objective")
+        objective_field = form.find_field("is_objective")
 
         assert objective_field.value() == expected
 
@@ -141,14 +135,10 @@ class TestDialogRecorderOptimisationSection:
         form = selected_page.form
 
         # noinspection PyUnresolvedReferences
-        assert (
-            selected_page.findChild(FormField, "name").value() == recorder_name
-        )
+        assert selected_page.findChild(FormField, "name").value() == recorder_name
 
         # 1. Test init of widgets
-        agg_func_widget: OptAggFuncWidget = form.find_field_by_name(
-            "agg_func"
-        ).widget
+        agg_func_widget: OptAggFuncWidget = form.find_field("agg_func").widget
 
         assert agg_func_widget.get_value() == func
 
@@ -161,15 +151,11 @@ class TestDialogRecorderOptimisationSection:
             visible_fields = self.percentile_fields
             # check value of fields
             assert (
-                form.find_field_by_name(
-                    agg_func_widget.agg_func_percentile_list
-                ).value()
+                form.find_field(agg_func_widget.agg_func_percentile_list).value()
                 == expected_agg_func["args"]
             )
             assert (
-                form.find_field_by_name(
-                    agg_func_widget.agg_func_percentile_method
-                ).value()
+                form.find_field(agg_func_widget.agg_func_percentile_method).value()
                 == expected_agg_func["kwargs"]["method"]
             )
         elif func == "percentileofscore":
@@ -178,13 +164,11 @@ class TestDialogRecorderOptimisationSection:
 
             # check value of fields
             assert (
-                form.find_field_by_name(
-                    agg_func_widget.agg_func_percentileofscore_kind
-                ).value()
+                form.find_field(agg_func_widget.agg_func_percentileofscore_kind).value()
                 == expected_agg_func["kwargs"]["kind"]
             )
             assert (
-                form.find_field_by_name(
+                form.find_field(
                     agg_func_widget.agg_func_percentileofscore_score
                 ).value()
                 == expected_agg_func["kwargs"]["score"]
@@ -192,9 +176,9 @@ class TestDialogRecorderOptimisationSection:
 
         # 2. Check field visibility
         for field in hidden_fields:
-            assert form.find_field_by_name(field).isVisible() is False
+            assert form.find_field(field).isVisible() is False
         for field in visible_fields:
-            assert form.find_field_by_name(field).isVisible() is True
+            assert form.find_field(field).isVisible() is True
 
         # 3. Send form and check resulting dictionary
         form_data = form.save()
@@ -211,19 +195,19 @@ class TestDialogRecorderOptimisationSection:
             agg_func_widget.combo_box.setCurrentText("Percentile")
             # percentile fields are shown
             for field in self.percentile_fields:
-                assert form.find_field_by_name(field).isVisible() is True
+                assert form.find_field(field).isVisible() is True
             agg_func_widget.combo_box.setCurrentText("Percentile of score")
             # percentile fields are shown
             for field in self.percentile_fields:
-                assert form.find_field_by_name(field).isVisible() is False
+                assert form.find_field(field).isVisible() is False
             # percentileofscore fields are shown
             for field in self.percentileofsocre_fields:
-                assert form.find_field_by_name(field).isVisible() is True
+                assert form.find_field(field).isVisible() is True
         else:
             agg_func_widget.combo_box.setCurrentText("Sum")
             # percentile and percentileofscore fields are hidden
             for field in self.percentile_fields + self.percentileofsocre_fields:
-                assert form.find_field_by_name(field).isVisible() is False
+                assert form.find_field(field).isVisible() is False
 
     @pytest.mark.parametrize(
         "value, error_message",
@@ -239,9 +223,7 @@ class TestDialogRecorderOptimisationSection:
             ("-1, 90", "percentiles must be numbers between"),
         ],
     )
-    def test_agg_func_percentile_list(
-        self, qtbot, model_config, value, error_message
-    ):
+    def test_agg_func_percentile_list(self, qtbot, model_config, value, error_message):
         """
         Tests the validation of OptAggFuncPercentileListWidget.
         """
@@ -252,14 +234,12 @@ class TestDialogRecorderOptimisationSection:
         # noinspection PyTypeChecker
         selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
         form = selected_page.form
-        list_widget: AggFuncPercentileListWidget = form.find_field_by_name(
+        list_widget: AggFuncPercentileListWidget = form.find_field(
             OptAggFuncWidget.agg_func_percentile_list
         ).widget
 
         # noinspection PyUnresolvedReferences
-        assert (
-            selected_page.findChild(FormField, "name").value() == recorder_name
-        )
+        assert selected_page.findChild(FormField, "name").value() == recorder_name
 
         # set value and validate
         list_widget.line_edit.setText(value)
@@ -280,11 +260,9 @@ class TestDialogRecorderOptimisationSection:
         # noinspection PyTypeChecker
         selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
         form = selected_page.form
-        score_widget: AggFuncPercentileOfScoreScoreWidget = (
-            form.find_field_by_name(
-                OptAggFuncWidget.agg_func_percentileofscore_score
-            ).widget
-        )
+        score_widget: AggFuncPercentileOfScoreScoreWidget = form.find_field(
+            OptAggFuncWidget.agg_func_percentileofscore_score
+        ).widget
 
         # empty field and validate
         score_widget.line_edit.setText("")

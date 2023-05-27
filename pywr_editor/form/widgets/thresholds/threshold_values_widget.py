@@ -2,7 +2,7 @@ from typing import Any
 
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QVBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField
+from pywr_editor.form import FormField, FormWidget
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import DoubleSpinBox
 
@@ -16,7 +16,7 @@ from pywr_editor.widgets import DoubleSpinBox
 """
 
 
-class ThresholdValuesWidget(FormCustomWidget):
+class ThresholdValuesWidget(FormWidget):
     def __init__(
         self,
         name: str,
@@ -65,7 +65,7 @@ class ThresholdValuesWidget(FormCustomWidget):
         :return: None
         """
         self.logger.debug("Registering post-render section actions")
-        self.form_field.set_warning_message(self.warning_message)
+        self.field.set_warning(self.warning_message)
 
     def sanitise_value(self, value: Any) -> [list, str | None]:
         """
@@ -81,9 +81,7 @@ class ThresholdValuesWidget(FormCustomWidget):
         if not value:
             self.logger.debug("The value is not provided")
         elif not isinstance(value, list):
-            message = (
-                "The value provided in the model configuration is not valid"
-            )
+            message = "The value provided in the model configuration is not valid"
             self.logger.debug(message)
         elif isinstance(value, list) and len(value) != 2:
             message = (

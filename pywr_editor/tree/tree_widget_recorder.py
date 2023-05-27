@@ -18,9 +18,7 @@ class TreeWidgetRecorder(AbstractTreeWidgetComponent):
         self,
         recorder_config: dict,
         model_config: ModelConfig,
-        parent: Union[
-            "TreeWidgetRecorder", TreeWidgetRecorderName, None
-        ] = None,
+        parent: Union["TreeWidgetRecorder", TreeWidgetRecorderName, None] = None,
     ):
         """
         Initialises the item containing the recorder configuration.

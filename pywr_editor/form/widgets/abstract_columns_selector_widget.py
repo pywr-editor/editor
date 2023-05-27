@@ -4,7 +4,7 @@ from pandas import DataFrame
 from PySide6.QtCore import QModelIndex, Slot
 from PySide6.QtWidgets import QHBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormValidation
+from pywr_editor.form import FormWidget, Validation
 from pywr_editor.utils import (
     Logging,
     default_index_name,
@@ -26,7 +26,7 @@ if TYPE_CHECKING:
 """
 
 
-class AbstractColumnsSelectorWidget(FormCustomWidget):
+class AbstractColumnsSelectorWidget(FormWidget):
     def __init__(
         self,
         name: str,
@@ -100,7 +100,7 @@ class AbstractColumnsSelectorWidget(FormCustomWidget):
         # clear field and model
         self.setEnabled(False)
         self.combo_box.clear()
-        self.form_field.clear_message(message_type="warning")
+        self.field.clear_message(message_type="warning")
         self.value = self.sanitise_value(self.value)
         columns = self.columns
 
@@ -112,17 +112,10 @@ class AbstractColumnsSelectorWidget(FormCustomWidget):
             )
         # Empty table (Excel spreadsheets are still parsed but may have no columns)
         elif len(columns) == 0:
-            self.logger.debug(
-                "The table does not contain any column. Keeping field disabled with "
-                + "warning"
-            )
-            self.form_field.set_warning_message(
-                "The table does not contain any column"
-            )
+            self.field.set_warning("The table does not contain any column")
+            self.logger.debug("Keeping field disabled with warning")
         else:
-            self.logger.debug(
-                f"Filling field with: {', '.join(map(str,columns))}"
-            )
+            self.logger.debug(f"Filling field with: {', '.join(map(str,columns))}")
             # noinspection PyTypeChecker
             url_form_widget: "UrlWidget" = self.form.fields["url"].widget
             # H5 files already contain DataFrame object (index is already set and
@@ -143,9 +136,7 @@ class AbstractColumnsSelectorWidget(FormCustomWidget):
 
             # log if index is an empty list
             if not indexes:
-                self.logger.debug(
-                    "No items are selected. No valid columns found"
-                )
+                self.logger.debug("No items are selected. No valid columns found")
 
             for col_index in indexes:
                 self.logger.debug(
@@ -156,14 +147,9 @@ class AbstractColumnsSelectorWidget(FormCustomWidget):
 
             # some provided column names or indexes may not exist
             if len(self.wrong_columns) > 0:
-                self.logger.debug(
-                    "The following columns do no exist in the file: "
-                    + " ".join(self.wrong_columns)
-                )
-                self.form_field.set_warning_message(
+                self.field.set_warning(
                     "The following columns, currently set in the model config file, "
-                    + "do not exist in the table file: "
-                    + ", ".join(self.wrong_columns)
+                    "do not exist in the table file: " + ", ".join(self.wrong_columns)
                 )
 
         self.logger.debug("Completed on_populate_field Slot")
@@ -232,9 +218,7 @@ class AbstractColumnsSelectorWidget(FormCustomWidget):
                     # When updating field, ComboBox widget returns a string with
                     # comma-separated field
                     if isinstance(value, str) and "," in value:
-                        self.logger.debug(
-                            "Converting comma-separated value to a list"
-                        )
+                        self.logger.debug("Converting comma-separated value to a list")
                         value = value.split(", ")
                     else:
                         self.logger.debug("Converting value to a list")
@@ -245,9 +229,7 @@ class AbstractColumnsSelectorWidget(FormCustomWidget):
                     (
                         selected_col_name,
                         self.wrong_columns,
-                    ) = find_existing_columns(
-                        self.table, value, include_index=True
-                    )
+                    ) = find_existing_columns(self.table, value, include_index=True)
                     self.wrong_columns = list(map(str, self.wrong_columns))
                     if len(self.wrong_columns) > 0:
                         self.logger.debug(
@@ -301,7 +283,7 @@ class AbstractColumnsSelectorWidget(FormCustomWidget):
             f"Running on_update_value Slot with value {selected_columns} from "
             + get_signal_sender(self)
         )
-        self.form_field.clear_message(message_type="warning")
+        self.field.clear_message(message_type="warning")
         self.value = self.sanitise_value(selected_columns)
         self.logger.debug(f"Updated field value to '{self.value}'")
         # when user check or uncheck an item, update the table index
@@ -381,25 +363,21 @@ class AbstractColumnsSelectorWidget(FormCustomWidget):
         name: str,
         label: str,
         value: list[str] | None,
-    ) -> FormValidation:
+    ) -> Validation:
         """
         The field is not mandatory. When the widget is used to set a table index, the
         value can be None to use the anonymous (numeric) index.
         :param name: The field name.
         :param label: The field label.
         :param value: The field value from self.get_value().
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
-        return FormValidation(validation=True)
+        return Validation()
 
-    def after_validate(
-        self, form_dict: dict[str, Any], form_field_name: str
-    ) -> None:
+    def after_validate(self, form_dict: dict[str, Any], form_field_name: str) -> None:
         # convert names to int with Excel - Pandas does not support strings when
         # setting an index as column
         if self.is_index_selector:
             url_form_field: "UrlWidget" = self.form.fields["url"].widget
             if url_form_field.file_ext and "xls" in url_form_field.file_ext:
-                form_dict[self.name] = [
-                    self.columns.index(col) for col in self.value
-                ]
+                form_dict[self.name] = [self.columns.index(col) for col in self.value]

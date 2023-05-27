@@ -1,6 +1,7 @@
 from typing import Any, Literal
 
 from pywr_editor.form import (
+    FieldConfig,
     FormSection,
     ScenarioPickerWidget,
     ScenarioValuesWidget,
@@ -32,44 +33,36 @@ class AbstractScenarioProfileParameterSection(FormSection):
         self.logger = Logging().logger(log_name)
         self.profile_type = profile_type
 
-    @property
-    def data(self):
-        """
-        Defines the section data dictionary.
-        :return: The section dictionary.
-        """
         self.form: ParameterDialogForm
-        self.logger.debug("Registering form")
-
-        data_dict = {
-            "Configuration": [
-                {
-                    "name": "scenario",
-                    "field_type": ScenarioPickerWidget,
-                    "value": self.form.get_param_dict_value("scenario"),
-                },
-            ],
-            "Source": [
-                self.form.source_field,
-                {
-                    "name": "values",
-                    "field_type": ScenarioValuesWidget,
-                    "field_args": {"data_type": f"{self.profile_type}_profile"},
-                    "value": self.form.get_param_dict_value("values"),
-                },
-                # table
-                self.form.table_field,
-                # anonymous table
-                self.form.url_field,
-            ]
-            + self.form.csv_parse_fields
-            + self.form.excel_parse_fields
-            + self.form.h5_parse_fields
-            + [self.form.index_col_field],
-            "Miscellaneous": [self.form.comment],
-        }
-
-        return data_dict
+        self.add_fields(
+            {
+                "Configuration": [
+                    FieldConfig(
+                        name="scenario",
+                        field_type=ScenarioPickerWidget,
+                        value=self.form.field_value("scenario"),
+                    ),
+                ],
+                "Source": [
+                    self.form.source_field,
+                    FieldConfig(
+                        name="values",
+                        field_type=ScenarioValuesWidget,
+                        field_args={"data_type": f"{self.profile_type}_profile"},
+                        value=self.form.field_value("values"),
+                    ),
+                    # table
+                    self.form.table_field,
+                    # anonymous table
+                    self.form.url_field,
+                ]
+                + self.form.csv_parse_fields
+                + self.form.excel_parse_fields
+                + self.form.h5_parse_fields
+                + [self.form.index_col_field],
+                "Miscellaneous": [self.form.comment],
+            }
+        )
 
     def filter(self, form_data):
         """
@@ -78,9 +71,7 @@ class AbstractScenarioProfileParameterSection(FormSection):
         :return: None.
         """
         # noinspection PyTypeChecker
-        source_widget: SourceSelectorWidget = self.form.find_field_by_name(
-            "source"
-        ).widget
+        source_widget: SourceSelectorWidget = self.form.find_field("source").widget
         labels = source_widget.labels
 
         url_fields = (

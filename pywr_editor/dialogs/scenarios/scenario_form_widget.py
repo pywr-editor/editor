@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from PySide6.QtWidgets import QPushButton
 
-from pywr_editor.form import FormValidation, ModelComponentForm
+from pywr_editor.form import FieldConfig, IntegerWidget, ModelComponentForm, Validation
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import Logging
 
@@ -44,49 +44,45 @@ class ScenarioFormWidget(ModelComponentForm):
 
         available_fields = {
             "General": [
-                {
-                    "name": "name",
-                    "value": name,
-                    "help_text": "A unique name identifying the parameter",
-                    "allow_empty": False,
-                    "validate_fun": self._check_scenario_name,
-                },
-                {
-                    "name": "size",
-                    "field_type": "integer",
-                    "min_value": 1,
-                    "value": self.get_dict_value("size", self.scenario_dict),
-                    "default_value": 1,
-                    "help_text": "The number of ensembles in the scenario",
-                },
-                {
-                    "name": "options",
-                    "field_type": ScenarioOptionsWidget,
-                    "value": {
-                        "slice": self.get_dict_value(
-                            "slice", self.scenario_dict
-                        ),
+                FieldConfig(
+                    name="name",
+                    value=name,
+                    help_text="A unique name identifying the parameter",
+                    allow_empty=False,
+                    validate_fun=self._check_scenario_name,
+                ),
+                FieldConfig(
+                    name="size",
+                    field_type=IntegerWidget,
+                    field_args={"min_value": 1},
+                    value=self.get_dict_value("size", self.scenario_dict),
+                    default_value=1,
+                    help_text="The number of ensembles in the scenario",
+                ),
+                FieldConfig(
+                    name="options",
+                    field_type=ScenarioOptionsWidget,
+                    value={
+                        "slice": self.get_dict_value("slice", self.scenario_dict),
                         "ensemble_names": self.get_dict_value(
                             "ensemble_names", self.scenario_dict
                         ),
                     },
-                    "help_text": "Specify the name of each ensemble (optional) and "
+                    help_text="Specify the name of each ensemble (optional) and "
                     "which ensemble to run",
-                },
+                ),
             ]
         }
 
         super().__init__(
             form_dict=self.scenario_dict,
             model_config=model_config,
-            available_fields=available_fields,
+            fields=available_fields,
             save_button=save_button,
             parent=parent,
         )
 
-    def _check_scenario_name(
-        self, name: str, label: str, value: str
-    ) -> FormValidation:
+    def _check_scenario_name(self, name: str, label: str, value: str) -> Validation:
         """
         Checks that the new scenario name is not duplicated.
         :param name: The field name.
@@ -95,13 +91,9 @@ class ScenarioFormWidget(ModelComponentForm):
         :return: True if the name validates correctly, False otherwise.
         """
         # do not save form if the name is changed and already exists
-        if (
-            self.name != value
-            and self.model_config.scenarios.does_scenario_exist(value) is True
-        ):
-            return FormValidation(
-                validation=False,
-                error_message=f"The scenario '{value}; already exists. "
+        if self.name != value and self.model_config.scenarios.exists(value) is True:
+            return Validation(
+                f"The scenario '{value}; already exists. "
                 "Please provide a different name.",
             )
-        return FormValidation(validation=True)
+        return Validation()

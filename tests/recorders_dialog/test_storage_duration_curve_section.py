@@ -2,9 +2,7 @@ import pytest
 from PySide6.QtCore import QTimer
 
 from pywr_editor.dialogs import RecordersDialog
-from pywr_editor.dialogs.recorders.recorder_page_widget import (
-    RecorderPageWidget,
-)
+from pywr_editor.dialogs.recorders.recorder_page_widget import RecorderPageWidget
 from pywr_editor.form import FormField
 from pywr_editor.model import ModelConfig
 from tests.utils import close_message_box, resolve_model_path
@@ -57,12 +55,10 @@ class TestDialogRecorderStorageDurationCurveRecorderSection:
         form = selected_page.form
 
         # noinspection PyUnresolvedReferences
-        assert (
-            selected_page.findChild(FormField, "name").value() == recorder_name
-        )
+        assert selected_page.findChild(FormField, "name").value() == recorder_name
 
         # 1. Check value
-        field = form.find_field_by_name("percentiles")
+        field = form.find_field("percentiles")
         assert field.value()["values"] == expected_percentiles
 
         # 2. Validate form

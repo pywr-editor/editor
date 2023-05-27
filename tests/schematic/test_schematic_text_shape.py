@@ -4,10 +4,9 @@ import pytest
 from PySide6 import QtGui
 from PySide6.QtCore import QEvent, QMimeData, QPoint, Qt, QTimer
 from PySide6.QtGui import QDragEnterEvent
-from PySide6.QtWidgets import QLineEdit
 
 from pywr_editor import MainWindow
-from pywr_editor.form import ColorPickerWidget
+from pywr_editor.form import ColorPickerWidget, IntegerWidget, TextWidget
 from pywr_editor.model import ModelConfig, TextShape
 from pywr_editor.schematic import (
     AddShapeCommand,
@@ -16,7 +15,6 @@ from pywr_editor.schematic import (
     SchematicText,
 )
 from pywr_editor.schematic.shapes.shape_dialogs import ShapeDialogForm
-from pywr_editor.widgets import SpinBox
 from tests.utils import close_message_box, resolve_model_path
 
 
@@ -44,7 +42,7 @@ class TestSchematicTextShape:
         """
         window, schematic = init_window
         model_config = window.model_config
-        shape_config: TextShape = model_config.shapes.find_shape(self.shape_id)
+        shape_config: TextShape = model_config.shapes.find(self.shape_id)
 
         assert self.shape_id in schematic.shape_items
 
@@ -59,18 +57,16 @@ class TestSchematicTextShape:
         # noinspection PyTypeChecker
         form: ShapeDialogForm = window.findChild(ShapeDialogForm)
 
-        text_field: QLineEdit = form.find_field_by_name("text").widget
+        text_field: TextWidget = form.find_field("text").widget
         new_text = "New label"
-        text_field.setText(new_text)
-        color_widget: ColorPickerWidget = form.find_field_by_name(
-            "color"
-        ).widget
+        text_field.line_edit.setText(new_text)
+        color_widget: ColorPickerWidget = form.find_field("color").widget
         color_widget.value = (120, 120, 120)
 
         # 3. Send form and check the model config and schematic item
         form.save()
         assert model_config.has_changes is True
-        assert model_config.shapes.find_shape(self.shape_id, as_dict=True) == {
+        assert model_config.shapes.find(self.shape_id, as_dict=True) == {
             **shape_config.shape_dict,
             **{
                 "text": new_text,
@@ -94,16 +90,14 @@ class TestSchematicTextShape:
         :return: None
         """
         # the shape is removed from the model configuration
-        assert model_config.shapes.find_shape(shape_id) is None
+        assert model_config.shapes.find(shape_id) is None
 
         # the shape is removed from the items list
         assert shape_id not in schematic.shape_items.keys()
 
         # the shape is removed from the schematic as graphical item
         shape_ids = [
-            shape.id
-            for shape in schematic.items()
-            if isinstance(shape, SchematicText)
+            shape.id for shape in schematic.items() if isinstance(shape, SchematicText)
         ]
         assert shape_id not in shape_ids
 
@@ -120,12 +114,10 @@ class TestSchematicTextShape:
         :param shape_config: The shape configuration instance.
         :return: None
         """
-        assert model_config.shapes.find_shape(shape_config.id) == shape_config
+        assert model_config.shapes.find(shape_config.id) == shape_config
         assert shape_config.id in schematic.shape_items.keys()
         shape_ids = [
-            shape.id
-            for shape in schematic.items()
-            if isinstance(shape, SchematicText)
+            shape.id for shape in schematic.items() if isinstance(shape, SchematicText)
         ]
         assert shape_config.id in shape_ids
 
@@ -136,7 +128,7 @@ class TestSchematicTextShape:
         """
         window, schematic = init_window
         model_config = window.model_config
-        shape_config = model_config.shapes.find_shape(self.shape_id)
+        shape_config = model_config.shapes.find(self.shape_id)
 
         panel = schematic.app.toolbar.tabs["Operations"].panels["Undo"]
         undo_button = panel.buttons["Undo"]
@@ -166,13 +158,9 @@ class TestSchematicTextShape:
         shape.on_edit_shape()
         # noinspection PyTypeChecker
         dialog_form: ShapeDialogForm = window.findChild(ShapeDialogForm)
-        dialog_form.find_field_by_name("text").widget.setText(
-            "I changed the label"
-        )
-        font_size_widget: SpinBox = dialog_form.find_field_by_name(
-            "font_size"
-        ).widget
-        font_size_widget.setValue(40)
+        dialog_form.find_field("text").widget.line_edit.setText("I changed the label")
+        font_size_widget: IntegerWidget = dialog_form.find_field("font_size").widget
+        font_size_widget.spin_box.setValue(40)
         qtbot.mouseClick(dialog_form.save_button, Qt.MouseButton.LeftButton)
 
         # 4. Test redo and undo operation again
@@ -187,9 +175,7 @@ class TestSchematicTextShape:
 
         shape_config.shape_dict["text"] = "I changed the label"
         shape_config.shape_dict["font_size"] = 40
-        shape_config.shape_dict["color"] = tuple(
-            shape_config.shape_dict["color"]
-        )
+        shape_config.shape_dict["color"] = tuple(shape_config.shape_dict["color"])
         self.is_shape_restored(model_config, schematic, shape_config)
 
     def test_add(self, qtbot, init_window):
@@ -241,22 +227,16 @@ class TestSchematicTextShape:
 
         assert model_config.has_changes is True
         # the shape is in the model configuration
-        assert (
-            model_config.shapes.find_shape_index_by_id(new_shape_id) is not None
-        )
-        shape_config = model_config.shapes.find_shape(new_shape_id)
+        assert model_config.shapes.find_index(new_shape_id) is not None
+        shape_config = model_config.shapes.find(new_shape_id)
 
         # 3. Change shape config
         schematic.shape_items[new_shape_id].on_edit_shape()
         # noinspection PyTypeChecker
         dialog_form: ShapeDialogForm = window.findChild(ShapeDialogForm)
-        dialog_form.find_field_by_name("text").widget.setText(
-            "I changed the label"
-        )
-        font_size_widget: SpinBox = dialog_form.find_field_by_name(
-            "font_size"
-        ).widget
-        font_size_widget.setValue(40)
+        dialog_form.find_field("text").widget.line_edit.setText("I changed the label")
+        font_size_widget: IntegerWidget = dialog_form.find_field("font_size").widget
+        font_size_widget.spin_box.setValue(40)
         qtbot.mouseClick(dialog_form.save_button, Qt.MouseButton.LeftButton)
 
         # 4. Test undo

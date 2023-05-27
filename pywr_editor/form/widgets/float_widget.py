@@ -1,10 +1,10 @@
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QLineEdit
 
-from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.form import FormField, FormWidget, Validation
 from pywr_editor.utils import Logging
 
 
-class FloatWidget(FormCustomWidget):
+class FloatWidget(FormWidget):
     def __init__(
         self,
         name: str,
@@ -43,22 +43,16 @@ class FloatWidget(FormCustomWidget):
 
             # check bound
             if min_value is not None and value < min_value:
-                message = "The value is below the allowed minimum of " + str(
-                    round(min_value, 2)
+                self.field.set_warning(
+                    f"The value is below the allowed minimum of {round(min_value, 2)}"
                 )
-                self.logger.debug(message)
-                self.form_field.set_warning_message(message)
             if max_value is not None and value > max_value:
-                message = "The value is above the allowed maximum of " + str(
-                    round(max_value, 2)
+                self.field.set_warning(
+                    f"The value is above the allowed maximum of {round(max_value, 2)}"
                 )
-                self.logger.debug(message)
-                self.form_field.set_warning_message(message)
         # otherwise use default if provided
         elif self.get_default_value() is not None:
-            self.logger.debug(
-                f"Setting default value of {self.get_default_value()}"
-            )
+            self.logger.debug(f"Setting default value of {self.get_default_value()}")
             self.line_edit.setText(str(self.get_default_value()))
         self.line_edit.blockSignals(False)
 
@@ -75,7 +69,7 @@ class FloatWidget(FormCustomWidget):
         The field default value use by self.get_value().
         :return: The default value.
         """
-        return self.form_field.default_value
+        return self.field.default_value
 
     def get_value(self) -> str | float | None:
         """
@@ -97,14 +91,12 @@ class FloatWidget(FormCustomWidget):
         """
         value = ""
         # restore default if available
-        if self.form_field.default_value is not None:
-            value = str(self.form_field.default_value)
+        if self.field.default_value is not None:
+            value = str(self.field.default_value)
 
         self.line_edit.setText(value)
 
-    def validate(
-        self, name: str, label: str, value: float | str
-    ) -> FormValidation:
+    def validate(self, name: str, label: str, value: float | str) -> Validation:
         """
         Checks that the parameter is a valid number.
         :param name: The field name.
@@ -115,14 +107,14 @@ class FloatWidget(FormCustomWidget):
         # value is empty or None
         if value is None or value == "":
             self.logger.debug("Value is empty. Validation passed")
-            return FormValidation(validation=True)
+            return Validation()
 
         try:
             value = float(value)
         except (ValueError, TypeError):
             message = "The value is not a valid number"
             self.logger.debug(message)
-            return FormValidation(validation=False, error_message=message)
+            return Validation(message)
         else:
             # check bounds
             if self.max_value is not None and value > self.max_value:
@@ -131,20 +123,14 @@ class FloatWidget(FormCustomWidget):
                     + f"{round(self.max_value, 2)}"
                 )
                 self.logger.debug(message)
-                return FormValidation(
-                    validation=False,
-                    error_message=message,
-                )
+                return Validation(message)
             if self.min_value is not None and value < self.min_value:
                 message = (
                     "The value is below the allowed minimum of "
                     + f"{round(self.min_value, 2)}"
                 )
                 self.logger.debug(message)
-                return FormValidation(
-                    validation=False,
-                    error_message=message,
-                )
+                return Validation(message)
 
             self.logger.debug("Validation passed")
-            return FormValidation(validation=True)
+            return Validation()

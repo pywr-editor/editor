@@ -53,9 +53,7 @@ class BaseTestClass:
 
 
 class TestNodesOutsideCanvas(BaseTestClass):
-    @pytest.mark.parametrize(
-        "node_props", [get_all_node_props()["node_inside"]]
-    )
+    @pytest.mark.parametrize("node_props", [get_all_node_props()["node_inside"]])
     def test_node_inside(self, qtbot, window, add_node, node_props):
         """
         Tests the SchematicItemUtils when a node is inside the schematic canvas.
@@ -125,9 +123,7 @@ class TestNodesOutsideCanvas(BaseTestClass):
     @pytest.mark.parametrize(
         "node_props", [get_all_node_props()["node_outside_bottom_edge"]]
     )
-    def test_node_outside_bottom_edge(
-        self, qtbot, window, add_node, node_props
-    ):
+    def test_node_outside_bottom_edge(self, qtbot, window, add_node, node_props):
         """
         Tests the SchematicItemUtils when a node is inside the schematic canvas.
         """
@@ -239,7 +235,6 @@ class TestMoveNodesToCanvasEdge(BaseTestClass):
             ],
         )
         assert (
-            node_obj.sceneBoundingRect().bottom()
-            == node_utils_obj.schematic_size[1]
+            node_obj.sceneBoundingRect().bottom() == node_utils_obj.schematic_size[1]
             and node_utils_obj.is_outside_bottom_edge is False
         )

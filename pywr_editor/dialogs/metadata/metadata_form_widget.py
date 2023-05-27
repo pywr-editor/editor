@@ -3,11 +3,11 @@ from typing import TYPE_CHECKING, Any
 
 from PySide6.QtCore import Slot
 
-from pywr_editor.form import FieldConfig, Form, FormValidation
+from pywr_editor.form import FieldConfig, Form, Validation
 from pywr_editor.model import ModelConfig
 from pywr_editor.utils import Logging
 
-from .metadata_custom_fields_widget import MetadataCustomFieldsWidget
+from .metadata_custom_fields_widget import MetadataFieldsWidget
 
 if TYPE_CHECKING:
     from .metadata_dialog import MetadataDialog
@@ -43,34 +43,34 @@ class MetadataFormWidget(Form):
 
         available_fields: dict[str, list[FieldConfig]] = {
             "Basic information": [
-                {
-                    "name": "title",
-                    "value": self.get_param_dict_value("title"),
-                    "allow_empty": False,
-                },
-                {
-                    "name": "description",
-                    "value": self.get_param_dict_value("description"),
-                },
-                {
-                    "name": "minimum_version",
-                    "allow_empty": False,
-                    "validate_fun": self._check_version_number,
-                    "value": self.get_param_dict_value("minimum_version"),
-                },
+                FieldConfig(
+                    name="title",
+                    value=self.get_param_dict_value("title"),
+                    allow_empty=False,
+                ),
+                FieldConfig(
+                    name="description",
+                    value=self.get_param_dict_value("description"),
+                ),
+                FieldConfig(
+                    name="minimum_version",
+                    allow_empty=False,
+                    validate_fun=self._check_version_number,
+                    value=self.get_param_dict_value("minimum_version"),
+                ),
             ],
             "Custom fields": [
-                {
-                    "name": "custom_fields",
-                    "hide_label": True,
-                    "field_type": MetadataCustomFieldsWidget,
-                    "value": custom_fields,
-                }
+                FieldConfig(
+                    name="custom_fields",
+                    hide_label=True,
+                    field_type=MetadataFieldsWidget,
+                    value=custom_fields,
+                )
             ],
         }
 
         super().__init__(
-            available_fields=available_fields,
+            fields=available_fields,
             save_button=parent.save_button,
             parent=parent,
         )
@@ -80,24 +80,19 @@ class MetadataFormWidget(Form):
         parent.save_button.clicked.connect(self.on_save)
 
     @staticmethod
-    def _check_version_number(
-        name: str, label: str, value: str
-    ) -> FormValidation:
+    def _check_version_number(name: str, label: str, value: str) -> Validation:
         """
         Checks the minimum version number field.
         :param name: The field name
         :param label: The field label.
         :param value: The field value.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
         matches = re.findall(r"\b\d+(?:\.\d+)+", value)
         if matches:
-            return FormValidation(validation=True)
+            return Validation()
         else:
-            return FormValidation(
-                validation=False,
-                error_message="You must provide a valid minimum version of Pywr",
-            )
+            return Validation("You must provide a valid minimum version of Pywr")
 
     def get_param_dict_value(self, key: str) -> Any:
         """
@@ -128,9 +123,7 @@ class MetadataFormWidget(Form):
         # update model dictionary
         self.logger.debug(f"Updated metadata with {form_data}")
         self.model_config.json["metadata"] = form_data
-        self.model_config.changes_tracker.add(
-            f"Updated model metadata to {form_data}"
-        )
+        self.model_config.has_changed()
 
         if self.dialog.parent is not None:
             # reload the components tree

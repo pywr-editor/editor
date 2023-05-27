@@ -6,9 +6,7 @@ from pywr_editor.dialogs import ScenariosDialog
 from pywr_editor.dialogs.scenarios.scenario_empty_page_widget import (
     ScenarioEmptyPageWidget,
 )
-from pywr_editor.dialogs.scenarios.scenario_form_widget import (
-    ScenarioFormWidget,
-)
+from pywr_editor.dialogs.scenarios.scenario_form_widget import ScenarioFormWidget
 from pywr_editor.form import FormField
 from pywr_editor.model import ModelConfig
 from tests.utils import close_message_box, resolve_model_path
@@ -72,9 +70,7 @@ class TestScenariosDialog:
         selected_page.findChild(ScenarioFormWidget).load_fields()
         assert new_name in selected_page.findChild(QLabel).text()
         # noinspection PyTypeChecker
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         # button is disabled
         assert save_button.isEnabled() is False
 
@@ -89,14 +85,14 @@ class TestScenariosDialog:
 
         # the model is updated
         assert model_config.has_changes is True
-        assert model_config.scenarios.does_scenario_exist(new_name) is True
-        assert model_config.scenarios.get_config_from_name(new_name) == {
+        assert model_config.scenarios.exists(new_name) is True
+        assert model_config.scenarios.config(new_name) == {
             "name": new_name,
         }
 
         # rename and save
         renamed_scenario_name = "A new shiny name"
-        name_field.widget.setText(renamed_scenario_name)
+        name_field.widget.line_edit.setText(renamed_scenario_name)
 
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         assert name_field.message.text() == ""
@@ -106,14 +102,11 @@ class TestScenariosDialog:
         assert renamed_scenario_name in selected_page.findChild(QLabel).text()
 
         # model configuration
-        assert model_config.scenarios.does_scenario_exist(new_name) is False
-        assert (
-            model_config.scenarios.does_scenario_exist(renamed_scenario_name)
-            is True
-        )
-        assert model_config.scenarios.get_config_from_name(
-            renamed_scenario_name
-        ) == {"name": renamed_scenario_name}
+        assert model_config.scenarios.exists(new_name) is False
+        assert model_config.scenarios.exists(renamed_scenario_name) is True
+        assert model_config.scenarios.config(renamed_scenario_name) == {
+            "name": renamed_scenario_name
+        }
 
     def test_rename_parameter(self, qtbot, model_config, dialog):
         """
@@ -128,14 +121,12 @@ class TestScenariosDialog:
         selected_page = pages_widget.currentWidget()
         selected_page.form.load_fields()
         # noinspection PyTypeChecker
-        save_button: QPushButton = selected_page.findChild(
-            QPushButton, "save_button"
-        )
+        save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         name_field: FormField = selected_page.findChild(FormField, "name")
 
         # 1. Change the name and save
         assert name_field.value() == current_name
-        name_field.widget.setText(new_name)
+        name_field.widget.line_edit.setText(new_name)
 
         qtbot.wait(200)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
@@ -148,16 +139,16 @@ class TestScenariosDialog:
 
         # model has changes
         assert model_config.has_changes is True
-        assert model_config.scenarios.does_scenario_exist(current_name) is False
-        assert model_config.scenarios.does_scenario_exist(new_name) is True
-        assert model_config.scenarios.get_config_from_name(new_name) == {
+        assert model_config.scenarios.exists(current_name) is False
+        assert model_config.scenarios.exists(new_name) is True
+        assert model_config.scenarios.config(new_name) == {
             "name": new_name,
             "size": 2,
             "ensemble_names": ["First", "Second"],
         }
 
         # 2. Set duplicated name
-        name_field.widget.setText("scenario A")
+        name_field.widget.line_edit.setText("scenario A")
         QTimer.singleShot(100, close_message_box)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
         assert "already exists" in name_field.message.text()
@@ -179,29 +170,21 @@ class TestScenariosDialog:
         )
 
         # delete button is enabled and the item is selected
-        delete_button: QPushButton = pages_widget.pages[
-            deleted_scenario
-        ].findChild(QPushButton, "delete_button")
-        assert delete_button.isEnabled() is True
-        assert (
-            scenario_list_widget.list.selectedIndexes()[0].data()
-            == deleted_scenario
+        delete_button: QPushButton = pages_widget.pages[deleted_scenario].findChild(
+            QPushButton, "delete_button"
         )
+        assert delete_button.isEnabled() is True
+        assert scenario_list_widget.list.selectedIndexes()[0].data() == deleted_scenario
 
         # delete
         def confirm_deletion():
             widget = QApplication.activeModalWidget()
-            qtbot.mouseClick(
-                widget.findChild(QPushButton), Qt.MouseButton.LeftButton
-            )
+            qtbot.mouseClick(widget.findChild(QPushButton), Qt.MouseButton.LeftButton)
 
         QTimer.singleShot(100, confirm_deletion)
         qtbot.mouseClick(delete_button, Qt.MouseButton.LeftButton)
 
         assert isinstance(pages_widget.currentWidget(), ScenarioEmptyPageWidget)
         assert deleted_scenario not in pages_widget.pages.keys()
-        assert (
-            model_config.scenarios.does_scenario_exist(deleted_scenario)
-            is False
-        )
+        assert model_config.scenarios.exists(deleted_scenario) is False
         assert deleted_scenario not in scenario_list_widget.model.scenario_names

@@ -1,9 +1,7 @@
 import pytest
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.dialogs.parameters.parameter_page_widget import (
-    ParameterPageWidget,
-)
+from pywr_editor.dialogs.parameters.parameter_page_widget import ParameterPageWidget
 from pywr_editor.form import (
     FormField,
     ScenarioValuesWidget,
@@ -74,9 +72,7 @@ class TestDialogParameterArrayIndexedScenarioMonthlyFactorsParameterSection:
         # noinspection PyTypeChecker
         form_field: FormField = selected_page.findChild(FormField, field_name)
         # noinspection PyTypeChecker
-        widget: ValuesAndExternalDataWidget | ScenarioValuesWidget = (
-            form_field.widget
-        )
+        widget: ValuesAndExternalDataWidget | ScenarioValuesWidget = form_field.widget
 
         # 1. Check message at init
         assert init_message in form_field.message.text()

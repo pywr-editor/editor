@@ -25,18 +25,14 @@ class TestNodesClass:
         node_index = 1
         # by name
         model.nodes.set_position([9.0, 10.0], node_name="Link")
-        assert model.json["nodes"][node_index]["position"][
-            "editor_position"
-        ] == [
+        assert model.json["nodes"][node_index]["position"]["editor_position"] == [
             9,
             10,
         ]
 
         # by index
         model.nodes.set_position([5, 77], node_index=node_index)
-        assert model.json["nodes"][node_index]["position"][
-            "editor_position"
-        ] == [
+        assert model.json["nodes"][node_index]["position"]["editor_position"] == [
             5,
             77,
         ]
@@ -82,11 +78,11 @@ class TestNodesClass:
 
         nodes.delete("Reservoir")
         assert model.nodes.find_node_index_by_name("Reservoir") is None
-        assert model.edges.get_targets("Reservoir") is None
+        assert model.edges.targets("Reservoir") is None
 
         nodes.delete("Link3")
         assert nodes.find_node_index_by_name("Link3") is None
-        assert model.edges.get_targets("Link3") is None
+        assert model.edges.targets("Link3") is None
 
     def test_delete_virtual_node(self):
         """
@@ -120,14 +116,14 @@ class TestNodesClass:
         Tests the find_orphans method with a model with orphaned nodes.
         """
         model = self.model("model_with_orphans.json")
-        assert model.nodes.find_orphans() == ["Link3", "Link4", "Custom node"]
+        assert model.nodes.orphans() == ["Link3", "Link4", "Custom node"]
 
     def test_model_wo_orphans(self):
         """
         Tests the find_orphans method with a model without orphaned nodes.
         """
         model = self.model("model_wo_orphans.json")
-        assert model.nodes.find_orphans() is None
+        assert model.nodes.orphans() is None
 
     def test_add_new_node(self):
         """
@@ -204,10 +200,7 @@ class TestNodesClass:
         model = self.model("model_1.json")
         model.nodes.update(new_dict)
         assert model.has_changes is True
-        assert (
-            model.nodes.get_node_config_from_name(new_dict["name"])
-            == expected_dict
-        )
+        assert model.nodes.config(new_dict["name"]) == expected_dict
 
     def test_rename(self):
         """
@@ -226,13 +219,8 @@ class TestNodesClass:
         assert model.edges.get_all() == [[new_name, "Link"]]
 
         # check recorders
-        assert (
-            model.recorders.get_config_from_name("storage_flow")["node"]
-            == new_name
-        )
-        assert (
-            model.recorders.get_config_from_name("storage")["node"] == new_name
-        )
+        assert model.recorders.config("storage_flow")["node"] == new_name
+        assert model.recorders.config("storage")["node"] == new_name
 
         # non-existing node
         model.nodes.rename("LinkXX", "New name")

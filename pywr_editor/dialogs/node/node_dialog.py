@@ -7,13 +7,9 @@ from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
 from pywr_editor.form import FormTitle
 from pywr_editor.model import ModelConfig
-from pywr_editor.node_shapes import (
-    BaseNode,
-    get_node_icon,
-    get_pixmap_from_type,
-)
+from pywr_editor.node_shapes import BaseNode, get_node_icon, get_pixmap_from_type
+from pywr_editor.widgets import PushIconButton
 
-from ...widgets import PushIconButton
 from .node_dialog_form import NodeDialogForm
 
 if TYPE_CHECKING:
@@ -35,9 +31,7 @@ class NodeDialog(QDialog):
         """
         super().__init__(parent)
         self.app = parent
-        node_config = model_config.nodes.get_node_config_from_name(
-            node_name=node_name, as_dict=False
-        )
+        node_config = model_config.nodes.config(node_name=node_name, as_dict=False)
         layout = QVBoxLayout(self)
         layout.setAlignment(Qt.AlignTop)
 

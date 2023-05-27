@@ -128,24 +128,18 @@ class TestDialogParameterSourceSelectorWidget:
         source_widget: SourceSelectorWidget = selected_page.findChild(
             FormField, "source"
         ).widget
-        group_box: QGroupBox = selected_page.findChild(
-            QGroupBox, "Table configuration"
-        )
+        group_box: QGroupBox = selected_page.findChild(QGroupBox, "Table configuration")
 
         # 1. Check widget items
         assert source_widget.combo_box.all_items == widget_items
 
         # 2. Check field visibility
         for field_name in shown_fields:
-            form_field: FormField = selected_page.findChild(
-                FormField, field_name
-            )
+            form_field: FormField = selected_page.findChild(FormField, field_name)
             assert form_field.widget.isVisible() is True
 
         for field_name in hidden_fields:
-            form_field: FormField = selected_page.findChild(
-                FormField, field_name
-            )
+            form_field: FormField = selected_page.findChild(FormField, field_name)
             assert form_field.widget.isVisible() is False
 
         # 1. The Configuration group and other fields are properly shown or hidden
@@ -182,22 +176,16 @@ class TestDialogParameterSourceSelectorWidget:
         updated_table_spy = QSignalSpy(url_widget.updated_table)
 
         # 1. Change source from value to anonymous table (UrlWidget)
-        source_widget.combo_box.setCurrentText(
-            source_widget.labels["anonymous_table"]
-        )
+        source_widget.combo_box.setCurrentText(source_widget.labels["anonymous_table"])
 
         # 2. Fields associated with UrlWidget are shown
         for field_name in field_visibility["anonymous_table"]["show"]:
-            form_field: FormField = selected_page.findChild(
-                FormField, field_name
-            )
+            form_field: FormField = selected_page.findChild(FormField, field_name)
             assert form_field.widget.isVisible() is True
 
         # 3. Other fields are instead hidden
         for field_name in field_visibility["anonymous_table"]["hide"]:
-            form_field: FormField = selected_page.findChild(
-                FormField, field_name
-            )
+            form_field: FormField = selected_page.findChild(FormField, field_name)
             assert form_field.widget.isVisible() is False
 
         # 4. Check UrlWidget
@@ -213,9 +201,7 @@ class TestDialogParameterSourceSelectorWidget:
 
         # 5. Check other linked fields - url is empty so table is not available
         for name in ["column", "index_col", "parse_dates"]:
-            widget: ColumnWidget = selected_page.findChild(
-                FormField, name
-            ).widget
+            widget: ColumnWidget = selected_page.findChild(FormField, name).widget
             assert widget.combo_box.isEnabled() is False
 
             if name == "column":
@@ -226,9 +212,7 @@ class TestDialogParameterSourceSelectorWidget:
             assert widget.combo_box.currentText() == "None"
 
         # disabled ComboBox for anonymous index
-        index_widget: IndexWidget = selected_page.findChild(
-            FormField, "index"
-        ).widget
+        index_widget: IndexWidget = selected_page.findChild(FormField, "index").widget
         combo_boxes: List[ComboBox] = index_widget.findChildren(ComboBox)
         assert len(combo_boxes) == 1
         assert combo_boxes[0].currentText() == ""
@@ -265,16 +249,12 @@ class TestDialogParameterSourceSelectorWidget:
 
         # 2. Fields associated with TableSelectorWidget are shown
         for field_name in field_visibility["table"]["show"]:
-            form_field: FormField = selected_page.findChild(
-                FormField, field_name
-            )
+            form_field: FormField = selected_page.findChild(FormField, field_name)
             assert form_field.widget.isVisible() is True
 
         # 3. Other fields are instead hidden
         for field_name in field_visibility["table"]["hide"]:
-            form_field: FormField = selected_page.findChild(
-                FormField, field_name
-            )
+            form_field: FormField = selected_page.findChild(FormField, field_name)
             assert form_field.widget.isVisible() is False
 
         # 4. Signal triggered to reload table in TableSelectorWidget

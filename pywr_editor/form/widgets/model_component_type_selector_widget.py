@@ -8,7 +8,7 @@ from PySide6.QtWidgets import QHBoxLayout, QSizePolicy
 
 import pywr_editor.dialogs
 import pywr_editor.model
-from pywr_editor.form import FormCustomWidget, FormField, FormSection
+from pywr_editor.form import FormField, FormSection, FormWidget
 from pywr_editor.model import ParameterConfig, RecorderConfig
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import ComboBox, PushIconButton
@@ -29,7 +29,7 @@ if TYPE_CHECKING:
 """
 
 
-class ModelComponentTypeSelectorWidget(FormCustomWidget):
+class ModelComponentTypeSelectorWidget(FormWidget):
     section_added = Signal()
 
     def __init__(
@@ -67,13 +67,9 @@ class ModelComponentTypeSelectorWidget(FormCustomWidget):
                 "The component type can only be: 'parameters' or 'recorders'"
             )
         if self.is_parameter_type and not isinstance(value, ParameterConfig):
-            raise ValueError(
-                "The value can only be an instance of ParameterConfig"
-            )
+            raise ValueError("The value can only be an instance of ParameterConfig")
         elif self.is_recorder_type and not isinstance(value, RecorderConfig):
-            raise ValueError(
-                "The value can only be an instance of RecorderConfig"
-            )
+            raise ValueError("The value can only be an instance of RecorderConfig")
 
         super().__init__(name, value, parent)
         self.init = True
@@ -123,13 +119,9 @@ class ModelComponentTypeSelectorWidget(FormCustomWidget):
             )
 
         # button to pywr API
-        self.doc_button = PushIconButton(
-            icon=qta.icon("msc.question"), parent=self
-        )
+        self.doc_button = PushIconButton(icon=qta.icon("msc.question"), parent=self)
         self.doc_button.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Minimum)
-        self.doc_button.setToolTip(
-            f"Open the pywr manual page for this {self.type}"
-        )
+        self.doc_button.setToolTip(f"Open the pywr manual page for this {self.type}")
         self.doc_button.setEnabled(False)
         self.doc_button.setMaximumWidth(25)
         # noinspection PyUnresolvedReferences
@@ -169,10 +161,8 @@ class ModelComponentTypeSelectorWidget(FormCustomWidget):
             self.logger.debug(f"Setting combo box index {index}")
             self.combo_box.setCurrentIndex(index)
 
-            doc_url = self.pywr_comp_data.get_doc_url_from_key(comp_key)
-            self.doc_button.setProperty(
-                "url", self.pywr_comp_data.get_doc_url_from_key(comp_key)
-            )
+            doc_url = self.pywr_comp_data.doc_url(comp_key)
+            self.doc_button.setProperty("url", self.pywr_comp_data.doc_url(comp_key))
             if doc_url is not None:
                 self.doc_button.setEnabled(True)
         # index not found: unknown custom component or type not allowed (for a pywr or
@@ -190,10 +180,10 @@ class ModelComponentTypeSelectorWidget(FormCustomWidget):
                 self.reset()
                 # do not warn if type is not provided
                 if comp_key:
-                    message = f"The {self.type} type set in the model configuration is "
-                    message += "not allowed"
-                    self.logger.debug(f"{message}. Key is {comp_key}")
-                    self.form_field.set_warning_message(message)
+                    self.field.set_warning(
+                        f"The {self.type} type set in the model configuration is "
+                        "not allowed"
+                    )
             # custom components not provided in the "includes" key
             else:
                 self.combo_box.setCurrentIndex(
@@ -229,7 +219,7 @@ class ModelComponentTypeSelectorWidget(FormCustomWidget):
         # hide field if only one component type can be selected
         if len(self.combo_box.all_items) == 1:
             self.form.change_field_visibility(
-                name=self.form_field.name, show=False, clear_message=False
+                name=self.field.name, show=False, clear_message=False
             )
 
     def add_component_section(self, comp_key: str) -> None:
@@ -238,7 +228,7 @@ class ModelComponentTypeSelectorWidget(FormCustomWidget):
         :param comp_key: The component key.
         :return: None
         """
-        pywr_class = self.pywr_comp_data.get_class_from_type(comp_key)
+        pywr_class = self.pywr_comp_data.class_from_type(comp_key)
         self.form: Union["ParameterForm", "RecorderForm"]
 
         # key not provided - section for default component is selected
@@ -248,22 +238,15 @@ class ModelComponentTypeSelectorWidget(FormCustomWidget):
         elif pywr_class is None:  # custom component
             self.logger.debug(f"{self.type.title()} '{comp_key}' is custom")
             # imported Python class
-            if (
-                comp_key
-                in getattr(self.custom_imports, self.import_method)().keys()
-            ):
-                self.logger.debug(
-                    f"{self.type.title()} is included as custom import"
-                )
+            if comp_key in getattr(self.custom_imports, self.import_method)().keys():
+                self.logger.debug(f"{self.type.title()} is included as custom import")
                 self.form.section_form_data["imported"] = True
             # unknown class
             else:
                 self.logger.debug(
                     f"{self.type.title()} is not included as custom import"
                 )
-            self.logger.debug(
-                f"Adding section for '{self.custom_section_name}'"
-            )
+            self.logger.debug(f"Adding section for '{self.custom_section_name}'")
             # noinspection PyTypeChecker
             self.form.add_section_from_class(
                 getattr(pywr_editor.dialogs, self.custom_section_name),
@@ -301,11 +284,9 @@ class ModelComponentTypeSelectorWidget(FormCustomWidget):
         self.add_component_section(comp_key)
 
         # update the doc url if available
-        doc_url = self.pywr_comp_data.get_doc_url_from_key(comp_key)
+        doc_url = self.pywr_comp_data.doc_url(comp_key)
         # noinspection PyTypeChecker
-        self.doc_button.setProperty(
-            "url", self.pywr_comp_data.get_doc_url_from_key(comp_key)
-        )
+        self.doc_button.setProperty("url", self.pywr_comp_data.doc_url(comp_key))
         if doc_url is None:
             self.doc_button.setEnabled(False)
         else:
@@ -316,7 +297,7 @@ class ModelComponentTypeSelectorWidget(FormCustomWidget):
         if self.init is False:
             for name in ["url", "table", "value", "values"]:
                 self.logger.debug(f"Resetting FormField '{name}'")
-                form_field = self.form.find_field_by_name(name)
+                form_field = self.form.find_field(name)
                 # ignore non-existing fields
                 if form_field is not None:
                     # noinspection PyUnresolvedReferences

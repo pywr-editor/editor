@@ -22,14 +22,11 @@ class NodesAndFactorsModel(QAbstractTableModel):
 
         if values is not None:
             self.nodes: list[str] = values["nodes"] if "nodes" in values else []
-            self.factors: list[float] = (
-                values["factors"] if "factors" in values else []
-            )
+            self.factors: list[float] = values["factors"] if "factors" in values else []
 
     def data(
         self,
-        index: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex,
+        index: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex,
         role: int = ...,
     ) -> Any:
         """
@@ -46,8 +43,7 @@ class NodesAndFactorsModel(QAbstractTableModel):
 
     def rowCount(
         self,
-        parent: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex = ...,
+        parent: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex = ...,
     ) -> int:
         """
         Provides the total number of rows.
@@ -58,8 +54,7 @@ class NodesAndFactorsModel(QAbstractTableModel):
 
     def columnCount(
         self,
-        parent: PySide6.QtCore.QModelIndex
-        | PySide6.QtCore.QPersistentModelIndex = ...,
+        parent: PySide6.QtCore.QModelIndex | PySide6.QtCore.QPersistentModelIndex = ...,
     ) -> int:
         """
         Returns the number of columns.

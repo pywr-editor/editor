@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Literal
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QHBoxLayout
 
-from pywr_editor.form import FormCustomWidget, FormField, FormValidation
+from pywr_editor.form import FormField, FormWidget, Validation
 from pywr_editor.utils import Logging
 from pywr_editor.widgets import ComboBox, ParameterIcon, RecorderIcon
 
@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 """
 
 
-class AbstractStringModelComponentPickerWidget(FormCustomWidget):
+class AbstractStringModelComponentPickerWidget(FormWidget):
     def __init__(
         self,
         name: str,
@@ -61,9 +61,7 @@ class AbstractStringModelComponentPickerWidget(FormCustomWidget):
             include_method = self.model_config.includes.get_custom_recorders
             icon_class = RecorderIcon
         else:
-            raise ValueError(
-                "The component_type can only be 'parameter' or 'recorder'"
-            )
+            raise ValueError("The component_type can only be 'parameter' or 'recorder'")
 
         # check if the component type exists
         all_comp_keys = self.comp_data.keys + list(include_method().keys())
@@ -75,15 +73,13 @@ class AbstractStringModelComponentPickerWidget(FormCustomWidget):
                         + f"Available types are: {', '.join(all_comp_keys)}"
                     )
 
-            self.logger.debug(
-                f"Including only the following keys: {include_comp_key}"
-            )
+            self.logger.debug(f"Including only the following keys: {include_comp_key}")
 
         # add component names with icon
         self.combo_box = ComboBox()
         self.combo_box.addItem("None")
         for name in model_comp_names:
-            param_obj = model_prop.get_config_from_name(name, as_dict=False)
+            param_obj = model_prop.config(name, as_dict=False)
             key = param_obj.key
 
             # filter component keys
@@ -97,39 +93,29 @@ class AbstractStringModelComponentPickerWidget(FormCustomWidget):
             self.logger.debug("Value is None or empty. No value set")
         # wrong type
         elif not isinstance(value, str):
-            message = f"The {component_type} name must be a string"
-            self.logger.debug(message)
-            self.form_field.set_warning_message(message)
+            self.field.set_warning(f"The {component_type} name must be a string")
         # component name exists
         elif value in model_comp_names:
             # check if the component is allowed when the filter is provided
             if value not in self.combo_box.all_items:
-                message = (
+                self.field.set_warning(
                     f"The type of selected {component_type} set in the model "
-                    + "configuration is not allowed"
+                    "configuration is not allowed"
                 )
-                self.logger.debug(message)
-                self.form_field.set_warning_message(message)
             else:
-                self.logger.debug(
-                    f"Setting '{value}' as selected {component_type}"
-                )
+                self.logger.debug(f"Setting '{value}' as selected {component_type}")
                 self.combo_box.setCurrentText(value)
         else:
-            message = (
+            self.field.set_warning(
                 f"The {component_type} named '{value}' does not exist in the "
-                + "model configuration"
+                "model configuration"
             )
-            self.logger.debug(message)
-            self.form_field.set_warning_message(message)
 
         # no model components - overwrite any previous message
         if len(self.combo_box.all_items) == 1:
-            message = f"There are no {component_type}s available"
-            self.logger.debug(message)
-            self.form_field.set_warning_message(
-                message
-                + f". Add a new {component_type} first before setting up this option"
+            self.field.set_warning(
+                f"There are no {component_type}s available. Add a new {component_type} "
+                "first before setting up this option"
             )
 
         # layout
@@ -144,20 +130,17 @@ class AbstractStringModelComponentPickerWidget(FormCustomWidget):
         """
         return self.combo_box.currentText()
 
-    def validate(self, name: str, label: str, value: str) -> FormValidation:
+    def validate(self, name: str, label: str, value: str) -> Validation:
         """
         Validates the value.
         :param name: The field name.
         :param label: The field label.
         :param value: The field value.
-        :return: The instance of FormValidation
+        :return: The instance of Validation
         """
         if value == "None":
-            return FormValidation(
-                validation=False,
-                error_message=f"You must select a model {self.component_type}",
-            )
-        return FormValidation(validation=True)
+            return Validation(f"You must select a model {self.component_type}")
+        return Validation()
 
     def reset(self) -> None:
         """

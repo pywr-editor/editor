@@ -1,7 +1,7 @@
 from typing import Tuple
 
 import PySide6
-from PySide6.QtCore import QDate
+from PySide6.QtCore import QDate, Qt
 from PySide6.QtWidgets import QDateEdit, QWidget
 
 from pywr_editor.style import Color, stylesheet_dict_to_str
@@ -39,6 +39,7 @@ class DateEdit(QDateEdit):
         self.setCalendarPopup(True)
         self.setCalendarWidget(CalendarWidget())
         self.setStyleSheet(self.stylesheet)
+        self.setContextMenuPolicy(Qt.ContextMenuPolicy.PreventContextMenu)
 
     @property
     def stylesheet(self) -> str:

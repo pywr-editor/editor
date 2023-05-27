@@ -24,7 +24,7 @@ class TestDialogParameterInterpFillValueWidget:
         form = ParameterForm(
             model_config=ModelConfig(),
             parameter_obj=ParameterConfig({}),
-            available_fields={
+            fields={
                 "Section": [
                     {
                         "name": "fill_value",
@@ -39,7 +39,7 @@ class TestDialogParameterInterpFillValueWidget:
         form.enable_optimisation_section = False
         form.load_fields()
 
-        fill_value_field = form.find_field_by_name("fill_value")
+        fill_value_field = form.find_field("fill_value")
         # noinspection PyTypeChecker
         return fill_value_field.widget
 
@@ -63,7 +63,7 @@ class TestDialogParameterInterpFillValueWidget:
         fill_value_widget = self.widget(
             value=value,
         )
-        fill_value_field: FormField = fill_value_widget.form_field
+        fill_value_field: FormField = fill_value_widget.field
 
         # register app to test field visibility
         app = QMainWindow()
@@ -115,9 +115,7 @@ class TestDialogParameterInterpFillValueWidget:
             ([1, 2, 4], None, "fill", "3 values were given"),
         ],
     )
-    def test_invalid(
-        self, qtbot, value, expected_value, combo_box_key, init_message
-    ):
+    def test_invalid(self, qtbot, value, expected_value, combo_box_key, init_message):
         """
         Tests that the form displays a warning message when the provided value is
         invalid.
@@ -125,7 +123,7 @@ class TestDialogParameterInterpFillValueWidget:
         fill_value_widget = self.widget(
             value=value,
         )
-        fill_value_field: FormField = fill_value_widget.form_field
+        fill_value_field: FormField = fill_value_widget.field
 
         # register app to test field visibility
         app = QMainWindow()
@@ -160,8 +158,6 @@ class TestDialogParameterInterpFillValueWidget:
         # 4. When "fill", empty QLineEdit and validate again
         if combo_box_key == "fill":
             line_edit.setText("")
-            out = fill_value_widget.validate(
-                "", "", fill_value_widget.get_value()
-            )
+            out = fill_value_widget.validate("", "", fill_value_widget.get_value())
             assert "must provide a value" in out.error_message
             assert out.validation is False

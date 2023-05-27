@@ -3,13 +3,13 @@ from typing import TYPE_CHECKING, Any, Callable
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QWidget
 
-from .form_validation import FormValidation
+from .validation import Validation
 
 if TYPE_CHECKING:
     from .form import Form, FormField
 
 
-class FormCustomWidget(QWidget):
+class FormWidget(QWidget):
     def __init__(
         self,
         name: str,
@@ -25,8 +25,8 @@ class FormCustomWidget(QWidget):
         super().__init__(parent)
         self.name = name
         self.value = value
-        self.form_field = parent
-        self.form: "Form" = self.form_field.form
+        self.field = parent
+        self.form: "Form" = self.field.form
 
     def _type(self) -> str:
         """
@@ -44,15 +44,15 @@ class FormCustomWidget(QWidget):
             f"The value() method is not implemented for {self._type()}"
         )
 
-    def validate(self, name: str, label: str, value: Any) -> FormValidation:
+    def validate(self, name: str, label: str, value: Any) -> Validation:
         """
         Validate the returned value(s) by the widget.
         :param name: The field name.
         :param label: The field label.
         :param value: The file URL.
-        :return: The FormValidation instance.
+        :return: The Validation instance.
         """
-        return FormValidation(validation=True)
+        return Validation()
 
     def register_after_render_action(self, action: Callable) -> None:
         """
@@ -78,15 +78,13 @@ class FormCustomWidget(QWidget):
         """
         pass
 
-    def after_validate(
-        self, form_dict: dict[str, Any], form_field_name: str
-    ) -> None:
+    def after_validate(self, form_dict: dict[str, Any], form_field_name: str) -> None:
         """
         Event executed after the widget is validated and its value is added to the
         the form.
-        :param form_dict: The dictionary containing the data of the form
-        the widget is child of.
+        :param form_dict: The dictionary containing the data of the form the widget is
+        child of.
         :param form_field_name: The name of the parent FormField.
         :return: None
         """
-        pass
+        return

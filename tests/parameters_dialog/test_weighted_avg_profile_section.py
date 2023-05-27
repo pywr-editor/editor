@@ -2,9 +2,7 @@ import pytest
 from PySide6.QtCore import QTimer
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.dialogs.parameters.parameter_page_widget import (
-    ParameterPageWidget,
-)
+from pywr_editor.dialogs.parameters.parameter_page_widget import ParameterPageWidget
 from pywr_editor.form import FormField
 from pywr_editor.model import ModelConfig
 from tests.utils import close_message_box, resolve_model_path
@@ -15,9 +13,7 @@ class TestDialogWeightedAverageProfileParameter:
     Tests the sections for the WeightedAverageProfileParameter.
     """
 
-    model_file = resolve_model_path(
-        "model_dialog_weighted_avg_parameter_section.json"
-    )
+    model_file = resolve_model_path("model_dialog_weighted_avg_parameter_section.json")
 
     @pytest.fixture()
     def model_config(self) -> ModelConfig:
@@ -58,9 +54,7 @@ class TestDialogWeightedAverageProfileParameter:
 
         for field_name_to_check, message in field_messages.items():
             # send form and verify message
-            form_field = selected_page.form.find_field_by_name(
-                field_name_to_check
-            )
+            form_field = selected_page.form.find_field(field_name_to_check)
 
             if message is not None:
                 QTimer.singleShot(100, close_message_box)

@@ -1,14 +1,13 @@
 import json
 import os
 from collections import Counter
-from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 
 from pandas import period_range
+from PySide6.QtCore import QObject, Signal
 
 from pywr_editor.model import (
-    ChangesTracker,
     Constants,
     Edges,
     Includes,
@@ -25,18 +24,21 @@ from pywr_editor.model import (
 )
 
 
-@dataclass
-class ModelConfig:
-    json_file: str | None = None
-    """The path to the model file"""
+class ModelConfig(QObject):
+    model_changed = Signal()
+    """ Signal emitted when a change is applied to the model configuration """
 
-    def __post_init__(self) -> None:
+    def __init__(self, json_file: str | None = None):
         """
-        Loads the model data.
-        :return: None
+        Initialise the class.
+        :param json_file: The path to the model file
         """
+        super().__init__()
+        self.json_file = json_file
+
         # load the model
         self.json = dict()
+        self.changed_ = False
         self.load_error = None
         self.load_model()
         # stop performing other tasks if the model cannot be loaded
@@ -56,7 +58,6 @@ class ModelConfig:
         self.pywr_node_data = PywrNodesData()
 
         # loads the module components
-        self.changes_tracker = ChangesTracker()
         self.file = ModelFileInfo(self.json_file)
         self.nodes = Nodes(model=self)
         self.edges = Edges(model=self)
@@ -70,6 +71,21 @@ class ModelConfig:
         # custom components cannot use same name as built-in parameters. Pywr always
         # prioritises its own
         self.validate_custom_components()
+
+    def has_changed(self) -> None:
+        """
+        Flag that the model has changed.
+        :return: None
+        """
+        self.changed_ = True
+        self.model_changed.emit()
+
+    def reset_change_flag(self) -> None:
+        """
+        Reset the change flag.
+        :return: None
+        """
+        self.changed_ = False
 
     @property
     def metadata(self) -> dict | None:
@@ -116,8 +132,8 @@ class ModelConfig:
         :param date: The date as string.
         :return: None
         """
-        self.changes_tracker.add(f"Changed start date to {date}")
         self.json["timestepper"]["start"] = date
+        self.has_changed()
 
     @property
     def end_date(self) -> str | None:
@@ -140,8 +156,8 @@ class ModelConfig:
         :param date: The date as string.
         :return: None
         """
-        self.changes_tracker.add(f"Changed end date to {date}")
         self.json["timestepper"]["end"] = date
+        self.has_changed()
 
     @property
     def time_delta(self) -> int:
@@ -165,8 +181,8 @@ class ModelConfig:
         :param time_delta: The new timestep as number of days.
         :return: The end date as datetime instance, None when not available.
         """
-        self.changes_tracker.add(f"Changed timestep to {time_delta} days")
         self.json["timestepper"]["timestep"] = time_delta
+        self.has_changed()
 
     @property
     def number_of_steps(self) -> int | None:
@@ -228,9 +244,7 @@ class ModelConfig:
         # check that the file is writable
         with open(self.json_file, "a") as fid:
             if not fid.writable():
-                self.load_error = (
-                    "You do not have write permissions to edit the model"
-                )
+                self.load_error = "You do not have write permissions to edit the model"
                 return
 
         try:
@@ -324,13 +338,9 @@ class ModelConfig:
         # check that all nodes have the "name" and "type" keys and are strings
         for ni, node_config in enumerate(self.json["nodes"]):
             missing_key = None
-            if "type" not in node_config or not isinstance(
-                node_config["type"], str
-            ):
+            if "type" not in node_config or not isinstance(node_config["type"], str):
                 missing_key = "type"
-            elif "name" not in node_config or not isinstance(
-                node_config["name"], str
-            ):
+            elif "name" not in node_config or not isinstance(node_config["name"], str):
                 missing_key = "name"
             if missing_key is not None:
                 self.load_error = (
@@ -351,9 +361,7 @@ class ModelConfig:
                 return
 
             # node names must be strings
-            if not all(
-                [isinstance(edge_name, str) for edge_name in edge_config[0:2]]
-            ):
+            if not all([isinstance(edge_name, str) for edge_name in edge_config[0:2]]):
                 self.load_error = (
                     f"The edge at position '{ei}' must contain valid strings "
                     + f"{error_to_append}"
@@ -416,9 +424,7 @@ class ModelConfig:
         custom_parameter_keys = list(custom_param_dict.keys())
         if self.load_error is None and custom_param_dict:
             duplicated_keys = list(
-                set(PywrParametersData().keys).intersection(
-                    custom_parameter_keys
-                )
+                set(PywrParametersData().keys).intersection(custom_parameter_keys)
             )
             if duplicated_keys:
                 class_names = [
@@ -434,19 +440,10 @@ class ModelConfig:
     @property
     def has_changes(self) -> bool:
         """
-        Returns True if there are committed changes to the model configuration.
+        Return True if there are committed changes to the model configuration.
         :return: True if the model dictionary has changed. False otherwise.
         """
-        return self.changes_tracker.changed
-
-    def fetch_changes(self) -> list[dict]:
-        """
-        Returns the list of changes applied to the model.
-        :return: A list of changes. Each element is a Change instance with the
-        'timestamp' and 'message' as attributes.
-        See ChangesTracker.
-        """
-        return self.changes_tracker.change_log
+        return self.changed_
 
     def reload_file_info(self) -> None:
         """
@@ -507,7 +504,7 @@ class ModelConfig:
         :return: None
         """
         self.editor_config[Constants.SCHEMATIC_SIZE_KEY.value] = size
-        self.changes_tracker.add(f"Changed schematic size to {size}")
+        self.has_changed()
 
     def normalize_file_path(self, file: str | None) -> str | None:
         """

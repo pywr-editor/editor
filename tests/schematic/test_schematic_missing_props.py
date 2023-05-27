@@ -27,8 +27,7 @@ class TestMissingSchematicProps:
         in the configuration file.
         """
         assert (
-            window.model_config.schematic_size
-            == Constants.DEFAULT_SCHEMATIC_SIZE.value
+            window.model_config.schematic_size == Constants.DEFAULT_SCHEMATIC_SIZE.value
         )
 
     def test_missing_node_position(self, qtbot, window):

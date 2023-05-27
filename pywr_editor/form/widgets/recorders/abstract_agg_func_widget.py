@@ -116,7 +116,7 @@ class AbstractAggFuncWidget(AbstractStringComboBoxWidget):
             )
             # reset field if method changes
             if self.get_value() != "percentile":
-                self.form.find_field_by_name(field_name).widget.reset()
+                self.form.find_field(field_name).widget.reset()
 
         for field_name in [
             self.agg_func_percentileofscore_score,
@@ -129,7 +129,7 @@ class AbstractAggFuncWidget(AbstractStringComboBoxWidget):
             )
             # reset field if method changes
             if self.get_value() != "percentileofscore":
-                self.form.find_field_by_name(field_name).widget.reset()
+                self.form.find_field(field_name).widget.reset()
 
     def get_default_value(self) -> str:
         """
@@ -146,7 +146,7 @@ class AbstractAggFuncWidget(AbstractStringComboBoxWidget):
         :return: None. The function updates the dictionary given by reference.
         """
         # the FormField name ("agg_func" or "temporal_agg_func")
-        field_name = self.form_field.name
+        field_name = self.field.name
 
         # return string or dictionary for agg_func depending on the selected method
         # By default a string is returned
@@ -169,9 +169,7 @@ class AbstractAggFuncWidget(AbstractStringComboBoxWidget):
                     "func": form_data[field_name],
                     "kwargs": {
                         # mandatory field
-                        "score": form_data.pop(
-                            self.agg_func_percentileofscore_score
-                        ),
+                        "score": form_data.pop(self.agg_func_percentileofscore_score),
                     },
                 }
                 # do not add None

@@ -23,11 +23,7 @@ def pytest_sessionfinish(session):
     """
     for item in session.items:
         cls = item.getparent(pytest.Class)
-        if (
-            cls is not None
-            and hasattr(cls, "obj")
-            and hasattr(cls.obj, "model_file")
-        ):
+        if cls is not None and hasattr(cls, "obj") and hasattr(cls.obj, "model_file"):
             clean_env(cls.obj.model_file)
 
     # Removed the dynamic table file created by one test. If one test fails the
