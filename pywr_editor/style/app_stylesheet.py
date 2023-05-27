@@ -133,14 +133,14 @@ class AppStylesheet:
             "padding-right": "15px",
             "border-width": "3",
             "background": "#FFF",
-            "border": f"1px solid {Color('gray', 300).hex}",
+            "border": f"1px solid {Color('gray', 400).hex}",
             "border-radius": "4px",
-            "padding": "5px 6px",
+            "padding": "4px 6px",
             ":hover": {
                 "background": Color("gray", 100).hex,
             },
             ":focus": {
-                "border": f"1px solid {Color('blue', 400).hex}",
+                "border": f"1px solid {Color('blue', 500).hex}",
             },
             ":focus:hover": {
                 "background": "#FFF",
@@ -187,7 +187,7 @@ class AppStylesheet:
             "QGroupBox": {
                 "border": 0,
                 "font-weight": "bold",
-                "border-bottom": f"1px solid {Color('gray', 300).hex}",
+                # "border-bottom": f"1px solid {Color('gray', 300).hex}",
                 "font-size": "15px",
                 "margin-top": "15px",
                 "padding": "7px 0px",
@@ -201,20 +201,20 @@ class AppStylesheet:
             },
             "QPlainTextEdit": {
                 "background": "#FFF",
-                "border": f"1px solid {Color('gray', 300).hex}",
+                "border": f"1px solid {Color('gray', 400).hex}",
                 "border-radius": "4px",
             },
             "QLineEdit, QTextEdit": {
                 "background": "#FFF",
-                "border": f"1px solid {Color('gray', 300).hex}",
+                "border": f"1px solid {Color('gray', 400).hex}",
                 "border-radius": "4px",
-                "padding": "5px 6px",
+                "padding": "4px 6px",
             },
             "QLineEdit:hover, QTextEdit:hover": {
                 "background": Color("gray", 50).hex,
             },
             "QLineEdit:focus, QTextEdit:focus": {
-                "border": f"1px solid {Color('blue', 400).hex}",
+                "border": f"1px solid {Color('blue', 500).hex}",
             },
             "QLineEdit:focus:hover, QTextEdit:focus:hover": {
                 "background": "#FFF",
@@ -232,9 +232,10 @@ class AppStylesheet:
                 },
             },
             "QDialog": {
-                "background": Color("gray", 100).hex,
+                "background": "#FFF",
                 # "background": Color("gray", 100).hex,
-                "border": f"1px solid {Color('gray', 300).hex}",
+                # "background": Color("gray", 100).hex,
+                "border": f"1px solid {Color('gray', 400).hex}",
                 # "background": Color("gray", 50).hex,
                 "color": Color("gray", 600).hex,
             },
@@ -253,10 +254,13 @@ class AppStylesheet:
         """
         return {
             "QPushButton": {
-                "background": Color("gray", 200).hex,
-                "border": f"1px solid {Color('gray', 300).hex}",
+                "background": "white",
+                "font-weight": 600,
+                "padding": "2px 6px",
+                # "background": Color("gray", 200).hex,
+                "border": f"1px solid {Color('gray', 400).hex}",
                 "border-radius": "4px",
-                "padding": "6px 10px",
+                # "padding": "6px 10px",
             },
             "QPushButton:pressed": {"color": "rgba(0, 0, 0, 150)"},
             "QPushButton:hover": {

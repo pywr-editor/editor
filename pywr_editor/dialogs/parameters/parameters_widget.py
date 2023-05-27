@@ -49,4 +49,5 @@ class ParametersWidget(QWidget):
 
         # Style
         self.setLayout(layout)
-        self.setMaximumWidth(260)
+        self.setMaximumWidth(290)
+        # self.setMinimumWidth(270)

@@ -558,4 +558,4 @@ class FormContainer(QWidget):
 class FormTitle(QLabel):
     def __init__(self, title: str = "", parent: QWidget = None):
         super().__init__(title, parent)
-        self.setStyleSheet("font-size: 18px; font-weight: bold")
+        self.setStyleSheet("font-size: 18px;")
