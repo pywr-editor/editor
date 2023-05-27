@@ -36,7 +36,8 @@ models written in [JSON-based document](https://pywr.github.io/pywr/json.html) f
 Pywr editor provides the following features:
 
 - Full and easy customisation of model parameters, nodes, recorders, metadata, tables, imports and slots directly from the UI
-- Dynamic validation of model configuration  
+- Dynamic validation of model configuration
+- Easily run and debug your model using the toolbar actions
 - Support of custom model components
 - Interactive model schematic
   - pan, zoom, resize, screenshotting
@@ -65,6 +66,7 @@ Pywr editor provides the following features:
 - [Pandas parsing options with external data](screenshots/tables.png)
 - [Available parameters](screenshots/available_parameters.png)
 - [Custom component import](screenshots/custom_imports.png)
+- [Model run](screenshots/model_run.png)
 
 # Getting started
 You can get started with Pywr editor by installing the Windows binary or running the
