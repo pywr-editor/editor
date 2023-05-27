@@ -3,9 +3,7 @@ from PySide6.QtCore import QPoint, Qt
 from PySide6.QtWidgets import QLineEdit, QPushButton
 
 from pywr_editor.dialogs import ScenariosDialog
-from pywr_editor.dialogs.scenarios.scenario_options_widget import (
-    ScenarioOptionsWidget,
-)
+from pywr_editor.dialogs.scenarios.scenario_options_widget import ScenarioOptionsWidget
 from pywr_editor.form import FormField
 from pywr_editor.model import ModelConfig
 from pywr_editor.widgets import SpinBox
