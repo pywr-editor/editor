@@ -13,6 +13,7 @@ class SpinBox(QSpinBox):
         self.setRange(int(-pow(10, 6)), int(pow(10, 6)))
         # prevent mouse wheel from changing value on scroll
         self.setFocusPolicy(Qt.StrongFocus)
+        self.setContextMenuPolicy(Qt.ContextMenuPolicy.PreventContextMenu)
 
     def wheelEvent(self, e: PySide6.QtGui.QWheelEvent) -> None:
         """

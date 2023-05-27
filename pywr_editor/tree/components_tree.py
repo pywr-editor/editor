@@ -19,6 +19,7 @@ from pywr_editor.style import Color, stylesheet_dict_to_str
 from pywr_editor.utils import maybe_delete_component
 from pywr_editor.widgets import ContextualMenu, ExtensionIcon
 
+from ..dialogs.node.node_dialog import NodeDialog
 from .expanded_item_states import ExpandedItemStates
 from .tree_widget_node import TreeWidgetNode
 from .tree_widget_parameter import TreeWidgetParameter, TreeWidgetParameterName
@@ -67,7 +68,7 @@ class ComponentsTree(QTreeWidget):
         self.header().resizeSection(0, 200)
         self.header().setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
         self.header().setStretchLastSection(False)
-        self.setStyleSheet(self.stylesheet)
+        self.setStyleSheet(self.stylesheet())
 
     def draw(self) -> None:
         """
@@ -79,7 +80,6 @@ class ComponentsTree(QTreeWidget):
         self.sortByColumn(0, Qt.SortOrder.AscendingOrder)
 
         self._populate_model_info()
-        self._populate_timestepper()
         self._populate_nodes()
         self._populate_parameters()
         self._populate_tables()
@@ -181,24 +181,6 @@ class ComponentsTree(QTreeWidget):
         else:
             self.expanded_state.store_state(parent_item)
         self.items["parameters"] = parent_item
-
-    def _populate_timestepper(self) -> None:
-        """
-        Populates the tree widget for the timestepper key.
-        :return: None
-        """
-        # timestepper
-        if self.model_config.timestepper is None:
-            return
-
-        time_step_info = QTreeWidgetItem(self)
-        time_step_info.setText(0, "Timestepper")
-        for key, value in self.model_config.timestepper.items():
-            item = QTreeWidgetItem(time_step_info)
-            item.setText(0, key.title())
-            item.setText(1, str(value))
-
-        self.items["timestepper"] = time_step_info
 
     def _populate_model_info(self) -> None:
         """
@@ -391,11 +373,33 @@ class ComponentsTree(QTreeWidget):
         :param pos: The position.
         :return: None
         """
+        # disable menu if model is running
+        if self.parent.is_model_running:
+            return
+
         item = self.itemAt(pos)
         icon_color = Color("gray", 500).qcolor
         edit_icon = qta.icon("msc.edit", color=icon_color)
         delete_icon = qta.icon("msc.trash", color=icon_color)
 
+        if isinstance(item, TreeWidgetNode):
+            node_name = item.name
+            context_menu = ContextualMenu()
+            context_menu.set_title(node_name)
+            # Edit node
+            edit_action = context_menu.addAction(edit_icon, "Edit")
+            # noinspection PyUnresolvedReferences
+            edit_action.triggered.connect(
+                lambda *args, name=node_name: self.on_edit_node(name)
+            )
+
+            # Delete node
+            edit_action = context_menu.addAction(delete_icon, "Delete")
+            # noinspection PyUnresolvedReferences
+            edit_action.triggered.connect(
+                lambda *args, name=node_name: self.on_delete_node(name)
+            )
+            context_menu.exec(self.mapToGlobal(pos))
         if isinstance(item, TreeWidgetTable):
             table_name = item.name
             context_menu = ContextualMenu()
@@ -459,6 +463,31 @@ class ComponentsTree(QTreeWidget):
             )
 
             context_menu.exec(self.mapToGlobal(pos))
+
+    @Slot(str)
+    def on_edit_node(self, node_name: str) -> None:
+        """
+        Opens the dialog to edit the selected node.
+        :param node_name: The node name to edit.
+        :return: None
+        """
+        dialog = NodeDialog(
+            node_name=node_name,
+            model_config=self.model_config,
+            parent=self.parent,
+        )
+        dialog.show()
+
+    @Slot(str)
+    def on_delete_node(self, node_name: str) -> None:
+        """
+        Deletes the selected node.
+        :param node_name: The node name to edit.
+        :return: None
+        """
+        self.parent.schematic.on_delete_nodes(
+            [self.parent.schematic.schematic_items[node_name]]
+        )
 
     @Slot(str)
     def on_edit_table(self, table_name: str) -> None:
@@ -568,10 +597,12 @@ class ComponentsTree(QTreeWidget):
         key = "{}{}".format(key[0].upper(), key[1:])
         return key
 
-    @property
-    def stylesheet(self) -> str:
+    @staticmethod
+    def stylesheet(as_dict: bool = False) -> str | dict:
         """
         Returns the stylesheet.
+        :param as_dict: Whether to return the stylesheet as dictionary. Default to
+        False.
         :return: The stylesheet as string.
         """
         style = {
@@ -591,7 +622,9 @@ class ComponentsTree(QTreeWidget):
                 "border-image: url(:components-tree/branch-end) 0"
             },
         }
-        return stylesheet_dict_to_str(style)
+        if not as_dict:
+            return stylesheet_dict_to_str(style)
+        return style
 
 
 class StyleDelegate(QStyledItemDelegate):

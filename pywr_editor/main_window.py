@@ -25,7 +25,8 @@ from pywr_editor.dialogs import (
 from pywr_editor.model import ModelConfig
 from pywr_editor.schematic import Schematic, scaling_factor
 from pywr_editor.style import AppStylesheet
-from pywr_editor.toolbar import SchematicItemsLibrary, ToolbarWidget
+from pywr_editor.toolbar import RunWidget, SchematicItemsLibrary, ToolbarWidget
+from pywr_editor.toolbar.run_controls.timestepper import TimeStepperWidget
 from pywr_editor.tree import ComponentsTree
 from pywr_editor.utils import (
     Action,
@@ -35,6 +36,7 @@ from pywr_editor.utils import (
     Settings,
     get_signal_sender,
 )
+from pywr_editor.widgets import DateEdit, SpinBox
 
 
 class MainWindow(QMainWindow):
@@ -75,6 +77,7 @@ class MainWindow(QMainWindow):
             )
             sys.exit(1)
         self.empty_model: bool = False
+
         if model_file is None:
             self.logger.debug("No model file was provided")
             self.empty_model = True
@@ -119,12 +122,17 @@ class MainWindow(QMainWindow):
         self.register_model_actions()
         self.register_nodes_actions()
         self.register_schematic_actions()
+        self.register_model_run_actions()
+        self.warning_info_message.connect(self.on_alert_info_message)
+        self.error_message.connect(self.on_error_message)
         self.save.connect(self.on_save)
 
         # Toolbar
         self.toolbar = ToolbarWidget(self)
         self.addToolBar(self.toolbar)
         self.setup_toolbar()
+        # noinspection PyTypeChecker
+        self.run_widget: RunWidget = self.toolbar.findChild(RunWidget)
 
         # Status bar
         self.add_status_bar()
@@ -139,6 +147,10 @@ class MainWindow(QMainWindow):
         self.components_tree.draw()
         self.schematic.draw()
 
+        # handle schematic status during a model ru
+        self.is_model_running = False
+        self.run_widget.run_status_changed.connect(self.on_model_run)
+
     def closeEvent(self, event: PySide6.QtGui.QCloseEvent) -> None:
         """
         Prompt whether to save the model and saves the widgets' geometry and state.
@@ -146,10 +158,18 @@ class MainWindow(QMainWindow):
         :return: None
         """
         if self.model_config.has_changes is False or self.maybe_save():
-            event.accept()
+            # event.accept()
             self.editor_settings.save_window_attributes(self)
         else:
             event.ignore()
+
+        # check if the run worker is still running
+        try:
+            if self.run_widget.worker:
+                self.run_widget.worker.kill()
+        except RuntimeError:
+            pass
+        event.accept()
 
     def register_model_actions(self) -> None:
         """
@@ -379,6 +399,16 @@ class MainWindow(QMainWindow):
         self.addAction(connect_node_action)
         self.app_actions.registry["connect-node-abort"] = connect_node_action
 
+        # register shortcut to delete schematic items
+        delete_item_action = QAction("Delete schematic item")
+        delete_item_action.setShortcut(QKeySequence.StandardKey.Delete)
+        # noinspection PyUnresolvedReferences
+        delete_item_action.triggered.connect(
+            lambda: self.schematic.on_delete_item(self.schematic.scene.selectedItems())
+        )
+        self.schematic.addAction(delete_item_action)
+        self.app_actions.registry["delete-schematic-item"] = delete_item_action
+
     def register_schematic_actions(self) -> None:
         """
         Registers the action for the schematic tab.
@@ -512,15 +542,30 @@ class MainWindow(QMainWindow):
             )
         )
 
-        # register shortcut to delete schematic items
-        delete_item_action = QAction("Delete schematic item")
-        delete_item_action.setShortcut(QKeySequence.StandardKey.Delete)
-        # noinspection PyUnresolvedReferences
-        delete_item_action.triggered.connect(
-            lambda: self.schematic.on_delete_item(self.schematic.scene.selectedItems())
+    def register_model_run_actions(self) -> None:
+        """
+        Registers the action for the Run tab.
+        :return: None
+        """
+        # self.app_actions.add(
+        #     Action(
+        #         key="plot-data",
+        #         name="Plot\nresults",
+        #         icon=":toolbar/plot-data",
+        #         tooltip="Plot the results at the end of a run",
+        #         is_disabled=True,
+        #     )
+        # )
+        self.app_actions.add(
+            Action(
+                key="run-inspector",
+                name="Inspector",
+                icon=":toolbar/run-inspector",
+                tooltip="Inspect the properties of all model components for an "
+                + "active model run",
+                is_disabled=True,
+            )
         )
-        self.schematic.addAction(delete_item_action)
-        self.app_actions.registry["delete-schematic-item"] = delete_item_action
 
     def setup_toolbar(self) -> None:
         """
@@ -558,6 +603,18 @@ class MainWindow(QMainWindow):
         validation_panel.add_button(
             self.app_actions.get("find-orphaned-parameters"), is_large=False
         )
+
+        # Run tab
+        run = self.toolbar.add_tab("Run")
+        time_stepper_panel = run.add_panel("Time-stepper")
+        time_stepper_panel.add_widget(TimeStepperWidget(self))
+
+        nodes_panel = run.add_panel("Controls")
+        nodes_panel.add_widget(RunWidget(self))
+
+        results_panel = run.add_panel("Results")
+        results_panel.add_button(self.app_actions.get("run-inspector"))
+        # results_panel.add_button(self.app_actions.get("plot-data"))
 
         # Schematic tab
         operation_tab = self.toolbar.add_tab("Operations")
@@ -858,14 +915,17 @@ class MainWindow(QMainWindow):
         dialog(self, title, message)
 
     @Slot(str, bool)
-    def on_error_message(self, message: str, close: bool) -> None:
+    def on_error_message(
+        self, message: str, close: bool, title: str = "An error occurred"
+    ) -> None:
         """
         Shows an error message. This closes the application.
         :param message: The error message.
         :param close: Whether to close the application.
+        :param title: The error message title. Optional
         :return: None
         """
-        QMessageBox().critical(self, "An error occurred", message)
+        QMessageBox().critical(self, title, message)
         if close:
             sys.exit(1)
 
@@ -881,6 +941,50 @@ class MainWindow(QMainWindow):
         # enable the "Save" button if there are changes
         save_button = self.app_actions.get("save-model")
         save_button.setEnabled(self.model_config.has_changes)
+
+    @Slot(bool)
+    def on_model_run(self, is_running: bool) -> None:
+        """
+        Handles the schematic and other widgets behaviour when the model is running.
+        :param is_running: Whether the model is running.
+        :return: None
+        """
+        # use flag to make other components aware the model is running
+        self.is_model_running = is_running
+
+        # disable toolbar buttons
+        to_disable = [
+            "edit-metadata",
+            "edit-scenarios",
+            "edit-imports",
+            "edit-slots",
+            "edit-tables",
+            "edit-parameters",
+            "edit-recorders",
+            "find-orphaned-nodes",
+            "find-orphaned-parameters",
+        ]
+        for action_name in to_disable:
+            self.app_actions.get(action_name).setDisabled(is_running)
+
+        # disable the node library
+        # noinspection PyTypeChecker
+        node_library: SchematicItemsLibrary = self.toolbar.findChild(
+            SchematicItemsLibrary
+        )
+        node_library.setDisabled(is_running)
+
+        self.schematic.set_run_mode(is_running)
+
+        # handle the timestepper fields
+        # noinspection PyUnresolvedReferences
+        self.findChild(DateEdit, "start_date").setDisabled(is_running)
+        # noinspection PyUnresolvedReferences
+        self.findChild(DateEdit, "end_date").setDisabled(is_running)
+        # noinspection PyUnresolvedReferences
+        self.findChild(DateEdit, "run_to_date").setDisabled(is_running)
+        # noinspection PyUnresolvedReferences
+        self.findChild(SpinBox, "time_step").setDisabled(is_running)
 
     @Slot()
     def on_save(self) -> None:

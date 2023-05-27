@@ -1,3 +1,4 @@
+import inspect
 from typing import TYPE_CHECKING, Sequence, Union
 
 import PySide6
@@ -14,6 +15,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
+from pywr_editor.dialogs import InspectorTree
 from pywr_editor.model import (
     BaseShape,
     Edges,
@@ -681,15 +683,10 @@ class Schematic(QGraphicsView):
 
     @Slot()
     def export_current_view(self) -> None:
-        # # image = QImage(self.scene.sceneRect().size().toSize(), QImage.Format_RGBA64)
-        # image = QPixmap(self.scene.sceneRect().size().toSize())
-        # # image.fill(Qt.GlobalColor.transparent)
-        # p = QPainter(image)
-        #
-        # self.scene.render(p, self.scene.itemsBoundingRect())
-        # p.end()
-        # image.save('test.png')
-        # return
+        """
+        Exports the current view.
+        :return: None
+        """
         file = QFileDialog().getSaveFileName(
             self, "Save current view as image", "", "PNG (*.png)"
         )
@@ -718,6 +715,82 @@ class Schematic(QGraphicsView):
         :return: None
         """
         self.app.app_actions.get("decrease-height").setEnabled(enable)
+
+    def set_run_mode(self, enable: bool) -> None:
+        """
+        Enables the run mode when the model is running.
+        :param enable: Whether the model is running.
+        :return: None
+        """
+        if enable:
+            self.canvas.setOpacity(0.7)
+        else:
+            self.canvas.setOpacity(1)
+
+        for item in self.items():
+            if isinstance(item, SchematicNode):
+                if enable:
+                    # lock node position and selection
+                    item.setFlag(QGraphicsItem.ItemIsMovable, False)
+                    item.setFlag(QGraphicsItem.ItemIsSelectable, False)
+
+                    # draw new tooltip
+                    model = self.app.run_widget.worker.pywr_model
+
+                    cell_style = "style='padding:2px 6px;"
+                    cell_style += f"border:1px solid {Color('neutral', 400).hex}'"
+
+                    tooltip_text = "<table>"
+                    tooltip_text += "<tr><td colspan='2'><b style='font-size:12pt'>"
+                    tooltip_text += f"{item.name}</td></tr>"
+
+                    node = model.nodes[item.name]
+                    all_attributes = inspect.getmembers(
+                        node,
+                        lambda a: not inspect.isroutine(a),
+                    )
+                    for (
+                        attr_raw_name,
+                        result_data,
+                    ) in InspectorTree.get_node_value_dict(
+                        model, all_attributes
+                    ).items():
+                        if attr_raw_name == "prev_flow":
+                            continue
+                        attr_name = item.model_node.humanise_attribute_name(
+                            attr_raw_name
+                        )
+                        tooltip_text += "<tr>"
+                        # data with scenarios
+                        if result_data["has_scenarios"]:
+                            tooltip_text += f"<td colspan='2'>{attr_name} "
+                            tooltip_text += "<table style='margin-left:10px;"
+                            tooltip_text += "border-collapse:collapse'>"
+                            tooltip_text += f"<tr><td {cell_style}><b>Combination</b>"
+                            tooltip_text += (
+                                f"</td><td {cell_style}><b>Value</b></td></tr>"
+                            )
+                            for sc_value in result_data["data"]:
+                                tooltip_text += f"<tr><td {cell_style}>"
+                                tooltip_text += f"{sc_value['name']}</td>"
+                                tooltip_text += f"<td {cell_style}>{sc_value['value']}"
+                                tooltip_text += "</td></tr>"
+                            tooltip_text += "</table></td>"
+                        # single value
+                        else:
+                            tooltip_text += f"<td>{attr_name}:</td>"
+                            tooltip_text += f"<td>{result_data['data']['value']}</td>"
+                        tooltip_text += "</tr>"
+                    tooltip_text += "</table>"
+                else:
+                    # unlock node position and selection
+                    item.setFlag(QGraphicsItem.ItemIsMovable, True)
+                    item.setFlag(QGraphicsItem.ItemIsSelectable, True)
+
+                    # restore tooltip
+                    tooltip_text = item.tooltip_text
+
+                item.setToolTip(tooltip_text)
 
     @Slot()
     def select_all_items(self) -> None:

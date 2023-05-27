@@ -1,0 +1,72 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {
+    "start": "2015-01-01",
+    "end": "2015-12-31",
+    "timestep": 1
+  },
+  "includes": [
+    "files/custom_parameter.py"
+  ],
+  "nodes": [
+    {
+      "name": "Input",
+      "type": "Input",
+      "max_flow": 20,
+      "position": {
+        "editor_position": [
+          400.0,
+          300.0
+        ]
+      }
+    },
+    {
+      "name": "Link",
+      "type": "link",
+      "min_flow": 1000,
+      "position": {
+        "editor_position": [
+          288.0,
+          208.0
+        ]
+      }
+    },
+    {
+      "name": "Output",
+      "type": "Output",
+      "max_flow": 10,
+      "position": {
+        "editor_position": [
+          504.0,
+          161.0
+        ]
+      }
+    }
+  ],
+  "edges": [
+    [
+      "Input",
+      "Link"
+    ],
+    [
+      "Link",
+      "Output"
+    ]
+  ],
+  "scenarios": [],
+  "parameters": {},
+  "recorders": {},
+  "tables": {},
+  "pywr_editor_schematic_size": [
+    800,
+    600
+  ]
+}

@@ -4,7 +4,7 @@ from collections import Counter
 from datetime import datetime
 from pathlib import Path
 
-from pandas import Timestamp, period_range, to_datetime
+from pandas import period_range
 from PySide6.QtCore import QObject, Signal
 
 from pywr_editor.model import (
@@ -112,36 +112,58 @@ class ModelConfig(QObject):
         return self.json["timestepper"]
 
     @property
-    def start_date(self) -> Timestamp | None:
+    def start_date(self) -> str | None:
         """
         Returns the timestepper start date.
-        :return: The start date as Pandas Timestamp instance, None when not available.
+        :return: The start date or None when not available.
         """
-        if "start" in self.timestepper:
-            try:
-                return to_datetime(self.timestepper["start"])
-            except ValueError:
-                pass
+        if (
+            "start" in self.timestepper
+            and isinstance(self.timestepper["start"], str)
+            and len(self.timestepper["start"].split("-")) == 3
+        ):
+            return self.timestepper["start"]
         return None
 
+    @start_date.setter
+    def start_date(self, date: str) -> None:
+        """
+        Updates the start date.
+        :param date: The date as string.
+        :return: None
+        """
+        self.json["timestepper"]["start"] = date
+        self.has_changed()
+
     @property
-    def end_date(self) -> Timestamp | None:
+    def end_date(self) -> str | None:
         """
         Returns the timestepper end date.
-        :return: The end date as Pandas Timestamp instance, None when not available.
+        :return: The end date as string or None when not available.
         """
-        if "end" in self.timestepper:
-            try:
-                return to_datetime(self.timestepper["end"])
-            except ValueError:
-                pass
+        if (
+            "end" in self.timestepper
+            and isinstance(self.timestepper["end"], str)
+            and len(self.timestepper["end"].split("-")) == 3
+        ):
+            return self.timestepper["end"]
         return None
 
-    @property
-    def time_delta(self) -> int | None:
+    @end_date.setter
+    def end_date(self, date: str) -> None:
         """
-        Returns the timestepper timestamp.
-        :return: The end date as datetime instance, None when not available.
+        Updates the end date.
+        :param date: The date as string.
+        :return: None
+        """
+        self.json["timestepper"]["end"] = date
+        self.has_changed()
+
+    @property
+    def time_delta(self) -> int:
+        """
+        Returns the timestepper timestep.
+        :return: The timestep or 1 when not available.
         """
         if "timestep" in self.timestepper and isinstance(
             self.timestepper["timestep"], int
@@ -149,8 +171,18 @@ class ModelConfig(QObject):
             try:
                 return int(self.timestepper["timestep"])
             except ValueError:
-                return None
-        return None
+                return 1
+        return 1
+
+    @time_delta.setter
+    def time_delta(self, time_delta: int) -> None:
+        """
+        Updates the timestepper timestep.
+        :param time_delta: The new timestep as number of days.
+        :return: The end date as datetime instance, None when not available.
+        """
+        self.json["timestepper"]["timestep"] = time_delta
+        self.has_changed()
 
     @property
     def number_of_steps(self) -> int | None:

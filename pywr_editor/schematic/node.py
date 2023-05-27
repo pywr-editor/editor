@@ -59,10 +59,10 @@ class SchematicNode(AbstractSchematicItem, QGraphicsItemGroup):
         self.x, self.y = self.model_node.position
         self.edges: list[Edge] = []
         self.view = view
-        tooltip = ModelComponentTooltip(
+        self.tooltip_text = ModelComponentTooltip(
             model_config=view.model_config, comp_obj=self.model_node
-        )
-        self.setToolTip(tooltip.render())
+        ).render()
+        self.setToolTip(self.tooltip_text)
 
         # allow interaction
         self.setFlag(
@@ -334,7 +334,7 @@ class SchematicNode(AbstractSchematicItem, QGraphicsItemGroup):
         :param event: The event being triggered.
         :return: None
         """
-        if self.view.connecting_node_props.enabled:
+        if self.view.app.is_model_running or self.view.connecting_node_props.enabled:
             return
 
         self.view.de_select_all_items()

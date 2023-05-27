@@ -2,7 +2,7 @@ import logging
 import sys
 from argparse import ArgumentParser, BooleanOptionalAction
 
-from PySide6.QtGui import QIcon
+from PySide6.QtGui import QIcon, Qt
 from PySide6.QtWidgets import QApplication
 
 from pywr_editor.dialogs import StartScreen
@@ -58,6 +58,13 @@ def app() -> None:
     file = options.file if options.file else None
     create_new = options.create_new if options.create_new else None
     browse = options.browse if options.browse else None
+
+    # enable dpi scale
+    QApplication.setHighDpiScaleFactorRoundingPolicy(
+        Qt.HighDpiScaleFactorRoundingPolicy.PassThrough
+    )
+    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
+    QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
 
     # create new model command
     if create_new is not None:

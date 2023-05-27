@@ -22,9 +22,13 @@ class ToolbarWidget(QToolBar):
         self.toolbar = QTabWidget(self)
         self.toolbar.setMaximumHeight(125)
         self.toolbar.setMinimumHeight(110)
-        self.toolbar.setContextMenuPolicy(Qt.ContextMenuPolicy.PreventContextMenu)
+        self.setContextMenuPolicy(Qt.ContextMenuPolicy.PreventContextMenu)
+        # self.toolbar.setContextMenuPolicy(Qt.ContextMenuPolicy.PreventContextMenu)
         self.setMovable(False)
         self.addWidget(self.toolbar)
+
+        self.setVisible(True)
+        self.show()
 
     def add_tab(self, name: str) -> Tab:
         """

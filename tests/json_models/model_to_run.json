@@ -1,0 +1,34 @@
+{
+  "metadata": {
+    "title": "Reservoir 1",
+    "description": "A model with a reservoir.",
+    "minimum_version": "0.1",
+    "author": "Stefano Simoncelli",
+    "email": "stefano.simoncelli@domain.com",
+    "maintainer": "Stefano Simoncelli",
+    "model_version": "2.1"
+  },
+  "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
+  "includes": ["files/custom_parameter.py"],
+  "nodes": [
+    {
+      "name": "Input", "type": "Input", "position": {
+      "editor_position": [
+        134.18168,
+        117.18473
+      ]
+    }
+    },
+    {
+      "name": "Output", "type": "Output", "position": {
+      "editor_position": [
+        34.18168,
+        17.18473
+      ]
+    }
+    }
+  ],
+  "edges": [
+    ["Input", "Output"]
+  ]
+}

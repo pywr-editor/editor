@@ -83,6 +83,7 @@ class AppStylesheet:
             "QToolTip": {
                 "background": Color("gray", 100).hex,
                 "border": f"1px solid{Color('gray', 300).hex}",
+                "border-radius": "5px",
                 "color": Color("gray", 600).hex,
             },
             "QMenu": {
@@ -122,13 +123,13 @@ class AppStylesheet:
             },
         }
 
-    @property
-    def forms(self) -> dict:
+    @staticmethod
+    def spin_box() -> dict:
         """
-        Returns the style for the forms.
-        :return: The stylesheet dictionary.
+        Returns the stylesheet for a spin box as dictionary.
+        :return: The stylesheet as dictionary.
         """
-        spin_box = {
+        return {
             "padding-right": "15px",
             "border-width": "3",
             "background": "#FFF",
@@ -175,6 +176,13 @@ class AppStylesheet:
             "::down-arrow:off": {"border-image": "url(:form/caret-down-disabled)"},
         }
 
+    @property
+    def forms(self) -> dict:
+        """
+        Returns the style for the forms.
+        :return: The stylesheet dictionary.
+        """
+
         return {
             "QGroupBox": {
                 "border": 0,
@@ -211,6 +219,18 @@ class AppStylesheet:
             "QLineEdit:focus:hover, QTextEdit:focus:hover": {
                 "background": "#FFF",
             },
+            "QDateEdit": {
+                "background": "#FFF",
+                "border": f"1px solid {Color('gray', 300).hex}",
+                "padding": "2px",
+                "::drop-down": {
+                    "image": "url(:form/caret-down)",
+                    "width": "12px",
+                    "height": "12px",
+                    "right": "3px",
+                    "top": "5px",
+                },
+            },
             "QDialog": {
                 "background": "#FFF",
                 # "background": Color("gray", 100).hex,
@@ -222,8 +242,8 @@ class AppStylesheet:
             "QGroupBox, QLabel": {
                 "color": Color("gray", 700).hex,
             },
-            "SpinBox": spin_box,
-            "DoubleSpinBox": spin_box,
+            "SpinBox": self.spin_box(),
+            "DoubleSpinBox": self.spin_box(),
         }
 
     @property

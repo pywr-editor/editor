@@ -1,6 +1,5 @@
 from pathlib import Path
 
-import pandas as pd
 import pytest
 
 from pywr_editor.model import Constants, ModelConfig
@@ -161,10 +160,27 @@ class TestModelConfig:
         Tests the methods used to handle the timestepper information.
         """
         model = self.model("model_2.json")
-        assert model.start_date == pd.to_datetime("2015-01-01")
-        assert model.end_date == pd.to_datetime("2015-12-31")
+        assert model.start_date == "2015-01-01"
+        assert model.end_date == "2015-12-31"
         assert model.time_delta == 1
         assert model.number_of_steps == 365
+
+        # test setters
+        model.start_date = "2009-10-10"
+        assert model.start_date == "2009-10-10"
+        model.end_date = "2009-10-10"
+        assert model.end_date == "2009-10-10"
+
+        # set a wrong date
+        model.start_date = "2009-1010"
+        assert model.start_date is None
+        model.end_date = "2009-1010"
+        assert model.end_date is None
+
+        # check and change the timestep
+        assert model.time_delta == 1
+        model.time_delta = 3
+        assert model.time_delta == 3
 
     @pytest.mark.parametrize(
         "path, ignore_outside_model_path, expected",

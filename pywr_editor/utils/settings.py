@@ -20,6 +20,7 @@ class Settings:
     zoom_level_key = "schematic/zoom_level"
     schematic_center_key = "schematic/schematic_center"
     recent_projects_key = "recent_projects"
+    run_to_date_key = "run_to_date"
 
     def __init__(self, json_file: str | None = None):
         """
@@ -133,6 +134,24 @@ class Settings:
         if self.app_name is None:
             return
         self.instance.setValue(self.hide_labels_key, hide)
+
+    @property
+    def run_to_date(self) -> bool:
+        """
+        Returns the run to date.
+        :return: The date as string
+        """
+        return self.instance.value(self.run_to_date_key)
+
+    def save_run_to_date(self, date: str) -> None:
+        """
+        Stores the run to date for a model.
+        :param date: The date as string.
+        :return: None.
+        """
+        if self.app_name is None and not isinstance(date, str):
+            return
+        self.instance.setValue(self.run_to_date_key, date)
 
     @property
     def are_edge_arrows_hidden(self) -> bool:

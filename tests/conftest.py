@@ -32,6 +32,10 @@ def pytest_sessionfinish(session):
     if dynamic_file.exists():
         dynamic_file.unlink()
 
+    # remove solved debug files
+    [f.unlink() for f in Path(__file__).parent.glob("*/*.lp")]
+    [f.unlink() for f in Path(__file__).parent.glob("*/*.mps")]
+
 
 @pytest.fixture(scope="class")
 def delay() -> None:

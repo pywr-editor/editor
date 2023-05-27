@@ -23,3 +23,5 @@ from .scenarios import Scenarios
 from .tables import Tables
 from .shapes import Shapes, TextShape, BaseShape, RectangleShape, LineArrowShape
 from .model_config import ModelConfig
+
+from .pywr_worker import PywrWorker, PywrProgress
