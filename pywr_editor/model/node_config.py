@@ -124,7 +124,7 @@ class NodeConfig(ComponentConfig):
         :return The node type.
         """
         pywr_nodes = PywrNodesData()
-        if pywr_nodes.does_type_exist(self.type):
+        if pywr_nodes.exists(self.type):
             return pywr_nodes.name(self.type)
         else:
             return self.custom_node_group_name

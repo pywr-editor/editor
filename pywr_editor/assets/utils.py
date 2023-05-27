@@ -102,8 +102,8 @@ def get_parameters() -> str:
     with open(file, "w") as f:
         json.dump(
             {
-                "parameters_key_lookup": parameters_key_lookup,
-                "parameters_data": parameters_data,
+                "key_lookup": parameters_key_lookup,
+                "data": parameters_data,
             },
             f,
         )
@@ -141,14 +141,17 @@ def get_nodes() -> str:
         "interp1d",
     ]
     nodes_data = {}
+    nodes_key_lookup = {}
     for name, obj in inspect.getmembers(pywr.nodes) + inspect.getmembers(
         pywr.domains.groundwater
     ):
         if inspect.isclass(obj):
             if name in to_exclude or "Parameter" in name:
                 continue
-
-            nodes_data[name.lower()] = {
+            key = name.lower()
+            # nodes can only be referenced by the full class name
+            nodes_key_lookup[key] = key
+            nodes_data[key] = {
                 "class": name,
                 "sub_classes": get_node_subclasses(obj),
                 "name": humanise(name),
@@ -156,7 +159,13 @@ def get_nodes() -> str:
 
     file = Path(__file__).parent / "pywr_data" / "node_data.json"
     with open(file, "w") as f:
-        json.dump(nodes_data, f)
+        json.dump(
+            {
+                "key_lookup": nodes_key_lookup,
+                "data": nodes_data,
+            },
+            f,
+        )
 
     return str(file)
 
@@ -226,8 +235,8 @@ def get_recorders() -> str:
     with open(file, "w") as f:
         json.dump(
             {
-                "recorders_key_lookup": recorders_key_lookup,
-                "recorders_data": recorders_data,
+                "key_lookup": recorders_key_lookup,
+                "data": recorders_data,
             },
             f,
         )
