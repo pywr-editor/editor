@@ -78,16 +78,11 @@ class TestRunWidget:
         assert window.schematic.canvas.opacity != 1
         # items are locked and not selectable
         assert (
-            bool(
-                node_item.flags()
-                & QGraphicsItem.GraphicsItemFlag.ItemIsSelectable
-            )
+            bool(node_item.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsSelectable)
             is False
         )
         assert (
-            bool(
-                node_item.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsMovable
-            )
+            bool(node_item.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsMovable)
             is False
         )
 
@@ -107,9 +102,7 @@ class TestRunWidget:
             "find-orphaned-parameters",
         ]
         for action_name in disabled_actions:
-            assert (
-                window.app_actions.get(action_name).isEnabled() is False
-            ), action_name
+            assert window.app_actions.get(action_name).isEnabled() is False, action_name
 
         # node library is disabled
         node_library: SchematicItemsLibrary = window.toolbar.findChild(
@@ -123,13 +116,8 @@ class TestRunWidget:
             "end_date",
             "run_to_date",
         ]:
-            assert (
-                window.toolbar.findChild(DateEdit, widget_name).isEnabled()
-                is False
-            )
-        assert (
-            window.toolbar.findChild(SpinBox, "time_step").isEnabled() is False
-        )
+            assert window.toolbar.findChild(DateEdit, widget_name).isEnabled() is False
+        assert window.toolbar.findChild(SpinBox, "time_step").isEnabled() is False
 
         # 2. Stop the model
         qtbot.mouseClick(run_widget.stop_button, Qt.MouseButton.LeftButton)
@@ -155,16 +143,11 @@ class TestRunWidget:
         # schematic status and tooltip are restored
         assert window.schematic.canvas.opacity() == 1
         assert (
-            bool(
-                node_item.flags()
-                & QGraphicsItem.GraphicsItemFlag.ItemIsSelectable
-            )
+            bool(node_item.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsSelectable)
             is True
         )
         assert (
-            bool(
-                node_item.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsMovable
-            )
+            bool(node_item.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsMovable)
             is True
         )
         # tooltip contains the model results
@@ -213,9 +196,7 @@ class TestRunWidget:
 
             # check progress
             # noinspection PyUnresolvedReferences
-            t = (
-                run_widget.worker.pywr_model.timestepper.current.period.to_timestamp()
-            )
+            t = run_widget.worker.pywr_model.timestepper.current.period.to_timestamp()
             assert t == pd.Timestamp(2015, 1, d + 1)
             assert run_widget.progress_status.text() == pd.Timestamp(
                 2015, 1, d + 1
@@ -235,9 +216,7 @@ class TestRunWidget:
                 assert run_widget.run_button.isEnabled() is True
 
             # timestepper fields are disabled
-            assert all(
-                [not w.isEnabled() for w in window.findChildren(DateEdit)]
-            )
+            assert all([not w.isEnabled() for w in window.findChildren(DateEdit)])
 
         assert run_widget.worker is not None
         assert run_widget.worker.is_paused is True
@@ -323,9 +302,9 @@ class TestRunWidget:
         assert worker.mode is None
 
         # 2. Check current date
-        assert run_widget.progress_status.text() == datetime(
-            *run_to_date
-        ).strftime("%d/%m/%Y")
+        assert run_widget.progress_status.text() == datetime(*run_to_date).strftime(
+            "%d/%m/%Y"
+        )
 
         # noinspection PyUnresolvedReferences
         c = run_widget.worker.pywr_model.timestepper.current

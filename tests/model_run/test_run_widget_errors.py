@@ -34,10 +34,7 @@ class TestRunWidgetErrors:
         # message for run to date not triggered
         run_to_date_widget.setDate(QDate(2014, 12, 31))
         window.model_config.end_date = "2014-12-31"
-        assert (
-            start_date_widget.date().toPython()
-            > end_date_widget.date().toPython()
-        )
+        assert start_date_widget.date().toPython() > end_date_widget.date().toPython()
 
         # try running the model
         QTimer.singleShot(
@@ -66,8 +63,7 @@ class TestRunWidgetErrors:
         # 1. Test the start date
         run_to_date_widget.setDate(QDate(2014, 12, 31))
         assert (
-            start_date_widget.date().toPython()
-            > run_to_date_widget.date().toPython()
+            start_date_widget.date().toPython() > run_to_date_widget.date().toPython()
         )
 
         # try running the model
@@ -81,10 +77,7 @@ class TestRunWidgetErrors:
 
         # 2. Test the end date
         run_to_date_widget.setDate(QDate(2020, 12, 31))
-        assert (
-            run_to_date_widget.date().toPython()
-            > end_date_widget.date().toPython()
-        )
+        assert run_to_date_widget.date().toPython() > end_date_widget.date().toPython()
 
         # try running the model
         QTimer.singleShot(
@@ -150,9 +143,7 @@ class TestRunWidgetErrors:
         window.model_config.end_date = "2015-01-05"
 
         with CaptureSolverOutput() as out:
-            qtbot.mouseClick(
-                getattr(run_widget, button), Qt.MouseButton.LeftButton
-            )
+            qtbot.mouseClick(getattr(run_widget, button), Qt.MouseButton.LeftButton)
             QTimer.singleShot(
                 300,
                 partial(check_msg, "The model has been modified"),
