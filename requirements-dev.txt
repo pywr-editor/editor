@@ -1,9 +1,10 @@
 bumpver
-pre-commit==3.2.1
+pre-commit==3.3.2
 pytest
 pytest-qt
-pytest-cov
-pyinstaller
+pytest-cov==4.1.0
+pyinstaller==5.11.0
+requests==2.31.0
 typer
 flake8
 isort

@@ -1,14 +1,11 @@
 pywr==1.20.1
 pywin32==306
-PySide6==6.5.0
-setuptools==67.6.1
-pandas==2.0.0
-requests
+PySide6==6.5.1
+setuptools==67.8.0
+pandas==2.0.1
 pyqtgraph
 numpy
 matplotlib==3.7.1
-pytest
-pyinstaller==5.9.0
 typer
 tables==3.8.0
 QtAwesome
