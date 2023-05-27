@@ -66,14 +66,14 @@ class JsonUtils:
         dict_path = []
         if isinstance(d, dict):
             for k, v in d.items():
-                (sub_counter, sub_dict_path,) = self._find_str_in_dict_match_key(
+                (sub_counter, sub_dict_path) = self._find_str_in_dict_match_key(
                     v, match_key, string, f"{parent_key}/{k}"
                 )
                 counter += sub_counter
                 dict_path = dict_path + sub_dict_path
         elif isinstance(d, list):
             for ii, item in enumerate(d):
-                (sub_counter, sub_dict_path,) = self._find_str_in_dict_match_key(
+                (sub_counter, sub_dict_path) = self._find_str_in_dict_match_key(
                     item, match_key, string, f"{parent_key}/Item #{ii}"
                 )
                 counter += sub_counter
