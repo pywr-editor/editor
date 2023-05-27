@@ -3,7 +3,7 @@ from .json_utils import *
 from .components_dict import ComponentsDict
 from .component_config import ComponentConfig
 
-from .pywr_data import *
+from .pywr_resources import *
 from .pywr_nodes_data import PywrNodesData
 from .pywr_parameters_data import PywrParametersData
 from .pywr_recorders_data import PywrRecordersData
