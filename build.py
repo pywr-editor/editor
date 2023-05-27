@@ -57,7 +57,7 @@ def pywr_assets():
     get_recorders()
 
     qrc_file = Path(__file__).parent / "pywr_editor" / "assets" / "pywr_resources.qrc"
-    py_file = Path(__file__).parent / "pywr_editor" / "model" / "pywr_data.py"
+    py_file = Path(__file__).parent / "pywr_editor" / "model" / "pywr_resources.py"
     os.system(f'pyside6-rcc.exe "{qrc_file}" -o "{py_file}"')
 
     typer.secho(f">> Generated {py_file}", fg=typer.colors.GREEN, bold=True)

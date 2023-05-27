@@ -53,13 +53,13 @@ class NodeDialogForm(Form):
         # the node type cannot be changed for built-in nodes or custom nodes that
         # have been imported
         self.can_type_be_changed = (
-            not model_config.pywr_node_data.does_type_exist(self.node_type)
+            not model_config.pywr_node_data.exists(self.node_type)
             and self.node_type not in model_config.includes.get_custom_nodes().keys()
         )
         self.logger.debug(f"Loading with {self.node_dict}")
 
         # main fields
-        if model_config.pywr_node_data.does_type_exist(self.node_type):
+        if model_config.pywr_node_data.exists(self.node_type):
             node_type_field = self.node_obj.humanised_type
         else:
             node_type_field = self.node_type

@@ -75,12 +75,10 @@ class ModelComponentTypeSelectorWidget(FormWidget):
         self.init = True
 
         icon_class = None
-        pywr_data_attr = None
         config_class = None
         if self.is_parameter_type:
             self.pywr_comp_data = self.form.model_config.pywr_parameter_data
             self.default_comp_type = "constant"
-            pywr_data_attr = "parameters"
             self.import_method = "get_custom_parameters"
             icon_class = "ParameterIcon"
             config_class = "ParameterConfig"
@@ -88,7 +86,6 @@ class ModelComponentTypeSelectorWidget(FormWidget):
         elif self.is_recorder_type:
             self.pywr_comp_data = self.form.model_config.pywr_recorder_data
             self.default_comp_type = "node"
-            pywr_data_attr = "recorders"
             self.import_method = "get_custom_recorders"
             icon_class = "RecorderIcon"
             config_class = "RecorderConfig"
@@ -99,7 +96,7 @@ class ModelComponentTypeSelectorWidget(FormWidget):
 
         # Collect all pywr and custom component types
         self.all_components = {
-            **getattr(self.pywr_comp_data, pywr_data_attr),
+            **getattr(self.pywr_comp_data, "data"),
             **getattr(self.custom_imports, self.import_method)(),
         }
 

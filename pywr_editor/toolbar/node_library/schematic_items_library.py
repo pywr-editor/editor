@@ -150,7 +150,7 @@ class LibraryPanel(QGraphicsView):
         # built-in nodes
         self.built_in_node_dict = {
             item["class"]: item["name"]
-            for node_type, item in self.window.model_config.pywr_node_data.nodes_data.items()  # noqa: E501
+            for node_type, item in self.window.model_config.pywr_node_data.data.items()  # noqa: E501
         }
         # store available nodes for the first time
         self.update_available_nodes()
