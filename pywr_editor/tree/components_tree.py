@@ -529,7 +529,7 @@ class ComponentsTree(QTreeWidget):
         :return: None
         """
         dialog = ParametersDialog(
-            model_config=self.model_config,
+            model=self.model_config,
             selected_parameter_name=parameter_name,
             parent=self.parent,
         )

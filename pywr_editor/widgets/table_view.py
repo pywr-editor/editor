@@ -52,6 +52,7 @@ class TableView(QTableView):
         self.horizontalHeader().setDefaultAlignment(Qt.AlignmentFlag.AlignLeft)
         self.horizontalHeader().setHighlightSections(False)
 
+        self.verticalHeader().setDefaultSectionSize(26)
         self.verticalHeader().hide()
         self.setAlternatingRowColors(False)
         self.setStyleSheet(self.stylesheet())

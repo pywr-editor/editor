@@ -1,4 +1,4 @@
-from PySide6.QtGui import QFont, QFontDatabase
+from PySide6.QtGui import QFontDatabase
 from PySide6.QtWidgets import QApplication
 
 # noinspection PyUnresolvedReferences
@@ -47,9 +47,11 @@ class AppStylesheet:
         """
         Sets the font.
         """
-        db = QFontDatabase.font("Segoe UI", "", 12)
-        if db.exactMatch():
-            font = QFont("Segoe UI", 10)
+        font_win11 = QFontDatabase.font("Segoe UI Variable", "", 10)
+        font = QFontDatabase.font("Segoe UI", "", 10)
+        if font_win11.exactMatch():
+            QApplication.setFont(font_win11)
+        elif font.exactMatch():
             QApplication.setFont(font)
 
     def get(self) -> str:
@@ -73,9 +75,7 @@ class AppStylesheet:
         :return: The stylesheet dictionary.
         """
         return {
-            "QMainWindow": {
-                "background": Color("gray", 100).hex,
-            },
+            "QMainWindow": {"background": Color("gray", 80).hex},
             "QStatusBar": {
                 "background": Color("gray", 200).hex,
                 "color": Color("gray", 600).hex,
@@ -87,8 +87,8 @@ class AppStylesheet:
                 "color": Color("gray", 600).hex,
             },
             "QMenu": {
-                "background": Color("gray", 200).hex,
-                "border": f'1px solid {Color("gray", 300).hex}',
+                "background": Color("gray", 100).hex,
+                "border": f'1px solid {Color("gray", 200).hex}',
                 "border-radius": "6px",
                 "color": Color("gray", 600).hex,
                 "padding": "5px",
@@ -100,7 +100,7 @@ class AppStylesheet:
                 },
                 "::item": {
                     "background-color": "transparent",
-                    "border": f'1px solid {Color("gray", 200).hex}',
+                    "border": f'1px solid {Color("gray", 100).hex}',
                     "padding": "4px 15px",
                     "padding-left": "5px",
                     "::selected, ::pressed": {
@@ -109,9 +109,7 @@ class AppStylesheet:
                         "border-radius": "6px",
                         "color": Color("gray", 700).hex,
                     },
-                    "::disabled": {
-                        "color": Color("gray", 400).hex,
-                    },
+                    "::disabled": {"color": Color("gray", 400).hex},
                     # title
                     "QLabel": {
                         "color": Color("gray", 600).hex,
@@ -133,18 +131,12 @@ class AppStylesheet:
             "padding-right": "15px",
             "border-width": "3",
             "background": "#FFF",
-            "border": f"1px solid {Color('gray', 400).hex}",
+            "border": f"1px solid {Color('gray', 300).hex}",
             "border-radius": "4px",
             "padding": "4px 6px",
-            ":hover": {
-                "background": Color("gray", 100).hex,
-            },
-            ":focus": {
-                "border": f"1px solid {Color('blue', 500).hex}",
-            },
-            ":focus:hover": {
-                "background": "#FFF",
-            },
+            ":hover": {"background": Color("gray", 100).hex},
+            ":focus": {"border": f"1px solid {Color('blue', 500).hex}"},
+            ":focus:hover": {"background": "#FFF"},
             "::up-button": {
                 "subcontrol-origin": "border",
                 "subcontrol-position": "top right",
@@ -187,7 +179,6 @@ class AppStylesheet:
             "QGroupBox": {
                 "border": 0,
                 "font-weight": "bold",
-                # "border-bottom": f"1px solid {Color('gray', 300).hex}",
                 "font-size": "15px",
                 "margin-top": "15px",
                 "padding": "7px 0px",
@@ -201,24 +192,20 @@ class AppStylesheet:
             },
             "QPlainTextEdit": {
                 "background": "#FFF",
-                "border": f"1px solid {Color('gray', 400).hex}",
+                "border": f"1px solid {Color('gray', 300).hex}",
                 "border-radius": "4px",
             },
             "QLineEdit, QTextEdit": {
                 "background": "#FFF",
-                "border": f"1px solid {Color('gray', 400).hex}",
+                "border": f"1px solid {Color('gray', 300).hex}",
                 "border-radius": "4px",
                 "padding": "4px 6px",
             },
-            "QLineEdit:hover, QTextEdit:hover": {
-                "background": Color("gray", 50).hex,
-            },
+            "QLineEdit:hover, QTextEdit:hover": {"background": Color("gray", 50).hex},
             "QLineEdit:focus, QTextEdit:focus": {
                 "border": f"1px solid {Color('blue', 500).hex}",
             },
-            "QLineEdit:focus:hover, QTextEdit:focus:hover": {
-                "background": "#FFF",
-            },
+            "QLineEdit:focus:hover, QTextEdit:focus:hover": {"background": "#FFF"},
             "QDateEdit": {
                 "background": "#FFF",
                 "border": f"1px solid {Color('gray', 300).hex}",
@@ -233,15 +220,10 @@ class AppStylesheet:
             },
             "QDialog": {
                 "background": "#FFF",
-                # "background": Color("gray", 100).hex,
-                # "background": Color("gray", 100).hex,
                 "border": f"1px solid {Color('gray', 400).hex}",
-                # "background": Color("gray", 50).hex,
                 "color": Color("gray", 600).hex,
             },
-            "QGroupBox, QLabel": {
-                "color": Color("gray", 700).hex,
-            },
+            "QGroupBox, QLabel": {"color": Color("gray", 700).hex},
             "SpinBox": self.spin_box(),
             "DoubleSpinBox": self.spin_box(),
         }
@@ -254,18 +236,16 @@ class AppStylesheet:
         """
         return {
             "QPushButton": {
-                "background": "white",
+                "background": Color("gray", 200).hex,
                 "font-weight": 600,
                 "padding": "2px 6px",
-                # "background": Color("gray", 200).hex,
-                "border": f"1px solid {Color('gray', 400).hex}",
+                "border": f"1px solid {Color('gray', 300).hex}",
                 "border-radius": "4px",
-                # "padding": "6px 10px",
             },
             "QPushButton:pressed": {"color": "rgba(0, 0, 0, 150)"},
             "QPushButton:hover": {
                 "background": Color("gray", 300).hex,
-                "border": f"1px solid {Color('gray', 300).hex}",
+                "border": f"1px solid {Color('gray', 400).hex}",
             },
             "QPushButton:disabled": {
                 "background": Color("gray", 100).hex,
@@ -273,9 +253,7 @@ class AppStylesheet:
                 "color": Color("gray", 400).hex,
             },
             # PushIconButton
-            "QPushButton QLabel:disabled": {
-                "color": Color("gray", 200).hex,
-            },
+            "QPushButton QLabel:disabled": {"color": Color("gray", 200).hex},
             "QPushButton:focus": {
                 "background-color": Color("blue", 100).hex,
                 "border": f"1px solid {Color('blue', 300).hex}",

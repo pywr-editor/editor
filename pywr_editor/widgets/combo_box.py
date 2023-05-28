@@ -70,7 +70,7 @@ class ComboBox(QComboBox):
             {
                 "QComboBox": {
                     "background": "#FFF",
-                    "border": f"1px solid {Color('gray', 400).hex}",
+                    "border": f"1px solid {Color('gray', 300).hex}",
                     "border-radius": "4px",
                     "padding": "4px 6px",
                     ":focus": {

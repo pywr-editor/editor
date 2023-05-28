@@ -1,7 +1,6 @@
 from collections import Counter
 from typing import Any
 
-import qtawesome as qta
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QSizePolicy, QSpacerItem, QVBoxLayout
 
@@ -25,10 +24,8 @@ class MetadataFieldsWidget(FormWidget):
         self.logger.debug(f"Loading widget with {value}")
 
         # Initialise the table view
-        add_button = PushIconButton(icon=qta.icon("msc.add"), label="Add", small=True)
-        delete_button = PushIconButton(
-            icon=qta.icon("msc.remove"), label="Delete", small=True
-        )
+        add_button = PushIconButton(icon="msc.add", label="Add", small=True)
+        delete_button = PushIconButton(icon="msc.remove", label="Delete", small=True)
         self.model = MetadataCustomFieldsModel(fields=value)
         # noinspection PyUnresolvedReferences
         self.model.dataChanged.connect(self.on_value_change)

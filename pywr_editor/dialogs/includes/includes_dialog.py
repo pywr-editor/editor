@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import PySide6
-import qtawesome as qta
 from PySide6.QtCore import Slot
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import (
@@ -52,15 +51,13 @@ class IncludesDialog(QDialog):
         description.setWordWrap(True)
 
         # Table buttons
-        self.add_button = PushIconButton(
-            icon=qta.icon("msc.add"), label="Add file", small=True
-        )
+        self.add_button = PushIconButton(icon="msc.add", label="Add file", small=True)
         self.add_button.setToolTip("Add a new file to import in the model")
         # noinspection PyUnresolvedReferences
         self.add_button.clicked.connect(self.on_add_new_file)
 
         self.delete_button = PushIconButton(
-            icon=qta.icon("msc.remove"), label="Delete file(s)", small=True
+            icon="msc.remove", label="Delete file(s)", small=True
         )
         self.delete_button.setToolTip("Delete the selected import")
         self.delete_button.setDisabled(True)
@@ -91,11 +88,11 @@ class IncludesDialog(QDialog):
 
         # dialog buttons
         button_box = QHBoxLayout()
-        close_button = PushIconButton(icon=qta.icon("msc.close"), label="Close")
+        close_button = PushIconButton(icon="msc.close", label="Close")
         # noinspection PyUnresolvedReferences
         close_button.clicked.connect(self.reject)
 
-        self.save_button = PushIconButton(icon=qta.icon("msc.save"), label="Save")
+        self.save_button = PushIconButton(icon="msc.save", label="Save", accent=True)
         self.save_button.setEnabled(False)
         # noinspection PyUnresolvedReferences
         self.save_button.clicked.connect(self.on_save)

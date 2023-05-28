@@ -1,8 +1,11 @@
 from typing import Literal
 
+import qtawesome as qta
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon, Qt
 from PySide6.QtWidgets import QPushButton, QSizePolicy
+
+from pywr_editor.style import Color, stylesheet_dict_to_str
 
 
 class PushIconButton(QPushButton):
@@ -12,6 +15,7 @@ class PushIconButton(QPushButton):
         icon_size=None,
         label: str = "",
         small: bool = False,
+        accent: bool = False,
         position: Literal["left", "right"] = "left",
         parent=None,
     ):
@@ -27,7 +31,19 @@ class PushIconButton(QPushButton):
         super().__init__(parent=parent)
 
         if isinstance(icon, str):
-            icon = QIcon(icon)
+            if "msc." in icon:
+                props = (
+                    dict(
+                        color="white",
+                        color_active="white",
+                        color_disabled=Color("gray", 300).hex,
+                    )
+                    if accent
+                    else {}
+                )
+                icon = qta.icon(icon, **props)
+            else:
+                icon = QIcon(icon)
 
         self.setText(label)
         self.setIcon(icon)
@@ -40,7 +56,18 @@ class PushIconButton(QPushButton):
         if position == "right":
             self.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
 
-        if small:
-            self.setStyleSheet("PushIconButton {padding: 3px 4px}")
-        else:
-            self.setStyleSheet("PushIconButton {padding: 4px 5px}")
+        stylesheet = {"padding": "3px 4px" if small else "5px 5px"}
+        if accent:
+            stylesheet["color"] = "white"
+            stylesheet["background"] = Color("blue", 500).hex
+            stylesheet["border-color"] = Color("blue", 600).hex
+            stylesheet[":hover"] = {
+                "background": Color("blue", 600).hex,
+                "border": f"1px solid {Color('blue', 600).hex}",
+            }
+            stylesheet[":disabled"] = {
+                "background": Color("gray", 100).hex,
+                "border": f"1px solid {Color('gray', 300).hex}",
+                "color": Color("gray", 300).hex,
+            }
+        self.setStyleSheet(stylesheet_dict_to_str({"PushIconButton": stylesheet}))

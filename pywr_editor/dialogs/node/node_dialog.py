@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING, Type, Union
 
-import qtawesome as qta
 from PySide6.QtCore import QSize, Qt
 from PySide6.QtGui import QWindow
 from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QVBoxLayout, QWidget
@@ -40,10 +39,10 @@ class NodeDialog(QDialog):
 
         # Buttons
         button_box = QHBoxLayout()
-        save_button = PushIconButton(icon=qta.icon("msc.save"), label="Save")
+        save_button = PushIconButton(icon="msc.save", label="Save", accent=True)
         save_button.setObjectName("save_button")
 
-        close_button = PushIconButton(icon=qta.icon("msc.close"), label="Close")
+        close_button = PushIconButton(icon="msc.close", label="Close")
         # noinspection PyUnresolvedReferences
         close_button.clicked.connect(self.reject)
 

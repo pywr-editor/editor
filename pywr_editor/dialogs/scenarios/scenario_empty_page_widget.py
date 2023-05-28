@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING, Union
 
-import qtawesome as qta
 from PySide6.QtSvgWidgets import QSvgWidget
 from PySide6.QtWidgets import (
     QHBoxLayout,
@@ -48,11 +47,11 @@ class ScenarioEmptyPageWidget(QWidget):
         icon_layout.addWidget(icon)
 
         # buttons
-        close_button = PushIconButton(icon=qta.icon("msc.close"), label="Close")
+        close_button = PushIconButton(icon="msc.close", label="Close")
         # noinspection PyUnresolvedReferences
         close_button.clicked.connect(parent.dialog.reject)
 
-        add_button = PushIconButton(icon=qta.icon("msc.add"), label="Add new")
+        add_button = PushIconButton(icon="msc.add", label="Add new")
         add_button.setObjectName("add_button")
         # noinspection PyUnresolvedReferences
         add_button.clicked.connect(parent.on_add_new_scenario)
