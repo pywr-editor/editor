@@ -1,12 +1,10 @@
 import pytest
 from PySide6.QtCore import QItemSelectionModel, Qt, QTimer
-from PySide6.QtWidgets import QApplication, QLabel, QPushButton
+from PySide6.QtWidgets import QApplication, QLabel, QPushButton, QWidget
 
 import pywr_editor
 from pywr_editor.dialogs import RecorderDialogForm, RecordersDialog
-from pywr_editor.dialogs.recorders.recorder_empty_page_widget import (
-    RecorderEmptyPageWidget,
-)
+from pywr_editor.dialogs.recorders.recorder_empty_page import RecorderEmptyPage
 from pywr_editor.form import FormField, RecorderTypeSelectorWidget
 from pywr_editor.model import ModelConfig, PywrRecordersData
 from tests.utils import close_message_box, resolve_model_path
@@ -43,32 +41,29 @@ class TestRecordersDialog:
         """
         Tests that a new recorder can be correctly added.
         """
-        recorder_list_widget = dialog.recorders_list_widget
-        pages_widget = dialog.pages_widget
-        add_button: QPushButton = pages_widget.empty_page.findChild(
-            QPushButton, "add_button"
-        )
+        pages = dialog.pages
+        empty_page = pages.findChild(QWidget, "empty_page")
+
+        add_button: QPushButton = empty_page.findChild(QPushButton, "add_button")
         qtbot.mouseClick(add_button, Qt.MouseButton.LeftButton)
         qtbot.wait(100)
 
         # new name is random
-        new_name = list(pages_widget.pages.keys())[-1]
+        new_name = dialog.list_model.recorder_names[-1]
         assert "Recorder " in new_name
 
         # Recorder model
         # the recorder is added to the model internal list
-        assert new_name in recorder_list_widget.model.recorder_names
+        assert new_name in dialog.list_model.recorder_names
         # the recorder appears in the recorder list on the left-hand side of the dialog
-        new_model_index = recorder_list_widget.model.index(
-            model_config.recorders.count - 1, 0
-        )
+        new_model_index = dialog.list_model.index(model_config.recorders.count - 1, 0)
         assert new_model_index.data() == new_name
 
         # the item is selected
-        assert recorder_list_widget.list.selectedIndexes()[0].data() == new_name
+        assert dialog.list.table.selectedIndexes()[0].data() == new_name
 
         # Page widget
-        selected_page = pages_widget.currentWidget()
+        selected_page = pages.currentWidget()
         selected_page.findChild(RecorderDialogForm).load_fields()
         assert new_name in selected_page.findChild(QLabel).text()
         # noinspection PyTypeChecker
@@ -77,9 +72,9 @@ class TestRecordersDialog:
         assert save_button.isEnabled() is False
 
         # the recorder is in the widgets list
-        assert new_name in pages_widget.pages.keys()
+        assert new_name in dialog.list_model.recorder_names
         # the form page is selected
-        assert selected_page == pages_widget.pages[new_name]
+        assert selected_page.objectName() == new_name
         name_field = selected_page.findChild(FormField, "name")
         type_field: FormField = selected_page.findChild(FormField, "type")
         # noinspection PyUnresolvedReferences
@@ -108,7 +103,7 @@ class TestRecordersDialog:
         assert node_widget.field.message.text() == ""
 
         # the page widget is renamed
-        assert renamed_recorder_name in pages_widget.pages.keys()
+        assert renamed_recorder_name in dialog.list_model.recorder_names
         assert renamed_recorder_name in selected_page.findChild(QLabel).text()
 
         # model configuration
@@ -123,12 +118,12 @@ class TestRecordersDialog:
         """
         Tests the clone recorder button.
         """
-        pages_widget = dialog.pages_widget
+        pages = dialog.pages
         current_recorder = "node_aggregated_rec"
 
         # Page widget
-        pages_widget.set_current_widget_by_name(current_recorder)
-        selected_page = pages_widget.currentWidget()
+        pages.set_page_by_name(current_recorder)
+        selected_page = pages.currentWidget()
         # noinspection PyUnresolvedReferences
         selected_page.findChild(RecorderDialogForm).load_fields()
 
@@ -140,13 +135,13 @@ class TestRecordersDialog:
         qtbot.mouseClick(clone_button, Qt.MouseButton.LeftButton)
 
         # new name is random
-        new_name = list(pages_widget.pages.keys())[-1]
+        new_name = dialog.list_model.recorder_names[-1]
         assert "Recorder " in new_name
         # the recorder is in the widgets list
-        assert new_name in pages_widget.pages.keys()
+        assert new_name in dialog.list_model.recorder_names
 
         # the form page is selected
-        assert pages_widget.currentWidget() == pages_widget.pages[new_name]
+        assert pages.currentWidget().objectName() == new_name
 
         # the model is updated
         assert model_config.has_changes is True
@@ -162,11 +157,11 @@ class TestRecordersDialog:
         """
         current_name = "node_link_rec"
         new_name = "Node link recorder"
-        pages_widget = dialog.pages_widget
+        pages = dialog.pages
 
         # select the recorder
-        pages_widget.set_current_widget_by_name(current_name)
-        selected_page = pages_widget.currentWidget()
+        pages.set_page_by_name(current_name)
+        selected_page = pages.currentWidget()
         # noinspection PyUnresolvedReferences
         form: RecorderDialogForm = selected_page.form
 
@@ -184,7 +179,7 @@ class TestRecordersDialog:
         assert name_field.message.text() == ""
 
         # the page widget is renamed
-        assert new_name in pages_widget.pages.keys()
+        assert new_name in dialog.list_model.recorder_names
         assert new_name in selected_page.findChild(QLabel).text()
 
         # model has changes
@@ -215,22 +210,22 @@ class TestRecordersDialog:
         Tests that a recorder is deleted correctly.
         """
         deleted_recorder = "node_storage_rec"
-        recorder_list_widget = dialog.recorders_list_widget
-        pages_widget = dialog.pages_widget
+        pages = dialog.pages
+        dialog.show()
 
         # select a recorder from the list
-        model_index = recorder_list_widget.model.index(1, 0)
+        model_index = dialog.list_model.index(1, 0)
         assert model_index.data() == deleted_recorder
-        recorder_list_widget.list.selectionModel().select(
+        dialog.list.table.selectionModel().select(
             model_index, QItemSelectionModel.Select
         )
 
         # delete button is enabled and the item is selected
-        delete_button: QPushButton = pages_widget.pages[deleted_recorder].findChild(
-            QPushButton, "delete_button"
-        )
+        delete_button: QPushButton = pages.findChild(
+            QWidget, deleted_recorder
+        ).findChild(QPushButton, "delete_button")
         assert delete_button.isEnabled() is True
-        assert recorder_list_widget.list.selectedIndexes()[0].data() == deleted_recorder
+        assert dialog.list.table.selectedIndexes()[0].data() == deleted_recorder
 
         # delete
         def confirm_deletion():
@@ -240,10 +235,9 @@ class TestRecordersDialog:
         QTimer.singleShot(100, confirm_deletion)
         qtbot.mouseClick(delete_button, Qt.MouseButton.LeftButton)
 
-        assert isinstance(pages_widget.currentWidget(), RecorderEmptyPageWidget)
-        assert deleted_recorder not in pages_widget.pages.keys()
+        assert isinstance(pages.currentWidget(), RecorderEmptyPage)
         assert model_config.recorders.exists(deleted_recorder) is False
-        assert deleted_recorder not in recorder_list_widget.model.recorder_names
+        assert deleted_recorder not in dialog.list_model.recorder_names
 
     def test_missing_sections(self, qtbot):
         """
@@ -268,7 +262,7 @@ class TestRecordersDialog:
         param_name = "node_storage_rec"
         dialog = RecordersDialog(model_config, param_name)
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         form = selected_page.form
 
         recorder_type_widget: RecorderTypeSelectorWidget = form.find_field(

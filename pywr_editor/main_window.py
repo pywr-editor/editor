@@ -867,7 +867,7 @@ class MainWindow(QMainWindow):
         Opens the dialog to edit the model parameters.
         :return: None
         """
-        dialog = ParametersDialog(model_config=self.model_config, parent=self)
+        dialog = ParametersDialog(model=self.model_config, parent=self)
         dialog.show()
 
     @Slot()

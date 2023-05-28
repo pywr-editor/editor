@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING, Union
 
-import qtawesome as qta
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QWindow
 from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QVBoxLayout
@@ -59,16 +58,14 @@ class InspectorDialog(QDialog):
         )
 
         # Buttons
-        expand_all = PushIconButton(icon=qta.icon("msc.expand-all"), label="Expand all")
+        expand_all = PushIconButton(icon="msc.expand-all", label="Expand all")
         # noinspection PyUnresolvedReferences
         expand_all.clicked.connect(tree.expandAll)
-        collapse_all = PushIconButton(
-            icon=qta.icon("msc.collapse-all"), label="Collapse all"
-        )
+        collapse_all = PushIconButton(icon="msc.collapse-all", label="Collapse all")
         # noinspection PyUnresolvedReferences
         collapse_all.clicked.connect(tree.collapseAll)
 
-        close_button = PushIconButton(icon=qta.icon("msc.close"), label="Close")
+        close_button = PushIconButton(icon="msc.close", label="Close")
         # noinspection PyUnresolvedReferences
         close_button.clicked.connect(self.close)
 

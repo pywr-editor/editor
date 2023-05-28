@@ -8,10 +8,8 @@ from .node.node_dialog_form import NodeDialogForm
 from .node.node_dialog import NodeDialog
 from .parameters.parameters_dialog import ParametersDialog
 from .parameters.parameter_dialog_form import ParameterDialogForm
-from .parameters.parameters_widget import ParametersWidget
 from .recorders.recorders_dialog import RecordersDialog
 from .recorders.recorder_dialog_form import RecorderDialogForm
-from .recorders.recorders_widget import RecordersWidget
 from .start_screen.start_screen import StartScreen
 from .scenarios.scenarios_dialog import ScenariosDialog
 from .about_dialog.about_button import AboutButton

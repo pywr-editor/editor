@@ -12,7 +12,7 @@ from pywr_editor.model import ModelConfig
 from pywr_editor.utils import Logging
 
 if TYPE_CHECKING:
-    from .parameter_page_widget import ParameterPageWidget
+    from .parameter_page import ParameterPage
 
 """
  This forms allow editing a parameter
@@ -27,10 +27,10 @@ class ParameterDialogForm(ParameterForm):
         model_config: ModelConfig,
         parameter_dict: dict,
         save_button: QPushButton,
-        parent: "ParameterPageWidget",
+        parent: "ParameterPage",
     ):
         """
-        Initialises the parameter form.
+        Initialise the parameter form.
         :param name: The parameter name.
         :param model_config: The ModelConfig instance.
         :param save_button: The button used to save the form.

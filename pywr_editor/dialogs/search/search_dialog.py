@@ -128,7 +128,7 @@ class SearchDialog(QDialog):
             )
         elif comp_type == ItemType.PARAMETER.value:
             dialog = ParametersDialog(
-                model_config=self.model_config,
+                model=self.model_config,
                 selected_parameter_name=comp_name,
                 parent=self.app,
             )

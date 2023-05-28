@@ -1,7 +1,7 @@
 import pytest
 from PySide6.QtCore import QItemSelectionModel, Qt, QTimer
 from PySide6.QtTest import QSignalSpy
-from PySide6.QtWidgets import QApplication, QLabel, QPushButton
+from PySide6.QtWidgets import QApplication, QLabel, QPushButton, QWidget
 
 import pywr_editor
 from pywr_editor.dialogs import (
@@ -10,9 +10,7 @@ from pywr_editor.dialogs import (
     ParameterDialogForm,
     ParametersDialog,
 )
-from pywr_editor.dialogs.parameters.parameter_empty_page_widget import (
-    ParameterEmptyPageWidget,
-)
+from pywr_editor.dialogs.parameters.parameter_empty_page import ParameterEmptyPage
 from pywr_editor.form import FormField, ParameterTypeSelectorWidget, TextWidget
 from pywr_editor.model import ModelConfig, PywrParametersData
 from tests.utils import close_message_box, resolve_model_path
@@ -49,33 +47,30 @@ class TestParametersDialog:
         """
         Tests that a new parameter can be correctly added.
         """
-        parameter_list_widget = dialog.parameters_list_widget
-        pages_widget = dialog.pages_widget
-        add_button: QPushButton = pages_widget.empty_page.findChild(
-            QPushButton, "add_button"
-        )
+        pages = dialog.pages
+        empty_page = pages.findChild(QWidget, "empty_page")
+
+        add_button: QPushButton = empty_page.findChild(QPushButton, "add_button")
         qtbot.mouseClick(add_button, Qt.MouseButton.LeftButton)
         qtbot.wait(100)
 
         # new name is random
-        new_name = list(pages_widget.pages.keys())[-1]
+        new_name = dialog.list_model.parameter_names[-1]
         assert "Parameter " in new_name
 
         # Parameter model
         # the parameter is added to the model internal list
-        assert new_name in parameter_list_widget.model.parameter_names
+        assert new_name in dialog.list_model.parameter_names
         # the parameter appears in the parameters list on the left-hand side of the
         # dialog
-        new_model_index = parameter_list_widget.model.index(
-            model_config.parameters.count - 1, 0
-        )
+        new_model_index = dialog.list_model.index(model_config.parameters.count - 1, 0)
         assert new_model_index.data() == new_name
 
         # the item is selected
-        assert parameter_list_widget.list.selectedIndexes()[0].data() == new_name
+        assert dialog.list.table.selectedIndexes()[0].data() == new_name
 
         # Page widget
-        selected_page = pages_widget.currentWidget()
+        selected_page = pages.currentWidget()
         selected_page.findChild(ParameterDialogForm).load_fields()
         assert new_name in selected_page.findChild(QLabel).text()
         save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
@@ -83,9 +78,9 @@ class TestParametersDialog:
         assert save_button.isEnabled() is False
 
         # the parameter is in the widgets list
-        assert new_name in pages_widget.pages.keys()
+        assert new_name in dialog.list_model.parameter_names
         # the form page is selected
-        assert selected_page == pages_widget.pages[new_name]
+        assert selected_page.objectName() == new_name
         # the form is filled with the name and type is constant
         name_field = selected_page.findChild(FormField, "name")
         type_field: FormField = selected_page.findChild(FormField, "type")
@@ -113,7 +108,7 @@ class TestParametersDialog:
         assert value_field.message.text() == ""
 
         # the page widget is renamed
-        assert renamed_parameter_name in pages_widget.pages.keys()
+        assert renamed_parameter_name in dialog.list_model.parameter_names
         assert renamed_parameter_name in selected_page.findChild(QLabel).text()
 
         # model configuration
@@ -128,12 +123,12 @@ class TestParametersDialog:
         """
         Tests the clone parameter button.
         """
-        pages_widget = dialog.pages_widget
+        pages = dialog.pages
         current_param = "dataframe_param"
 
         # Page widget
-        pages_widget.set_current_widget_by_name(current_param)
-        selected_page = pages_widget.currentWidget()
+        pages.set_page_by_name(current_param)
+        selected_page = pages.currentWidget()
         # noinspection PyUnresolvedReferences
         selected_page.findChild(ParameterDialogForm).load_fields()
 
@@ -145,13 +140,13 @@ class TestParametersDialog:
         qtbot.mouseClick(clone_button, Qt.MouseButton.LeftButton)
 
         # new name is random
-        new_name = list(pages_widget.pages.keys())[-1]
+        new_name = dialog.list_model.parameter_names[-1]
         assert "Parameter " in new_name
         # the parameter is in the widgets list
-        assert new_name in pages_widget.pages.keys()
+        assert new_name in dialog.list_model.parameter_names
 
         # the form page is selected
-        assert pages_widget.currentWidget() == pages_widget.pages[new_name]
+        assert pages.currentWidget().objectName() == new_name
 
         # the model is updated
         assert model_config.has_changes is True
@@ -168,11 +163,11 @@ class TestParametersDialog:
         """
         current_name = "param_with_valid_excel_table"
         new_name = "Param X"
-        pages_widget = dialog.pages_widget
+        pages = dialog.pages
 
         # select the parameter
-        pages_widget.set_current_widget_by_name(current_name)
-        selected_page = pages_widget.currentWidget()
+        pages.set_page_by_name(current_name)
+        selected_page = pages.currentWidget()
         selected_page.form.load_fields()
         save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         name_field = selected_page.findChild(FormField, "name")
@@ -187,7 +182,7 @@ class TestParametersDialog:
         assert selected_page.findChild(FormField, "index").message.text() == ""
 
         # the page widget is renamed
-        assert new_name in pages_widget.pages.keys()
+        assert new_name in dialog.list_model.parameter_names
         assert new_name in selected_page.findChild(QLabel).text()
 
         # model has changes
@@ -213,26 +208,23 @@ class TestParametersDialog:
         Tests that a parameter is deleted correctly.
         """
         deleted_parameter = "const_param_with_values"
-        parameter_list_widget = dialog.parameters_list_widget
-        pages_widget = dialog.pages_widget
+        pages = dialog.pages
         dialog.show()
 
         # select a parameter from the list
-        model_index = parameter_list_widget.model.index(1, 0)
+        model_index = dialog.list_model.index(1, 0)
         assert model_index.data() == deleted_parameter
-        parameter_list_widget.list.selectionModel().select(
+        dialog.list.table.selectionModel().select(
             model_index, QItemSelectionModel.Select
         )
 
-        delete_button: QPushButton = pages_widget.pages[deleted_parameter].findChild(
-            QPushButton, "delete_button"
-        )
+        delete_button: QPushButton = pages.findChild(
+            QWidget, deleted_parameter
+        ).findChild(QPushButton, "delete_button")
 
         # delete button is enabled and the item is selected
         assert delete_button.isEnabled() is True
-        assert (
-            parameter_list_widget.list.selectedIndexes()[0].data() == deleted_parameter
-        )
+        assert dialog.list.table.selectedIndexes()[0].data() == deleted_parameter
 
         # delete
         def confirm_deletion():
@@ -242,10 +234,9 @@ class TestParametersDialog:
         QTimer.singleShot(200, confirm_deletion)
         qtbot.mouseClick(delete_button, Qt.MouseButton.LeftButton)
 
-        assert isinstance(pages_widget.currentWidget(), ParameterEmptyPageWidget)
-        assert deleted_parameter not in pages_widget.pages.keys()
+        assert isinstance(pages.currentWidget(), ParameterEmptyPage)
         assert model_config.parameters.exists(deleted_parameter) is False
-        assert deleted_parameter not in parameter_list_widget.model.parameter_names
+        assert deleted_parameter not in dialog.list_model.parameter_names
 
     def test_change_param_type(self, qtbot, model_config):
         """
@@ -253,8 +244,9 @@ class TestParametersDialog:
         """
         param_name = "param_with_valid_excel_table"
         dialog = ParametersDialog(model_config, param_name)
+        dialog.show()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         name_field = selected_page.findChild(FormField, "name")
         assert name_field.value() == param_name
 
@@ -305,7 +297,8 @@ class TestParametersDialog:
         """
         param_name = "param_with_valid_excel_table"
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        dialog.show()
+        selected_page = dialog.pages.currentWidget()
         form = selected_page.form
 
         param_type_widget: ParameterTypeSelectorWidget = form.find_field("type").widget
@@ -318,14 +311,14 @@ class TestParametersDialog:
         Tests that a new custom parameter can be correctly added. This tests
         the validation and filter in the CustomParameterSection
         """
-        pages_widget = dialog.pages_widget
-        add_button: QPushButton = pages_widget.empty_page.findChild(
+        pages = dialog.pages
+        add_button: QPushButton = pages.findChild(QWidget, "empty_page").findChild(
             QPushButton, "add_button"
         )
         qtbot.mouseClick(add_button, Qt.MouseButton.LeftButton)
 
         # Page widget
-        selected_page = pages_widget.currentWidget()
+        selected_page = pages.currentWidget()
         # noinspection PyUnresolvedReferences
         selected_page.findChild(ParameterDialogForm).load_fields()
         # noinspection PyTypeChecker

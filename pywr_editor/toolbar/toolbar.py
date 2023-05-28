@@ -52,20 +52,18 @@ class ToolbarWidget(QToolBar):
             "QToolBar": {"padding": 0},
             "QTabWidget": {
                 ":pane": {
-                    "background-color": Color("gray", 200).hex,
-                    "border-top": f'1px solid {Color("gray", 400).hex}',
+                    "background": Color("gray", 80).hex,
                     "border-radius": 0,
                     "margin": 0,
                     "padding": 0,
-                    "top": "-1px",
                 },
                 "::tab-bar": {"left": "5px"},
             },
             "QTabBar": {
                 "::tab": {
-                    "border-top-left-radius": "5px",
-                    "border-top-right-radius": "5px",
+                    "border-bottom": "1px solid transparent",
                     "color": Color("gray", 600).hex,
+                    "font-size": "13px",
                     "margin-right": "5px",
                     "padding-bottom": "4px",
                     "padding-right": "12px",
@@ -74,15 +72,12 @@ class ToolbarWidget(QToolBar):
                 },
                 "::tab:hover": {
                     "background": Color("gray", 100).hex,
-                    "border": f'1px solid {Color("gray", 300).hex}',
-                    "border-bottom-color": Color("gray", 400).hex,
+                    "border-bottom": f"1px solid {Color('gray', 400).hex}",
                 },
                 "::tab:selected": {
-                    "background": Color("gray", 200).hex,
-                    "border": f'1px solid {Color("gray", 400).hex}',
-                    "border-bottom-color": Color("gray", 200).hex,
+                    "border-bottom": f"3px solid {Color('blue', 400).hex}",
                     "color": Color("gray", 700).hex,
-                    "margin-bottom": "-1px",
+                    "font-weight": "bold",
                 },
             },
         }
