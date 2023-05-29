@@ -3,10 +3,9 @@ from PySide6.QtCore import QItemSelectionModel, Qt, QTimer
 from PySide6.QtWidgets import QApplication, QLabel, QPushButton
 
 from pywr_editor.dialogs import ScenariosDialog
-from pywr_editor.dialogs.scenarios.scenario_empty_page_widget import (
-    ScenarioEmptyPageWidget,
-)
+from pywr_editor.dialogs.scenarios.scenario_empty_page import ScenarioEmptyPage
 from pywr_editor.dialogs.scenarios.scenario_form_widget import ScenarioFormWidget
+from pywr_editor.dialogs.scenarios.scenario_page import ScenarioPage
 from pywr_editor.form import FormField
 from pywr_editor.model import ModelConfig
 from tests.utils import close_message_box, resolve_model_path
@@ -43,30 +42,26 @@ class TestScenariosDialog:
         """
         Tests that a new scenario can be correctly added.
         """
-        scenario_list_widget = dialog.scenarios_list_widget
-        pages_widget = dialog.pages
-        add_button: QPushButton = pages_widget.empty_page.findChild(
+        add_button: QPushButton = dialog.pages.findChild(ScenarioEmptyPage).findChild(
             QPushButton, "add_button"
         )
 
         qtbot.mouseClick(add_button, Qt.MouseButton.LeftButton)
         qtbot.wait(100)
         # new name is random
-        new_name = list(pages_widget.pages.keys())[-1]
+        new_name = dialog.list_model.scenario_names[-1]
 
         # Scenario model
         # the scenario is added to the model internal list
-        assert new_name in scenario_list_widget.model.scenario_names
+        assert new_name in dialog.list_model.scenario_names
         # the scenario appears in the parameters list on the left-hand side of the
         # dialog
-        new_model_index = scenario_list_widget.model.index(
-            model_config.scenarios.count - 1, 0
-        )
+        new_model_index = dialog.list_model.index(model_config.scenarios.count - 1, 0)
         assert new_model_index.data() == new_name
         # the item is selected
-        assert scenario_list_widget.list.selectedIndexes()[0].data() == new_name
+        assert dialog.list.table.selectedIndexes()[0].data() == new_name
         # Page widget
-        selected_page = pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         selected_page.findChild(ScenarioFormWidget).load_fields()
         assert new_name in selected_page.findChild(QLabel).text()
         # noinspection PyTypeChecker
@@ -74,10 +69,8 @@ class TestScenariosDialog:
         # button is disabled
         assert save_button.isEnabled() is False
 
-        # the scenario is in the widgets list
-        assert new_name in pages_widget.pages.keys()
         # the form page is selected
-        assert selected_page == pages_widget.pages[new_name]
+        assert selected_page.objectName() == new_name
         # the form is filled with the name
         # noinspection PyTypeChecker
         name_field: FormField = selected_page.findChild(FormField, "name")
@@ -98,7 +91,7 @@ class TestScenariosDialog:
         assert name_field.message.text() == ""
 
         # the page widget is renamed
-        assert renamed_scenario_name in pages_widget.pages.keys()
+        assert dialog.pages.currentWidget().objectName() == renamed_scenario_name
         assert renamed_scenario_name in selected_page.findChild(QLabel).text()
 
         # model configuration
@@ -114,11 +107,10 @@ class TestScenariosDialog:
         """
         current_name = "scenario B"
         new_name = "scenario X"
-        pages_widget = dialog.pages
 
         # select the scenario
-        pages_widget.set_current_widget_by_name(current_name)
-        selected_page = pages_widget.currentWidget()
+        dialog.pages.set_page_by_name(current_name)
+        selected_page = dialog.pages.currentWidget()
         selected_page.form.load_fields()
         # noinspection PyTypeChecker
         save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
@@ -134,7 +126,7 @@ class TestScenariosDialog:
         assert selected_page.findChild(FormField, "name").message.text() == ""
 
         # the page widget is renamed
-        assert new_name in pages_widget.pages.keys()
+        assert selected_page.objectName() == new_name
         assert new_name in selected_page.findChild(QLabel).text()
 
         # model has changes
@@ -159,22 +151,20 @@ class TestScenariosDialog:
         Tests that a scenario is deleted correctly.
         """
         deleted_scenario = "scenario A"
-        scenario_list_widget = dialog.scenarios_list_widget
-        pages_widget = dialog.pages
 
         # select a parameter from the list
-        model_index = scenario_list_widget.model.index(0, 0)
+        model_index = dialog.list_model.index(0, 0)
         assert model_index.data() == deleted_scenario
-        scenario_list_widget.list.selectionModel().select(
+        dialog.list.table.selectionModel().select(
             model_index, QItemSelectionModel.Select
         )
 
         # delete button is enabled and the item is selected
-        delete_button: QPushButton = pages_widget.pages[deleted_scenario].findChild(
-            QPushButton, "delete_button"
-        )
+        delete_button: QPushButton = dialog.pages.findChild(
+            ScenarioPage, deleted_scenario
+        ).findChild(QPushButton, "delete_button")
         assert delete_button.isEnabled() is True
-        assert scenario_list_widget.list.selectedIndexes()[0].data() == deleted_scenario
+        assert dialog.list.table.selectedIndexes()[0].data() == deleted_scenario
 
         # delete
         def confirm_deletion():
@@ -184,7 +174,6 @@ class TestScenariosDialog:
         QTimer.singleShot(100, confirm_deletion)
         qtbot.mouseClick(delete_button, Qt.MouseButton.LeftButton)
 
-        assert isinstance(pages_widget.currentWidget(), ScenarioEmptyPageWidget)
-        assert deleted_scenario not in pages_widget.pages.keys()
+        assert isinstance(dialog.pages.currentWidget(), ScenarioEmptyPage)
         assert model_config.scenarios.exists(deleted_scenario) is False
-        assert deleted_scenario not in scenario_list_widget.model.scenario_names
+        assert deleted_scenario not in dialog.list_model.scenario_names

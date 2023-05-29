@@ -885,7 +885,7 @@ class MainWindow(QMainWindow):
         Opens the dialog to edit the model scenarios.
         :return: None
         """
-        dialog = ScenariosDialog(model_config=self.model_config, parent=self)
+        dialog = ScenariosDialog(model=self.model_config, parent=self)
         dialog.show()
 
     @Slot(str)
