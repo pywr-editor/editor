@@ -12,7 +12,7 @@ from pywr_editor.model import ModelConfig
 from pywr_editor.utils import Logging
 
 if TYPE_CHECKING:
-    from .recorder_page_widget import RecorderPageWidget
+    from .recorder_page import RecorderPage
 
 
 """
@@ -28,7 +28,7 @@ class RecorderDialogForm(RecorderForm):
         model_config: ModelConfig,
         recorder_dict: dict,
         save_button: QPushButton,
-        parent: "RecorderPageWidget",
+        parent: "RecorderPage",
     ):
         """
         Initialises the recorder form.

@@ -9,7 +9,8 @@ from PySide6.QtTest import QSignalSpy
 from PySide6.QtWidgets import QApplication, QGroupBox, QLabel, QPushButton
 
 from pywr_editor.dialogs import TablesDialog
-from pywr_editor.dialogs.tables.table_empty_page_widget import TableEmptyPageWidget
+from pywr_editor.dialogs.tables.table_empty_page import TableEmptyPage
+from pywr_editor.dialogs.tables.table_page import TablePage
 from pywr_editor.dialogs.tables.table_url_widget import TableUrlWidget
 from pywr_editor.form import FormField, IndexColWidget
 from pywr_editor.model import ModelConfig
@@ -54,37 +55,33 @@ class TestTablesDialog:
         dialog = TablesDialog(model_config)
         dialog.show()
 
-        table_list_widget = dialog.table_list_widget
-        pages_widget = dialog.pages_widget
-        add_button: QPushButton = pages_widget.empty_page.findChild(
+        add_button: QPushButton = dialog.pages.findChild(TableEmptyPage).findChild(
             QPushButton, "add_button"
         )
         qtbot.mouseClick(add_button, Qt.MouseButton.LeftButton)
         # new name is random
-        new_name = list(pages_widget.pages.keys())[-1]
+        new_name = dialog.list_model.table_names[-1]
 
         # Table model
         # the table is added to the model internal list
-        assert new_name in table_list_widget.model.table_names
+        assert new_name in dialog.list_model.table_names
         # the table appears in the tables list on the left-hand side of the dialog
-        new_model_index = table_list_widget.model.index(
-            model_config.tables.count - 1, 0
-        )
+        new_model_index = dialog.list_model.index(model_config.tables.count - 1, 0)
         assert new_model_index.data() == new_name
         # the item is selected
-        assert table_list_widget.list.selectedIndexes()[0].data() == new_name
+        assert dialog.list.table.selectedIndexes()[0].data() == new_name
 
         # Page widget
-        selected_page = pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         assert new_name in selected_page.findChild(QLabel).text()
         save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         # button is disabled
         assert save_button.isEnabled() is False
 
         # the table is in the widgets list
-        assert new_name in pages_widget.pages.keys()
+        assert new_name in dialog.list_model.table_names
         # the form page is selected
-        assert selected_page == pages_widget.pages[new_name]
+        assert selected_page.objectName() == new_name
         # the form is filled with the name but with empty URL
         name_field: FormField = selected_page.findChild(FormField, "name")
         url_field: FormField = selected_page.findChild(FormField, "url")
@@ -124,7 +121,7 @@ class TestTablesDialog:
         assert name_field.message.text() == ""
 
         # the page widget is renamed
-        assert renamed_table_name in pages_widget.pages.keys()
+        assert dialog.pages.currentWidget().objectName() == renamed_table_name
         assert renamed_table_name in selected_page.findChild(QLabel).text()
 
         # model configuration
@@ -143,7 +140,7 @@ class TestTablesDialog:
         dialog = TablesDialog(model_config, current_name)
         dialog.show()
 
-        pages_widget = dialog.pages_widget
+        pages_widget = dialog.pages
         selected_page = pages_widget.currentWidget()
 
         save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
@@ -158,7 +155,6 @@ class TestTablesDialog:
         assert url_field.message.text() == ""
 
         # the page widget is renamed
-        assert new_name in pages_widget.pages.keys()
         assert new_name in selected_page.findChild(QLabel).text()
 
         # model has changes
@@ -193,23 +189,20 @@ class TestTablesDialog:
         dialog = TablesDialog(model_config)
         dialog.show()
 
-        table_list_widget = dialog.table_list_widget
-        pages_widget = dialog.pages_widget
-
         # select a table from the list
         deleted_table = "Table 2"
-        model_index = table_list_widget.model.index(1, 0)
+        model_index = dialog.list_model.index(1, 0)
         assert model_index.data() == deleted_table
-        table_list_widget.list.selectionModel().select(
+        dialog.list.table.selectionModel().select(
             model_index, QItemSelectionModel.Select
         )
 
         # delete button is enabled and the item is selected
-        delete_button: QPushButton = pages_widget.pages[deleted_table].findChild(
-            QPushButton, "delete_button"
-        )
+        delete_button: QPushButton = dialog.pages.findChild(
+            TablePage, deleted_table
+        ).findChild(QPushButton, "delete_button")
         assert delete_button.isEnabled() is True
-        assert table_list_widget.list.selectedIndexes()[0].data() == deleted_table
+        assert dialog.list.table.selectedIndexes()[0].data() == deleted_table
 
         # delete
         def confirm_deletion():
@@ -219,10 +212,9 @@ class TestTablesDialog:
         QTimer.singleShot(100, confirm_deletion)
         qtbot.mouseClick(delete_button, Qt.MouseButton.LeftButton)
 
-        assert isinstance(pages_widget.currentWidget(), TableEmptyPageWidget)
-        assert deleted_table not in pages_widget.pages.keys()
+        assert isinstance(dialog.pages.currentWidget(), TableEmptyPage)
         assert model_config.tables.exists(deleted_table) is False
-        assert deleted_table not in table_list_widget.model.table_names
+        assert deleted_table not in dialog.list_model.table_names
 
     @pytest.mark.parametrize(
         "table_name, shown_fields, hidden_fields",
@@ -266,7 +258,7 @@ class TestTablesDialog:
         dialog = TablesDialog(model_config, table_name)
         dialog.show()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
 
         assert selected_page.findChild(FormField, "name").value() == table_name
 
@@ -312,7 +304,7 @@ class TestTablesDialog:
         # use table from TableSelectorWidget
         model_config = ModelConfig(self.model_file_table_selector)
         dialog = TablesDialog(model_config, table_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         url_field: FormField = selected_page.findChild(FormField, "url")
         # noinspection PyTypeChecker
         url_widget: TableUrlWidget = url_field.widget
@@ -389,7 +381,7 @@ class TestTablesDialog:
         dialog = TablesDialog(model_config, table_name)
         dialog.show()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyUnresolvedReferences
         url_widget: TableUrlWidget = selected_page.findChild(FormField, "url").widget
         index_col: FormField = selected_page.findChild(FormField, "index_col")

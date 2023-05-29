@@ -2,7 +2,6 @@ from .includes.includes_dialog import IncludesDialog
 from .json_viewer.json_code_viewer import JsonCodeViewer
 from .metadata.metadata_dialog import MetadataDialog
 from .tables.tables_dialog import TablesDialog
-from .tables.tables_widget import TablesWidget
 from .slots.edge_slots_dialog import EdgeSlotsDialog
 from .node.node_dialog_form import NodeDialogForm
 from .node.node_dialog import NodeDialog

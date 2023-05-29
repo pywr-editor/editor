@@ -18,7 +18,7 @@ from pywr_editor.model import ModelConfig
 from .table_url_widget import TableUrlWidget
 
 if TYPE_CHECKING:
-    from .table_page_widget import TablePageWidget
+    from .table_page import TablePage
 
 
 class TableFormWidget(Form):
@@ -28,7 +28,7 @@ class TableFormWidget(Form):
         model_config: ModelConfig,
         table_dict: dict,
         save_button: QPushButton,
-        parent: "TablePageWidget",
+        page: "TablePage",
     ):
         """
         Initialises the table form.
@@ -36,12 +36,12 @@ class TableFormWidget(Form):
         :param model_config: The ModelConfig instance.
         :param save_button: The button used to save the form.
         :param table_dict: The table configuration.
-        :param parent: The parent widget.
+        :param page: The parent widget.
         """
         self.name = name
         self.model_config = model_config
         self.table_dict = table_dict
-        self.page = parent
+        self.page = page
 
         available_fields = {
             "Basic information": [
@@ -152,7 +152,7 @@ class TableFormWidget(Form):
         super().__init__(
             fields=available_fields,
             save_button=save_button,
-            parent=parent,
+            parent=page,
             direction="vertical",
         )
 
