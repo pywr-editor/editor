@@ -51,6 +51,7 @@ class ComponentListView(TableView):
         stylesheet: dict = TableView.stylesheet(as_string=False)
         stylesheet["TableView"]["background"] = "transparent"
         stylesheet["TableView"]["border"] = "0px"
+        stylesheet["TableView"]["::item"]["border-radius"] = "5px"
         self.setStyleSheet(stylesheet_dict_to_str(stylesheet))
 
     def selectionChanged(
