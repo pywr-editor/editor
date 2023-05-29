@@ -28,20 +28,20 @@ if TYPE_CHECKING:
 class SearchDialog(QDialog):
     def __init__(
         self,
-        model_config: ModelConfig,
+        model: ModelConfig,
         parent: Union["MainWindow", None] = None,
     ):
         """
         Opens the search bar.
-        :param model_config: The ModelConfig instance.
+        :param model: The ModelConfig instance.
         :param parent: The parent widget.
         """
         super().__init__(parent)
-        self.model_config = model_config
+        self.model = model
         self.app = parent
 
         # Autocomplete widget
-        model = SearchModel(model_config)
+        model = SearchModel(model)
         completer = QCompleter()
         completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
         completer.setFilterMode(Qt.MatchFlag.MatchContains)
@@ -116,27 +116,19 @@ class SearchDialog(QDialog):
 
         if comp_type == ItemType.NODE.value:
             dialog = NodeDialog(
-                model_config=self.model_config,
-                node_name=comp_name,
-                parent=self.app,
+                model_config=self.model, node_name=comp_name, parent=self.app
             )
         elif comp_type == ItemType.RECORDER.value:
             dialog = RecordersDialog(
-                model_config=self.model_config,
-                selected_recorder_name=comp_name,
-                parent=self.app,
+                model=self.model, selected_name=comp_name, parent=self.app
             )
         elif comp_type == ItemType.PARAMETER.value:
             dialog = ParametersDialog(
-                model=self.model_config,
-                selected_parameter_name=comp_name,
-                parent=self.app,
+                model=self.model, selected_name=comp_name, parent=self.app
             )
         elif comp_type == ItemType.TABLE.value:
             dialog = TablesDialog(
-                model_config=self.model_config,
-                selected_table_name=comp_name,
-                parent=self.app,
+                model=self.model, selected_name=comp_name, parent=self.app
             )
 
         if dialog:

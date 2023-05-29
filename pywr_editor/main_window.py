@@ -812,7 +812,7 @@ class MainWindow(QMainWindow):
         Opens the search bar.
         :return: None
         """
-        viewer = SearchDialog(parent=self, model_config=self.model_config)
+        viewer = SearchDialog(parent=self, model=self.model_config)
         viewer.exec()
 
     @Slot()
@@ -849,7 +849,7 @@ class MainWindow(QMainWindow):
         Opens the dialog to edit the model tables.
         :return: None
         """
-        dialog = TablesDialog(model_config=self.model_config, parent=self)
+        dialog = TablesDialog(model=self.model_config, parent=self)
         dialog.show()
 
     @Slot()
@@ -876,7 +876,7 @@ class MainWindow(QMainWindow):
         Opens the dialog to edit the model recorders.
         :return: None
         """
-        dialog = RecordersDialog(model_config=self.model_config, parent=self)
+        dialog = RecordersDialog(model=self.model_config, parent=self)
         dialog.show()
 
     @Slot()

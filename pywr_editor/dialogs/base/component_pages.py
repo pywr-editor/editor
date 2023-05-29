@@ -3,6 +3,10 @@ from PySide6.QtWidgets import QDialog, QStackedWidget, QWidget
 
 class ComponentPages(QStackedWidget):
     def __init__(self, dialog: QDialog):
+        """
+        Initialise the stacked widget containing the pages.
+        :param dialog: The dialog containing this widget.
+        """
         super().__init__(dialog)
         self.dialog = dialog
 

@@ -1,6 +1,12 @@
 import PySide6
 from PySide6.QtCore import QAbstractTableModel, QSortFilterProxyModel, Qt
-from PySide6.QtWidgets import QAbstractItemView, QDialog, QHBoxLayout, QWidget
+from PySide6.QtWidgets import (
+    QAbstractItemView,
+    QDialog,
+    QHBoxLayout,
+    QSizePolicy,
+    QWidget,
+)
 
 from pywr_editor.dialogs.base.component_empty_page import ComponentEmptyPage
 from pywr_editor.dialogs.base.component_pages import ComponentPages
@@ -18,7 +24,7 @@ class ComponentListView(TableView):
         model: QAbstractTableModel,
         proxy_model: QSortFilterProxyModel,
         empty_page: ComponentEmptyPage,
-        wrapper: QWidget,
+        wrapper: "ComponentList",
     ):
         """
         Initialise the widget showing the list of the model components.
@@ -28,7 +34,8 @@ class ComponentListView(TableView):
         :param wrapper: The wrapper parent widget.
         """
         self.empty_page = empty_page
-        self.pages: ComponentPages = wrapper.parent().findChild(ComponentPages)
+        # noinspection PyTypeChecker
+        self.pages: ComponentPages = wrapper.dialog.findChild(ComponentPages)
 
         super().__init__(model=model, proxy_model=proxy_model, parent=wrapper)
 
@@ -42,8 +49,8 @@ class ComponentListView(TableView):
 
         # add style
         stylesheet: dict = TableView.stylesheet(as_string=False)
-        stylesheet["TableView"]["background"] = Color("gray", 100).hex
-        stylesheet["TableView"]["::item"]["border-radius"] = "5px"
+        stylesheet["TableView"]["background"] = "transparent"
+        stylesheet["TableView"]["border"] = "0px"
         self.setStyleSheet(stylesheet_dict_to_str(stylesheet))
 
     def selectionChanged(
@@ -78,8 +85,31 @@ class ComponentList(QWidget):
         empty_page: ComponentEmptyPage,
         dialog: QDialog,
     ):
-        super().__init__(dialog)
+        """
+        Initialise the widget containing the list of components.
+        :param model: The model with the component list.
+        :param proxy_model: The proxy model with the component list.
+        :param empty_page: The widget for the empty page when no component is selected.
+        :param dialog: The dialog containing this widget.
+        """
+        super().__init__()
+        self.dialog = dialog
+
         self.setAttribute(Qt.WA_StyledBackground, True)
+        self.setMinimumWidth(290)
+        self.setMaximumWidth(400)
+        self.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.setStyleSheet(
+            stylesheet_dict_to_str(
+                {
+                    "ComponentList": {
+                        "background": Color("gray", 100).hex,
+                        "border-right": f"1px solid {Color('gray', 400).hex}",
+                        "margin-top": "1px",
+                    }
+                }
+            )
+        )
 
         # Add the table
         self.table = ComponentListView(model, proxy_model, empty_page, self)

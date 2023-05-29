@@ -10,15 +10,12 @@ from .tables_widget import TablesWidget
 
 class TablesDialog(SettingsDialog):
     def __init__(
-        self,
-        model_config: ModelConfig,
-        selected_table_name: str = None,
-        parent: QMainWindow = None,
+        self, model: ModelConfig, selected_name: str = None, parent: QMainWindow = None
     ):
         """
         Initialises the modal dialog.
-        :param model_config: The ModelConfig instance.
-        :param selected_table_name: The name of the table to select. Default to None.
+        :param model: The ModelConfig instance.
+        :param selected_name: The name of the table to select. Default to None.
         :param parent: The parent widget. Default to None.
         """
         super().__init__(parent)
@@ -26,14 +23,14 @@ class TablesDialog(SettingsDialog):
 
         # pages - init before list
         self.pages_widget = TablePagesWidget(
-            model_config=model_config,
+            model_config=model,
             parent=self,
         )
 
         # table list
-        self.model_config = model_config
+        self.model_config = model
         self.table_list_widget = TablesWidget(
-            model_config=model_config,
+            model_config=model,
             parent=self,
         )
 
@@ -42,12 +39,12 @@ class TablesDialog(SettingsDialog):
         self.setMinimumSize(850, 700)
 
         # select a table
-        if selected_table_name is not None:
+        if selected_name is not None:
             # load the page and the form fields
-            self.pages_widget.set_current_widget_by_name(selected_table_name)
+            self.pages_widget.set_current_widget_by_name(selected_name)
             # noinspection PyTypeChecker
             page: TablePageWidget = self.pages_widget.currentWidget()
             page.form.load_fields()
 
             table_list = self.table_list_widget.list
-            table_list.select_row_by_name(selected_table_name)
+            table_list.select_row_by_name(selected_name)
