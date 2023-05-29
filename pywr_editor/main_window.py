@@ -123,8 +123,6 @@ class MainWindow(QMainWindow):
         self.register_nodes_actions()
         self.register_schematic_actions()
         self.register_model_run_actions()
-        self.warning_info_message.connect(self.on_alert_info_message)
-        self.error_message.connect(self.on_error_message)
         self.save.connect(self.on_save)
 
         # Toolbar
@@ -1012,8 +1010,8 @@ class MainWindow(QMainWindow):
         else:
             status = "warn"
             message = (
-                f"The model has {len(parameter_names)} orphaned "
-                + f"parameter(s): {', '.join(parameter_names)}"
+                f"The model has the following {len(parameter_names)} orphaned "
+                f"parameter(s): {', '.join(parameter_names)}"
             )
 
         # noinspection PyUnresolvedReferences
@@ -1035,13 +1033,13 @@ class MainWindow(QMainWindow):
             if len(orphaned_nodes) == 1:
                 message = (
                     f'The node "{orphaned_nodes[0]}" is not part of a valid route. '
-                    + "This has been highlighted on the schematic"
+                    "This has been highlighted on the schematic"
                 )
             else:
                 message = (
                     f"The following {len(orphaned_nodes)} nodes are not part "
-                    + f"of a valid route: {', '.join(orphaned_nodes)}. These "
-                    + "have been highlighted on the schematic"
+                    f"of a valid route: {', '.join(orphaned_nodes)}. These "
+                    "have been highlighted on the schematic"
                 )
 
         # noinspection PyUnresolvedReferences
