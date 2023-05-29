@@ -88,7 +88,7 @@ class AppStylesheet:
             },
             "QMenu": {
                 "background": Color("gray", 100).hex,
-                "border": f'1px solid {Color("gray", 200).hex}',
+                "border": f'1px solid {Color("gray", 300).hex}',
                 "border-radius": "6px",
                 "color": Color("gray", 600).hex,
                 "padding": "5px",
