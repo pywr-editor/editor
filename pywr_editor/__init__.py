@@ -1,4 +1,4 @@
-__version__ = "1.6.0"
-__build_date__ = "2023-4-2"
+__version__ = "2.0.0"
+__build_date__ = "2023-5-29"
 from .main_window import MainWindow
 from .app import app
