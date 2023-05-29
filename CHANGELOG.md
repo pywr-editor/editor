@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 All issue numbers are relative to https://github.com/pywr-editor/editor
 
 
+## v2.0.0 - 2023-05-29
+### Added
+- Pywr is now bundled with the editor, and you can run and debug your model using the new Toolbar `Run` tab. You can also change the start, end date, timestep as well as run and pause the model to a specific date ([#122](https://github.com/pywr-editor/editor/issues/122))
+
+### Changed
+- The code of some classes have been improved ([PR #176](https://github.com/pywr-editor/editor/pull/176), [PR #177](https://github.com/pywr-editor/editor/pull/177), [PR #181](https://github.com/pywr-editor/editor/pull/181)) 
+- Qt 6.5 is now required ([PR #175](https://github.com/pywr-editor/editor/pull/175))
+
+### Fixed
+- When values in `ControlCurvePiecewiseInterpolatedParameter` were provided as nested lists, the values were not transposed and were assigned to the wrong control curve. The parameter form now also shows a new column in the control curve and value fields to easily map and assign the values to each area defined by the control curves ([#173](https://github.com/pywr-editor/editor/issues/173)).
+- If one or more nodes did not have the `position` attribute, the editor showed a warning message every time the schematic was reloaded. The message is now shown only when the schematic is first initialised. ([#178](https://github.com/pywr-editor/editor/issues/178)).
+
+
 ## v1.6.0 - 2023-04-02
 ### Added
 - Added support to multi-line comments ([#146](https://github.com/pywr-editor/editor/issues/146)).
