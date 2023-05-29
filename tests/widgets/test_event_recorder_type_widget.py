@@ -1,7 +1,7 @@
 import pytest
 
 from pywr_editor.dialogs import RecordersDialog
-from pywr_editor.dialogs.recorders.recorder_page_widget import RecorderPageWidget
+from pywr_editor.dialogs.recorders.recorder_page import RecorderPage
 from pywr_editor.model import ModelConfig, ParameterConfig, RecorderConfig
 from tests.utils import resolve_model_path
 
@@ -62,7 +62,7 @@ class TestEventRecorderTypeWidget:
         dialog.show()
 
         # noinspection PyTypeChecker
-        selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
+        selected_page: RecorderPage = dialog.pages.currentWidget()
         form = selected_page.form
         comp_type_field = form.find_field("threshold_type")
         parameter_field = form.find_field("threshold_parameter")
@@ -132,7 +132,7 @@ class TestEventRecorderTypeWidget:
         dialog.show()
 
         # noinspection PyTypeChecker
-        selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
+        selected_page: RecorderPage = dialog.pages.currentWidget()
         form = selected_page.form
         event_agg_func_field = form.find_field("event_agg_func")
 

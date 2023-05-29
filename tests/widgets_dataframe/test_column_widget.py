@@ -109,7 +109,7 @@ class TestDialogParameterColumnWidget:
 
         all_columns = {"Column 1", "Column 2", "Column 3", "Column 4"}
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.show()
 
         # noinspection PyUnresolvedReferences
@@ -226,7 +226,7 @@ class TestDialogParameterColumnWidget:
         model_config = ModelConfig(resolve_model_path(model_file))
 
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.show()
 
         # noinspection PyUnresolvedReferences
@@ -261,7 +261,7 @@ class TestDialogParameterColumnWidget:
         model_config = ModelConfig(resolve_model_path(model_file))
 
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.hide()
 
         # noinspection PyUnresolvedReferences
@@ -361,7 +361,7 @@ class TestDialogParameterColumnWidget:
 
         param_name = "param_empty_sheet"
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.hide()
 
         # noinspection PyUnresolvedReferences
@@ -409,7 +409,7 @@ class TestDialogParameterColumnWidget:
 
         param_name = "param_with_column_str"
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.hide()
 
         # noinspection PyUnresolvedReferences
@@ -468,7 +468,7 @@ class TestDialogParameterColumnWidget:
         model_config = ModelConfig(resolve_model_path(self.model_files["url"]))
 
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.hide()
 
         # noinspection PyUnresolvedReferences
@@ -504,7 +504,7 @@ class TestDialogParameterColumnWidget:
 
         param_name = "param_empty_sheet"
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.hide()
 
         # noinspection PyUnresolvedReferences
@@ -540,7 +540,7 @@ class TestDialogParameterColumnWidget:
         model_config = ModelConfig(resolve_model_path(model_file))
 
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.show()
 
         # noinspection PyUnresolvedReferences
@@ -602,7 +602,7 @@ class TestDialogParameterColumnWidget:
 
         param_name = "param_with_column_str"
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.hide()
 
         # noinspection PyUnresolvedReferences

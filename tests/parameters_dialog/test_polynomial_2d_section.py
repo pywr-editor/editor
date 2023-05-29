@@ -29,7 +29,7 @@ class TestDialogParameterPolynomial2DCoefficientsWidgetSection:
         dialog = ParametersDialog(model_config, param_name)
         dialog.show()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         form = selected_page.form
 
         # noinspection PyUnresolvedReferences
@@ -87,7 +87,7 @@ class TestDialogParameterPolynomial2DCoefficientsWidgetSection:
         dialog = ParametersDialog(model_config, param_name)
         dialog.show()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         form = selected_page.form
 
         # noinspection PyUnresolvedReferences

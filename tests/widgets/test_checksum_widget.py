@@ -5,7 +5,7 @@ from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import QApplication, QMessageBox, QPushButton, QWidget
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.dialogs.parameters.parameter_page_widget import ParameterPageWidget
+from pywr_editor.dialogs.parameters.parameter_page import ParameterPage
 from pywr_editor.form import CheckSumWidget, FormField, ParameterForm
 from pywr_editor.model import ModelConfig, ParameterConfig
 from pywr_editor.widgets import PushIconButton
@@ -196,7 +196,7 @@ class TestDialogParameterCheckSumWidget:
         dialog.show()
 
         # noinspection PyTypeChecker
-        selected_page: ParameterPageWidget = dialog.pages_widget.currentWidget()
+        selected_page: ParameterPage = dialog.pages.currentWidget()
 
         # noinspection PyUnresolvedReferences
         assert selected_page.findChild(FormField, "name").value() == param_name

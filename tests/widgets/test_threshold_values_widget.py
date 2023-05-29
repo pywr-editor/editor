@@ -31,7 +31,7 @@ class TestDialogThresholdValuesWidget:
         dialog = ParametersDialog(model_config, param_name)
         dialog.hide()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         assert selected_page.findChild(FormField, "name").value() == param_name
 
         values_field: FormField = selected_page.findChild(FormField, "values")
@@ -65,7 +65,7 @@ class TestDialogThresholdValuesWidget:
         dialog = ParametersDialog(model_config, param_name)
         dialog.show()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         assert selected_page.findChild(FormField, "name").value() == param_name
 
         values_field: FormField = selected_page.findChild(FormField, "values")

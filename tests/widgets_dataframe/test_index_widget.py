@@ -220,7 +220,7 @@ class TestDialogParameterIndexWidget:
         model_config = self.get_model_config(model_file)
 
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.show()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
@@ -360,7 +360,7 @@ class TestDialogParameterIndexWidget:
         model_config = self.get_model_config(model_file)
 
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.hide()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
@@ -414,7 +414,7 @@ class TestDialogParameterIndexWidget:
         expected_values = list(dict_values.values())
 
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.hide()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
@@ -547,7 +547,7 @@ class TestDialogParameterIndexWidget:
 
         param_name = "param_table_no_rows"
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.hide()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
@@ -593,7 +593,7 @@ class TestDialogParameterIndexWidget:
         model_config = self.get_model_config(self.model_files["url"])
 
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.hide()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
@@ -641,7 +641,7 @@ class TestDialogParameterIndexWidget:
         new_values = [2, 3]
 
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.hide()
 
         index_widget: IndexWidget = selected_page.findChild(FormField, "index").widget
@@ -671,7 +671,7 @@ class TestDialogParameterIndexWidget:
 
         param_name = "param_with_index_list_int"
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.hide()
 
         # noinspection PyUnresolvedReferences

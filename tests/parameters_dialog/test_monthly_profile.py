@@ -47,7 +47,7 @@ class TestDialogParameterMonthlyValuesWidget:
         dialog = ParametersDialog(model_config, param_name)
         dialog.hide()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyTypeChecker
         value_field: FormField = selected_page.findChild(FormField, "values")
         # noinspection PyTypeChecker
@@ -102,7 +102,7 @@ class TestDialogParameterMonthlyValuesWidget:
         dialog = ParametersDialog(model_config, param_name)
         dialog.hide()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         value_field: FormField = selected_page.findChild(FormField, "values")
 
         assert selected_page.findChild(FormField, "name").value() == param_name
@@ -118,7 +118,7 @@ class TestDialogParameterMonthlyValuesWidget:
         dialog = ParametersDialog(model_config, param_name)
         dialog.hide()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyTypeChecker
         value_field: FormField = selected_page.findChild(FormField, "values")
         # noinspection PyTypeChecker
@@ -172,7 +172,7 @@ class TestDialogParameterMonthlyValuesWidget:
         dialog = ParametersDialog(model_config, param_name)
         dialog.show()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         fields: dict[str, FormField] = {}
         widgets = {}
         for name in ["url", "index_col", "sheet_name", "index"]:
@@ -234,7 +234,7 @@ class TestDialogParameterMonthlyValuesWidget:
         dialog = ParametersDialog(model_config, param_name)
         dialog.show()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         fields: dict[str, FormField] = {}
         widgets = {}
         for name in ["url", "index_col", "key", "index"]:
@@ -298,7 +298,7 @@ class TestDialogParameterMonthlyValuesWidget:
         dialog = ParametersDialog(model_config, param_name)
         dialog.show()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         fields: dict[str, FormField] = {}
         widgets = {}
         for name in ["table", "index"]:

@@ -54,7 +54,7 @@ class TestDialogParameterH5KeyWidget:
         dialog = ParametersDialog(model_config, param_name)
         dialog.hide()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyTypeChecker
         key_field: FormField = selected_page.findChild(FormField, "key")
         # noinspection PyTypeChecker
@@ -114,7 +114,7 @@ class TestDialogParameterH5KeyWidget:
         dialog = ParametersDialog(model_config, param_name)
         dialog.hide()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyTypeChecker
         key_field: FormField = selected_page.findChild(FormField, "key")
         # noinspection PyTypeChecker
@@ -179,7 +179,7 @@ class TestDialogParameterH5KeyWidget:
         dialog = ParametersDialog(model_config, selected_parameter)
         dialog.hide()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyTypeChecker
         key_field: FormField = selected_page.findChild(FormField, "key")
         # noinspection PyTypeChecker
@@ -211,7 +211,7 @@ class TestDialogParameterH5KeyWidget:
         dialog = ParametersDialog(model_config, selected_parameter)
         dialog.hide()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyTypeChecker
         key_field: FormField = selected_page.findChild(FormField, "key")
         # noinspection PyTypeChecker

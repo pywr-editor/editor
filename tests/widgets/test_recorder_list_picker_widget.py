@@ -68,7 +68,7 @@ class TestDialogRecorderRecordersListPickerWidget:
         dialog = RecordersDialog(model_config, recorder_name)
         dialog.hide()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyUnresolvedReferences
         assert selected_page.findChild(FormField, "name").value() == recorder_name
 
@@ -170,7 +170,7 @@ class TestDialogRecorderRecordersListPickerWidget:
         dialog = RecordersDialog(model_config, recorder_name)
         dialog.hide()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyUnresolvedReferences
         assert selected_page.findChild(FormField, "name").value() == recorder_name
 
@@ -216,7 +216,7 @@ class TestDialogRecorderRecordersListPickerWidget:
         dialog = RecordersDialog(model_config, self.general_anonymous_recorder_name)
         dialog.show()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyUnresolvedReferences
         assert (
             selected_page.findChild(FormField, "name").value()
@@ -299,7 +299,7 @@ class TestDialogRecorderRecordersListPickerWidget:
         dialog = RecordersDialog(model_config, recorder_name)
         dialog.show()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyUnresolvedReferences
         assert selected_page.findChild(FormField, "name").value() == recorder_name
 

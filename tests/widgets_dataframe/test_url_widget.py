@@ -108,7 +108,7 @@ class TestDialogParameterUrlWidget:
         extensions are shown and the others hidden.
         """
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
 
@@ -152,7 +152,7 @@ class TestDialogParameterUrlWidget:
     )
     def test_valid_table_file(self, qtbot, model_config, param_name):
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         url_field: FormField = selected_page.findChild(FormField, "url")
         # noinspection PyTypeChecker
         url_widget: UrlWidget = url_field.widget
@@ -234,7 +234,7 @@ class TestDialogParameterUrlWidget:
         Test the widget when the table file does not exist or is not supported.
         """
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         url_field: FormField = selected_page.findChild(FormField, "url")
         # noinspection PyTypeChecker
         url_widget: UrlWidget = url_field.widget
@@ -271,7 +271,7 @@ class TestDialogParameterUrlWidget:
         """
         param_name = "param_csv_file"
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         url_field: FormField = selected_page.findChild(FormField, "url")
         # noinspection PyTypeChecker
         url_widget: UrlWidget = url_field.widget
@@ -311,7 +311,7 @@ class TestDialogParameterUrlWidget:
         """
         param_name = "param_csv_file"
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         url_field: FormField = selected_page.findChild(FormField, "url")
         # noinspection PyTypeChecker
         url_widget: UrlWidget = url_field.widget
@@ -352,7 +352,7 @@ class TestDialogParameterUrlWidget:
         """
         param_name = "param_csv_file"
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         url_field: FormField = selected_page.findChild(FormField, "url")
         # noinspection PyTypeChecker
         url_widget: UrlWidget = url_field.widget
@@ -372,7 +372,7 @@ class TestDialogParameterUrlWidget:
         """
         param_name = "param_csv_file"
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         url_field: FormField = selected_page.findChild(FormField, "url")
         # noinspection PyTypeChecker
         url_widget: UrlWidget = url_field.widget
@@ -400,7 +400,7 @@ class TestDialogParameterUrlWidget:
         """
         param_name = "param_csv_file"
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         url_field: FormField = selected_page.findChild(FormField, "url")
         # noinspection PyTypeChecker
         url_widget: UrlWidget = url_field.widget
@@ -427,7 +427,7 @@ class TestDialogParameterUrlWidget:
         dialog = ParametersDialog(model_config, selected_parameter)
         dialog.show()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         key_field: FormField = selected_page.findChild(FormField, "key")
         url_field: FormField = selected_page.findChild(FormField, "url")
         # noinspection PyTypeChecker
