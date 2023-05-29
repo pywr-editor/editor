@@ -5,7 +5,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtTest import QSignalSpy
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.dialogs.parameters.parameter_page_widget import ParameterPageWidget
+from pywr_editor.dialogs.parameters.parameter_page import ParameterPage
 from pywr_editor.form import FormField, H5FileWidget, H5NodeWidget, H5WhereWidget
 from pywr_editor.model import ModelConfig
 from tests.utils import resolve_model_path
@@ -76,7 +76,7 @@ class TestDialogParameterTablesArrayParameterSection:
         node = values["node"]
 
         # noinspection PyTypeChecker
-        selected_page: ParameterPageWidget = dialog.pages_widget.currentWidget()
+        selected_page: ParameterPage = dialog.pages.currentWidget()
         # noinspection PyTypeChecker
         file_field: FormField = selected_page.findChild(FormField, "url")
         # noinspection PyTypeChecker
@@ -238,7 +238,7 @@ class TestDialogParameterTablesArrayParameterSection:
         dialog.hide()
 
         # noinspection PyTypeChecker
-        selected_page: ParameterPageWidget = dialog.pages_widget.currentWidget()
+        selected_page: ParameterPage = dialog.pages.currentWidget()
         # noinspection PyTypeChecker
         form_field: FormField = selected_page.findChild(FormField, field)
         # noinspection PyTypeChecker
@@ -285,7 +285,7 @@ class TestDialogParameterTablesArrayParameterSection:
         dialog = ParametersDialog(model_config, param_name)
 
         # noinspection PyTypeChecker
-        selected_page: ParameterPageWidget = dialog.pages_widget.currentWidget()
+        selected_page: ParameterPage = dialog.pages.currentWidget()
         # noinspection PyTypeChecker
         file_field: FormField = selected_page.findChild(FormField, "url")
         # noinspection PyTypeChecker
@@ -350,7 +350,7 @@ class TestDialogParameterTablesArrayParameterSection:
         dialog = ParametersDialog(model_config, param_name)
 
         # noinspection PyTypeChecker
-        selected_page: ParameterPageWidget = dialog.pages_widget.currentWidget()
+        selected_page: ParameterPage = dialog.pages.currentWidget()
         # noinspection PyTypeChecker
         file_field: FormField = selected_page.findChild(FormField, "url")
         # noinspection PyTypeChecker

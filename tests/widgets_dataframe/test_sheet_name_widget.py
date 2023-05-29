@@ -36,7 +36,7 @@ class TestDialogParameterSheetNameWidget:
         dialog = ParametersDialog(model_config, selected_parameter)
         dialog.hide()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         excel_sheet_field: FormField = selected_page.findChild(FormField, "sheet_name")
         excel_sheet_widget: SheetNameWidget = excel_sheet_field.widget
         url_widget: UrlWidget = selected_page.findChild(FormField, "url").widget
@@ -134,7 +134,7 @@ class TestDialogParameterSheetNameWidget:
         dialog = ParametersDialog(model_config, selected_parameter)
         dialog.hide()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         excel_sheet_field: FormField = selected_page.findChild(FormField, "sheet_name")
         excel_sheet_widget: SheetNameWidget = excel_sheet_field.widget
         url_widget: UrlWidget = selected_page.findChild(FormField, "url").widget

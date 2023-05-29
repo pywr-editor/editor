@@ -2,7 +2,7 @@ import pytest
 from PySide6.QtCore import QTimer
 
 from pywr_editor.dialogs import RecordersDialog
-from pywr_editor.dialogs.recorders.recorder_page_widget import RecorderPageWidget
+from pywr_editor.dialogs.recorders.recorder_page import RecorderPage
 from pywr_editor.form import FormField
 from pywr_editor.model import ModelConfig
 from tests.utils import close_message_box, resolve_model_path
@@ -54,7 +54,7 @@ class TestDialogRecorderFlowDurationCurveDeviationRecorderSectionSection:
         dialog.hide()
 
         # noinspection PyTypeChecker
-        selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
+        selected_page: RecorderPage = dialog.pages.currentWidget()
         form = selected_page.form
 
         # noinspection PyUnresolvedReferences
@@ -96,7 +96,7 @@ class TestDialogRecorderFlowDurationCurveDeviationRecorderSectionSection:
         dialog.hide()
 
         # noinspection PyTypeChecker
-        selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
+        selected_page: RecorderPage = dialog.pages.currentWidget()
         form = selected_page.form
 
         # noinspection PyUnresolvedReferences

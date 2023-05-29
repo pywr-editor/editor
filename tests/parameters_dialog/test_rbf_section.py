@@ -5,7 +5,7 @@ from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import QPushButton
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.dialogs.parameters.parameter_page_widget import ParameterPageWidget
+from pywr_editor.dialogs.parameters.parameter_page import ParameterPage
 from pywr_editor.form import FormField
 from pywr_editor.model import ModelConfig
 from tests.utils import close_message_box, resolve_model_path
@@ -44,7 +44,7 @@ class TestDialogParameterRbfSection:
         dialog = ParametersDialog(model_config, param_name)
         dialog.show()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         values_field: FormField = selected_page.findChild(FormField, "values")
         assert selected_page.findChild(FormField, "name").value() == param_name
 
@@ -109,7 +109,7 @@ class TestDialogParameterRbfSection:
         dialog = ParametersDialog(model_config, param_name)
         dialog.show()
 
-        selected_page: ParameterPageWidget = dialog.pages_widget.currentWidget()
+        selected_page: ParameterPage = dialog.pages.currentWidget()
         form = selected_page.form
         days_field = form.find_field(field_name)
         assert form.find_field("name").value() == param_name

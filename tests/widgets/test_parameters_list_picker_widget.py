@@ -132,7 +132,7 @@ class TestDialogParameterParametersListPickerWidget:
         dialog = ParametersDialog(model_config, param_name)
         dialog.show()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyUnresolvedReferences
         assert selected_page.findChild(FormField, "name").value() == param_name
 
@@ -297,7 +297,7 @@ class TestDialogParameterParametersListPickerWidget:
         dialog = ParametersDialog(model_config, param_name)
         dialog.hide()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyUnresolvedReferences
         assert selected_page.findChild(FormField, "name").value() == param_name
 
@@ -342,7 +342,7 @@ class TestDialogParameterParametersListPickerWidget:
         dialog = ParametersDialog(model_config, self.general_anonymous_param_name)
         dialog.show()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyUnresolvedReferences
         assert (
             selected_page.findChild(FormField, "name").value()
@@ -422,7 +422,7 @@ class TestDialogParameterParametersListPickerWidget:
         dialog = ParametersDialog(model_config, self.general_anonymous_param_name)
         dialog.show()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyUnresolvedReferences
         assert (
             selected_page.findChild(FormField, "name").value()
@@ -482,7 +482,7 @@ class TestDialogParameterParametersListPickerWidget:
         dialog = ParametersDialog(model_config, self.general_anonymous_param_name)
         dialog.show()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyUnresolvedReferences
         assert (
             selected_page.findChild(FormField, "name").value()
@@ -571,7 +571,7 @@ class TestDialogParameterParametersListPickerWidget:
         dialog = ParametersDialog(model_config, param_name)
         dialog.show()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyUnresolvedReferences
         assert selected_page.findChild(FormField, "name").value() == param_name
 
@@ -694,7 +694,7 @@ class TestDialogParameterParametersListPickerWidget:
         dialog = ParametersDialog(model_config, param_name)
         dialog.show()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyUnresolvedReferences
         assert selected_page.findChild(FormField, "name").value() == param_name
 
@@ -774,7 +774,7 @@ class TestDialogParameterParametersListPickerWidget:
         dialog = ParametersDialog(model_config, param_name)
         dialog.show()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyUnresolvedReferences
         assert selected_page.findChild(FormField, "name").value() == param_name
 

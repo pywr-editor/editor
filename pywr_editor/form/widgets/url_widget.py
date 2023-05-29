@@ -1,6 +1,7 @@
 import os
 import traceback
 
+import pandas as pd
 import qtawesome as qta
 from pandas import read_csv, read_excel, read_hdf
 from PySide6.QtCore import Signal, SignalInstance, Slot
@@ -106,11 +107,11 @@ class UrlWidget(FormWidget):
         self.model_config = self.form.model_config
 
         # table data
-        self.table = None
+        self.table: pd.DataFrame | None = None
         self.table_parse_error = False
 
         # store the new value
-        self.full_file = None
+        self.full_file: str | None = None
         self.file_ext = None
         self.supported_extensions = [
             ".csv",

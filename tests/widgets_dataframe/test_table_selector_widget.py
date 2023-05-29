@@ -69,7 +69,7 @@ class TestDialogParameterTableSelectorWidget:
         expected_indexes,
     ):
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         table_field: FormField = selected_page.findChild(FormField, "table")
         # noinspection PyTypeChecker
         table_widget: TableSelectorWidget = table_field.widget
@@ -202,7 +202,7 @@ class TestDialogParameterTableSelectorWidget:
         Test the widget when the table file does not exist or is not supported.
         """
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         table_field: FormField = selected_page.findChild(FormField, "table")
         # noinspection PyTypeChecker
         table_widget: TableSelectorWidget = table_field.widget
@@ -245,7 +245,7 @@ class TestDialogParameterTableSelectorWidget:
     #     param_name = "param_file_invalid_table_name"
     #     selected_table = "non_existing_table"
     #     dialog = ParametersDialog(model_config, param_name)
-    #     selected_page = dialog.pages_widget.currentWidget()
+    #     selected_page = dialog.pages.currentWidget()
     #     table_field: FormField = selected_page.findChild(FormField, "table")
     #     # noinspection PyTypeChecker
     #     table_widget: TableSelectorWidget = table_field.widget
@@ -286,7 +286,7 @@ class TestDialogParameterTableSelectorWidget:
     #     """
     #     param_name = "param4"
     #     dialog = ParametersDialog(model_config_empty_table, param_name)
-    #     selected_page = dialog.pages_widget.currentWidget()
+    #     selected_page = dialog.pages.currentWidget()
     #     table_field: FormField = selected_page.findChild(FormField, "table")
     #     # noinspection PyTypeChecker
     #     table_widget: TableSelectorWidget = table_field.widget
@@ -323,7 +323,7 @@ class TestDialogParameterTableSelectorWidget:
     #     """
     #     param_name = "param_csv_file"
     #     dialog = ParametersDialog(model_config, param_name)
-    #     selected_page = dialog.pages_widget.currentWidget()
+    #     selected_page = dialog.pages.currentWidget()
     #     table_field: FormField = selected_page.findChild(FormField, "table")
     #     # noinspection PyTypeChecker
     #     table_widget: TableSelectorWidget = table_field.widget
@@ -348,7 +348,7 @@ class TestDialogParameterTableSelectorWidget:
     #     dialog = ParametersDialog(model_config, selected_parameter)
     #     dialog.show()
     #
-    #     selected_page = dialog.pages_widget.currentWidget()
+    #     selected_page = dialog.pages.currentWidget()
     #     table_field: FormField = selected_page.findChild(FormField, "table")
     #     # noinspection PyTypeChecker
     #     table_widget: TableSelectorWidget = table_field.widget

@@ -120,7 +120,7 @@ class TestDialogParameterSourceSelectorWidget:
         when the form is initialised.
         """
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.show()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
@@ -159,7 +159,7 @@ class TestDialogParameterSourceSelectorWidget:
         """
         param_name = "param1"
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.show()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
@@ -226,7 +226,7 @@ class TestDialogParameterSourceSelectorWidget:
         """
         param_name = "param_with_valid_anonymous_excel_table"
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.show()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
@@ -278,7 +278,7 @@ class TestDialogParameterSourceSelectorWidget:
         """
         param_name = "param1"
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.show()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
@@ -328,7 +328,7 @@ class TestDialogParameterSourceSelectorWidget:
     def test_param_wo_source(self, qtbot, model_config):
         param_name = "param_no_source"
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.show()
 
         assert selected_page.findChild(FormField, "name").value() == param_name

@@ -33,7 +33,7 @@ class TestDialogParameterProfileWidget:
         dialog = ParametersDialog(model_config, param_name)
         dialog.hide()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         value_field: FormField = selected_page.findChild(FormField, "values")
         value_widget: MonthlyValuesWidget = value_field.widget
         save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
@@ -85,7 +85,7 @@ class TestDialogParameterProfileWidget:
         dialog = ParametersDialog(model_config, param_name)
         dialog.hide()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         value_field: FormField = selected_page.findChild(FormField, "values")
 
         assert selected_page.findChild(FormField, "name").value() == param_name

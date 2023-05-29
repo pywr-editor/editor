@@ -76,7 +76,7 @@ class TestDialogParameterIndexColWidget:
             "param_with_h5_table_ano_index",
         ]
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.show()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
@@ -205,7 +205,7 @@ class TestDialogParameterIndexColWidget:
             "Column 4",
         ]
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.hide()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
@@ -255,7 +255,7 @@ class TestDialogParameterIndexColWidget:
         """
         param_name = "param_empty_sheet"
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
 
@@ -295,7 +295,7 @@ class TestDialogParameterIndexColWidget:
         """
         param_name = "param_non_existing_file"
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # dialog.hide()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
@@ -350,7 +350,7 @@ class TestDialogParameterIndexColWidget:
         """
         param_name = "param_empty_sheet"
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.hide()
 
         assert selected_page.findChild(FormField, "name").value() == param_name
@@ -393,7 +393,7 @@ class TestDialogParameterIndexColWidget:
         """
         param_name = "param_with_index_col_list_of_str"
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
 
         index_col_widget: IndexColWidget = selected_page.findChild(
             FormField, "index_col"

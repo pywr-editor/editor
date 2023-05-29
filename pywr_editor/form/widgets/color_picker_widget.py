@@ -1,6 +1,5 @@
 from typing import Sequence
 
-import qtawesome as qta
 from PySide6.QtCore import Signal, Slot
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QColorDialog, QHBoxLayout, QWidget
@@ -8,13 +7,13 @@ from PySide6.QtWidgets import QColorDialog, QHBoxLayout, QWidget
 from pywr_editor.form import FormField, FormWidget
 from pywr_editor.widgets import PushIconButton
 
+"""
+ This form widget renders a widget showing the selected colour and allows the user to
+ the select another colour using the system color picker dialog.
+"""
+
 
 class ColorPickerWidget(FormWidget):
-    """
-    This form widget renders a widget showing the selected colour and allows the user to
-    the select another colour using the system color picker dialog.
-    """
-
     changed_color = Signal()
     """ signal emitted when a new colour is selected """
 
@@ -54,10 +53,7 @@ class ColorPickerWidget(FormWidget):
         self.preview_color_box.setFixedSize(30, 30)
         self.set_preview_color(self.value)
 
-        button = PushIconButton(
-            icon=qta.icon("msc.symbol-color"), label="Select colour"
-        )
-        # noinspection PyUnresolvedReferences
+        button = PushIconButton(icon="msc.symbol-color", label="Select colour")
         button.clicked.connect(self.open_color_picker)
 
         layout = QHBoxLayout()
@@ -69,8 +65,8 @@ class ColorPickerWidget(FormWidget):
 
     def sanitise_color(self) -> None:
         """
-        Sanitise the color. The color must be a sequence with three items
-        with the RGB values. If this is not the case, a default colour us used.
+        Sanitise the color. The color must be a sequence with three items with the RGB
+        values. If this is not the case, a default colour us used.
         :return: None
         """
         if (
@@ -101,14 +97,12 @@ class ColorPickerWidget(FormWidget):
         Open the colour picker.
         :return: None
         """
-        dialog = QColorDialog()
-        options = {
-            "initial": QColor.fromRgb(*self.value),
-            "parent": self,
-        }
+        dialog = QColorDialog(self)
+        options = {"initial": QColor.fromRgb(*self.value)}
         if self.enable_alpha:
             options["options"] = QColorDialog.ColorDialogOption.ShowAlphaChannel
         color = dialog.getColor(**options)
+        dialog.setParent(self)
 
         # convert to RGB
         if color.isValid():
@@ -118,7 +112,7 @@ class ColorPickerWidget(FormWidget):
 
     def get_value(self) -> Sequence[int]:
         """
-        Returns the selected colour.
-        :return: The colour as listr of RGB values.
+        Return the selected colour.
+        :return: The colour as list of RGB values.
         """
         return self.value

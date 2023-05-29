@@ -2,7 +2,7 @@ import pytest
 from PySide6.QtCore import QTimer
 
 from pywr_editor.dialogs import RecordersDialog
-from pywr_editor.dialogs.recorders.recorder_page_widget import RecorderPageWidget
+from pywr_editor.dialogs.recorders.recorder_page import RecorderPage
 from pywr_editor.form import (
     AggFuncPercentileListWidget,
     AggFuncPercentileOfScoreScoreWidget,
@@ -47,7 +47,7 @@ class TestDialogRecorderOptimisationSection:
         dialog.hide()
 
         # noinspection PyTypeChecker
-        selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
+        selected_page: RecorderPage = dialog.pages.currentWidget()
         form = selected_page.form
 
         # noinspection PyUnresolvedReferences
@@ -81,7 +81,7 @@ class TestDialogRecorderOptimisationSection:
         dialog.hide()
 
         # noinspection PyTypeChecker
-        selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
+        selected_page: RecorderPage = dialog.pages.currentWidget()
         form = selected_page.form
 
         # noinspection PyUnresolvedReferences
@@ -131,7 +131,7 @@ class TestDialogRecorderOptimisationSection:
         dialog.show()
 
         # noinspection PyTypeChecker
-        selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
+        selected_page: RecorderPage = dialog.pages.currentWidget()
         form = selected_page.form
 
         # noinspection PyUnresolvedReferences
@@ -232,7 +232,7 @@ class TestDialogRecorderOptimisationSection:
         dialog.show()
 
         # noinspection PyTypeChecker
-        selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
+        selected_page: RecorderPage = dialog.pages.currentWidget()
         form = selected_page.form
         list_widget: AggFuncPercentileListWidget = form.find_field(
             OptAggFuncWidget.agg_func_percentile_list
@@ -258,7 +258,7 @@ class TestDialogRecorderOptimisationSection:
         dialog.show()
 
         # noinspection PyTypeChecker
-        selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
+        selected_page: RecorderPage = dialog.pages.currentWidget()
         form = selected_page.form
         score_widget: AggFuncPercentileOfScoreScoreWidget = form.find_field(
             OptAggFuncWidget.agg_func_percentileofscore_score

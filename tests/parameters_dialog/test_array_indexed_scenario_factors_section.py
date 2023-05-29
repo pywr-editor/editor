@@ -1,7 +1,7 @@
 import pytest
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.dialogs.parameters.parameter_page_widget import ParameterPageWidget
+from pywr_editor.dialogs.parameters.parameter_page import ParameterPage
 from pywr_editor.form import (
     FormField,
     ScenarioValuesWidget,
@@ -64,7 +64,7 @@ class TestDialogParameterArrayIndexedScenarioMonthlyFactorsParameterSection:
         dialog.hide()
 
         # noinspection PyTypeChecker
-        selected_page: ParameterPageWidget = dialog.pages_widget.currentWidget()
+        selected_page: ParameterPage = dialog.pages.currentWidget()
 
         # noinspection PyUnresolvedReferences
         assert selected_page.findChild(FormField, "name").value() == param_name

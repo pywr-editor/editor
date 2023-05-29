@@ -37,7 +37,7 @@ class TestDialogParameterInterpDayWidget:
         dialog = ParametersDialog(model_config, param_name)
         dialog.hide()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyTypeChecker
         interp_day_field: FormField = selected_page.findChild(FormField, "interp_day")
         interp_day_widget: InterpDayWidget = interp_day_field.widget
@@ -75,7 +75,7 @@ class TestDialogParameterInterpDayWidget:
         dialog = ParametersDialog(model_config, param_name)
         dialog.hide()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyTypeChecker
         interp_day_field: FormField = selected_page.findChild(FormField, "interp_day")
         interp_day_widget: InterpDayWidget = interp_day_field.widget

@@ -3,7 +3,7 @@ from PySide6.QtCore import QItemSelectionModel, Qt, QTimer
 from PySide6.QtWidgets import QPushButton
 
 from pywr_editor.dialogs import RecordersDialog
-from pywr_editor.dialogs.recorders.recorder_page_widget import RecorderPageWidget
+from pywr_editor.dialogs.recorders.recorder_page import RecorderPage
 from pywr_editor.form import (
     FloatWidget,
     NodePickerWidget,
@@ -87,7 +87,7 @@ class TestAnnualTotalFlowSection:
         dialog.show()
 
         # noinspection PyTypeChecker
-        selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
+        selected_page: RecorderPage = dialog.pages.currentWidget()
         form = selected_page.form
         field = form.find_field("nodes_and_factors")
         widget: NodesAndFactorsTableWidget = field.widget
@@ -152,7 +152,7 @@ class TestAnnualTotalFlowSection:
         dialog.show()
 
         # noinspection PyTypeChecker
-        selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
+        selected_page: RecorderPage = dialog.pages.currentWidget()
         form = selected_page.form
         field = form.find_field("nodes_and_factors")
         widget: NodesAndFactorsTableWidget = field.widget
@@ -172,7 +172,7 @@ class TestAnnualTotalFlowSection:
         """
         dialog = RecordersDialog(model_config, "valid_value_with_nodes_and_factors")
         # noinspection PyTypeChecker
-        selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
+        selected_page: RecorderPage = dialog.pages.currentWidget()
 
         field = selected_page.form.find_field("nodes_and_factors")
         widget: NodesAndFactorsTableWidget = field.widget
@@ -201,7 +201,7 @@ class TestAnnualTotalFlowSection:
         """
         dialog = RecordersDialog(model_config, "valid_value_with_nodes_and_factors")
         # noinspection PyTypeChecker
-        selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
+        selected_page: RecorderPage = dialog.pages.currentWidget()
 
         field = selected_page.form.find_field("nodes_and_factors")
         widget: NodesAndFactorsTableWidget = field.widget
@@ -237,7 +237,7 @@ class TestAnnualTotalFlowSection:
         """
         dialog = RecordersDialog(model_config, "valid_value_with_nodes_and_factors")
         # noinspection PyTypeChecker
-        selected_page: RecorderPageWidget = dialog.pages_widget.currentWidget()
+        selected_page: RecorderPage = dialog.pages.currentWidget()
 
         field = selected_page.form.find_field("nodes_and_factors")
         widget: NodesAndFactorsTableWidget = field.widget

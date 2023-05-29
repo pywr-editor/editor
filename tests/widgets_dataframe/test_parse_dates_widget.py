@@ -31,7 +31,7 @@ class TestDialogParameterParseDatesWidget:
         """
         param_name = "param_with_index_col_list_of_str"
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.hide()
 
         parse_dates_widget: ParseDatesWidget = selected_page.findChild(
@@ -74,7 +74,7 @@ class TestDialogParameterParseDatesWidget:
         """
         param_name = "param_with_parse_dates_true"
         dialog = ParametersDialog(model_config, param_name)
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         dialog.hide()
 
         parse_dates_widget: ParseDatesWidget = selected_page.findChild(

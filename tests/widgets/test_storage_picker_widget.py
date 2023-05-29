@@ -32,7 +32,7 @@ class TestDialogStoragePickerWidget:
         dialog = ParametersDialog(model_config, param_name)
         dialog.hide()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         assert selected_page.findChild(FormField, "name").value() == param_name
 
         storage_node_field: FormField = selected_page.findChild(
@@ -72,7 +72,7 @@ class TestDialogStoragePickerWidget:
         dialog = ParametersDialog(model_config, param_name)
         dialog.hide()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         assert selected_page.findChild(FormField, "name").value() == param_name
 
         storage_node_field: FormField = selected_page.findChild(

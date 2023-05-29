@@ -3,7 +3,8 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QPushButton, QWidget
 
 from pywr_editor.dialogs import ParametersDialog
-from pywr_editor.dialogs.parameters.parameter_page_widget import ParameterPageWidget
+from pywr_editor.dialogs.parameters.parameter_empty_page import ParameterEmptyPage
+from pywr_editor.dialogs.parameters.parameter_page import ParameterPage
 from pywr_editor.dialogs.parameters.sections.storage_threshold_parameter_section import (  # noqa: E501
     StorageThresholdParameterSection,
 )
@@ -117,7 +118,7 @@ class TestDialogParameterLineEditWidget:
         dialog.hide()
 
         # noinspection PyTypeChecker
-        selected_page: ParameterPageWidget = dialog.pages_widget.currentWidget()
+        selected_page: ParameterPage = dialog.pages.currentWidget()
         form = selected_page.form
 
         threshold_field = form.find_field("threshold")
@@ -165,7 +166,7 @@ class TestDialogParameterLineEditWidget:
         dialog = ParametersDialog(model_config, param_name)
         dialog.hide()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         threshold_field: FormField = selected_page.findChild(FormField, "threshold")
         # noinspection PyTypeChecker
         threshold_widget: ParameterLineEditWidget = threshold_field.widget
@@ -199,7 +200,7 @@ class TestDialogParameterLineEditWidget:
         ParameterLineEditWidget,
         ModelComponentPickerDialog,
         ParametersDialog,
-        ParameterPageWidget,
+        ParameterPage,
     ]:
         """
         Adds a new model parameter.
@@ -211,7 +212,7 @@ class TestDialogParameterLineEditWidget:
         dialog = ParametersDialog(model_config)
         dialog.show()
 
-        add_button: QPushButton = dialog.pages_widget.empty_page.findChild(
+        add_button: QPushButton = dialog.pages.findChild(ParameterEmptyPage).findChild(
             QPushButton, "add_button"
         )
 
@@ -220,7 +221,7 @@ class TestDialogParameterLineEditWidget:
         qtbot.wait(100)
 
         # 2. Load fields
-        page = dialog.pages_widget.currentWidget()
+        page = dialog.pages.currentWidget()
         form = page.form
         form.load_fields()
 
@@ -259,7 +260,7 @@ class TestDialogParameterLineEditWidget:
 
     @staticmethod
     def save_main_form(
-        qtbot, model_config: ModelConfig, page: ParameterPageWidget, value: dict
+        qtbot, model_config: ModelConfig, page: ParameterPage, value: dict
     ) -> None:
         """ "
         Saves the main form.

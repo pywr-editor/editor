@@ -33,7 +33,7 @@ class TestDialogParameterConstantValue:
         dialog = ParametersDialog(model_config, "param1")
         dialog.hide()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyTypeChecker
         value_field: FormField = selected_page.findChild(FormField, "value")
 
@@ -57,7 +57,7 @@ class TestDialogParameterConstantValue:
         dialog = ParametersDialog(model_config, param_name)
         dialog.show()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyTypeChecker
         value_field: FormField = selected_page.findChild(FormField, "value")
         # noinspection PyTypeChecker
@@ -98,7 +98,7 @@ class TestDialogParameterConstantValue:
         dialog = ParametersDialog(model_config, "const_param_with_values")
         dialog.hide()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyUnresolvedReferences
         selected_page.findChild(ParameterDialogForm).load_fields()
         value_field = selected_page.findChild(FormField, "value")
@@ -121,7 +121,7 @@ class TestDialogParameterConstantValue:
         dialog = ParametersDialog(model_config, param_name)
         dialog.show()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyUnresolvedReferences
         selected_page.findChild(ParameterDialogForm).load_fields()
         # noinspection PyTypeChecker
@@ -181,7 +181,7 @@ class TestDialogParameterConstantValue:
         dialog = ParametersDialog(model_config, param_name)
         dialog.hide()
 
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
         # noinspection PyUnresolvedReferences
         assert selected_page.findChild(FormField, "name").value() == param_name
 
@@ -216,7 +216,7 @@ class TestDialogParameterConstantValue:
         param_name = "const_param_with_values"
         dialog = ParametersDialog(model_config, param_name)
         dialog.hide()
-        selected_page = dialog.pages_widget.currentWidget()
+        selected_page = dialog.pages.currentWidget()
 
         # noinspection PyUnresolvedReferences
         assert selected_page.findChild(FormField, "name").value() == param_name
