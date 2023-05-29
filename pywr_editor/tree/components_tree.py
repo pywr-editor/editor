@@ -497,9 +497,7 @@ class ComponentsTree(QTreeWidget):
         :return: None
         """
         dialog = TablesDialog(
-            model_config=self.model_config,
-            selected_table_name=table_name,
-            parent=self.parent,
+            model=self.model_config, selected_name=table_name, parent=self.parent
         )
         dialog.show()
 
@@ -530,7 +528,7 @@ class ComponentsTree(QTreeWidget):
         """
         dialog = ParametersDialog(
             model=self.model_config,
-            selected_parameter_name=parameter_name,
+            selected_name=parameter_name,
             parent=self.parent,
         )
         dialog.show()
@@ -561,8 +559,8 @@ class ComponentsTree(QTreeWidget):
         :return: None
         """
         dialog = RecordersDialog(
-            model_config=self.model_config,
-            selected_recorder_name=recorder_name,
+            model=self.model_config,
+            selected_name=recorder_name,
             parent=self.parent,
         )
         dialog.show()

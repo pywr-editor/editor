@@ -6,6 +6,7 @@ from PySide6.QtWidgets import QDialog, QHBoxLayout
 
 from pywr_editor.model import ModelConfig
 
+from ..base.component_dialog_splitter import ComponentDialogSplitter
 from ..base.component_list import ComponentList
 from ..base.component_pages import ComponentPages
 from .recorder_empty_page import RecorderEmptyPage
@@ -20,14 +21,13 @@ class RecordersDialog(QDialog):
     def __init__(
         self,
         model: ModelConfig,
-        selected_recorder_name: str = None,
+        selected_name: str = None,
         parent: Union[QWindow, "MainWindow", None] = None,
     ):
         """
         Initialise the modal dialog.
         :param model: The ModelConfig instance.
-        :param selected_recorder_name: The name of the recorder to select.
-        Default to None.
+        :param selected_name: The name of the recorder to select. Default to None.
         :param parent: The parent widget. Default to None.
         """
         super().__init__(parent)
@@ -37,7 +37,7 @@ class RecordersDialog(QDialog):
         if model.load_error:
             raise ValueError(
                 f"The model '{model.json_file}' cannot be loaded "
-                + f"because: {model.load_error}"
+                f"because: {model.load_error}"
             )
         # Right widget
         self.pages = ComponentPages(self)
@@ -66,15 +66,15 @@ class RecordersDialog(QDialog):
         self.setWindowTitle("Model recorders")
         self.setMinimumSize(1000, 750)
 
-        modal_layout = QHBoxLayout()
+        splitter = ComponentDialogSplitter(self.list, self.pages, self.app)
+
+        modal_layout = QHBoxLayout(self)
         modal_layout.setContentsMargins(0, 0, 5, 0)
-        modal_layout.addWidget(self.list)
-        modal_layout.addWidget(self.pages)
-        self.setLayout(modal_layout)
+        modal_layout.addWidget(splitter)
 
         # select a recorder
-        if selected_recorder_name is not None:
-            found = self.pages.set_page_by_name(selected_recorder_name)
+        if selected_name is not None:
+            found = self.pages.set_page_by_name(selected_name)
             if found is False:
                 return
 
@@ -82,7 +82,7 @@ class RecordersDialog(QDialog):
             page: RecorderPage = self.pages.currentWidget()
             page.form.load_fields()
             # set the selected item in the list
-            self.list.table.select_row_by_name(selected_recorder_name)
+            self.list.table.select_row_by_name(selected_name)
 
     @Slot()
     def add_recorder(self, configuration: dict | None = None) -> None:
