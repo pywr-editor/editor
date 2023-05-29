@@ -130,7 +130,6 @@ class RecorderPage(QWidget):
             self.model.recorders.rename(self.name, new_name)
 
             # update the page name in the list
-            # noinspection PyUnresolvedReferences
             self.pages.rename_page(self.name, new_name)
 
             # update the page title

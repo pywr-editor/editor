@@ -67,8 +67,7 @@ class ComponentListView(TableView):
         if len(selected.indexes()) == 0:
             self.pages.setCurrentWidget(self.empty_page)
         else:
-            parameter_name = selected.indexes()[0].data(Qt.ItemDataRole.DisplayRole)
-            self.pages.set_page_by_name(parameter_name)
+            self.pages.set_page_by_name(selected.indexes()[0].data())
         super().selectionChanged(selected, deselected)
 
 
