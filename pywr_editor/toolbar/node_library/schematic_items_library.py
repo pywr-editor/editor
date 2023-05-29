@@ -42,16 +42,16 @@ class SchematicItemsLibrary(QWidget):
         self.scroll_up = PushIconButton(
             icon=":toolbar/scroll-up", icon_size=QSize(10, 10)
         )
-        self.scroll_up.setStyleSheet(self.button_stylesheet("up"))
+        self.scroll_up.setMinimumHeight(25)
+        self.scroll_up.setStyleSheet(self.button_stylesheet)
         self.scroll_up.setEnabled(False)
-        # noinspection PyUnresolvedReferences
         self.scroll_up.clicked.connect(partial(self.on_scroll, "up"))
 
         self.scroll_down = PushIconButton(
             icon=":toolbar/scroll-down", icon_size=QSize(10, 10)
         )
-        self.scroll_down.setStyleSheet(self.button_stylesheet("down"))
-        # noinspection PyUnresolvedReferences
+        self.scroll_down.setMinimumHeight(25)
+        self.scroll_down.setStyleSheet(self.button_stylesheet)
         self.scroll_down.clicked.connect(partial(self.on_scroll, "down"))
 
         buttons_layout = QVBoxLayout()
@@ -99,11 +99,10 @@ class SchematicItemsLibrary(QWidget):
             self.scroll_down.setEnabled(True)
             self.scroll_up.setEnabled(True)
 
-    @staticmethod
-    def button_stylesheet(button: Literal["up", "down"]) -> str:
+    @property
+    def button_stylesheet(self) -> str:
         """
         Returns the button stylesheet as string.
-        :param button: The button the style is applied to ("up" or "down).
         :return: The style sheet.
         """
         style_dict = {
@@ -111,7 +110,7 @@ class SchematicItemsLibrary(QWidget):
                 "border": f"1px solid {Color('gray', 300).hex}",
                 "border-radius": "4px",
                 "padding": "0px 1px",
-                "margin-top": 0,
+                "margin-top": "6px",
                 ":disabled": {
                     "background": "rgba(0, 0, 0, 5)",
                     "border": "1px solid rgba(0, 0, 0, 5)",
@@ -119,10 +118,6 @@ class SchematicItemsLibrary(QWidget):
                 },
             },
         }
-        # use same margin from panel
-        if button == "up":
-            # noinspection PyTypedDict
-            style_dict["PushIconButton"]["margin-top"] = "6px"
 
         return stylesheet_dict_to_str(style_dict)
 
