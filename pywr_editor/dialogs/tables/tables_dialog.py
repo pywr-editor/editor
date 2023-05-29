@@ -2,10 +2,9 @@ from typing import TYPE_CHECKING, Union
 
 from PySide6.QtCore import QSortFilterProxyModel, Qt, QUuid, Slot
 from PySide6.QtGui import QWindow
-from PySide6.QtWidgets import QHBoxLayout
+from PySide6.QtWidgets import QDialog, QHBoxLayout
 
 from pywr_editor.model import ModelConfig
-from pywr_editor.widgets import SettingsDialog
 
 from ..base.component_dialog_splitter import ComponentDialogSplitter
 from ..base.component_list import ComponentList
@@ -18,7 +17,7 @@ if TYPE_CHECKING:
     from pywr_editor import MainWindow
 
 
-class TablesDialog(SettingsDialog):
+class TablesDialog(QDialog):
     def __init__(
         self,
         model: ModelConfig,
