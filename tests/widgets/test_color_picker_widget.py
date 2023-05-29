@@ -3,35 +3,35 @@ from typing import Sequence
 import pytest
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtTest import QSignalSpy
-from PySide6.QtWidgets import QColorDialog, QPushButton, QSpinBox, QWidget
+from PySide6.QtWidgets import QColorDialog, QPushButton, QSpinBox
 
-from pywr_editor.form import ColorPickerWidget, Form
+from pywr_editor.form import ColorPickerWidget, FieldConfig, Form
 from pywr_editor.utils import is_windows
 from pywr_editor.widgets import PushIconButton
 
 
+# temporarily disabled test due to broken Qt API
+@pytest.mark.skip("TestColorPickerWidget skipped")
 class TestColorPickerWidget:
     @staticmethod
     def widget(selected_color: Sequence[int] | None) -> ColorPickerWidget:
         """
-        Initialises the form and returns the widget.
+        Initialise the form and returns the widget.
         :param selected_color: The selected RGB colour.
         :return: An instance of ColorPickerWidget.
         """
         form = Form(
             fields={
                 "Section": [
-                    {
-                        "name": "colour",
-                        "field_type": ColorPickerWidget,
-                        "value": selected_color,
-                    }
+                    FieldConfig(
+                        name="colour",
+                        field_type=ColorPickerWidget,
+                        value=selected_color,
+                    )
                 ]
             },
             save_button=QPushButton("Save"),
-            parent=QWidget(),
         )
-        form.enable_optimisation_section = False
         form.load_fields()
 
         form_field = form.find_field("colour")
@@ -64,11 +64,11 @@ class TestColorPickerWidget:
 
         # check preview colour box
         assert f"{tuple(color)}" in widget.preview_color_box.styleSheet()
-        new_color_value = 125
+        new_color_value = 120
 
         def set_color():
             """
-            Selects a new colour using the Windows color picker.
+            Select a new colour using the Windows color picker.
             """
             # noinspection PyTypeChecker
             w: QColorDialog = widget.findChild(QColorDialog)
@@ -86,11 +86,11 @@ class TestColorPickerWidget:
         # select new colour
         if is_windows():
             spy = QSignalSpy(widget.changed_color)
-
             QTimer.singleShot(200, set_color)
             qtbot.mouseClick(
                 widget.findChild(PushIconButton), Qt.MouseButton.LeftButton
             )
+
             new_color_rgb = tuple([new_color_value] * 3)
             assert widget.get_value() == new_color_rgb
             assert spy.count() == 1
