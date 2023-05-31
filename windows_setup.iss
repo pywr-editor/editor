@@ -6,6 +6,12 @@
 #define MyAppAssocName "JSON file"
 #define MyAppAssocExt ".json"
 #define MyAppAssocKey StringChange(MyAppAssocName, " ", "") + MyAppAssocExt
+#define FindFolderWithWildcard(Path) \
+    Local[0] = FindFirst(Path, faDirectory), \
+    Local[0] = AddBackslash(ExtractFileDir(Path)) + FindGetFileName(Local[0])
+#define FindFolderNameWithWildcard(Path) \
+    Local[0] = FindFirst(Path, faDirectory), \
+    Local[0] = FindGetFileName(Local[0])
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -89,6 +95,7 @@ Source: "dist\main\api-ms-win-crt-heap-l1-1-0.dll"; DestDir: "{app}"; Flags: ign
 Source: "dist\main\api-ms-win-crt-locale-l1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\api-ms-win-crt-math-l1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\api-ms-win-crt-multibyte-l1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "dist\main\api-ms-win-crt-private-l1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\api-ms-win-crt-process-l1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\api-ms-win-crt-runtime-l1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\api-ms-win-crt-stdio-l1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -98,13 +105,13 @@ Source: "dist\main\api-ms-win-crt-utility-l1-1-0.dll"; DestDir: "{app}"; Flags: 
 Source: "dist\main\base_library.zip"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\LEGAL NOTICES.md"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\libcrypto-1_1.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "dist\main\libffi-7.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "dist\main\libffi-*.dll"; DestDir: "{app}"; Flags: ignoreversion skipifsourcedoesntexist
 Source: "dist\main\libopenblas*.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\libssl-1_1.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\mfc140u.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\pyexpat.pyd"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\python3.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "dist\main\python310.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "dist\main\python311.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\Pywr Editor.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\Pywr Editor.ico"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\select.pyd"; DestDir: "{app}"; Flags: ignoreversion
@@ -117,27 +124,29 @@ Source: "dist\main\win32evtlog.pyd"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\win32pdh.pyd"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\win32trace.pyd"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\win32ui.pyd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "dist\main\markupsafe\*"; DestDir: "{app}\markupsafe"; Flags: ignoreversion recursesubdirs createallsubdirs skipifsourcedoesntexist
+
 Source: "dist\main\numexpr\*"; DestDir: "{app}\numexpr"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "dist\main\numpy\*"; DestDir: "{app}\numpy"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "dist\main\pandas\*"; DestDir: "{app}\pandas"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "dist\main\PIL\*"; DestDir: "{app}\PIL"; Flags: ignoreversion recursesubdirs createallsubdirs skipifsourcedoesntexist
-Source: "dist\main\psutils\*"; DestDir: "{app}\psutils"; Flags: ignoreversion recursesubdirs createallsubdirs skipifsourcedoesntexist
-Source: "dist\main\PySide6\*"; DestDir: "{app}\PySide6"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "dist\main\pyqtgraph\*"; DestDir: "{app}\pyqtgraph"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "dist\main\PySide6\*"; DestDir: "{app}\PySide6"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "dist\main\pytz\*"; DestDir: "{app}\pytz"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "dist\main\pywin32_system32\*"; DestDir: "{app}\pywin32_system32"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "dist\main\pywr\*"; DestDir: "{app}\pywr"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#FindFolderWithWildcard("dist\main\pywr-*.dist-info")}\*"; DestDir: "{app}\{#FindFolderNameWithWildcard("dist\main\pywr-*.dist-info")}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "dist\main\qtawesome\*"; DestDir: "{app}\qtawesome"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "dist\main\scipy\*"; DestDir: "{app}\scipy"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "dist\main\scipy.libs\*"; DestDir: "{app}\scipy.libs"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "dist\main\shiboken6\*"; DestDir: "{app}\shiboken6"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "dist\main\tables\*"; DestDir: "{app}\tables"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "dist\main\tables.libs\*"; DestDir: "{app}\tables.libs"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#FindFolderWithWildcard("dist\main\wheel-*.dist-info")}\*"; DestDir: "{app}\{#FindFolderNameWithWildcard("dist\main\wheel-*.dist-info")}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "dist\main\win32com\*"; DestDir: "{app}\win32com"; Flags: ignoreversion recursesubdirs createallsubdirs
-; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+Source: "dist\main\yaml\*"; DestDir: "{app}\yaml"; Flags: ignoreversion recursesubdirs createallsubdirs
+
 
 [Registry]
-;Root: HKA; Subkey: "Software\Classes\{#MyAppAssocExt}\OpenWithProgids"; ValueType: string; ValueName: "{#MyAppAssocKey}"; ValueData: ""; Flags: uninsdeletevalue
-;Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey}"; ValueType: string; ValueName: ""; ValueData: "{#MyAppAssocName}"; Flags: uninsdeletekey
-;Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey}\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppExeName},0"
-;Root: HKA; Subkey: "Software\Classes\{#MyAppAssocKey}\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""
 Root: HKA; Subkey: "Software\Classes\Applications\{#MyAppExeName}\SupportedTypes"; ValueType: string; ValueName: ".myp"; ValueData: ""
 
 [Icons]
