@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 All issue numbers are relative to https://github.com/pywr-editor/editor
 
 
+## v2.0.1 - 2023-05-31
+### Fixed
+- The frozen application and installer did not include some imports needed by pywr ([#183](https://github.com/pywr-editor/editor/issues/183)).
+
 ## v2.0.0 - 2023-05-29
 ### Added
 - Pywr is now bundled with the editor, and you can run and debug your model using the new Toolbar `Run` tab. You can also change the start, end date, timestep as well as run and pause the model to a specific date ([#122](https://github.com/pywr-editor/editor/issues/122))
