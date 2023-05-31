@@ -6,6 +6,7 @@ from io import StringIO
 from typing import TypedDict
 
 import pandas as pd
+import pywr
 from pandas import Timestamp
 from PySide6.QtCore import QMutex, QObject, QWaitCondition, Signal
 from pywr.model import Model
@@ -101,7 +102,7 @@ class PywrWorker(QObject):
         # Load the model first and check if it fails
         # noinspection PyBroadException
         try:
-            self.logger.debug("Loading model")
+            self.logger.debug(f"Loading model. Using pywr-{pywr.__version__}")
             self.status_update.emit("Loading model")
             # noinspection PyArgumentList
             self.pywr_model: Model = Model.load(

@@ -77,7 +77,7 @@ class AppStylesheet:
         return {
             "QMainWindow": {"background": Color("gray", 80).hex},
             "QStatusBar": {
-                "background": Color("gray", 200).hex,
+                "background": Color("gray", 80).hex,
                 "color": Color("gray", 600).hex,
             },
             "QToolTip": {
