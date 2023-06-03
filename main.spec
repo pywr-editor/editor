@@ -1,9 +1,9 @@
 # -*- mode: python ; coding: utf-8 -*-
-import os
 import shutil
 from pathlib import Path
 
 import pywr
+import tables
 from win32com.propsys import propsys
 
 block_cipher = None
@@ -16,7 +16,7 @@ a = Analysis(
     binaries=[
         (win32_module_path / "propsys.pyd", "win32com\propsys"),
         (win32_module_path / "pscon.py", "win32com\propsys"),
-        (Path(os.environ["VIRTUAL_ENV"]) / "bin" / "libblosc2.dll", "tables"),
+        (Path(tables.__file__).parent / "libblosc2.dll", "tables"),
     ],
     datas=[
         ("LEGAL NOTICES.md", "."),
@@ -82,5 +82,8 @@ coll = COLLECT(
     name="main",
 )
 
-# PyInstaller does not want to copy the dist info folder (see datas attribute)
+# PyInstaller does not want to copy the following files/folder in the data attr
 shutil.copytree(pywr_dist.as_posix(), f"./dist/main/{pywr_dist.name}")
+shutil.copyfile(
+    Path(tables.__file__).parent / "libblosc2.dll", "./dist/main/tables/libblosc2.dll"
+)
