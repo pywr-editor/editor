@@ -278,13 +278,14 @@ class AbstractModelComponentLineEditWidget(FormWidget):
             return None
 
         if self.is_anonymous_component is True:
-            # for constant parameter from value, return the number instead of the
-            # dictionary
+            # for constant parameter, return the number instead of the dictionary
+            # only if "value" key is given. User can provide comment or set scale, etc.
             if (
                 self.is_parameter
                 and self.component_obj.key is not None
                 and self.component_obj.key == "constant"
                 and "value" in self.component_obj.props
+                and len(self.component_obj.props.keys()) == 2
             ):
                 return self.component_obj.props["value"]
             else:
