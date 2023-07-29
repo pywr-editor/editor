@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 All issue numbers are relative to https://github.com/pywr-editor/editor
 
 
+## v2.0.2 - 2023-07-29
+### Fixed
+- Fixed import of `tables` module in the GitHub pipeline ([#186](https://github.com/pywr-editor/editor/issues/186))
+- Some dictionary keys of a nested `ConstantParameter` were dropped when the parameter configuration was saved ([#188](https://github.com/pywr-editor/editor/issues/188))
+- The editor version in the Windows installer setup is updated during a release
+
 ## v2.0.1 - 2023-05-31
 ### Fixed
 - The frozen application and installer did not include some imports needed by pywr ([#183](https://github.com/pywr-editor/editor/issues/183)).
