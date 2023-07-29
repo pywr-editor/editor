@@ -19,6 +19,9 @@ push = false
     '^__version__ = "{version}"$',
     '^__build_date__ = "YYYY-MM-DD"$',
 ]
+"windows_setup.iss" = [
+    "#define MyAppVersion \"{version}\""
+]
 
 [tool.isort]
 profile = "black"
