@@ -56,6 +56,7 @@ class ControlCurvePiecewiseInterpolatedParameterSection(FormSection):
                             "multiple_variables": True,
                             "show_row_numbers": True,
                             "row_number_label": "Above curve #",
+                            "lower_bound": -pow(10, 6),
                             # values are provided by row
                             "transpose_values": True,
                             "variable_names": ["Largest value", "Smallest value"],
