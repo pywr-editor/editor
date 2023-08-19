@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 All issue numbers are relative to https://github.com/pywr-editor/editor
 
 
+## v2.0.3 - 2023-08-19
+### Fixed
+- Negative costs could not be input for a `ControlCurvePiecewiseInterpolatedParameter`([#191](https://github.com/pywr-editor/editor/issues/191))
+- Allow floats in the RBF bounds in the optimisation section ([#193](https://github.com/pywr-editor/editor/issues/193))
+- When pywr is running and the inspector tree is open, the editor crashed due to a wrong function signature ([#195](https://github.com/pywr-editor/editor/issues/195))
+
+### Changed
+- Distributed application will now contain `pywr-1.21.0` and `Qt-6.5.2` ([#197](https://github.com/pywr-editor/editor/issues/197))
+
+
 ## v2.0.2 - 2023-07-29
 ### Fixed
 - Fixed import of `tables` module in the GitHub pipeline ([#186](https://github.com/pywr-editor/editor/issues/186))
