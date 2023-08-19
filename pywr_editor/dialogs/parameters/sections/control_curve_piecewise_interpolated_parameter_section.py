@@ -63,11 +63,11 @@ class ControlCurvePiecewiseInterpolatedParameterSection(FormSection):
                         },
                         validate_fun=self._check_size,
                         value=self.form.field_value("values"),
-                        help_text="The first value pair is used between the maximum and"
-                        "the first control curve, the second pair between the first and"
-                        " second curve, and so on until the last pair is reached to "
-                        "interpolate between the last control curve and the minimum "
-                        "storage",
+                        help_text="The first value pair is used between the maximum "
+                        "and the first control curve, the second pair between the "
+                        "first and second curve, and so on until the last pair is "
+                        "reached to interpolate between the last control curve and "
+                        "the minimum storage",
                     ),
                     FieldConfig(
                         name="minimum",
