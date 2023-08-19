@@ -163,7 +163,7 @@ class InspectorTree(QTreeWidget):
             if parameter.name is None:
                 continue
             total_parameters += 1
-            parameter_config = self.model_config.parameters.get_config_from_name(
+            parameter_config = self.model_config.parameters.config(
                 parameter.name, as_dict=False
             )
             parameter_item = QTreeWidgetItem(root)
@@ -261,7 +261,9 @@ class InspectorTree(QTreeWidget):
             # print all nested anonymous parameters
             for nested_param in attr_value:
                 nested_param: Parameter
-                key = ParameterConfig.string_to_key(nested_param.__class__.__name__)
+                key = ParameterConfig(nested_param).string_to_key(
+                    nested_param.__class__.__name__
+                )
                 all_nested_attributes = inspect.getmembers(
                     nested_param,
                     lambda a: not inspect.isroutine(a),
