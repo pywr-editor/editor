@@ -44,9 +44,11 @@ class ArrayIndexedScenarioMonthlyFactorsParameterSection(FormSection):
                             "show_row_numbers": True,
                             "row_number_label": "Timestep number",
                             "variable_names": "Value",
-                            "min_total_values": total_model_steps
-                            if total_model_steps is not None
-                            else None,
+                            "min_total_values": (
+                                total_model_steps
+                                if total_model_steps is not None
+                                else None
+                            ),
                         },
                         help_text="Provides the timeseries values to be perturbed "
                         "using the monthly factors below in each ensemble",

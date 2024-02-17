@@ -31,9 +31,11 @@ class ArrayIndexedParameterSection(FormSection):
                         field_args={
                             "show_row_numbers": True,
                             "row_number_label": "Timestep number",
-                            "min_total_values": total_model_steps
-                            if total_model_steps is not None
-                            else None,
+                            "min_total_values": (
+                                total_model_steps
+                                if total_model_steps is not None
+                                else None
+                            ),
                         },
                         validate_fun=self._check_count,
                         value=self.form.field_value("values"),
