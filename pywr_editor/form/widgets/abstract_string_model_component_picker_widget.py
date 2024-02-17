@@ -1,10 +1,11 @@
 from typing import TYPE_CHECKING, Literal
 
+from PySide6.QtCore import Slot
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QHBoxLayout
 
 from pywr_editor.form import FormField, FormWidget, Validation
-from pywr_editor.utils import Logging
+from pywr_editor.utils import Logging, ModelComponentTooltip
 from pywr_editor.widgets import ComboBox, ParameterIcon, RecorderIcon
 
 if TYPE_CHECKING:
@@ -50,14 +51,14 @@ class AbstractStringModelComponentPickerWidget(FormWidget):
         self.model_config = self.form.model_config
         if self.is_parameter:
             self.comp_data = self.model_config.pywr_parameter_data
-            model_prop = self.model_config.parameters
-            model_comp_names = list(model_prop.get_all().keys())
+            self.model_prop = self.model_config.parameters
+            model_comp_names = list(self.model_prop.get_all().keys())
             include_method = self.model_config.includes.get_custom_parameters
             icon_class = ParameterIcon
         elif self.is_recorder:
             self.comp_data = self.model_config.pywr_recorder_data
-            model_prop = self.model_config.recorders
-            model_comp_names = list(model_prop.get_all().keys())
+            self.model_prop = self.model_config.recorders
+            model_comp_names = list(self.model_prop.get_all().keys())
             include_method = self.model_config.includes.get_custom_recorders
             icon_class = RecorderIcon
         else:
@@ -80,9 +81,10 @@ class AbstractStringModelComponentPickerWidget(FormWidget):
 
         # add component names with icon
         self.combo_box = ComboBox()
+        self.combo_box.currentTextChanged.connect(self.set_tooltip)
         self.combo_box.addItem("None")
         for name in model_comp_names:
-            param_obj = model_prop.config(name, as_dict=False)
+            param_obj = self.model_prop.config(name, as_dict=False)
             key = param_obj.key
 
             # filter component keys
@@ -167,3 +169,19 @@ class AbstractStringModelComponentPickerWidget(FormWidget):
         :return: True if the type is a recorder, False otherwise
         """
         return self.component_type == "recorder"
+
+    @Slot(str)
+    def set_tooltip(self, name: str) -> None:
+        """
+        Set the tooltip containing the model component configuration.
+        :param name: The component name.
+        :return: None
+        """
+        if name != "None":
+            tooltip = ModelComponentTooltip(
+                model_config=self.model_config,
+                comp_obj=self.model_prop.config(name, as_dict=False),
+            )
+            self.combo_box.setToolTip(tooltip.render())
+        else:
+            self.combo_box.setToolTip("")
