@@ -38,9 +38,7 @@ class ToolbarBaseButton(QToolButton):
         self.action = action
         self.setObjectName(f"toolbar_button_{action.text()}")
         self._update_status()
-        # noinspection PyUnresolvedReferences
         self.clicked.connect(self.action.trigger)
-        # noinspection PyUnresolvedReferences
         self.action.changed.connect(self._update_status)
 
     @Slot()
@@ -49,13 +47,17 @@ class ToolbarBaseButton(QToolButton):
         Updates the button status when the action changes.
         :return: None
         """
-        self.setText(self.action.text())
-        self.setStatusTip(self.action.statusTip())
-        self.setToolTip(self.action.toolTip())
-        self.setIcon(self.action.icon())
-        self.setEnabled(self.action.isEnabled())
-        self.setCheckable(self.action.isCheckable())
-        self.setChecked(self.action.isChecked())
+        # check whether C++ object was deleted
+        try:
+            self.setText(self.action.text())
+            self.setStatusTip(self.action.statusTip())
+            self.setToolTip(self.action.toolTip())
+            self.setIcon(self.action.icon())
+            self.setEnabled(self.action.isEnabled())
+            self.setCheckable(self.action.isCheckable())
+            self.setChecked(self.action.isChecked())
+        except RuntimeError:
+            pass
 
     @property
     def base_stylesheet(self) -> dict:

@@ -92,6 +92,26 @@ class NodeConfig(ComponentConfig):
             return self.props["position"][position_key]
         return None
 
+    def change_name(self, name: str) -> None:
+        """
+        Change the node name.
+        :param name: The new name.
+        :return: None. This only update the internal dictionary.
+        """
+        self.props["name"] = name
+
+    def change_position(self, position: list[float]) -> None:
+        """
+        Change the node position.
+        :param position: The new position to set.
+        :return: None. This only update the internal dictionary.
+        """
+        position_key = Constants.POSITION_KEY.value
+        if "position" in self.props:
+            self.props["position"][position_key] = position
+        else:
+            self.props["position"] = {position_key: position}
+
     @property
     def is_visible(self) -> bool:
         """
