@@ -452,6 +452,19 @@ class ModelConfig(QObject):
         """
         self.file = ModelFileInfo(self.json_file)
 
+    @property
+    def as_string(self) -> str | bool:
+        """
+        Saves the model as JSON string.
+        :return: A string containing the model, or False if the model cannot be
+        converted to a string.
+        """
+        # noinspection PyBroadException
+        try:
+            return json.dumps(self.json, indent=2)
+        except Exception:
+            return False
+
     def save(self) -> bool | str:
         """
         Saves the JSON file.

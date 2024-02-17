@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Literal
 
 import PySide6
-from PySide6.QtCore import Signal, Slot
+from PySide6.QtCore import QTimer, Signal, Slot
 from PySide6.QtGui import QAction, QKeySequence, Qt, QUndoStack
 from PySide6.QtWidgets import QFileDialog, QMainWindow, QMessageBox, QSplitter
 
@@ -92,6 +92,12 @@ class MainWindow(QMainWindow):
             self.error_message.emit(self.model_config.load_error, True)
             return
         self.model_config.model_changed.connect(self.on_model_change)
+
+        # listen for file changes
+        self.timer = QTimer(self)
+        # noinspection PyUnresolvedReferences
+        self.timer.timeout.connect(self.listen_for_changes)
+        self.timer.start(3000)
 
         self.editor_settings = Settings(model_file)
         # store recent files
@@ -1092,3 +1098,30 @@ class MainWindow(QMainWindow):
             self.prompt_unsaved_changes = False
             MainWindow(self.model_file)
             self.close()
+
+    @Slot()
+    def listen_for_changes(self) -> None:
+        """
+        Check whether the file is changed externally and reload the model.
+        :return: None
+        """
+        # do not refresh if the window has not focus
+        if not self.window().isActiveWindow():
+            return
+
+        # noinspection PyBroadException
+        try:
+            with open(self.model_file, "r") as file:
+                # only reload the editor if there are not changes made using the editor
+                if (
+                    file.read() != self.model_config.as_string
+                    and not self.model_config.has_changes
+                ):
+                    self.logger.debug(
+                        "Reloading model because it was changed externally"
+                    )
+                    self.timer.stop()
+                    self.close()
+                    MainWindow(self.model_file)
+        except Exception:
+            pass
