@@ -445,3 +445,11 @@ class SchematicArrow(AbstractSchematicShape, QGraphicsLineItem):
         color_widget: ColorPickerWidget = dialog.form.find_field("border_color").widget
         color_widget.changed_color.connect(dialog.form.on_field_changed)
         dialog.show()
+
+    def mouseDoubleClickEvent(self, event) -> None:
+        """
+        Edit node on double-click.
+        :param event: The event that triggered this.
+        :return: None.
+        """
+        self.on_edit_shape()
