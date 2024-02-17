@@ -268,20 +268,11 @@ class LibraryPanel(QGraphicsView):
 
     def wheelEvent(self, event: PySide6.QtGui.QWheelEvent) -> None:
         """
-        Handles zoom using the mouse wheel.
+        Toggle the scroll buttons.
         :param event: The event being triggered.
         :return: None
         """
-        # make scroll smoother
-        delta = 4
-        if event.angleDelta().y() > 0:
-            scroll_delta = -delta
-        else:
-            scroll_delta = delta
-        self.verticalScrollBar().setValue(
-            self.verticalScrollBar().value() + scroll_delta
-        )
-        # toggle scroll buttons
+        super().wheelEvent(event)
         self.parent().toggle_scroll_buttons()
 
     def mousePressEvent(self, event: PySide6.QtGui.QMouseEvent) -> None:
