@@ -1,6 +1,6 @@
 setuptools==69.1.0
 pandas==2.2.0
-pywr==1.21.0
+pywr==1.23.0
 pyqtgraph==0.13.3
 pywin32==306
 numpy==1.26.4
