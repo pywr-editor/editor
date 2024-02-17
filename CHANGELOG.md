@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 All issue numbers are relative to https://github.com/pywr-editor/editor
 
 
+## v2.1 - 2024-02-18
+### Fixed
+- Disable action buttons (move and delete) after adding a new control curve. This prevents the editor from
+crashing when no item is selected in the widget ([#202](https://github.com/pywr-editor/editor/issues/202))
+- If the model has changes and is reloaded, two save prompts used to be displayed ([#212](https://github.com/pywr-editor/editor/issues/212))
+- When user clicks on a searched item in the global search, no action is triggered ([#214](https://github.com/pywr-editor/editor/issues/214))
+- Scroll with the mouse wheel was too slow in the panel used to add new nodes and shapes ([#216](https://github.com/pywr-editor/editor/issues/216))
+
+### Changed
+- Updated dependencies ([#197](https://github.com/pywr-editor/editor/issues/197))
+- The list of model parameters are now alphabetically sorted in the UI dropdown menus ([#205](https://github.com/pywr-editor/editor/issues/204))
+- To improve user experience dialogs are automatically closed after a form is saved ([#208](https://github.com/pywr-editor/editor/issues/208))
+
+### Added
+- Added ability to clone a node from the schematic. By right-clicking on a node and pressing "Clone" the node and 
+its model is configuration are cloned. The new node is assigned a random name ([#205](https://github.com/pywr-editor/editor/issues/204))
+- Updated support for pywr to 1.23. The `loss_factor `in `LossLink `can now be provided as a parameter ([#210](https://github.com/pywr-editor/editor/issues/210))
+- Users can now double click on a schematic item (node or shape) to edit it ([#214](https://github.com/pywr-editor/editor/issues/214))
+- When selecting a named parameter or recorder from a dropdown, display its configuration in a tooltip ([#220](https://github.com/pywr-editor/editor/issues/220))
+- Double click on a model component (recorder or parameter) to edit it in a list or table widget ([#222](https://github.com/pywr-editor/editor/issues/222))
+- Listen for changes to the JSON file made externally (for example using a text editor). If there are any, the 
+ editor will be reloaded to include the new changes ([#224](https://github.com/pywr-editor/editor/issues/224))
+
+
 ## v2.0.3 - 2023-08-19
 ### Fixed
 - Negative costs could not be input for a `ControlCurvePiecewiseInterpolatedParameter`([#191](https://github.com/pywr-editor/editor/issues/191))
