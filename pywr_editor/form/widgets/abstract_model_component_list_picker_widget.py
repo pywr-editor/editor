@@ -361,6 +361,11 @@ class AbstractModelComponentsListPickerWidget(FormWidget):
         # noinspection PyUnresolvedReferences
         self.model.layoutChanged.emit()
 
+        # disable buttons on change
+        self.move_up.setEnabled(False)
+        self.move_down.setEnabled(False)
+        self.delete_button.setEnabled(False)
+
     def sanitise_value(
         self, value: list[int | float | str | dict]
     ) -> [list[dict | str], str | None]:
