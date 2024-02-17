@@ -46,6 +46,7 @@ class SearchDialog(QDialog):
         completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
         completer.setFilterMode(Qt.MatchFlag.MatchContains)
         completer.setModel(model)
+        completer.setMaxVisibleItems(10)
         # noinspection PyTypeChecker
         completer.connect(
             completer, SIGNAL("activated(QModelIndex)"), self.open_component
@@ -60,7 +61,10 @@ class SearchDialog(QDialog):
         line_edit.setStyleSheet("#search_field { font-size: 20px }")
 
         # Description
-        description = QLabel("Start typing to find and open any model components")
+        description = QLabel(
+            "Start typing to find any model components. Click on an item or press ENTER"
+            " to open its configuration"
+        )
         description.setStyleSheet("font-size: 11px; border: 0")
 
         self.setObjectName("search_dialog")
