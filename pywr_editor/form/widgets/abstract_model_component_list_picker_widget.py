@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Any, List, Literal, Union
 
 import qtawesome as qta
-from PySide6.QtCore import Slot
+from PySide6.QtCore import QModelIndex, Slot
 from PySide6.QtWidgets import QAbstractItemView, QHBoxLayout, QVBoxLayout
 
 from pywr_editor.form import (
@@ -137,7 +137,7 @@ class AbstractModelComponentsListPickerWidget(FormWidget):
         )
         self.edit_button.setEnabled(False)
         # noinspection PyUnresolvedReferences
-        self.edit_button.clicked.connect(self.on_edit_component)
+        self.edit_button.clicked.connect(self.on_edit_selected_component)
         self.edit_button.setToolTip(f"Edit the selected {component_type}")
 
         self.delete_button = PushIconButton(
@@ -188,6 +188,7 @@ class AbstractModelComponentsListPickerWidget(FormWidget):
             )
         else:
             self.list = ListView(**widget_args)
+        self.list.doubleClicked.connect(self.on_component_double_click)
         self.list.setMaximumHeight(100)
         # noinspection PyUnresolvedReferences
         self.list.selectionModel().selectionChanged.connect(self.on_selection_changed)
@@ -287,13 +288,29 @@ class AbstractModelComponentsListPickerWidget(FormWidget):
         self.list.clear_selection()
 
     @Slot()
-    def on_edit_component(self) -> None:
+    def on_edit_selected_component(self):
         """
         Opens the dialog to edit an existing component from the list.
         :return: None
         """
-        current_index = self.list.selectionModel().selection().indexes()[0].row()
+        self.on_edit_component(
+            self.list.selectionModel().selection().indexes()[0].row()
+        )
 
+    @Slot(QModelIndex)
+    def on_component_double_click(self, model_index: QModelIndex) -> None:
+        """
+        Opens the dialog to edit an existing component on double click.
+        :return: None
+        """
+        self.on_edit_component(model_index.row())
+
+    def on_edit_component(self, current_index: int) -> None:
+        """
+        Opens the dialog to edit an existing component from the list.
+        :param current_index: The model row to change.
+        :return: None
+        """
         model_value = self.model.values[current_index]
         # model component
         if isinstance(model_value, str):
