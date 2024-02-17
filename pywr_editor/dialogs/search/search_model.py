@@ -39,7 +39,7 @@ class SearchModel(QAbstractListModel):
                         ExtensionIcon(model_config.tables.get_extension(name))
                     ),
                     "comp_type": None,
-                    "type": ItemType.TABLE,
+                    "type": ItemType.TABLE.value,
                 }
             )
         for name in model_config.parameters.names:
@@ -49,7 +49,7 @@ class SearchModel(QAbstractListModel):
                     "name": name,
                     "icon": QIcon(ParameterIcon(param_obj.key)),
                     "comp_type": f"{param_obj.humanised_type} - parameter",
-                    "type": ItemType.PARAMETER,
+                    "type": ItemType.PARAMETER.value,
                 }
             )
 
@@ -59,8 +59,8 @@ class SearchModel(QAbstractListModel):
                 {
                     "name": name,
                     "icon": QIcon(RecorderIcon(recorder_obj.key)),
-                    "comp_type": f"{recorder_obj.humanised_type} - recorder",  #
-                    "type": ItemType.RECORDER,
+                    "comp_type": f"{recorder_obj.humanised_type} - recorder",
+                    "type": ItemType.RECORDER.value,
                 }
             )
 
@@ -77,7 +77,7 @@ class SearchModel(QAbstractListModel):
                     "name": name,
                     "icon": QIcon(icon),
                     "comp_type": node_obj.humanised_type,
-                    "type": ItemType.NODE,
+                    "type": ItemType.NODE.value,
                 }
             )
 
