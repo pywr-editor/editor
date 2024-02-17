@@ -1,5 +1,5 @@
 #define MyAppName "Pywr editor"
-#define MyAppVersion "2.0.3"
+#define MyAppVersion "2.1.0"
 #define MyAppPublisher "Stefano Simoncelli"
 #define MyAppURL "https://github.com/pywr-editor/editor"
 #define MyAppExeName "Pywr Editor.exe"
