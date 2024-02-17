@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Any, Literal, TypedDict, Union
 
 import PySide6
 import qtawesome as qta
-from PySide6.QtCore import QSize, Slot
+from PySide6.QtCore import QSize, QUuid, Slot
 from PySide6.QtGui import QAction, QFont, QPainterPath
 from PySide6.QtWidgets import (
     QGraphicsItem,
@@ -16,7 +16,9 @@ from pywr_editor.style import Color
 from pywr_editor.utils import ModelComponentTooltip
 from pywr_editor.widgets import ContextualMenu
 
+from ..model import NodeConfig
 from .abstract_schematic_item import AbstractSchematicItem
+from .commands.add_node_command import AddNodeCommand
 from .commands.disconnect_node_command import DisconnectNodeCommand
 from .edge import Edge
 
@@ -353,15 +355,20 @@ class SchematicNode(AbstractSchematicItem, QGraphicsItemGroup):
         edit_node_action = context_menu.addAction(
             qta.icon("msc.edit", color=icon_color), "Edit node"
         )
-        # noinspection PyUnresolvedReferences
         edit_node_action.triggered.connect(self.on_edit_node)
         self.view.addAction(edit_node_action)
+
+        # clone node action
+        clone_node_action = context_menu.addAction(
+            qta.icon("msc.copy", color=icon_color), "Clone node"
+        )
+        clone_node_action.triggered.connect(self.on_clone_node)
+        self.view.addAction(clone_node_action)
 
         # delete node action
         delete_node_action = context_menu.addAction(
             qta.icon("msc.trash", color=icon_color), "Delete node"
         )
-        # noinspection PyUnresolvedReferences
         delete_node_action.triggered.connect(self.on_delete_item)
         self.view.addAction(delete_node_action)
 
@@ -395,6 +402,23 @@ class SchematicNode(AbstractSchematicItem, QGraphicsItemGroup):
                 self.add_delete_edge_actions(edge_disconnect_submenu)
 
         context_menu.exec(event.screenPos())
+
+    @Slot()
+    def on_clone_node(self) -> None:
+        """
+        Clone the schematic node.
+        :return: None
+        """
+        # add new name and shift the coordinates
+        new_node_props = NodeConfig(self.model_node.props, deepcopy=True)
+        new_node_props.change_name(f"Node {QUuid().createUuid().toString()[1:7]}")
+        new_node_props.change_position([self.x + 100, self.y])
+
+        # register the action in the undo stack
+        command = AddNodeCommand(
+            schematic=self.view, added_node_dict=new_node_props.props
+        )
+        self.view.app.undo_stack.push(command)
 
     @Slot(QAction)
     def on_disconnect_edge(self, action: QAction) -> None:
