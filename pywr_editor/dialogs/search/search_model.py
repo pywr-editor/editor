@@ -59,7 +59,7 @@ class SearchModel(QAbstractListModel):
                 {
                     "name": name,
                     "icon": QIcon(RecorderIcon(recorder_obj.key)),
-                    "comp_type": f"{recorder_obj.humanised_type} - recorder",  #
+                    "comp_type": f"{recorder_obj.humanised_type} - recorder",
                     "type": ItemType.RECORDER.value,
                 }
             )

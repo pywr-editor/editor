@@ -47,6 +47,7 @@ class SearchDialog(QDialog):
         completer.setFilterMode(Qt.MatchFlag.MatchContains)
         completer.setModel(model)
         completer.setMaxVisibleItems(10)
+        completer.popup().setStyleSheet("::item{ padding: 5px }")
         # noinspection PyTypeChecker
         completer.connect(
             completer, SIGNAL("activated(QModelIndex)"), self.open_component
