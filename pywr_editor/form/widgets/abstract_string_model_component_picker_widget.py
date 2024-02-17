@@ -63,6 +63,9 @@ class AbstractStringModelComponentPickerWidget(FormWidget):
         else:
             raise ValueError("The component_type can only be 'parameter' or 'recorder'")
 
+        # sort names alphabetically
+        model_comp_names.sort(key=str.lower)
+
         # check if the component type exists
         all_comp_keys = self.comp_data.keys + list(include_method().keys())
         if include_comp_key:
