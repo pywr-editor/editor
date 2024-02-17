@@ -161,3 +161,11 @@ class SchematicText(AbstractSchematicShape, QGraphicsTextItem):
             )
 
         return Validation()
+
+    def mouseDoubleClickEvent(self, event) -> None:
+        """
+        Edit node on double-click.
+        :param event: The event that triggered this.
+        :return: None.
+        """
+        self.on_edit_shape()

@@ -328,6 +328,14 @@ class SchematicNode(AbstractSchematicItem, QGraphicsItemGroup):
 
         return True
 
+    def mouseDoubleClickEvent(self, event) -> None:
+        """
+        Edit node on double-click.
+        :param event: The event that triggered this.
+        :return: None.
+        """
+        self.on_edit_node()
+
     def contextMenuEvent(
         self, event: PySide6.QtWidgets.QGraphicsSceneContextMenuEvent
     ) -> None:
@@ -444,14 +452,6 @@ class SchematicNode(AbstractSchematicItem, QGraphicsItemGroup):
         self.view.app.status_message.emit(
             f'Deleted edge from "{source_node.name}" to "{target_node.name}"'
         )
-
-    # @Slot()
-    # def on_delete_node(self) -> None:
-    #     """
-    #     Deletes a node and its edges from the schematic and model configuration.
-    #     :return: None
-    #     """
-    #     self.view.on_delete_item([self])
 
     @Slot()
     def on_edit_node(self) -> None:
