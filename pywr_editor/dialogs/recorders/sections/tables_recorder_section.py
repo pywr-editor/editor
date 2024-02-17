@@ -105,18 +105,20 @@ class TablesRecorderSection(FormSection):
                         field_type=IntegerWidget,
                         field_args={"min_value": 0, "max_value": 9},
                         default_value=0,
-                        value=filter_kwd["complevel"]
-                        if "complevel" in filter_kwd
-                        else None,
+                        value=(
+                            filter_kwd["complevel"]
+                            if "complevel" in filter_kwd
+                            else None
+                        ),
                         help_text="A value of 0 (the default) disables compression",
                     ),
                     FieldConfig(
                         name="complib",
                         label="Compression algorithm",
                         field_type=H5CompressionLibWidget,
-                        value=filter_kwd["complib"]
-                        if "complib" in filter_kwd
-                        else None,
+                        value=(
+                            filter_kwd["complib"] if "complib" in filter_kwd else None
+                        ),
                     ),
                     FieldConfig(
                         name="metadata",

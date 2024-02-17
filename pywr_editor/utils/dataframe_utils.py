@@ -89,9 +89,11 @@ def get_index_values(
     # return data by columns by transposition. If column does not exist, returns
     # empty set. A set is used to collect unique names only.
     return [
-        list(set(table[index_name].values.transpose().tolist()))
-        if index_name in all_index_names
-        else []
+        (
+            list(set(table[index_name].values.transpose().tolist()))
+            if index_name in all_index_names
+            else []
+        )
         for index_name in index_names
     ]
 

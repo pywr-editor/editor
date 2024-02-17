@@ -128,27 +128,33 @@ class DictionaryItemFormWidget(Form):
                     label="1 dimensional array",
                     field_type=TableValuesWidget,
                     field_args={"min_total_values": 1},
-                    value=data_values_dict
-                    if len(data_values_dict) == 1
-                    else empty_data_values_dict,
+                    value=(
+                        data_values_dict
+                        if len(data_values_dict) == 1
+                        else empty_data_values_dict
+                    ),
                 ),
                 FieldConfig(
                     name="field_2d_array",
                     label="2 dimensional array",
                     field_type=TableValuesWidget,
                     field_args={"min_total_values": 1},
-                    value=data_values_dict
-                    if len(data_values_dict) == 2
-                    else empty_data_values_dict,
+                    value=(
+                        data_values_dict
+                        if len(data_values_dict) == 2
+                        else empty_data_values_dict
+                    ),
                 ),
                 FieldConfig(
                     name="field_3d_array",
                     label="3 dimensional array",
                     field_type=TableValuesWidget,
                     field_args={"min_total_values": 1},
-                    value=data_values_dict
-                    if len(data_values_dict) == 3
-                    else empty_data_values_dict,
+                    value=(
+                        data_values_dict
+                        if len(data_values_dict) == 3
+                        else empty_data_values_dict
+                    ),
                 ),
                 FieldConfig(
                     name="field_dict",

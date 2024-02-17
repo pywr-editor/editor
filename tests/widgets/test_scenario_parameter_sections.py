@@ -19,7 +19,6 @@ from tests.utils import resolve_model_path
 
 
 class TestDialogParameterControlCurveParameterSection:
-
     """
     Tests the sections for parameters supporting scenario values using
     ScenarioValuesWidget. This is done by testing
