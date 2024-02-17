@@ -77,6 +77,8 @@ class MainWindow(QMainWindow):
             )
             sys.exit(1)
         self.empty_model: bool = False
+        self.prompt_unsaved_changes: bool = True
+        """ Prompts the user for unsaved model changes """
 
         if model_file is None:
             self.logger.debug("No model file was provided")
@@ -755,6 +757,9 @@ class MainWindow(QMainWindow):
         Asks user if they want to save the model file before exiting the editor.
         :return: True whether the close the window, False otherwise.
         """
+        if not self.prompt_unsaved_changes:
+            return True
+
         message = QMessageBox(self)
         message.setWindowTitle("Unsaved changes")
         message.setIcon(QMessageBox.Icon.Information)
@@ -1084,5 +1089,6 @@ class MainWindow(QMainWindow):
 
         answer = message.exec()
         if answer == QMessageBox.StandardButton.Ok:
+            self.prompt_unsaved_changes = False
             MainWindow(self.model_file)
             self.close()
