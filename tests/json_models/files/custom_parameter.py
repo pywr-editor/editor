@@ -65,9 +65,9 @@ class LicenseParameter(Parameter, MyClass):
         timestep = self.model.timestepper.current  # get current timestep
         flow_during_timestep = self._node.flow * timestep.days  # see explanation below
         self._remaining -= flow_during_timestep
-        self._remaining[
-            self._remaining < 0
-        ] = 0  # volume remaining cannot be less than zero
+        self._remaining[self._remaining < 0] = (
+            0  # volume remaining cannot be less than zero
+        )
 
     @classmethod
     def load(cls, model, data):
