@@ -55,9 +55,9 @@ class ParameterForm(ModelComponentForm):
         # (for example for table and external file)
         self.clean_keys()
         self.section_form_data["parameter_obj"] = self.parameter_obj
-        self.section_form_data[
-            "enable_optimisation_section"
-        ] = enable_optimisation_section
+        self.section_form_data["enable_optimisation_section"] = (
+            enable_optimisation_section
+        )
         self.params_data = model_config.pywr_parameter_data
         self.show_warning = False
 

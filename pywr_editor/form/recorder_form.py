@@ -67,9 +67,9 @@ class RecorderForm(ModelComponentForm):
         # (for example for table and external file)
         self.clean_keys()
         self.section_form_data["recorder_obj"] = self.recorder_obj
-        self.section_form_data[
-            "enable_optimisation_section"
-        ] = enable_optimisation_section
+        self.section_form_data["enable_optimisation_section"] = (
+            enable_optimisation_section
+        )
         self.recorders_data = self.model_config.pywr_recorder_data
         self.show_warning = False
 
