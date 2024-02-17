@@ -28,9 +28,10 @@ class BoxBoundaries:
 
 @dataclass
 class SchematicBBoxUtils:
-    items: list[PySide6.QtWidgets.QGraphicsItem] | list[
-        SchematicNode | AbstractSchematicItem
-    ]
+    items: (
+        list[PySide6.QtWidgets.QGraphicsItem]
+        | list[SchematicNode | AbstractSchematicItem]
+    )
 
     @property
     def min_max_bounding_box_coordinates(self) -> BoxBoundaries:

@@ -194,9 +194,7 @@ class TestDialogParameterLineEditWidget:
         assert "must provide a valid parameter" in validation_obj.error_message
 
     @staticmethod
-    def add_parameter_with_checks(
-        qtbot, model_config
-    ) -> [
+    def add_parameter_with_checks(qtbot, model_config) -> [
         ParameterLineEditWidget,
         ModelComponentPickerDialog,
         ParametersDialog,

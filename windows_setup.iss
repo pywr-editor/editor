@@ -58,7 +58,6 @@ Source: "dist\main\_queue.pyd"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\_socket.pyd"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\_ssl.pyd"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\_uuid.pyd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "dist\main\_win32sysloader.pyd"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\api-ms-win-core-console-l1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\api-ms-win-core-datetime-l1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\api-ms-win-core-debug-l1-1-0.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -108,7 +107,6 @@ Source: "dist\main\libcrypto-1_1.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\libffi-*.dll"; DestDir: "{app}"; Flags: ignoreversion skipifsourcedoesntexist
 Source: "dist\main\libopenblas*.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\libssl-1_1.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "dist\main\mfc140u.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\pyexpat.pyd"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\python3.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\python311.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -119,11 +117,11 @@ Source: "dist\main\ucrtbase.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\unicodedata.pyd"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\VCRUNTIME140.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "dist\main\VCRUNTIME140_1.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "dist\main\win32api.pyd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "dist\main\win32evtlog.pyd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "dist\main\win32pdh.pyd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "dist\main\win32trace.pyd"; DestDir: "{app}"; Flags: ignoreversion
-Source: "dist\main\win32ui.pyd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "dist\main\win32\win32api.pyd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "dist\main\win32\_win32sysloader.pyd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "dist\main\win32\win32evtlog.pyd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "dist\main\win32\win32pdh.pyd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "dist\main\win32\win32trace.pyd"; DestDir: "{app}"; Flags: ignoreversion
 
 Source: "dist\main\numexpr\*"; DestDir: "{app}\numexpr"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "dist\main\numpy\*"; DestDir: "{app}\numpy"; Flags: ignoreversion recursesubdirs createallsubdirs

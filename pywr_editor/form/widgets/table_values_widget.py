@@ -290,9 +290,11 @@ class TableValuesWidget(FormWidget):
             if self._all_equal([len(v) for v in variable_values]) is False:
                 max_length = max([len(nested_list) for nested_list in variable_values])
                 variable_values = [
-                    nested_list
-                    if len(nested_list) == max_length
-                    else nested_list + [0] * (max_length - len(nested_list))
+                    (
+                        nested_list
+                        if len(nested_list) == max_length
+                        else nested_list + [0] * (max_length - len(nested_list))
+                    )
                     for nested_list in variable_values
                 ]
                 message = (
