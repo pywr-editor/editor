@@ -1,4 +1,5 @@
-from pywr_editor.form import FieldConfig, FloatWidget
+from pywr_editor.form import FieldConfig
+from pywr_editor.form.widgets.parameter_line_edit_widget import ParameterLineEditWidget
 
 from ..node_dialog_form import NodeDialogForm
 from .abstract_node_section import AbstractNodeSection
@@ -18,10 +19,8 @@ class LossLinkSection(AbstractNodeSection):
             additional_fields=[
                 FieldConfig(
                     name="loss_factor",
-                    field_type=FloatWidget,
-                    field_args={
-                        "min_value": 0,
-                    },
+                    field_type=ParameterLineEditWidget,
+                    min_value=0,
                     default_value=0,
                     value=form.field_value("loss_factor"),
                     help_text="The proportion of flow that is lost through this node",
