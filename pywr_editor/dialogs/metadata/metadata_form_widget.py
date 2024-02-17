@@ -75,10 +75,6 @@ class MetadataFormWidget(Form):
             parent=parent,
         )
 
-        # save form with button click
-        # noinspection PyUnresolvedReferences
-        parent.save_button.clicked.connect(self.on_save)
-
     @staticmethod
     def _check_version_number(name: str, label: str, value: str) -> Validation:
         """
