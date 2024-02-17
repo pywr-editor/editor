@@ -288,7 +288,7 @@ class IncludesDialog(QDialog):
             panel: LibraryPanel = self.app.findChild(LibraryPanel)
             panel.reload()
 
-        self.save_button.setEnabled(False)
+        self.close()
 
     @Slot()
     def on_value_change(self) -> None:

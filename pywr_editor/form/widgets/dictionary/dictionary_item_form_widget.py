@@ -213,3 +213,4 @@ class DictionaryItemFormWidget(Form):
 
         # callback function
         self.after_save(form_data, self.additional_data)
+        self.parent.close()

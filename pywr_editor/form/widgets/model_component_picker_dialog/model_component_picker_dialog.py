@@ -154,6 +154,7 @@ class ModelComponentPickerDialog(QDialog):
 
         # callback function
         self.after_form_save(form_data, self.additional_data)
+        self.close()
 
     @property
     def is_parameter(self) -> bool:

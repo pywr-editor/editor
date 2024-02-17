@@ -57,6 +57,7 @@ class ScenarioValuesWidget(FormWidget):
 
         # noinspection PyTypeChecker
         self.dialog: "ParametersDialog" = self.form.parent
+        self.nested_dialog: ScenarioValuesPickerDialogWidget | None = None
         self.model_config = self.form.model_config
         self.scenario_size: int | None = None
         self.data_type = data_type
@@ -213,7 +214,7 @@ class ScenarioValuesWidget(FormWidget):
         """
         current_index = self.list.selectionModel().selection().indexes()[0].row()
 
-        dialog = ScenarioValuesPickerDialogWidget(
+        self.nested_dialog = ScenarioValuesPickerDialogWidget(
             model_config=self.model_config,
             values=self.model.values[current_index],
             additional_data={
@@ -226,7 +227,7 @@ class ScenarioValuesWidget(FormWidget):
             after_form_save=self.on_form_save,
             parent=self.dialog,
         )
-        dialog.open()
+        self.nested_dialog.open()
 
     @Slot()
     def on_add_new_ensemble(self) -> None:
@@ -234,7 +235,7 @@ class ScenarioValuesWidget(FormWidget):
         Opens the dialog to add new ensemble values.
         :return: None
         """
-        dialog = ScenarioValuesPickerDialogWidget(
+        self.nested_dialog = ScenarioValuesPickerDialogWidget(
             model_config=self.model_config,
             additional_data={
                 "ensemble_number": self.model.rowCount() + 1,
@@ -244,7 +245,7 @@ class ScenarioValuesWidget(FormWidget):
             after_form_save=self.on_form_save,
             parent=self.dialog,
         )
-        dialog.open()
+        self.nested_dialog.open()
 
     def on_form_save(
         self, form_data: dict[str, Any], additional_data: dict[str, Any]
@@ -271,8 +272,11 @@ class ScenarioValuesWidget(FormWidget):
         else:
             self.model.values.append(values)
 
-        # noinspection PyUnresolvedReferences
         self.model.layoutChanged.emit()
+
+        if self.nested_dialog:
+            self.nested_dialog.close()
+            self.nested_dialog = None
 
     def sanitise_value(
         self, value: list[list[int | float]] | None

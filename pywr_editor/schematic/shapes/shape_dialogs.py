@@ -143,3 +143,5 @@ class ShapeDialogForm(Form):
         app = self.dialog.app
         app.schematic.reload()
         app.statusBar().showMessage("Updated shape")
+
+        self.close()

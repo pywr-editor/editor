@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Type, Union
 
-from PySide6.QtCore import QSize, Qt
+from PySide6.QtCore import QSize, Qt, Slot
 from PySide6.QtGui import QWindow
 from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
@@ -58,7 +58,7 @@ class NodeDialog(QDialog):
             parent=self,
         )
         # noinspection PyUnresolvedReferences
-        save_button.clicked.connect(self.form.save)
+        save_button.clicked.connect(self.on_form_save)
 
         layout.addWidget(self.title)
         layout.addWidget(self.form)
@@ -68,6 +68,15 @@ class NodeDialog(QDialog):
         self.setWindowTitle(f"Edit node - {node_name}")
         self.setMinimumSize(750, 650)
         self.setWindowModality(Qt.WindowModality.WindowModal)
+
+    @Slot()
+    def on_form_save(self) -> None:
+        """
+        Save the form and close the dialog.
+        :return: None
+        """
+        self.form.save()
+        self.close()
 
 
 class NodeDialogTitle(QWidget):

@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Union
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QDialog, QHBoxLayout, QVBoxLayout
 
 from pywr_editor.model import ModelConfig
@@ -33,6 +33,7 @@ class MetadataDialog(QDialog):
         button_box = QHBoxLayout()
         self.save_button = PushIconButton(icon="msc.save", label="Save", accent=True)
         self.save_button.setObjectName("save_button")
+        self.save_button.clicked.connect(self.on_form_save)
 
         close_button = PushIconButton(icon="msc.close", label="Close")
         # noinspection PyUnresolvedReferences
@@ -57,3 +58,12 @@ class MetadataDialog(QDialog):
         self.setMinimumSize(600, 600)
         self.setMaximumSize(600, 600)
         self.setWindowModality(Qt.WindowModality.WindowModal)
+
+    @Slot()
+    def on_form_save(self) -> None:
+        """
+        Save the form and close the dialog.
+        :return: None
+        """
+        self.form.on_save()
+        self.close()

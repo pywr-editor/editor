@@ -127,3 +127,4 @@ class ExternalDataPickerFormWidget(ModelComponentForm):
 
         # callback function
         self.after_save(form_data)
+        self.parent.close()
