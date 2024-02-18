@@ -9,21 +9,20 @@
     "model_version": "2.1"
   },
   "timestepper": {"start": "2015-01-01", "end": "2015-12-31", "timestep": 1},
-  "includes": ["files/custom_parameter.py"],
   "nodes": [
     {
       "name": "Input", "type": "Input", "position": {
       "editor_position": [
-        134.18168,
-        117.18473
+        434.18168,
+        417.18473
       ]
     }
     },
     {
       "name": "Output", "type": "Output", "position": {
       "editor_position": [
-        34.18168,
-        17.18473
+        304.18168,
+        170.18473
       ]
     }
     }
