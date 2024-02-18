@@ -612,19 +612,7 @@ class MainWindow(QMainWindow):
             self.app_actions.get("find-orphaned-parameters"), is_large=False
         )
 
-        # Run tab
-        run = self.toolbar.add_tab("Run")
-        time_stepper_panel = run.add_panel("Time-stepper")
-        time_stepper_panel.add_widget(TimeStepperWidget(self))
-
-        nodes_panel = run.add_panel("Controls")
-        nodes_panel.add_widget(RunWidget(self))
-
-        results_panel = run.add_panel("Results")
-        results_panel.add_button(self.app_actions.get("run-inspector"))
-        # results_panel.add_button(self.app_actions.get("plot-data"))
-
-        # Schematic tab
+        # Operation tab
         operation_tab = self.toolbar.add_tab("Operations")
         nodes_panel = operation_tab.add_panel("Undo", layout="vertical")
         nodes_panel.add_button(self.app_actions.get("undo"), is_large=False)
@@ -642,6 +630,17 @@ class MainWindow(QMainWindow):
 
         nodes_panel = operation_tab.add_panel("Nodes Library", show_name=False)
         nodes_panel.add_widget(SchematicItemsLibrary(self))
+
+        # Run tab
+        run = self.toolbar.add_tab("Run")
+        time_stepper_panel = run.add_panel("Time-stepper")
+        time_stepper_panel.add_widget(TimeStepperWidget(self))
+
+        nodes_panel = run.add_panel("Controls")
+        nodes_panel.add_widget(RunWidget(self))
+
+        results_panel = run.add_panel("Results")
+        results_panel.add_button(self.app_actions.get("run-inspector"))
 
         # View tab
         schematic_tab = self.toolbar.add_tab("Schematic")

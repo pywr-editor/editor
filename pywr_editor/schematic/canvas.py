@@ -49,7 +49,7 @@ class SchematicCanvas(QGraphicsItem):
         """
         painter.setPen(QPen(Color("gray", 400).hex))
         painter.setBrush(Qt.GlobalColor.white)
-        painter.drawRoundedRect(self.boundingRect(), 10, 10)
+        painter.drawRoundedRect(self.boundingRect(), 8, 8)
 
     @property
     def shadow(self) -> QGraphicsDropShadowEffect:
