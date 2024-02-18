@@ -169,6 +169,8 @@ class MainWindow(QMainWindow):
         else:
             event.ignore()
 
+        self.timer.stop()
+
         # check if the run worker is still running
         try:
             if self.run_widget.worker:
