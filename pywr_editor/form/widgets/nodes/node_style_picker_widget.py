@@ -55,7 +55,16 @@ class NodeStylePickerWidget(FormWidget):
         ):
             icon_class_type = getattr(pywr_editor.node_shapes, icon_class_name)
             icon, label = get_pixmap_from_type(icon_size, icon_class_type)
-            self.combo_box.addItem(icon, label, icon_class_name)
+            self.combo_box.addItem(
+                icon,
+                # replace name for plain color nodes
+                (
+                    f"Plain color - {label.replace(' circle', '').lower()}"
+                    if "Circle" in icon_class_name
+                    else label
+                ),
+                icon_class_name,
+            )
             name_key_map[icon_class_name.lower()] = icon_class_name
 
         # select the icon
@@ -68,8 +77,10 @@ class NodeStylePickerWidget(FormWidget):
         self.combo_box.setCurrentIndex(selected_index)
 
         # connect slot to change the icon in the dialog title
-        # noinspection PyUnresolvedReferences
         self.combo_box.currentIndexChanged.connect(self.on_value_changed)
+
+        # sort by name
+        self.combo_box.model().sort(0)
 
         # layout
         layout = QHBoxLayout(self)
