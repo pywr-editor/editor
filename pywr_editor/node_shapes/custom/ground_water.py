@@ -55,7 +55,7 @@ class GroundWater(BaseNode):
         painter.setPen(pen)
         painter.setBrush(fill.qcolor)
         painter.drawEllipse(QPointF(0, 0), self.radius, self.radius)
-        l1 = -(self.radius - self.outline_width)
-        l2 = self.radius - self.outline_width
+        l1 = -self.radius
+        l2 = self.radius
         painter.drawLine(QPointF(l1, 0), QPointF(l2, 0))
         painter.drawLine(QPointF(0, l1), QPointF(0, l2))

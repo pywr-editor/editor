@@ -23,7 +23,7 @@ from pywr_editor.dialogs import (
     TablesDialog,
 )
 from pywr_editor.model import ModelConfig
-from pywr_editor.schematic import Schematic, scaling_factor
+from pywr_editor.schematic import Schematic, get_scaling_factor
 from pywr_editor.style import AppStylesheet
 from pywr_editor.toolbar import RunWidget, SchematicItemsLibrary, ToolbarWidget
 from pywr_editor.toolbar.run_controls.timestepper import TimeStepperWidget
@@ -742,14 +742,14 @@ class MainWindow(QMainWindow):
         Zooms in on the schematic.
         :return: None
         """
-        self.set_zoom(scaling_factor("zoom-in"))
+        self.set_zoom(get_scaling_factor("zoom-in"))
 
     def zoom_out(self) -> None:
         """
         Zooms out on the schematic.
         :return: None
         """
-        self.set_zoom(scaling_factor("zoom-out"))
+        self.set_zoom(get_scaling_factor("zoom-out"))
 
     def zoom_100(self) -> None:
         """

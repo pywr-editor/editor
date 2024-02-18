@@ -111,12 +111,12 @@ class AbstractSchematicItem:
         # width
         line_width = pen.width()
 
-        self: QGraphicsItem
-        rect = self.boundingRect()
-        rect.setX(rect.x() + line_width)
-        rect.setY(rect.y() + line_width)
-        rect.setWidth(rect.width() - line_width)
-        rect.setHeight(rect.height() - line_width)
-        painter.drawRoundedRect(rect, 4, 4)
-        # remove default outline
-        option.state = QStyle.StateFlag.State_None
+        if isinstance(self, QGraphicsItem):
+            rect = self.boundingRect()
+            rect.setX(rect.x() + line_width)
+            rect.setY(rect.y() + line_width)
+            rect.setWidth(rect.width() - line_width)
+            rect.setHeight(rect.height() - line_width)
+            painter.drawRoundedRect(rect, 10, 10)
+            # remove default outline
+            option.state = QStyle.StateFlag.State_None
