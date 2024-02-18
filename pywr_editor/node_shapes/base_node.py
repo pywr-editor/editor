@@ -39,7 +39,7 @@ class BaseNode(QGraphicsItemGroup):
         self.y = parent.y
 
         self.parent = parent
-        self.outline_width = 1
+        self.outline_width = 1.5
         self.fill = fill
         self.outline = outline
         self.label = label
