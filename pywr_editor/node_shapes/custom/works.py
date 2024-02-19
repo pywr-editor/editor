@@ -28,6 +28,7 @@ class Works(Circle):
 
         self.size = [22, 22]
         self.radius = self.size[0] / 2
+        self.outline_width = 1
 
     def paint(
         self,
