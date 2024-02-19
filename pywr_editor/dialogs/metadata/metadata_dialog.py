@@ -65,5 +65,5 @@ class MetadataDialog(QDialog):
         Save the form and close the dialog.
         :return: None
         """
-        self.form.on_save()
-        self.close()
+        if self.form.on_save():
+            self.close()
