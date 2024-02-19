@@ -23,7 +23,7 @@ from pywr_editor.dialogs import (
     TablesDialog,
 )
 from pywr_editor.model import ModelConfig
-from pywr_editor.schematic import Schematic, scaling_factor
+from pywr_editor.schematic import Schematic, get_scaling_factor
 from pywr_editor.style import AppStylesheet
 from pywr_editor.toolbar import RunWidget, SchematicItemsLibrary, ToolbarWidget
 from pywr_editor.toolbar.run_controls.timestepper import TimeStepperWidget
@@ -168,6 +168,8 @@ class MainWindow(QMainWindow):
             self.editor_settings.save_window_attributes(self)
         else:
             event.ignore()
+
+        self.timer.stop()
 
         # check if the run worker is still running
         try:
@@ -610,19 +612,7 @@ class MainWindow(QMainWindow):
             self.app_actions.get("find-orphaned-parameters"), is_large=False
         )
 
-        # Run tab
-        run = self.toolbar.add_tab("Run")
-        time_stepper_panel = run.add_panel("Time-stepper")
-        time_stepper_panel.add_widget(TimeStepperWidget(self))
-
-        nodes_panel = run.add_panel("Controls")
-        nodes_panel.add_widget(RunWidget(self))
-
-        results_panel = run.add_panel("Results")
-        results_panel.add_button(self.app_actions.get("run-inspector"))
-        # results_panel.add_button(self.app_actions.get("plot-data"))
-
-        # Schematic tab
+        # Operation tab
         operation_tab = self.toolbar.add_tab("Operations")
         nodes_panel = operation_tab.add_panel("Undo", layout="vertical")
         nodes_panel.add_button(self.app_actions.get("undo"), is_large=False)
@@ -640,6 +630,17 @@ class MainWindow(QMainWindow):
 
         nodes_panel = operation_tab.add_panel("Nodes Library", show_name=False)
         nodes_panel.add_widget(SchematicItemsLibrary(self))
+
+        # Run tab
+        run = self.toolbar.add_tab("Run")
+        time_stepper_panel = run.add_panel("Time-stepper")
+        time_stepper_panel.add_widget(TimeStepperWidget(self))
+
+        nodes_panel = run.add_panel("Controls")
+        nodes_panel.add_widget(RunWidget(self))
+
+        results_panel = run.add_panel("Results")
+        results_panel.add_button(self.app_actions.get("run-inspector"))
 
         # View tab
         schematic_tab = self.toolbar.add_tab("Schematic")
@@ -742,14 +743,14 @@ class MainWindow(QMainWindow):
         Zooms in on the schematic.
         :return: None
         """
-        self.set_zoom(scaling_factor("zoom-in"))
+        self.set_zoom(get_scaling_factor("zoom-in"))
 
     def zoom_out(self) -> None:
         """
         Zooms out on the schematic.
         :return: None
         """
-        self.set_zoom(scaling_factor("zoom-out"))
+        self.set_zoom(get_scaling_factor("zoom-out"))
 
     def zoom_100(self) -> None:
         """
