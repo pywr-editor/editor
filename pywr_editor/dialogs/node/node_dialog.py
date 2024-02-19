@@ -75,8 +75,8 @@ class NodeDialog(QDialog):
         Save the form and close the dialog.
         :return: None
         """
-        self.form.save()
-        self.close()
+        if self.form.save():
+            self.close()
 
 
 class NodeDialogTitle(QWidget):
