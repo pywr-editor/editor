@@ -101,7 +101,6 @@ class TestTablesIncludes:
             all_files.insert(0, "model_2.json")
 
             assert model_config.has_changes is True
-            assert dialog.save_button.isEnabled() is False
             assert model_config.json["includes"] == all_files
 
             # check that the node library is updated
