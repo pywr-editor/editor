@@ -19,7 +19,7 @@ class ComponentConfig:
         :return: The lowercase string identifying the component type.
         """
         if "type" in self.props and self.props["type"]:
-            return self.props["type"]
+            return self.props["type"].lower()
         return None
 
     @property

@@ -39,7 +39,7 @@ from pywr_editor.schematic import (
     SchematicNode,
     SchematicRectangle,
     SchematicText,
-    scaling_factor,
+    get_scaling_factor,
     units_to_factor,
 )
 from pywr_editor.style import Color, stylesheet_dict_to_str
@@ -64,9 +64,9 @@ class Schematic(QGraphicsView):
     """ event emitted when schematic is moved """
     connect_node_event = Signal(SchematicNode)
     """ event emitted when a node is being connected to another """
-    min_zoom = scaling_factor("zoom-out", 3)
+    min_zoom = get_scaling_factor("zoom-out", 3)
     """ min zoom factor"""
-    max_zoom = scaling_factor("zoom-in", 3)
+    max_zoom = get_scaling_factor("zoom-in", 3)
     """ max zoom factor"""
     shape_class_map = {
         "TextShape": SchematicText,

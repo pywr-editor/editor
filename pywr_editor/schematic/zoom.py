@@ -12,7 +12,7 @@ def units_to_factor(units: float) -> float:
     return pow(2, -units / 240)
 
 
-def scaling_factor(
+def get_scaling_factor(
     scroll_type: Literal["zoom-in", "zoom-out"], scroll_count: int = 1
 ) -> float:
     """
