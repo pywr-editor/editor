@@ -79,6 +79,7 @@ class MainWindow(QMainWindow):
         self.empty_model: bool = False
         self.prompt_unsaved_changes: bool = True
         """ Prompts the user for unsaved model changes """
+        self.toggle_sync_model_file = False
 
         if model_file is None:
             self.logger.debug("No model file was provided")
@@ -219,6 +220,19 @@ class MainWindow(QMainWindow):
                 icon=":/toolbar/reload",
                 tooltip="Reload the JSON file if it was externally edited",
                 connection=self.reload_model_file,
+                button_separator=False,
+            )
+        )
+        self.app_actions.add(
+            Action(
+                key="sync-model",
+                name="Sync\n file",
+                icon=":/toolbar/sync-model",
+                tooltip="Automatically reload the editor if the JSON file is "
+                "edited externally. Sync will be paused if there are unsaved "
+                "changes within the editor",
+                connection=self.sync_model_file,
+                is_checked=self.toggle_sync_model_file,
                 button_separator=True,
             )
         )
@@ -586,6 +600,8 @@ class MainWindow(QMainWindow):
         file_panel.add_button(self.app_actions.get("save-model"))
         self.app_actions.get("save-model").setDisabled(True)
         file_panel.add_button(self.app_actions.get("reload-model"))
+        file_panel.add_button(self.app_actions.get("sync-model"))
+
         file_panel.add_button(self.app_actions.get("search-in-model"))
         file_panel.add_button(self.app_actions.get("open-json-reader"))
 
@@ -1105,8 +1121,8 @@ class MainWindow(QMainWindow):
         Check whether the file is changed externally and reload the model.
         :return: None
         """
-        # do not refresh if the window has not focus
-        if not self.window().isActiveWindow():
+        # do not refresh if the window has not focus or sync is off
+        if not self.window().isActiveWindow() or not self.toggle_sync_model_file:
             return
 
         # noinspection PyBroadException
@@ -1125,3 +1141,16 @@ class MainWindow(QMainWindow):
                     MainWindow(self.model_file)
         except Exception:
             pass
+
+    @Slot()
+    def sync_model_file(self) -> None:
+        """
+        Enable sync model.
+        :return: None
+        """
+        self.toggle_sync_model_file = not self.toggle_sync_model_file
+        self.app_actions.get("sync-model").setChecked(self.toggle_sync_model_file)
+
+        status_message = "JSON file synchronisation "
+        status_message += "enabled" if self.toggle_sync_model_file else "disabled"
+        self.statusBar().showMessage(status_message)
