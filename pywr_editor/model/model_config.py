@@ -266,6 +266,7 @@ class ModelConfig(QObject):
         for key in ["nodes", "edges", "includes", "scenarios"]:
             if key not in self.json:
                 self.json[key] = []
+                self.has_changed()
 
         # check for missing keys with dictionary as value
         for key in [
@@ -278,6 +279,7 @@ class ModelConfig(QObject):
         ]:
             if key not in self.json:
                 self.json[key] = {}
+                self.has_changed()
 
         if (
             Constants.SHAPES_KEY.value
@@ -286,6 +288,7 @@ class ModelConfig(QObject):
             self.json[Constants.EDITOR_CONFIG_KEY.value][
                 Constants.SHAPES_KEY.value
             ] = []
+            self.has_changed()
 
         # check that the metadata dictionary and its key/value pairs are defined
         default_metadata = {
@@ -298,6 +301,7 @@ class ModelConfig(QObject):
                 self.json["metadata"][key], str
             ):
                 self.json["metadata"][key] = value
+                self.has_changed()
 
     def is_valid(self) -> bool:
         """
