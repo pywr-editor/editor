@@ -49,6 +49,7 @@
         <file alias="plot-data">toolbar/sc_diagramtype.svg</file>
         <file alias="run-inspector">toolbar/lc_morecontrols.svg</file>
         <file alias="search">toolbar/searchdialog.svg</file>
+        <file alias="sync-model">toolbar/sync-model.svg</file>
     </qresource>
     <qresource prefix="file-browser">
         <file alias="close">file_browser/x-circle.svg</file>
