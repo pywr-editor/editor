@@ -218,11 +218,12 @@ class ModelConfig(QObject):
                 "description": f"Model created on {current_time}",
             },
             "includes": [],
-            "timestepper": {},
+            "timestepper": {"start": "2000-1-1", "end": "2000-12-31", "timestep": 1},
             "scenarios": [],
             "nodes": [],
             "edges": [],
             "tables": {},
+            "recorders": {},
             Constants.EDITOR_CONFIG_KEY.value: {Constants.SHAPES_KEY.value: []},
         }
 
