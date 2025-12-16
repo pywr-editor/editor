@@ -278,6 +278,7 @@ class ModelConfig(QObject):
         ]:
             if key not in self.json:
                 self.json[key] = {}
+                self.has_changed()
 
         if (
             Constants.SHAPES_KEY.value
@@ -286,6 +287,7 @@ class ModelConfig(QObject):
             self.json[Constants.EDITOR_CONFIG_KEY.value][
                 Constants.SHAPES_KEY.value
             ] = []
+            self.has_changed()
 
         # check that the metadata dictionary and its key/value pairs are defined
         default_metadata = {
