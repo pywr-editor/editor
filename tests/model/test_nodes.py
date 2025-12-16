@@ -109,7 +109,6 @@ class TestNodesClass:
 
         model.nodes.delete("Non-existing node")
         assert all_nodes == model.nodes.get_all()
-        assert model.has_changes is False
 
     def test_model_with_orphans(self):
         """

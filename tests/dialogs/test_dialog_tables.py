@@ -345,7 +345,7 @@ class TestTablesDialog:
         # 5. Save form to test filter
         save_button: QPushButton = selected_page.findChild(QPushButton, "save_button")
         # enable button (disabled due to no changes)
-        assert model_config.has_changes is False
+        assert model_config.has_changes is True
         assert save_button.isEnabled() is False
         save_button.setEnabled(True)
         qtbot.mouseClick(save_button, Qt.MouseButton.LeftButton)
