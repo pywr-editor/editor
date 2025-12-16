@@ -59,6 +59,9 @@
       "Link"
     ]
   ],
+  "includes": [],
+  "scenarios": [],
+  "tables": {},
   "parameters": {
     "param_with_index_col_str": {
       "type": "constant",
@@ -245,10 +248,12 @@
       "parse_dates": true
     }
   },
+  "recorders": {},
   "pywr_editor": {
     "schematic_size": [
       1900,
       1450
-    ]
+    ],
+    "shapes": []
   }
 }
