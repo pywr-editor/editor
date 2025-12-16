@@ -94,7 +94,7 @@ class TestDialogParameterLineEditWidget:
             (
                 "valid_custom_parameter",
                 "custom",
-                "customParameter",
+                "customparameter",
                 {"type": "customParameter", "value": 2},
                 ParameterConfig(props={"type": "customParameter", "value": 2}),
             ),
