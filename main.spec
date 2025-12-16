@@ -40,6 +40,9 @@ a = Analysis(
         "PySide6.QtSvg",
         "PySide6.QtAxContainer",
         "PySide6.QtSvgWidgets",
+        "inspector_dialog",
+        "matplotlib",
+        "numpy",
     ],
     hookspath=[],
     hooksconfig={},
@@ -84,6 +87,6 @@ coll = COLLECT(
 
 # PyInstaller does not want to copy the following files/folder in the data attr
 shutil.copytree(pywr_dist.as_posix(), f"./dist/main/{pywr_dist.name}")
-shutil.copyfile(
-    Path(tables.__file__).parent / "libblosc2.dll", "./dist/main/tables/libblosc2.dll"
-)
+#shutil.copyfile(
+#    Path(tables.__file__).parent / "libblosc2.dll", "./dist/main/tables/libblosc2.dll"
+#)
