@@ -49,7 +49,11 @@ class TestModelConfig:
         assert model.json["includes"] == []
         assert model.json["nodes"] == []
         assert model.json["edges"] == []
-        assert model.json["timestepper"] == {}
+        assert model.json["timestepper"] == {
+            "start": "2000-1-1",
+            "end": "2000-12-31",
+            "timestep": 1,
+        }
         assert model.json["scenarios"] == []
 
     def test_duplicated_custom_class_name(self):
