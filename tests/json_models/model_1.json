@@ -66,11 +66,27 @@
     ]
   ],
   "parameters": {
-    "param1": {"type": "constant", "value": 4},
-    "param2": {"type": "constant", "value": 5},
-    "param3": {"type": "constantscenario", "scenario": "scenario A", "value": 5},
-    "custom_param": {"type": "MyParameter", "value": 50},
-    "custom_param2": {"type": "LicenseParameter", "total_volume": 50}
+    "param1": {
+      "type": "constant",
+      "value": 4
+    },
+    "param2": {
+      "type": "constant",
+      "value": 5
+    },
+    "param3": {
+      "type": "constantscenario",
+      "scenario": "scenario A",
+      "value": 5
+    },
+    "custom_param": {
+      "type": "MyParameter",
+      "value": 50
+    },
+    "custom_param2": {
+      "type": "LicenseParameter",
+      "total_volume": 50
+    }
   },
   "recorders": {
     "storage_flow": {
@@ -124,5 +140,6 @@
         "y": 50.0
       }
     ]
-  }
+  },
+  "tables": {}
 }
