@@ -284,10 +284,15 @@
       "column": " Date"
     }
   },
+  "includes": [],
+  "scenarios": [],
+  "tables": {},
+  "recorders": {},
   "pywr_editor": {
     "schematic_size": [
       1900,
       1450
-    ]
+    ],
+    "shapes": []
   }
 }

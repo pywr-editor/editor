@@ -102,10 +102,15 @@
       "url": "files/table_no_keys.h5"
     }
   },
+  "includes": [],
+  "scenarios": [],
+  "tables": {},
+  "recorders": {},
   "pywr_editor": {
     "schematic_size": [
       1900,
       1450
-    ]
+    ],
+    "shapes": []
   }
 }
