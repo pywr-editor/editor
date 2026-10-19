@@ -2,6 +2,11 @@
   Pywr editor
   <br>
 </h1>
+<h1>MOVED PROJECT</h1>
+<p>The development of this project has stopped and <b>has moved</b> to <a href="https://s-simoncelli.github.io/pywr-vscode/">https://s-simoncelli.github.io/pywr-vscode/</a>. The new editor provides more features and is also compatible with pywr2 models.</p>
+<p></p>
+<hr/>
+
 <h4 align="center">A graphical user interface to edit Pywr models</h4>
 
 <p align="center">
